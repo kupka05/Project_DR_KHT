@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class AccountManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class AccountManager : MonoBehaviour
     [SerializeField] InputField idInput;
     [SerializeField] InputField passwordInput;
     [SerializeField] InputField infoInput;
+    [SerializeField] TMP_Text description;
 
     [SerializeField] string url;
 
@@ -31,7 +33,17 @@ public class AccountManager : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Post(url, form);
 
         yield return www.SendWebRequest();
+        description.text = www.downloadHandler.text;
         print(www.downloadHandler.text);
+
+        switch (www.downloadHandler.text)
+        {
+            case "Login Complete":
+                SceneManager.LoadScene("JH MainScene");
+                break;
+        }
+       
+
     }
 }
 

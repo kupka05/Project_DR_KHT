@@ -13,7 +13,6 @@ namespace BNG
         [Header("General")]
 
         public bool isDrill;
-        public GameObject drillHead;
 
         // 최대 사거리
         public float MaxRange = 25f;
@@ -186,6 +185,9 @@ namespace BNG
 
         protected bool readyToShoot = true;
 
+        // 드릴 작동을 위한 클래스
+        protected WeaponDrill drill;
+
         void Start()
         {
             weaponRigid = GetComponent<Rigidbody>();
@@ -194,8 +196,9 @@ namespace BNG
             {
                 MuzzleFlashObject.SetActive(false);
             }
-
+            
             ws = GetComponentInChildren<WeaponSlide>();
+            drill = GetComponentInChildren<WeaponDrill>();
 
             updateChamberedBullet();
         }
@@ -305,6 +308,7 @@ namespace BNG
         public virtual void Shoot()
         {
 
+
             // 사격 가능한지 확인
             float shotInterval = Time.timeScale < 1 ? SlowMoRateOfFire : FiringRate;
             // 마지막 사격 시간을 체크해 shotInterval보다 낮으면 리턴
@@ -343,7 +347,13 @@ namespace BNG
                 input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
             }
 
-            // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
+            if (isDrill)
+            {
+                drill.OnSpin();
+            }
+
+
+                // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
             bool useProjectile = AlwaysFireProjectile || (FireProjectileInSlowMo && Time.timeScale < 1);
             if (useProjectile)
             {
@@ -367,8 +377,6 @@ namespace BNG
                 RaycastHit hit;
                 if (Physics.Raycast(MuzzlePointTransform.position, MuzzlePointTransform.forward, out hit, MaxRange, ValidLayers, QueryTriggerInteraction.Ignore))
                 {
-                    Debug.Log("들어오나?");
-
                     Debug.DrawRay(MuzzlePointTransform.position, MuzzlePointTransform.forward * MaxRange, Color.red);
                     OnRaycastHit(hit);
                 }
@@ -634,6 +642,8 @@ namespace BNG
 
         protected virtual void ejectCasing()
         {
+            if (isDrill)
+                return;
             GameObject shell = Instantiate(BulletCasingPrefab, EjectPointTransform.position, EjectPointTransform.rotation) as GameObject;
             Rigidbody rb = shell.GetComponentInChildren<Rigidbody>();
 

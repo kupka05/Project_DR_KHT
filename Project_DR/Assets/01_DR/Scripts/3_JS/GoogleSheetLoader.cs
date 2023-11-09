@@ -7,18 +7,14 @@ public class GoogleSheetLoader : MonoBehaviour
 {
     [Header("GoogleAPI")]
     // 스프레드 시트 url에 있는 ID
-    private const string spreadsheetId = "1zGWet3RC6xmqQTkGS31E8BQjEPTuwhIFT1LkVIJSJYI";
+    private const string spreadsheetId = "1QZiDv3heAHcoaWa91lvT2C_D9XFQmyUQ1ocWGwLJpBA";
     // API 접근 KEY
-    private const string apiKey = "AIzaSyCXNUN-D43FJGsu37TjJxRUDWD7wcF98CU";
+    private const string apiKey = "AIzaSyC3utQPnsLiJdh3AAAdmYJFQ4QCZ7ReV_A";
     // 불러올 문서의 시트 이름 배열
     // 불러올 시트 이름을 넣어주세요!!!
     private string[] sheetNames =
     {
-        "Minion_Table", "Minion_Spawn_Table", 
-        "PC_Table", "Weapon_Table", "Unit_Weapon_Upgrade_Table", "Projectile_Table",
-         "Shop_Item_Table", "Gold_Table",
-         "Golem_Table", "Golem_Projectile_Table", "Golem_Weak_Table",
-         "Unit_FireBomb", "Collision_Table", "Unit_Trap"
+        "Test_Table"
     };
     // 코루틴에서 데이터를 반환하고
     // 반환된 데이터를 저장하기 위한 콜백 변수
@@ -72,5 +68,7 @@ public class GoogleSheetLoader : MonoBehaviour
 
         // 로딩 완료 상태 변경
         isDone = true;
+
+        Debug.Log((int)DataManager.GetData(1, "HP"));
     }
 }

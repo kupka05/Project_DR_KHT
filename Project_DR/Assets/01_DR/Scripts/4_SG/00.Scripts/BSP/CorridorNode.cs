@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using UnityEditor.iOS;
 using static StructureHelper;
 using System.Collections.Generic;
 using System.Linq;

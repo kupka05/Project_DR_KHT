@@ -152,13 +152,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be8e50b18693534a8d088b12c9e6a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dungeonWidth: 300
-  dungeonHeight: 300
+  dungeonWidth: 250
+  dungeonHeight: 250
   roomWidthMin: 25
   roomLengthMin: 25
   maxIterations: 7
-  corridorWidth: 25
-  material: {fileID: 2100000, guid: 75ec4dc45dcf4e747bc501b034e2d67b, type: 2}
+  corridorWidth: 8
+  material: {fileID: 2100000, guid: 658e6fe543c4eb3429fc65cb91b27b7c, type: 2}
   roomBottomCornerModifier: 0.15
   roomTopCornerModifier: 0.7
   roomOffset: 1
@@ -168,6 +168,8 @@ MonoBehaviour:
     type: 3}
   wallBreakdown: {fileID: 7413407458742904279, guid: a402e9b3be34fca498905cc330e93351,
     type: 3}
+  floorPrefabs:
+  - {fileID: 2991707312341179396, guid: 8b8e3e70a5aff25488eeb919633ceb21, type: 3}
 --- !u!4 &687154412
 Transform:
   m_ObjectHideFlags: 0

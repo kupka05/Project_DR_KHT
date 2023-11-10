@@ -12,7 +12,8 @@ namespace BNG
 
         [Header("General")]
 
-        public bool isDrill;
+        // 근접 공격 무기인지 체크
+        public bool isMelee;
 
         // 최대 사거리
         public float MaxRange = 25f;
@@ -347,7 +348,7 @@ namespace BNG
                 input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
             }
 
-            if (isDrill)
+            if (isMelee)
             {
                 drill.OnSpin();
             }
@@ -642,7 +643,7 @@ namespace BNG
 
         protected virtual void ejectCasing()
         {
-            if (isDrill)
+            if (isMelee)
                 return;
             GameObject shell = Instantiate(BulletCasingPrefab, EjectPointTransform.position, EjectPointTransform.rotation) as GameObject;
             Rigidbody rb = shell.GetComponentInChildren<Rigidbody>();

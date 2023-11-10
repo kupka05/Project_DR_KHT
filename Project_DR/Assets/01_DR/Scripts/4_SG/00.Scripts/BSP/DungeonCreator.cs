@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DungeonCreator : MonoBehaviour
@@ -28,6 +29,7 @@ public class DungeonCreator : MonoBehaviour
     [Range(0, 2)]
     public int roomOffset;                // 방 오프셋
 
+
     [Header("WallObj")]
     // 벽 오브젝트 설정
     public GameObject wallVertical, wallHorizontal, wallBreakdown;
@@ -43,6 +45,9 @@ public class DungeonCreator : MonoBehaviour
     List<Vector3Int> possibleDoorHorizontalPosition;
     List<Vector3Int> possibleWallHorizontalPosition;
     List<Vector3Int> possibleWallVerticalPosition;
+
+    // 벽이 생성될때에 어디에 생성할지 지정해줄 좌표        // Y축이 벽의 영향을 받음
+    public Vector3 roopYpos = new Vector3(1, 26, 1);
 
     void Start()
     {
@@ -74,6 +79,10 @@ public class DungeonCreator : MonoBehaviour
         // 바닥의 부모 오브젝트 생성
         GameObject floorParent = new GameObject("FloorMeshParent");
         floorParent.transform.parent = transform;
+        // 지붕의 부모 오브젝트 생성
+        GameObject roopParent = new GameObject("RoopMeshParent");
+        roopParent.transform.parent = transform;
+
         // 복도의 부모 오브젝트 생성
         GameObject corridorParnet = new GameObject("CorridorMeshParent");
         corridorParnet.transform.parent = transform;
@@ -86,47 +95,112 @@ public class DungeonCreator : MonoBehaviour
                 listOfRooms[i].TopRightAreaCorner, listOfRooms[i].isFloor, floorParent, corridorParnet);
         }
 
+        #region 땅바닥 OBj 생성
         // 각 방에 대한 땅바닥Obj 생성
         //for (int i = 0; i < listOfRooms.Count; i++)
         //{
         //    CreateMeshInFloor(listOfRooms[i].BottomLeftAreaCorner,
         //        listOfRooms[i].TopRightAreaCorner, listOfRooms[i].isFloor, floorParent, corridorParnet);
         //}
+        #endregion 땅바닥 OBj 생성
 
         // 벽 생성
         CreateWalls(wallParent);
-    }
 
-    private void SG_CreateFloor(Vector2 bottomLeftCorner, Vector2 topRightCorner, GameObject floorParent, GameObject[] floorPrefab)
-    {
-        // parent로 묶을때,인스턴스 할때 사용할 GameObject
-        GameObject floorObjClone;
-        GameObject floorCloneTras = new GameObject();
-
-        // 바닥을 랜덤하게 뽑아줄 변수
-        int randomFloorNum;
-
-        // 해당 방에 대한 꼭지점 들생성
-        Vector3 bottomLeftV = new Vector3(bottomLeftCorner.x, 0f, bottomLeftCorner.y);
-        Vector3 bottomRightV = new Vector3(topRightCorner.x, 0f, bottomLeftCorner.y);
-        Vector3 topLeftV = new Vector3(bottomLeftCorner.x, 0f, topRightCorner.y);
-        Vector3 topRightV = new Vector3(topRightCorner.x, 0f, topRightCorner.y);
-        // 인스턴스될 Position
-        Vector3Int instancePos;
-        for (float vertical = bottomLeftV.z; vertical < topLeftV.z; vertical++)
-        {       // 아래 꼭지점이 윗꼭지점보다 작을때 ++
-            for (float horizontal = bottomLeftV.x; horizontal < bottomRightV.z; horizontal++)
-            {
-                //instancePos = new Vector3Int((int)horizontal, 0, (int)vertical);                
-                Debug.LogFormat("Length -> {0}", floorPrefab.Length);
-
-                randomFloorNum = UnityEngine.Random.Range(0, floorPrefab.Length);
-                floorObjClone = Instantiate(floorPrefab[randomFloorNum]);
-                floorObjClone.transform.position = new Vector3Int((int)horizontal, 0, (int)vertical);
-            }
-
+        // 각 방마다 지붕 생성
+        for (int i = 0; i < listOfRooms.Count; i++)
+        {
+            CreateRoof(listOfRooms[i].BottomLeftAreaCorner,
+                    listOfRooms[i].TopRightAreaCorner, roopParent);
         }
-    }
+
+        Debug.Log("던전 생성 끝");
+    }   // CreateDungeon()
+
+    private void CreateRoof(Vector2 bottomLeftCorner, Vector2 topRightCorner,
+        GameObject roopParent)
+    {
+        // 바닥 메시 생성을 위한 꼭지점 좌표 설정
+        Vector3 bottomLeftV = new Vector3(bottomLeftCorner.x, roopYpos.y, bottomLeftCorner.y);
+        Vector3 bottomRightV = new Vector3(topRightCorner.x, roopYpos.y, bottomLeftCorner.y);
+        Vector3 topLeftV = new Vector3(bottomLeftCorner.x, roopYpos.y, topRightCorner.y);
+        Vector3 topRightV = new Vector3(topRightCorner.x, roopYpos.y, topRightCorner.y);
+
+        // 바닥 메시를 위한 꼭지점 배열 생성
+        Vector3[] vertices = new Vector3[]
+        {
+            topLeftV,
+            topRightV,
+            bottomLeftV,
+            bottomRightV
+        };
+
+        // UV 매핑을 위한 배열 생성
+        Vector2[] uvs = new Vector2[vertices.Length];
+        for (int i = 0; i < uvs.Length; i++)
+        {
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+        }
+        
+        // 삼각형을 정의하는 배열 생성
+        int[] triangles = new int[]
+        {
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+        };
+
+        // 메시 생성 및 설정
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices;
+        mesh.uv = uvs;
+        mesh.triangles = triangles;
+        mesh.triangles = mesh.triangles.Reverse().ToArray();
+
+
+        GameObject dungeonFloor = new GameObject("Mesh" + InItNum + bottomLeftCorner,
+            typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
+        roopYpos.x = 0;
+        roopYpos.z = 0;
+
+
+        InItNum++;
+
+        #region 메시의 콜라이더 Center,Size 수정
+
+        // 메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
+        // Center
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, roopYpos.y, (topLeftV.z + bottomLeftV.z) / 2);
+        BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
+        floorCol.center = colCenter;
+        // Size
+        float colSizeX, colSizeY, colSizeZ;
+        colSizeX = bottomLeftV.x - bottomRightV.x;
+        colSizeY = 0.03f;
+        colSizeZ = bottomLeftV.z - topLeftV.z;
+        // 음수값이 나오면 양수로 치환
+        if (colSizeX < 0) { colSizeX = -colSizeX; }
+        if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
+        Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
+        floorCol.size = colSize;       
+
+        #endregion 메시의 콜라이더 Center,Size 수정
+
+        dungeonFloor.transform.position = Vector3.zero;
+        dungeonFloor.transform.localScale = Vector3.one;
+        dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
+        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+
+        dungeonFloor.transform.parent = roopParent.transform;
+        dungeonFloor.transform.position = roopYpos;        
+        
+
+
+    }   // CreateRoof()
+
 
     // 수평 벽 및 수직 벽 생성 함수
     private void CreateWalls(GameObject wallParent)
@@ -142,6 +216,8 @@ public class DungeonCreator : MonoBehaviour
         {
             CreateWall(wallParent, wallPosition, wallVertical);
         }
+        Debug.Log("수직 수평 벽 생성 끝");
+        
     }       // CreateWalls()
 
     // 벽 오브젝트 생성 함수
@@ -159,7 +235,9 @@ public class DungeonCreator : MonoBehaviour
         //wallObjClone.transform.position = wallPos;
         #endregion 1층구조 벽 생성(벽 생성후 YPos조절까지)
         #region 2층 구조 벽 생성 (한 칸에 벽 2개 생성 2번째 생성되는벽은 Y축 추가 조절)
-        float randomCreatWall = UnityEngine.Random.Range(0, 1001);     // 0 ~ 1000 임시        
+        float randomCreatWall = UnityEngine.Random.Range(0, 1001);     // 0 ~ 1000 임시
+        // 나중에 sclae이 다른 벽을 Instance할때에 position잡을때 직전에 만든 벽의 Y를 담아둘 변수
+        float tempWallPosY;
         // 벽 오브젝트 생성후 Y축 조절을 위한 GameObject
         GameObject wallObjClone;
         if (randomCreatWall < wallBreakDownPercentage)
@@ -170,14 +248,25 @@ public class DungeonCreator : MonoBehaviour
         {
             wallObjClone = Instantiate(wallPrefab, wallPosition, Quaternion.identity, wallParent.transform);
         }
-
+        
         Vector3 wallPos = wallObjClone.transform.position;
         wallPos.y = wallObjClone.transform.localScale.y / 2;
         wallObjClone.transform.position = wallPos;
 
         // 2번째 벽 생성 
         wallPos.y = wallPos.y * 3;
+        tempWallPosY = wallPos.y;
         wallObjClone = Instantiate(wallPrefab, wallPos, Quaternion.identity, wallParent.transform);
+        // 3번째 벽 생성
+        wallObjClone = Instantiate(wallPrefab, wallPos, Quaternion.identity, wallParent.transform);
+        wallObjClone.transform.localScale = new Vector3(1f, 22f, 1f);
+        wallPos.y = +(tempWallPosY * 1.33f) + (wallObjClone.transform.localScale.y / 2);
+        //wallPos.y = +((2.5f * 2f) / 2) + (wallObjClone.transform.localScale.y / 2); 나중에 이 방식으로 식 바꾸기 시도해봐야겠음
+        wallObjClone.transform.position = wallPos;
+        //roopYpos.y = wallObjClone.GetComponent<MeshRenderer>().bounds.size.y;
+
+
+        //roopYpos.y = wallObjClone.transform.localScale.y;
 
         #endregion 2층 구조 벽 생성 (한 칸에 벽 2개 생성 2번째 생성되는벽은 Y축 추가 조절)
 
@@ -237,30 +326,35 @@ public class DungeonCreator : MonoBehaviour
 
         InItNum++;
 
-        #region 메시의 콜라이더 Center,Size 수정 23.11.07_LEGACY
+        #region 메시에 해당 매쉬 꼭지점들을 알수 있도록 스크립트 넣어주고 해당 좌표 생성자로 기입
+        //dungeonFloor.AddComponent<FloorMesh>();
+        #endregion 메시에 해당 매쉬 꼭지점들을 알수 있도록 스크립트 넣어주고 해당 좌표 생성자로 기입
 
-        // 메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
-        // Center
-        //Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0f, (topLeftV.z + bottomLeftV.z) / 2);
-        //BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
-        //floorCol.center = colCenter;
-        //// Size
-        //float colSizeX, colSizeY, colSizeZ;
-        //colSizeX = bottomLeftV.x - bottomRightV.x;
-        //colSizeY = 0.03f;
-        //colSizeZ = bottomLeftV.z - topLeftV.z;
-        //// 음수값이 나오면 양수로 치환
-        //if(colSizeX < 0) {  colSizeX = -colSizeX; }
-        //if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
-        //Vector3 colSize = new Vector3(colSizeX,colSizeY,colSizeZ);
-        //floorCol.size = colSize;
+        #region 메시의 콜라이더 Center,Size
 
-        #endregion 메시의 콜라이더 Center,Size 수정 23.11.07_LEGACY
+        //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
+        //Center
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0f, (topLeftV.z + bottomLeftV.z) / 2);
+        BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
+        floorCol.center = colCenter;
+        // Size
+        float colSizeX, colSizeY, colSizeZ;
+        colSizeX = bottomLeftV.x - bottomRightV.x;
+        colSizeY = 0.03f;
+        colSizeZ = bottomLeftV.z - topLeftV.z;
+        // 음수값이 나오면 양수로 치환
+        if (colSizeX < 0) { colSizeX = -colSizeX; }
+        if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
+        Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
+        floorCol.size = colSize;
+
+        #endregion 메시의 콜라이더 Center,Size
 
         dungeonFloor.transform.position = Vector3.zero;
         dungeonFloor.transform.localScale = Vector3.one;
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
         dungeonFloor.GetComponent<MeshRenderer>().material = material;
+
         if (isFloor == true)
         {
             dungeonFloor.transform.parent = floorParent.transform;
@@ -439,7 +533,7 @@ public class DungeonCreator : MonoBehaviour
             AddWallPositionToList(wallPosition, possibleWallVerticalPosition, possibleDoorVerticalPosition);
         }
     }
-   
+
 
     // 벽 위치 목록에 벽 또는 문 위치 추가
     private void AddWallPositionToList(Vector3 wallPosition, List<Vector3Int> wallList, List<Vector3Int> doorList)

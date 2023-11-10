@@ -138,7 +138,7 @@ namespace BNG {
                     // 이 스냅존이 없으면 : 아이템이 보관되어있지 않으면
                     if (StartingItem.transform.parent.GetComponent<SnapZone>() == null)
                     { 
-                        //코루틴이 없을때만 실행
+                        // 현재 코루틴이 없을때만 실행
                         if (resetCoroutine == null)
                         {
                             resetCoroutine = StartCoroutine(ResetCount());
@@ -485,23 +485,24 @@ namespace BNG {
             HeldItem = null;
         }
 
-        // 지환 : 드릴을 다시 홀스터로 되돌리는 스크립트
+        // 지환 : 아이템을 다시 홀스터로 되돌리는 스크립트
         public void ResetItem()
         {
+            // 코루틴들을 꺼주고 null로 바꿔준다.
             StopAllCoroutines();
             resetCoroutine = null;
+
+            // 만약 들고있는 아이템이 없는 경우 : 있으면 되돌릴 필요가 없기 때문에
             if (HeldItem == null)
             {
-                Debug.Log("삭제하나");
                 StartingItem.transform.position = transform.position;
                 GrabGrabbable(StartingItem);
             }
         }
 
+        // 아이템 리셋 코루틴 
         IEnumerator ResetCount()
         {
-            Debug.Log("코루틴 시작");
-
             yield return new WaitForSeconds(resetTime);
             ResetItem();
         }

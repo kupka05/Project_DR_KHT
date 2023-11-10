@@ -92,7 +92,7 @@ namespace BNG {
         Transform leftHandAnchor;
         Transform rightHandAnchor;
 
-        BNGPlayerController player;
+        PlayerController player;
         SmoothLocomotion smoothLocomotion;
         PlayerTeleport playerTeleport;
         bool didFirstActivate = false;
@@ -126,7 +126,7 @@ namespace BNG {
             leftControllerTranform = GameObject.Find("LeftControllerAnchor").transform;
             rightControllerTranform = GameObject.Find("RightControllerAnchor").transform;
 
-            player = FindObjectOfType<BNGPlayerController>();
+            player = FindObjectOfType<PlayerController>();
 
             if(player) {
                 // Use this to keep our head up high

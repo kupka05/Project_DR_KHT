@@ -10,12 +10,12 @@ namespace BNG {
 	/// </summary>
 	public class CharacterConstraint : MonoBehaviour {
 
-		BNGPlayerController bngController;
+		PlayerController bngController;
 		CharacterController character;
 
 		void Awake() {
 			character = GetComponent<CharacterController>();
-			bngController = transform.GetComponentInParent<BNGPlayerController>();
+			bngController = transform.GetComponentInParent<PlayerController>();
 		}
 
 		private void Update() {

@@ -11,10 +11,18 @@ namespace BNG {
         None
     }
 
+    public enum PlayerState
+    {
+        Idle,
+        Jump,
+        Grappling,
+        Freeze
+    }
+
     /// <summary>
     /// The BNGPlayerController handles basic player movement
     /// </summary>
-    public class BNGPlayerController : MonoBehaviour {
+    public class PlayerController : MonoBehaviour {
 
         [Header("Camera Options : ")]
 

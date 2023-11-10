@@ -453,12 +453,12 @@ namespace BNG {
         /// <summary>
         /// If a BNGPlayerController is provided we can check for player movements and make certain adjustments to physics.
         /// </summary>
-        protected BNGPlayerController player {
+        protected PlayerController player {
             get {
                 return GetBNGPlayerController();
             }
         }
-        private BNGPlayerController _player;
+        private PlayerController _player;
         protected Collider col;
         protected Rigidbody rigid;
 
@@ -2237,7 +2237,7 @@ namespace BNG {
         /// A BNGPlayerController is optional, but if one is available we can check the last moved time in order to strengthen the physics joint during quick movements. This helps prevent jitter or flying objects in certain situations.
         /// </summary>
         /// <returns></returns>
-        public virtual BNGPlayerController GetBNGPlayerController() {
+        public virtual PlayerController GetBNGPlayerController() {
 
             if (_player != null) {
                 return _player;
@@ -2245,10 +2245,10 @@ namespace BNG {
 
             // The player object can be used to determine if the object is about to move rapidly
             if (GameObject.FindGameObjectWithTag("Player")) {
-                return _player = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<BNGPlayerController>();
+                return _player = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerController>();
             }
             else {
-                return _player = FindObjectOfType<BNGPlayerController>();
+                return _player = FindObjectOfType<PlayerController>();
             }
         }
 

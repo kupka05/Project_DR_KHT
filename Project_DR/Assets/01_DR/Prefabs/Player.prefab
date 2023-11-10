@@ -7140,6 +7140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b646e2949ffb74c9ca8c512b4411df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHolder: 0
+  resetTime: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 0}
   CanDropItem: 1
@@ -13005,6 +13007,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b646e2949ffb74c9ca8c512b4411df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHolder: 0
+  resetTime: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 0}
   CanDropItem: 1
@@ -30233,7 +30237,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3173366925099495254}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.21, y: -0.22, z: 0.191}
+  m_LocalPosition: {x: -0.3, y: -0.22, z: 0.191}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -30266,6 +30270,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b646e2949ffb74c9ca8c512b4411df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHolder: 1
+  resetTime: 3
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 1116539841907240137}
   CanDropItem: 1
@@ -53023,7 +53029,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5336184971949158428}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.21, y: -0.22, z: 0.191}
+  m_LocalPosition: {x: 0.3, y: -0.22, z: 0.191}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -53056,6 +53062,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b646e2949ffb74c9ca8c512b4411df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHolder: 1
+  resetTime: 3
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 2042058824998220963}
   CanDropItem: 1
@@ -71139,6 +71147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b646e2949ffb74c9ca8c512b4411df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHolder: 0
+  resetTime: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 0}
   CanDropItem: 1
@@ -71300,7 +71310,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9138919207622557759
 RectTransform:
   m_ObjectHideFlags: 0

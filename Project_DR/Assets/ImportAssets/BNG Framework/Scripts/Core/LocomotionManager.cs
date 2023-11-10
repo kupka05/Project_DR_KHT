@@ -32,12 +32,12 @@ namespace BNG {
         [Tooltip("The action used to toggle locomotion type")]
         public InputActionReference LocomotionToggleAction;
 
-        BNGPlayerController player;
+        PlayerController player;
         PlayerTeleport teleport;
         SmoothLocomotion smoothLocomotion;
 
         void Start() {
-            player = GetComponentInChildren<BNGPlayerController>();
+            player = GetComponentInChildren<PlayerController>();
             teleport = GetComponentInChildren<PlayerTeleport>();
 
             // Load Locomotion Preference

@@ -100,7 +100,7 @@ namespace BNG {
         [Tooltip("How fast the player can move in the air if AirControl = true. Example : 0.5 = Player will move at half the speed of MovementSpeed")]
         public float AirControlSpeed = 1f;
 
-        BNGPlayerController playerController;
+        PlayerController playerController;
         CharacterController characterController;
         Rigidbody playerRigid;
         SphereCollider playerSphere;
@@ -152,7 +152,7 @@ namespace BNG {
         public virtual void CheckControllerReferences() {
             // Component may be called while disabled, so check for references here
             if (playerController == null) {
-                playerController = GetComponentInParent<BNGPlayerController>();
+                playerController = GetComponentInParent<PlayerController>();
             }
 
             if(playerInitialized == false) {
@@ -496,7 +496,7 @@ namespace BNG {
         public virtual void SetupCharacterController() {
             playerRigid = GetComponent<Rigidbody>();
 
-            BNGPlayerController bng = GetComponent<BNGPlayerController>();
+            PlayerController bng = GetComponent<PlayerController>();
             if (bng) {
                 bng.DistanceFromGroundOffset = 0f;
             }
@@ -528,7 +528,7 @@ namespace BNG {
                 GameObject.Destroy(charController);
             }
 
-            BNGPlayerController bng = GetComponent<BNGPlayerController>();
+            PlayerController bng = GetComponent<PlayerController>();
             if (bng) {
                 bng.DistanceFromGroundOffset = -0.087f;
             }

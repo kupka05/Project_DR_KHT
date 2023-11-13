@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +9,6 @@ namespace BNG {
         Teleport,
         SmoothLocomotion,
         None
-    }
-
-    public enum PlayerState
-    {
-        Idle,
-        Jump,
-        Grappling,
-        Freeze
     }
 
     /// <summary>
@@ -441,6 +433,10 @@ namespace BNG {
             else {
 
             }
+        }
+        public void StateHandler()
+        {
+
         }
 
 //#if UNITY_EDITOR

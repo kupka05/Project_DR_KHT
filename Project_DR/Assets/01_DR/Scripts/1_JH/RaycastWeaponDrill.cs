@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,6 +14,7 @@ namespace BNG
 
         // 근접 공격 무기인지 체크
         public bool isMelee;
+        private Grappling grappling;
 
         // 최대 사거리
         public float MaxRange = 25f;
@@ -147,6 +148,8 @@ namespace BNG
         [Tooltip("Controller Input used to release reload the weapon if ReloadMethod = InternalAmmo.")]
         public List<GrabbedControllerBinding> ReloadInput = new List<GrabbedControllerBinding>() { GrabbedControllerBinding.Button2Down };
 
+        public List<GrabbedControllerBinding> GrapplingInput = new List<GrabbedControllerBinding>() { GrabbedControllerBinding.Button1 };
+
         [Header("Shown for Debug : ")]
         // 탄이 약실에 들어있는지
         public bool BulletInChamber = false;
@@ -177,6 +180,7 @@ namespace BNG
         [Tooltip("Passes along Raycast Hit info whenever a Raycast hit is successfully detected. Use this to display fx, add force, etc.")]
         public RaycastHitEvent onRaycastHitEvent;
 
+
         /// <summary>
         /// Is the slide / receiver forced back due to last shot
         /// </summary>
@@ -192,7 +196,7 @@ namespace BNG
         void Start()
         {
             weaponRigid = GetComponent<Rigidbody>();
-
+            grappling = GetComponent<Grappling>();
             if (MuzzleFlashObject)
             {
                 MuzzleFlashObject.SetActive(false);
@@ -234,14 +238,16 @@ namespace BNG
             }
 
             // These are here for convenience. Could be called through GrabbableUnityEvents instead
-            checkSlideInput();
-            checkEjectInput();
-            CheckReloadInput();
+            //checkSlideInput();
+            //checkEjectInput();
+            //CheckReloadInput();
+            CheckGrapplingInput();
 
             updateChamberedBullet();
 
             base.OnTrigger(triggerValue);
         }
+
 
         void checkSlideInput()
         {
@@ -284,7 +290,18 @@ namespace BNG
                 }
             }
         }
-
+        // 그래플링 인풋 체크
+        public virtual void CheckGrapplingInput()
+        {
+            for (int x = 0; x < GrapplingInput.Count; x++)
+            {
+                if (InputBridge.Instance.GetGrabbedControllerBinding(ReleaseSlideInput[x], thisGrabber.HandSide))
+                {
+                    Grappling();
+                    break;
+                }
+            }
+        }
         public virtual void UnlockSlide()
         {
             if (ws != null)
@@ -436,6 +453,20 @@ namespace BNG
             {
                 shotRoutine = doMuzzleFlash();
                 StartCoroutine(shotRoutine);
+            }
+        }
+        // 그래플링 관련
+        public void Grappling()
+        {
+            // 진동 (뭔가 집고있을 경우)
+            if (thisGrabber != null)
+            {
+                input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
+            }
+
+            if (isMelee && grappling != null)
+            {
+                grappling.StartGrapple();
             }
         }
 

@@ -4759,6 +4759,7 @@ MonoBehaviour:
   EjectInput: 04000000
   ReleaseSlideInput: 02000000
   ReloadInput: 04000000
+  GrapplingInput: 01000000
   BulletInChamber: 0
   EmptyBulletInChamber: 0
   onShootEvent:
@@ -5036,7 +5037,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 0.025
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -5101,15 +5102,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e4494b8e8a7d7479774644b7d6cd68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
-  gunTip: {fileID: 0}
+  gun: {fileID: 8768672552246940895}
+  gunTip: {fileID: 8768672551865264199}
   grappleableLayer:
     serializedVersion: 2
-    m_Bits: 0
-  maxGrappleDistance: 0
-  grappleDelayTime: 0
-  grapplingCd: 0
-  grappling: 0
+    m_Bits: 1
+  locomotionManager: {fileID: 0}
+  maxGrappleDistance: 25
+  grappleDelayTime: 0.25
+  overshootYAxis: 0.2
+  grapplingCd: 1
 --- !u!1 &8768672552584099863
 GameObject:
   m_ObjectHideFlags: 0

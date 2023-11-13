@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -79,6 +79,9 @@ namespace BNG {
 
         [Tooltip("Unity Input Action used to mimic having your thumb near a button")]
         public InputActionReference RightThumbNearAction;
+
+        public InputActionReference LeftPrimaryButtonAction;
+        public InputActionReference RightPrimaryButtonAction;
 
        
 
@@ -247,6 +250,7 @@ namespace BNG {
         }        
 
         float prevVal;
+        bool prevBool;
         /// <summary>
         /// Overwrite InputBridge inputs with our own bindings
         /// </summary>
@@ -302,6 +306,23 @@ namespace BNG {
             if(RightThumbNearAction) {
                 InputBridge.Instance.RightThumbNear = RightThumbNearAction.action.ReadValue<float>() == 1;
             }
+
+            if (LeftPrimaryButtonAction != null)
+            {
+                prevBool = InputBridge.Instance.XButton;
+                InputBridge.Instance.XButton = LeftPrimaryButtonAction.action.IsPressed();
+                InputBridge.Instance.XButtonDown = prevBool == false && InputBridge.Instance.XButton == true;
+                InputBridge.Instance.XButtonUp = prevBool == true && InputBridge.Instance.XButton == false;
+
+            }
+            if (RightPrimaryButtonAction != null)
+            {
+                prevBool = InputBridge.Instance.AButton;
+                InputBridge.Instance.AButton = RightPrimaryButtonAction.action.IsPressed();
+                InputBridge.Instance.AButtonDown = prevBool == false && InputBridge.Instance.AButton == true;
+                InputBridge.Instance.AButtonUp = prevBool == true && InputBridge.Instance.AButton == false;
+            }
+
         }
 
         public void CheckPlayerControls() {

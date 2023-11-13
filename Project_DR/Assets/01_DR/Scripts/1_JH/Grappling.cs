@@ -5,16 +5,30 @@ using UnityEngine;
 
 public class Grappling : MonoBehaviour
 {
+    public enum LocomoType
+    {
+        Teleport,
+        SmoothLocomotion,
+        None
+    }
+
     [Header("References")]
     private GameObject player;
-    public Transform cam;
+    public Transform gun;
     public Transform gunTip;
     public LayerMask grappleableLayer;
-    public LineRenderer lineRenderer;
+    private LineRenderer line;
+
+    [Header("LocomotionType")]
+    public LocomotionManager locomotionManager;
+    private SmoothLocomotion smoothLocomotion;
+    private PlayerTeleport teleport;
+    LocomoType locomoType = LocomoType.None;
 
     [Header("Grappling")]
     public float maxGrappleDistance;
     public float grappleDelayTime;
+    public float overshootYAxis;
 
     private Vector3 grapplePoint;
 
@@ -22,12 +36,14 @@ public class Grappling : MonoBehaviour
     public float grapplingCd;
     private float grapplingCdTimer;
 
-    public bool grappling;
+    private bool grappling;
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        lineRenderer = GetComponent<LineRenderer>();
+        locomotionManager = player.GetComponent<LocomotionManager>();               // 플레이어 이동 매니저 가져와서
+        LocomoCheck();
+        line = GetComponent<LineRenderer>();
     }
     private void Update()
     {
@@ -35,17 +51,41 @@ public class Grappling : MonoBehaviour
             grapplingCdTimer -= Time.deltaTime;
     }
 
+    private void LateUpdate()
+    {
+        if (grappling)
+            line.SetPosition(0, gunTip.position);
+    }
+    private void LocomoCheck()
+    {
+        if (locomotionManager.SelectedLocomotion == LocomotionType.SmoothLocomotion)
+        {
+            locomoType = LocomoType.SmoothLocomotion;
+            smoothLocomotion = player.GetComponent<SmoothLocomotion>();
+        }
+        else if (locomotionManager.SelectedLocomotion == LocomotionType.Teleport)
+        {
+            locomoType = LocomoType.Teleport;
+            teleport = player.GetComponent<PlayerTeleport>();
+        }
+    }
 
-    // �׷��ø� ����
+    // 그래플링 시작
     public void StartGrapple()
     {
-        // ��ٿ��� �ȵǸ� ����
+
+        // 쿨다운이 안되면 리턴
         if (grapplingCdTimer > 0) return;
 
         grappling = true;
 
+        LocomoCheck(); // 쏘기전에 로코모 타입 체크
+        if (locomoType == LocomoType.SmoothLocomotion)
+        {
+            smoothLocomotion.freeze = true;
+        }
         RaycastHit hit;
-        if(Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, grappleableLayer))
+        if(Physics.Raycast(gun.position, gun.forward, out hit, maxGrappleDistance, grappleableLayer))
         {
             grapplePoint = hit.point;
 
@@ -53,21 +93,34 @@ public class Grappling : MonoBehaviour
         }
         else
         {
-            grapplePoint = cam.position + cam.forward * maxGrappleDistance;
+            grapplePoint = gun.position + gun.forward * maxGrappleDistance;
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
 
+        line.enabled = true;
+        line.SetPosition(1, grapplePoint);
     }
 
     private void ExecuteGrapple()
     {
+        smoothLocomotion.freeze = false;
+        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
+        float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
+        float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
+        if (locomoType == LocomoType.SmoothLocomotion)
+        {
+            smoothLocomotion.JumpToPosition(grapplePoint, highestPointOnArc);
+        }
 
+        Invoke(nameof(StopGrapple), 1f);
     }
 
     private void StopGrapple()
     {
+        smoothLocomotion.freeze = false;
         grappling = false;
         grapplingCdTimer = grapplingCd;
+        line.enabled = false;
     }
 
 }

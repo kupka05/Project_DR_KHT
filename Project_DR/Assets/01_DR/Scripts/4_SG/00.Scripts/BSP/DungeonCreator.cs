@@ -96,7 +96,7 @@ public class DungeonCreator : MonoBehaviour
         }
 
         #region 땅바닥 OBj 생성
-        // 각 방에 대한 땅바닥Obj 생성
+        //각 방에 대한 땅바닥Obj 생성
         //for (int i = 0; i < listOfRooms.Count; i++)
         //{
         //    CreateMeshInFloor(listOfRooms[i].BottomLeftAreaCorner,
@@ -114,7 +114,7 @@ public class DungeonCreator : MonoBehaviour
                     listOfRooms[i].TopRightAreaCorner, roopParent);
         }
 
-        Debug.Log("던전 생성 끝");
+        //Debug.Log("던전 생성 끝");
     }   // CreateDungeon()
 
     private void CreateRoof(Vector2 bottomLeftCorner, Vector2 topRightCorner,
@@ -216,7 +216,7 @@ public class DungeonCreator : MonoBehaviour
         {
             CreateWall(wallParent, wallPosition, wallVertical);
         }
-        Debug.Log("수직 수평 벽 생성 끝");
+        //Debug.Log("수직 수평 벽 생성 끝");
         
     }       // CreateWalls()
 
@@ -324,6 +324,8 @@ public class DungeonCreator : MonoBehaviour
         GameObject dungeonFloor = new GameObject("Mesh" + InItNum + bottomLeftCorner,
             typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
 
+        dungeonFloor.gameObject.tag = "Floor";
+
         InItNum++;
 
         #region 메시에 해당 매쉬 꼭지점들을 알수 있도록 스크립트 넣어주고 해당 좌표 생성자로 기입
@@ -352,8 +354,13 @@ public class DungeonCreator : MonoBehaviour
 
         dungeonFloor.transform.position = Vector3.zero;
         dungeonFloor.transform.localScale = Vector3.one;
+
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
         dungeonFloor.GetComponent<MeshRenderer>().material = material;
+
+        // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
+        dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV,topLeftV,topRightV);
+
 
         if (isFloor == true)
         {

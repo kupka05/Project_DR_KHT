@@ -9,7 +9,7 @@ public class DungeonCraetEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        DungeonCreator dungeonCreator = (DungeonCreator)target;
+        DungeonCreator dungeonCreator = (DungeonCreator)target;        
         if (GUILayout.Button("CreateNewDungeon"))
         {
             dungeonCreator.CreateDungeon();

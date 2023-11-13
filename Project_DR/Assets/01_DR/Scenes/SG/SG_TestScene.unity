@@ -162,15 +162,18 @@ MonoBehaviour:
   roomBottomCornerModifier: 0.15
   roomTopCornerModifier: 0.7
   roomOffset: 1
-  wallVertical: {fileID: 7658315763074952937, guid: d503f72036569a343bd4f8325662f0e3,
+  wallVertical: {fileID: 2855808085789068914, guid: 38bc2bb711def7f488158293b2f77724,
     type: 3}
-  wallHorizontal: {fileID: 7658315763074952937, guid: d503f72036569a343bd4f8325662f0e3,
+  wallHorizontal: {fileID: 2855808085789068914, guid: 38bc2bb711def7f488158293b2f77724,
     type: 3}
   wallBreakdown: {fileID: 7413407458742904279, guid: a402e9b3be34fca498905cc330e93351,
     type: 3}
   floorPrefabs:
   - {fileID: 2991707312341179396, guid: 8b8e3e70a5aff25488eeb919633ceb21, type: 3}
   roopYpos: {x: 0, y: 13.5, z: 0}
+  pcRoomDistance: 25
+  pcRoomWidth: 50
+  pcRoomHeight: 50
 --- !u!4 &687154412
 Transform:
   m_ObjectHideFlags: 0
@@ -333,7 +336,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -392,7 +395,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2094966239}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: -1.22, y: 2.671, z: 0.319}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -294,6 +294,7 @@ public class DungeonCreator : MonoBehaviour
         wallObjClone = Instantiate(wallPrefab, wallPos, Quaternion.identity, wallParent.transform);
         wallObjClone.transform.localScale = new Vector3(1f, 22f, 1f);
         wallPos.y = +(tempWallPosY * 1.33f) + (wallObjClone.transform.localScale.y / 2);
+        wallObjClone.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1f,9f);
         //wallPos.y = +((2.5f * 2f) / 2) + (wallObjClone.transform.localScale.y / 2); 나중에 이 방식으로 식 바꾸기 시도해봐야겠음
         wallObjClone.transform.position = wallPos;
         wallObjClone.tag = "Wall";
@@ -696,6 +697,11 @@ public class DungeonCreator : MonoBehaviour
 
         // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
+        dungeonFloor.AddComponent<ReCreateDungeon>();
+        // 아래 Rigid 무한 Roof돌아버림
+        //Rigidbody dungeonRigid = dungeonFloor.AddComponent<Rigidbody>();
+        //dungeonRigid.useGravity = false;
+        //dungeonRigid.freezeRotation = true;      
         #region PlayerStart CustomRoom
         CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
         CustomRoomCorridorMeshCreate(bspfirstRoomBottomCenterPoint, firstRoomPos, dungeonFloor);
@@ -880,6 +886,7 @@ public class DungeonCreator : MonoBehaviour
         // 3번째 벽 생성
         wallObjClone = Instantiate(wallPrefab, wallPos, Quaternion.identity, wallParent.transform);
         wallObjClone.transform.localScale = new Vector3(1f, 22f, 1f);
+        wallObjClone.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1f, 9f);
         wallPos.y = +(tempWallPosY * 1.33f) + (wallObjClone.transform.localScale.y / 2);
         //wallPos.y = +((2.5f * 2f) / 2) + (wallObjClone.transform.localScale.y / 2); 나중에 이 방식으로 식 바꾸기 시도해봐야겠음
         wallObjClone.transform.position = wallPos;

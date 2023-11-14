@@ -699,6 +699,7 @@ public class DungeonCreator : MonoBehaviour
         #region PlayerStart CustomRoom
         CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
         CustomRoomCorridorMeshCreate(bspfirstRoomBottomCenterPoint, firstRoomPos, dungeonFloor);
+        CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         #endregion PlayerStart CustomRoom
     }       // PlayerStartRoomCreate()
 
@@ -849,6 +850,11 @@ public class DungeonCreator : MonoBehaviour
 
         CustomRoomCorridorCreateMinusPos(dungeonFloor, bottomLeftV, bottomRightV, topLeftV, topRightV, true);
 
+        bottomLeftV.y = roopYpos.y;
+        bottomRightV.y = roopYpos.y;
+        topLeftV.y = roopYpos.y;
+        topRightV.y = roopYpos.y;
+        CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, pcRoom_);
 
     }       // PlayerStartRoomCorridorCreate()
 
@@ -893,6 +899,90 @@ public class DungeonCreator : MonoBehaviour
         wallObjClone.transform.position = wallPos;
 
     }       // CreateDemolisherWall()
+
+    // 커스텀방 지붕 생성
+    private void CreateCustomRoomRoof(Vector3 bottomLeftV_,Vector3 bottomRightV_,
+        Vector3 topLeftV_, Vector3 topRightV_,GameObject roopParent)
+    {
+        topLeftV_.y = roopYpos.y;
+        topRightV_.y = roopYpos.y;
+        bottomLeftV_.y = roopYpos.y;
+        bottomRightV_.y = roopYpos.y;
+
+        // 바닥 메시를 위한 꼭지점 배열 생성
+        Vector3[] vertices = new Vector3[]
+        {
+            topLeftV_,
+            topRightV_,
+            bottomLeftV_,
+            bottomRightV_
+        };
+
+        // UV 매핑을 위한 배열 생성
+        Vector2[] uvs = new Vector2[vertices.Length];
+        for (int i = 0; i < uvs.Length; i++)
+        {
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+        }
+
+        // 삼각형을 정의하는 배열 생성
+        int[] triangles = new int[]
+        {
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+        };
+
+        // 메시 생성 및 설정
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices;
+        mesh.uv = uvs;
+        mesh.triangles = triangles;
+        mesh.triangles = mesh.triangles.Reverse().ToArray();
+
+
+        GameObject dungeonFloor = new GameObject("Mesh" + InItNum + bottomLeftV_,
+            typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
+        roopYpos.x = 0;
+        roopYpos.z = 0;
+
+
+        InItNum++;
+
+        #region 메시의 콜라이더 Center,Size 수정
+
+        // 메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
+        // Center
+        Vector3 colCenter = new Vector3((bottomLeftV_.x + bottomRightV_.x) / 2, roopYpos.y, (topLeftV_.z + bottomLeftV_.z) / 2);
+        BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
+        floorCol.center = colCenter;
+        // Size
+        float colSizeX, colSizeY, colSizeZ;
+        colSizeX = bottomLeftV_.x - bottomRightV_.x;
+        colSizeY = 0.03f;
+        colSizeZ = bottomLeftV_.z - topLeftV_.z;
+        // 음수값이 나오면 양수로 치환
+        if (colSizeX < 0) { colSizeX = -colSizeX; }
+        if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
+        Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
+        floorCol.size = colSize;
+
+        #endregion 메시의 콜라이더 Center,Size 수정
+
+        dungeonFloor.transform.position = Vector3.zero;
+        dungeonFloor.transform.localScale = Vector3.one;
+        dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
+        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+
+        dungeonFloor.transform.parent = roopParent.transform;
+        dungeonFloor.transform.position = roopYpos;
+
+
+
+    }   // CreateRoof()
     #endregion CustomRoomCreate
 }   // ClassEnd
 

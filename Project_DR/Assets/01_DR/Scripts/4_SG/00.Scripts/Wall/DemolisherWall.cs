@@ -20,24 +20,11 @@ public class DemolisherWall : MonoBehaviour
 
     IEnumerator DestroyTime()
     {
-        for (int i = 0; i < 5; i++)
-        {
-            if(this.gameObject.activeSelf == true)
-            {
-                this.gameObject.SetActive(false);
-            }
-            else if(this.gameObject.activeSelf == false)
-            {
-                this.gameObject.SetActive(true);
-            }
-            yield return null;
-        }
-
-
-        for (int i = 0; i < 10; i++)
-        {
-            yield return null;
-        }
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    yield return null;
+        //}
+        yield return null;
         Destroy(this.gameObject);
     }
 

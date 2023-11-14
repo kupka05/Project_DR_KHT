@@ -727,30 +727,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &619172338 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8300719872262077, guid: 9af8996cf7742564d86ec55ab5e912c0,
-    type: 3}
-  m_PrefabInstance: {fileID: 6757648436143502866}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4e4494b8e8a7d7479774644b7d6cd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &661915541 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1384043012322387927, guid: 9af8996cf7742564d86ec55ab5e912c0,
-    type: 3}
-  m_PrefabInstance: {fileID: 6757648436143502866}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4e4494b8e8a7d7479774644b7d6cd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &884058471
 GameObject:
   m_ObjectHideFlags: 0
@@ -1706,62 +1682,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6757648435622825461, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: LeftPrimaryButtonAction
-      value: 
-      objectReference: {fileID: 1367316620502084850, guid: 27bafa1c7d8a77b47985ab70c0511986,
-        type: 3}
-    - target: {fileID: 6757648435622825461, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: RightPrimaryButtonAction
-      value: 
-      objectReference: {fileID: -4905483316028591056, guid: 27bafa1c7d8a77b47985ab70c0511986,
-        type: 3}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: freeze
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: AirDrag
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: JumpForce
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: swingSpeed
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: MovementForce
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: ControllerType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: grapplings.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: grapplings.Array.data[0]
-      value: 
-      objectReference: {fileID: 619172338}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: grapplings.Array.data[1]
-      value: 
-      objectReference: {fileID: 661915541}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9af8996cf7742564d86ec55ab5e912c0, type: 3}

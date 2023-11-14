@@ -45816,7 +45816,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4668945887704089343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4688ae0e7d3f7c7498dd85852dfd2622, type: 3}
+  m_Script: {fileID: 11500000, guid: fa81333c13603f3458ac0f21739e4d86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MoveCharacterWithCamera: 1
@@ -45827,7 +45827,7 @@ MonoBehaviour:
   CenterEyeAnchor: {fileID: 8717664012036131316}
   GroundedLayers:
     serializedVersion: 2
-    m_Bits: 1281
+    m_Bits: 1
   DistanceFromGround: 0
   DistanceFromGroundOffset: 0
   MinimumCapsuleHeight: 0.4
@@ -45835,10 +45835,10 @@ MonoBehaviour:
   LastTeleportTime: 0
   CharacterControllerYOffset: -0.025
   CameraHeight: 0
-  ElevateCameraIfNoHMDPresent: 0
+  ElevateCameraIfNoHMDPresent: 1
   ElevateCameraHeight: 1.65
-  MinElevation: -100
-  MaxElevation: 5000
+  MinElevation: -6000
+  MaxElevation: 6000
   LastPlayerMoveTime: 0
   SphereColliderRadius: 0.08
 --- !u!143 &4668945887714883383

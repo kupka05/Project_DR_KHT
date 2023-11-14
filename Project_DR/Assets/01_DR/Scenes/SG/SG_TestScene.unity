@@ -152,22 +152,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be8e50b18693534a8d088b12c9e6a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dungeonWidth: 300
-  dungeonHeight: 300
+  dungeonWidth: 250
+  dungeonHeight: 250
   roomWidthMin: 25
   roomLengthMin: 25
   maxIterations: 7
-  corridorWidth: 25
-  material: {fileID: 2100000, guid: 75ec4dc45dcf4e747bc501b034e2d67b, type: 2}
+  corridorWidth: 10
+  material: {fileID: 2100000, guid: 658e6fe543c4eb3429fc65cb91b27b7c, type: 2}
   roomBottomCornerModifier: 0.15
   roomTopCornerModifier: 0.7
   roomOffset: 1
-  wallVertical: {fileID: 7658315763074952937, guid: d503f72036569a343bd4f8325662f0e3,
+  wallVertical: {fileID: 2855808085789068914, guid: 38bc2bb711def7f488158293b2f77724,
     type: 3}
-  wallHorizontal: {fileID: 7658315763074952937, guid: d503f72036569a343bd4f8325662f0e3,
+  wallHorizontal: {fileID: 2855808085789068914, guid: 38bc2bb711def7f488158293b2f77724,
     type: 3}
   wallBreakdown: {fileID: 7413407458742904279, guid: a402e9b3be34fca498905cc330e93351,
     type: 3}
+  demolisherWall: {fileID: 2138547158113062884, guid: 601675849cb14ff43a768e9f287ddc83,
+    type: 3}
+  floorPrefabs:
+  - {fileID: 2991707312341179396, guid: 8b8e3e70a5aff25488eeb919633ceb21, type: 3}
+  roopYpos: {x: 0, y: 13.5, z: 0}
+  pcRoomDistance: 25
+  pcRoomWidth: 50
+  pcRoomHeight: 50
 --- !u!4 &687154412
 Transform:
   m_ObjectHideFlags: 0
@@ -260,14 +268,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2035812429}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.6530511, y: -0, z: -0, w: 0.75731397}
+  m_LocalPosition: {x: 0, y: 80, z: -41.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 81.544, y: 0, z: 0}
 --- !u!114 &2035812433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,7 +338,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -389,7 +397,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2094966239}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: -1.22, y: 2.671, z: 0.319}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

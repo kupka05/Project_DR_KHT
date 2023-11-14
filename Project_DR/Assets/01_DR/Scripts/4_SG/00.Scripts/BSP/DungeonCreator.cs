@@ -36,6 +36,10 @@ public class DungeonCreator : MonoBehaviour
     public GameObject wallHorizontal;
     public GameObject wallBreakdown;
 
+    // 이 오브젝트는 프리펩이며 커스텀 방에서 막힌 벽을 뚫어주는데 사용될거임
+    // 벽이 한개만 있는게 아닌 3단 으로 쌓여있기에 이렇게 사용
+    public GameObject demolisherWall;
+
     // 부숴지는벽이 나올 확률 // 임시 : 추후 스프레드시트로 바뀔수 있음 11.09
     private float wallBreakDownPercentage = 5;
 
@@ -268,12 +272,14 @@ public class DungeonCreator : MonoBehaviour
         if (randomCreatWall < wallBreakDownPercentage)
         {
             wallObjClone = Instantiate(wallBreakdown, wallPosition, Quaternion.identity, wallParent.transform);
+            wallObjClone.tag = "EventWall";
         }
         else
         {
             wallObjClone = Instantiate(wallPrefab, wallPosition, Quaternion.identity, wallParent.transform);
+            wallObjClone.tag = "Wall";
         }
-        
+
 
         Vector3 wallPos = wallObjClone.transform.position;
         wallPos.y = wallObjClone.transform.localScale.y / 2;
@@ -283,13 +289,15 @@ public class DungeonCreator : MonoBehaviour
         wallPos.y = wallPos.y * 3;
         tempWallPosY = wallPos.y;
         wallObjClone = Instantiate(wallPrefab, wallPos, Quaternion.identity, wallParent.transform);
+        wallObjClone.tag = "Wall";
         // 3번째 벽 생성
         wallObjClone = Instantiate(wallPrefab, wallPos, Quaternion.identity, wallParent.transform);
         wallObjClone.transform.localScale = new Vector3(1f, 22f, 1f);
         wallPos.y = +(tempWallPosY * 1.33f) + (wallObjClone.transform.localScale.y / 2);
         //wallPos.y = +((2.5f * 2f) / 2) + (wallObjClone.transform.localScale.y / 2); 나중에 이 방식으로 식 바꾸기 시도해봐야겠음
         wallObjClone.transform.position = wallPos;
-        //roopYpos.y = wallObjClone.GetComponent<MeshRenderer>().bounds.size.y;
+        wallObjClone.tag = "Wall";
+        
 
 
         //roopYpos.y = wallObjClone.transform.localScale.y;
@@ -596,6 +604,7 @@ public class DungeonCreator : MonoBehaviour
         }
     }       // DestroyAllChildren()
 
+    #region CustomRoomCreate
     // 플레이어 시작 위치 방 생성하는 함수
     private void PlayerStartRoomCreate(GameObject floorParent)
     {       // 고정적인 방
@@ -604,7 +613,7 @@ public class DungeonCreator : MonoBehaviour
         FloorMeshPos firstRoomPos = floorParent.transform.GetChild(0).GetComponent<FloorMeshPos>();
 
         // 방의 하단 중앙위치
-        float bspfirstRoomBottomCenterPoint = (firstRoomPos.bottomLeftCorner.x + firstRoomPos.bottomRightCorner.x) / 2;        
+        float bspfirstRoomBottomCenterPoint = (firstRoomPos.bottomLeftCorner.x + firstRoomPos.bottomRightCorner.x) / 2;
 
         //// 바닥 메시 생성을 위한 꼭지점 좌표 설정
         Vector3 topLeftV = new Vector3
@@ -622,7 +631,7 @@ public class DungeonCreator : MonoBehaviour
             bottomLeftV,
             bottomRightV
         };
-      
+
         // UV 매핑을 위한 배열 생성
         Vector2[] uvs = new Vector2[vertices.Length];
         for (int i = 0; i < uvs.Length; i++)
@@ -651,10 +660,14 @@ public class DungeonCreator : MonoBehaviour
         GameObject dungeonFloor = new GameObject("PCRoomMesh" + InItNum + bottomLeftV,
             typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
 
+        GameObject wallParnet = new GameObject("CustomRoomWallParent");
+        dungeonFloor.transform.parent = this.transform;
+        wallParnet.transform.parent = dungeonFloor.transform;
+
         dungeonFloor.gameObject.tag = "Floor";
 
         InItNum++;
-        
+
         #region 메시의 콜라이더 Center,Size
 
         //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
@@ -683,20 +696,78 @@ public class DungeonCreator : MonoBehaviour
 
         // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
-
-
-        PlayerStartRoomCorridorCreate(bspfirstRoomBottomCenterPoint, firstRoomPos, dungeonFloor);
-
+        #region PlayerStart CustomRoom
+        CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
+        CustomRoomCorridorMeshCreate(bspfirstRoomBottomCenterPoint, firstRoomPos, dungeonFloor);
+        #endregion PlayerStart CustomRoom
     }       // PlayerStartRoomCreate()
 
+    // 플레이어 시작 위치에 벽 생성해주는 함수 (해당 방의 포지션이 음수인지 양수인지에 따라 계산이 다르기때문에 둘로 쪼개놓음)
+    private void CustomRoomCorridorCreateMinusPos(GameObject wallParent_,
+        Vector3 bottomLeftV_, Vector3 bottomRightV_, Vector3 topLeftV_, Vector3 topRightV_, bool isCustomCorridor)
+    {       // 매개변수는 위 PlayerStartRoomCreate에 있는 Vector3변수를 이용
+        Vector3 createPos;
+
+        // 좌측 세로
+        createPos = bottomLeftV_;
+        for (float i = bottomLeftV_.z; i < topLeftV_.z; i++)
+        {
+            createPos.z = i;
+            CreateCustomRoomWall(wallParent_, createPos, wallVertical);
+        }
+        // 우측 세로
+        createPos = bottomRightV_;
+        for (float i = bottomRightV_.z; i < topRightV_.z; i++)
+        {
+            createPos.z = i;
+            CreateCustomRoomWall(wallParent_, createPos, wallVertical);
+        }
+        if (isCustomCorridor == false)
+        {
+            // 상단 가로
+            createPos = topLeftV_;
+            for (float i = topLeftV_.x; i < topRightV_.x; i++)
+            {
+                createPos.x = i;
+                CreateCustomRoomWall(wallParent_, createPos, wallHorizontal);
+            }
+            // 하단 가로
+            createPos = bottomLeftV_;
+            for (float i = bottomLeftV_.x; i < bottomRightV_.x; i++)
+            {
+                createPos.x = i;
+                CreateCustomRoomWall(wallParent_, createPos, wallHorizontal);
+            }
+        }
+        else if (isCustomCorridor == true)
+        {
+            //상단 세로
+            createPos = topLeftV_;
+            for (float i = topLeftV_.x + 1.5f; i < topRightV_.x - 1; i++)
+            {
+                createPos.x = i;
+                CreateDemolisherWall(wallParent_, createPos, demolisherWall);
+            }
+            // 하단 가로
+            createPos = bottomLeftV_;
+            for (float i = bottomLeftV_.x + 1.5f; i < bottomRightV_.x - 1; i++)
+            {
+                createPos.x = i;
+                CreateDemolisherWall(wallParent_, createPos, demolisherWall);
+            }
+        }
+
+
+    }       // PlayerStartRoomCorridorCreate()
+
     // 플레이어와 첫번째 방을 이어주는 복도 제작
-    private void PlayerStartRoomCorridorCreate(float bspfirstRoomBottomCenterPoint_, FloorMeshPos firstRoomPos_,
+    private void CustomRoomCorridorMeshCreate(float bspfirstRoomBottomCenterPoint_, FloorMeshPos firstRoomPos_,
         GameObject pcRoom_)
     {
-        
+
         //// 바닥 메시 생성을 위한 꼭지점 좌표 설정
         Vector3 topLeftV = new Vector3
-            (bspfirstRoomBottomCenterPoint_ - (corridorWidth /2),0f,firstRoomPos_.bottomLeftCorner.z);
+            (bspfirstRoomBottomCenterPoint_ - (corridorWidth / 2), 0f, firstRoomPos_.bottomLeftCorner.z);
         Vector3 topRightV = new Vector3
             (bspfirstRoomBottomCenterPoint_ + (corridorWidth / 2), 0f, firstRoomPos_.bottomLeftCorner.z);
 
@@ -775,9 +846,54 @@ public class DungeonCreator : MonoBehaviour
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
 
         dungeonFloor.transform.parent = pcRoom_.transform;
+
+        CustomRoomCorridorCreateMinusPos(dungeonFloor, bottomLeftV, bottomRightV, topLeftV, topRightV, true);
+
+
     }       // PlayerStartRoomCorridorCreate()
 
+    // 벽 오브젝트 생성 함수     CustomRoomCorridorCreateMinusPos() 참조용
+    private void CreateCustomRoomWall(GameObject wallParent, Vector3 wallPosition, GameObject wallPrefab)
+    {
+        // 나중에 sclae이 다른 벽을 Instance할때에 position잡을때 직전에 만든 벽의 Y를 담아둘 변수
+        float tempWallPosY;
+        // 벽 오브젝트 생성후 Y축 조절을 위한 GameObject
+        GameObject wallObjClone;
 
+        wallObjClone = Instantiate(wallPrefab, wallPosition, Quaternion.identity, wallParent.transform);
+        Vector3 wallPos = wallObjClone.transform.position;
+        wallPos.y = wallObjClone.transform.localScale.y / 2;
+        wallObjClone.transform.position = wallPos;
+        wallObjClone.tag = "Wall";   
+
+        // 2번째 벽 생성 
+        wallPos.y = wallPos.y * 3;
+        tempWallPosY = wallPos.y;
+        wallObjClone = Instantiate(wallPrefab, wallPos, Quaternion.identity, wallParent.transform);
+        wallObjClone.tag = "Wall";        
+        // 3번째 벽 생성
+        wallObjClone = Instantiate(wallPrefab, wallPos, Quaternion.identity, wallParent.transform);
+        wallObjClone.transform.localScale = new Vector3(1f, 22f, 1f);
+        wallPos.y = +(tempWallPosY * 1.33f) + (wallObjClone.transform.localScale.y / 2);
+        //wallPos.y = +((2.5f * 2f) / 2) + (wallObjClone.transform.localScale.y / 2); 나중에 이 방식으로 식 바꾸기 시도해봐야겠음
+        wallObjClone.transform.position = wallPos;
+        wallObjClone.tag = "Wall";
+        
+    }       // CreateWall()
+
+    // 벽 파괴하는 벽 생성해주는 함수 CustomRoomCorridorCreateMinusPos() 참조용
+    private void CreateDemolisherWall(GameObject wallParent, Vector3 wallPosition, GameObject wallPrefab)
+    {
+        // 벽 오브젝트 생성후 Y축 조절을 위한 GameObject
+        GameObject wallObjClone;
+
+        wallObjClone = Instantiate(wallPrefab, wallPosition, Quaternion.identity, wallParent.transform);
+        Vector3 wallPos = wallObjClone.transform.position;
+        wallPos.y = wallObjClone.transform.localScale.y / 2;
+        wallObjClone.transform.position = wallPos;
+
+    }       // CreateDemolisherWall()
+    #endregion CustomRoomCreate
 }   // ClassEnd
 
 

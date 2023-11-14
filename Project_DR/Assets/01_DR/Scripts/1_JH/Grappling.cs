@@ -82,31 +82,44 @@ public class Grappling : MonoBehaviour
         LocomoCheck(); // 쏘기전에 로코모 타입 체크
         if (locomoType == LocomoType.SmoothLocomotion)
         {
-            smoothLocomotion.freeze = true;
+            smoothLocomotion.freeze = true;                 // 플레이어 이동 못하는 상태로 전환
         }
         RaycastHit hit;
         if(Physics.Raycast(gun.position, gun.forward, out hit, maxGrappleDistance, grappleableLayer))
         {
-            grapplePoint = hit.point;
+            grapplePoint = hit.point;                         // 충돌한 곳이 있으면 그래플링 포인트로
 
-            Invoke(nameof(ExecuteGrapple), grappleDelayTime);
+            Invoke(nameof(ExecuteGrapple), grappleDelayTime); // 그래플링 실행
         }
         else
         {
-            grapplePoint = gun.position + gun.forward * maxGrappleDistance;
-            Invoke(nameof(StopGrapple), grappleDelayTime);
+            grapplePoint = gun.position + gun.forward * maxGrappleDistance; // 충돌한곳이 없다면 최대사거리로 쏘고 
+            Invoke(nameof(StopGrapple), grappleDelayTime);    // 그래플링 정지
         }
 
-        line.enabled = true;
+        line.enabled = true;                                  // 라인 켜주기
         line.SetPosition(1, grapplePoint);
     }
 
+    // 그래플링 실행
     private void ExecuteGrapple()
     {
-        smoothLocomotion.freeze = false;
-        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
+        smoothLocomotion.freeze = false; // 정지 상태 해제
+
+        // lowestPoint : 플레이어의 바닥 예상 높이
+        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+        
+        // grapplePointRelativeYPos : 바닥에서 그래플링 포인트까지의 높이
         float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
+
+        // highestPointOnArc : 최대 높이
+        // overshootYAxis : 최대 높이 보정점. 이 수치로 얼마나 더 튀어오를지 정할 수 있음
         float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
+
+        if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
+
+        // 부드러운 이동 방식이면 smoothLocomotion에서 JumpToPosition 호출
+        // 전달 변수는 그래플링 포인트와 최대 높이
         if (locomoType == LocomoType.SmoothLocomotion)
         {
             smoothLocomotion.JumpToPosition(grapplePoint, highestPointOnArc);
@@ -114,9 +127,11 @@ public class Grappling : MonoBehaviour
 
         Invoke(nameof(StopGrapple), 1f);
     }
-
-    private void StopGrapple()
+    // 그래플링 멈춤
+    public void StopGrapple()
     {
+        LocomoCheck(); // 쏘기전에 로코모 타입 체크
+
         smoothLocomotion.freeze = false;
         grappling = false;
         grapplingCdTimer = grapplingCd;

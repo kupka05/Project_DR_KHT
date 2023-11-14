@@ -45888,9 +45888,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97dc4c75aa9c7ac4496efd08a068c08c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ControllerType: 0
+  state: 0
+  ControllerType: 1
   MovementSpeed: 1.25
-  MovementForce: 500
+  MovementForce: 2
   MaxHorizontalVelocity: 5
   MaxVerticalVelocity: 10
   StepHeight: 0.1
@@ -45899,7 +45900,7 @@ MonoBehaviour:
   FrictionMaterial: {fileID: 0}
   MovementDrag: 1
   StaticDrag: 5
-  AirDrag: 1
+  AirDrag: 0
   ForwardDirection: {fileID: 0}
   AllowInput: 1
   UpdateMovement: 1
@@ -45911,14 +45912,22 @@ MonoBehaviour:
   SprintInput: 00000000
   SprintAction: {fileID: -9014867403852775025, guid: e39f4b35a6db18348b41eb0262520e69,
     type: 3}
+  swingSpeed: 1.5
   StrafeSpeed: 1
   StrafeSprintSpeed: 1.25
-  JumpForce: 3
+  swingStrafeSpeed: 1.25
+  JumpForce: 4
   JumpInput: 00000000
   JumpAction: {fileID: 3598031526004978682, guid: e39f4b35a6db18348b41eb0262520e69,
     type: 3}
+  freeze: 0
+  activeGrapple: 0
+  swinging: 0
   AirControl: 1
   AirControlSpeed: 1
+  grapplings:
+  - {fileID: 8300719872262077}
+  - {fileID: 1384043012322387927}
   Magnitude: 0
   GroundContacts: 0
   SurfaceAngle: 0
@@ -46125,7 +46134,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4668945887704089343}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6194a870e97cfe14081ff58549a6852a, type: 3}
   m_Name: 
@@ -88674,6 +88683,10 @@ MonoBehaviour:
     type: 3}
   RightThumbNearAction: {fileID: -9043086599165714804, guid: 27bafa1c7d8a77b47985ab70c0511986,
     type: 3}
+  LeftPrimaryButtonAction: {fileID: 1367316620502084850, guid: 27bafa1c7d8a77b47985ab70c0511986,
+    type: 3}
+  RightPrimaryButtonAction: {fileID: -4905483316028591056, guid: 27bafa1c7d8a77b47985ab70c0511986,
+    type: 3}
   HMDIsActive: 0
   LeftControllerPosition: {x: -0.2, y: -0.2, z: 0.5}
   RightControllerPosition: {x: 0.2, y: -0.2, z: 0.5}
@@ -93615,6 +93628,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e51c0d6c37746cc4da02dc91bcae6bf5, type: 3}
+--- !u!114 &1384043012322387927 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8562283376345319334, guid: e51c0d6c37746cc4da02dc91bcae6bf5,
+    type: 3}
+  m_PrefabInstance: {fileID: 7342640444471107697}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4e4494b8e8a7d7479774644b7d6cd68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2042058824998220963 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8768672552246940882, guid: e51c0d6c37746cc4da02dc91bcae6bf5,
@@ -93702,6 +93727,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e51c0d6c37746cc4da02dc91bcae6bf5, type: 3}
+--- !u!114 &8300719872262077 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8562283376345319334, guid: e51c0d6c37746cc4da02dc91bcae6bf5,
+    type: 3}
+  m_PrefabInstance: {fileID: 8560826294476355611}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4e4494b8e8a7d7479774644b7d6cd68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1116539841907240132 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8768672552246940895, guid: e51c0d6c37746cc4da02dc91bcae6bf5,

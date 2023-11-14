@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Created by https://www.toptal.com/developers/gitignore/api/csharp,unity
 # Edit at https://www.toptal.com/developers/gitignore?templates=csharp,unity
 
@@ -401,6 +402,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+=======
+# Created by https://www.toptal.com/developers/gitignore/api/unity
+# Edit at https://www.toptal.com/developers/gitignore?templates=unity
+>>>>>>> upstream/feature/jihwan
 
 ### Unity ###
 # This .gitignore file should be placed at the root of your Unity project directory
@@ -428,6 +433,7 @@ FodyWeavers.xsd
 /[Aa]ssets/Plugins/Editor/JetBrains*
 
 # Visual Studio cache directory
+.vs/
 
 # Gradle cache directory
 .gradle/
@@ -438,9 +444,17 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
 *.booproj
 *.svd
+*.pdb
 *.mdb
+*.opendb
+*.VC.db
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -466,4 +480,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-# End of https://www.toptal.com/developers/gitignore/api/csharp,unity
+# End of https://www.toptal.com/developers/gitignore/api/unity

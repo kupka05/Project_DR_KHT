@@ -14,7 +14,9 @@ namespace BNG
 
         // 근접 공격 무기인지 체크
         public bool isMelee;
-        private Grappling grappling;
+        private Grappling grappling;        
+        // 드릴 작동을 위한 클래스
+        protected WeaponDrill drill;
 
         // 최대 사거리
         public float MaxRange = 25f;
@@ -190,8 +192,7 @@ namespace BNG
 
         protected bool readyToShoot = true;
 
-        // 드릴 작동을 위한 클래스
-        protected WeaponDrill drill;
+
 
         void Start()
         {

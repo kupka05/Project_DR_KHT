@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1765,6 +1765,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1384043012322387927, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: grapplingCd
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6757648434215542744, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_Name
@@ -1823,11 +1828,6 @@ PrefabInstance:
     - target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: ControllerType
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

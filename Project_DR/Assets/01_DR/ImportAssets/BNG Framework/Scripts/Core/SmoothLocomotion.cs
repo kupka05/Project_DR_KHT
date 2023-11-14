@@ -399,7 +399,6 @@ namespace BNG {
         public virtual void MoveCharacter() {
 
             if (activeGrapple) return;
-            if (swinging) return;
 
             // Bail early if no elligible for movement
             if (UpdateMovement == false) {

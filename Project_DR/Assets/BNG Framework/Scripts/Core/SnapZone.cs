@@ -1,11 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 namespace BNG {
     public class SnapZone : MonoBehaviour {
+
+
+        [Header("Holder Item")]
+        // 지환 : 이 스냅존이 고정 아이템 전용인지
+        public bool isHolder;
+        public float resetTime;
+        Coroutine resetCoroutine;
 
         [Header("Starting / Held Item")]
         [Tooltip("The currently held item. Set this in the editor to equip on Start().")]
@@ -99,6 +108,7 @@ namespace BNG {
 
         SnapZoneOffset offset;
 
+
         void Start() {
             gZone = GetComponent<GrabbablesInTrigger>();
             _scaleTo = ScaleItem;
@@ -118,6 +128,24 @@ namespace BNG {
         void Update() {
 
             ClosestGrabbable = getClosestGrabbable();
+
+            // 고정 아이템이고 지금 들고있는 아이템이 없는 경우
+            if(isHolder && HeldItem == null && StartingItem != null)
+            {
+                // 부모오브젝트가 있을 때
+                if (StartingItem.transform.parent != null)
+                {
+                    // 이 스냅존이 없으면 : 아이템이 보관되어있지 않으면
+                    if (StartingItem.transform.parent.GetComponent<SnapZone>() == null)
+                    { 
+                        // 현재 코루틴이 없을때만 실행
+                        if (resetCoroutine == null)
+                        {
+                            resetCoroutine = StartCoroutine(ResetCount());
+                        }
+                    }
+                }
+            }
 
             // Can we grab something
             if (HeldItem == null && ClosestGrabbable != null) {
@@ -146,11 +174,11 @@ namespace BNG {
             }
 
             // Can't drop item. Lerp to position if not being held
-            if (!CanDropItem && trackedItem != null && HeldItem == null) {
-                if (!trackedItem.BeingHeld) {
-                    GrabGrabbable(trackedItem);
-                }
-            }
+            //if (!CanDropItem && trackedItem != null && HeldItem == null) {
+            //    if (!trackedItem.BeingHeld) {
+            //        GrabGrabbable(trackedItem);
+            //    }
+            //}
         }
 
         Grabbable getClosestGrabbable() {
@@ -227,6 +255,15 @@ namespace BNG {
                     }
                 }
             }
+
+            // 고정아이템일 경우
+            if(isHolder)
+            {
+                // 스타트 아이템이 아니면 보관할 수 없도록 하기
+                if (closest != null && closest != StartingItem)
+                return null;
+            }
+            
 
             return closest;
         }
@@ -446,6 +483,28 @@ namespace BNG {
             }
 
             HeldItem = null;
+        }
+
+        // 지환 : 아이템을 다시 홀스터로 되돌리는 스크립트
+        public void ResetItem()
+        {
+            // 코루틴들을 꺼주고 null로 바꿔준다.
+            StopAllCoroutines();
+            resetCoroutine = null;
+
+            // 만약 들고있는 아이템이 없는 경우 : 있으면 되돌릴 필요가 없기 때문에
+            if (HeldItem == null)
+            {
+                StartingItem.transform.position = transform.position;
+                GrabGrabbable(StartingItem);
+            }
+        }
+
+        // 아이템 리셋 코루틴 
+        IEnumerator ResetCount()
+        {
+            yield return new WaitForSeconds(resetTime);
+            ResetItem();
         }
     }
 }

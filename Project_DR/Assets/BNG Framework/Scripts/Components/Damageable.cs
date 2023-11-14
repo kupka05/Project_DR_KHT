@@ -99,7 +99,7 @@ namespace BNG {
             if (destroyed) {
                 return;
             }
-
+            Debug.Log("데미지 입는다" + damageAmount);
             Health -= damageAmount;
 
             onDamaged?.Invoke(damageAmount);

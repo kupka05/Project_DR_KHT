@@ -94,6 +94,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "EmulateRightPrimaryButton",
+                    "type": "Button",
+                    "id": "ed7c8fc4-cdf0-4fda-a27a-9a50bc74033b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "EmulateLeftPrimaryButton",
+                    "type": "Button",
+                    "id": "00999922-6fc8-4df0-a6ad-a1c50fedd309",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -215,6 +233,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Lock Camera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d7211542-97de-4407-a7f5-cb0dc9c91d4b",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EmulateRightPrimaryButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea5383b6-2fc2-4a67-aa07-b42b1d857de1",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EmulateLeftPrimaryButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

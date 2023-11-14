@@ -15,7 +15,7 @@ namespace BNG {
         public float DesiredPlayerHeight = 1.65f;
 
         [Tooltip("Adjust the CharacterControllerYOffset property of this playerController. If not specified one will be found using GetComponentInChildren()")]
-        public BNGPlayerController PlayerController;
+        public PlayerController PlayerController;
 
         [Header("Startup")]
         [Tooltip("If true, the player's virtual height will be adjusted to match DesiredPlayerHeight on Start()")]
@@ -35,7 +35,7 @@ namespace BNG {
             }
 
             if(PlayerController == null) {
-                PlayerController = GetComponentInChildren<BNGPlayerController>();
+                PlayerController = GetComponentInChildren<PlayerController>();
             }
 
             if(CalibrateOnStart) {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,10 +9,22 @@ namespace BNG {
     public enum MovementVector {
         HMD,
         Controller
-    }    
+    }
 
+    public enum PlayerState
+    {
+        freeze,
+        grappling,
+        swinging,
+        walking,
+        sprinting,
+        air,
+        grounded
+           
+    }
     public class SmoothLocomotion : MonoBehaviour {
 
+        public PlayerState state;
         public PlayerControllerType ControllerType = PlayerControllerType.CharacterController;
 
         [Header("CharacterController Settings : ")]
@@ -79,9 +91,13 @@ namespace BNG {
         [Tooltip("Unity Input Action used to enable sprinting")]
         public InputActionReference SprintAction;
 
+        [Header("Swing : ")]
+        public float swingSpeed;
+
         [Header("Strafe : ")]
         public float StrafeSpeed = 1f;
         public float StrafeSprintSpeed = 1.25f;
+        public float swingStrafeSpeed = 1.25f;
 
         [Header("Jump : ")]
         [Tooltip("Amount of 'force' to apply to the player during Jump")]
@@ -93,6 +109,12 @@ namespace BNG {
         [Tooltip("Unity Input Action used to initiate a jump")]
         public InputActionReference JumpAction;
 
+        [Header("Grappling : ")]
+        public bool freeze;
+        public bool activeGrapple;
+        public bool swinging;
+
+
         [Header("Air Control : ")]
         [Tooltip("Can the player move when not grounded? Set to true if you want to be able to move the joysticks and have the player respond to input even when not grounded.")]
         public bool AirControl = true;
@@ -100,10 +122,11 @@ namespace BNG {
         [Tooltip("How fast the player can move in the air if AirControl = true. Example : 0.5 = Player will move at half the speed of MovementSpeed")]
         public float AirControlSpeed = 1f;
 
-        BNGPlayerController playerController;
+        PlayerController playerController;
         CharacterController characterController;
         Rigidbody playerRigid;
         SphereCollider playerSphere;
+        public Grappling[] grapplings;
 
         // Left / Right
         float movementX;
@@ -152,7 +175,7 @@ namespace BNG {
         public virtual void CheckControllerReferences() {
             // Component may be called while disabled, so check for references here
             if (playerController == null) {
-                playerController = GetComponentInParent<BNGPlayerController>();
+                playerController = GetComponentInParent<PlayerController>();
             }
 
             if(playerInitialized == false) {
@@ -178,50 +201,149 @@ namespace BNG {
         }
 
 
-        public virtual void UpdateInputs() {
-
+        // 입력 부분
+        public virtual void UpdateInputs()
+        {
             // Start by resetting our previous frame's inputs
             movementX = 0;
             movementY = 0;
             movementZ = 0;
 
+            // Start with VR Controller Input
+            Vector2 primaryAxis = GetMovementAxis();
+
             // Keep values zeroed out if not allowing input
-            if(AllowInput == false) {
+            if (AllowInput == false)
+            {
                 return;
             }
 
-            // Start with VR Controller Input
-            Vector2 primaryAxis = GetMovementAxis();
-            if (IsGrounded()) {
+            // 상태 : 플레이어 멈춰있는 상태
+            if (freeze)
+            {
+                state = PlayerState.freeze;
+                if (ControllerType == PlayerControllerType.Rigidbody)
+                {
+                    playerRigid.velocity = Vector3.zero;
+                }
+            }
+            // 상태 : 그래플링을 하고있는 상태
+            else if (activeGrapple)
+            {
+                state = PlayerState.grappling;
+
+                movementX *= StrafeSprintSpeed;
+                movementZ *= SprintSpeed;
+            }
+
+            // 상태 : 스윙 중인 상태
+            else if (swinging)
+            {
+                state = PlayerState.swinging;
+                movementX *= swingStrafeSpeed;
+                movementZ *= swingSpeed;
+            }
+
+            // 상태 : 달리는 상태
+            else if (IsGrounded() && CheckSprint() && primaryAxis != Vector2.zero)
+            {
+                state = PlayerState.sprinting;
                 movementX = primaryAxis.x;
                 movementZ = primaryAxis.y;
             }
-            else if(AirControl) {
+
+            // 상태 : 걷는 상태
+            else if (IsGrounded() && primaryAxis != Vector2.zero)
+            {
+                state = PlayerState.walking;
+                movementX = primaryAxis.x;
+                movementZ = primaryAxis.y;
+            }
+            else if (IsGrounded())
+            {
+                state = PlayerState.grounded;
+            }
+            // 상태 : 공중에 있는 상태
+            else if (AirControl)
+            {
+                state = PlayerState.air;
                 movementX = primaryAxis.x * AirControlSpeed;
                 movementZ = primaryAxis.y * AirControlSpeed;
+
             }
 
-            // Add Jump Force
-            if (CheckJump()) {
+            // 점프
+            if (CheckJump())
+            {
                 // Add movement directly to CC type
-                if(ControllerType == PlayerControllerType.CharacterController) {
+                if (ControllerType == PlayerControllerType.CharacterController)
+                {
                     movementY += JumpForce;
                 }
-                else if (ControllerType == PlayerControllerType.Rigidbody) {
+                else if (ControllerType == PlayerControllerType.Rigidbody)
+                {
                     DoRigidBodyJump();
                 }
             }
 
             // Attach any additional speed
-            if(CheckSprint()) {
+            if (CheckSprint())
+            {
                 movementX *= StrafeSprintSpeed;
                 movementZ *= SprintSpeed;
             }
-            else {
+            else
+            {
                 movementX *= StrafeSpeed;
                 movementZ *= MovementSpeed;
-            }            
+            }
+
+
         }
+        //public virtual void UpdateInputs() {
+
+        //    // Start by resetting our previous frame's inputs
+        //    movementX = 0;
+        //    movementY = 0;
+        //    movementZ = 0;
+
+        //    // Keep values zeroed out if not allowing input
+        //    if(AllowInput == false) {
+        //        return;
+        //    }
+
+        //    // Start with VR Controller Input
+        //    Vector2 primaryAxis = GetMovementAxis();
+        //    if (IsGrounded()) {
+        //        movementX = primaryAxis.x;
+        //        movementZ = primaryAxis.y;
+        //    }
+        //    else if(AirControl) {
+        //        movementX = primaryAxis.x * AirControlSpeed;
+        //        movementZ = primaryAxis.y * AirControlSpeed;
+        //    }
+
+        //    // Add Jump Force
+        //    if (CheckJump()) {
+        //        // Add movement directly to CC type
+        //        if(ControllerType == PlayerControllerType.CharacterController) {
+        //            movementY += JumpForce;
+        //        }
+        //        else if (ControllerType == PlayerControllerType.Rigidbody) {
+        //            DoRigidBodyJump();
+        //        }
+        //    }
+
+        //    // Attach any additional speed
+        //    if(CheckSprint()) {
+        //        movementX *= StrafeSprintSpeed;
+        //        movementZ *= SprintSpeed;
+        //    }
+        //    else {
+        //        movementX *= StrafeSpeed;
+        //        movementZ *= MovementSpeed;
+        //    }            
+        //}
 
         float lastJumpTime;
         float lastMoveTime;
@@ -236,6 +358,7 @@ namespace BNG {
             }
         }
 
+        // 이동 입력 받는 메서드
         public virtual Vector2 GetMovementAxis() {
 
             // Use the largest, non-zero value we find in our input list
@@ -274,6 +397,9 @@ namespace BNG {
         }        
 
         public virtual void MoveCharacter() {
+
+            if (activeGrapple) return;
+            if (swinging) return;
 
             // Bail early if no elligible for movement
             if (UpdateMovement == false) {
@@ -339,7 +465,7 @@ namespace BNG {
                 if (IsGrounded()) {
 
                     // Do movement if grounded and not recently jumped
-                    if(!recentlyJumped) {
+                    if (!recentlyJumped) {
                         if (maxVelocityChange > 0) {
                             velocityTarget.x = Mathf.Clamp(velocityTarget.x, -maxVelocityChange, maxVelocityChange);
                             // velocityChange.y = Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);
@@ -496,7 +622,7 @@ namespace BNG {
         public virtual void SetupCharacterController() {
             playerRigid = GetComponent<Rigidbody>();
 
-            BNGPlayerController bng = GetComponent<BNGPlayerController>();
+            PlayerController bng = GetComponent<PlayerController>();
             if (bng) {
                 bng.DistanceFromGroundOffset = 0f;
             }
@@ -528,7 +654,7 @@ namespace BNG {
                 GameObject.Destroy(charController);
             }
 
-            BNGPlayerController bng = GetComponent<BNGPlayerController>();
+            PlayerController bng = GetComponent<PlayerController>();
             if (bng) {
                 bng.DistanceFromGroundOffset = -0.087f;
             }
@@ -600,6 +726,77 @@ namespace BNG {
                 }
             }
         }
+        private Vector3 velocityToSet;
+        private bool enableMovementOnNextTouch;
+
+        // 그래플링 포인트로 점프하는 메서드
+        // targetPosition : 날아오를 포지션
+        // trajectoryHeight : 최대 높이
+        public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+        {
+            activeGrapple = true; // 그래플링 상태 true
+
+            velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+            Invoke(nameof(SetVelocity), 0.1f);
+
+            Invoke(nameof(ResetRestrictions), 3f);
+        }
+
+        // 점프를 계산해주는 메서드
+        // startPoint : 플레이어의 현재 위치
+        // endPoint : 점프에 도달할 목적지, 그래플링 포인트
+        // trajectorHeight : 점프 시 최대 높이
+        public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+        {
+            // 중력
+            float gravity = Physics.gravity.y;
+            // 목적지 - 플레이어 위치
+            float displacementY = endPoint.y - startPoint.y;
+            Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+            // Y값 속도
+            Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+            Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity)
+                + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+            return velocityXZ + velocityY;
+        }
+        private void SetVelocity()
+        {
+            enableMovementOnNextTouch = true;
+            if (playerRigid)
+            {
+                playerRigid.velocity = velocityToSet;
+
+                //cam.DoFov(grappleFov); // 시야각
+            }
+            else
+            {
+                characterController.SimpleMove(velocityToSet*Time.deltaTime);
+            }
+        }
+        public void ResetRestrictions()
+        {
+            activeGrapple = false;
+            //cam.DoFov(85f);
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (enableMovementOnNextTouch)
+            {
+                enableMovementOnNextTouch = false;
+                ResetRestrictions();
+
+                grapplings[0].StopGrapple();              
+                grapplings[1].StopGrapple();
+                
+
+
+            }
+        }
+
+
     }
 
     public enum PlayerControllerType {

@@ -128,7 +128,7 @@ namespace BNG {
         public PhysicMaterial FrictionMaterial;
 
         CharacterController controller;
-        BNGPlayerController playerController;
+        PlayerController playerController;
         Rigidbody playerRigid;
         InputBridge input;
         Transform cameraRig;
@@ -172,7 +172,7 @@ namespace BNG {
         bool setVariables = false;
         void setupVariables() {
             input = InputBridge.Instance;
-            playerController = GetComponent<BNGPlayerController>();
+            playerController = GetComponent<PlayerController>();
             playerRigid = GetComponent<Rigidbody>();
             controller = GetComponentInChildren<CharacterController>();
             cameraRig = playerController.CameraRig;

@@ -123,6 +123,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &19439882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 19439883}
+  - component: {fileID: 19439884}
+  m_Layer: 0
+  m_Name: DungeonInspectionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &19439883
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19439882}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &19439884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19439882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 612a114a231a0584fa744f34857d4c0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &687154410
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,6 +206,16 @@ MonoBehaviour:
   roomBottomCornerModifier: 0.15
   roomTopCornerModifier: 0.7
   roomOffset: 1
+  roopYpos: {x: 0, y: 13.5, z: 0}
+  pcRoomDistance: 25
+  pcRoomWidth: 50
+  pcRoomHeight: 50
+  bossRoomDistance: 40
+  bossRoomWidth: 50
+  bossRoomHeight: 50
+  nextStageRoomDistance: 0
+  nextStageRoomWidth: 0
+  nextStageRoomHeight: 0
   wallVertical: {fileID: 1641494010946769928, guid: 8dcffe0d54f9e4040aef3c18a36ee65d,
     type: 3}
   wallHorizontal: {fileID: 1641494010946769928, guid: 8dcffe0d54f9e4040aef3c18a36ee65d,
@@ -170,12 +224,10 @@ MonoBehaviour:
     type: 3}
   demolisherWall: {fileID: 2138547158113062884, guid: 601675849cb14ff43a768e9f287ddc83,
     type: 3}
+  dungeonInspection: {fileID: 918513362392551550, guid: bc7445132087abd4b83f6a0d1da0ee54,
+    type: 3}
   floorPrefabs:
   - {fileID: 2991707312341179396, guid: 8b8e3e70a5aff25488eeb919633ceb21, type: 3}
-  roopYpos: {x: 0, y: 13.5, z: 0}
-  pcRoomDistance: 25
-  pcRoomWidth: 50
-  pcRoomHeight: 50
 --- !u!4 &687154412
 Transform:
   m_ObjectHideFlags: 0

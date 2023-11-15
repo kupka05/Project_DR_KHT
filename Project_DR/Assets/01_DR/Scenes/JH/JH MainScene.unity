@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1622,35 +1622,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 742026294, guid: 9af8996cf7742564d86ec55ab5e912c0, type: 3}
-      propertyPath: InputAction
-      value: 
-      objectReference: {fileID: 4860515764186564299, guid: e39f4b35a6db18348b41eb0262520e69,
+    - target: {fileID: 2042058824998220969, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
-    - target: {fileID: 714438617893924353, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: DefaultLocomotion
+      propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1959171161867064845, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6098487436436248671, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: EjectInput.Array.data[0]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6098487436436248671, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: ReloadInput.Array.data[0]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6098487436436248671, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: ReleaseSlideInput.Array.data[0]
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6757648434215542744, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -1712,15 +1687,23 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6757648434263195372, guid: 9af8996cf7742564d86ec55ab5e912c0,
+    - target: {fileID: 6757648435622825461, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7951211782782386390, guid: 9af8996cf7742564d86ec55ab5e912c0,
+      propertyPath: Button1
+      value: 
+      objectReference: {fileID: 7297283861868334280, guid: 27bafa1c7d8a77b47985ab70c0511986,
         type: 3}
-      propertyPath: JumpInput.Array.data[0]
-      value: 3
-      objectReference: {fileID: 0}
+    - target: {fileID: 6757648435622825461, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: LeftPrimaryButtonAction
+      value: 
+      objectReference: {fileID: 1367316620502084850, guid: 27bafa1c7d8a77b47985ab70c0511986,
+        type: 3}
+    - target: {fileID: 6757648435622825461, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: RightPrimaryButtonAction
+      value: 
+      objectReference: {fileID: -4905483316028591056, guid: 27bafa1c7d8a77b47985ab70c0511986,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9af8996cf7742564d86ec55ab5e912c0, type: 3}

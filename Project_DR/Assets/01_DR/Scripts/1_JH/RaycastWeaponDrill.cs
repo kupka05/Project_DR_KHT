@@ -299,7 +299,7 @@ namespace BNG
             {
                 if (InputBridge.Instance.GetGrabbedControllerBinding(ReleaseSlideInput[x], thisGrabber.HandSide))
                 {
-                    Grappling();
+                    //Grappling();
                     break;
                 }
             }

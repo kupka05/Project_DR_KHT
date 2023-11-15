@@ -770,76 +770,7 @@ namespace BNG {
                 }
             }
         }
-        private Vector3 velocityToSet;
-        private bool enableMovementOnNextTouch;
-
-        // 그래플링 포인트로 점프하는 메서드
-        // targetPosition : 날아오를 포지션
-        // trajectoryHeight : 최대 높이
-        public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
-        {
-            activeGrapple = true; // 그래플링 상태 true
-
-            velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
-            Invoke(nameof(SetVelocity), 0.1f);
-
-            Invoke(nameof(ResetRestrictions), 3f);
-        }
-
-        // 점프를 계산해주는 메서드
-        // startPoint : 플레이어의 현재 위치
-        // endPoint : 점프에 도달할 목적지, 그래플링 포인트
-        // trajectorHeight : 점프 시 최대 높이
-        public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
-        {
-            // 중력
-            float gravity = Physics.gravity.y;
-            // 목적지 - 플레이어 위치
-            float displacementY = endPoint.y - startPoint.y;
-            Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
-
-            // Y값 속도
-            Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
-            Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity)
-                + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
-
-            return velocityXZ + velocityY;
-        }
-        private void SetVelocity()
-        {
-            enableMovementOnNextTouch = true;
-            if (playerRigid)
-            {
-                playerRigid.velocity = velocityToSet;
-
-                //cam.DoFov(grappleFov); // 시야각
-            }
-            else
-            {
-                characterController.SimpleMove(velocityToSet*Time.deltaTime);
-            }
-        }
-        public void ResetRestrictions()
-        {
-            activeGrapple = false;
-            //cam.DoFov(85f);
-        }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (enableMovementOnNextTouch)
-            {
-                enableMovementOnNextTouch = false;
-                ResetRestrictions();
-
-                grapplings[0].StopGrapple();              
-                grapplings[1].StopGrapple();
-                
-
-
-            }
-        }
-
+        
 
     }
 

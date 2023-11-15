@@ -40,6 +40,7 @@ public class Grappling : GrabbableEvents
     [Header("CoolDown")]
     public float grapplingCd;
     float lastGrapplingTime;
+    private bool isGrappling;
 
     private void Start()
     {
@@ -62,7 +63,11 @@ public class Grappling : GrabbableEvents
 
     private void Update()
     {
-        GrapplingMove();
+        if (state != State.Idle)
+        {
+            ExcuteCheck();
+            GrapplingMove();
+        }
     }
     private void LateUpdate()
     {
@@ -74,6 +79,16 @@ public class Grappling : GrabbableEvents
             // 거리 계산
             updateGrappleDistance();
         }
+    }
+    public override void OnButton1Down()
+    {
+        //StartGrapple();
+        base.OnButton1Down();
+    }
+    public override void OnButton1Up()
+    {
+        //ExecuteGrapple();
+        base.OnButton1Up();
     }
 
     // 그래플링 시작
@@ -94,6 +109,9 @@ public class Grappling : GrabbableEvents
         {
             grapplePoint = hit.point;                         // 충돌한 곳이 있으면 그래플링 포인트로
             lastGrapplingTime = Time.time;
+            smoothLocomotion.freeze = false;
+            isGrappling = true;
+
             //Invoke(nameof(ExecuteGrapple), grappleDelayTime); // 그래플링 실행
         }
         else
@@ -106,28 +124,26 @@ public class Grappling : GrabbableEvents
         line.SetPosition(1, grapplePoint);
     }
 
+    public void ExcuteCheck()
+    { 
+        if(state == State.Shooting && !InputBridge.Instance.AButton)
+        {
+            Invoke(nameof(ExecuteGrapple), grappleDelayTime);    // 그래플링 정지
+
+        }
+    }
+
+
     // 그래플링 실행
     public void ExecuteGrapple()
     {
-        Debug.Log("실행?");
-        StartCoroutine(ExcuteDelay());
-        //Invoke(nameof(ExcuteDelay), grappleDelayTime); // 그래플링 실행
-    }
-    IEnumerator ExcuteDelay()
-    {
-        yield return new WaitForSeconds(grappleDelayTime);
+        if (!isGrappling)
+        { return; }
+
         state = State.Grappling;
         changeGravity(false);
-        smoothLocomotion.freeze = false; // 정지 상태 해제
-        StopAllCoroutines();
     }
 
-    //private void ExcuteDelay()
-    //{
-    //    state = State.Grappling;
-    //    changeGravity(false);
-    //    smoothLocomotion.freeze = false; // 정지 상태 해제
-    //}
     // 그래플링 이동 관련
     private void GrapplingMove()
     {
@@ -146,12 +162,20 @@ public class Grappling : GrabbableEvents
     // 그래플링 멈춤
     public void StopGrapple()
     {
-        changeGravity(true);
-        smoothLocomotion.freeze = false;
-        state = State.Idle;
+        if(isGrappling)
+        {
+            line.enabled = false;
+            smoothLocomotion.freeze = true;
+        }
 
-        line.enabled = false;
-
+        else
+        { 
+            changeGravity(true);
+            smoothLocomotion.freeze = false;
+            state = State.Idle;
+            line.enabled = false;
+        }
+        isGrappling = false;
         lastGrapplingTime = Time.time;
     }
 

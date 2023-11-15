@@ -23638,7 +23638,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 3
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &6757648434728640072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46317,7 +46317,8 @@ MonoBehaviour:
   StrafeSprintSpeed: 1.25
   swingStrafeSpeed: 1.25
   JumpForce: 4
-  JumpInput: 00000000
+  JumpInput: 03000000
+  JumpInputAxis: 03000000
   JumpAction: {fileID: 3598031526004978682, guid: e39f4b35a6db18348b41eb0262520e69,
     type: 3}
   freeze: 0
@@ -46611,6 +46612,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   optionUI: {fileID: 8822906912926717993}
   optionInput: 15000000
+  InputAction: {fileID: 4860515764186564299, guid: e39f4b35a6db18348b41eb0262520e69,
+    type: 3}
 --- !u!1 &4669820137761937533
 GameObject:
   m_ObjectHideFlags: 0
@@ -63685,7 +63688,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6315712938356022711}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ba090305c50883428df8e6727be7d75, type: 3}
   m_Name: 
@@ -94562,11 +94565,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6757648434215542745}
     m_Modifications:
-    - target: {fileID: 8562283376345319334, guid: e51c0d6c37746cc4da02dc91bcae6bf5,
-        type: 3}
-      propertyPath: grapplingCd
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 8768672552246940888, guid: e51c0d6c37746cc4da02dc91bcae6bf5,
         type: 3}
       propertyPath: m_Name

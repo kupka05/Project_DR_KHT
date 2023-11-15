@@ -152,6 +152,7 @@ namespace BNG
 
         public List<GrabbedControllerBinding> GrapplingInput = new List<GrabbedControllerBinding>() { GrabbedControllerBinding.Button1 };
 
+
         [Header("Shown for Debug : ")]
         // 탄이 약실에 들어있는지
         public bool BulletInChamber = false;
@@ -462,12 +463,17 @@ namespace BNG
             // 진동 (뭔가 집고있을 경우)
             if (thisGrabber != null)
             {
-                input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
+                //input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
             }
 
             if (isMelee && grappling != null)
             {
-                grappling.StartGrapple();
+                if (grappling.state == global::Grappling.State.Idle)
+                {
+                    grappling.StartGrapple();
+                }
+                else if(grappling.state == global::Grappling.State.Shooting)
+                    grappling.ExecuteGrapple();
             }
         }
 

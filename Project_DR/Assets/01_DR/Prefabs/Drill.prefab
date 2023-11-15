@@ -4759,7 +4759,7 @@ MonoBehaviour:
   EjectInput: 04000000
   ReleaseSlideInput: 02000000
   ReloadInput: 04000000
-  GrapplingInput: 01000000
+  GrapplingInput: 02000000
   BulletInChamber: 0
   EmptyBulletInChamber: 0
   onShootEvent:
@@ -5102,6 +5102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e4494b8e8a7d7479774644b7d6cd68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
   gun: {fileID: 8768672552246940895}
   muzzleTransform: {fileID: 8768672551865264199}
   grappleableLayer:
@@ -5109,7 +5110,7 @@ MonoBehaviour:
     m_Bits: 1
   maxGrappleDistance: 25
   grappleDelayTime: 0.25
-  GrappleReelForce: 5
+  GrappleReelForce: 10
   currentGrappleDistance: 0
   grapplingCd: 1
 --- !u!1 &8768672552584099863

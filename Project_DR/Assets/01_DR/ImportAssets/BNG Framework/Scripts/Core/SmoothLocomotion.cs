@@ -105,6 +105,7 @@ namespace BNG {
 
         [Tooltip("The key(s) to use to initiate a jump. You can also override the CheckJump() function to determine your jump criteria.")]
         public List<ControllerBinding> JumpInput = new List<ControllerBinding>() { ControllerBinding.None };
+        public List<InputAxis> JumpInputAxis = new List<InputAxis>() { InputAxis.RightThumbStickAxis };
 
         [Tooltip("Unity Input Action used to initiate a jump")]
         public InputActionReference JumpAction;
@@ -583,9 +584,53 @@ namespace BNG {
                 return true;
             }
 
+            //if (JumpInputAxis != null)
+            //{
+
+            //    for (int i = 0; i < JumpInputAxis.Count; i++)
+            //    {
+            //        float axisVal = InputBridge.Instance.GetInputAxisValue(JumpInputAxis[i]).y;
+
+            //        // Always take this value if our last entry was 0. 
+            //        if (axisVal == 0)
+            //        {
+            //            return false;
+            //        }
+            //        else if (axisVal != 0 && axisVal > 0)
+            //        {
+            //            Debug.Log(axisVal);
+            //            return true;
+            //        }
+            //    }
+            //}
             return false;
         }
 
+        public virtual float CheckJumpAxis()
+        {
+            float lastVal = 0f;
+
+            // Check Raw Input
+            if (JumpInputAxis != null)
+            {
+                for (int i = 0; i < JumpInputAxis.Count; i++)
+                {
+                    float axisVal = InputBridge.Instance.GetInputAxisValue(JumpInputAxis[i]).y;
+
+                    // Always take this value if our last entry was 0. 
+                    if (lastVal == 0)
+                    {
+                        lastVal = axisVal;
+                    }
+                    else if (axisVal != 0 && axisVal > lastVal)
+                    {
+                        lastVal = axisVal;
+                    }
+                }
+            }
+            return lastVal;
+        }
+      
         public virtual bool CheckSprint() {
 
             // Check for bound controller button

@@ -3,9 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Windows;
+using static UnityEngine.GraphicsBuffer;
 
-public class Grappling : MonoBehaviour
+public class Grappling : GrabbableEvents
 {
+    public enum State { Idle, Shooting, Grappling };
+
+    public State state = State.Idle;
+
     [Header("References")]
     private GameObject player;
     private CharacterController characterController;
@@ -34,12 +40,10 @@ public class Grappling : MonoBehaviour
     [Header("CoolDown")]
     public float grapplingCd;
     float lastGrapplingTime;
-    private bool isGrappling;
-    private bool grappling;
 
     private void Start()
     {
-         player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         if (player)
         {
             characterController = player.GetComponentInChildren<CharacterController>();
@@ -47,7 +51,7 @@ public class Grappling : MonoBehaviour
             playerGravity = player.GetComponentInChildren<PlayerGravity>();
             playerClimbing = player.GetComponentInChildren<PlayerClimbing>();
             playerRigid = player.GetComponent<Rigidbody>();
-            smoothLocomotion = player.GetComponent <SmoothLocomotion>();
+            smoothLocomotion = player.GetComponent<SmoothLocomotion>();
         }
         else
         {
@@ -63,7 +67,7 @@ public class Grappling : MonoBehaviour
     private void LateUpdate()
     {
         // 그래플링 중이면
-        if (grappling)
+        if (state != State.Idle)
         {
             // 라인 만들고
             line.SetPosition(0, muzzleTransform.position);
@@ -75,20 +79,22 @@ public class Grappling : MonoBehaviour
     // 그래플링 시작
     public void StartGrapple()
     {
-        if (Time.time - lastGrapplingTime < grapplingCd)
+        // 쿨타임이 안돌고 기본 상태가 아니면
+        if (Time.time - lastGrapplingTime < grapplingCd || state != State.Idle)
         {
             return;
         }
-        grappling = true;
+
+        state = State.Shooting;                         // 그래플링을 발사한 상태
         smoothLocomotion.freeze = true;                 // 플레이어 이동 못하는 상태로 전환
+        input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
 
         RaycastHit hit;
         if (Physics.Raycast(muzzleTransform.position, gun.forward, out hit, maxGrappleDistance, grappleableLayer))
         {
             grapplePoint = hit.point;                         // 충돌한 곳이 있으면 그래플링 포인트로
             lastGrapplingTime = Time.time;
-
-            Invoke(nameof(ExecuteGrapple), grappleDelayTime); // 그래플링 실행
+            //Invoke(nameof(ExecuteGrapple), grappleDelayTime); // 그래플링 실행
         }
         else
         {
@@ -101,18 +107,31 @@ public class Grappling : MonoBehaviour
     }
 
     // 그래플링 실행
-    private void ExecuteGrapple()
+    public void ExecuteGrapple()
     {
-        isGrappling = true;
-
+        Debug.Log("실행?");
+        StartCoroutine(ExcuteDelay());
+        //Invoke(nameof(ExcuteDelay), grappleDelayTime); // 그래플링 실행
+    }
+    IEnumerator ExcuteDelay()
+    {
+        yield return new WaitForSeconds(grappleDelayTime);
+        state = State.Grappling;
         changeGravity(false);
         smoothLocomotion.freeze = false; // 정지 상태 해제
-        Invoke(nameof(StopGrapple), 3f);    // 그래플링 정지
-
+        StopAllCoroutines();
     }
+
+    //private void ExcuteDelay()
+    //{
+    //    state = State.Grappling;
+    //    changeGravity(false);
+    //    smoothLocomotion.freeze = false; // 정지 상태 해제
+    //}
+    // 그래플링 이동 관련
     private void GrapplingMove()
     {
-        if(isGrappling)
+        if(state == State.Grappling)
         {
             Vector3 moveDirection = (grapplePoint - muzzleTransform.position) * GrappleReelForce;
             smoothLocomotion.MoveCharacter(moveDirection * Time.deltaTime);
@@ -129,8 +148,7 @@ public class Grappling : MonoBehaviour
     {
         changeGravity(true);
         smoothLocomotion.freeze = false;
-        grappling = false;
-        isGrappling = false;
+        state = State.Idle;
 
         line.enabled = false;
 
@@ -141,7 +159,7 @@ public class Grappling : MonoBehaviour
     void updateGrappleDistance()
     {
         // Update Distance
-        if (grappling)
+        if (state != State.Idle)
         {
             currentGrappleDistance = Vector3.Distance(muzzleTransform.position, grapplePoint);
         }

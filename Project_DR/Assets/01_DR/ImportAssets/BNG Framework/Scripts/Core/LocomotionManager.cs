@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,9 +12,9 @@ namespace BNG {
         /// Default locomotion to use if nothing stored in playerprefs. 0 = Teleport. 1 = SmoothLocomotion
         /// </summary>
         [Tooltip("Default locomotion to use if nothing stored in playerprefs. 0 = Teleport. 1 = SmoothLocomotion")]
-        public LocomotionType DefaultLocomotion = LocomotionType.Teleport;
+        public LocomotionType DefaultLocomotion = LocomotionType.SmoothLocomotion;
 
-        LocomotionType selectedLocomotion = LocomotionType.Teleport;
+        LocomotionType selectedLocomotion = LocomotionType.SmoothLocomotion;
         public LocomotionType SelectedLocomotion {
             get { return selectedLocomotion; }
         }
@@ -147,6 +148,26 @@ namespace BNG {
             else {
                 ChangeLocomotionType(LocomotionType.SmoothLocomotion);
             }
+        }
+
+        // 이동 타입 변경
+        public TMP_Text locomoTypeText;
+        public void ChangeLocomotionTypeSetting()
+        {
+            if (selectedLocomotion == LocomotionType.SmoothLocomotion)
+            {
+                selectedLocomotion = LocomotionType.Teleport;
+
+                locomoTypeText.text = "순간이동";
+            }
+            else
+            {
+                selectedLocomotion = LocomotionType.SmoothLocomotion;
+                locomoTypeText.text = "실시간 이동";
+            }
+            teleport.enabled = SelectedLocomotion == LocomotionType.Teleport;
+            toggleTeleport(selectedLocomotion == LocomotionType.Teleport);
+            toggleSmoothLocomotion(selectedLocomotion == LocomotionType.SmoothLocomotion);
         }
     }
 }

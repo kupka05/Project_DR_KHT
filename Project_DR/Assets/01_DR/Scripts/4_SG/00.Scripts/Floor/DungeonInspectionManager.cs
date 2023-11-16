@@ -18,7 +18,7 @@ public class DungeonInspectionManager : MonoBehaviour
         {
             dungeonManagerInstance = this;
         }
-        else { }
+        else { Debug.Log("DungeonInspectionManager : else 들어옴"); }
     }
 
 

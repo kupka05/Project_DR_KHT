@@ -30,21 +30,22 @@ public class DungeonCreator : MonoBehaviour
     public int roomOffset;                // 방 오프셋    
     // 벽이 생성될때에 어디에 생성할지 지정해줄 좌표        // Y축이 벽의 영향을 받음
     public Vector3 roopYpos = new Vector3(1, 26, 1);
-
+    
     [Header("CustomRoom")]
     public float pcRoomDistance;  // 플레이어방과 첫번째 방의 거리
-    public int pcRoomWidth;     // 플레이어방 넓이
-    public int pcRoomHeight;    // 플레이어방 높이
+    public int pcRoomWidth;       // 플레이어방 넓이
+    public int pcRoomHeight;      // 플레이어방 높이
+    private FloorMeshPos playerRoomCornerPos;       // 플레이어방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
     [Space]
-
     public float bossRoomDistance;      // 마지막 방과 보스방의 거리
-    public int bossRoomWidth;         // 보스방 넓이
-    public int bossRoomHeight;        // 보스방 높이
+    public int bossRoomWidth;           // 보스방 넓이
+    public int bossRoomHeight;          // 보스방 높이
+    private FloorMeshPos bossRoomCornerPos;         // 보스방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
     [Space]
     public float nextStageRoomDistance; // 보스방과 다음스테이지의 거리
-    public int nextStageRoomWidth;    // 다음스테이지방 넓이
-    public int nextStageRoomHeight;   // 다음스테이지방 높이
-
+    public int nextStageRoomWidth;      // 다음스테이지방 넓이
+    public int nextStageRoomHeight;     // 다음스테이지방 높이
+    private FloorMeshPos nextStageRoomCornerPos;   // 다음스테이지방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
     [Header("WallObj")]
     // 벽 오브젝트 설정
     public GameObject wallVertical;
@@ -70,20 +71,6 @@ public class DungeonCreator : MonoBehaviour
     List<Vector3Int> possibleDoorHorizontalPosition;
     List<Vector3Int> possibleWallHorizontalPosition;
     List<Vector3Int> possibleWallVerticalPosition;
-
-
-
-
-    // 일단 스택메모리로 해보고 안되면 힙까지 이용
-    //// 바닥의 부모오브젝트
-    //private GameObject floorParent;
-    //// 벽의 부모 오브젝트
-    //private GameObject wallParent;
-    //// 지붕의 부모 오브젝트
-    //private GameObject roopParent;
-    //// 복도의 부모 오브젝트
-    //private GameObject corridorParnet;
-
 
 
     void Start()
@@ -154,6 +141,8 @@ public class DungeonCreator : MonoBehaviour
         PlayerStartRoomCreate(floorParent);
 
         BossRoomCreate(floorParent);
+
+        NextStageRoomCreate(bossRoomCornerPos);
 
         //Debug.Log("던전 생성 끝");
     }   // CreateDungeon()
@@ -631,7 +620,7 @@ public class DungeonCreator : MonoBehaviour
 
     // 벽 위치 목록에 벽 또는 문 위치 추가
     private void AddWallPositionToList(Vector3 wallPosition, List<Vector3Int> wallList, List<Vector3Int> doorList)
-    {
+    {        
         Vector3Int point = Vector3Int.CeilToInt(wallPosition);
         if (wallList.Contains(point))
         {
@@ -755,6 +744,7 @@ public class DungeonCreator : MonoBehaviour
 
         // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
+        playerRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
         #region PlayerStart CustomRoom
         CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
         CustomRoomCorridorMeshCreate(false, bspfirstRoomBottomCenterPoint,bspFirstRoomTopCenterPoint, firstRoomPos, dungeonFloor);
@@ -823,10 +813,11 @@ public class DungeonCreator : MonoBehaviour
 
     }       // PlayerStartRoomCorridorCreate()
 
+
     /// <summary>
     /// 커스텀룸와 인근 방을 이어주는 복도 제작   
     /// isPositive : PC = flase ,Boss : true, NextStage : ture
-    /// </summary>    
+    /// </summary>
     private void CustomRoomCorridorMeshCreate(bool isPositive_, float bspRoomBottomCenterPoint_,
         float bspRoomTopCenterPoint_ ,FloorMeshPos bspRoomPos_,GameObject parentRoom_)
     {
@@ -952,7 +943,9 @@ public class DungeonCreator : MonoBehaviour
 
     }       // PlayerStartRoomCorridorCreate()
 
-    // 벽 오브젝트 생성 함수     CustomRoomCorridorCreateMinusPos() 참조용
+    /// <summary>
+    /// 벽 오브젝트 생성 함수     CustomRoomCorridorCreateMinusPos() 참조용
+    /// </summary>    
     private void CreateCustomRoomWall(GameObject wallParent, Vector3 wallPosition, GameObject wallPrefab)
     {
         // 나중에 sclae이 다른 벽을 Instance할때에 position잡을때 직전에 만든 벽의 Y를 담아둘 변수
@@ -982,7 +975,9 @@ public class DungeonCreator : MonoBehaviour
 
     }       // CreateWall()
 
-    // 벽 파괴하는 벽 생성해주는 함수 CustomRoomCorridorCreateMinusPos() 참조용
+    /// <summary>
+    /// 벽 파괴하는 벽 생성해주는 함수 CustomRoomCorridorCreateMinusPos() 참조용
+    /// </summary>    
     private void CreateDemolisherWall(GameObject wallParent, Vector3 wallPosition, GameObject wallPrefab)
     {
         // 벽 오브젝트 생성후 Y축 조절을 위한 GameObject
@@ -1079,7 +1074,7 @@ public class DungeonCreator : MonoBehaviour
     }   // CreateRoof()
 
     private void BossRoomCreate(GameObject floorParent)
-    {
+    {        
 
         // 처음으로 매쉬가 생성된 방의 꼭지점Pos 얻기
         FloorMeshPos lastRoomPos = floorParent.transform.GetChild(floorParent.transform.childCount - 1).GetComponent<FloorMeshPos>();
@@ -1171,6 +1166,7 @@ public class DungeonCreator : MonoBehaviour
 
         // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
+        bossRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
 
         CustomRoomCorridorCreatePlusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
         //CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
@@ -1180,7 +1176,7 @@ public class DungeonCreator : MonoBehaviour
     }       // BossRoomCreate()
 
     /// <summary>
-    /// 보스 위치에 벽 생성해주는 함수 (해당 방의 포지션이 음수인지 양수인지에 따라 계산이 다르기때문에 둘로 쪼개놓음)           
+    /// 보스방,다음스테이지방 위치에 벽 생성해주는 함수 (해당 방의 포지션이 음수인지 양수인지에 따라 계산이 다르기때문에 둘로 쪼개놓음)           
     /// bool 값 : Mesh = false,  Corridor = ture
     /// </summary>    
     private void CustomRoomCorridorCreatePlusPos(GameObject wallParent_,
@@ -1237,8 +1233,108 @@ public class DungeonCreator : MonoBehaviour
             }
         }
 
-
     }       // PlayerStartRoomCorridorCreate()
+
+    /// <summary>
+    /// 다음 스테이지로 이동하기위한방 생성
+    /// </summary>    
+    private void NextStageRoomCreate(FloorMeshPos bossRoomCornerPos_)
+    {
+                     
+        // 방의 하단 중앙위치
+        float bspLastRoomBottomCenterPoint = (bossRoomCornerPos_.bottomLeftCorner.x + bossRoomCornerPos_.bottomRightCorner.x) / 2;
+        // 방의 상단 중앙위치
+        float bspLastRoomTopCenterPoint = (bossRoomCornerPos_.topLeftCorner.x + bossRoomCornerPos_.topRightCorner.x) / 2;
+
+        //// 바닥 메시 생성을 위한 꼭지점 좌표 설정
+        Vector3 bottomLeftV = new Vector3
+            (bspLastRoomTopCenterPoint - (bossRoomWidth / 2), 0f, bossRoomCornerPos_.topLeftCorner.z + bossRoomDistance);
+        Vector3 bottomRightV = new Vector3
+            (bspLastRoomTopCenterPoint + (bossRoomWidth / 2), 0f, bossRoomCornerPos_.topRightCorner.z + bossRoomDistance);
+        Vector3 topLeftV = new Vector3(bottomLeftV.x, 0f, bottomLeftV.z + bossRoomHeight);
+        Vector3 topRightV = new Vector3(bottomRightV.x, 0f, bottomRightV.z + bossRoomHeight);
+
+        // 바닥 메시를 위한 꼭지점 배열 생성
+        Vector3[] vertices = new Vector3[]
+        {
+            topLeftV,
+            topRightV,
+            bottomLeftV,
+            bottomRightV
+        };
+
+        // UV 매핑을 위한 배열 생성
+        Vector2[] uvs = new Vector2[vertices.Length];
+        for (int i = 0; i < uvs.Length; i++)
+        {
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+        }
+
+        // 삼각형을 정의하는 배열 생성
+        int[] triangles = new int[]
+        {
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+        };
+
+        // 메시 생성 및 설정
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices;
+        mesh.uv = uvs;
+        mesh.triangles = triangles;
+
+
+        GameObject dungeonFloor = new GameObject("NextStageRoomMesh" + InItNum + bottomLeftV,
+            typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
+
+        GameObject wallParnet = new GameObject("CustomRoomWallParent");
+        dungeonFloor.transform.parent = this.transform;
+        wallParnet.transform.parent = dungeonFloor.transform;
+
+        dungeonFloor.gameObject.tag = "Floor";
+
+        InItNum++;
+
+        #region 메시의 콜라이더 Center,Size
+
+        //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
+        //Center
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0f, (topLeftV.z + bottomLeftV.z) / 2);
+        BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
+        floorCol.center = colCenter;
+        // Size
+        float colSizeX, colSizeY, colSizeZ;
+        colSizeX = bottomLeftV.x - bottomRightV.x;
+        colSizeY = 0.03f;
+        colSizeZ = bottomLeftV.z - topLeftV.z;
+        // 음수값이 나오면 양수로 치환
+        if (colSizeX < 0) { colSizeX = -colSizeX; }
+        if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
+        Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
+        floorCol.size = colSize;
+
+        #endregion 메시의 콜라이더 Center,Size
+
+        dungeonFloor.transform.position = Vector3.zero;
+        dungeonFloor.transform.localScale = Vector3.one;
+
+        dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
+        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+
+        // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
+        dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
+        nextStageRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
+
+        CustomRoomCorridorCreatePlusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);        
+        CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, bossRoomCornerPos_, dungeonFloor);
+        CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
+        CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
+
+    }       // NextStageRoomCreate()
     #endregion CustomRoomCreate
 
 }   // ClassEnd

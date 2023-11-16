@@ -200,7 +200,7 @@ MonoBehaviour:
   dungeonHeight: 250
   roomWidthMin: 25
   roomLengthMin: 25
-  maxIterations: 7
+  maxIterations: 5
   corridorWidth: 10
   material: {fileID: 2100000, guid: 658e6fe543c4eb3429fc65cb91b27b7c, type: 2}
   roomBottomCornerModifier: 0.15
@@ -213,9 +213,9 @@ MonoBehaviour:
   bossRoomDistance: 40
   bossRoomWidth: 50
   bossRoomHeight: 50
-  nextStageRoomDistance: 0
-  nextStageRoomWidth: 0
-  nextStageRoomHeight: 0
+  nextStageRoomDistance: 40
+  nextStageRoomWidth: 50
+  nextStageRoomHeight: 50
   wallVertical: {fileID: 1641494010946769928, guid: 8dcffe0d54f9e4040aef3c18a36ee65d,
     type: 3}
   wallHorizontal: {fileID: 1641494010946769928, guid: 8dcffe0d54f9e4040aef3c18a36ee65d,

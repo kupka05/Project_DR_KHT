@@ -51,12 +51,13 @@ namespace Rito.InventorySystem
         #region .
         [Header("Options")]
         [Range(0, 10)]
-        [SerializeField] private int _horizontalSlotCount = 8;  // 슬롯 가로 개수
+        [SerializeField] private int _horizontalSlotCount = 7;  // 슬롯 가로 개수
         [Range(0, 10)]
-        [SerializeField] private int _verticalSlotCount = 8;      // 슬롯 세로 개수
+        [SerializeField] private int _verticalSlotCount = 7;      // 슬롯 세로 개수
         [SerializeField] private float _slotMargin = 8f;          // 한 슬롯의 상하좌우 여백
         [SerializeField] private float _contentAreaPadding = 20f; // 인벤토리 영역의 내부 여백
-        [Range(32, 64)]
+        [Range(1, 64)]
+        // 임시로 1로 설정
         [SerializeField] private float _slotSize = 64f;      // 각 슬롯의 크기
 
         [Space]
@@ -192,7 +193,12 @@ namespace Rito.InventorySystem
                     slotRT.anchoredPosition = curPos;
                     slotRT.gameObject.SetActive(true);
                     slotRT.gameObject.name = $"Item Slot [{slotIndex}]";
-
+                // Changed* 로컬 스케일 1로 고정
+                    slotRT.localScale = Vector3.one;
+                    // Changed* PosZ 0으로 고정
+                    Vector3 tempPos = slotRT.anchoredPosition3D;
+                    tempPos.z = 0f;
+                    slotRT.anchoredPosition3D = tempPos;
                     var slotUI = slotRT.GetComponent<ItemSlotUI>();
                     slotUI.SetSlotIndex(slotIndex);
                     _slotUIList.Add(slotUI);

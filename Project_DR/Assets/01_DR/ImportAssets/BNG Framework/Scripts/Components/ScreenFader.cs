@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -101,7 +101,6 @@ namespace BNG {
         /// Fade from transparent to solid color
         /// </summary>
         public virtual void DoFadeIn() {
-
             // Stop if currently running
             if (fadeRoutine != null) {
                 StopCoroutine(fadeRoutine);
@@ -142,6 +141,7 @@ namespace BNG {
         }
 
         IEnumerator doFade(float alphaFrom, float alphaTo) {
+            Debug.Log("페이드?");
 
             float alpha = alphaFrom;
 

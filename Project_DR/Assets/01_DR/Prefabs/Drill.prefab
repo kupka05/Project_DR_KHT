@@ -5040,7 +5040,8 @@ MonoBehaviour:
   MuzzlePointTransform: {fileID: 8768672551865264199}
   EjectPointTransform: {fileID: 8768672551645038193}
   ChamberedBullet: {fileID: 656579064084665810}
-  MuzzleFlashObject: {fileID: 8400961830067750631}
+  MuzzleFlashObject: {fileID: 1092013624344405315, guid: 9872ce4a05e8b4a419b17728344764fa,
+    type: 3}
   BulletCasingPrefab: {fileID: 4293907302815737054, guid: f8313a7c0e07bba40ac0f3634a590caf,
     type: 3}
   ProjectilePrefab: {fileID: 1449094533667961452, guid: 4af46545725f628459794cfc7c0f7d54,
@@ -5053,7 +5054,7 @@ MonoBehaviour:
   EmptySoundVolume: 1
   SlideDistance: -0.028
   ForceSlideBackOnLastShot: 1
-  slideSpeed: 1
+  slideSpeed: 0.5
   EjectInput: 00000000
   ReleaseSlideInput: 00000000
   ReloadInput: 00000000
@@ -5265,13 +5266,10 @@ MonoBehaviour:
       m_Calls: []
   onButton1:
     m_PersistentCalls:
-      m_Calls: []
-  onButton1Down:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8562283376345319334}
         m_TargetAssemblyTypeName: Grappling, Assembly-CSharp
-        m_MethodName: StartGrapple
+        m_MethodName: OnGrapple
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5281,6 +5279,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onButton1Down:
+    m_PersistentCalls:
+      m_Calls: []
   onButton1Up:
     m_PersistentCalls:
       m_Calls: []
@@ -5434,7 +5435,7 @@ MonoBehaviour:
   grappleDelayTime: 0.25
   GrappleReelForce: 10
   currentGrappleDistance: 0
-  grapplingCd: 0.5
+  grapplingCd: 1
 --- !u!1 &8768672552584099863
 GameObject:
   m_ObjectHideFlags: 0

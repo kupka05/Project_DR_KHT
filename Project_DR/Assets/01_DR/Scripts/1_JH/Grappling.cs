@@ -65,7 +65,7 @@ public class Grappling : GrabbableEvents
     {
         if (state != State.Idle)
         {
-            ExcuteCheck();
+            //ExcuteCheck();
             GrapplingMove();
         }
     }
@@ -90,16 +90,29 @@ public class Grappling : GrabbableEvents
         //ExecuteGrapple();
         base.OnButton1Up();
     }
-
-    // 그래플링 시작
-    public void StartGrapple()
+    public void OnGrapple()
     {
         // 쿨타임이 안돌고 기본 상태가 아니면
-        if (Time.time - lastGrapplingTime < grapplingCd || state != State.Idle)
+        if (Time.time - lastGrapplingTime < grapplingCd)
         {
             return;
         }
 
+        if (state == State.Idle)
+        {
+            StartGrapple();
+        }
+        else if (state == State.Shooting)
+        {
+            Invoke(nameof(ExecuteGrapple), grappleDelayTime);
+        }
+        else
+        return;
+    }
+
+    // 그래플링 시작
+    public void StartGrapple()
+    {
         state = State.Shooting;                         // 그래플링을 발사한 상태
         smoothLocomotion.freeze = true;                 // 플레이어 이동 못하는 상태로 전환
         input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
@@ -111,8 +124,6 @@ public class Grappling : GrabbableEvents
             lastGrapplingTime = Time.time;
             smoothLocomotion.freeze = false;
             isGrappling = true;
-
-            //Invoke(nameof(ExecuteGrapple), grappleDelayTime); // 그래플링 실행
         }
         else
         {
@@ -122,6 +133,7 @@ public class Grappling : GrabbableEvents
 
         line.enabled = true;                                  // 라인 켜주기
         line.SetPosition(1, grapplePoint);
+
     }
 
     public void ExcuteCheck()
@@ -154,7 +166,8 @@ public class Grappling : GrabbableEvents
 
             if(currentGrappleDistance < 1f)
             {
-                StopGrapple();
+                //StopGrapple();
+                smoothLocomotion.freeze = true;
             }
         }
     }
@@ -162,19 +175,19 @@ public class Grappling : GrabbableEvents
     // 그래플링 멈춤
     public void StopGrapple()
     {
-        if(isGrappling)
-        {
-            line.enabled = false;
-            smoothLocomotion.freeze = true;
-        }
+        //if(isGrappling)
+        //{
+        //    line.enabled = false;
+        //    smoothLocomotion.freeze = true;
+        //}
 
-        else
-        { 
+        //else
+        //{ 
             changeGravity(true);
             smoothLocomotion.freeze = false;
             state = State.Idle;
             line.enabled = false;
-        }
+        //}
         isGrappling = false;
         lastGrapplingTime = Time.time;
     }

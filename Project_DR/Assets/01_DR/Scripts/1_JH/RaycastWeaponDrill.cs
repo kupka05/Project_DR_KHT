@@ -457,25 +457,7 @@ namespace BNG
                 StartCoroutine(shotRoutine);
             }
         }
-        // 그래플링 관련
-        public void Grappling()
-        {
-            // 진동 (뭔가 집고있을 경우)
-            if (thisGrabber != null)
-            {
-                //input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
-            }
 
-            if (isMelee && grappling != null)
-            {
-                if (grappling.state == global::Grappling.State.Idle)
-                {
-                    grappling.StartGrapple();
-                }
-                else if(grappling.state == global::Grappling.State.Shooting)
-                    grappling.ExecuteGrapple();
-            }
-        }
 
         // Apply recoil by requesting sprinyness and apply a local force to the muzzle point
         public virtual void ApplyRecoil()

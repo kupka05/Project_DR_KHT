@@ -320,11 +320,8 @@ namespace BNG {
             {
                 prevBool = InputBridge.Instance.AButton;
                 InputBridge.Instance.AButton = RightPrimaryButtonAction.action.IsPressed();
-
                 InputBridge.Instance.AButtonDown = prevBool == false && InputBridge.Instance.XButton == true;
-
                 InputBridge.Instance.AButtonUp = prevBool == true && InputBridge.Instance.XButton == false;
-                Debug.Log(InputBridge.Instance.AButtonUp);
             }
 
         }

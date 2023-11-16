@@ -327,7 +327,10 @@ namespace BNG
         // 발사 부분
         public virtual void Shoot()
         {
-
+            if(grappling.state != Grappling.State.Idle)
+            {
+                return;
+            }
 
             // 사격 가능한지 확인
             float shotInterval = Time.timeScale < 1 ? SlowMoRateOfFire : FiringRate;

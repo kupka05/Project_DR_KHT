@@ -1,6 +1,8 @@
 using BNG;
+using Oculus.Platform.Models;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Windows;
@@ -27,7 +29,11 @@ public class Grappling : GrabbableEvents
     public Transform muzzleTransform;
     public LayerMask grappleableLayer;
     private LineRenderer line;
+    public GameObject drill;
+    public GameObject drillPrefab;
+    private GameObject _drill;
 
+    [Space]
 
     [Header("Grappling")]
     public float maxGrappleDistance;      // 최대사거리
@@ -36,11 +42,17 @@ public class Grappling : GrabbableEvents
     public float currentGrappleDistance;  // 그래플링 거리
 
     private Vector3 grapplePoint;
+    [Space]
 
     [Header("CoolDown")]
     public float grapplingCd;
     float lastGrapplingTime;
     private bool isGrappling;
+    public void OnEnable()
+    {
+        drill.SetActive(true);
+
+    }
 
     private void Start()
     {
@@ -78,18 +90,10 @@ public class Grappling : GrabbableEvents
             line.SetPosition(0, muzzleTransform.position);
             // 거리 계산
             updateGrappleDistance();
+
         }
     }
-    public override void OnButton1Down()
-    {
-        //StartGrapple();
-        base.OnButton1Down();
-    }
-    public override void OnButton1Up()
-    {
-        //ExecuteGrapple();
-        base.OnButton1Up();
-    }
+
     public void OnGrapple()
     {
         // 쿨타임이 안돌고 기본 상태가 아니면
@@ -133,9 +137,15 @@ public class Grappling : GrabbableEvents
 
         line.enabled = true;                                  // 라인 켜주기
         line.SetPosition(1, grapplePoint);
-
+        drill.SetActive(false);
+        ShootDrill();
     }
 
+    private void ShootDrill()
+    {
+        _drill = Instantiate(drillPrefab, drill.transform.position, drill.transform.rotation);
+        _drill.GetComponent<DrillHead>().targetPos = grapplePoint;
+    }
     public void ExcuteCheck()
     { 
         if(state == State.Shooting && !InputBridge.Instance.AButton)
@@ -190,6 +200,11 @@ public class Grappling : GrabbableEvents
         //}
         isGrappling = false;
         lastGrapplingTime = Time.time;
+        drill.SetActive(true);
+        if (_drill.gameObject != null)
+        {
+            Destroy(_drill.gameObject);
+        }
     }
 
     // 그래플링 포인트와 총구의 거리를 계산하는 메서드

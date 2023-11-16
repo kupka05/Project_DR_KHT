@@ -3442,7 +3442,7 @@ GameObject:
   - component: {fileID: 4749243748706755000}
   - component: {fileID: 6931777746847559607}
   m_Layer: 2
-  m_Name: DrillHead
+  m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4755,6 +4755,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8768672552246940895}
   - component: {fileID: 8768672552246940887}
+  - component: {fileID: 8562283376345319334}
   - component: {fileID: 8768672552246940881}
   - component: {fileID: 8768672552246940882}
   - component: {fileID: 8768672552246940883}
@@ -4771,7 +4772,6 @@ GameObject:
   - component: {fileID: 3038501380516454709}
   - component: {fileID: 175642213109327402}
   - component: {fileID: 747878795694139402}
-  - component: {fileID: 8562283376345319334}
   m_Layer: 9
   m_Name: Drill
   m_TagString: Untagged
@@ -4819,6 +4819,32 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8768672552246940888}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &8562283376345319334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8768672552246940888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4e4494b8e8a7d7479774644b7d6cd68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  gun: {fileID: 8768672552246940895}
+  muzzleTransform: {fileID: 8768672551865264199}
+  grappleableLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  drill: {fileID: 7353309825794527893}
+  drillPrefab: {fileID: 8136475241427521122, guid: 4b50f1d3b73912a4cb235c724691d7f7,
+    type: 3}
+  maxGrappleDistance: 25
+  grappleDelayTime: 0.25
+  GrappleReelForce: 10
+  currentGrappleDistance: 0
+  grapplingCd: 0.5
 --- !u!54 &8768672552246940881
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5413,29 +5439,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!114 &8562283376345319334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8768672552246940888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4e4494b8e8a7d7479774644b7d6cd68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  state: 0
-  gun: {fileID: 8768672552246940895}
-  muzzleTransform: {fileID: 8768672551865264199}
-  grappleableLayer:
-    serializedVersion: 2
-    m_Bits: 1
-  maxGrappleDistance: 25
-  grappleDelayTime: 0.25
-  GrappleReelForce: 10
-  currentGrappleDistance: 0
-  grapplingCd: 1
 --- !u!1 &8768672552584099863
 GameObject:
   m_ObjectHideFlags: 0

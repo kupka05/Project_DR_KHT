@@ -141,7 +141,6 @@ namespace BNG {
         }
 
         IEnumerator doFade(float alphaFrom, float alphaTo) {
-            Debug.Log("페이드?");
 
             float alpha = alphaFrom;
 

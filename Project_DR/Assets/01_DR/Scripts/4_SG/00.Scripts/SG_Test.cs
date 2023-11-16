@@ -1,14 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
+using System;
 
 public class SG_Test : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    StringBuilder stBuilder;
+    string stText;
+
+    delegate void rambdaD();
+
+    event rambdaD RDEvent;
+
+    private void Start()
     {
-        if(collision.gameObject.CompareTag("Floor"))
-        {
-            Debug.Log("Floor∂˚ ¥Í¿Ω");
-        }
+        RDEvent += TestMethod;
+        RDEvent?.Invoke();
+        
     }
+
+    private void TestMethod()
+    {
+        Debug.Log("Ïù¥Î≤§Ìä∏ Ìò∏Ï∂ú");
+
+    }
+
 }       // SG_Test

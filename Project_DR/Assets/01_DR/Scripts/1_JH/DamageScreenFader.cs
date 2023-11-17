@@ -7,11 +7,8 @@ using UnityEngine.UI;
 
 public class DamageScreenFader : MonoBehaviour
 {
-    [Tooltip("Should the screen fade in when a new level is loaded")]
-    public bool FadeOnSceneLoaded = true;
-
     [Tooltip("Color of the fade. Alpha will be modified when fading in / out")]
-    public Color FadeColor = Color.black;
+    public Color FadeColor = Color.white;
 
     [Tooltip("How fast to fade in / out")]
     public float FadeInSpeed = 6f;
@@ -21,14 +18,14 @@ public class DamageScreenFader : MonoBehaviour
     [Tooltip("Wait X seconds before fading scene in")]
     public float SceneFadeInDelay = 1f;
 
-    GameObject fadeObject;
-    RectTransform fadeObjectRect;
-    Canvas fadeCanvas;
-    CanvasGroup canvasGroup;
-    Image fadeImage;
-    IEnumerator fadeRoutine;
-    string damageFaderName = "DamageScreenFader";
-    string dyingFaderName = "DyingScreenFader";
+    public float blinkSpeed = 0.2f;
+
+    CanvasGroup damageCanvasGroup;
+    CanvasGroup dyingCanvasGroup;
+    IEnumerator damageRoutine;
+    IEnumerator dyingRoutine;
+    public string damageFaderName = "DamageScreenFader";
+    public string dyingFaderName = "DyingScreenFader";
 
     public Sprite damageScreen;
 
@@ -40,13 +37,16 @@ public class DamageScreenFader : MonoBehaviour
     protected virtual void initialize()
     {
         // Create a Canvas that will be placed directly over the camera
-        if (fadeObject == null)
+        if (damageCanvasGroup == null)
         {
-            CreateFader(damageFaderName);
-            CreateFader(dyingFaderName);
+            damageCanvasGroup = CreateFader(damageFaderName);
+        }
+        if (dyingCanvasGroup == null)
+        {
+            dyingCanvasGroup = CreateFader(dyingFaderName);
         }
     }
-    private void CreateFader(string faderName)
+    private CanvasGroup CreateFader(string faderName)
     {
         Canvas childCanvas = GetComponentInChildren<Canvas>();
 
@@ -54,91 +54,90 @@ public class DamageScreenFader : MonoBehaviour
         if (childCanvas != null && childCanvas.transform.name == faderName)
         {
             GameObject.Destroy(this.gameObject);
-            return;
+            return null;
         }
-        fadeObject = new GameObject();
-        fadeObject.transform.parent = Camera.main.transform;
-        fadeObject.transform.localPosition = new Vector3(0, 0, 0.03f);
-        fadeObject.transform.localEulerAngles = Vector3.zero;
-        fadeObject.transform.name = faderName;
+        GameObject damageFadeObject = new GameObject();
+        damageFadeObject.transform.parent = Camera.main.transform;
+        damageFadeObject.transform.localPosition = new Vector3(0, 0, 0.03f);
+        damageFadeObject.transform.localEulerAngles = Vector3.zero;
+        damageFadeObject.transform.name = faderName;
 
-        fadeCanvas = fadeObject.AddComponent<Canvas>();
+        Canvas fadeCanvas = damageFadeObject.AddComponent<Canvas>();
         fadeCanvas.renderMode = RenderMode.WorldSpace;
         fadeCanvas.sortingOrder = 100; // Make sure the canvas renders on top
 
-        canvasGroup = fadeObject.AddComponent<CanvasGroup>();
+        CanvasGroup canvasGroup = damageFadeObject.AddComponent<CanvasGroup>();
         canvasGroup.interactable = false;
         canvasGroup.alpha = 0f;
 
-        fadeImage = fadeObject.AddComponent<Image>();
+        Image fadeImage = damageFadeObject.AddComponent<Image>();
         fadeImage.color = FadeColor;
         fadeImage.sprite = damageScreen;
         fadeImage.raycastTarget = false;
 
         // Stretch the image
-        fadeObjectRect = fadeObject.GetComponent<RectTransform>();
+        RectTransform fadeObjectRect = damageFadeObject.GetComponent<RectTransform>();
         fadeObjectRect.anchorMin = new Vector2(1, 0);
         fadeObjectRect.anchorMax = new Vector2(0, 1);
         fadeObjectRect.pivot = new Vector2(0.5f, 0.5f);
         fadeObjectRect.sizeDelta = new Vector2(0.07f, 0.04f);
         fadeObjectRect.localScale = new Vector2(2f, 2f);
+
+        return canvasGroup;
     }
 
     private void Start()
     {
         GetData();
     }
-    /// <summary>
-    /// Fade from transparent to solid color
-    /// </summary>
-    public virtual void DoFadeIn()
-    {
-        // Stop if currently running
-        if (fadeRoutine != null)
-        {
-            StopCoroutine(fadeRoutine);
-        }
-
-        // Do the fade routine
-        if (canvasGroup != null)
-        {
-            fadeRoutine = doFade(canvasGroup.alpha, 1);
-            StartCoroutine(fadeRoutine);
-        }
-    }
-
-    /// <summary>
-    /// Fade from solid color to transparent
-    /// </summary>
-    public virtual void DoFadeOut()
-    {
-        if (fadeRoutine != null)
-        {
-            StopCoroutine(fadeRoutine);
-        }
-
-        fadeRoutine = doFade(canvasGroup.alpha, 0);
-        StartCoroutine(fadeRoutine);
-    }
-
+ 
     public void OnDamage()
     {
-        if (fadeRoutine != null)
+        if (damageRoutine != null)
         {
-            StopCoroutine(fadeRoutine);
+            StopCoroutine(damageRoutine);
         }
-        canvasGroup.alpha = 0.5f;
-        fadeRoutine = doFade(canvasGroup.alpha, 0);
-        StartCoroutine(fadeRoutine);
+        damageCanvasGroup.alpha = 0.5f;
+        damageRoutine = doFade(damageCanvasGroup, 0);
+        StartCoroutine(damageRoutine);
     }
 
-
-    IEnumerator doFade(float alphaFrom, float alphaTo)
+    public void OnDying()
     {
+        if (dyingRoutine != null)
+        {
+            StopCoroutine(dyingRoutine);
+        }
+        dyingCanvasGroup.gameObject.SetActive(true);
+        dyingRoutine = doBlink(blinkSpeed, 0.5f);
+        StartCoroutine(dyingRoutine);
+    }
 
+    public void OnRestore()
+    {
+        if (dyingRoutine != null)
+        {
+            StopCoroutine(dyingRoutine);
+            dyingCanvasGroup.gameObject.SetActive(false);
+        }
+    }
+
+    IEnumerator doBlink(float speed,float maxAlpha)
+    {
+        while (true)
+        {
+            dyingCanvasGroup.alpha = Mathf.PingPong(Time.time*speed, 5)/10+ 0.1f;
+            Debug.Log(dyingCanvasGroup.alpha);
+            yield return null;
+        }
+    }
+
+    IEnumerator doFade(CanvasGroup _canvasGroup, float alphaTo)
+    {
+        float alphaFrom = _canvasGroup.alpha;
         float alpha = alphaFrom;
 
-        updateImageAlpha(alpha);
+        updateImageAlpha(alpha, _canvasGroup);
 
         while (alpha != alphaTo)
         {
@@ -160,7 +159,7 @@ public class DamageScreenFader : MonoBehaviour
                 }
             }
 
-            updateImageAlpha(alpha);
+            updateImageAlpha(alpha, _canvasGroup);
 
             yield return new WaitForEndOfFrame();
         }
@@ -168,30 +167,30 @@ public class DamageScreenFader : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         // Ensure alpha is always applied
-        updateImageAlpha(alphaTo);
+        updateImageAlpha(alphaTo, _canvasGroup);
     }
 
-    protected virtual void updateImageAlpha(float alphaValue)
+    protected virtual void updateImageAlpha(float alphaValue, CanvasGroup _canvasGroup)
     {
 
         // Canvas Group was Destroyed.
-        if (canvasGroup == null)
+        if (_canvasGroup == null)
         {
             return;
         }
 
         // Enable canvas if necessary
-        if (!canvasGroup.gameObject.activeSelf)
+        if (!_canvasGroup.gameObject.activeSelf)
         {
-            canvasGroup.gameObject.SetActive(true);
+            _canvasGroup.gameObject.SetActive(true);
         }
 
-        canvasGroup.alpha = alphaValue;
+        _canvasGroup.alpha = alphaValue;
 
         // Disable Canvas if we're done
-        if (alphaValue == 0 && canvasGroup.gameObject.activeSelf)
+        if (alphaValue == 0 && _canvasGroup.gameObject.activeSelf)
         {
-            canvasGroup.gameObject.SetActive(false);
+            _canvasGroup.gameObject.SetActive(false);
         }
     }
     private void GetData()

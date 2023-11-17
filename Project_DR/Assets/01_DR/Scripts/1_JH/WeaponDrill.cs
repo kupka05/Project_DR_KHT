@@ -58,7 +58,14 @@ public class WeaponDrill : MonoBehaviour
             }
         }
     }
+    public void ResetDrill()
+    {
+        transform.localRotation = Quaternion.identity;
+        lerpSpeed = 0;
+        StopAllCoroutines();
+        StartCoroutine("DrillSpin");
 
+    }
     private void GetData()
     {
         addSpeed = (float)DataManager.GetData(1100, "SpiralForce");

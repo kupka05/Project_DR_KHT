@@ -54,8 +54,10 @@ public class Grappling : GrabbableEvents
 
     }
 
+
     private void Start()
     {
+
         player = GameObject.FindGameObjectWithTag("Player");
         if (player)
         {
@@ -70,6 +72,8 @@ public class Grappling : GrabbableEvents
         {
             Debug.Log("플레이어 오브젝트를 찾지 못함");
         }
+        GetData();
+
         line = GetComponent<LineRenderer>();
     }
 
@@ -233,5 +237,9 @@ public class Grappling : GrabbableEvents
             playerGravity.ToggleGravity(gravityOn);
         }
     }
-
+    void GetData()
+    {
+        maxGrappleDistance = (float)DataManager.GetData(1100, "MaxDistance");
+        grapplingCd = (float)DataManager.GetData(1100, "GrappleDelay");
+    }
 }

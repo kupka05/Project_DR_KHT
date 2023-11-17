@@ -194,9 +194,11 @@ namespace BNG
         protected bool readyToShoot = true;
 
 
-
+  
         void Start()
         {
+            GetData();
+
             weaponRigid = GetComponent<Rigidbody>();
             grappling = GetComponent<Grappling>();
             if (MuzzleFlashObject)
@@ -367,6 +369,10 @@ namespace BNG
             // 진동 (뭔가 집고있을 경우)
             if (thisGrabber != null)
             {
+                if(input == null)
+                {
+                    Debug.Log("이곳");
+                }
                 input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
             }
 
@@ -782,6 +788,12 @@ namespace BNG
                     yield return new WaitForEndOfFrame();
                 }
             }
+        }
+        private void GetData()
+        {
+            Damage = (float)DataManager.GetData(1100, "Damage");
+            FiringRate = (float)DataManager.GetData(1100, "AttackSpeed");
+
         }
     }
 

@@ -7,14 +7,14 @@ public class GoogleSheetLoader : MonoBehaviour
 {
     [Header("GoogleAPI")]
     // 스프레드 시트 url에 있는 ID
-    private const string spreadsheetId = "QZiDv3heAHcoaWa91lvT2C_D9XFQmyUQ1ocWGwLJpBA";
+    private const string spreadsheetId = "1QZiDv3heAHcoaWa91lvT2C_D9XFQmyUQ1ocWGwLJpBA";
     // API 접근 KEY
     private const string apiKey = "AIzaSyC3utQPnsLiJdh3AAAdmYJFQ4QCZ7ReV_A";
     // 불러올 문서의 시트 이름 배열
     // 불러올 시트 이름을 넣어주세요!!!
     private string[] sheetNames =
     {
-        "Test_Table"
+        "Player_Table", "Drill_Table"
     };
 
     // 코루틴에서 데이터를 반환하고
@@ -70,7 +70,5 @@ public class GoogleSheetLoader : MonoBehaviour
 
         // 로딩 완료 상태 변경
         isDone = true;
-
-        Debug.Log((int)DataManager.GetData(1, "HP"));
     }
 }

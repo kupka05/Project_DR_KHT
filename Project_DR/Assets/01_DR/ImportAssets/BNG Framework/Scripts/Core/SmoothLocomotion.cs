@@ -152,7 +152,10 @@ namespace BNG {
         public delegate void OnAfterMoveAction();
         public static event OnAfterMoveAction OnAfterMove;
         #endregion
-
+        private void Awake()
+        {
+            GetData();
+        }
         public virtual void Update() {
             CheckControllerReferences();
             UpdateInputs();
@@ -770,10 +773,14 @@ namespace BNG {
                 }
             }
         }
-        
+        private void GetData()
+        {
+            MovementSpeed = (float)DataManager.GetData(1001, "Speed");
+            StrafeSpeed = (float)DataManager.GetData(1001, "Speed") * 0.75f;
+        }
 
     }
-
+   
     public enum PlayerControllerType {
         CharacterController,
         Rigidbody

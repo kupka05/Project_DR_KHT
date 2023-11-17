@@ -128,6 +128,11 @@ public class Grappling : GrabbableEvents
             lastGrapplingTime = Time.time;
             smoothLocomotion.freeze = false;
             isGrappling = true;
+
+            if(hit.collider.GetComponent<Damageable>())
+            {
+                Invoke(nameof(StopGrapple), grappleDelayTime);    // 그래플링 정지
+            }
         }
         else
         {
@@ -201,10 +206,11 @@ public class Grappling : GrabbableEvents
         isGrappling = false;
         lastGrapplingTime = Time.time;
         drill.SetActive(true);
-        if (_drill.gameObject != null)
+        if (_drill != null)
         {
             Destroy(_drill.gameObject);
         }
+
     }
 
     // 그래플링 포인트와 총구의 거리를 계산하는 메서드

@@ -5224,7 +5224,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8768672552246940888}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
@@ -5236,6 +5236,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!114 &3038501380516454709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5360,7 +5361,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fb49a6c2bee5d7f4ea2a7cdf206e1514, type: 2}
+  - {fileID: 2100000, guid: d9b352dfd8c6c97438e74ec8e4e0d76d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

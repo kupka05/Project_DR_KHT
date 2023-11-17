@@ -1,3 +1,4 @@
+using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +27,8 @@ public class DamageScreenFader : MonoBehaviour
     CanvasGroup canvasGroup;
     Image fadeImage;
     IEnumerator fadeRoutine;
-    string faderName = "DamageScreenFader";
+    string damageFaderName = "DamageScreenFader";
+    string dyingFaderName = "DyingScreenFader";
 
     public Sprite damageScreen;
 
@@ -34,69 +36,58 @@ public class DamageScreenFader : MonoBehaviour
     {
         initialize();
     }
-
+   
     protected virtual void initialize()
     {
         // Create a Canvas that will be placed directly over the camera
         if (fadeObject == null)
         {
-            Canvas childCanvas = GetComponentInChildren<Canvas>();
-
-            // Found existing item, no need to initialize this one
-            if (childCanvas != null && childCanvas.transform.name == faderName)
-            {
-                GameObject.Destroy(this.gameObject);
-                return;
-            }
-            fadeObject = new GameObject();
-            fadeObject.transform.parent = Camera.main.transform;
-            fadeObject.transform.localPosition = new Vector3(0, 0, 0.03f);
-            fadeObject.transform.localEulerAngles = Vector3.zero;
-            fadeObject.transform.name = faderName;
-
-            fadeCanvas = fadeObject.AddComponent<Canvas>();
-            fadeCanvas.renderMode = RenderMode.WorldSpace;
-            fadeCanvas.sortingOrder = 100; // Make sure the canvas renders on top
-
-            canvasGroup = fadeObject.AddComponent<CanvasGroup>();
-            canvasGroup.interactable = false;
-
-            fadeImage = fadeObject.AddComponent<Image>();
-            fadeImage.color = FadeColor;
-            fadeImage.sprite = damageScreen;
-            fadeImage.raycastTarget = false;
-
-            // Stretch the image
-            fadeObjectRect = fadeObject.GetComponent<RectTransform>();
-            fadeObjectRect.anchorMin = new Vector2(1, 0);
-            fadeObjectRect.anchorMax = new Vector2(0, 1);
-            fadeObjectRect.pivot = new Vector2(0.5f, 0.5f);
-            fadeObjectRect.sizeDelta = new Vector2(0.2f, 0.2f);
-            fadeObjectRect.localScale = new Vector2(2f, 2f);
-
+            CreateFader(damageFaderName);
+            CreateFader(dyingFaderName);
         }
     }
-
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void CreateFader(string faderName)
     {
+        Canvas childCanvas = GetComponentInChildren<Canvas>();
 
-        if (FadeOnSceneLoaded && fadeObject != null)
+        // Found existing item, no need to initialize this one
+        if (childCanvas != null && childCanvas.transform.name == faderName)
         {
-            // Start screen at fade
-            updateImageAlpha(FadeColor.a);
-
-            StartCoroutine(fadeOutWithDelay(SceneFadeInDelay));
+            GameObject.Destroy(this.gameObject);
+            return;
         }
+        fadeObject = new GameObject();
+        fadeObject.transform.parent = Camera.main.transform;
+        fadeObject.transform.localPosition = new Vector3(0, 0, 0.03f);
+        fadeObject.transform.localEulerAngles = Vector3.zero;
+        fadeObject.transform.name = faderName;
+
+        fadeCanvas = fadeObject.AddComponent<Canvas>();
+        fadeCanvas.renderMode = RenderMode.WorldSpace;
+        fadeCanvas.sortingOrder = 100; // Make sure the canvas renders on top
+
+        canvasGroup = fadeObject.AddComponent<CanvasGroup>();
+        canvasGroup.interactable = false;
+        canvasGroup.alpha = 0f;
+
+        fadeImage = fadeObject.AddComponent<Image>();
+        fadeImage.color = FadeColor;
+        fadeImage.sprite = damageScreen;
+        fadeImage.raycastTarget = false;
+
+        // Stretch the image
+        fadeObjectRect = fadeObject.GetComponent<RectTransform>();
+        fadeObjectRect.anchorMin = new Vector2(1, 0);
+        fadeObjectRect.anchorMax = new Vector2(0, 1);
+        fadeObjectRect.pivot = new Vector2(0.5f, 0.5f);
+        fadeObjectRect.sizeDelta = new Vector2(0.07f, 0.04f);
+        fadeObjectRect.localScale = new Vector2(2f, 2f);
     }
 
-    IEnumerator fadeOutWithDelay(float delaySeconds)
+    private void Start()
     {
-        yield return new WaitForSeconds(delaySeconds);
-
-        DoFadeOut();
+        GetData();
     }
-
     /// <summary>
     /// Fade from transparent to solid color
     /// </summary>
@@ -130,23 +121,17 @@ public class DamageScreenFader : MonoBehaviour
         StartCoroutine(fadeRoutine);
     }
 
-    public virtual void SetFadeLevel(float fadeLevel)
+    public void OnDamage()
     {
         if (fadeRoutine != null)
         {
             StopCoroutine(fadeRoutine);
-            // Debug.Log("----- Stopped Routine");
         }
-
-        // No Canvas available to fade
-        if (canvasGroup == null)
-        {
-            return;
-        }
-
-        fadeRoutine = doFade(canvasGroup.alpha, fadeLevel);
+        canvasGroup.alpha = 0.5f;
+        fadeRoutine = doFade(canvasGroup.alpha, 0);
         StartCoroutine(fadeRoutine);
     }
+
 
     IEnumerator doFade(float alphaFrom, float alphaTo)
     {
@@ -208,5 +193,11 @@ public class DamageScreenFader : MonoBehaviour
         {
             canvasGroup.gameObject.SetActive(false);
         }
+    }
+    private void GetData()
+    {
+        FadeInSpeed = (float)DataManager.GetData(1001, "FadeSpeed");
+        FadeOutSpeed = (float)DataManager.GetData(1001, "FadeSpeed");
+
     }
 }

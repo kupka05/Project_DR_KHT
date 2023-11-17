@@ -8,6 +8,8 @@ public class PlayerHealth : MonoBehaviour
 {
     private Damageable playerDamage;
     public float health;
+    private DamageScreenFader fader;
+
 
     public PlayerStatusController[] playerHealthUI;
     // Start is called before the first frame update
@@ -21,9 +23,18 @@ public class PlayerHealth : MonoBehaviour
     }
   
     // Update is called once per frame
-    void Update()
+    void Start()
     {
-        
+        if (Camera.main)
+        {
+            fader = Camera.main.transform.GetComponent<DamageScreenFader>();
+        }
+    }
+
+    public void OnDamage()
+    {
+        SetHealth();
+        fader.OnDamage();
     }
 
     private void GetData()

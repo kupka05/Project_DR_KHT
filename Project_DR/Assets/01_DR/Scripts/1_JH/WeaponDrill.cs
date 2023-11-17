@@ -14,13 +14,12 @@ public class WeaponDrill : MonoBehaviour
     public float addSpeed;
     private float maxSpeed;
 
-    private void Awake()
-    {
-        GetData();
-    }
+
 
     void Start()
     {
+        GetData();
+
         StartCoroutine("DrillSpin");
     }
     private void Update()

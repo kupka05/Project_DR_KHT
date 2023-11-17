@@ -369,10 +369,6 @@ namespace BNG
             // 진동 (뭔가 집고있을 경우)
             if (thisGrabber != null)
             {
-                if(input == null)
-                {
-                    Debug.Log("이곳");
-                }
                 input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
             }
 

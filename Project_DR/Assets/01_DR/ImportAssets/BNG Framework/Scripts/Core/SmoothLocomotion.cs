@@ -114,6 +114,7 @@ namespace BNG {
         public bool freeze;
         public bool activeGrapple;
         public bool swinging;
+        public bool isGrappling;
 
 
         [Header("Air Control : ")]

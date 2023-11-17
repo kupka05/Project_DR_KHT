@@ -35,22 +35,16 @@ public class PlayerStatusController : MonoBehaviour
     {
         if (_curHealth > maxHealth * 0.5f)
         {
-            Debug.Log("초록");
-
-            healthColor.color = new Color(23 / 255, 255 / 255, 100 / 255, 1); // 초록
+            healthColor.color = new Color(23f / 255f, 255f / 255f, 100f / 255f, 1); // 초록
 
         }
         else if (_curHealth > maxHealth * 0.25f)
         {
-            Debug.Log("주황");
-            healthColor.color = new Color(255 / 255, 125 / 255, 23 / 255, 1); // 주황
-
+            healthColor.color = new Color(255f / 255f, 125f / 255f, 23f / 255f, 1); // 주황
         }
         else
         {
-            Debug.Log("빨강");
-
-            healthColor.color = new Color(255 / 255, 0, 103 / 255, 1); // 빨강
+            healthColor.color = new Color(255f / 255f, 0f, 103f / 255f, 1); // 빨강
         }
     }
 

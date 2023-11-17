@@ -11,8 +11,8 @@ public class DungeonCreator : MonoBehaviour
 
     [Header("BSPRoom")]
     // 던전 크기 설정
-    public int dungeonWidth;
-    public int dungeonHeight;     // 던전의 넓이와 높이
+    public int dungeonWidth;      // 던전의 넓이
+    public int dungeonHeight;     // 던전의 높이
     // 방 크기 및 기준 설정
     public int roomWidthMin, roomLengthMin;     // 방의 최소 넓이와 길이
     public int maxIterations;       // 던전 생성 최대 반복 횟수
@@ -45,6 +45,7 @@ public class DungeonCreator : MonoBehaviour
     public float nextStageRoomDistance; // 보스방과 다음스테이지의 거리
     public int nextStageRoomWidth;      // 다음스테이지방 넓이
     public int nextStageRoomHeight;     // 다음스테이지방 높이
+    public int nextStageRoomUnderObjCount;      // 다음방 가기위해 깔아둘 벽돌 갯수 = 깊이
     private FloorMeshPos nextStageRoomCornerPos;   // 다음스테이지방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
     [Header("WallObj")]
     // 벽 오브젝트 설정
@@ -1319,6 +1320,12 @@ public class DungeonCreator : MonoBehaviour
         Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
         floorCol.size = colSize;
 
+        BoxCollider stepOffCol = dungeonFloor.AddComponent<BoxCollider>();
+        dungeonFloor.AddComponent<NextstageRoomColliderController>().GetColliders(floorCol, stepOffCol);
+
+
+        stepOffCol.center = colCenter;
+        stepOffCol.size = new Vector3((float)nextStageRoomUnderObjCount,0f , (float)nextStageRoomUnderObjCount);
         #endregion 메시의 콜라이더 Center,Size
 
         dungeonFloor.transform.position = Vector3.zero;
@@ -1331,12 +1338,46 @@ public class DungeonCreator : MonoBehaviour
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
         nextStageRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
 
+
+
         CustomRoomCorridorCreatePlusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);        
         CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, bossRoomCornerPos_, dungeonFloor);
         CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
 
+        CreateNextStageStoneObj(colCenter, bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
+
     }       // NextStageRoomCreate()
+
+    /// <summary>
+    /// 다음 던전이동 하기위한 뚫리는 돌 오브젝트 생성
+    /// </summary>
+    private void CreateNextStageStoneObj(Vector3 meshCenter,Vector3 bottomLeftV, Vector3 bottomRightV,
+        Vector3 topLeftV, Vector3 topRightV, GameObject dungeonFloor)
+    {       // 11.17 여기부터 수정해야함
+        GameObject underStoneClone;
+        int roopWidth = nextStageRoomUnderObjCount;
+        int roopHeight = nextStageRoomUnderObjCount;
+        int tempNum001;
+
+        Vector3 centerClone = meshCenter;
+        centerClone.x -= roopWidth;
+        centerClone.z -= roopHeight;
+
+        for (int i = 0; i < roopHeight; i++)
+        {
+            for(int j = 0; j < roopWidth; j++)
+            {
+                underStoneClone = Instantiate(floorPrefabs[0], centerClone, Quaternion.identity, dungeonFloor.transform);
+            }
+
+
+        }
+
+        
+        
+
+    }       // CreateNextStageStoneObj()
     #endregion CustomRoomCreate
 
 }   // ClassEnd

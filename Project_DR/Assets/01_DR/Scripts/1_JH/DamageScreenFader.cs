@@ -127,7 +127,6 @@ public class DamageScreenFader : MonoBehaviour
         while (true)
         {
             dyingCanvasGroup.alpha = Mathf.PingPong(Time.time*speed, 5)/10+ 0.1f;
-            Debug.Log(dyingCanvasGroup.alpha);
             yield return null;
         }
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,15 +25,26 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-      
+
     }       // Start()
 
-    
+
     void Update()
     {
 
 
     }       // Update()
+
+
+    public void GameOver()
+    {
+        ResetScene();
+    }
+    public void ResetScene()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
+    }
 
 
 }       // ClassEnd

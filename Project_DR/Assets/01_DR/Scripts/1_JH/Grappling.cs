@@ -48,6 +48,10 @@ public class Grappling : GrabbableEvents
     public float grapplingCd;
     float lastGrapplingTime;
     private bool isGrappling;
+
+    private bool isDamageCheck;
+    private Damageable target;
+
     public void OnEnable()
     {
         drill.SetActive(true);
@@ -96,6 +100,7 @@ public class Grappling : GrabbableEvents
             updateGrappleDistance();
 
         }
+        DamageCheck();
     }
 
     public void OnGrapple()
@@ -132,10 +137,11 @@ public class Grappling : GrabbableEvents
             lastGrapplingTime = Time.time;
             smoothLocomotion.freeze = false;
             isGrappling = true;
-
-            if(hit.collider.GetComponent<Damageable>())
+            if (hit.collider.GetComponent<Damageable>())
             {
-                Invoke(nameof(StopGrapple), grappleDelayTime);    // 그래플링 정지
+                Debug.Log("체력은"+hit.collider.GetComponent<Damageable>().Health);
+                isDamageCheck = true;
+                target = hit.collider.GetComponent<Damageable>();
             }
         }
         else
@@ -153,8 +159,11 @@ public class Grappling : GrabbableEvents
     private void ShootDrill()
     {
         _drill = Instantiate(drillPrefab, drill.transform.position, drill.transform.rotation);
+        _drill.transform.LookAt(grapplePoint);
         _drill.GetComponent<DrillHead>().targetPos = grapplePoint;
+        _drill.GetComponent<DrillHead>().grappling = this;
     }
+    
     public void ExcuteCheck()
     { 
         if(state == State.Shooting && !InputBridge.Instance.AButton)
@@ -170,7 +179,6 @@ public class Grappling : GrabbableEvents
     {
         if (!isGrappling)
         { return; }
-
         state = State.Grappling;
         changeGravity(false);
     }
@@ -194,27 +202,36 @@ public class Grappling : GrabbableEvents
     // 그래플링 멈춤
     public void StopGrapple()
     {
-        //if(isGrappling)
-        //{
-        //    line.enabled = false;
-        //    smoothLocomotion.freeze = true;
-        //}
 
-        //else
-        //{ 
-            changeGravity(true);
-            smoothLocomotion.freeze = false;
-            state = State.Idle;
-            line.enabled = false;
-        //}
+
+        
+        changeGravity(true);
+        smoothLocomotion.freeze = false;
+        state = State.Idle;
+        line.enabled = false;
+
         isGrappling = false;
         lastGrapplingTime = Time.time;
         drill.SetActive(true);
+        
+        isDamageCheck = false;
+        target = null;
+
         if (_drill != null)
         {
             Destroy(_drill.gameObject);
         }
 
+    }
+    public void DamageCheck()
+    {
+        if (!isDamageCheck)
+            return;
+        if (target.Health <= 0)
+        {
+            Debug.Log("상대 죽음");
+            StopGrapple();
+        }
     }
 
     // 그래플링 포인트와 총구의 거리를 계산하는 메서드

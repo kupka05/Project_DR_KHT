@@ -160,7 +160,6 @@ namespace BNG {
                         alpha = alphaTo;
                     }
                 }
-
                 updateImageAlpha(alpha);
 
                 yield return new WaitForEndOfFrame();

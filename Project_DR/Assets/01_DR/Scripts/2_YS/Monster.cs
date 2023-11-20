@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,23 +25,23 @@ public class Monster : MonoBehaviour
     }
     public Type monsterType = Type.A;
 
-    [Header("¸ó½ºÅÍ ¿ø°Å¸® °ü·Ã")]
+    [Header("ëª¬ìŠ¤í„° ì›ê±°ë¦¬ ê´€ë ¨")]
     public Transform bulletport;
     public GameObject monsterBullet;
 
-    [Header("¸ó½ºÅÍ Å×ÀÌºí")]
+    [Header("ëª¬ìŠ¤í„° í…Œì´ë¸”")]
     public float hp = default;
     public float attack = default;
-    public float attDelay = default;   //°ø°İ°£°İ
+    public float attDelay = default;   //ê³µê²©ê°„ê²©
     public float speed = default;
-    public float recRange = 50.0f;   //pc ÀÎ½Å¹üÀ§
-    public float attRange = 1.0f;   //pc °ø°İ¹üÀ§
+    public float recRange = 50.0f;   //pc ì¸ì‹ ë²”ìœ„
+    public float attRange = 1.0f;   //pc ê³µê²©ë²”ìœ„
 
-    [Header("Æ®·£½ºÆû")]
+    [Header("íŠ¸ëœìŠ¤í¼")]
     public Transform monsterTr;
     public Transform playerTr;
 
-    [Header("¸ó½ºÅÍ ÄÄÆ÷³ÍÆ®")]
+    [Header("ëª¬ìŠ¤í„° ì»´í¬ë„ŒíŠ¸")]
     public Animator anim;
     public Rigidbody rigid;
     public NavMeshAgent nav;

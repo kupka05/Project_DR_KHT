@@ -14,7 +14,7 @@ public class GoogleSheetLoader : MonoBehaviour
     // 불러올 시트 이름을 넣어주세요!!!
     private string[] sheetNames =
     {
-        "Player_Table", "Drill_Table"
+        "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table"
     };
 
     // 코루틴에서 데이터를 반환하고

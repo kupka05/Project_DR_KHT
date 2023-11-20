@@ -130,6 +130,8 @@ namespace BNG {
         SphereCollider playerSphere;
         public Grappling[] grapplings;
 
+        public int grappleCount;
+
         // Left / Right
         float movementX;
 

@@ -2,7 +2,6 @@ using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class DrillHead : MonoBehaviour
@@ -13,6 +12,9 @@ public class DrillHead : MonoBehaviour
     public float damage;
     public float speed;
     public DamageCollider damageCollider;
+    public bool isTrigger;
+    public Grappling grappling;
+    private CapsuleCollider collider;
 
     private void Awake()
     {
@@ -21,6 +23,7 @@ public class DrillHead : MonoBehaviour
     private void Start()
     {
         damageCollider.Damage = damage;
+        collider = damageCollider.GetComponent<CapsuleCollider>();
     }
     // Update is called once per frame
     void Update()
@@ -41,6 +44,15 @@ public class DrillHead : MonoBehaviour
         damage = (float)DataManager.GetData(1100, "ProjectileDamage");
         speed = (float)DataManager.GetData(1100, "ProjectileSpeed");
 
+    }
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.GetComponent<Damageable>())
+        {
+            Debug.Log("뭔가 부딧쳤다");
+            grappling.StopGrapple();
+                
+        }
     }
 
 }

@@ -157,7 +157,7 @@ namespace Rito.InventorySystem
             if (_itemTooltip == null)
             {
                 _itemTooltip = GetComponentInChildren<ItemTooltipUI>();
-                EditorLog("인스펙터에서 아이템 툴팁 UI를 직접 지정하지 않아 자식에서 발견하여 초기화하였습니다.");
+                //EditorLog("인스펙터에서 아이템 툴팁 UI를 직접 지정하지 않아 자식에서 발견하여 초기화하였습니다.");
             }
         }
 
@@ -335,7 +335,7 @@ namespace Rito.InventorySystem
                 // 아이템을 갖고 있는 슬롯만 해당
                 if (_beginDragSlot != null && _beginDragSlot.HasItem && _beginDragSlot.IsAccessible)
                 {
-                    EditorLog($"Drag Begin : Slot [{_beginDragSlot.Index}]");
+                    //EditorLog($"Drag Begin : Slot [{_beginDragSlot.Index}]");
 
                     // 위치 기억, 참조 등록
                     _beginDragIconTransform = _beginDragSlot.IconRect.transform;
@@ -466,7 +466,7 @@ namespace Rito.InventorySystem
             // 슬롯이 아닌 다른 UI 위에 놓은 경우
             else
             {
-                EditorLog($"Drag End(Do Nothing)");
+                //EditorLog($"Drag End(Do Nothing)");
             }
         }
 
@@ -479,7 +479,7 @@ namespace Rito.InventorySystem
         /// <summary> UI 및 인벤토리에서 아이템 제거 </summary>
         private void TryRemoveItem(int index)
         {
-            EditorLog($"UI - Try Remove Item : Slot [{index}]");
+            //EditorLog($"UI - Try Remove Item : Slot [{index}]");
 
             _inventory.Remove(index);
         }
@@ -487,7 +487,7 @@ namespace Rito.InventorySystem
         /// <summary> 아이템 사용 </summary>
         private void TryUseItem(int index)
         {
-            EditorLog($"UI - Try Use Item : Slot [{index}]");
+            //EditorLog($"UI - Try Use Item : Slot [{index}]");
 
             _inventory.Use(index);
         }
@@ -497,11 +497,11 @@ namespace Rito.InventorySystem
         {
             if (from == to)
             {
-                EditorLog($"UI - Try Swap Items: Same Slot [{from.Index}]");
+                //EditorLog($"UI - Try Swap Items: Same Slot [{from.Index}]");
                 return;
             }
 
-            EditorLog($"UI - Try Swap Items: Slot [{from.Index} -> {to.Index}]");
+            //EditorLog($"UI - Try Swap Items: Slot [{from.Index} -> {to.Index}]");
 
             from.SwapOrMoveIcon(to);
             _inventory.Swap(from.Index, to.Index);
@@ -512,11 +512,11 @@ namespace Rito.InventorySystem
         {
             if (indexA == indexB)
             {
-                EditorLog($"UI - Try Separate Amount: Same Slot [{indexA}]");
+                //EditorLog($"UI - Try Separate Amount: Same Slot [{indexA}]");
                 return;
             }
 
-            EditorLog($"UI - Try Separate Amount: Slot [{indexA} -> {indexB}]");
+            //EditorLog($"UI - Try Separate Amount: Slot [{indexA} -> {indexB}]");
 
             string itemName = $"{_inventory.GetItemName(indexA)} x{amount}";
 
@@ -563,7 +563,7 @@ namespace Rito.InventorySystem
         /// <summary> 슬롯에 아이템 아이콘 등록 </summary>
         public void SetItemIcon(int index, Sprite icon)
         {
-            EditorLog($"Set Item Icon : Slot [{index}]");
+            //EditorLog($"Set Item Icon : Slot [{index}]");
 
             _slotUIList[index].SetItem(icon);
         }
@@ -571,7 +571,7 @@ namespace Rito.InventorySystem
         /// <summary> 해당 슬롯의 아이템 개수 텍스트 지정 </summary>
         public void SetItemAmountText(int index, int amount)
         {
-            EditorLog($"Set Item Amount Text : Slot [{index}], Amount [{amount}]");
+            //EditorLog($"Set Item Amount Text : Slot [{index}], Amount [{amount}]");
 
             // NOTE : amount가 1 이하일 경우 텍스트 미표시
             _slotUIList[index].SetItemAmount(amount);
@@ -580,7 +580,7 @@ namespace Rito.InventorySystem
         /// <summary> 해당 슬롯의 아이템 개수 텍스트 지정 </summary>
         public void HideItemAmountText(int index)
         {
-            EditorLog($"Hide Item Amount Text : Slot [{index}]");
+            //EditorLog($"Hide Item Amount Text : Slot [{index}]");
 
             _slotUIList[index].SetItemAmount(1);
         }
@@ -588,7 +588,7 @@ namespace Rito.InventorySystem
         /// <summary> 슬롯에서 아이템 아이콘 제거, 개수 텍스트 숨기기 </summary>
         public void RemoveItem(int index)
         {
-            EditorLog($"Remove Item : Slot [{index}]");
+            //EditorLog($"Remove Item : Slot [{index}]");
 
             _slotUIList[index].RemoveItem();
         }
@@ -639,19 +639,19 @@ namespace Rito.InventorySystem
         /***********************************************************************
         *                               Editor Only Debug
         ***********************************************************************/
-        #region .
-#if UNITY_EDITOR
-        [Header("Editor Options")]
-        [SerializeField] private bool _showDebug = true;
-#endif
-        [System.Diagnostics.Conditional("UNITY_EDITOR")]
-        private void EditorLog(object message)
-        {
-            if (!_showDebug) return;
-            UnityEngine.Debug.Log($"[InventoryUI] {message}");
-        }
+//        #region .
+//#if UNITY_EDITOR
+//        [Header("Editor Options")]
+//        [SerializeField] private bool _showDebug = true;
+//#endif
+//        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+//        private void EditorLog(object message)
+//        {
+//            if (!_showDebug) return;
+//            UnityEngine.Debug.Log($"[InventoryUI] {message}");
+//        }
 
-        #endregion
+        //#endregion
         /***********************************************************************
         *                               Editor Preview
         ***********************************************************************/
@@ -679,7 +679,7 @@ namespace Rito.InventorySystem
                 __prevMouseReversed = _mouseReversed;
                 InvertMouse(_mouseReversed);
 
-                EditorLog($"Mouse Reversed : {_mouseReversed}");
+                //EditorLog($"Mouse Reversed : {_mouseReversed}");
             }
 
             if (Application.isPlaying) return;

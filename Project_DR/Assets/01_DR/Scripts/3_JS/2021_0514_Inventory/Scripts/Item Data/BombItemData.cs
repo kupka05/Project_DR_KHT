@@ -9,19 +9,19 @@ using UnityEngine;
 namespace Rito.InventorySystem
 {
     /// <summary> 소비 아이템 정보 </summary>
-    [CreateAssetMenu(fileName = "Item_Portion_", menuName = "Inventory System/Item Data/Portion", order = 3)]
-    public class PortionItemData : CountableItemData
+    [CreateAssetMenu(fileName = "Item_Bomb_", menuName = "Inventory System/Item Data/Bomb", order = 5)]
+    public class BombItemData : CountableItemData
     {
         /// <summary> 효과량(회복량 등) </summary>
         public float Value => _value;
         public float Duration => _duration;
-        public float EffectDuration => _effectDuration;
+        public float Radius => _radius;
         [SerializeField] public float _value;
         [SerializeField] public float _duration;
-        [SerializeField] public float _effectDuration;
+        [SerializeField] public float _radius;
         public override Item CreateItem()
         {
-            return new PortionItem(this);
+            return new BombItem(this);
         }
     }
 }

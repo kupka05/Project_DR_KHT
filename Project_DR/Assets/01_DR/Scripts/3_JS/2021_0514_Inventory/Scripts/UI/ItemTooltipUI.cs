@@ -91,7 +91,7 @@ namespace Rito.InventorySystem
         }
 
         /// <summary> 툴팁의 위치 조정 </summary>
-        public void SetRectPosition(RectTransform slotRect, int widthSlots, int heightSlots, int index)
+        public void SetRectPosition(RectTransform slotRect, int widthSlots, int heightSlots, int index, float slotSize)
         {
             //// 캔버스 스케일러에 따른 해상도 대응
             //float wRatio = Screen.width / _canvasScaler.referenceResolution.x;
@@ -148,7 +148,7 @@ namespace Rito.InventorySystem
             float maxWidth = 15f;
             float widthRange = Math.Abs(minWidth) + Math.Abs(maxWidth);
             float adjustWidth = (widthRange / (widthSlots - 1)) * xIndex;
-            float adjustHeight = 64f * yIndex;
+            float adjustHeight = slotSize * yIndex;
             _rt.anchoredPosition3D = new Vector3((defaultWidth + adjustWidth), (defaultHeight - adjustHeight), 0f);
         }
 

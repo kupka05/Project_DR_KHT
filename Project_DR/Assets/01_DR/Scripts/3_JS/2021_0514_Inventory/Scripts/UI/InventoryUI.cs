@@ -53,14 +53,15 @@ namespace Rito.InventorySystem
         #region .
         [Header("Options")]
         [Range(0, 10)]
-        [SerializeField] private int _horizontalSlotCount = 7;  // 슬롯 가로 개수
+        [SerializeField] private int _horizontalSlotCount = 4;  // 슬롯 가로 개수
         [Range(0, 10)]
-        [SerializeField] private int _verticalSlotCount = 7;      // 슬롯 세로 개수
+        [SerializeField] private int _verticalSlotCount = 5;      // 슬롯 세로 개수
         [SerializeField] private float _slotMargin = 8f;          // 한 슬롯의 상하좌우 여백
         [SerializeField] private float _contentAreaPadding = 20f; // 인벤토리 영역의 내부 여백
-        [Range(1, 64)]
+        [Range(1, 128)]
         // 임시로 1로 설정
-        [SerializeField] private float _slotSize = 64f;      // 각 슬롯의 크기
+        [SerializeField] private float _slotSize = 116f;      // 각 슬롯의 크기
+        [SerializeField] private float _scrollScale = 1.3f;    // 스크롤 범위 배율
 
         [Space]
         [SerializeField] private bool _showTooltip = true;
@@ -72,6 +73,7 @@ namespace Rito.InventorySystem
         [SerializeField] private GameObject _slotUiPrefab;     // 슬롯의 원본 프리팹
         [SerializeField] private ItemTooltipUI _itemTooltip;   // 아이템 정보를 보여줄 툴팁 UI
         [SerializeField] private InventoryPopupUI _popup;      // 팝업 UI 관리 객체
+        [SerializeField] private RectTransform _scrollPanelRect;   // 스크롤 사이즈 조절을 위한 RectTransform
 
         [Header("Buttons")]
         [SerializeField] private Button _trimButton;
@@ -129,6 +131,7 @@ namespace Rito.InventorySystem
             InitSlots();
             InitButtonEvents();
             InitToggleEvents();
+            ChangeScrollRange();
         }
 
         // 임시
@@ -609,7 +612,21 @@ namespace Rito.InventorySystem
             _itemTooltip.SetItemInfo(_inventory.GetItemData(slot.Index));
 
             // 툴팁 위치 조정
-            _itemTooltip.SetRectPosition(slot.SlotRect, _horizontalSlotCount, _verticalSlotCount, slot.Index);
+            _itemTooltip.SetRectPosition(slot.SlotRect, _horizontalSlotCount, 
+                _verticalSlotCount, slot.Index, _slotSize);
+        }
+
+        /// <summary> 스크롤 패널의 스크롤 범위(사이즈)를 변경 </summary>
+        private void ChangeScrollRange()
+        {
+            // 현재 사이즈 가져오기
+            Vector2 sizeDelta = _scrollPanelRect.sizeDelta;
+
+            // height 변경
+            sizeDelta.y = (_slotSize * _scrollScale) * _verticalSlotCount;
+
+            // 적용
+            _scrollPanelRect.sizeDelta = sizeDelta;
         }
 
         #endregion

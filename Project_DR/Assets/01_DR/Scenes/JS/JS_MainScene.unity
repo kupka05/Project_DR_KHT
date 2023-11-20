@@ -11917,11 +11917,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5b81c692dc3d044483c3ae773ada1f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _horizontalSlotCount: 7
-  _verticalSlotCount: 7
+  _horizontalSlotCount: 4
+  _verticalSlotCount: 10
   _slotMargin: 4
   _contentAreaPadding: 8
-  _slotSize: 64
+  _slotSize: 116
+  _scrollScale: 1.3
   _showTooltip: 1
   _showHighlight: 1
   _showRemovingPopup: 1
@@ -11929,6 +11930,7 @@ MonoBehaviour:
   _slotUiPrefab: {fileID: 191365978}
   _itemTooltip: {fileID: 863788214}
   _popup: {fileID: 595018958}
+  _scrollPanelRect: {fileID: 909344560}
   _trimButton: {fileID: 1687520977}
   _sortButton: {fileID: 349324708}
   _toggleFilterAll: {fileID: 142690139}

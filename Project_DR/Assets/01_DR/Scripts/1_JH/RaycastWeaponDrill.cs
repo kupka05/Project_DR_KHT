@@ -362,10 +362,12 @@ namespace BNG
                 VRUtils.Instance.PlaySpatialClipAt(EmptySound, transform.position, EmptySoundVolume, 0.5f);
                 return;
             }
-
-            // 사격 사운드 재생
-            VRUtils.Instance.PlaySpatialClipAt(GunShotSound, transform.position, GunShotVolume);
-
+            // 사운드가 안 비어있을 경우
+            if (!GunShotSound)
+            {
+                // 사격 사운드 재생
+                VRUtils.Instance.PlaySpatialClipAt(GunShotSound, transform.position, GunShotVolume);
+            }
             // 진동 (뭔가 집고있을 경우)
             if (thisGrabber != null)
             {
@@ -406,7 +408,6 @@ namespace BNG
                     OnRaycastHit(hit);
                 }
             }
-
             // Apply recoil
             ApplyRecoil();
 

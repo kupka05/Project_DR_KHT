@@ -26,12 +26,12 @@ namespace Rito.InventorySystem
         public int ID => _id;
         public string Name => _name;
         public string Desc => _desc;
-        public string Tooltip => _tooltip;
+        public string Tooltip => _desc;
         public Sprite IconSprite => _iconSprite;
 
         public GameObject Prefab => _prefab;
 
-        [SerializeField] public int      _id;
+        public int      _id;
         [SerializeField] public string   _name;    // 아이템 이름
         [SerializeField] public string   _desc;
         [Multiline]

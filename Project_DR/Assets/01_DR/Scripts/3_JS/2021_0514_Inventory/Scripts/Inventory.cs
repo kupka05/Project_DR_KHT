@@ -86,6 +86,7 @@ namespace Rito.InventorySystem
         /// <summary> 아이템 목록 </summary>
         [SerializeField]
         private Item[] _items;
+        public Item[] Items => _items;
 
         /// <summary> 업데이트 할 인덱스 목록 </summary>
         private readonly HashSet<int> _indexSetForUpdate = new HashSet<int>();
@@ -179,13 +180,13 @@ namespace Rito.InventorySystem
             if (!IsValidIndex(index)) return;
 
             Item item = _items[index];
-
+            Debug.Log("CP: UpdateSlot()");
             // 1. 아이템이 슬롯에 존재하는 경우
             if (item != null)
             {
+                Debug.Log("CP: item != null");
                 // 아이콘 등록
                 _inventoryUI.SetItemIcon(index, item.Data.IconSprite);
-
                 // 1-1. 셀 수 있는 아이템
                 if (item is CountableItem ci)
                 {
@@ -214,6 +215,7 @@ namespace Rito.InventorySystem
             // 2. 빈 슬롯인 경우 : 아이콘 제거
             else
             {
+                Debug.Log("CP: item == null");
                 RemoveIcon();
             }
 
@@ -316,7 +318,6 @@ namespace Rito.InventorySystem
         public int Add(ItemData itemData, int amount = 1)
         {
             int index;
-
             // 1. 수량이 있는 아이템
             if (itemData is CountableItemData ciData)
             {
@@ -325,9 +326,11 @@ namespace Rito.InventorySystem
 
                 while (amount > 0)
                 {
+                    Debug.Log("CP: amount > 0");
                     // 1-1. 이미 해당 아이템이 인벤토리 내에 존재하고, 개수 여유 있는지 검사
                     if (findNextCountable)
                     {
+                        Debug.Log("CP: findNextCountable");
                         index = FindCountableItemSlotIndex(ciData, index + 1);
 
                         // 개수 여유있는 기존재 슬롯이 더이상 없다고 판단될 경우, 빈 슬롯부터 탐색 시작
@@ -341,12 +344,14 @@ namespace Rito.InventorySystem
                             CountableItem ci = _items[index] as CountableItem;
                             amount = ci.AddAmountAndGetExcess(amount);
 
+                            Debug.Log("CP: UpdateSlot 0");
                             UpdateSlot(index);
                         }
                     }
                     // 1-2. 빈 슬롯 탐색
                     else
                     {
+                        Debug.Log("CP: is Empty Slot");
                         index = FindEmptySlotIndex(index + 1);
 
                         // 빈 슬롯조차 없는 경우 종료
@@ -364,9 +369,11 @@ namespace Rito.InventorySystem
                             // 슬롯에 추가
                             _items[index] = ci;
 
+                            Debug.Log($"CP: _items[{index}] = {_items[index]}");
                             // 남은 개수 계산
                             amount = (amount > ciData.MaxAmount) ? (amount - ciData.MaxAmount) : 0;
 
+                            Debug.Log("CP: UpdateSlot 1");
                             UpdateSlot(index);
                         }
                     }

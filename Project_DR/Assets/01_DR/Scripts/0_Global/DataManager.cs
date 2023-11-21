@@ -65,45 +65,66 @@ public static class DataManager
     // 기본 반환 값은 string이다.
     public static object GetData(int id, string category, Type castType)
     {
-        // GoogleSheetLoader에서 모든 데이터를
-        // 불러왔을 경우
-        if (GoogleSheetLoader.isDone)
+        try
         {
-            // dataTable을 검색하는 함수 호출
-            object data = FindDataTable(id, category);
-
-            // 데이터 타입을 가져오는 함수 호출
-            string type = GetDataType((string)data);
-
-            // 데이터 타입에 따라 형변환 하는 함수 호출
-            data = ConvertDataType(type, (string)data);
-
-            // data가 null일 경우
-            // 예외 처리를 위해 추가
-            if (data == null)
+            // GoogleSheetLoader에서 모든 데이터를
+            // 불러왔을 경우
+            if (GoogleSheetLoader.isDone)
             {
-                // 만약 castType이 string 일 경우
-                // 참조 타입이므로 예외처리 한다.
-                if (castType == typeof(string))
+                // dataTable을 검색하는 함수 호출
+                object data = FindDataTable(id, category);
+
+                // 데이터 타입을 가져오는 함수 호출
+                string type = GetDataType((string)data);
+
+                // 데이터 타입에 따라 형변환 하는 함수 호출
+                data = ConvertDataType(type, (string)data);
+
+                // data가 null일 경우
+                // 예외 처리를 위해 추가
+                if (data == null)
                 {
-                    return string.Empty;
+                    // 만약 castType이 string 일 경우
+                    // 참조 타입이므로 예외처리 한다.
+                    if (castType == typeof(string))
+                    {
+                        return string.Empty;
+                    }
+
+            ////////// TODO: CSV 연동 후에 data == null일 경우
+            ////////// csv에 있는 정보를 가져오게 변경하기
+
+                    // castType에 맞는 default 인스턴스 반환
+                    return Activator.CreateInstance(castType);
                 }
-
-        ////////// TODO: CSV 연동 후에 data == null일 경우
-        ////////// csv에 있는 정보를 가져오게 변경하기
-
-                // castType에 맞는 default 인스턴스 반환
-                return Activator.CreateInstance(castType);
+                else
+                {
+                    return data;
+                }
             }
-            else
-            {
-                return data;
-            }
+
+            Debug.LogWarning("GetData(): GoogleSheetLoader에서 모든 데이터가" +
+                " 로딩되지 않았습니다. GoogleSheetLoader.isDone = false");
+            return new object();
         }
 
-        Debug.LogWarning("GetData(): GoogleSheetLoader에서 모든 데이터가" +
-            " 로딩되지 않았습니다. GoogleSheetLoader.isDone = false");
-        return null;
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"오류 강제 예외처리 / DataManager.GetData() Exception: {ex.Message}");
+
+            // 만약 castType이 string 일 경우
+            // 참조 타입이므로 예외처리 한다.
+            if (castType == typeof(string))
+            {
+                return string.Empty;
+            }
+
+            ////////// TODO: CSV 연동 후에 data == null일 경우
+            ////////// csv에 있는 정보를 가져오게 변경하기
+
+            // castType에 맞는 default 인스턴스 반환
+            return Activator.CreateInstance(castType);
+        }
     }
 
     // 매개 변수에 id만 넣을 경우 Dictionary<string, string>로 반환한다.
@@ -168,26 +189,36 @@ public static class DataManager
     // dataTable를 검색하는 함수
     private static object FindDataTable(int id, string category)
     {
-        object data = default;
-
-        // idTable에 정상적으로 접근했을 경우
-        if (idTable.ContainsKey(id))
+        try
         {
-            // dataTable에서 데이터를 찾아서 반환한다.
-            int key = idTable[id][DATA_KEY];
-            int index = idTable[id][DATA_INDEX];
-            data = dataTable[key][category][index];
-        }
+            object data = default;
 
-        // 접근하지 못했을 경우
-        else
-        {
-            // 디버그 메세지 출력
-            Debug.LogWarning($"FindDataTable({id}, {category}): 데이터를 찾지 못했습니다. " +
-                $"ID와 Category를 확인해 주세요.");
-        }
+            // idTable에 정상적으로 접근했을 경우
+            if (idTable.ContainsKey(id))
+            {
+                // dataTable에서 데이터를 찾아서 반환한다.
+                int key = idTable[id][DATA_KEY];
+                int index = idTable[id][DATA_INDEX];
+                data = dataTable[key][category][index];
+            }
 
+            // 접근하지 못했을 경우
+            else
+            {
+                // 디버그 메세지 출력
+                Debug.LogWarning($"FindDataTable({id}, {category}): 데이터를 찾지 못했습니다. " +
+                    $"ID와 Category를 확인해 주세요.");
+            }
         return data;
+        }
+
+        catch (Exception ex)
+        {
+            // 예외가 발생했을 때 실행할 코드 블록
+            Debug.LogWarning($"오류 강제 예외처리 / DataManager.FindDataTable() Exception: {ex.Message}");
+
+            return new object();
+        }
     }
 
     // 매개 변수에 id만 넣을 경우 Dictionary<string, string>로 반환한다.

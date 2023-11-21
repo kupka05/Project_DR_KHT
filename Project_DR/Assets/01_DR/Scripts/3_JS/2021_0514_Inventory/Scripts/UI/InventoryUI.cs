@@ -132,7 +132,6 @@ namespace Rito.InventorySystem
             InitButtonEvents();
             InitToggleEvents();
             ChangeScrollRange();
-            ItemDataManager.InitItemDB();
         }
 
         // 임시

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,7 +63,7 @@ public static class DataManager
 
     // dataTable에 저장된 데이터를 가져오는 함수
     // 기본 반환 값은 string이다.
-    public static object GetData(int id, string category)
+    public static object GetData(int id, string category, Type castType)
     {
         // GoogleSheetLoader에서 모든 데이터를
         // 불러왔을 경우
@@ -77,7 +78,27 @@ public static class DataManager
             // 데이터 타입에 따라 형변환 하는 함수 호출
             data = ConvertDataType(type, (string)data);
 
-            return data;
+            // data가 null일 경우
+            // 예외 처리를 위해 추가
+            if (data == null)
+            {
+                // 만약 castType이 string 일 경우
+                // 참조 타입이므로 예외처리 한다.
+                if (castType == typeof(string))
+                {
+                    return string.Empty;
+                }
+
+        ////////// TODO: CSV 연동 후에 data == null일 경우
+        ////////// csv에 있는 정보를 가져오게 변경하기
+
+                // castType에 맞는 default 인스턴스 반환
+                return Activator.CreateInstance(castType);
+            }
+            else
+            {
+                return data;
+            }
         }
 
         Debug.LogWarning("GetData(): GoogleSheetLoader에서 모든 데이터가" +

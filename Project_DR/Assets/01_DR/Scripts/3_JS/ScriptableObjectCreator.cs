@@ -2,7 +2,7 @@
 using UnityEditor;
 #endif
 using UnityEngine;
-
+using Rito.InventorySystem;
 // 스크립터블 오브젝트의 데이터를 담을 클래스
 [CreateAssetMenu(fileName = "NewScriptableObject", menuName = "MyScriptableObjects/NewScriptableObject", order = 1)]
 public class MyScriptableObject : ScriptableObject
@@ -56,6 +56,16 @@ public class ScriptableObjectCreator : MonoBehaviour
 #if UNITY_EDITOR
         // 생성된 스크립터블 오브젝트를 에셋으로 저장
         string path = "Assets/Resources/NewScriptableObject.asset";
+        UnityEditor.AssetDatabase.CreateAsset(data, path);
+        UnityEditor.AssetDatabase.SaveAssets();
+#endif
+    }
+
+    public static void SaveScriptableObject(int id, PortionItemData data)
+    {
+#if UNITY_EDITOR
+        // 생성된 스크립터블 오브젝트를 에셋으로 저장
+        string path = "Assets/Resources/" + id + ".asset";
         UnityEditor.AssetDatabase.CreateAsset(data, path);
         UnityEditor.AssetDatabase.SaveAssets();
 #endif

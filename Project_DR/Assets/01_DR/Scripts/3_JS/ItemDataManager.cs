@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Rito.InventorySystem;
+using System.Reflection;
 
 public static class ItemDataManager
 {
@@ -32,6 +33,9 @@ public static class ItemDataManager
     #region [+]
     public static void InitItemDB()
     {
+        string data2 = (string)DataManager.GetData(50022221, "Dur222ation", typeof(string));
+        Debug.Log($"{data2}");
+
         // DB 초기화
         potionItemDB = new Dictionary<int, PortionItemData>();
         bombItemDB = new Dictionary<int, BombItemData>();
@@ -63,22 +67,23 @@ public static class ItemDataManager
             switch (category)
             {
                 case "Potion":
-                    potionItemDB.Add(id, InitData(id, new PortionItemData()));
+                    potionItemDB.Add(id, InitData<PortionItemData>(id, new PortionItemData()));
                     Debug.Log($"ID: {potionItemDB[id].ID}");
+                    //ScriptableObjectCreator.SaveScriptableObject(id, potionItemDB[id]);
                     break;
 
                 case "Bomb":
-                    bombItemDB.Add(id, InitData(id, new BombItemData()));
+                    bombItemDB.Add(id, InitData<BombItemData>(id, new BombItemData()));
                     Debug.Log($"maxAmount: {bombItemDB[id]._maxAmount}");
                     break;
 
                 case "Material":
-                    materialItemDB.Add(id, InitData(id, new MaterialItemData()));
+                    materialItemDB.Add(id, InitData<MaterialItemData>(id, new MaterialItemData()));
                     Debug.Log($"maxAmount: {materialItemDB[id]._maxAmount}");
                     break;
 
                 case "Quest":
-                    questItemDB.Add(id, InitData(id, new QuestItemData()));
+                    questItemDB.Add(id, InitData<QuestItemData>(id, new QuestItemData()));
                     Debug.Log($"maxAmount: {questItemDB[id]._maxAmount}");
                     break;
 
@@ -89,71 +94,59 @@ public static class ItemDataManager
         }
     }
 
-    private static PortionItemData InitData(int id, PortionItemData data)
+    private static T InitData<T>(int id, T data) where T : ItemData
     {
-        // Init
-        data._id = (int)DataManager.GetData(id, "ID");
-        data._name = (string)DataManager.GetData(id, "Name");
-        data._maxAmount = (int)DataManager.GetData(id, "MaxCount");
-        data._value = (float)DataManager.GetData(id, "EffectAmount");
-        data._duration = (float)DataManager.GetData(id, "Duration");
-        data._effectDuration = (float)DataManager.GetData(id, "EffectDuration");
-        data._desc = (string)DataManager.GetData(id, "Desc");
-        // TODO: 아직 프리팹,스프라이트 등록안되서
-        //       임시 예외처리
-        //data._iconSprite = Resources.Load<Sprite>(
-        //    (string)DataManager.GetData(id, "IconSprite"));
-        //data._prefab = Resources.Load<GameObject>(
-        //    (string)DataManager.GetData(id, "PrefabName"));
+        // itemData가 가지고 있는 기본 프로퍼티
+        data._id = (int)DataManager.GetData(id, "ID", typeof(int));
+        data._name = (string)DataManager.GetData(id, "Name", typeof(string));
+        data._desc = (string)DataManager.GetData(id, "Desc", typeof(string));
+
+        // 자식 클래스에 해당 프로퍼티가 있는지 확인 후 데이터 추가
+        if (CheckProperty<ItemData, int>(data, "_maxAmount"))
+        {
+            SetPropertyIfExists(data, "_maxAmount", (int)DataManager.GetData(id, "MaxCount", typeof(int)));
+        }
+        if (CheckProperty<ItemData, float>(data, "_effectAmount"))
+        {
+            SetPropertyIfExists(data, "_effectAmount", (float)DataManager.GetData(id, "EffectAmount", typeof(float)));
+        }
+        if (CheckProperty<ItemData, float>(data, "_effectAmount"))
+        {
+            SetPropertyIfExists(data, "_radius", (float)DataManager.GetData(id, "Radius", typeof(float)));
+        }
+        if (CheckProperty<ItemData, float>(data, "_duration"))
+        {
+            SetPropertyIfExists(data, "_duration", (float)DataManager.GetData(id, "Duration",typeof(float)));
+        }
+
+    //TODO: 아직 프리팹, 스프라이트 등록안되서
+    //       임시 예외처리
+    //    data._iconSprite = Resources.Load<Sprite>(
+    //        (string)DataManager.GetData(id, "IconSprite"));
+    //    data._prefab = Resources.Load<GameObject>(
+    //        (string)DataManager.GetData(id, "PrefabName"));
 
         return data;
     }
 
-    private static BombItemData InitData(int id, BombItemData data)
+    /// <summary> 부모 클래스와 상속 관계인 자식 클래스에
+    /// 해당 프로퍼티(변수)가 있는지 확인하고 있을 경우
+    /// 값을 넣는 함수. </summary>
+    private static bool CheckProperty<T, TValue>(T target, string propertyName)
     {
-        data._id = (int)DataManager.GetData(id, "ID");
-        data._name = (string)DataManager.GetData(id, "Name");
-        data._maxAmount = (int)DataManager.GetData(id, "MaxCount");
-        data._value = (float)DataManager.GetData(id, "EffectAmount");
-        data._radius = (float)DataManager.GetData(id, "Radius");
-        data._duration = (float)DataManager.GetData(id, "Duration");
-        data._desc = (string)DataManager.GetData(id, "Desc");
-        // TODO: 아직 프리팹,스프라이트 등록안되서
-        //       임시 예외처리
-        //data._iconSprite = Resources.Load<Sprite>(
-        //    (string)DataManager.GetData(id, "IconSprite"));
-        //data._prefab = Resources.Load<GameObject>(
-        //    (string)DataManager.GetData(id, "PrefabName"));
-        return data;
+        PropertyInfo property = typeof(T).GetProperty(propertyName);
+        if (property?.PropertyType == typeof(TValue))
+        {
+            return true;
+        }
+        return false;
     }
 
-    private static MaterialItemData InitData(int id, MaterialItemData data)
+    // 프로퍼티에 값을 넣는 함수
+    private static void SetPropertyIfExists<T, TValue>(T target, string propertyName, TValue value)
     {
-        data._id = (int)DataManager.GetData(id, "ID");
-        data._name = (string)DataManager.GetData(id, "Name");
-        data._maxAmount = (int)DataManager.GetData(id, "MaxCount");
-        data._desc = (string)DataManager.GetData(id, "Desc");
-        // TODO: 아직 프리팹,스프라이트 등록안되서
-        //       임시 예외처리
-        //data._iconSprite = Resources.Load<Sprite>(
-        //    (string)DataManager.GetData(id, "IconSprite"));
-        //data._prefab = Resources.Load<GameObject>(
-        //    (string)DataManager.GetData(id, "PrefabName"));
-        return data;
-    }
-    private static QuestItemData InitData(int id, QuestItemData data)
-    {
-        data._id = (int)DataManager.GetData(id, "ID");
-        data._name = (string)DataManager.GetData(id, "Name");
-        data._maxAmount = (int)DataManager.GetData(id, "MaxCount");
-        data._desc = (string)DataManager.GetData(id, "Desc");
-        // TODO: 아직 프리팹,스프라이트 등록안되서
-        //       임시 예외처리
-        //data._iconSprite = Resources.Load<Sprite>(
-        //    (string)DataManager.GetData(id, "IconSprite"));
-        //data._prefab = Resources.Load<GameObject>(
-        //    (string)DataManager.GetData(id, "PrefabName"));
-        return data;
+        PropertyInfo property = typeof(T).GetProperty(propertyName);
+        property.SetValue(target, value);
     }
 
     private static T SearchItemDB<T>(int id) where T : class

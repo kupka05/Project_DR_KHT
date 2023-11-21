@@ -50,6 +50,7 @@ public static class ItemDataManager
 
         // 디버그
         Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
+        Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
     }
 
     #endregion
@@ -149,31 +150,78 @@ public static class ItemDataManager
         property.SetValue(target, value);
     }
 
+    /// <summary> itemDB에서 값을 검색하는 함수 </summary>
     private static T SearchItemDB<T>(int id) where T : class
     {
         // Potion일 경우
         if (POTION_TYPE_ID <= id && id < BOMB_TYPE_ID)
         {
-            return potionItemDB[id] as T;
+            // db에 키 값이 있을 경우
+            if (CheckIsValidKey(potionItemDB, id))
+            {
+                return potionItemDB[id] as T;
+            }
+
+            // 없을 경우
+            return new PortionItemData() as T;
         }
 
         // Bomb일 경우
         else if (BOMB_TYPE_ID <= id && id < MATERIAL_TYPE_ID)
         {
-            return bombItemDB[id] as T;
+            // db에 키 값이 있을 경우
+            if (CheckIsValidKey(bombItemDB, id))
+            {
+                return bombItemDB[id] as T;
+            }
+
+            // 없을 경우
+            return new BombItemData() as T;
         }
 
         // Material일 경우
         else if (MATERIAL_TYPE_ID <= id && id < QUEST_TYPE_ID)
         {
-            return materialItemDB[id] as T;
+            // db에 키 값이 있을 경우
+            if (CheckIsValidKey(materialItemDB, id))
+            {
+                return materialItemDB[id] as T;
+            }
+
+            // 없을 경우
+            return new MaterialItemData() as T;
         }
 
         // Quest일 경우
         else
         {
-            return questItemDB[id] as T;
+            // db에 키 값이 있을 경우
+            if (CheckIsValidKey(questItemDB, id))
+            {
+                return questItemDB[id] as T;
+            }
+
+            // 없을 경우
+            return new QuestItemData() as T;
         }
+    }
+
+    // DB에 키 값이 정상적으로 존재하는지 확인하는 함수
+    private static bool CheckIsValidKey<T> (Dictionary<int, T> data, int id)
+    {
+        // 딕셔너리에 id 키가 존재할 경우
+        if (data.ContainsKey(id))
+        {
+            Debug.Log("111: Have Key");
+            return true;
+        }
+        // 아닐 경우
+        else
+        {
+            Debug.Log("111: Don't Have Key");
+            return false;
+        }
+        return false;
     }
     #endregion
 

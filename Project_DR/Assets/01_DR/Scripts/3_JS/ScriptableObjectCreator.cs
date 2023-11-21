@@ -16,25 +16,25 @@ public class ScriptableObjectCreator : MonoBehaviour
 {
     void Start()
     {
-        // ScriptableObject를 동적으로 생성
-        MyScriptableObject myScriptableObject = CreateScriptableObject();
+//        // ScriptableObject를 동적으로 생성
+//        MyScriptableObject myScriptableObject = CreateScriptableObject();
 
-        Debug.Log(myScriptableObject);
+//        Debug.Log(myScriptableObject);
 
-        // 생성된 ScriptableObject 사용
-        if (myScriptableObject != null)
-        {
-            Debug.Log("Created String: " + myScriptableObject.myString);
-            Debug.Log("Created Int: " + myScriptableObject.myInt);
-            Debug.Log("Created Float: " + myScriptableObject.myFloat);
-#if UNITY_EDITOR
-            SaveScriptableObject(myScriptableObject);
-#endif
-        }
-        else
-        {
-            Debug.LogError("Failed to create ScriptableObject!");
-        }
+//        // 생성된 ScriptableObject 사용
+//        if (myScriptableObject != null)
+//        {
+//            Debug.Log("Created String: " + myScriptableObject.myString);
+//            Debug.Log("Created Int: " + myScriptableObject.myInt);
+//            Debug.Log("Created Float: " + myScriptableObject.myFloat);
+//#if UNITY_EDITOR
+//            SaveScriptableObject(myScriptableObject);
+//#endif
+//        }
+//        else
+//        {
+//            Debug.LogError("Failed to create ScriptableObject!");
+//        }
     }
 
     // ScriptableObject를 생성하는 함수

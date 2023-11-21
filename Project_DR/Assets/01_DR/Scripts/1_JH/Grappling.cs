@@ -3,6 +3,7 @@ using Oculus.Platform.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Windows;
@@ -52,6 +53,9 @@ public class Grappling : GrabbableEvents
     private bool isDamageCheck;
     private Damageable target;
 
+    public TMP_Text debug;
+    public TMP_Text debug2;
+
     public void OnEnable()
     {
         drill.SetActive(true);
@@ -61,7 +65,6 @@ public class Grappling : GrabbableEvents
 
     private void Start()
     {
-
         player = GameObject.FindGameObjectWithTag("Player");
         if (player)
         {
@@ -70,25 +73,37 @@ public class Grappling : GrabbableEvents
             playerGravity = player.GetComponentInChildren<PlayerGravity>();
             playerClimbing = player.GetComponentInChildren<PlayerClimbing>();
             playerRigid = player.GetComponent<Rigidbody>();
-            smoothLocomotion = player.GetComponent<SmoothLocomotion>();
         }
         else
         {
             Debug.Log("플레이어 오브젝트를 찾지 못함");
         }
         GetData();
-
         line = GetComponent<LineRenderer>();
     }
 
     private void Update()
     {
-        if (state != State.Idle)
-        {
-            //ExcuteCheck();
-            GrapplingMove();
-        }
+#if JH_DEBUG
+        DebugMode();
+#endif
+        if (state != State.Grappling)
+            return;
+
+            GrapplingMove(); // 그래플링일 경우에만 실행
     }
+#if JH_DEBUG
+
+    public void DebugMode()
+    {
+        debug.gameObject.SetActive(true);
+        debug2.gameObject.SetActive(true);
+        debug.text = string.Format(""+state);
+        debug2.text = string.Format(currentGrappleDistance+ "m");
+
+    }
+#endif
+
     private void LateUpdate()
     {
         // 그래플링 중이면
@@ -97,12 +112,12 @@ public class Grappling : GrabbableEvents
             // 라인 만들고
             line.SetPosition(0, muzzleTransform.position);
             // 거리 계산
-            updateGrappleDistance();
-
         }
-        DamageCheck();
+        updateGrappleDistance();
+        DamageCheck(); // 데미지 체크
     }
 
+    // 그래플링 쏘기와 당기기를 한 버튼으로 할 경우
     public void OnGrapple()
     {
         // 쿨타임이 안돌고 기본 상태가 아니면
@@ -126,96 +141,103 @@ public class Grappling : GrabbableEvents
     // 그래플링 시작
     public void StartGrapple()
     {
-        state = State.Shooting;                         // 그래플링을 발사한 상태
-        smoothLocomotion.freeze = true;                 // 플레이어 이동 못하는 상태로 전환
-        input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
+        if (state != State.Idle || Time.time - lastGrapplingTime < grapplingCd)
+            return;
 
+      
+        state = State.Shooting;                         // 그래플링을 발사한 상태
+        //smoothLocomotion.freeze = true;                 // 플레이어 이동 못하는 상태로 전환
+        input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
         RaycastHit hit;
+        // 레이 발사
         if (Physics.Raycast(muzzleTransform.position, gun.forward, out hit, maxGrappleDistance, grappleableLayer))
         {
             grapplePoint = hit.point;                         // 충돌한 곳이 있으면 그래플링 포인트로
-            lastGrapplingTime = Time.time;
-            smoothLocomotion.freeze = false;
-            isGrappling = true;
+            smoothLocomotion.freeze = false;                  // 플레이어 움직일 수 있도록 전환
+
+            // 만약  damageable 오브젝트와 충돌 시
             if (hit.collider.GetComponent<Damageable>())
             {
-                Debug.Log("체력은"+hit.collider.GetComponent<Damageable>().Health);
-                isDamageCheck = true;
-                target = hit.collider.GetComponent<Damageable>();
+                isDamageCheck = true;                             // 데미지 체크 켜고
+                target = hit.collider.GetComponent<Damageable>(); // 타겟 세팅
             }
         }
+
         else
         {
             grapplePoint = gun.position + gun.forward * maxGrappleDistance; // 충돌한곳이 없다면 최대사거리로 쏘고 
-            Invoke(nameof(StopGrapple), grappleDelayTime);    // 그래플링 정지
+            Invoke(nameof(StopGrapple), grappleDelayTime);                  // 그래플링 정지
         }
 
         line.enabled = true;                                  // 라인 켜주기
-        line.SetPosition(1, grapplePoint);
-        drill.SetActive(false);
-        ShootDrill();
+        line.SetPosition(1, grapplePoint);                    // 그래플링 포인트까지
+        drill.SetActive(false);                               // 달려있는 드릴 잠깐 꺼주고
+        ShootDrill();                                         // 그래플링용 드릴 발사
+    }
+    private void ChangeState()
+    {
+
     }
 
+    // 드릴 발사
     private void ShootDrill()
     {
-        _drill = Instantiate(drillPrefab, drill.transform.position, drill.transform.rotation);
-        _drill.transform.LookAt(grapplePoint);
-        _drill.GetComponent<DrillHead>().targetPos = grapplePoint;
-        _drill.GetComponent<DrillHead>().grappling = this;
+        _drill = Instantiate(drillPrefab, drill.transform.position, drill.transform.rotation); // 드릴 인스턴스
+        _drill.transform.LookAt(grapplePoint);                                                 // 타겟 바라보고
+        _drill.GetComponent<DrillHead>().targetPos = grapplePoint;                             // 그래플링 포인트 세팅
+        _drill.GetComponent<DrillHead>().grappling = this;                                     // 드릴이 만난 오브젝트의 체력이 0이하일 경우를 체크하기 위함
     }
     
-    public void ExcuteCheck()
-    { 
-        if(state == State.Shooting && !InputBridge.Instance.AButton)
-        {
-            Invoke(nameof(ExecuteGrapple), grappleDelayTime);    // 그래플링 정지
-
-        }
-    }
-
 
     // 그래플링 실행
     public void ExecuteGrapple()
     {
-        if (!isGrappling)
+        if (state != State.Shooting)
         { return; }
         state = State.Grappling;
         changeGravity(false);
+        //smoothLocomotion.freeze = true;
+        smoothLocomotion.grappleCount++;
+
     }
 
-    // 그래플링 이동 관련
+    // 그래플링 이동 관련 : state가 그래플링일 경우 실행
     private void GrapplingMove()
     {
-        if(state == State.Grappling)
-        {
-            Vector3 moveDirection = (grapplePoint - muzzleTransform.position) * GrappleReelForce;
-            smoothLocomotion.MoveCharacter(moveDirection * Time.deltaTime);
-
-            if(currentGrappleDistance < 1f)
-            {
-                //StopGrapple();
-                smoothLocomotion.freeze = true;
-            }
-        }
+        if (currentGrappleDistance < 0.4f)
+            return;
+        // 플레이어 이동
+        Vector3 moveDirection = (grapplePoint - muzzleTransform.position) * GrappleReelForce;
+            smoothLocomotion.MoveCharacter(moveDirection * Time.deltaTime);  
     }
 
     // 그래플링 멈춤
     public void StopGrapple()
     {
-
+        if (state == State.Idle)
+            return;
+        if (smoothLocomotion.grappleCount == 1)
+        {
+            changeGravity(true);
+            smoothLocomotion.freeze = false;
+        }
+        if (state == State.Grappling)
+        {
+            smoothLocomotion.grappleCount--;
+        }
 
         
-        changeGravity(true);
-        smoothLocomotion.freeze = false;
         state = State.Idle;
-        line.enabled = false;
 
-        isGrappling = false;
         lastGrapplingTime = Time.time;
+
         drill.SetActive(true);
+        line.enabled = false;
         
         isDamageCheck = false;
         target = null;
+
+
 
         if (_drill != null)
         {
@@ -223,14 +245,14 @@ public class Grappling : GrabbableEvents
         }
 
     }
+    // 데미지를 체크하는 메서드
     public void DamageCheck()
     {
         if (!isDamageCheck)
             return;
         if (target.Health <= 0)
         {
-            Debug.Log("상대 죽음");
-            StopGrapple();
+            StopGrapple(); // 맞은 상대가 체력이 0이하이면, 그래플링 멈추기
         }
     }
 
@@ -247,6 +269,8 @@ public class Grappling : GrabbableEvents
             currentGrappleDistance = 0;
         }
     }
+
+    // 중력 변경
     void changeGravity(bool gravityOn)
     {
         if (playerGravity)
@@ -254,6 +278,7 @@ public class Grappling : GrabbableEvents
             playerGravity.ToggleGravity(gravityOn);
         }
     }
+    // 데이터 가져오기
     void GetData()
     {
         maxGrappleDistance = (float)DataManager.GetData(1100, "MaxDistance");

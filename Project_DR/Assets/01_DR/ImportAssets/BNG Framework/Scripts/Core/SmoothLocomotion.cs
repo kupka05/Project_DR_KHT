@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -115,6 +116,7 @@ namespace BNG {
         public bool activeGrapple;
         public bool swinging;
         public bool isGrappling;
+        public int grappleCount;
 
 
         [Header("Air Control : ")]
@@ -130,7 +132,6 @@ namespace BNG {
         SphereCollider playerSphere;
         public Grappling[] grapplings;
 
-        public int grappleCount;
 
         // Left / Right
         float movementX;
@@ -148,6 +149,9 @@ namespace BNG {
         /// </summary>
         Vector3 additionalMovement;
 
+        public TMP_Text debug;
+        public TMP_Text debug2;
+
         #region Events
         public delegate void OnBeforeMoveAction();
         public static event OnBeforeMoveAction OnBeforeMove;
@@ -160,6 +164,9 @@ namespace BNG {
             GetData();
         }
         public virtual void Update() {
+#if JH_DEBUG
+            DebugMode();
+#endif
             CheckControllerReferences();
             UpdateInputs();
 
@@ -167,6 +174,16 @@ namespace BNG {
                 MoveCharacter();
             }
         }
+#if JH_DEBUG
+
+        private void DebugMode()
+        {
+            debug.gameObject.SetActive(true);
+            debug2.gameObject.SetActive(true);
+            debug.text = string.Format("Count:" + grappleCount); 
+            debug2.text = string.Format("" + state); 
+        }
+#endif
 
         public virtual void FixedUpdate() {
             if (UpdateMovement && ControllerType == PlayerControllerType.Rigidbody) {

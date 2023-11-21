@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+//using BNG;
+using Button = UnityEngine.UI.Button;
 
 /*
     [기능 - 에디터 전용]
@@ -51,13 +53,15 @@ namespace Rito.InventorySystem
         #region .
         [Header("Options")]
         [Range(0, 10)]
-        [SerializeField] private int _horizontalSlotCount = 8;  // 슬롯 가로 개수
+        [SerializeField] private int _horizontalSlotCount = 4;  // 슬롯 가로 개수
         [Range(0, 10)]
-        [SerializeField] private int _verticalSlotCount = 8;      // 슬롯 세로 개수
+        [SerializeField] private int _verticalSlotCount = 5;      // 슬롯 세로 개수
         [SerializeField] private float _slotMargin = 8f;          // 한 슬롯의 상하좌우 여백
         [SerializeField] private float _contentAreaPadding = 20f; // 인벤토리 영역의 내부 여백
-        [Range(32, 64)]
-        [SerializeField] private float _slotSize = 64f;      // 각 슬롯의 크기
+        [Range(1, 128)]
+        // 임시로 1로 설정
+        [SerializeField] private float _slotSize = 116f;      // 각 슬롯의 크기
+        [SerializeField] private float _scrollScale = 1.3f;    // 스크롤 범위 배율
 
         [Space]
         [SerializeField] private bool _showTooltip = true;
@@ -69,6 +73,7 @@ namespace Rito.InventorySystem
         [SerializeField] private GameObject _slotUiPrefab;     // 슬롯의 원본 프리팹
         [SerializeField] private ItemTooltipUI _itemTooltip;   // 아이템 정보를 보여줄 툴팁 UI
         [SerializeField] private InventoryPopupUI _popup;      // 팝업 UI 관리 객체
+        [SerializeField] private RectTransform _scrollPanelRect;   // 스크롤 사이즈 조절을 위한 RectTransform
 
         [Header("Buttons")]
         [SerializeField] private Button _trimButton;
@@ -82,6 +87,7 @@ namespace Rito.InventorySystem
         [Space(16)]
         [SerializeField] private bool _mouseReversed = false; // 마우스 클릭 반전 여부
 
+        public global::BNG.UIPointer UIPointer; // UI 포인터
         #endregion
         /***********************************************************************
         *                               Private Fields
@@ -125,14 +131,29 @@ namespace Rito.InventorySystem
             InitSlots();
             InitButtonEvents();
             InitToggleEvents();
+            ChangeScrollRange();
+            ItemDataManager.InitItemDB();
         }
 
+        // 임시
+        ConvertControllerPosition convertControllerPosition = new ConvertControllerPosition();
         private void Update()
         {
-            _ped.position = Input.mousePosition;
+            //_ped.position = Input.mousePosition;
+            _ped.position = UIPointer.publicUISystem.RightPointerTransform.position;
 
+            float convertX = Input.mousePosition.x - (_ped.position.x - Input.mousePosition.x);
+            float convertY = Input.mousePosition.y - (_ped.position.y - Input.mousePosition.y);
+            convertX = convertX / 2.000634366822615f;
+            convertY = convertY / 2.018859837119589f;
+            Vector2 convertedPos = new Vector2(convertX, convertY);
+
+            _ped.position = Input.mousePosition;
             OnPointerEnterAndExit();
-            if(_showTooltip) ShowOrHideItemTooltip();
+            //if(_showTooltip) ShowOrHideItemTooltip();
+            //Debug.Log($"0: Mouse Pos: {Input.mousePosition}");
+            //Debug.Log($"0: Controller Pos: {_ped.position}");
+            //Debug.Log($"0: Converted Pos: {convertedPos}");
             OnPointerDown();
             OnPointerDrag();
             OnPointerUp();
@@ -192,7 +213,12 @@ namespace Rito.InventorySystem
                     slotRT.anchoredPosition = curPos;
                     slotRT.gameObject.SetActive(true);
                     slotRT.gameObject.name = $"Item Slot [{slotIndex}]";
-
+                // Changed* 로컬 스케일 1로 고정
+                    slotRT.localScale = Vector3.one;
+                    // Changed* PosZ 0으로 고정
+                    Vector3 tempPos = slotRT.anchoredPosition3D;
+                    tempPos.z = 0f;
+                    slotRT.anchoredPosition3D = tempPos;
                     var slotUI = slotRT.GetComponent<ItemSlotUI>();
                     slotUI.SetSlotIndex(slotIndex);
                     _slotUIList.Add(slotUI);
@@ -255,15 +281,35 @@ namespace Rito.InventorySystem
         /// <summary> 레이캐스트하여 얻은 첫 번째 UI에서 컴포넌트 찾아 리턴 </summary>
         private T RaycastAndGetFirstComponent<T>() where T : Component
         {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
             _rrList.Clear();
 
-            _gr.Raycast(_ped, _rrList);
-            
-            if(_rrList.Count == 0)
-                return null;
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                // 디버그용으로 레이를 시각적으로 표시
+                //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red, 0.1f);
 
-            return _rrList[0].gameObject.GetComponent<T>();
+                // 충돌 지점 출력
+                //Debug.Log($"Ray Hit Point: {hit.point}");
+
+                // 충돌한 객체에서 원하는 컴포넌트 가져오기
+                T component = hit.collider.GetComponent<T>();
+
+                if (component != null)
+                {
+                    // 가져온 컴포넌트를 사용하여 원하는 작업 수행
+                    //Debug.Log("Detected Component: " + component.name);
+                    return component;
+                }
+            }
+
+            return null;
         }
+
+
+
         /// <summary> 슬롯에 포인터가 올라가는 경우, 슬롯에서 포인터가 빠져나가는 경우 </summary>
         private void OnPointerEnterAndExit()
         {
@@ -272,6 +318,7 @@ namespace Rito.InventorySystem
 
             // 현재 프레임의 슬롯
             var curSlot = _pointerOverSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
+            //Debug.Log($"curSlot: {curSlot}");
 
             if (prevSlot == null)
             {
@@ -300,6 +347,7 @@ namespace Rito.InventorySystem
             // ===================== Local Methods ===============================
             void OnCurrentEnter()
             {
+                //Debug.Log("OnCurrentEnter");
                 if(_showHighlight)
                     curSlot.Highlight(true);
             }
@@ -309,26 +357,47 @@ namespace Rito.InventorySystem
             }
         }
         /// <summary> 아이템 정보 툴팁 보여주거나 감추기 </summary>
-        private void ShowOrHideItemTooltip()
-        {
-            // 마우스가 유효한 아이템 아이콘 위에 올라와 있다면 툴팁 보여주기
-            bool isValid =
-                _pointerOverSlot != null && _pointerOverSlot.HasItem && _pointerOverSlot.IsAccessible
-                && (_pointerOverSlot != _beginDragSlot); // 드래그 시작한 슬롯이면 보여주지 않기
+        //public void ShowOrHideItemTooltip()
+        //{
+        //    // 마우스가 유효한 아이템 아이콘 위에 올라와 있다면 툴팁 보여주기
+        //    bool isValid =
+        //        _pointerOverSlot != null && _pointerOverSlot.HasItem && _pointerOverSlot.IsAccessible
+        //        && (_pointerOverSlot != _beginDragSlot); // 드래그 시작한 슬롯이면 보여주지 않기
 
-            if (isValid)
+        //    if (isValid)
+        //    {
+        //        UpdateTooltipUI(_pointerOverSlot);
+        //        _itemTooltip.Show();
+        //    }
+        //    //else
+        //    //    _itemTooltip.Hide();
+        //}
+
+        public void ShowTooltip(int index)
+        {
+            // 슬롯에 아이템이 있을 경우 && 접근 가능한 슬롯일 경우
+            if (_slotUIList[index].HasItem && _slotUIList[index].IsAccessible)
             {
-                UpdateTooltipUI(_pointerOverSlot);
+                UpdateTooltipUI(_slotUIList[index]);
                 _itemTooltip.Show();
+
+///////////////////////////////////
+                // 데이터매니저 불러오기 예외처리 관련
+                // 디버그 일시작업 중단
+                //Debug.Log($"GetData: {(float)DataManager.GetData(1001, "Health")}");
             }
-            else
-                _itemTooltip.Hide();
         }
+
+        public void HideTooltip()
+        {
+            _itemTooltip.Hide();
+        }
+
         /// <summary> 슬롯에 클릭하는 경우 </summary>
-        private void OnPointerDown()
+        public void OnPointerDown()
         {
             // Left Click : Begin Drag
-            if (Input.GetMouseButtonDown(_leftClick))
+            if (global::BNG.InputBridge.Instance.RightTriggerDown)
             {
                 _beginDragSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
 
@@ -340,7 +409,9 @@ namespace Rito.InventorySystem
                     // 위치 기억, 참조 등록
                     _beginDragIconTransform = _beginDragSlot.IconRect.transform;
                     _beginDragIconPoint = _beginDragIconTransform.position;
-                    _beginDragCursorPoint = Input.mousePosition;
+                    Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
+                    _beginDragCursorPoint = rightControllerPos;
+                    //Debug.Log($"rightControlPos: {_beginDragCursorPoint}");
 
                     // 맨 위에 보이기
                     _beginDragSlotSiblingIndex = _beginDragSlot.transform.GetSiblingIndex();
@@ -355,33 +426,38 @@ namespace Rito.InventorySystem
                 }
             }
 
-            // Right Click : Use Item
-            else if (Input.GetMouseButtonDown(_rightClick))
-            {
-                ItemSlotUI slot = RaycastAndGetFirstComponent<ItemSlotUI>();
+            //// Right Click : Use Item
+            //else if (Input.GetMouseButtonDown(_rightClick))
+            //{
+            //    ItemSlotUI slot = RaycastAndGetFirstComponent<ItemSlotUI>();
 
-                if (slot != null && slot.HasItem && slot.IsAccessible)
-                {
-                    TryUseItem(slot.Index);
-                }
-            }
+            //    if (slot != null && slot.HasItem && slot.IsAccessible)
+            //    {
+            //        TryUseItem(slot.Index);
+            //    }
+            //}
         }
         /// <summary> 드래그하는 도중 </summary>
-        private void OnPointerDrag()
+        public void OnPointerDrag()
         {
             if(_beginDragSlot == null) return;
 
-            if (Input.GetMouseButton(_leftClick))
+            // 라이트 트리거를 누르고 있는 경우 (1 == true)
+            if (global::BNG.InputBridge.Instance.RightTrigger == 1)
             {
+                //Debug.Log("1: TRUE");
                 // 위치 이동
-                _beginDragIconTransform.position =
-                    _beginDragIconPoint + (Input.mousePosition - _beginDragCursorPoint);
+                Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
+                //Debug.Log($"Cursor Pos: {rightControllerPos}");
+                _beginDragIconTransform.position = (_beginDragIconPoint + rightControllerPos - _beginDragCursorPoint);
+                //Debug.Log($"Current Pos: {rightControllerPos}");
+                //Debug.Log($"Dragged Pos: {_beginDragIconTransform.position}");
             }
         }
         /// <summary> 클릭을 뗄 경우 </summary>
         private void OnPointerUp()
         {
-            if (Input.GetMouseButtonUp(_leftClick))
+            if (global::BNG.InputBridge.Instance.RightTriggerUp)
             {
                 // End Drag
                 if (_beginDragSlot != null)
@@ -405,7 +481,7 @@ namespace Rito.InventorySystem
             }
         }
 
-        private void EndDrag()
+        public void EndDrag()
         {
             ItemSlotUI endDragSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
 
@@ -532,11 +608,26 @@ namespace Rito.InventorySystem
             if(!slot.IsAccessible || !slot.HasItem)
                 return;
 
+            Debug.Log("UpdateTooltupUI");
             // 툴팁 정보 갱신
             _itemTooltip.SetItemInfo(_inventory.GetItemData(slot.Index));
 
             // 툴팁 위치 조정
-            _itemTooltip.SetRectPosition(slot.SlotRect);
+            _itemTooltip.SetRectPosition(slot.SlotRect, _horizontalSlotCount, 
+                _verticalSlotCount, slot.Index, _slotSize);
+        }
+
+        /// <summary> 스크롤 패널의 스크롤 범위(사이즈)를 변경 </summary>
+        private void ChangeScrollRange()
+        {
+            // 현재 사이즈 가져오기
+            Vector2 sizeDelta = _scrollPanelRect.sizeDelta;
+
+            // height 변경
+            sizeDelta.y = (_slotSize * _scrollScale) * _verticalSlotCount;
+
+            // 적용
+            _scrollPanelRect.sizeDelta = sizeDelta;
         }
 
         #endregion

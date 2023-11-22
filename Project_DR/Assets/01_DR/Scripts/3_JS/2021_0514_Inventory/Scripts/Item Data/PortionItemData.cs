@@ -15,9 +15,11 @@ namespace Rito.InventorySystem
         /// <summary> 효과량(회복량 등) </summary>
         public float Value => _value;
         public float Duration => _duration;
+        public float EffectAmount => _effectAmount;
         public float EffectDuration => _effectDuration;
         [SerializeField] public float _value;
         [SerializeField] public float _duration;
+        [SerializeField] public float _effectAmount;
         [SerializeField] public float _effectDuration;
         public override Item CreateItem()
         {

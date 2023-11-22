@@ -33,125 +33,37 @@ public static class ItemDataManager
     #region [+]
     public static void InitItemDB()
     {
-        string data2 = (string)DataManager.GetData(50022221, "Dur222ation", typeof(string));
-        Debug.Log($"{data2}");
-
-        // DB 초기화
-        potionItemDB = new Dictionary<int, PortionItemData>();
-        bombItemDB = new Dictionary<int, BombItemData>();
-        materialItemDB = new Dictionary<int, MaterialItemData>();
-        questItemDB = new Dictionary<int, QuestItemData>();
-
-        // ItemDB에 Init
-        InitTable(POTION_TYPE_ID, "Potion");
-        InitTable(BOMB_TYPE_ID, "Bomb");
-        InitTable(MATERIAL_TYPE_ID, "Material");
-        InitTable(QUEST_TYPE_ID, "Quest");
-
-        // 디버그
-        Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
-        Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
-    }
-
-    #endregion
-
-    /*************************************************
-     *                 Private Methods
-     *************************************************/
-    #region [+]
-    private static void InitTable(int typeID, string category)
-    {
-        int size = DataManager.GetCount(typeID);
-        for (int i = 0; i < size; i++)
+        try
         {
-            int id = typeID + i;
-            switch (category)
-            {
-                case "Potion":
-                    potionItemDB.Add(id, InitData<PortionItemData>(id, new PortionItemData()));
-                    Debug.Log($"ID: {potionItemDB[id].ID}");
-                    //ScriptableObjectCreator.SaveScriptableObject(id, potionItemDB[id]);
-                    break;
+            string data2 = (string)DataManager.GetData(50022221, "Dur222ation", typeof(string));
+            Debug.Log($"{data2}");
 
-                case "Bomb":
-                    bombItemDB.Add(id, InitData<BombItemData>(id, new BombItemData()));
-                    Debug.Log($"maxAmount: {bombItemDB[id]._maxAmount}");
-                    break;
+            // DB 초기화
+            potionItemDB = new Dictionary<int, PortionItemData>();
+            bombItemDB = new Dictionary<int, BombItemData>();
+            materialItemDB = new Dictionary<int, MaterialItemData>();
+            questItemDB = new Dictionary<int, QuestItemData>();
 
-                case "Material":
-                    materialItemDB.Add(id, InitData<MaterialItemData>(id, new MaterialItemData()));
-                    Debug.Log($"maxAmount: {materialItemDB[id]._maxAmount}");
-                    break;
+            // ItemDB에 Init
+            InitTable(POTION_TYPE_ID, "Potion");
+            InitTable(BOMB_TYPE_ID, "Bomb");
+            InitTable(MATERIAL_TYPE_ID, "Material");
+            InitTable(QUEST_TYPE_ID, "Quest");
 
-                case "Quest":
-                    questItemDB.Add(id, InitData<QuestItemData>(id, new QuestItemData()));
-                    Debug.Log($"maxAmount: {questItemDB[id]._maxAmount}");
-                    break;
-
-                default:
-                    Debug.Assert(false);
-                    break;
-            }
+            // 디버그
+            Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
+            Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
         }
-    }
-
-    private static T InitData<T>(int id, T data) where T : ItemData
-    {
-        // itemData가 가지고 있는 기본 프로퍼티
-        data._id = (int)DataManager.GetData(id, "ID", typeof(int));
-        data._name = (string)DataManager.GetData(id, "Name", typeof(string));
-        data._desc = (string)DataManager.GetData(id, "Desc", typeof(string));
-
-        // 자식 클래스에 해당 프로퍼티가 있는지 확인 후 데이터 추가
-        if (CheckProperty<ItemData, int>(data, "_maxAmount"))
+        // DB에 데이터를 저장할 수 없을 경우
+        catch (Exception ex)
         {
-            SetPropertyIfExists(data, "_maxAmount", (int)DataManager.GetData(id, "MaxCount", typeof(int)));
+            // 예외가 발생했을 때 실행할 코드 블록
+            Debug.LogWarning($"오류 강제 예외처리 / ItemDataManager.InitItemDB() Exception: {ex.Message}");
         }
-        if (CheckProperty<ItemData, float>(data, "_effectAmount"))
-        {
-            SetPropertyIfExists(data, "_effectAmount", (float)DataManager.GetData(id, "EffectAmount", typeof(float)));
-        }
-        if (CheckProperty<ItemData, float>(data, "_effectAmount"))
-        {
-            SetPropertyIfExists(data, "_radius", (float)DataManager.GetData(id, "Radius", typeof(float)));
-        }
-        if (CheckProperty<ItemData, float>(data, "_duration"))
-        {
-            SetPropertyIfExists(data, "_duration", (float)DataManager.GetData(id, "Duration",typeof(float)));
-        }
-
-    //TODO: 아직 프리팹, 스프라이트 등록안되서
-    //       임시 예외처리
-    //    data._iconSprite = Resources.Load<Sprite>(
-    //        (string)DataManager.GetData(id, "IconSprite"));
-    //    data._prefab = Resources.Load<GameObject>(
-    //        (string)DataManager.GetData(id, "PrefabName"));
-
-        return data;
-    }
-
-    /// <summary> 부모 클래스와 상속 관계인 자식 클래스에
-    /// 해당 프로퍼티(변수)가 있는지 확인하고 있을 경우
-    /// 값을 넣는 함수. </summary>
-    private static bool CheckProperty<T, TValue>(T target, string propertyName)
-    {
-        PropertyInfo property = typeof(T).GetProperty(propertyName);
-        if (property?.PropertyType == typeof(TValue))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    // 프로퍼티에 값을 넣는 함수
-    private static void SetPropertyIfExists<T, TValue>(T target, string propertyName, TValue value)
-    {
-        PropertyInfo property = typeof(T).GetProperty(propertyName);
-        property.SetValue(target, value);
     }
 
     /// <summary> itemDB에서 값을 검색하는 함수 </summary>
-    private static T SearchItemDB<T>(int id) where T : class
+    public static T SearchItemDB<T>(int id) where T : class
     {
         // Potion일 경우
         if (POTION_TYPE_ID <= id && id < BOMB_TYPE_ID)
@@ -205,23 +117,143 @@ public static class ItemDataManager
             return new QuestItemData() as T;
         }
     }
+    #endregion
+
+    /*************************************************
+     *                 Private Methods
+     *************************************************/
+    #region [+]
+    private static void InitTable(int typeID, string category)
+    {
+        int size = DataManager.GetCount(typeID);
+        for (int i = 0; i < size; i++)
+        {
+            int id = typeID + i;
+            switch (category)
+            {
+                case "Potion":
+                    potionItemDB.Add(id, InitData(id, new PortionItemData()));
+                    break;
+
+                case "Bomb":
+                    bombItemDB.Add(id, InitData(id, new BombItemData()));
+                    break;
+
+                case "Material":
+                    materialItemDB.Add(id, InitData(id, new MaterialItemData()));
+                    break;
+
+                case "Quest":
+                    questItemDB.Add(id, InitData(id, new QuestItemData()));
+                    break;
+
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
+        }
+    }
+
+    private static T InitData<T>(int id, T data) where T : ItemData
+    {
+        // itemData가 가지고 있는 기본 프로퍼티
+        data._id = (int)DataManager.GetData(id, "ID", typeof(int));
+        data._name = (string)DataManager.GetData(id, "Name", typeof(string));
+        data._desc = (string)DataManager.GetData(id, "Desc", typeof(string));
+        Sprite bluePotionSprite = Resources.Load<Sprite>("Sprites/bluePotion");
+        data._iconSprite = Resources.Load<Sprite>((string)DataManager.GetData(id, "IconSprite", typeof(string)));
+        //data._prefab = Resources.Load<GameObject>((string)DataManager.GetData(id, "PrefabName", typeof(string)));
+
+        // 자식 클래스에 해당 프로퍼티가 있는지 확인 후 데이터 추가
+        if (CheckField<T, int>(data, "_maxAmount"))
+        {
+            SetFieldIfExists(data, "_maxAmount", (int)DataManager.GetData(id, "MaxCount", typeof(int)));
+        }
+        if (CheckField<T, float>(data, "_effectAmount"))
+        {
+            SetFieldIfExists(data, "_effectAmount", (float)DataManager.GetData(id, "EffectAmount", typeof(float)));
+        }
+        if (CheckField<T, float>(data, "_radius"))
+        {
+            SetFieldIfExists(data, "_radius", (float)DataManager.GetData(id, "Radius", typeof(float)));
+        }
+        if (CheckField<T, float>(data, "_duration"))
+        {
+            SetFieldIfExists(data, "_duration", (float)DataManager.GetData(id, "Duration", typeof(float)));
+        }
+
+        return data;
+    }
+
+    /// <summary> 부모 클래스와 상속 관계인 자식 클래스에
+    /// 해당 필드(변수(멤버))가 있는지 확인하고 있을 경우
+    /// 값을 넣는 함수. </summary>
+    // ㅇㄴ 프로퍼티랑 필드랑 헷갈려서 반나절날림
+    // 멤버(변수) = 필드 / 데이터를 저장하는 것만 함
+        // ex) public int num;
+    // 프로퍼티 = 필드처럼 보이나 메서드로 선언 하는것
+               // 데이터에 접근하거나 수정하는 동작에 중점을 둠
+        // ex) public int num => _num;
+        // ex2) public int num
+        //      {
+        //          get { return _num; } // 프로퍼티
+        //          set { _num = value; }
+        //      }
+    private static bool CheckField<T, TValue>(T target, string fieldName)
+    {
+        if (target == null)
+        {
+            Debug.Log("Target is null");
+            return false;
+        }
+
+        FieldInfo field = typeof(T).GetField(fieldName, BindingFlags.Public | BindingFlags.Instance);
+
+        if (field == null)
+        {
+            Debug.Log($"{typeof(T)} Field {fieldName} not found");
+            return false;
+        }
+
+        //Debug.Log($"isField = {field}");
+        return field.FieldType == typeof(TValue);
+    }
+
+
+    // 필드에 값을 넣는 함수
+    private static void SetFieldIfExists<T, TValue>(T target, string fieldName, TValue value)
+    {
+        FieldInfo field = typeof(T).GetField(fieldName, BindingFlags.Public | BindingFlags.Instance);
+        if (field != null && field.FieldType == typeof(TValue))
+        {
+            field.SetValue(target, value);
+        }
+    }
+
 
     // DB에 키 값이 정상적으로 존재하는지 확인하는 함수
     private static bool CheckIsValidKey<T> (Dictionary<int, T> data, int id)
     {
-        // 딕셔너리에 id 키가 존재할 경우
-        if (data.ContainsKey(id))
+        try
         {
-            Debug.Log("111: Have Key");
-            return true;
+            // 딕셔너리에 id 키가 존재할 경우
+            if (data.ContainsKey(id))
+            {
+                return true;
+            }
+            // 아닐 경우
+            else
+            {
+                return false;
+            }
         }
-        // 아닐 경우
-        else
+        // 키 값을 확인할 수 없을 경우
+        catch (Exception ex)
         {
-            Debug.Log("111: Don't Have Key");
+            // 예외가 발생했을 때 실행할 코드 블록
+            Debug.LogWarning($"오류 강제 예외처리 / ItemDataManager.CheckIsValidKey() Exception: {ex.Message}");
             return false;
         }
-        return false;
     }
     #endregion
 

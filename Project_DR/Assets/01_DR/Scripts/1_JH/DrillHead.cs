@@ -49,8 +49,8 @@ public class DrillHead : MonoBehaviour
         speed = (float)DataManager.GetData(1100, "ProjectileSpeed", typeof(float));
         critIncrease = (float)DataManager.GetData(1100, "CritIncrease", typeof(float));
         critChance = (float)DataManager.GetData(1100, "CritChance", typeof(float));
-
     }
+
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Damageable>())

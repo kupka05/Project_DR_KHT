@@ -23,14 +23,16 @@ public class PlayerHealth : MonoBehaviour
     private void Awake()
     {
         playerDamage =  GetComponent<Damageable>();
-        GetData();
-        playerDamage.Health = health; // 체력 세팅해주기
-        SetMaxHealthUIUpdate();
     }
+    
   
     // Update is called once per frame
     void Start()
     {
+        GetData();
+        playerDamage.Health = health; // 체력 세팅해주기
+        SetMaxHealthUIUpdate();
+
         playerController = GetComponent<PlayerController>();
         if (Camera.main)
         {

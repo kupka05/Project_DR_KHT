@@ -110,6 +110,8 @@ namespace BNG {
 
 
         void Start() {
+
+            GetData();
             gZone = GetComponent<GrabbablesInTrigger>();
             _scaleTo = ScaleItem;
 
@@ -507,6 +509,11 @@ namespace BNG {
         {
             yield return new WaitForSeconds(resetTime);
             ResetItem();
+        }
+
+        private void GetData()
+        {
+            resetTime = (float)DataManager.GetData(1100, "ResetTimer", typeof(float));
         }
     }
 }

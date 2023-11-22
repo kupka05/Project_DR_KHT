@@ -106,6 +106,8 @@ public class Grappling : GrabbableEvents
 
     private void LateUpdate()
     {
+        
+
         // 그래플링 중이면
         if (state != State.Idle)
         {
@@ -115,6 +117,7 @@ public class Grappling : GrabbableEvents
         }
         updateGrappleDistance();
         DamageCheck(); // 데미지 체크
+        GrapleDisable();
     }
 
     // 그래플링 쏘기와 당기기를 한 버튼으로 할 경우
@@ -175,10 +178,7 @@ public class Grappling : GrabbableEvents
         drill.SetActive(false);                               // 달려있는 드릴 잠깐 꺼주고
         ShootDrill();                                         // 그래플링용 드릴 발사
     }
-    private void ChangeState()
-    {
 
-    }
 
     // 드릴 발사
     private void ShootDrill()
@@ -187,29 +187,41 @@ public class Grappling : GrabbableEvents
         _drill.transform.LookAt(grapplePoint);                                                 // 타겟 바라보고
         _drill.GetComponent<DrillHead>().targetPos = grapplePoint;                             // 그래플링 포인트 세팅
         _drill.GetComponent<DrillHead>().grappling = this;                                     // 드릴이 만난 오브젝트의 체력이 0이하일 경우를 체크하기 위함
+        Destroy(_drill,grappleDelayTime);
     }
     
 
     // 그래플링 실행
     public void ExecuteGrapple()
     {
-        if (state != State.Shooting || Time.time - lastGrapplingTime < grapplingCd)
+        if (Time.time - lastGrapplingTime < grapplingCd)
+            Invoke(nameof(Excute), grappleDelayTime);                  // 그래플링 실행
+
+        else
+            Excute();
+    }
+    public void Excute()
+    {
+        if (state != State.Shooting)
         { return; }
         state = State.Grappling;
         changeGravity(false);
         //smoothLocomotion.freeze = true;
         smoothLocomotion.grappleCount++;
-
     }
 
     // 그래플링 이동 관련 : state가 그래플링일 경우 실행
     private void GrapplingMove()
     {
-        if (currentGrappleDistance < 0.4f)
+
+
+        if (currentGrappleDistance < 0.3f)
             return;
         // 플레이어 이동
         Vector3 moveDirection = (grapplePoint - muzzleTransform.position) * GrappleReelForce;
             smoothLocomotion.MoveCharacter(moveDirection * Time.deltaTime);  
+       
+
     }
 
     // 그래플링 멈춤
@@ -240,12 +252,20 @@ public class Grappling : GrabbableEvents
 
 
 
-        if (_drill != null)
-        {
-            Destroy(_drill.gameObject);
-        }
+        //if (_drill != null)
+        //{
+        //    Destroy(_drill.gameObject);
+        //}
 
     }
+    public void GrapleDisable()
+    {
+        if (currentGrappleDistance < 1f && state == State.Grappling)
+        {
+            StopGrapple();
+        }
+    }
+
     // 데미지를 체크하는 메서드
     public void DamageCheck()
     {

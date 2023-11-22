@@ -49,9 +49,8 @@ public class DrillHead : MonoBehaviour
     {
         if (other.gameObject.GetComponent<Damageable>())
         {
-            Debug.Log("뭔가 부딧쳤다");
             grappling.StopGrapple();
-                
+               
         }
     }
 

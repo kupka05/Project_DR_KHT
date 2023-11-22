@@ -24,8 +24,14 @@ namespace BNG
 
         // 데미지 : "Damageable" 함수와 충돌했을 경우 입힐 데미지
         public float Damage = 25f;
-        public float critChance = 0.1f;  // 치명타 확률
-        public float critIncrease = 1.5f;// 치명타 배율
+        public float critChance = 0.1f;    // 치명타 확률
+        public float critIncrease = 1.5f;  // 치명타 배율
+
+        [Header("Skill")]
+
+        public float skillIncrease = 1.5f; // 스킬 데미지 배율
+        public bool ActiveTeraDrill= false;
+        public bool ActiveGrinding = false;
 
         // Semi : 단발 ,  Automatic : 자동 연사 설정
         public FiringType FiringMethod = FiringType.Semi;

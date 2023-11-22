@@ -33,24 +33,33 @@ public static class ItemDataManager
     #region [+]
     public static void InitItemDB()
     {
-        string data2 = (string)DataManager.GetData(50022221, "Dur222ation", typeof(string));
-        Debug.Log($"{data2}");
+        try
+        {
+            string data2 = (string)DataManager.GetData(50022221, "Dur222ation", typeof(string));
+            Debug.Log($"{data2}");
 
-        // DB 초기화
-        potionItemDB = new Dictionary<int, PortionItemData>();
-        bombItemDB = new Dictionary<int, BombItemData>();
-        materialItemDB = new Dictionary<int, MaterialItemData>();
-        questItemDB = new Dictionary<int, QuestItemData>();
+            // DB 초기화
+            potionItemDB = new Dictionary<int, PortionItemData>();
+            bombItemDB = new Dictionary<int, BombItemData>();
+            materialItemDB = new Dictionary<int, MaterialItemData>();
+            questItemDB = new Dictionary<int, QuestItemData>();
 
-        // ItemDB에 Init
-        InitTable(POTION_TYPE_ID, "Potion");
-        InitTable(BOMB_TYPE_ID, "Bomb");
-        InitTable(MATERIAL_TYPE_ID, "Material");
-        InitTable(QUEST_TYPE_ID, "Quest");
+            // ItemDB에 Init
+            InitTable(POTION_TYPE_ID, "Potion");
+            InitTable(BOMB_TYPE_ID, "Bomb");
+            InitTable(MATERIAL_TYPE_ID, "Material");
+            InitTable(QUEST_TYPE_ID, "Quest");
 
-        // 디버그
-        Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
-        Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
+            // 디버그
+            Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
+            Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
+        }
+        // DB에 데이터를 저장할 수 없을 경우
+        catch (Exception ex)
+        {
+            // 예외가 발생했을 때 실행할 코드 블록
+            Debug.LogWarning($"오류 강제 예외처리 / ItemDataManager.InitItemDB() Exception: {ex.Message}");
+        }
     }
 
     /// <summary> itemDB에서 값을 검색하는 함수 </summary>
@@ -225,14 +234,24 @@ public static class ItemDataManager
     // DB에 키 값이 정상적으로 존재하는지 확인하는 함수
     private static bool CheckIsValidKey<T> (Dictionary<int, T> data, int id)
     {
-        // 딕셔너리에 id 키가 존재할 경우
-        if (data.ContainsKey(id))
+        try
         {
-            return true;
+            // 딕셔너리에 id 키가 존재할 경우
+            if (data.ContainsKey(id))
+            {
+                return true;
+            }
+            // 아닐 경우
+            else
+            {
+                return false;
+            }
         }
-        // 아닐 경우
-        else
+        // 키 값을 확인할 수 없을 경우
+        catch (Exception ex)
         {
+            // 예외가 발생했을 때 실행할 코드 블록
+            Debug.LogWarning($"오류 강제 예외처리 / ItemDataManager.CheckIsValidKey() Exception: {ex.Message}");
             return false;
         }
     }

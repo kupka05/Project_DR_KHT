@@ -2,54 +2,6 @@
     "name": "VRIF Default Input Actions",
     "maps": [
         {
-            "name": "XR HMD",
-            "id": "09ff3ccc-21b4-4346-a3a2-7c978b5af892",
-            "actions": [
-                {
-                    "name": "Position",
-                    "type": "Value",
-                    "id": "1a9029f8-7a46-46b9-9eff-e9ae8365f611",
-                    "expectedControlType": "Vector3",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Rotation",
-                    "type": "Value",
-                    "id": "aed87fe6-2b01-4dd2-a8fa-195578fd8158",
-                    "expectedControlType": "Quaternion",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "cff1f981-6e1f-4e2c-a90c-715a0ea2e80e",
-                    "path": "<XRHMD>/centerEyePosition",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Generic XR Controller",
-                    "action": "Position",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e2017383-a3f6-4c46-acb1-012b8eece9cc",
-                    "path": "<XRHMD>/centerEyeRotation",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Generic XR Controller",
-                    "action": "Rotation",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
             "name": "XR LeftHand",
             "id": "5fe596f9-1b7b-49b7-80a7-3b5195caf74d",
             "actions": [
@@ -410,6 +362,17 @@
                 },
                 {
                     "name": "",
+                    "id": "e7d4380f-6f49-4cd3-b73f-5ff5a1d20510",
+                    "path": "<XInputController>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "acdf9550-5529-4ff7-8558-73ecdf0d75bd",
                     "path": "<XRController>{LeftHand}/*",
                     "interactions": "",
@@ -465,22 +428,22 @@
                 },
                 {
                     "name": "",
-                    "id": "583bd4fd-754c-4e71-972b-60d1e120215b",
-                    "path": "<Keyboard>/space",
-                    "interactions": "Press(behavior=2)",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "863d5818-8537-46f8-8861-0a81bf75c8b7",
                     "path": "<XRController>{LeftHand}/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "Generic XR Controller",
+                    "action": "Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9bd72361-16d8-4dec-a476-8355320747c6",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -506,6 +469,54 @@
                     "action": "Teleport Start",
                     "isComposite": false,
                     "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "XR HMD",
+            "id": "09ff3ccc-21b4-4346-a3a2-7c978b5af892",
+            "actions": [
+                {
+                    "name": "Position",
+                    "type": "Value",
+                    "id": "1a9029f8-7a46-46b9-9eff-e9ae8365f611",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Rotation",
+                    "type": "Value",
+                    "id": "aed87fe6-2b01-4dd2-a8fa-195578fd8158",
+                    "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "cff1f981-6e1f-4e2c-a90c-715a0ea2e80e",
+                    "path": "<XRHMD>/centerEyePosition",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e2017383-a3f6-4c46-acb1-012b8eece9cc",
+                    "path": "<XRHMD>/centerEyeRotation",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "Rotation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -616,6 +627,15 @@
                     "name": "Rotate Teleport Destination",
                     "type": "Value",
                     "id": "9b5d8312-f609-4895-b70f-81a722b2ae11",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Value",
+                    "id": "5769ddc4-e5c3-4e47-97f0-3c894595286a",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -864,6 +884,17 @@
                     "action": "Turn",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "6c602cf4-3bf0-4963-9525-f45551c06357",
+                    "path": "<XRController>{RightHand}/thumbstick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

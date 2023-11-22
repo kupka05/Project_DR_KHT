@@ -14,7 +14,9 @@ namespace BNG
 
         // 근접 공격 무기인지 체크
         public bool isMelee;
-        private Grappling grappling;
+        private Grappling grappling;        
+        // 드릴 작동을 위한 클래스
+        protected WeaponDrill drill;
 
         // 최대 사거리
         public float MaxRange = 25f;
@@ -150,6 +152,7 @@ namespace BNG
 
         public List<GrabbedControllerBinding> GrapplingInput = new List<GrabbedControllerBinding>() { GrabbedControllerBinding.Button1 };
 
+
         [Header("Shown for Debug : ")]
         // 탄이 약실에 들어있는지
         public bool BulletInChamber = false;
@@ -190,11 +193,12 @@ namespace BNG
 
         protected bool readyToShoot = true;
 
-        // 드릴 작동을 위한 클래스
-        protected WeaponDrill drill;
 
+  
         void Start()
         {
+            GetData();
+
             weaponRigid = GetComponent<Rigidbody>();
             grappling = GetComponent<Grappling>();
             if (MuzzleFlashObject)
@@ -297,7 +301,7 @@ namespace BNG
             {
                 if (InputBridge.Instance.GetGrabbedControllerBinding(ReleaseSlideInput[x], thisGrabber.HandSide))
                 {
-                    Grappling();
+                    //Grappling();
                     break;
                 }
             }
@@ -325,7 +329,10 @@ namespace BNG
         // 발사 부분
         public virtual void Shoot()
         {
-
+            if(grappling.state != Grappling.State.Idle)
+            {
+                return;
+            }
 
             // 사격 가능한지 확인
             float shotInterval = Time.timeScale < 1 ? SlowMoRateOfFire : FiringRate;
@@ -355,10 +362,12 @@ namespace BNG
                 VRUtils.Instance.PlaySpatialClipAt(EmptySound, transform.position, EmptySoundVolume, 0.5f);
                 return;
             }
-
-            // 사격 사운드 재생
-            VRUtils.Instance.PlaySpatialClipAt(GunShotSound, transform.position, GunShotVolume);
-
+            // 사운드가 안 비어있을 경우
+            if (!GunShotSound)
+            {
+                // 사격 사운드 재생
+                VRUtils.Instance.PlaySpatialClipAt(GunShotSound, transform.position, GunShotVolume);
+            }
             // 진동 (뭔가 집고있을 경우)
             if (thisGrabber != null)
             {
@@ -399,7 +408,6 @@ namespace BNG
                     OnRaycastHit(hit);
                 }
             }
-
             // Apply recoil
             ApplyRecoil();
 
@@ -455,20 +463,7 @@ namespace BNG
                 StartCoroutine(shotRoutine);
             }
         }
-        // 그래플링 관련
-        public void Grappling()
-        {
-            // 진동 (뭔가 집고있을 경우)
-            if (thisGrabber != null)
-            {
-                input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
-            }
 
-            if (isMelee && grappling != null)
-            {
-                grappling.StartGrapple();
-            }
-        }
 
         // Apply recoil by requesting sprinyness and apply a local force to the muzzle point
         public virtual void ApplyRecoil()
@@ -790,6 +785,12 @@ namespace BNG
                     yield return new WaitForEndOfFrame();
                 }
             }
+        }
+        private void GetData()
+        {
+            Damage = (float)DataManager.GetData(1100, "Damage");
+            FiringRate = (float)DataManager.GetData(1100, "AttackSpeed");
+
         }
     }
 

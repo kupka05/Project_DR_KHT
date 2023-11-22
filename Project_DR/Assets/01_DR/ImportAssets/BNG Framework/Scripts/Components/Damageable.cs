@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -99,7 +99,6 @@ namespace BNG {
             if (destroyed) {
                 return;
             }
-            Debug.Log("데미지 입는다" + damageAmount);
             Health -= damageAmount;
 
             onDamaged?.Invoke(damageAmount);

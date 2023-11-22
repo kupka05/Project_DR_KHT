@@ -12,10 +12,14 @@ public class WeaponDrill : MonoBehaviour
     [Range(0, 50)]
     private float lerpSpeed = 0f;    
     public float addSpeed;
+    private float maxSpeed;
+
 
 
     void Start()
     {
+        GetData();
+
         StartCoroutine("DrillSpin");
     }
     private void Update()
@@ -29,8 +33,8 @@ public class WeaponDrill : MonoBehaviour
     public void OnSpin()
     {
         lerpSpeed += addSpeed;
-        if(50 < lerpSpeed)
-            lerpSpeed = 50;
+        if(maxSpeed < lerpSpeed)
+            lerpSpeed = maxSpeed;
     }
     IEnumerator DrillSpin()
     {
@@ -54,5 +58,17 @@ public class WeaponDrill : MonoBehaviour
             }
         }
     }
+    public void ResetDrill()
+    {
+        transform.localRotation = Quaternion.identity;
+        lerpSpeed = 0;
+        StopAllCoroutines();
+        StartCoroutine("DrillSpin");
 
+    }
+    private void GetData()
+    {
+        addSpeed = (float)DataManager.GetData(1100, "SpiralForce");
+        maxSpeed = (float)DataManager.GetData(1100, "MaxSpiralSpeed");
+    }
 }

@@ -80,6 +80,8 @@ namespace BNG {
         [Tooltip("Unity Input Action used to mimic having your thumb near a button")]
         public InputActionReference RightThumbNearAction;
 
+        public InputActionReference Button1Action;
+
         public InputActionReference LeftPrimaryButtonAction;
         public InputActionReference RightPrimaryButtonAction;
 
@@ -313,14 +315,13 @@ namespace BNG {
                 InputBridge.Instance.XButton = LeftPrimaryButtonAction.action.IsPressed();
                 InputBridge.Instance.XButtonDown = prevBool == false && InputBridge.Instance.XButton == true;
                 InputBridge.Instance.XButtonUp = prevBool == true && InputBridge.Instance.XButton == false;
-
             }
             if (RightPrimaryButtonAction != null)
             {
                 prevBool = InputBridge.Instance.AButton;
                 InputBridge.Instance.AButton = RightPrimaryButtonAction.action.IsPressed();
-                InputBridge.Instance.AButtonDown = prevBool == false && InputBridge.Instance.AButton == true;
-                InputBridge.Instance.AButtonUp = prevBool == true && InputBridge.Instance.AButton == false;
+                InputBridge.Instance.AButtonDown = prevBool == false && InputBridge.Instance.XButton == true;
+                InputBridge.Instance.AButtonUp = prevBool == true && InputBridge.Instance.XButton == false;
             }
 
         }

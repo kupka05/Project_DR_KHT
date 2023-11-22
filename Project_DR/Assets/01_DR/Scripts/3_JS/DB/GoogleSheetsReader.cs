@@ -48,11 +48,18 @@ public class GoogleSheetsReader
             {
                 // JSON 형식 데이터를 가져옴
                 data = www.downloadHandler.text;
+
+                // JSON 데이터를 파일로 저장
+                //SaveDataToFile.WriteJsonToFile(data, sheetName);
+
                 // isCsvConert가 true일 경우
                 if (isCsvConvert)
                 {
                     // JSON 형식 데이터를 CSV 형식으로 변환
                     data = JsonToCsvConverter.ConvertJsonToCsv(data);
+
+                    // CSV 데이터를 파일로 저장
+                    SaveDataToFile.WriteCsvToFile(data, sheetName);
                 }
             }
 

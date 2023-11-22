@@ -795,7 +795,7 @@ namespace BNG {
         }
         private void GetData()
         {
-            MovementSpeed = (float)DataManager.GetData(1001, "Speed", typeof(float));
+            MovementSpeed = (float)DataManager.instance.GetData(1001, "Speed", typeof(float));
             StrafeSpeed = MovementSpeed * 0.75f;
         }
 

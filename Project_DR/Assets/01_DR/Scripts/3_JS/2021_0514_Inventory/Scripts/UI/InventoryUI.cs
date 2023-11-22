@@ -383,7 +383,7 @@ namespace Rito.InventorySystem
 ///////////////////////////////////
                 // 데이터매니저 불러오기 예외처리 관련
                 // 디버그 일시작업 중단
-                //Debug.Log($"GetData: {(float)DataManager.GetData(1001, "Health")}");
+                //Debug.Log($"GetData: {(float)DataManager.instance.GetData(1001, "Health")}");
             }
         }
 

@@ -68,7 +68,7 @@ public class WeaponDrill : MonoBehaviour
     }
     private void GetData()
     {
-        addSpeed = (float)DataManager.GetData(1100, "SpiralForce", typeof(float));
-        maxSpeed = (float)DataManager.GetData(1100, "MaxSpiralSpeed", typeof(float));
+        addSpeed = (float)DataManager.instance.GetData(1100, "SpiralForce", typeof(float));
+        maxSpeed = (float)DataManager.instance.GetData(1100, "MaxSpiralSpeed", typeof(float));
     }
 }

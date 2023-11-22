@@ -162,8 +162,8 @@ public class DyingScreenFader : MonoBehaviour
     }
     private void GetData()
     {
-        FadeInSpeed = (float)DataManager.GetData(1001, "FadeSpeed");
-        FadeOutSpeed = (float)DataManager.GetData(1001, "FadeSpeed");
+        FadeInSpeed = (float)DataManager.GetData(1001, "FadeSpeed", typeof(float));
+        FadeOutSpeed = (float)DataManager.GetData(1001, "FadeSpeed", typeof(float));
 
     }
 }

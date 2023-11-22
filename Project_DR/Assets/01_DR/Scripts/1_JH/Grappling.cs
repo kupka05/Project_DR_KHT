@@ -281,7 +281,7 @@ public class Grappling : GrabbableEvents
     // 데이터 가져오기
     void GetData()
     {
-        maxGrappleDistance = (float)DataManager.GetData(1100, "MaxDistance");
-        grapplingCd = (float)DataManager.GetData(1100, "GrappleDelay");
+        maxGrappleDistance = (float)DataManager.GetData(1100, "MaxDistance", typeof(float));
+        grapplingCd = (float)DataManager.GetData(1100, "GrappleDelay", typeof(float)) ;
     }
 }

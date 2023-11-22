@@ -105,7 +105,14 @@ public static class DataManager
 
             Debug.LogWarning("GetData(): GoogleSheetLoader에서 모든 데이터가" +
                 " 로딩되지 않았습니다. GoogleSheetLoader.isDone = false");
-            return new object();
+            // 만약 castType이 string 일 경우
+            // 참조 타입이므로 예외처리 한다.
+            if (castType == typeof(string))
+            {
+                return string.Empty;
+            }
+            // castType에 맞는 default 인스턴스 반환
+            return Activator.CreateInstance(castType);
         }
 
         catch (Exception ex)

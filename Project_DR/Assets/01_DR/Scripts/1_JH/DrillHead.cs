@@ -14,7 +14,7 @@ public class DrillHead : MonoBehaviour
     public DamageCollider damageCollider;
     public bool isTrigger;
     public Grappling grappling;
-    private CapsuleCollider collider;
+    private CapsuleCollider col;
 
     private void Awake()
     {
@@ -23,7 +23,7 @@ public class DrillHead : MonoBehaviour
     private void Start()
     {
         damageCollider.Damage = damage;
-        collider = damageCollider.GetComponent<CapsuleCollider>();
+        col = damageCollider.GetComponent<CapsuleCollider>();
     }
     // Update is called once per frame
     void Update()
@@ -41,8 +41,8 @@ public class DrillHead : MonoBehaviour
     }
     private void GetData()
     {
-        damage = (float)DataManager.GetData(1100, "ProjectileDamage");
-        speed = (float)DataManager.GetData(1100, "ProjectileSpeed");
+        damage = (float)DataManager.GetData(1100, "ProjectileDamage", typeof(float));
+        speed = (float)DataManager.GetData(1100, "ProjectileSpeed", typeof(float));
 
     }
     public void OnTriggerEnter(Collider other)

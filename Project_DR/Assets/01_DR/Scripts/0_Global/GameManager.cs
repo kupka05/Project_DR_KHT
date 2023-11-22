@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
     }
     public void GetData()
     {
-        gameoverText = (string)DataManager.GetData(1001, "GameOverText");
+        gameoverText = (string)DataManager.GetData(1001, "GameOverText", typeof(string));
     }
 
 

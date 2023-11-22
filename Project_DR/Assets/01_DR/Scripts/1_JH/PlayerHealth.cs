@@ -47,8 +47,8 @@ public class PlayerHealth : MonoBehaviour
         }
         playerDamage.Health = health;
         SetHealthUIUpdate();
-        if (health > maxHealth * dyingAmount) ;
-        fader.OnRestore();
+        if (health > maxHealth * dyingAmount)
+        { fader.OnRestore(); }
     }
 
     public void OnDamage()
@@ -63,7 +63,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void GetData()
     {
-        health = (float)DataManager.GetData(1001, "Health");
+        health = (float)DataManager.GetData(1001, "Health", typeof(float));
         maxHealth = health;
     }
     // 데미지를 입을 때 체력 업데이트

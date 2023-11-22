@@ -1,3 +1,4 @@
+using Oculus.Interaction;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -498,10 +499,20 @@ namespace BNG
 
             // Damage if possible
             Damageable d = hit.collider.GetComponent<Damageable>();
+            DamageablePart damagePart = hit.collider.GetComponent<DamageablePart>();
+              
             if (d)
             {
                 d.DealDamage(Damage, hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
 
+                if (onDealtDamageEvent != null)
+                {
+                    onDealtDamageEvent.Invoke(Damage);
+                }
+            }
+            else if (damagePart)
+            {
+                damagePart.parent.DealDamage(Damage, hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
                 if (onDealtDamageEvent != null)
                 {
                     onDealtDamageEvent.Invoke(Damage);

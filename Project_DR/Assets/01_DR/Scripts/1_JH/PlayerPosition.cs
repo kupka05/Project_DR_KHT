@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerPosition : MonoBehaviour
 {
-    public GameObject playerPos;
+    public Transform playerPos;
 
    
 }

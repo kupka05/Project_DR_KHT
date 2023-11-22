@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 
 public class Monster : MonoBehaviour
@@ -52,7 +53,8 @@ public class Monster : MonoBehaviour
     public Animator anim;
     public Rigidbody rigid;
     public NavMeshAgent nav;
-    
+
+    Damageable damageable;
 
     public readonly int hashRun = Animator.StringToHash("isRun");
 
@@ -77,11 +79,16 @@ public class Monster : MonoBehaviour
     public bool traceStart;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-        monsterTr = GetComponent<Transform>();
-        playerTr = GameObject.FindWithTag("Player").GetComponent<Transform>();
 
+        monsterTr = GetComponent<Transform>();
+        Debug.Log(GameObject.FindWithTag("Player"));
+        Debug.Log(GameObject.FindWithTag("Player").GetComponent<PlayerPosition>());
+        Debug.Log(GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos);
+        playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
+
+        damageable = GetComponent<Damageable>();
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
@@ -94,7 +101,12 @@ public class Monster : MonoBehaviour
     {
         if (state == State.TRACE || state == State.ATTACK)
         {
-            transform.LookAt(playerTr.position);
+            // Look At Y 각도로만 기울어지게 하기
+            Vector3 targetPostition = new Vector3(playerTr.position.x,
+            this.transform.position.y,
+                                       playerTr.position.z);
+            this.transform.LookAt(targetPostition);
+            //transform.LookAt(playerTr.position);
         }
 
         
@@ -460,7 +472,23 @@ public class Monster : MonoBehaviour
         }
         Debug.Log($"hp:{hp}");
     }
-    
+    public void OnDeal()
+    {
+        if (!isDie)
+        {
+            anim.SetTrigger(hashHit);
+
+
+            if (damageable.Health <= 0)
+            {
+
+                state = State.DIE;
+                //Debug.Log($"state:{state}");
+
+            }
+        }
+        Debug.Log($"hp:{damageable.Health}");
+    }
 
 }
 

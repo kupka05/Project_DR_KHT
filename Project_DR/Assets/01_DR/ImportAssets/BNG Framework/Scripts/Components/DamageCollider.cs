@@ -84,14 +84,6 @@ namespace BNG {
                     thisDamageable.DealDamage(CollisionDamage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
                 }
             }
-            else if (isTouch)
-            {
-                // Can we damage what we hit?
-                Damageable d = collision.gameObject.GetComponent<Damageable>();
-                if (d)
-                {
-                    d.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
-                }
-            }
+           
         }
     }

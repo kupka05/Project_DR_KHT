@@ -23,6 +23,8 @@ namespace BNG
 
         // 데미지 : "Damageable" 함수와 충돌했을 경우 입힐 데미지
         public float Damage = 25f;
+        public float critChance = 0.1f;  // 치명타 확률
+        public float critIncrease = 1.5f;// 치명타 배율
 
         // Semi : 단발 ,  Automatic : 자동 연사 설정
         public FiringType FiringMethod = FiringType.Semi;
@@ -378,9 +380,11 @@ namespace BNG
             {
                 drill.OnSpin();
             }
+            // 데미지 계산
+            DamageCalculator();
 
 
-                // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
+            // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
             bool useProjectile = AlwaysFireProjectile || (FireProjectileInSlowMo && Time.timeScale < 1);
             if (useProjectile)
             {
@@ -786,10 +790,24 @@ namespace BNG
                 }
             }
         }
+        private void DamageCalculator()
+        {
+            float val = Random.Range(0f, 100f);
+            if (critChance <= val)
+            {
+                critIncrease = 0;
+            }
+            Damage = Damage * (1 + critIncrease);
+
+        }
+
         private void GetData()
         {
             Damage = (float)DataManager.GetData(1100, "Damage", typeof(float)) == default ? Damage : (float)DataManager.GetData(1100, "Damage", typeof(float));
             FiringRate = (float)DataManager.GetData(1100, "AttackSpeed", typeof(float)) == default ? FiringRate : (float)DataManager.GetData(1100, "AttackSpeed", typeof(float));
+            critIncrease = (float)DataManager.GetData(1100, "CritIncrease", typeof(float));
+            critChance = (float)DataManager.GetData(1100, "CritChance", typeof(float));
+
         }
     }
 

@@ -143,8 +143,9 @@ public class Grappling : GrabbableEvents
     {
         if (state != State.Idle || Time.time - lastGrapplingTime < grapplingCd)
             return;
+        lastGrapplingTime = Time.time;
 
-      
+
         state = State.Shooting;                         // 그래플링을 발사한 상태
         //smoothLocomotion.freeze = true;                 // 플레이어 이동 못하는 상태로 전환
         input.VibrateController(0.1f, 0.2f, 0.1f, thisGrabber.HandSide);
@@ -192,7 +193,7 @@ public class Grappling : GrabbableEvents
     // 그래플링 실행
     public void ExecuteGrapple()
     {
-        if (state != State.Shooting)
+        if (state != State.Shooting || Time.time - lastGrapplingTime < grapplingCd)
         { return; }
         state = State.Grappling;
         changeGravity(false);

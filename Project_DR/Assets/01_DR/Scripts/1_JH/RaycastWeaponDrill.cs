@@ -363,7 +363,7 @@ namespace BNG
                 return;
             }
             // 사운드가 안 비어있을 경우
-            if (!GunShotSound)
+            if (GunShotSound)
             {
                 // 사격 사운드 재생
                 VRUtils.Instance.PlaySpatialClipAt(GunShotSound, transform.position, GunShotVolume);

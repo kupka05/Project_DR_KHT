@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Rito.InventorySystem;
+using System;
 
 public class ItemManager : MonoBehaviour
 {
@@ -44,28 +45,35 @@ public class ItemManager : MonoBehaviour
     // 자동으로 타입을 찾아서 아이템을 생성
     public void CreateItem(int id, int amount = 1)
     {
-        // 생성할 아이템이 Potion 타입일 경우
-        if (ItemDataManager.SearchItemDB<PortionItemData>(id))
+        try
         {
-            CreatePotionItem(id, amount);
-        }
+            // 생성할 아이템이 Potion 타입일 경우
+            if (ItemDataManager.SearchItemDB<PortionItemData>(id))
+            {
+                CreatePotionItem(id, amount);
+            }
 
-        // 생성할 아이템이 Bomb 타입일 경우
-        else if (ItemDataManager.SearchItemDB<BombItemData>(id))
-        {
-            CreateBombItem(id, amount);
-        }
+            // 생성할 아이템이 Bomb 타입일 경우
+            else if (ItemDataManager.SearchItemDB<BombItemData>(id))
+            {
+                CreateBombItem(id, amount);
+            }
 
-        // 생성할 아이템이 Material 타입일 경우
-        else if (ItemDataManager.SearchItemDB<MaterialItemData>(id))
-        {
-            CreateMaterialItem(id, amount);
-        }
+            // 생성할 아이템이 Material 타입일 경우
+            else if (ItemDataManager.SearchItemDB<MaterialItemData>(id))
+            {
+                CreateMaterialItem(id, amount);
+            }
 
-        // 생성할 아이템이 Quest 타입일 경우
-        else 
+            // 생성할 아이템이 Quest 타입일 경우
+            else 
+            {
+                CreateQuestItem(id, amount);
+            }
+        }
+        catch (Exception ex)
         {
-            CreateQuestItem(id, amount);
+            Debug.LogWarning($"오류 발생! / ItemManager.CreateItem() {ex.Message}");
         }
     }
 

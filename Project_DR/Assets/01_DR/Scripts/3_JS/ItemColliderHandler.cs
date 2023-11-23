@@ -1,3 +1,4 @@
+using Rito.InventorySystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,9 +41,21 @@ public class ItemColliderHandler : MonoBehaviour
                 // 작업 상태로 변경
                 _state = State.Processing;
 
-                // 추후 콜라이더 정보 받아서 해당 ID에 해당하는 아이템 생성하게 변경하기
-                ItemManager.instance.InventoryCreateItem(5001);
-                ItemManager.instance.CreatePotionItem(5001);
+                ItemDataComponent itemDataComponent = gameObject.GetComponent<ItemDataComponent>();
+
+                // ItemDataComponent가 있는지 확인
+                if (itemDataComponent != null)
+                {
+                    ItemData itemData = (ItemData)itemDataComponent.ItemData;
+                    int id = itemData.ID;
+                    ItemManager.instance.InventoryCreateItem(id);
+                    ItemManager.instance.CreatePotionItem(id);
+                }
+                else
+                {
+                    ItemManager.instance.InventoryCreateItem(5001);
+                    ItemManager.instance.CreatePotionItem(5001);
+                }
                 Destroy(gameObject);
             }
             else
@@ -54,7 +67,7 @@ public class ItemColliderHandler : MonoBehaviour
 
     #endregion
     /*************************************************
-     *                 Unity Events
+     *                 Private Methods
      *************************************************/
     #region [+]
     private bool CheckColliderVisibility(RectTransform scrollPanel, RectTransform other)
@@ -64,6 +77,7 @@ public class ItemColliderHandler : MonoBehaviour
 
         return isVisible;
     }
+
 
     #endregion
 }

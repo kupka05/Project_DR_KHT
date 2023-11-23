@@ -137,6 +137,16 @@ public class ItemManager : MonoBehaviour
         GameObject item = Instantiate(data.Prefab);
         item.name = data.Name;
         item.AddComponent<ItemColliderHandler>();
+        // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
+        // 정보를 등록함
+        ItemDataComponent itemData = 
+            item.AddComponent<ItemDataComponent>();
+        itemData.Initialize(data);
+        PortionItemData portionItemData = (PortionItemData)itemData.ItemData;
+        Debug.Log($"ID: {portionItemData.ID}");
+
+        
+
     }
 
     #endregion

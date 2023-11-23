@@ -41,7 +41,8 @@ public class ItemColliderHandler : MonoBehaviour
                 _state = State.Processing;
 
                 // 추후 콜라이더 정보 받아서 해당 ID에 해당하는 아이템 생성하게 변경하기
-                ItemManager.instance.CreateItem(5102);
+                ItemManager.instance.InventoryCreateItem(5001);
+                ItemManager.instance.CreatePotionItem(5001);
                 Destroy(gameObject);
             }
             else

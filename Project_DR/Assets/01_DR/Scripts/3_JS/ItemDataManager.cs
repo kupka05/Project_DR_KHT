@@ -158,9 +158,8 @@ public static class ItemDataManager
         data._id = (int)DataManager.instance.GetData(id, "ID", typeof(int));
         data._name = (string)DataManager.instance.GetData(id, "Name", typeof(string));
         data._desc = (string)DataManager.instance.GetData(id, "Desc", typeof(string));
-        Sprite bluePotionSprite = Resources.Load<Sprite>("Sprites/bluePotion");
         data._iconSprite = Resources.Load<Sprite>((string)DataManager.instance.GetData(id, "IconSprite", typeof(string)));
-        //data._prefab = Resources.Load<GameObject>((string)DataManager.instance.GetData(id, "PrefabName", typeof(string)));
+        data._prefab = Resources.Load<GameObject>((string)DataManager.instance.GetData(id, "PrefabName", typeof(string)));
 
         // 자식 클래스에 해당 프로퍼티가 있는지 확인 후 데이터 추가
         if (CheckField<T, int>(data, "_maxAmount"))

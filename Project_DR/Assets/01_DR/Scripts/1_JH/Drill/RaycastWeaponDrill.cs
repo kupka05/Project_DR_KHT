@@ -820,8 +820,8 @@ namespace BNG
 
         private void GetData()
         {
-            Damage = (float)DataManager.GetData(1100, "Damage", typeof(float)) == default ? Damage : (float)DataManager.GetData(1100, "Damage", typeof(float));
-            FiringRate = (float)DataManager.GetData(1100, "AttackSpeed", typeof(float)) == default ? FiringRate : (float)DataManager.GetData(1100, "AttackSpeed", typeof(float));
+            Damage = (float)DataManager.GetData(1100, "Damage", typeof(float));
+            FiringRate = (float)DataManager.GetData(1100, "AttackSpeed", typeof(float));
             critIncrease = (float)DataManager.GetData(1100, "CritIncrease", typeof(float));
             critChance = (float)DataManager.GetData(1100, "CritChance", typeof(float));
 

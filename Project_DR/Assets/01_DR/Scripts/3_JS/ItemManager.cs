@@ -6,6 +6,32 @@ using System;
 public class ItemManager : MonoBehaviour
 {
     /*************************************************
+    *                 Private Fields
+    *************************************************/
+    #region [+]
+    // 싱글톤
+    private static ItemManager _instance;
+    public static ItemManager instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<ItemManager>();
+                if (_instance == null)
+                {
+                    GameObject obj = new GameObject("ItemManager");
+                    _instance = obj.AddComponent<ItemManager>();
+                }
+            }
+            return _instance;
+        }
+    }
+
+    [SerializeField] private Inventory _inventory;
+
+    #endregion
+    /*************************************************
     *                 Public Fields
     *************************************************/
     #region [+]
@@ -13,16 +39,15 @@ public class ItemManager : MonoBehaviour
 
     #endregion
     /*************************************************
-    *                 Private Fields
-    *************************************************/
-    #region [+]
-    [SerializeField] private Inventory _inventory;
-
-    #endregion
-    /*************************************************
     *                 Unity Events
     *************************************************/
     #region [+]
+    private void Awake()
+    {
+        // 파괴 방지
+        DontDestroyOnLoad(this);
+    }
+
     private void Start()
     {
         // 아이템 DB Init

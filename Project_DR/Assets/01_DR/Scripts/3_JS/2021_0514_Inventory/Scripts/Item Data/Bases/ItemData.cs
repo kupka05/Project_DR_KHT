@@ -39,7 +39,10 @@ namespace Rito.InventorySystem
         [SerializeField] public Sprite   _iconSprite; // 아이템 아이콘
         [SerializeField] public GameObject _prefab; 
         [SerializeField] public GameObject _dropItemPrefab; // 바닥에 떨어질 때 생성할 프리팹
-
+        public enum State
+        {
+            Default = 0
+        }
         /// <summary> 타입에 맞는 새로운 아이템 생성 </summary>
         public abstract Item CreateItem();
     }

@@ -2876,7 +2876,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7627447358138291877}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3654658131223172448
 MeshFilter:
@@ -3011,13 +3011,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5131699535621002208}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.85, y: 0.4554, z: 0.85}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0020999908, y: 0.23020001, z: 0.003000006}
+  m_LocalScale: {x: 0.95, y: 0.5054, z: 0.95}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7627447358138291877}
-  m_RootOrder: 0
+  m_Father: {fileID: 4749243748706755000}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4286123462292176648
 MeshFilter:
@@ -3098,6 +3098,12 @@ MonoBehaviour:
   skill: 2
   trigger: 0
   skillEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  shootEnableEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  shootDisableEvent:
     m_PersistentCalls:
       m_Calls: []
   TDcheckerHeight: 0
@@ -4268,7 +4274,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7627447358138291877}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2605602983719995659
 MeshFilter:
@@ -4352,7 +4358,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7627447358138291877}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3555177097017120675
 MeshFilter:
@@ -4447,7 +4453,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8336246025523880147}
   - {fileID: 3632766638260579199}
   - {fileID: 9181724764029554111}
   - {fileID: 3095930890634181592}
@@ -4498,6 +4503,7 @@ Transform:
   m_Children:
   - {fileID: 7627447358138291877}
   - {fileID: 8842608807794886174}
+  - {fileID: 8336246025523880147}
   m_Father: {fileID: 8768672552246940895}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
@@ -6368,6 +6374,7 @@ MonoBehaviour:
   isMelee: 1
   drillHead: {fileID: 7353309825794527893}
   isSpining: 0
+  isShootPossible: 0
   MaxRange: 0.5
   damage: 25
   critChance: 0.1

@@ -53,7 +53,6 @@ public class SkillManager : MonoBehaviour
     {
         GetData();
         SetSlider();
-        StartCoroutine("Slider");
     }
 
 
@@ -108,26 +107,36 @@ public class SkillManager : MonoBehaviour
 
     public void StartGrinderDrill()
     {
+        GD_collDown += GD_addTime;          // 남은시간에 시간 추가                                             
+        if (GD_collDown >= GD_maxTime)       // 시간 초과 불가하게
+        {
+            GD_collDown = GD_maxTime;
+        }
+
+        ActiveGrinderDrill();
+
         if (grinderDrillRoutine != null)
         {
-            GD_collDown += GD_addTime;          // 남은시간에 시간 추가                                             
-            if (GD_collDown >= GD_maxTime)       // 시간 초과 불가하게
-            {
-                GD_collDown = GD_maxTime;
-            }
-
             StopCoroutine(grinderDrillRoutine);
             grinderDrillRoutine = null;
         }
 
-        grinderDrillRoutine = Slider();
+        grinderDrillRoutine = IActiveGrinderDrill();
         StartCoroutine(grinderDrillRoutine);
     }
     // 드릴연마 실행
     IEnumerator IActiveGrinderDrill()
     {
-        ActiveGrinderDrill();
-        yield return new WaitForSeconds(GD_collDown);
+        while (0 <= GD_collDown)
+        {
+            GD_collDown -= 1f * Time.deltaTime;
+            if (GD_collDown <= 0)
+            { GD_collDown = 0; }
+            grinderSlider.value = GD_collDown;
+            grinderVal.text = string.Format("" + GD_collDown);
+
+            yield return null;
+        }
         DeActiveGrinderDrill();
     }
     // 드릴 연마 스킬 시전
@@ -142,6 +151,22 @@ public class SkillManager : MonoBehaviour
         GD_collDown = 0;                    // 남은시간 0으로 변경
         Damage.instance.isGrinder = false;
     }
+
+    public void ShootEnable()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            drills[i].GetComponent<RaycastWeaponDrill>().isShootPossible = true;
+        }
+    }
+    public void ShootDisable()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            drills[i].GetComponent<RaycastWeaponDrill>().isShootPossible = false;
+        }
+    }
+
     // } =======================  드릴 연마  =======================
 
 
@@ -149,20 +174,8 @@ public class SkillManager : MonoBehaviour
     {
         grinderSlider.maxValue = GD_maxTime;
         grinderSlider.value = 0;
-    }
+        grinderVal.text = string.Format("" + GD_collDown);
 
-    IEnumerator Slider()
-    {
-        while (0 <= TD_collDown)
-        {
-            TD_collDown -= 1f * Time.deltaTime;
-            if (TD_collDown <= 0)
-            { TD_collDown = 0; }
-            grinderSlider.value = TD_collDown;
-
-            yield return null;
-        }
-        DeActiveGrinderDrill();
     }
 
 

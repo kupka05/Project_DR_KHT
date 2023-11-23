@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.Windows;
 
 public class SkillEvent : MonoBehaviour
@@ -15,6 +16,8 @@ public class SkillEvent : MonoBehaviour
 
     [Header("Event")]
     public UnityEvent skillEvent;
+    public UnityEvent shootEnableEvent;
+    public UnityEvent shootDisableEvent;
     IEnumerator skillRoutine;
 
     [Header("Debug")]
@@ -62,7 +65,8 @@ public class SkillEvent : MonoBehaviour
 
         if(skill == Skill.Grinding)
         {
-            if(!other.gameObject.CompareTag("Weapon"))
+
+            if (!other.gameObject.CompareTag("Weapon"))
             { return; }
 
             if (other.gameObject.GetComponent<RaycastWeaponDrill>().isSpining && GetComponentInParent<RaycastWeaponDrill>().isSpining)
@@ -70,14 +74,18 @@ public class SkillEvent : MonoBehaviour
                 if (trigger)
                 { return; }
                 InitRoutine(skillRoutine);
-
+                Debug.Log("시작한다..");
                 skillRoutine = IGrinderDrill();
                 StartCoroutine(skillRoutine);
             }
-           else
+            else if(!other.gameObject.GetComponent<RaycastWeaponDrill>().isSpining || !GetComponentInParent<RaycastWeaponDrill>().isSpining)
             {
-                InitRoutine(skillRoutine);
+                if (skillRoutine != null)
+                {
+                    StopCoroutine(skillRoutine);
+                }
             }
+
 
         }
 
@@ -85,11 +93,19 @@ public class SkillEvent : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (skill != Skill.Default)
+        if (skill == Skill.TeraDrill)
         {
             if (!other.gameObject.CompareTag("Weapon"))
             { return; }
             InitRoutine(skillRoutine);
+        }
+        if (skill == Skill.Grinding)
+        {
+            if (!other.gameObject.CompareTag("Weapon"))
+            { return; }
+            InitRoutine(skillRoutine);
+            shootDisableEvent.Invoke();
+            Debug.Log("트리거 해제");
         }
 
     }
@@ -111,9 +127,13 @@ public class SkillEvent : MonoBehaviour
     }
     IEnumerator IGrinderDrill()
     {
-        trigger = true;
-        yield return new WaitForSeconds(GDcheckerTiming);
-        skillEvent.Invoke();
+            trigger = true;
+        shootEnableEvent.Invoke();
+        while (true)
+        {
+            yield return new WaitForSeconds(GDcheckerTiming); ;
+            skillEvent.Invoke();
+        }
     }
 
 

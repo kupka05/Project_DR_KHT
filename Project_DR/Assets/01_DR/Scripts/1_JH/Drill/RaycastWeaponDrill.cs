@@ -20,6 +20,7 @@ namespace BNG
         // 드릴 작동을 위한 클래스
         protected WeaponDrill spinDrill;
         public bool isSpining;
+        public bool isShootPossible;
 
         // 최대 사거리
         public float MaxRange = 25f;
@@ -392,35 +393,37 @@ namespace BNG
             {
                 spinDrill.OnSpin();
             }
-            
 
-
-            // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
-            bool useProjectile = AlwaysFireProjectile || (FireProjectileInSlowMo && Time.timeScale < 1);
-            if (useProjectile)
+            if (!isShootPossible)
             {
-                GameObject projectile = Instantiate(ProjectilePrefab, MuzzlePointTransform.position, MuzzlePointTransform.rotation) as GameObject;
-                Rigidbody projectileRigid = projectile.GetComponentInChildren<Rigidbody>();
-                projectileRigid.AddForce(MuzzlePointTransform.forward * ShotForce, ForceMode.VelocityChange);
 
-                Projectile proj = projectile.GetComponent<Projectile>();
-                // Convert back to raycast if Time reverts
-                if (proj && !AlwaysFireProjectile)
+                // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
+                bool useProjectile = AlwaysFireProjectile || (FireProjectileInSlowMo && Time.timeScale < 1);
+                if (useProjectile)
                 {
-                    proj.MarkAsRaycastBullet();
+                    GameObject projectile = Instantiate(ProjectilePrefab, MuzzlePointTransform.position, MuzzlePointTransform.rotation) as GameObject;
+                    Rigidbody projectileRigid = projectile.GetComponentInChildren<Rigidbody>();
+                    projectileRigid.AddForce(MuzzlePointTransform.forward * ShotForce, ForceMode.VelocityChange);
+
+                    Projectile proj = projectile.GetComponent<Projectile>();
+                    // Convert back to raycast if Time reverts
+                    if (proj && !AlwaysFireProjectile)
+                    {
+                        proj.MarkAsRaycastBullet();
+                    }
+
+                    // Make sure we clean up this projectile
+                    Destroy(projectile, 20);
                 }
-
-                // Make sure we clean up this projectile
-                Destroy(projectile, 20);
-            }
-            else
-            {
-                // Raycast to hit
-                RaycastHit hit;
-                if (Physics.Raycast(MuzzlePointTransform.position, MuzzlePointTransform.forward, out hit, MaxRange, ValidLayers, QueryTriggerInteraction.Ignore))
+                else
                 {
-                    Debug.DrawRay(MuzzlePointTransform.position, MuzzlePointTransform.forward * MaxRange, Color.red);
-                    OnRaycastHit(hit);
+                    // Raycast to hit
+                    RaycastHit hit;
+                    if (Physics.Raycast(MuzzlePointTransform.position, MuzzlePointTransform.forward, out hit, MaxRange, ValidLayers, QueryTriggerInteraction.Ignore))
+                    {
+                        Debug.DrawRay(MuzzlePointTransform.position, MuzzlePointTransform.forward * MaxRange, Color.red);
+                        OnRaycastHit(hit);
+                    }
                 }
             }
             // Apply recoil

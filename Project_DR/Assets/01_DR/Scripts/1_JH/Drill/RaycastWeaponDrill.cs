@@ -11,19 +11,21 @@ namespace BNG
     public class RaycastWeaponDrill : GrabbableEvents
     {
 
-        [Header("General")]
+        [Header("Drill")]
 
         // 근접 공격 무기인지 체크
         public bool isMelee;
+        public GameObject drillHead;
         private Grappling grappling;        
         // 드릴 작동을 위한 클래스
-        protected WeaponDrill drill;
+        protected WeaponDrill spinDrill;
+        public bool isSpining;
 
         // 최대 사거리
         public float MaxRange = 25f;
 
         // 데미지 : "Damageable" 함수와 충돌했을 경우 입힐 데미지
-        public float Damage = 25f;
+        public float damage = 25f;
         public float critChance = 0.1f;    // 치명타 확률
         public float critIncrease = 1.5f;  // 치명타 배율
 
@@ -210,13 +212,14 @@ namespace BNG
 
             weaponRigid = GetComponent<Rigidbody>();
             grappling = GetComponent<Grappling>();
+            grappling.drill = drillHead;
             if (MuzzleFlashObject)
             {
                 MuzzleFlashObject.SetActive(false);
             }
             
             ws = GetComponentInChildren<WeaponSlide>();
-            drill = GetComponentInChildren<WeaponDrill>();
+            spinDrill = GetComponentInChildren<WeaponDrill>();
 
             updateChamberedBullet();
         }
@@ -245,10 +248,12 @@ namespace BNG
             if (readyToShoot && triggerValue >= 0.75f)
             {
                 Shoot();
-
+                isSpining = true;
                 // Immediately ready to keep firing if 
                 readyToShoot = FiringMethod == FiringType.Automatic;
             }
+            else
+                isSpining = false;
 
             // These are here for convenience. Could be called through GrabbableUnityEvents instead
             //checkSlideInput();
@@ -385,10 +390,9 @@ namespace BNG
 
             if (isMelee)
             {
-                drill.OnSpin();
+                spinDrill.OnSpin();
             }
-            // 데미지 계산
-            DamageCalculator();
+            
 
 
             // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
@@ -509,19 +513,19 @@ namespace BNG
               
             if (d)
             {
-                d.DealDamage(Damage, hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
+                d.DealDamage(FinalDamage(), hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
 
                 if (onDealtDamageEvent != null)
                 {
-                    onDealtDamageEvent.Invoke(Damage);
+                    onDealtDamageEvent.Invoke(FinalDamage());
                 }
             }
             else if (damagePart)
             {
-                damagePart.parent.DealDamage(Damage, hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
+                damagePart.parent.DealDamage(FinalDamage(), hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
                 if (onDealtDamageEvent != null)
                 {
-                    onDealtDamageEvent.Invoke(Damage);
+                    onDealtDamageEvent.Invoke(FinalDamage());
                 }
             }
 
@@ -807,25 +811,16 @@ namespace BNG
                 }
             }
         }
-        private void DamageCalculator()
+        // 데미지 연산하는 함수
+        private float FinalDamage()
         {
-            float val = Random.Range(0f, 100f);
-            if (critChance <= val)
-            {
-                critIncrease = 0;
-            }
-            Damage = Damage * (1 + critIncrease);
-
+            return Damage.instance.DamageCalculate(damage);
         }
 
         private void GetData()
         {
-            Damage = (float)DataManager.instance.GetData(1100, "Damage", typeof(float)) ;
+            damage = (float)DataManager.instance.GetData(1100, "Damage", typeof(float)) ;
             FiringRate = (float)DataManager.instance.GetData(1100, "AttackSpeed", typeof(float));
-            critIncrease = (float)DataManager.instance.GetData(1100, "CritIncrease", typeof(float));
-            critChance = (float)DataManager.instance.GetData(1100, "CritChance", typeof(float));
-
-
         }
     }
 

@@ -41,7 +41,8 @@ namespace BNG {
         /// 빠른 속도로 물체와 충돌할 경우 적용할 피해량
         /// </summary>
         public float CollisionDamage = 5;
-        public bool isTouch;
+        // 플레이어 여부, 플레이어는 자기 자신을 공격 할 수 없다.
+        public bool isPlayer;
 
         Damageable thisDamageable;
 
@@ -58,7 +59,8 @@ namespace BNG {
             if(!this.isActiveAndEnabled) {
                 return;
             }
-
+            if (isPlayer && collision.gameObject.CompareTag("Player"))
+                return;
             OnCollisionEvent(collision);
         }
 

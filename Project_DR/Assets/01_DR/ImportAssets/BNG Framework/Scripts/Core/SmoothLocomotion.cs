@@ -149,8 +149,6 @@ namespace BNG {
         /// </summary>
         Vector3 additionalMovement;
 
-        public TMP_Text debug;
-        public TMP_Text debug2;
 
         #region Events
         public delegate void OnBeforeMoveAction();
@@ -752,6 +750,8 @@ namespace BNG {
         public float SurfaceAngle = 0f;
         public float SurfaceHeight = 0f;
 
+        public TMP_Text debug;
+        public TMP_Text debug2;
         //public virtual void OnCollisionEnter(Collision collision) {
         //    if(ControllerType == PlayerControllerType.Rigidbody) {
         //        // May want to check for sphere collider here, contact normals, etc. Keeping it simple for now.
@@ -763,7 +763,7 @@ namespace BNG {
         //        GroundContacts--;
         //    }
         //}
-        
+
         void OnCollisionStay(Collision collisionInfo) {
             if (ControllerType == PlayerControllerType.Rigidbody) {
                 //= collisionInfo.contacts.Length;

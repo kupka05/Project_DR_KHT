@@ -70,23 +70,20 @@ namespace BNG {
 
                 // Can we damage what we hit?
                 Damageable d = collision.gameObject.GetComponent<Damageable>();
+                DamageablePart damagePart = collision.gameObject.GetComponent<DamageablePart>();
                 if (d) {
                     d.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+                }
+                else if(damagePart){
+                      damagePart.parent.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+                    Debug.Log($"damage:{Damage}");
+                }
                 }
                 // Otherwise, can we take damage ourselves from this collision?
                 else if (TakeCollisionDamage && thisDamageable != null) {
                     thisDamageable.DealDamage(CollisionDamage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
                 }
             }
-            else if (isTouch)
-            {
-                // Can we damage what we hit?
-                Damageable d = collision.gameObject.GetComponent<Damageable>();
-                if (d)
-                {
-                    d.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
-                }
-            }
+           
         }
     }
-}

@@ -29,7 +29,7 @@ public class ItemManager : MonoBehaviour
         ItemDataManager.InitItemDB();
 
         // 테스트용 포션 생성
-        CreateItem(5001, 99);
+        CreateItem(5001, 13);
     }
 
     #endregion

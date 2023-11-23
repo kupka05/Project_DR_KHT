@@ -220,7 +220,7 @@ public class DataManager : MonoBehaviour
 
         catch (Exception ex)
         {
-            Debug.LogWarning($"오류 강제 예외처리 / DataManager.instance.GetData() Exception: {ex.Message}");
+            Debug.LogWarning($"오류 강제 예외처리 / DataManager.instance.GetData() {category} : {id} / Exception: {ex.Message}");
 
             // 만약 castType이 string 일 경우
             // 참조 타입이므로 예외처리 한다.

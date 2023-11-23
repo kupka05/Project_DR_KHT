@@ -607,7 +607,7 @@ namespace Rito.InventorySystem
             if(!slot.IsAccessible || !slot.HasItem)
                 return;
 
-            Debug.Log("UpdateTooltupUI");
+            //Debug.Log("UpdateTooltupUI");
             // 툴팁 정보 갱신
             _itemTooltip.SetItemInfo(_inventory.GetItemData(slot.Index));
 

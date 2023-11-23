@@ -130,27 +130,16 @@ public class DataManager : MonoBehaviour
         SetIDTable(data);
     }
 
-    public void CallDataTable()
-    {
-        Debug.Log($"133: >call dataTable> {localDataTable.Count}");
-    }
-
     // dataTable에 저장된 데이터를 가져오는 함수
     // 기본 반환 값은 string이다.
     public object GetData(int id, string category, Type castType)
     {
-        CallDataTable();
         try
         {
             // GoogleSheetLoader에서 모든 데이터를
             // 불러왔을 경우 
             if (GoogleSheetLoader.isDone)
             {
-                CallDataTable();
-                // SetDAta()에서 값이 제대로 저장안되는거 같음 못불러옴
-                Debug.Log("133: GoogleDone");
-                Debug.Log($"133: dataTable {dataTable.Count}");
-                Debug.Log($"133: idTable {idTable.Count}");
                 // dataTable을 검색하는 함수 호출
                 object data = FindDataTable(id, category, dataTable, idTable);
 
@@ -160,7 +149,6 @@ public class DataManager : MonoBehaviour
                 // 데이터 타입에 따라 형변환 하는 함수 호출
                 data = ConvertDataType(type, (string)data);
 
-                Debug.Log($"133: data {data}");
                 // data가 null일 경우
                 // 예외 처리를 위해 추가
                 if (data == null)
@@ -188,9 +176,6 @@ public class DataManager : MonoBehaviour
                 Debug.LogWarning("GetData(): GoogleSheetLoader에서 모든 데이터가" +
                 " 로딩되지 않았습니다. GoogleSheetLoader.isDone = false");
 
-                Debug.Log("133: localDone");
-                Debug.Log($"133: localdataTable {localDataTable.Count}");
-                Debug.Log($"133: localidTable {localIDTable.Count}");
                 // dataTable을 검색하는 함수 호출
                 object data = FindDataTable(id, category, localDataTable, localIDTable);
 
@@ -200,7 +185,6 @@ public class DataManager : MonoBehaviour
                 // 데이터 타입에 따라 형변환 하는 함수 호출
                 data = ConvertDataType(type, (string)data);
 
-                Debug.Log($"33: {id} Data {data}");
                 // data가 null일 경우
                 // 예외 처리를 위해 추가
                 if (data == null)
@@ -217,14 +201,12 @@ public class DataManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log($"33: 가져온 데이터 {data}");
                     return data;
                 }
             }
             // 위의 두 사항에 해당하지 않을 경우
             else
             {
-                Debug.Log("33: ELSE");
                 // 만약 castType이 string 일 경우
                 // 참조 타입이므로 예외처리 한다.
                 if (castType == typeof(string))
@@ -269,7 +251,7 @@ public class DataManager : MonoBehaviour
         // dataTable이 비어있지 않을 경우
         if (dataTable.Count != 0)
         {
-            Debug.Log("33: dataTable.Count != 0");
+
             // 키 값과 키 값을 사용해 카운트를 가져온다.
             int key = GetDataKey(id);
             int count = dataTable[key][ID_HEADER].Count;
@@ -280,7 +262,6 @@ public class DataManager : MonoBehaviour
         // 비어 있을 경우 로컬로 대체
         else
         {
-            Debug.Log("33: dataTable.Count == 0");
             // 키 값과 키 값을 사용해 카운트를 가져온다.
             int key = GetDataKey(id);
             
@@ -314,7 +295,6 @@ public class DataManager : MonoBehaviour
 
         localDataTable.Add(index, data);
 
-        Debug.Log($"133: C {localDataTable.Count}");
         // ID 값을 idTable에 저장하는 함수 호출
         SetLocalIDTable(data);
     }
@@ -341,7 +321,6 @@ public class DataManager : MonoBehaviour
     // ID 값을 idTable에 저장하는 함수
     private void SetIDTable(Dictionary<string, List<string>> data)
     {
-        Debug.Log($"133 setidtable(): {dataTable.Count}");
 
         // dataTable의 길이 - 1 를 딕셔너리 접근 인덱스로 설정
         int index = dataTable.Count - 1;
@@ -363,7 +342,6 @@ public class DataManager : MonoBehaviour
             idTable.Add(id, new List<int>());
             idTable[id].Add(index); // [0] 딕셔너리의 위치
             idTable[id].Add(index2); // [1] 실제 데이터 열이 저장된 위치
-            Debug.Log($"133: {idTable[id][0]}, {idTable[id][1]}");
         }
     }
 
@@ -391,7 +369,6 @@ public class DataManager : MonoBehaviour
             localIDTable.Add(id, new List<int>());
             localIDTable[id].Add(index); // [0] 딕셔너리의 위치
             localIDTable[id].Add(index2); // [1] 실제 데이터 열이 저장된 위치
-            Debug.Log($"133: {localIDTable[id][0]}, {localIDTable[id][1]}");
         }
     }
 
@@ -407,20 +384,15 @@ public class DataManager : MonoBehaviour
             // idTable에 정상적으로 접근했을 경우
             if (idTable.ContainsKey(id))
             {
-                Debug.Log($"33: id {id} category {category} ContainsKey true");
                 // dataTable에서 데이터를 찾아서 반환한다.
                 int key = idTable[id][DATA_KEY];
-                Debug.Log($"33: key {key}");
                 int index = idTable[id][DATA_INDEX];
-                Debug.Log($"33: index {index}");
                 data = dataTable[key][category][index];
-                Debug.Log($"33: data {data}");
             }
 
             // 접근하지 못했을 경우
             else
             {
-                Debug.Log($"33: id: {id} ContainsKey false");
                 // 디버그 메세지 출력
                 Debug.LogWarning($"FindDataTable({id}, {category}): 데이터를 찾지 못했습니다. " +
                     $"ID와 Category를 확인해 주세요.");

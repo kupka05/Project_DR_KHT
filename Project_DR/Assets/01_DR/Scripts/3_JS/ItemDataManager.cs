@@ -35,9 +35,6 @@ public static class ItemDataManager
     {
         try
         {
-            string data2 = (string)DataManager.instance.GetData(50022221, "Dur222ation", typeof(string));
-            Debug.Log($"{data2}");
-
             // DB 초기화
             potionItemDB = new Dictionary<int, PortionItemData>();
             bombItemDB = new Dictionary<int, BombItemData>();
@@ -51,8 +48,9 @@ public static class ItemDataManager
             InitTable(QUEST_TYPE_ID, "Quest");
 
             // 디버그
-            Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
-            Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
+            //string data2 = (string)DataManager.instance.GetData(50022221, "Dur222ation", typeof(string));
+            //Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
+            //Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
         }
         // DB에 데이터를 저장할 수 없을 경우
         catch (Exception ex)
@@ -126,7 +124,6 @@ public static class ItemDataManager
     private static void InitTable(int typeID, string category)
     {
         int size = DataManager.instance.GetCount(typeID);
-        Debug.Log($"33: size {size}");
         for (int i = 0; i < size; i++)
         {
             int id = typeID + i;
@@ -204,7 +201,7 @@ public static class ItemDataManager
     {
         if (target == null)
         {
-            Debug.Log("Target is null");
+            //Debug.Log("Target is null");
             return false;
         }
 
@@ -212,7 +209,7 @@ public static class ItemDataManager
 
         if (field == null)
         {
-            Debug.Log($"{typeof(T)} Field {fieldName} not found");
+            //Debug.Log($"{typeof(T)} Field {fieldName} not found");
             return false;
         }
 

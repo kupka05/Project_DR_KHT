@@ -513,7 +513,7 @@ namespace BNG {
 
         private void GetData()
         {
-            resetTime = (float)DataManager.GetData(1100, "ResetTimer", typeof(float));
+            resetTime = (float)DataManager.instance.GetData(1100, "ResetTimer", typeof(float));
         }
     }
 }

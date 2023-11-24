@@ -78,6 +78,7 @@ namespace BNG {
 #endif
 
         bool destroyed = false;
+        public bool stun = false;
 
         Rigidbody rigid;
         bool initialWasKinematic;
@@ -96,7 +97,7 @@ namespace BNG {
 
         public virtual void DealDamage(float damageAmount, Vector3? hitPosition = null, Vector3? hitNormal = null, bool reactToHit = true, GameObject sender = null, GameObject receiver = null) {
 
-            if (destroyed) {
+            if (destroyed || stun) {
                 return;
             }
             Health -= damageAmount;

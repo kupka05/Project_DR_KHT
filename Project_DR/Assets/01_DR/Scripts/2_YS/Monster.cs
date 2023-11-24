@@ -465,9 +465,10 @@ public class Monster : MonoBehaviour
     {
         isStun = true;
         anim.SetTrigger(hashHit);
-
+        damageable.stun = true;
         yield return new WaitForSeconds(stunDelay);
         isStun = false;
+        damageable.stun = false;
         yield break;
     }
 

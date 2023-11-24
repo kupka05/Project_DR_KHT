@@ -25,7 +25,6 @@ namespace Rito.InventorySystem
         /// <summary> 개수가 없는지 여부 </summary>
         public bool IsEmpty => Amount <= 0;
 
-
         public CountableItem(CountableItemData data, int amount = 1) : base(data)
         {
             CountableData = data;

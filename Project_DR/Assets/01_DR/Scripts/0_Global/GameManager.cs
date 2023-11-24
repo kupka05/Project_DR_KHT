@@ -1,7 +1,10 @@
+using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,17 +25,56 @@ public class GameManager : MonoBehaviour
     }
     private static GameManager m_instance; // 싱글톤이 할당될 static 변수    
 
+    private GameObject player;
+    private ScreenFader fader;
+    private InputBridge input;
+    private ScreenText screenText;
+
+    public string gameoverText;
+
     void Start()
     {
-      
+        GetData();
+        player = GameObject.FindGameObjectWithTag("Player");
+        if (player)
+        {
+            input = player.transform.parent.GetComponent<InputBridge>();
+        }
     }       // Start()
 
-    
+
     void Update()
     {
 
 
     }       // Update()
+
+
+    public void GameOver()
+    {
+        // 스크린 페이더 가져오기
+        if (Camera.main)
+        {
+            fader = Camera.main.transform.GetComponent<ScreenFader>();
+        }
+        screenText = player.GetComponent<ScreenText>();
+
+        fader.DoFadeIn();
+        screenText.OnScreenText(gameoverText);
+        input.enabled = false;
+
+
+        Invoke(nameof(ResetScene),5f);
+    }
+    public void ResetScene()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
+    }
+    public void GetData()
+    {
+        gameoverText = (string)DataManager.instance.GetData(1001, "GameOverText", typeof(string));
+    }
 
 
 }       // ClassEnd

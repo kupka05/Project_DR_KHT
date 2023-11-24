@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -49,6 +49,7 @@ namespace BNG {
         /// Calls Events
         /// </summary>
         VRUISystem uiSystem;
+        public VRUISystem publicUISystem => uiSystem;
         PointerEvents selectedPointerEvents;
         PointerEventData data;
 

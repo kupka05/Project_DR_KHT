@@ -58,6 +58,7 @@ namespace Rito.InventorySystem
         ***********************************************************************/
         #region .
         private InventoryUI _inventoryUI;
+        public InventoryUI publicInventoryUI => _inventoryUI;
 
         private RectTransform _slotRect;
         private RectTransform _iconRect;
@@ -68,6 +69,9 @@ namespace Rito.InventorySystem
         private GameObject _highlightGo;
 
         private Image _slotImage;
+
+        // 버튼
+        private Button _btn;
 
         // 현재 하이라이트 알파값
         private float _currentHLAlpha = 0f;
@@ -89,6 +93,7 @@ namespace Rito.InventorySystem
         {
             InitComponents();
             InitValues();
+            InitEventListener();
         }
 
         #endregion
@@ -112,6 +117,9 @@ namespace Rito.InventorySystem
 
             // Images
             _slotImage = GetComponent<Image>();
+
+            // Button
+            _btn = GetComponent<Button>(); 
         }
         private void InitValues()
         {
@@ -138,6 +146,11 @@ namespace Rito.InventorySystem
             // 3. Deactivate Icon
             HideIcon();
             _highlightGo.SetActive(false);
+        }
+
+        private void InitEventListener()
+        {
+            _btn.onClick.AddListener(() => _inventoryUI.ShowTooltip(Index));
         }
 
         private void ShowIcon() => _iconGo.SetActive(true);

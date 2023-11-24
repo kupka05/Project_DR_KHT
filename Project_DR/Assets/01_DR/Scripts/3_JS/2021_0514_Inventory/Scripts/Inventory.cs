@@ -86,6 +86,7 @@ namespace Rito.InventorySystem
         /// <summary> 아이템 목록 </summary>
         [SerializeField]
         private Item[] _items;
+        public Item[] Items => _items;
 
         /// <summary> 업데이트 할 인덱스 목록 </summary>
         private readonly HashSet<int> _indexSetForUpdate = new HashSet<int>();
@@ -179,13 +180,11 @@ namespace Rito.InventorySystem
             if (!IsValidIndex(index)) return;
 
             Item item = _items[index];
-
             // 1. 아이템이 슬롯에 존재하는 경우
             if (item != null)
             {
                 // 아이콘 등록
                 _inventoryUI.SetItemIcon(index, item.Data.IconSprite);
-
                 // 1-1. 셀 수 있는 아이템
                 if (item is CountableItem ci)
                 {
@@ -316,7 +315,6 @@ namespace Rito.InventorySystem
         public int Add(ItemData itemData, int amount = 1)
         {
             int index;
-
             // 1. 수량이 있는 아이템
             if (itemData is CountableItemData ciData)
             {

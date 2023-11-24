@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -105,6 +106,7 @@ namespace BNG {
 
         [Tooltip("The key(s) to use to initiate a jump. You can also override the CheckJump() function to determine your jump criteria.")]
         public List<ControllerBinding> JumpInput = new List<ControllerBinding>() { ControllerBinding.None };
+        public List<InputAxis> JumpInputAxis = new List<InputAxis>() { InputAxis.RightThumbStickAxis };
 
         [Tooltip("Unity Input Action used to initiate a jump")]
         public InputActionReference JumpAction;
@@ -113,6 +115,8 @@ namespace BNG {
         public bool freeze;
         public bool activeGrapple;
         public bool swinging;
+        public bool isGrappling;
+        public int grappleCount;
 
 
         [Header("Air Control : ")]
@@ -127,6 +131,7 @@ namespace BNG {
         Rigidbody playerRigid;
         SphereCollider playerSphere;
         public Grappling[] grapplings;
+
 
         // Left / Right
         float movementX;
@@ -144,6 +149,7 @@ namespace BNG {
         /// </summary>
         Vector3 additionalMovement;
 
+
         #region Events
         public delegate void OnBeforeMoveAction();
         public static event OnBeforeMoveAction OnBeforeMove;
@@ -151,8 +157,14 @@ namespace BNG {
         public delegate void OnAfterMoveAction();
         public static event OnAfterMoveAction OnAfterMove;
         #endregion
-
+        private void Awake()
+        {
+            GetData();
+        }
         public virtual void Update() {
+#if JH_DEBUG
+            DebugMode();
+#endif
             CheckControllerReferences();
             UpdateInputs();
 
@@ -160,6 +172,16 @@ namespace BNG {
                 MoveCharacter();
             }
         }
+#if JH_DEBUG
+
+        private void DebugMode()
+        {
+            debug.gameObject.SetActive(true);
+            debug2.gameObject.SetActive(true);
+            debug.text = string.Format("Count:" + grappleCount); 
+            debug2.text = string.Format("" + state); 
+        }
+#endif
 
         public virtual void FixedUpdate() {
             if (UpdateMovement && ControllerType == PlayerControllerType.Rigidbody) {
@@ -399,7 +421,6 @@ namespace BNG {
         public virtual void MoveCharacter() {
 
             if (activeGrapple) return;
-            if (swinging) return;
 
             // Bail early if no elligible for movement
             if (UpdateMovement == false) {
@@ -584,9 +605,53 @@ namespace BNG {
                 return true;
             }
 
+            //if (JumpInputAxis != null)
+            //{
+
+            //    for (int i = 0; i < JumpInputAxis.Count; i++)
+            //    {
+            //        float axisVal = InputBridge.Instance.GetInputAxisValue(JumpInputAxis[i]).y;
+
+            //        // Always take this value if our last entry was 0. 
+            //        if (axisVal == 0)
+            //        {
+            //            return false;
+            //        }
+            //        else if (axisVal != 0 && axisVal > 0)
+            //        {
+            //            Debug.Log(axisVal);
+            //            return true;
+            //        }
+            //    }
+            //}
             return false;
         }
 
+        public virtual float CheckJumpAxis()
+        {
+            float lastVal = 0f;
+
+            // Check Raw Input
+            if (JumpInputAxis != null)
+            {
+                for (int i = 0; i < JumpInputAxis.Count; i++)
+                {
+                    float axisVal = InputBridge.Instance.GetInputAxisValue(JumpInputAxis[i]).y;
+
+                    // Always take this value if our last entry was 0. 
+                    if (lastVal == 0)
+                    {
+                        lastVal = axisVal;
+                    }
+                    else if (axisVal != 0 && axisVal > lastVal)
+                    {
+                        lastVal = axisVal;
+                    }
+                }
+            }
+            return lastVal;
+        }
+      
         public virtual bool CheckSprint() {
 
             // Check for bound controller button
@@ -685,6 +750,8 @@ namespace BNG {
         public float SurfaceAngle = 0f;
         public float SurfaceHeight = 0f;
 
+        public TMP_Text debug;
+        public TMP_Text debug2;
         //public virtual void OnCollisionEnter(Collision collision) {
         //    if(ControllerType == PlayerControllerType.Rigidbody) {
         //        // May want to check for sphere collider here, contact normals, etc. Keeping it simple for now.
@@ -696,7 +763,7 @@ namespace BNG {
         //        GroundContacts--;
         //    }
         //}
-        
+
         void OnCollisionStay(Collision collisionInfo) {
             if (ControllerType == PlayerControllerType.Rigidbody) {
                 //= collisionInfo.contacts.Length;
@@ -726,79 +793,14 @@ namespace BNG {
                 }
             }
         }
-        private Vector3 velocityToSet;
-        private bool enableMovementOnNextTouch;
-
-        // 그래플링 포인트로 점프하는 메서드
-        // targetPosition : 날아오를 포지션
-        // trajectoryHeight : 최대 높이
-        public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+        private void GetData()
         {
-            activeGrapple = true; // 그래플링 상태 true
-
-            velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
-            Invoke(nameof(SetVelocity), 0.1f);
-
-            Invoke(nameof(ResetRestrictions), 3f);
+            MovementSpeed = (float)DataManager.instance.GetData(1001, "Speed", typeof(float));
+            StrafeSpeed = MovementSpeed * 0.75f;
         }
-
-        // 점프를 계산해주는 메서드
-        // startPoint : 플레이어의 현재 위치
-        // endPoint : 점프에 도달할 목적지, 그래플링 포인트
-        // trajectorHeight : 점프 시 최대 높이
-        public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
-        {
-            // 중력
-            float gravity = Physics.gravity.y;
-            // 목적지 - 플레이어 위치
-            float displacementY = endPoint.y - startPoint.y;
-            Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
-
-            // Y값 속도
-            Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
-            Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity)
-                + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
-
-            return velocityXZ + velocityY;
-        }
-        private void SetVelocity()
-        {
-            enableMovementOnNextTouch = true;
-            if (playerRigid)
-            {
-                playerRigid.velocity = velocityToSet;
-
-                //cam.DoFov(grappleFov); // 시야각
-            }
-            else
-            {
-                characterController.SimpleMove(velocityToSet*Time.deltaTime);
-            }
-        }
-        public void ResetRestrictions()
-        {
-            activeGrapple = false;
-            //cam.DoFov(85f);
-        }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (enableMovementOnNextTouch)
-            {
-                enableMovementOnNextTouch = false;
-                ResetRestrictions();
-
-                grapplings[0].StopGrapple();              
-                grapplings[1].StopGrapple();
-                
-
-
-            }
-        }
-
 
     }
-
+   
     public enum PlayerControllerType {
         CharacterController,
         Rigidbody

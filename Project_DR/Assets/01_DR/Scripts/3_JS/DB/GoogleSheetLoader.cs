@@ -2,19 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GoogleSheetLoader : MonoBehaviour
 {
     [Header("GoogleAPI")]
     // 스프레드 시트 url에 있는 ID
-    private const string spreadsheetId = "QZiDv3heAHcoaWa91lvT2C_D9XFQmyUQ1ocWGwLJpBA";
+    private const string spreadsheetId = "1QZiDv3heAHcoaWa91lvT2C_D9XFQmyUQ1ocWGwLJpBA";
     // API 접근 KEY
     private const string apiKey = "AIzaSyC3utQPnsLiJdh3AAAdmYJFQ4QCZ7ReV_A";
     // 불러올 문서의 시트 이름 배열
     // 불러올 시트 이름을 넣어주세요!!!
-    private string[] sheetNames =
+    private static string[] sheetNames =
     {
-        "Test_Table"
+        // JS
+        "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
+
+        // JH
+        "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table"
+
     };
 
     // 코루틴에서 데이터를 반환하고
@@ -25,7 +30,10 @@ public class GoogleSheetLoader : MonoBehaviour
     // 상태를 알려주는 변수
     public static bool isDone = false;
 
-    private void Awake()
+    // 데이터가 전부 로드되면 넘어갈 다음 씬 이름
+    [SerializeField] private string sceneName = default;
+
+    private void Start()
     {
         // 데이터 매니저를 설정하는 함수 호출
         SetDataManager();
@@ -48,11 +56,11 @@ public class GoogleSheetLoader : MonoBehaviour
                     // callBack 변수에서 받은 data를
                     // CSVReader.NewReadCSVFile()에
                     // 매개변수로 보내 데이터 타입을 변경
-                    Dictionary<string, List<string>> dataDictionary = 
+                    Dictionary<string, List<string>> dataDictionary =
                     CSVReader.NewReadCSVFile(data);
 
                     // dataDictionary를 데이터 매니저에 추가
-                    DataManager.SetData(dataDictionary);
+                    DataManager.instance.SetData(dataDictionary);
                 }));
         }
 
@@ -71,6 +79,7 @@ public class GoogleSheetLoader : MonoBehaviour
         // 로딩 완료 상태 변경
         isDone = true;
 
-        Debug.Log((int)DataManager.GetData(1, "HP"));
+        // 씬을 불러옴
+        SceneManager.LoadScene(sceneName);
     }
 }

@@ -16,6 +16,7 @@ public class Monster : MonoBehaviour
         IDLE,
         TRACE,
         ATTACK,
+        STUN,
         DIE
     }
 
@@ -76,16 +77,14 @@ public class Monster : MonoBehaviour
     public readonly int hashidle = Animator.StringToHash("isIdle");
 
     public bool isDie = false;
-    public bool traceStart;
+    public bool isStun = false;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        //GetData();
 
         monsterTr = GetComponent<Transform>();
-        Debug.Log(GameObject.FindWithTag("Player"));
-        Debug.Log(GameObject.FindWithTag("Player").GetComponent<PlayerPosition>());
-        Debug.Log(GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos);
         playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
 
         damageable = GetComponent<Damageable>();
@@ -109,55 +108,59 @@ public class Monster : MonoBehaviour
             //transform.LookAt(playerTr.position);
         }
 
-        
+       
     }
 
+    //public void GetData()
+    //{
+    //    damageable.Health = (float)DataManager.GetData(7001, "HP"); //이름으로 가져오는거라서 순서상관 X 0번째 행  //변수 선언은 해야함
+    //    speed = (float)DataManager.GetData(3001, "MoveSpeed");
+    //    coolTime = (float)DataManager.GetData(3001, "Cooltime");
+    //    //traceDist = (float)DataManager.GetData(3001, "CheckRange");
+
+    //    speedReduce = (float)DataManager.GetData(7041, "Speed_Reduce");
+    //}
+
+  
 
     IEnumerator MonsterState()
     {
-        while (!isDie)
+        while (!isDie && !isStun)
         {
             yield return new WaitForSeconds(0.1f);
 
             if (state == State.DIE) yield break;
 
-            float distance = Vector3.Distance(playerTr.position, monsterTr.position);
-   
-            //if (distance <= attRange)
-            //{
-            //    state = State.ATTACK;
-            //}
-            //else if (distance >= recRange)
-            //{
-            //    state = State.IDLE;
-            //}
-            //else if (distance <= recRange)
-            //{
-            //    traceStart = true;
-            //    state = State.TRACE;
-            //}
-            //else if (!traceStart)
-            //{
-            //    state = State.IDLE;
-            //}
-            if(distance <= attRange)
+            if (isStun)
             {
-                state = State.ATTACK;
-            }
-            else if(distance <= recRange)
-            {
-                state = State.TRACE;
+                state = State.STUN;
             }
             else
             {
-                state = State.IDLE;
+                float distance = Vector3.Distance(playerTr.position, monsterTr.position);
+
+                if (distance <= attRange)
+                {
+                    state = State.ATTACK;
+                }
+                else if (distance <= recRange)
+                {
+                    state = State.TRACE;
+                }
+                else
+                {
+                    state = State.IDLE;
+                }
             }
         }
+
+        
+  
     }
 
     IEnumerator MonsterAction()
     {
-        while (!isDie)
+        while (!isDie && !isStun)
         {
           
             switch (state)
@@ -211,10 +214,10 @@ public class Monster : MonoBehaviour
                                 case 0:
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
-                                    yield return new WaitForSeconds(1.5f);
+                                    yield return new WaitForSeconds(1.3f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
+                                    anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
                                     yield return new WaitForSeconds(0.3f);
                                     break;
@@ -222,7 +225,8 @@ public class Monster : MonoBehaviour
                                 case 1:
                                     //anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack2, true);
-                                    yield return new WaitForSeconds(1.5f);
+                                    
+                                    yield return new WaitForSeconds(1.3f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
@@ -286,7 +290,7 @@ public class Monster : MonoBehaviour
 
                         case Type.BEAST_STING:
 
-                            int sting = Random.Range(0, 4);
+                            int sting = Random.Range(0, 3);
 
                             switch (sting)
                             {
@@ -320,15 +324,15 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashRun, false);
                                     yield return new WaitForSeconds(0.3f);
                                     break;
-                                case 3:
-                                    anim.SetBool(hashAttack4, true);
-                                    yield return new WaitForSeconds(0.8f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack4, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                                //case 3:
+                                //    anim.SetBool(hashAttack4, true);
+                                //    yield return new WaitForSeconds(0.8f);
+                                //    anim.SetBool(hashidle, true);
+                                //    anim.SetBool(hashAttack4, false);
+                                //    //anim.SetBool(hashWalkingAttack, false);
+                                //    anim.SetBool(hashRun, false);
+                                //    yield return new WaitForSeconds(0.3f);
+                                //    break;
                             }
                             break;
 
@@ -401,32 +405,65 @@ public class Monster : MonoBehaviour
                             }
                             break;
                     }
-                    //state = State.IDLE;
                     break;
 
+                case State.STUN:
+                    isStun = true;
+                    Debug.Log($"state:{state}");
+                    nav.isStopped = true;
+                    Debug.Log("nav.isStopped: " + nav.isStopped);
+                    break;
+                    
                 case State.DIE:
                     isDie = true;
                     nav.isStopped = true;
                     //Debug.Log("nav.isStopped: " + nav.isStopped);
                     anim.SetTrigger(hashDie);
-                    Destroy(this.gameObject, 2.0f);
+                    //Destroy(this.gameObject, 2.0f); //damageable 쪽에서 처리
                     break;
             }
+            
             yield return new WaitForSeconds(0.1f);
 
         }
     }
-    //int GetAttackHash(int attackIndex)
-    //{
-    //    switch (attackIndex)
-    //    {
-    //        case 0: return hashAttack;
-    //        case 1: return hashAttack2;
-    //        case 2: return hashAttack3;
-    //        case 3: return hashAttack4;
-    //        default: return hashAttack;
-    //    }
-    //}
+
+    public void OnDeal()
+    {
+        if (!isDie && !isStun)
+        {
+            if (damageable.Health >= 0)
+            {
+                damageable.Health--;
+
+                StartCoroutine(OnStun());
+            }
+
+            if (damageable.Health <= 0)
+            {
+                state = State.DIE;
+                //Debug.Log($"state:{state}");
+            }
+        }
+        Debug.Log($"hp:{damageable.Health}");
+    }
+
+    IEnumerator OnStun()
+    {
+        isStun = true;
+
+        anim.SetTrigger(hashHit);
+        yield return new WaitForSeconds(0.5f);
+        
+        isStun = false;
+        Debug.Log($"isStun:{isStun}");
+
+        //넘어가는 로직이 필요한데...
+    }
+
+   
+
+
 
     void OnDrawGizmos()
     {
@@ -444,6 +481,20 @@ public class Monster : MonoBehaviour
 
     }
 
+    
+
+    //int GetAttackHash(int attackIndex)
+    //{
+    //    switch (attackIndex)
+    //    {
+    //        case 0: return hashAttack;
+    //        case 1: return hashAttack2;
+    //        case 2: return hashAttack3;
+    //        case 3: return hashAttack4;
+    //        default: return hashAttack;
+    //    }
+    //}
+
     //private void OnTriggerEnter(Collider other)
     //{
     //    if(other.CompareTag("test"))
@@ -453,42 +504,25 @@ public class Monster : MonoBehaviour
     //    }
     //}
 
-    public void OnDamage(float Damage)
-    {
-        if (!isDie)
-        {
-            RaycastWeaponDrill weaponDrill = GetComponent<RaycastWeaponDrill>();
-            hp -= Damage;
-            anim.SetTrigger(hashHit);
-            
-
-            if (hp <= 0)
-            {          
-                
-                state = State.DIE;
-                //Debug.Log($"state:{state}");
-                
-            }
-        }
-        Debug.Log($"hp:{hp}");
-    }
-    public void OnDeal()
-    {
-        if (!isDie)
-        {
-            anim.SetTrigger(hashHit);
+    //public void OnDamage(float Damage)
+    //{
+    //    if (!isDie)
+    //    {
+    //        RaycastWeaponDrill weaponDrill = GetComponent<RaycastWeaponDrill>();
+    //        hp -= Damage;
+    //        anim.SetTrigger(hashHit);
 
 
-            if (damageable.Health <= 0)
-            {
+    //        if (hp <= 0)
+    //        {          
 
-                state = State.DIE;
-                //Debug.Log($"state:{state}");
+    //            state = State.DIE;
+    //            //Debug.Log($"state:{state}");
 
-            }
-        }
-        Debug.Log($"hp:{damageable.Health}");
-    }
+    //        }
+    //    }
+    //    Debug.Log($"hp:{hp}");
+    //}
 
 }
 

@@ -46,7 +46,6 @@ public class GoogleSheetLoader : MonoBehaviour
         // sheetNames의 길이 만큼 순회
         for (int i = 0; i < sheetNames.Length; i++)
         {
-
             // 코루틴으로 구글 시트 데이터를 불러온다.
             // isCsvConert = true를 매개변수로 할당해서
             // Csv 데이터로 변환한다.

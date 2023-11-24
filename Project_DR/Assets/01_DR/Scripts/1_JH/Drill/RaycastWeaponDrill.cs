@@ -11,19 +11,22 @@ namespace BNG
     public class RaycastWeaponDrill : GrabbableEvents
     {
 
-        [Header("General")]
+        [Header("Drill")]
 
         // 근접 공격 무기인지 체크
         public bool isMelee;
+        public GameObject drillHead;
         private Grappling grappling;        
         // 드릴 작동을 위한 클래스
-        protected WeaponDrill drill;
+        protected WeaponDrill spinDrill;
+        public bool isSpining;
+        public bool isShootPossible;
 
         // 최대 사거리
         public float MaxRange = 25f;
 
         // 데미지 : "Damageable" 함수와 충돌했을 경우 입힐 데미지
-        public float Damage = 25f;
+        public float damage = 25f;
         public float critChance = 0.1f;    // 치명타 확률
         public float critIncrease = 1.5f;  // 치명타 배율
 
@@ -210,13 +213,14 @@ namespace BNG
 
             weaponRigid = GetComponent<Rigidbody>();
             grappling = GetComponent<Grappling>();
+            grappling.drill = drillHead;
             if (MuzzleFlashObject)
             {
                 MuzzleFlashObject.SetActive(false);
             }
             
             ws = GetComponentInChildren<WeaponSlide>();
-            drill = GetComponentInChildren<WeaponDrill>();
+            spinDrill = GetComponentInChildren<WeaponDrill>();
 
             updateChamberedBullet();
         }
@@ -245,10 +249,12 @@ namespace BNG
             if (readyToShoot && triggerValue >= 0.75f)
             {
                 Shoot();
-
+                isSpining = true;
                 // Immediately ready to keep firing if 
                 readyToShoot = FiringMethod == FiringType.Automatic;
             }
+            else
+                isSpining = false;
 
             // These are here for convenience. Could be called through GrabbableUnityEvents instead
             //checkSlideInput();
@@ -385,38 +391,39 @@ namespace BNG
 
             if (isMelee)
             {
-                drill.OnSpin();
+                spinDrill.OnSpin();
             }
-            // 데미지 계산
-            DamageCalculator();
 
-
-            // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
-            bool useProjectile = AlwaysFireProjectile || (FireProjectileInSlowMo && Time.timeScale < 1);
-            if (useProjectile)
+            if (!isShootPossible)
             {
-                GameObject projectile = Instantiate(ProjectilePrefab, MuzzlePointTransform.position, MuzzlePointTransform.rotation) as GameObject;
-                Rigidbody projectileRigid = projectile.GetComponentInChildren<Rigidbody>();
-                projectileRigid.AddForce(MuzzlePointTransform.forward * ShotForce, ForceMode.VelocityChange);
 
-                Projectile proj = projectile.GetComponent<Projectile>();
-                // Convert back to raycast if Time reverts
-                if (proj && !AlwaysFireProjectile)
+                // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
+                bool useProjectile = AlwaysFireProjectile || (FireProjectileInSlowMo && Time.timeScale < 1);
+                if (useProjectile)
                 {
-                    proj.MarkAsRaycastBullet();
+                    GameObject projectile = Instantiate(ProjectilePrefab, MuzzlePointTransform.position, MuzzlePointTransform.rotation) as GameObject;
+                    Rigidbody projectileRigid = projectile.GetComponentInChildren<Rigidbody>();
+                    projectileRigid.AddForce(MuzzlePointTransform.forward * ShotForce, ForceMode.VelocityChange);
+
+                    Projectile proj = projectile.GetComponent<Projectile>();
+                    // Convert back to raycast if Time reverts
+                    if (proj && !AlwaysFireProjectile)
+                    {
+                        proj.MarkAsRaycastBullet();
+                    }
+
+                    // Make sure we clean up this projectile
+                    Destroy(projectile, 20);
                 }
-
-                // Make sure we clean up this projectile
-                Destroy(projectile, 20);
-            }
-            else
-            {
-                // Raycast to hit
-                RaycastHit hit;
-                if (Physics.Raycast(MuzzlePointTransform.position, MuzzlePointTransform.forward, out hit, MaxRange, ValidLayers, QueryTriggerInteraction.Ignore))
+                else
                 {
-                    Debug.DrawRay(MuzzlePointTransform.position, MuzzlePointTransform.forward * MaxRange, Color.red);
-                    OnRaycastHit(hit);
+                    // Raycast to hit
+                    RaycastHit hit;
+                    if (Physics.Raycast(MuzzlePointTransform.position, MuzzlePointTransform.forward, out hit, MaxRange, ValidLayers, QueryTriggerInteraction.Ignore))
+                    {
+                        Debug.DrawRay(MuzzlePointTransform.position, MuzzlePointTransform.forward * MaxRange, Color.red);
+                        OnRaycastHit(hit);
+                    }
                 }
             }
             // Apply recoil
@@ -509,19 +516,19 @@ namespace BNG
               
             if (d)
             {
-                d.DealDamage(Damage, hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
+                d.DealDamage(FinalDamage(), hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
 
                 if (onDealtDamageEvent != null)
                 {
-                    onDealtDamageEvent.Invoke(Damage);
+                    onDealtDamageEvent.Invoke(FinalDamage());
                 }
             }
             else if (damagePart)
             {
-                damagePart.parent.DealDamage(Damage, hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
+                damagePart.parent.DealDamage(FinalDamage(), hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
                 if (onDealtDamageEvent != null)
                 {
-                    onDealtDamageEvent.Invoke(Damage);
+                    onDealtDamageEvent.Invoke(FinalDamage());
                 }
             }
 
@@ -807,25 +814,16 @@ namespace BNG
                 }
             }
         }
-        private void DamageCalculator()
+        // 데미지 연산하는 함수
+        private float FinalDamage()
         {
-            float val = Random.Range(0f, 100f);
-            if (critChance <= val)
-            {
-                critIncrease = 0;
-            }
-            Damage = Damage * (1 + critIncrease);
-
+            return Damage.instance.DamageCalculate(damage);
         }
 
         private void GetData()
         {
-            Damage = (float)DataManager.instance.GetData(1100, "Damage", typeof(float)) ;
+            damage = (float)DataManager.instance.GetData(1100, "Damage", typeof(float)) ;
             FiringRate = (float)DataManager.instance.GetData(1100, "AttackSpeed", typeof(float));
-            critIncrease = (float)DataManager.instance.GetData(1100, "CritIncrease", typeof(float));
-            critChance = (float)DataManager.instance.GetData(1100, "CritChance", typeof(float));
-
-
         }
     }
 

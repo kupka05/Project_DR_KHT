@@ -10,8 +10,6 @@ public class DrillHead : MonoBehaviour
     private bool isStop=false;
     private float currentGrappleDistance;
     public float damage;
-    public float critChance = 0.1f;
-    public float critIncrease = 1.5f;
 
     public float speed;
     public DamageCollider damageCollider;
@@ -25,8 +23,7 @@ public class DrillHead : MonoBehaviour
     }
     private void Start()
     {
-        DamageCalculator();
-        damageCollider.Damage = damage;
+        damageCollider.Damage = FinalDamage();
         col = damageCollider.GetComponent<CapsuleCollider>();
     }
     // Update is called once per frame
@@ -47,8 +44,7 @@ public class DrillHead : MonoBehaviour
     {
         damage = (float)DataManager.instance.GetData(1100, "ProjectileDamage", typeof(float));
         speed = (float)DataManager.instance.GetData(1100, "ProjectileSpeed", typeof(float));
-        critIncrease = (float)DataManager.instance.GetData(1100, "CritIncrease", typeof(float));
-        critChance = (float)DataManager.instance.GetData(1100, "CritChance", typeof(float));
+     
     }
 
     public void OnTriggerEnter(Collider other)
@@ -59,16 +55,9 @@ public class DrillHead : MonoBehaviour
                
         }
     }
-    // 데미지 계산
-    private void DamageCalculator()
-    {
-        float val = Random.Range(0f, 100f);
-        if (critChance <= val)
+            // 데미지 연산하는 함수
+        private float FinalDamage()
         {
-            critIncrease = 0;
+            return Damage.instance.DamageCalculate(damage);
         }
-        damage = damage * (1 + critIncrease);
-
-    }
-
 }

@@ -1,14 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
+using System;
+using Newtonsoft.Json.Bson;
 
 public class SG_Test : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    StringBuilder stBuilder = new StringBuilder();
+    string stText;
+
+    delegate void ButtonInputD();
+    event ButtonInputD inputEvent;
+   
+    event System.Action<int> actionEvent;
+
+    int tempNum003 = 10;
+
+    private void Awake()
     {
-        if(collision.gameObject.CompareTag("Floor"))
-        {
-            Debug.Log("Floor¶û ´êÀ½");
-        }
+        inputEvent += TestMethod;
+        actionEvent += ActionTest;
     }
+    private void Start()
+    {
+        stBuilder.Append("ì—¬ëŸ¬ë³€ ì¶”ê°€ë˜ë‚˜?");
+
+        Debug.Log($"stB -> {stBuilder}");
+        stBuilder.Clear();
+        Debug.Log($"stB -> {stBuilder}");
+        
+        inputEvent?.Invoke();
+        actionEvent?.Invoke(tempNum003);
+
+
+    }
+
+    private void TestMethod()
+    {
+        Debug.Log("ButtonEventCall");
+    }
+
+    private void ActionTest(int tempNum_)
+    {
+        Debug.Log("ActionCall");
+        Debug.Log($"ActionParamiter -> {tempNum_}");
+    }
+
+
 }       // SG_Test

@@ -383,7 +383,7 @@ namespace Rito.InventorySystem
 ///////////////////////////////////
                 // 데이터매니저 불러오기 예외처리 관련
                 // 디버그 일시작업 중단
-                //Debug.Log($"GetData: {(float)DataManager.GetData(1001, "Health")}");
+                //Debug.Log($"GetData: {(float)DataManager.instance.GetData(1001, "Health")}");
             }
         }
 
@@ -607,7 +607,7 @@ namespace Rito.InventorySystem
             if(!slot.IsAccessible || !slot.HasItem)
                 return;
 
-            Debug.Log("UpdateTooltupUI");
+            //Debug.Log("UpdateTooltupUI");
             // 툴팁 정보 갱신
             _itemTooltip.SetItemInfo(_inventory.GetItemData(slot.Index));
 

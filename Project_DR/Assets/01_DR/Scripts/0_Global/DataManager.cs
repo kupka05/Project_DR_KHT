@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -18,40 +19,108 @@ using UnityEngine;
 //!
 //! 2. DataManager에 저장된 데이터를 불러온다.
 //! 2-1. 하나의 데이터 값만 가져올 때
-//! DataManager.GetData(아이디, 카테고리);
-//! 값을 받을 때 int num = (int)DataManager.GetData();
+//! DataManager.instance.GetData(아이디, 카테고리);
+//! 값을 받을 때 int num = (int)DataManager.instance.GetData();
 //! 위와 같은 형태로 맞는 데이터 타입으로 형변환 해야 한다.
 //! *what? 아이디 = CSV파일 참조
 //! *what? 카테고리 = CSV파일의 행 참조
 //!
 //! 2-2. 아이디에 해당하는 줄의 모든 데이터를 가져올 떄
-//! DataManager.GetData(아이디);
+//! DataManager.instance.GetData(아이디);
 //! *what? 반환타입 = Dictionary<string, string> 이며,
 //! 가져올 변수를 같은 타입으로 선언해야 한다.
 //!
 //! 아이디가 들어있는 CSV파일의 카운트를 가져온다.
 //! DataManager.GetCount(아이디);
-public static class DataManager
+public class DataManager : MonoBehaviour
 {
+    // 싱글톤
+    private static DataManager _instance;
+    public static DataManager instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<DataManager>();
+                if (_instance == null)
+                {
+                    GameObject obj = new GameObject("DataManager");
+                    _instance = obj.AddComponent<DataManager>();
+                }
+            }
+            return _instance;
+        }
+    }
+
+
     [Header("Choi")]
     // 데이터를 보관하는 변수
-    private static Dictionary<int, Dictionary<string, List<string>>>
+    private Dictionary<int, Dictionary<string, List<string>>>
         dataTable = new Dictionary<int, Dictionary<string, List<string>>>();
+
+    private Dictionary<int, Dictionary<string, List<string>>>
+    dataTable2 = new Dictionary<int, Dictionary<string, List<string>>>();
+
+    // 로컬용 dataTable
+    private Dictionary<int, Dictionary<string, List<string>>>
+    localDataTable = new Dictionary<int, Dictionary<string, List<string>>>();
+
+    // 로컬에서 불러올 csv 파일 이름
+    private string[] fileNames =
+    {
+        // JS
+        "GameDataTable_Item_Potion_Table", "GameDataTable_Item_Bomb_Table", "GameDataTable_Item_Material_Table",
+        "GameDataTable_Item_Quest_Table",
+
+        // JH
+        "GameDataTable_Player_Table", "GameDataTable_Drill_Table", "GameDataTable_Skill_Table",
+        "GameDataTable_SkillEffect_Table"
+    };
+
     // dataTable에 ID로 접근하기 위해
     // ID에 해당하는 인덱스를 보관하는 변수
     // idTable[ID][DATA_KEY] = dataTable에 저장된 순서
     // idTable[ID][DATA_INDEX] = 실제 데이터의 인덱스
-    private static Dictionary<int, List<int>> 
+    public Dictionary<int, List<int>> 
         idTable = new Dictionary<int, List<int>>();
+
+    // 로컬용 idTable
+    private Dictionary<int, List<int>>
+    localIDTable = new Dictionary<int, List<int>>();
+
     // dataTable의 고정 상수
     private const string ID_HEADER = "ID";
     private const int DATA_KEY = 0;
     private const int DATA_INDEX = 1;
+    private enum State
+    {
+        Default = 0,    // 기본 상태
+        Done            // CSV 파일 Init 완료
+    };
+    private static State state = State.Default;
 
-    #region [외부 메서드]
+    /*************************************************
+     *                 Unity Events
+     *************************************************/
+    private void Awake()
+    {
+        // 파괴 방지
+        DontDestroyOnLoad(this);
+
+        // 로컬용 CSV 파일을 테이블에 Init
+        InitLocalDataTable();
+    }
+
+    /*************************************************
+     *                 Public Methods
+     *************************************************/
+    #region [+]
     // CSV Reader로 불러온 Dictionary<string, List<string>를
     // dataTable에 데이터를 저장하는 함수
-    public static void SetData(Dictionary<string, List<string>> data)
+
+    int num = 0;
+    public void SetData(Dictionary<string, List<string>> data)
     {
         // dataTable에 값 추가
         int index = dataTable.Count;
@@ -63,16 +132,16 @@ public static class DataManager
 
     // dataTable에 저장된 데이터를 가져오는 함수
     // 기본 반환 값은 string이다.
-    public static object GetData(int id, string category, Type castType)
+    public object GetData(int id, string category, Type castType)
     {
         try
         {
             // GoogleSheetLoader에서 모든 데이터를
-            // 불러왔을 경우
+            // 불러왔을 경우 
             if (GoogleSheetLoader.isDone)
             {
                 // dataTable을 검색하는 함수 호출
-                object data = FindDataTable(id, category);
+                object data = FindDataTable(id, category, dataTable, idTable);
 
                 // 데이터 타입을 가져오는 함수 호출
                 string type = GetDataType((string)data);
@@ -91,8 +160,41 @@ public static class DataManager
                         return string.Empty;
                     }
 
-            ////////// TODO: CSV 연동 후에 data == null일 경우
-            ////////// csv에 있는 정보를 가져오게 변경하기
+                    // castType에 맞는 default 인스턴스 반환
+                    return Activator.CreateInstance(castType);
+                }
+                else
+                {
+                    return data;
+                }
+            }
+            // 구글 스프레트 시트에서 데이터를 못가져왔을 경우
+            // 로컬에 있는 CSV 데이터를 가져옴
+            // CSV 데이터를 가져왔을 경우
+            else if (state == State.Done)
+            {
+                Debug.LogWarning("GetData(): GoogleSheetLoader에서 모든 데이터가" +
+                " 로딩되지 않았습니다. GoogleSheetLoader.isDone = false");
+
+                // dataTable을 검색하는 함수 호출
+                object data = FindDataTable(id, category, localDataTable, localIDTable);
+
+                // 데이터 타입을 가져오는 함수 호출
+                string type = GetDataType((string)data);
+
+                // 데이터 타입에 따라 형변환 하는 함수 호출
+                data = ConvertDataType(type, (string)data);
+
+                // data가 null일 경우
+                // 예외 처리를 위해 추가
+                if (data == null)
+                {
+                    // 만약 castType이 string 일 경우
+                    // 참조 타입이므로 예외처리 한다.
+                    if (castType == typeof(string))
+                    {
+                        return string.Empty;
+                    }
 
                     // castType에 맞는 default 인스턴스 반환
                     return Activator.CreateInstance(castType);
@@ -102,22 +204,23 @@ public static class DataManager
                     return data;
                 }
             }
-
-            Debug.LogWarning("GetData(): GoogleSheetLoader에서 모든 데이터가" +
-                " 로딩되지 않았습니다. GoogleSheetLoader.isDone = false");
-            // 만약 castType이 string 일 경우
-            // 참조 타입이므로 예외처리 한다.
-            if (castType == typeof(string))
+            // 위의 두 사항에 해당하지 않을 경우
+            else
             {
-                return string.Empty;
+                // 만약 castType이 string 일 경우
+                // 참조 타입이므로 예외처리 한다.
+                if (castType == typeof(string))
+                {
+                    return string.Empty;
+                }
+                // castType에 맞는 default 인스턴스 반환
+                return Activator.CreateInstance(castType);
             }
-            // castType에 맞는 default 인스턴스 반환
-            return Activator.CreateInstance(castType);
         }
 
         catch (Exception ex)
         {
-            Debug.LogWarning($"오류 강제 예외처리 / DataManager.GetData() Exception: {ex.Message}");
+            Debug.LogWarning($"오류 강제 예외처리 / DataManager.instance.GetData() {category} : {id} / Exception: {ex.Message}");
 
             // 만약 castType이 string 일 경우
             // 참조 타입이므로 예외처리 한다.
@@ -125,9 +228,6 @@ public static class DataManager
             {
                 return string.Empty;
             }
-
-            ////////// TODO: CSV 연동 후에 data == null일 경우
-            ////////// csv에 있는 정보를 가져오게 변경하기
 
             // castType에 맞는 default 인스턴스 반환
             return Activator.CreateInstance(castType);
@@ -135,7 +235,7 @@ public static class DataManager
     }
 
     // 매개 변수에 id만 넣을 경우 Dictionary<string, string>로 반환한다.
-    public static Dictionary<string, string> GetData(
+    public Dictionary<string, string> GetData(
         int id)
     {
         // dataTable을 검색하는 함수 호출
@@ -146,18 +246,34 @@ public static class DataManager
 
     // 아이디를 매개변수로 받고 아이디가 들어 있는 CSV파일의
     // 열 갯수를 가져오는 함수.
-    public static int GetCount(int id)
+    public int GetCount(int id)
     {
-        // 키 값과 키 값을 사용해 카운트를 가져온다.
-        int key = GetDataKey(id);
-        int count = dataTable[key][ID_HEADER].Count;
+        // dataTable이 비어있지 않을 경우
+        if (dataTable.Count != 0)
+        {
 
-        // 찾은 카운트 반환
-        return count;
+            // 키 값과 키 값을 사용해 카운트를 가져온다.
+            int key = GetDataKey(id);
+            int count = dataTable[key][ID_HEADER].Count;
+
+            // 찾은 카운트 반환
+            return count;
+        }
+        // 비어 있을 경우 로컬로 대체
+        else
+        {
+            // 키 값과 키 값을 사용해 카운트를 가져온다.
+            int key = GetDataKey(id);
+            
+            int count = localDataTable[key][ID_HEADER].Count;
+
+            // 찾은 카운트 반환
+            return count;
+        }
     }
 
     // 아이디가 위치한 실제 인덱스를 가져오는 함수
-    public static int GetIndex(int id)
+    public int GetIndex(int id)
     {
         // 아이디의 실제 인덱스를 가져오는 함수 호출
         id = GetDataKey(id);
@@ -166,10 +282,46 @@ public static class DataManager
     }
     #endregion
 
-    #region [내부 메서드]
-    // ID 값을 idTable에 저장하는 함수
-    private static void SetIDTable(Dictionary<string, List<string>> data)
+    /*************************************************
+     *                 Private Methods
+     *************************************************/
+    #region [+]
+
+    // 로컬 데이터 테이블을 설정하는 함수
+    public void SetLocalData(Dictionary<string, List<string>> data)
     {
+        // dataTable에 값 추가
+        int index = localDataTable.Count;
+
+        localDataTable.Add(index, data);
+
+        // ID 값을 idTable에 저장하는 함수 호출
+        SetLocalIDTable(data);
+    }
+
+    // CSV 파일을 Local 변수에 Init하는 함수
+    public void InitLocalDataTable()
+    {
+        string directory = "CSVs/";
+        for (int i = 0; i < fileNames.Length; i++)
+        {
+            TextAsset data = Resources.Load<TextAsset>(directory + fileNames[i]);
+
+            Dictionary<string, List<string>> dataDictionary =
+            CSVReader.NewReadCSVFile(data.ToString());
+
+            // dataDictionary를 데이터 매니저에 추가
+            SetLocalData(dataDictionary);
+        }
+
+        // 작업 완료 상태 변경
+        state = State.Done;
+    }
+
+    // ID 값을 idTable에 저장하는 함수
+    private void SetIDTable(Dictionary<string, List<string>> data)
+    {
+
         // dataTable의 길이 - 1 를 딕셔너리 접근 인덱스로 설정
         int index = dataTable.Count - 1;
 
@@ -193,8 +345,37 @@ public static class DataManager
         }
     }
 
+    // ref로 주소 값 전달해서 값 변경하려는데 안돼서
+    // 이걸로 대체
+    private void SetLocalIDTable(Dictionary<string, List<string>> data)
+    {
+        // dataTable의 길이 - 1 를 딕셔너리 접근 인덱스로 설정
+        int index = localDataTable.Count - 1;
+
+        // data[ID_HEADER]의 길이 만큼 순회
+        for (int i = 0; i < data[ID_HEADER].Count; i++)
+        {
+            int id = int.Parse(data[ID_HEADER][i]);
+            int index2 = i;
+            // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
+            if (localIDTable.ContainsKey(id))
+            {
+                Debug.LogWarning($"SetIDTable(): 등록하는 ID: [{id}]는 " +
+                    $"기존에 있는 ID와 중복됩니다. CSV 파일의 ID 값을 변경하시거나, " +
+                    $"CSV파일이 중복으로 SetData()를 호출하는지 확인해주세요.");
+            }
+            // 딕셔너리의 키값으로 ID를 설정하고, 내부 List에 실제 인덱스를 저장한다.
+            // index는 딕셔너리의 위치, index2는 실제 데이터 열이 저장된 위치
+            localIDTable.Add(id, new List<int>());
+            localIDTable[id].Add(index); // [0] 딕셔너리의 위치
+            localIDTable[id].Add(index2); // [1] 실제 데이터 열이 저장된 위치
+        }
+    }
+
     // dataTable를 검색하는 함수
-    private static object FindDataTable(int id, string category)
+    private object FindDataTable(int id, string category,
+        Dictionary<int, Dictionary<string, List<string>>> dataTable,
+        Dictionary<int, List<int>> idTable)
     {
         try
         {
@@ -222,14 +403,14 @@ public static class DataManager
         catch (Exception ex)
         {
             // 예외가 발생했을 때 실행할 코드 블록
-            Debug.LogWarning($"오류 강제 예외처리 / DataManager.FindDataTable() Exception: {ex.Message}");
+            Debug.LogWarning($"오류 강제 예외처리 id:{id} category: {category} / DataManager.FindDataTable() Exception: {ex.Message}");
 
             return new object();
         }
     }
 
     // 매개 변수에 id만 넣을 경우 Dictionary<string, string>로 반환한다.
-    private static Dictionary<string, string> FindDataTable(int id)
+    private Dictionary<string, string> FindDataTable(int id)
     {
         Dictionary<string, string> temp_DataTable = new Dictionary<string, string>();
         // idTable에 정상적으로 접근했을 경우
@@ -273,7 +454,7 @@ public static class DataManager
 
     // string으로 저장된 data 값의 데이터 타입을
     // 조건식을 통해 찾아내는 함수
-    public static string GetDataType(string data)
+    public string GetDataType(string data)
     {
         // 데이터 타입이 int 일 경우
         if (int.TryParse(data, out int tempIntValue))
@@ -301,7 +482,7 @@ public static class DataManager
     }
 
     // 데이터 타입을 형변환 해주는 함수
-    private static object ConvertDataType(string type, string data)
+    private object ConvertDataType(string type, string data)
     {
         // 받아온 type에 따라 데이터 타입을 형변환
         switch (type)
@@ -325,12 +506,25 @@ public static class DataManager
     }
 
     // 아이디로 해당 아이디가 위치한 CSV파일의 위치를 받아오는 함수
-    private static int GetDataKey(int id)
+    private int GetDataKey(int id)
     {
-        int index = idTable[id][DATA_KEY];
+        // dataTable이 비어있지 않을 경우
+        if (dataTable.Count != 0)
+        {
+            int index = idTable[id][DATA_KEY];
         
-        // 찾은 위치 인덱스 반환
-        return index;
+            // 찾은 위치 인덱스 반환
+            return index;
+        }
+        // 비어있을 경우
+        else
+        {
+            int index = localIDTable[id][DATA_KEY];
+
+            // 찾은 위치 인덱스 반환
+            return index;
+        }
     }
+
     #endregion
 }

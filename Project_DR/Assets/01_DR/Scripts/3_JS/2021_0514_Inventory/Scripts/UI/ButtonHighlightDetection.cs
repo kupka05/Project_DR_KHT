@@ -34,7 +34,7 @@ public class ButtonHighlightDetection : MonoBehaviour
     // 호버에 진입했을 경우
     void OnHoverEnter()
     {
-        Debug.Log("Hover Enter");
+        //Debug.Log("Hover Enter");
         _inventoryUI.ShowTooltip(_itemSlotUI.Index);
         // 호버 진입 시 실행할 동작 추가
     }
@@ -42,7 +42,7 @@ public class ButtonHighlightDetection : MonoBehaviour
     // 호버에서 나갔을 경우
     void OnHoverExit()
     {
-        Debug.Log("Hover Exit");
+        //Debug.Log("Hover Exit");
         _inventoryUI.HideTooltip();
         // 호버 해제 시 실행할 동작 추가
     }

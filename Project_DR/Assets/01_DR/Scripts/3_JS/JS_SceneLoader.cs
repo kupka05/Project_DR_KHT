@@ -3,18 +3,18 @@ using UnityEngine.SceneManagement;
 
 public class JS_SceneLoader : MonoBehaviour
 {
-    public float delay = default; // ·Îµù µô·¹ÀÌ
-    public string sceneName = default; // ·ÎµùÇÒ ¾ÀÀÇ ÀÌ¸§
+    public float delay = default; // ë¡œë”© ë”œë ˆì´
+    public string sceneName = default; // ë¡œë”©í•  ì”¬ì˜ ì´ë¦„
 
     void Start()
     {
-        // delay ÈÄ¿¡ LoadScene ÇÔ¼ö¸¦ È£ÃâÇÏ¿© ¾ÀÀ» ·Îµù
+        // delay í›„ì— LoadScene í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•˜ì—¬ ì”¬ì„ ë¡œë”©
         Invoke("LoadSceneAfterDelay", delay);
     }
 
     void LoadSceneAfterDelay()
     {
-        // ÁöÁ¤µÈ ÀÌ¸§ÀÇ ¾ÀÀ» ·Îµù
+        // ì§€ì •ëœ ì´ë¦„ì˜ ì”¬ì„ ë¡œë”©
         SceneManager.LoadScene(sceneName);
     }
 }

@@ -2626,7 +2626,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
 --- !u!54 &624144660
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3321,7 +3321,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
 --- !u!54 &897850463
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3760,6 +3760,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1005570377}
   - component: {fileID: 1005570376}
+  - component: {fileID: 1005570378}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3795,6 +3796,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1005570378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005570375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74789f34019235b40b29f6515b4da3ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1039873563
 GameObject:
   m_ObjectHideFlags: 0
@@ -20025,16 +20038,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 636365455855327399, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2042058824998220969, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2804856919992919102, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -20054,47 +20057,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459314038795754053, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: onDestroyed.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459314038795754053, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: onDestroyed.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5459314038795754053, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: onDestroyed.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1005570376}
-    - target: {fileID: 5459314038795754053, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: onDestroyed.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459314038795754053, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: onDestroyed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: GameOver
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459314038795754053, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: onDestroyed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 5459314038795754053, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: onDestroyed.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 6313937909607908136, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6757648434215542744, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_Name
@@ -20153,34 +20121,6 @@ PrefabInstance:
     - target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6757648435622825461, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: Button1
-      value: 
-      objectReference: {fileID: 7297283861868334280, guid: 27bafa1c7d8a77b47985ab70c0511986,
-        type: 3}
-    - target: {fileID: 6757648435622825461, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: LeftPrimaryButtonAction
-      value: 
-      objectReference: {fileID: 1367316620502084850, guid: 27bafa1c7d8a77b47985ab70c0511986,
-        type: 3}
-    - target: {fileID: 6757648435622825461, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: RightPrimaryButtonAction
-      value: 
-      objectReference: {fileID: -4905483316028591056, guid: 27bafa1c7d8a77b47985ab70c0511986,
-        type: 3}
-    - target: {fileID: 7045689710206694866, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7045689710206694866, guid: 9af8996cf7742564d86ec55ab5e912c0,
-        type: 3}
-      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

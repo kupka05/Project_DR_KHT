@@ -35,9 +35,6 @@ public static class ItemDataManager
     {
         try
         {
-            string data2 = (string)DataManager.GetData(50022221, "Dur222ation", typeof(string));
-            Debug.Log($"{data2}");
-
             // DB 초기화
             potionItemDB = new Dictionary<int, PortionItemData>();
             bombItemDB = new Dictionary<int, BombItemData>();
@@ -51,8 +48,9 @@ public static class ItemDataManager
             InitTable(QUEST_TYPE_ID, "Quest");
 
             // 디버그
-            Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
-            Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
+            //string data2 = (string)DataManager.instance.GetData(50022221, "Dur222ation", typeof(string));
+            //Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
+            //Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
         }
         // DB에 데이터를 저장할 수 없을 경우
         catch (Exception ex)
@@ -125,7 +123,7 @@ public static class ItemDataManager
     #region [+]
     private static void InitTable(int typeID, string category)
     {
-        int size = DataManager.GetCount(typeID);
+        int size = DataManager.instance.GetCount(typeID);
         for (int i = 0; i < size; i++)
         {
             int id = typeID + i;
@@ -157,29 +155,29 @@ public static class ItemDataManager
     private static T InitData<T>(int id, T data) where T : ItemData
     {
         // itemData가 가지고 있는 기본 프로퍼티
-        data._id = (int)DataManager.GetData(id, "ID", typeof(int));
-        data._name = (string)DataManager.GetData(id, "Name", typeof(string));
-        data._desc = (string)DataManager.GetData(id, "Desc", typeof(string));
+        data._id = (int)DataManager.instance.GetData(id, "ID", typeof(int));
+        data._name = (string)DataManager.instance.GetData(id, "Name", typeof(string));
+        data._desc = (string)DataManager.instance.GetData(id, "Desc", typeof(string));
         Sprite bluePotionSprite = Resources.Load<Sprite>("Sprites/bluePotion");
-        data._iconSprite = Resources.Load<Sprite>((string)DataManager.GetData(id, "IconSprite", typeof(string)));
-        //data._prefab = Resources.Load<GameObject>((string)DataManager.GetData(id, "PrefabName", typeof(string)));
+        data._iconSprite = Resources.Load<Sprite>((string)DataManager.instance.GetData(id, "IconSprite", typeof(string)));
+        //data._prefab = Resources.Load<GameObject>((string)DataManager.instance.GetData(id, "PrefabName", typeof(string)));
 
         // 자식 클래스에 해당 프로퍼티가 있는지 확인 후 데이터 추가
         if (CheckField<T, int>(data, "_maxAmount"))
         {
-            SetFieldIfExists(data, "_maxAmount", (int)DataManager.GetData(id, "MaxCount", typeof(int)));
+            SetFieldIfExists(data, "_maxAmount", (int)DataManager.instance.GetData(id, "MaxCount", typeof(int)));
         }
         if (CheckField<T, float>(data, "_effectAmount"))
         {
-            SetFieldIfExists(data, "_effectAmount", (float)DataManager.GetData(id, "EffectAmount", typeof(float)));
+            SetFieldIfExists(data, "_effectAmount", (float)DataManager.instance.GetData(id, "EffectAmount", typeof(float)));
         }
         if (CheckField<T, float>(data, "_radius"))
         {
-            SetFieldIfExists(data, "_radius", (float)DataManager.GetData(id, "Radius", typeof(float)));
+            SetFieldIfExists(data, "_radius", (float)DataManager.instance.GetData(id, "Radius", typeof(float)));
         }
         if (CheckField<T, float>(data, "_duration"))
         {
-            SetFieldIfExists(data, "_duration", (float)DataManager.GetData(id, "Duration", typeof(float)));
+            SetFieldIfExists(data, "_duration", (float)DataManager.instance.GetData(id, "Duration", typeof(float)));
         }
 
         return data;
@@ -203,7 +201,7 @@ public static class ItemDataManager
     {
         if (target == null)
         {
-            Debug.Log("Target is null");
+            //Debug.Log("Target is null");
             return false;
         }
 
@@ -211,7 +209,7 @@ public static class ItemDataManager
 
         if (field == null)
         {
-            Debug.Log($"{typeof(T)} Field {fieldName} not found");
+            //Debug.Log($"{typeof(T)} Field {fieldName} not found");
             return false;
         }
 

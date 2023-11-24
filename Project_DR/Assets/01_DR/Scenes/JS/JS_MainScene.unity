@@ -4736,6 +4736,7 @@ MonoBehaviour:
     type: 3}
   RightThumbNearAction: {fileID: -9043086599165714804, guid: 27bafa1c7d8a77b47985ab70c0511986,
     type: 3}
+  Button1Action: {fileID: 0}
   LeftPrimaryButtonAction: {fileID: 1367316620502084850, guid: 27bafa1c7d8a77b47985ab70c0511986,
     type: 3}
   RightPrimaryButtonAction: {fileID: -4905483316028591056, guid: 27bafa1c7d8a77b47985ab70c0511986,
@@ -11781,6 +11782,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1566563306
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1566563308}
+  - component: {fileID: 1566563307}
+  m_Layer: 0
+  m_Name: GoogleSheetLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1566563307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566563306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e37e333f1dbc37a41869735f8d33c216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1566563308
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566563306}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1572284504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12027,7 +12072,6 @@ MonoBehaviour:
   _toggleFilterPortions: {fileID: 1382794042}
   _mouseReversed: 0
   UIPointer: {fileID: 1137882212}
-  _showDebug: 1
   __showPreview: 1
   __previewAlpha: 0.134
 --- !u!114 &1592772954
@@ -21379,6 +21423,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!1 &624268136358125659
 GameObject:
   m_ObjectHideFlags: 0
@@ -23708,6 +23753,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!4 &847388284171491026
 Transform:
   m_ObjectHideFlags: 0
@@ -25325,6 +25371,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!23 &1040113587935020928
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -32399,6 +32446,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!136 &1802062037839898160
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34542,6 +34590,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!4 &2031517485265390067
 Transform:
   m_ObjectHideFlags: 0
@@ -36948,6 +36997,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!1 &2220389717784812085
 GameObject:
   m_ObjectHideFlags: 0
@@ -43739,6 +43789,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!4 &2863597732836842762
 Transform:
   m_ObjectHideFlags: 0
@@ -52768,16 +52819,21 @@ MonoBehaviour:
   swingStrafeSpeed: 1.25
   JumpForce: 4
   JumpInput: 00000000
+  JumpInputAxis: 03000000
   JumpAction: {fileID: 3598031526004978682, guid: e39f4b35a6db18348b41eb0262520e69,
     type: 3}
   freeze: 0
   activeGrapple: 0
   swinging: 0
+  isGrappling: 0
+  grappleCount: 0
   AirControl: 1
   AirControlSpeed: 1
   grapplings:
   - {fileID: 1270669883}
   - {fileID: 1493473285}
+  debug: {fileID: 0}
+  debug2: {fileID: 0}
   Magnitude: 0
   GroundContacts: 0
   SurfaceAngle: 0
@@ -55997,6 +56053,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!1 &4044197938184990619
 GameObject:
   m_ObjectHideFlags: 0
@@ -56787,6 +56844,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!4 &4096997680117423224
 Transform:
   m_ObjectHideFlags: 0
@@ -63246,6 +63304,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!1 &4803334786278549835
 GameObject:
   m_ObjectHideFlags: 0
@@ -63701,6 +63760,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!1 &4853969520175688408
 GameObject:
   m_ObjectHideFlags: 0
@@ -75701,6 +75761,7 @@ MonoBehaviour:
   locomotionToggleInput: 0e000000
   LocomotionToggleAction: {fileID: 3512515067727415170, guid: e39f4b35a6db18348b41eb0262520e69,
     type: 3}
+  locomoTypeText: {fileID: 0}
 --- !u!1 &6066469697970544604
 GameObject:
   m_ObjectHideFlags: 0
@@ -76757,6 +76818,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!1 &6155032585146338234
 GameObject:
   m_ObjectHideFlags: 0
@@ -85220,6 +85282,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!1 &7081065265451109559
 GameObject:
   m_ObjectHideFlags: 0
@@ -85566,6 +85629,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!136 &7130124195268021157
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -105411,6 +105475,7 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
+  isTouch: 0
 --- !u!114 &8991264975360684986
 MonoBehaviour:
   m_ObjectHideFlags: 0

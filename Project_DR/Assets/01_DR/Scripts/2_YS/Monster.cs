@@ -408,10 +408,6 @@ public class Monster : MonoBehaviour
                     break;
 
                 case State.STUN:
-                    isStun = true;
-                    Debug.Log($"state:{state}");
-                    nav.isStopped = true;
-                    Debug.Log("nav.isStopped: " + nav.isStopped);
                     break;
                     
                 case State.DIE:
@@ -434,9 +430,11 @@ public class Monster : MonoBehaviour
         {
             if (damageable.Health >= 0)
             {
-                damageable.Health--;
-
-                StartCoroutine(OnStun());
+                anim.SetTrigger(hashHit);
+                
+                state = State.STUN;
+                Debug.Log($"state:{state}");
+                
             }
 
             if (damageable.Health <= 0)
@@ -448,18 +446,18 @@ public class Monster : MonoBehaviour
         Debug.Log($"hp:{damageable.Health}");
     }
 
-    IEnumerator OnStun()
-    {
-        isStun = true;
+    //IEnumerator OnStun()
+    //{
+    //    isStun = true;
 
-        anim.SetTrigger(hashHit);
-        yield return new WaitForSeconds(0.5f);
+    //    anim.SetTrigger(hashHit);
+    //    yield return new WaitForSeconds(0.5f);
         
-        isStun = false;
-        Debug.Log($"isStun:{isStun}");
+    //    isStun = false;
+    //    Debug.Log($"isStun:{isStun}");
 
-        //넘어가는 로직이 필요한데...
-    }
+    //    //넘어가는 로직이 필요한데...
+    //}
 
    
 

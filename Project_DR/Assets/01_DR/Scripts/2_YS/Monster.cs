@@ -415,7 +415,7 @@ public class Monster : MonoBehaviour
                     nav.isStopped = true;
                     //Debug.Log("nav.isStopped: " + nav.isStopped);
                     anim.SetTrigger(hashDie);
-                    //Destroy(this.gameObject, 2.0f); //damageable 쪽에서 처리
+                    Destroy(this.gameObject, 1.3f); //damageable 쪽에서 처리
                     break;
             }
             

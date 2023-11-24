@@ -11,9 +11,9 @@ public class ItemColliderHandler : MonoBehaviour
      *************************************************/
     #region [+]
     private Rigidbody rigidBody = default;
-    private float stateResetDelay = 1f;     // 상태 초기화에 걸리는 시간
+    private float stateResetDelay = 5f;                     // 상태 초기화(슬롯에 보관)에 걸리는 시간
     private GrabbableHaptics grabbableHaptics = default;    // 그립 여부를 파악하기 위해 객체 생성
-
+    public GrabbableHaptics GrabbableHaptics => grabbableHaptics;
     #endregion
     /*************************************************
      *                Public Fields
@@ -38,10 +38,6 @@ public class ItemColliderHandler : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
     }
 
-    private void Update()
-    {
-    }
-
     // 아이템이 특정 물체를 통과했을 경우
     private void OnTriggerEnter(Collider other)
     {
@@ -64,15 +60,15 @@ public class ItemColliderHandler : MonoBehaviour
                 {
                     ItemData itemData = (ItemData)itemDataComponent.ItemData;
                     int id = itemData.ID;
-                    ItemManager.instance.InventoryCreateItem(id);
-                    ItemManager.instance.CreatePotionItem(id);
+                    ItemManager.instance.InventoryCreateItem(other.transform.position, id);
+                    //ItemManager.instance.CreatePotionItem(id);
                 }
                 else
                 {
                     // 디버그용
                     Debug.LogWarning("Item Error!");
-                    ItemManager.instance.InventoryCreateItem(5001);
-                    ItemManager.instance.CreatePotionItem(5001);
+                    ItemManager.instance.InventoryCreateItem(other.transform.position, 5001);
+                    //ItemManager.instance.CreatePotionItem(5001);
                 }
                 Destroy(gameObject);
             }
@@ -81,6 +77,13 @@ public class ItemColliderHandler : MonoBehaviour
                 Debug.Log("Out of range");
             }
         }
+    }
+
+    // 아이템이 슬롯에서 Exit했을 경우
+    private void OnTriggerExit(Collider other)
+    {
+        // 5초 후에 상태 초기화
+        //Coroutine(ResetState, 5f);
     }
 
     // 아이템이 바닥과 충돌 했을 경우
@@ -93,7 +96,7 @@ public class ItemColliderHandler : MonoBehaviour
             // 디버그
             Debug.Log("Floor");
 
-            // 1초 후에 상태 초기화 코루틴 실행
+            // n초 후에 상태 초기화 코루틴 실행
             Action func = ResetState;
             Coroutine(func, stateResetDelay);
         }

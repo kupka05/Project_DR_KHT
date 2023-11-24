@@ -29,7 +29,7 @@ public class ItemManager : MonoBehaviour
     }
 
     [SerializeField] private Inventory _inventory;
-
+    private float overItemResetStateDelay = 5f;     // 초과된 아이템 상태 리셋(슬롯 가능) 딜레이
     #endregion
     /*************************************************
     *                 Public Fields
@@ -54,7 +54,7 @@ public class ItemManager : MonoBehaviour
         ItemDataManager.InitItemDB();
 
         // 테스트용 포션 생성
-        CreateItem(5001, 10);
+        //CreateItem(5001, 10);
     }
 
     #endregion
@@ -68,32 +68,32 @@ public class ItemManager : MonoBehaviour
     }
 
     // 자동으로 타입을 찾아서 인벤토리에 아이템을 생성
-    public void InventoryCreateItem(int id, int amount = 1)
+    public void InventoryCreateItem(Vector3 handPos, int id, int amount = 1)
     {
         try
         {
             // 생성할 아이템이 Potion 타입일 경우
             if (ItemDataManager.SearchItemDB<PortionItemData>(id))
             {
-                InventoryCreatePotionItem(id, amount);
+                InventoryCreatePotionItem(handPos, id, amount);
             }
 
             // 생성할 아이템이 Bomb 타입일 경우
             else if (ItemDataManager.SearchItemDB<BombItemData>(id))
             {
-                InventoryCreateBombItem(id, amount);
+                InventoryCreateBombItem(handPos, id, amount);
             }
 
             // 생성할 아이템이 Material 타입일 경우
             else if (ItemDataManager.SearchItemDB<MaterialItemData>(id))
             {
-                InventoryCreateMaterialItem(id, amount);
+                InventoryCreateMaterialItem(handPos, id, amount);
             }
 
             // 생성할 아이템이 Quest 타입일 경우
             else 
             {
-                InventoryCreateQuestItem(id, amount);
+                InventoryCreateQuestItem(handPos, id, amount);
             }
         }
         catch (Exception ex)
@@ -103,35 +103,67 @@ public class ItemManager : MonoBehaviour
     }
 
     // 포션 아이템 생성
-    public void InventoryCreatePotionItem(int id, int amount = 1)
+    public void InventoryCreatePotionItem(Vector3 handPos, int id, int amount = 1)
     {
         PortionItemData data = ItemDataManager.SearchItemDB<PortionItemData>(id);
-        _inventory.Add(data, amount);
+
+        // 인벤토리에 아이템 추가 & 초과 수량 저장
+        int overCount = _inventory.Add(data, amount);
+        // 인벤토리가 가득 찼을 경우
+        if (CheckOverInventorySlot(overCount))
+        {
+            // 초과분 만큼 아이템 생성
+            CreateOverItem(handPos, id, overCount);
+        }
     }
 
     // 폭탄 아이템 생성
-    public void InventoryCreateBombItem(int id, int amount = 1)
+    public void InventoryCreateBombItem(Vector3 handPos, int id, int amount = 1)
     {
         BombItemData data = ItemDataManager.SearchItemDB<BombItemData>(id);
-        _inventory.Add(data, amount);
+
+        // 인벤토리에 아이템 추가 & 초과 수량 저장
+        int overCount = _inventory.Add(data, amount);
+        // 인벤토리가 가득 찼을 경우
+        if (CheckOverInventorySlot(overCount))
+        {
+            // 초과분 만큼 아이템 생성
+            CreateOverItem(handPos, id, overCount);
+        }
     }
 
     // 재료 아이템 생성
-    public void InventoryCreateMaterialItem(int id, int amount = 1)
+    public void InventoryCreateMaterialItem(Vector3 handPos, int id, int amount = 1)
     {
         MaterialItemData data = ItemDataManager.SearchItemDB<MaterialItemData>(id);
-        _inventory.Add(data, amount);
+
+        // 인벤토리에 아이템 추가 & 초과 수량 저장
+        int overCount = _inventory.Add(data, amount);
+        // 인벤토리가 가득 찼을 경우
+        if (CheckOverInventorySlot(overCount))
+        {
+            // 초과분 만큼 아이템 생성
+            CreateOverItem(handPos, id, overCount);
+        }
     }
 
     // 퀘스트 아이템 생성
-    public void InventoryCreateQuestItem(int id, int amount = 1)
+    public void InventoryCreateQuestItem(Vector3 handPos, int id, int amount = 1)
     {
         QuestItemData data = ItemDataManager.SearchItemDB<QuestItemData>(id);
-        _inventory.Add(data, amount);
+
+        // 인벤토리에 아이템 추가 & 초과 수량 저장
+        int overCount = _inventory.Add(data, amount);
+        // 인벤토리가 가득 찼을 경우
+        if (CheckOverInventorySlot(overCount))
+        {
+            // 초과분 만큼 아이템 생성
+            CreateOverItem(handPos, id, overCount);
+        }
     }
 
     // 자동으로 타입을 찾아서 아이템을 생성
-    public GameObject CreateItem(int id, int amount = 1)
+    public GameObject CreateItem(Vector3 handPos, int id, int amount = 1)
     {
         /////////////////////////////////////////////
         // amount 값이 변해도 하나만 생성하도록 고정함
@@ -142,25 +174,25 @@ public class ItemManager : MonoBehaviour
             // 생성할 아이템이 Potion 타입일 경우
             if (ItemDataManager.SearchItemDB<PortionItemData>(id))
             {
-                item = CreatePotionItem(id, amount);
+                item = CreatePotionItem(handPos, id, amount);
             }
 
             // 생성할 아이템이 Bomb 타입일 경우
             else if (ItemDataManager.SearchItemDB<BombItemData>(id))
             {
-                item =CreateBombItem(id, amount);
+                item = CreateBombItem(handPos, id, amount);
             }
 
             // 생성할 아이템이 Material 타입일 경우
             else if (ItemDataManager.SearchItemDB<MaterialItemData>(id))
             {
-                item =CreateMaterialItem(id, amount);
+                item = CreateMaterialItem(handPos, id, amount);
             }
 
             // 생성할 아이템이 Quest 타입일 경우
             else
             {
-                item = CreateQuestItem(id, amount);
+                item = CreateQuestItem(handPos, id, amount);
             }
 
             return item;
@@ -172,7 +204,7 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    public GameObject CreatePotionItem(int id, int amount = 1)
+    public GameObject CreatePotionItem(Vector3 handPos, int id, int amount = 1)
     {
         /////////////////////////////////////////////
         // amount 값이 변해도 하나만 생성하도록 고정함
@@ -186,31 +218,33 @@ public class ItemManager : MonoBehaviour
         ItemDataComponent itemData = 
             item.AddComponent<ItemDataComponent>();
         itemData.Initialize(data);
+        SetOverItem(handPos, item);
         //PortionItemData portionItemData = (PortionItemData)itemData.ItemData;
 
         return item;
     }
 
-    public GameObject CreateBombItem(int id, int amount = 1)
+    public GameObject CreateBombItem(Vector3 handPos, int id, int amount = 1)
     {
         /////////////////////////////////////////////
         // amount 값이 변해도 하나만 생성하도록 고정함
         /////////////////////////////////////////////
         BombItemData data = ItemDataManager.SearchItemDB<BombItemData>(id);
         GameObject item = Instantiate(data.Prefab);
-        item.name = data.Name;
         item.AddComponent<ItemColliderHandler>();
         // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
         // 정보를 등록함
         ItemDataComponent itemData =
             item.AddComponent<ItemDataComponent>();
         itemData.Initialize(data);
+        item.name = data.Name;
+        SetOverItem(handPos, item);
         //BombItemData bombItemData = (BombItemData)itemData.ItemData;
 
         return item;
     }
 
-    public GameObject CreateMaterialItem(int id, int amount = 1)
+    public GameObject CreateMaterialItem(Vector3 handPos, int id, int amount = 1)
     {
         /////////////////////////////////////////////
         // amount 값이 변해도 하나만 생성하도록 고정함
@@ -224,12 +258,13 @@ public class ItemManager : MonoBehaviour
         ItemDataComponent itemData =
             item.AddComponent<ItemDataComponent>();
         itemData.Initialize(data);
+        SetOverItem(handPos, item);
         //MaterialItemData materialItemData = (MaterialItemData)itemData.ItemData;
 
         return item;
     }
 
-    public GameObject CreateQuestItem(int id, int amount = 1)
+    public GameObject CreateQuestItem(Vector3 handPos, int id, int amount = 1)
     {
         /////////////////////////////////////////////
         // amount 값이 변해도 하나만 생성하도록 고정함
@@ -243,6 +278,7 @@ public class ItemManager : MonoBehaviour
         ItemDataComponent itemData =
             item.AddComponent<ItemDataComponent>();
         itemData.Initialize(data);
+        SetOverItem(handPos, item);
         //QuestItemData questItemData = (QuestItemData)itemData.ItemData;
 
         return item;
@@ -253,7 +289,42 @@ public class ItemManager : MonoBehaviour
     *                 Private Methods
     *************************************************/
     #region [+]
+    // 인벤토리가 가득 찼는지 체크하는 함수
+    private bool CheckOverInventorySlot(int num)
+    {
+        // 가득 찼을 경우
+        if (num > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
+    // 초과된 만큼 아이템을 생성하는 함수
+    private void CreateOverItem(Vector3 handPos, int id, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            CreateItem(handPos, id);
+        }
+    }
 
+    // 생성된 아이템의 설정을 변경하는 함수
+    private void SetOverItem(Vector3 handPos, GameObject item)
+    {
+        ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
+
+        // 슬롯에 넣을 수 없도록 아이템 상태 Stop으로 변경
+        itemColliderHandler.state = ItemColliderHandler.State.Stop;
+
+        // hand 위치로 포지션 이동
+        item.transform.position = handPos;
+
+        // n초 후에 슬롯에 들어가도록 설정
+        itemColliderHandler.Coroutine(itemColliderHandler.ResetState, overItemResetStateDelay);
+    }
     #endregion
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 568425037}
   - component: {fileID: 568425038}
+  - component: {fileID: 8797092599653547235}
   m_Layer: 0
   m_Name: Sting_HitPoint (2)
   m_TagString: Untagged
@@ -40,12 +41,25 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 568425036}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.24
   m_Height: 1.14
   m_Direction: 0
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8797092599653547235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568425036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8b439ff5b411f4e8f4b877b008d150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 517865391267453902}
 --- !u!1 &794035995
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,6 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 794035996}
   - component: {fileID: 794035997}
+  - component: {fileID: 3477530741871522936}
   m_Layer: 0
   m_Name: Sting_HitPoint
   m_TagString: Untagged
@@ -86,12 +101,25 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 794035995}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.4
   m_Height: 1.51
   m_Direction: 0
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3477530741871522936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794035995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8b439ff5b411f4e8f4b877b008d150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 517865391267453902}
 --- !u!1 &887393054
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,6 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 887393055}
   - component: {fileID: 887393056}
+  - component: {fileID: 7679488691868887015}
   m_Layer: 0
   m_Name: Sting_HitPoint (1)
   m_TagString: Untagged
@@ -132,12 +161,25 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 887393054}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.24
   m_Height: 1.14
   m_Direction: 0
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7679488691868887015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 887393054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8b439ff5b411f4e8f4b877b008d150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 517865391267453902}
 --- !u!1 &2652037704934797185
 GameObject:
   m_ObjectHideFlags: 0
@@ -1649,7 +1691,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!195 &2652037704290814978
 NavMeshAgent:
@@ -1727,7 +1769,19 @@ MonoBehaviour:
   RemoveBulletHolesOnDeath: 1
   onDamaged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3291982757527717295}
+        m_TargetAssemblyTypeName: Monster, Assembly-CSharp
+        m_MethodName: OnDeal
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onDestroyed:
     m_PersistentCalls:
       m_Calls: []

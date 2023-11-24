@@ -302,7 +302,7 @@ public class DataManager : MonoBehaviour
     // CSV 파일을 Local 변수에 Init하는 함수
     public void InitLocalDataTable()
     {
-        string directory = "CSVs/";
+        string directory = "";
         for (int i = 0; i < fileNames.Length; i++)
         {
             TextAsset data = Resources.Load<TextAsset>(directory + fileNames[i]);

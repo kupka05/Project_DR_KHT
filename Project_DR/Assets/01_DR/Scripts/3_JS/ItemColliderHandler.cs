@@ -61,14 +61,11 @@ public class ItemColliderHandler : MonoBehaviour
                     ItemData itemData = (ItemData)itemDataComponent.ItemData;
                     int id = itemData.ID;
                     ItemManager.instance.InventoryCreateItem(other.transform.position, id);
-                    //ItemManager.instance.CreatePotionItem(id);
                 }
                 else
                 {
                     // 디버그용
                     Debug.LogWarning("Item Error!");
-                    ItemManager.instance.InventoryCreateItem(other.transform.position, 5001);
-                    //ItemManager.instance.CreatePotionItem(5001);
                 }
                 Destroy(gameObject);
             }

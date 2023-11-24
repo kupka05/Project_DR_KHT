@@ -3,11 +3,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using BNG;
 public class ItemColliderHandler : MonoBehaviour
 {
     /*************************************************
      *                Private Fields
+     *************************************************/
+    #region [+]
+    private Rigidbody rigidBody = default;
+    private float stateResetDelay = 1f;     // 상태 초기화에 걸리는 시간
+    private GrabbableHaptics grabbableHaptics = default;    // 그립 여부를 파악하기 위해 객체 생성
+
+    #endregion
+    /*************************************************
+     *                Public Fields
      *************************************************/
     #region [+]
     public enum State
@@ -16,13 +25,6 @@ public class ItemColliderHandler : MonoBehaviour
         Processing,
         Stop
     }
-    private Rigidbody rigidBody = default;
-
-    #endregion
-    /*************************************************
-     *                Public Fields
-     *************************************************/
-    #region [+]
     public State state;
 
     #endregion
@@ -32,7 +34,12 @@ public class ItemColliderHandler : MonoBehaviour
     #region [+]
     private void Awake()
     {
+        grabbableHaptics = GetComponent<GrabbableHaptics>();
         rigidBody = GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
     }
 
     // 아이템이 특정 물체를 통과했을 경우
@@ -88,7 +95,7 @@ public class ItemColliderHandler : MonoBehaviour
 
             // 1초 후에 상태 초기화 코루틴 실행
             Action func = ResetState;
-            Coroutine(func, 1f);
+            Coroutine(func, stateResetDelay);
         }
     }
     #endregion
@@ -104,9 +111,9 @@ public class ItemColliderHandler : MonoBehaviour
     }
 
     // 물리 효과 토글
-    public void ToggleKinematic()
+    public void ChangeKinematic(bool isKinematic)
     {
-        rigidBody.isKinematic = !rigidBody.isKinematic;
+        rigidBody.isKinematic = isKinematic;
     }
 
     // 상태 초기화

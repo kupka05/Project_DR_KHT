@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using BNG;
 
 public class HandColliderHandler : MonoBehaviour
 {
@@ -14,7 +16,10 @@ public class HandColliderHandler : MonoBehaviour
         ProcessingTwo
     }
     [SerializeField] private State _state;
+
     private Rigidbody rigidBody = default;
+    private float chanageKinematicDelay = 3f;   // 물리 효과 종료 딜레이
+
     #endregion
     /*************************************************
      *                 Unity Events
@@ -28,7 +33,6 @@ public class HandColliderHandler : MonoBehaviour
 
     void Update()
     {
-        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -43,7 +47,7 @@ public class HandColliderHandler : MonoBehaviour
             {
                 Debug.Log($"name: {other.transform.parent.name}");
 
-                // 작업 상태로 변경
+                // 상태 변경
                 _state = State.ProcessingOne;
             }
             else
@@ -70,21 +74,21 @@ public class HandColliderHandler : MonoBehaviour
                 Transform slot = other.transform.parent;
                 GameObject item = ItemManager.instance.CreateItem(5001);
                 ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
-                Rigidbody itemRigid = item.GetComponent<Rigidbody>();
 
                 // 슬롯에 넣을 수 없도록 아이템 상태 Stop으로 변경
                 itemColliderHandler.state = ItemColliderHandler.State.Stop;
 
                 // 아이템 물리 효과 정지
-                itemRigid.isKinematic = true;
+                itemColliderHandler.ChangeKinematic(true);
 
                 // hand 위치로 포지션 이동
                 item.transform.position = transform.position;
 
                 // 플레이어가 아이템을 잡고 손을 떼엇을 경우 다시 들어가야 하므로,
                 // n 초 후에 물리 효과 실행 및 아이템 슬롯에 들어가도록 설정
-                itemColliderHandler.Coroutine(itemColliderHandler.ToggleKinematic, 3f);
-
+                // itemColliderHandler.ChangeKinematic(false)의 참조인 func 선언 및 초기화
+                Action func = () => itemColliderHandler.ChangeKinematic(false);
+                itemColliderHandler.Coroutine(func, chanageKinematicDelay);
             }
 
             // 왼쪽 컨트롤러에서 트리거 키를 눌렀을 경우

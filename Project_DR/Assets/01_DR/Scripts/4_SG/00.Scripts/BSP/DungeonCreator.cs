@@ -64,8 +64,9 @@ public class DungeonCreator : MonoBehaviour
     [Header("Prefabs")]
     public GameObject dungeonInspection;
     
-    public GameObject nextStagePotal;
+    public GameObject nextStageStone;
 
+    public GameObject nextStagePotal;
 
 
     // 부숴지는벽이 나올 확률 // 임시 : 추후 스프레드시트로 바뀔수 있음 11.09
@@ -168,7 +169,7 @@ public class DungeonCreator : MonoBehaviour
     /// </summary>
     /// <param name="floorParent">방의 갯수는 parent의 ChildrenCount로 계산</param>
     private void InItRoomsEvent(GameObject floorParent)
-    {                
+    {         // 나중에 Llst대신 Queue를 사용해서 EnQueue로 넣고 DeQueue로 뺴는 식으로 해서 Count로 Random돌려도 될거같음  
         int roomCount = floorParent.transform.childCount;
         int battleRoomCount = roomCount / 2;
         int eventRoom = roomCount - battleRoomCount;
@@ -1416,7 +1417,7 @@ public class DungeonCreator : MonoBehaviour
         // 프리펩을 클론딸 게임오브젝트
         GameObject nextStageStoneObj;
 
-        nextStageStoneObj = Instantiate(floorPrefabs[0], meshCenter, Quaternion.identity, dungeonFloor.transform);
+        nextStageStoneObj = Instantiate(nextStageStone, meshCenter, Quaternion.identity, dungeonFloor.transform);
 
         // 이후 스프레트 시트로 바뀔수 있음        
         nextStageStoneObj.transform.localScale = cloneScale;

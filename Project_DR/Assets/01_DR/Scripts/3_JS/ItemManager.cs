@@ -131,107 +131,123 @@ public class ItemManager : MonoBehaviour
     }
 
     // 자동으로 타입을 찾아서 아이템을 생성
-    public void CreateItem(int id, int amount = 1)
+    public GameObject CreateItem(int id, int amount = 1)
     {
+        /////////////////////////////////////////////
+        // amount 값이 변해도 하나만 생성하도록 고정함
+        /////////////////////////////////////////////
         try
         {
+            GameObject item = default;
             // 생성할 아이템이 Potion 타입일 경우
             if (ItemDataManager.SearchItemDB<PortionItemData>(id))
             {
-                CreatePotionItem(id, amount);
+                item = CreatePotionItem(id, amount);
             }
 
             // 생성할 아이템이 Bomb 타입일 경우
             else if (ItemDataManager.SearchItemDB<BombItemData>(id))
             {
-                CreateBombItem(id, amount);
+                item =CreateBombItem(id, amount);
             }
 
             // 생성할 아이템이 Material 타입일 경우
             else if (ItemDataManager.SearchItemDB<MaterialItemData>(id))
             {
-                CreateMaterialItem(id, amount);
+                item =CreateMaterialItem(id, amount);
             }
 
             // 생성할 아이템이 Quest 타입일 경우
             else
             {
-                CreateQuestItem(id, amount);
+                item = CreateQuestItem(id, amount);
             }
+
+            return item;
         }
         catch (Exception ex)
         {
             Debug.LogWarning($"오류 발생! / ItemManager.CreateItem() {ex.Message}");
+            return new GameObject();
         }
     }
 
-    public void CreatePotionItem(int id, int amount = 1)
+    public GameObject CreatePotionItem(int id, int amount = 1)
     {
-        for (int i = 0; i < amount; i++)
-        {
-            PortionItemData data = ItemDataManager.SearchItemDB<PortionItemData>(id);
-            GameObject item = Instantiate(data.Prefab);
-            item.name = data.Name;
-            item.AddComponent<ItemColliderHandler>();
-            // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
-            // 정보를 등록함
-            ItemDataComponent itemData = 
-                item.AddComponent<ItemDataComponent>();
-            itemData.Initialize(data);
-            //PortionItemData portionItemData = (PortionItemData)itemData.ItemData;
-        }
+        /////////////////////////////////////////////
+        // amount 값이 변해도 하나만 생성하도록 고정함
+        /////////////////////////////////////////////
+        PortionItemData data = ItemDataManager.SearchItemDB<PortionItemData>(id);
+        GameObject item = Instantiate(data.Prefab);
+        item.name = data.Name;
+        item.AddComponent<ItemColliderHandler>();
+        // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
+        // 정보를 등록함
+        ItemDataComponent itemData = 
+            item.AddComponent<ItemDataComponent>();
+        itemData.Initialize(data);
+        //PortionItemData portionItemData = (PortionItemData)itemData.ItemData;
+
+        return item;
     }
 
-    public void CreateBombItem(int id, int amount = 1)
+    public GameObject CreateBombItem(int id, int amount = 1)
     {
-        for (int i = 0; i < amount; i++)
-        {
-            BombItemData data = ItemDataManager.SearchItemDB<BombItemData>(id);
-            GameObject item = Instantiate(data.Prefab);
-            item.name = data.Name;
-            item.AddComponent<ItemColliderHandler>();
-            // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
-            // 정보를 등록함
-            ItemDataComponent itemData =
-                item.AddComponent<ItemDataComponent>();
-            itemData.Initialize(data);
-            //BombItemData bombItemData = (BombItemData)itemData.ItemData;
-        }
+        /////////////////////////////////////////////
+        // amount 값이 변해도 하나만 생성하도록 고정함
+        /////////////////////////////////////////////
+        BombItemData data = ItemDataManager.SearchItemDB<BombItemData>(id);
+        GameObject item = Instantiate(data.Prefab);
+        item.name = data.Name;
+        item.AddComponent<ItemColliderHandler>();
+        // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
+        // 정보를 등록함
+        ItemDataComponent itemData =
+            item.AddComponent<ItemDataComponent>();
+        itemData.Initialize(data);
+        //BombItemData bombItemData = (BombItemData)itemData.ItemData;
+
+        return item;
     }
 
-    public void CreateMaterialItem(int id, int amount = 1)
+    public GameObject CreateMaterialItem(int id, int amount = 1)
     {
-        for (int i = 0; i < amount; i++)
-        {
-            MaterialItemData data = ItemDataManager.SearchItemDB<MaterialItemData>(id);
-            GameObject item = Instantiate(data.Prefab);
-            item.name = data.Name;
-            item.AddComponent<ItemColliderHandler>();
-            // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
-            // 정보를 등록함
-            ItemDataComponent itemData =
-                item.AddComponent<ItemDataComponent>();
-            itemData.Initialize(data);
-            //MaterialItemData materialItemData = (MaterialItemData)itemData.ItemData;
-        }
+        /////////////////////////////////////////////
+        // amount 값이 변해도 하나만 생성하도록 고정함
+        /////////////////////////////////////////////
+        MaterialItemData data = ItemDataManager.SearchItemDB<MaterialItemData>(id);
+        GameObject item = Instantiate(data.Prefab);
+        item.name = data.Name;
+        item.AddComponent<ItemColliderHandler>();
+        // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
+        // 정보를 등록함
+        ItemDataComponent itemData =
+            item.AddComponent<ItemDataComponent>();
+        itemData.Initialize(data);
+        //MaterialItemData materialItemData = (MaterialItemData)itemData.ItemData;
+
+        return item;
     }
 
-    public void CreateQuestItem(int id, int amount = 1)
+    public GameObject CreateQuestItem(int id, int amount = 1)
     {
-        for (int i = 0; i < amount; i++)
-        {
-            QuestItemData data = ItemDataManager.SearchItemDB<QuestItemData>(id);
-            GameObject item = Instantiate(data.Prefab);
-            item.name = data.Name;
-            item.AddComponent<ItemColliderHandler>();
-            // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
-            // 정보를 등록함
-            ItemDataComponent itemData =
-                item.AddComponent<ItemDataComponent>();
-            itemData.Initialize(data);
-            //QuestItemData questItemData = (QuestItemData)itemData.ItemData;
-        }
+        /////////////////////////////////////////////
+        // amount 값이 변해도 하나만 생성하도록 고정함
+        /////////////////////////////////////////////
+        QuestItemData data = ItemDataManager.SearchItemDB<QuestItemData>(id);
+        GameObject item = Instantiate(data.Prefab);
+        item.name = data.Name;
+        item.AddComponent<ItemColliderHandler>();
+        // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
+        // 정보를 등록함
+        ItemDataComponent itemData =
+            item.AddComponent<ItemDataComponent>();
+        itemData.Initialize(data);
+        //QuestItemData questItemData = (QuestItemData)itemData.ItemData;
+
+        return item;
     }
+
     #endregion
     /*************************************************
     *                 Private Methods

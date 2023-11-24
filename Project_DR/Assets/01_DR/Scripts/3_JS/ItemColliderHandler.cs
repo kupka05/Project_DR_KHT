@@ -1,4 +1,5 @@
 using Rito.InventorySystem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +10,21 @@ public class ItemColliderHandler : MonoBehaviour
      *                Private Fields
      *************************************************/
     #region [+]
-    private enum State
+    public enum State
     {
         Default = 0,
-        Processing
+        Processing,
+        Stop
     }
-    [SerializeField] private State _state;
     private Rigidbody rigidBody = default;
+
+    #endregion
+    /*************************************************
+     *                Public Fields
+     *************************************************/
+    #region [+]
+    public State state;
+
     #endregion
     /*************************************************
      *                 Unity Events
@@ -30,7 +39,7 @@ public class ItemColliderHandler : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // 대상이 아이템 슬롯일 경우
-        if (other.CompareTag("ItemSlot") && _state == State.Default)
+        if (other.CompareTag("ItemSlot") && state == State.Default)
         {
             Debug.Log($"name: {other.transform.parent.name}");
             // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우
@@ -39,7 +48,7 @@ public class ItemColliderHandler : MonoBehaviour
                 other.GetComponent<RectTransform>()) == true)
             {
                 // 작업 상태로 변경
-                _state = State.Processing;
+                state = State.Processing;
 
                 ItemDataComponent itemDataComponent = gameObject.GetComponent<ItemDataComponent>();
 
@@ -53,6 +62,8 @@ public class ItemColliderHandler : MonoBehaviour
                 }
                 else
                 {
+                    // 디버그용
+                    Debug.LogWarning("Item Error!");
                     ItemManager.instance.InventoryCreateItem(5001);
                     ItemManager.instance.CreatePotionItem(5001);
                 }
@@ -63,6 +74,45 @@ public class ItemColliderHandler : MonoBehaviour
                 Debug.Log("Out of range");
             }
         }
+    }
+
+    // 아이템이 바닥과 충돌 했을 경우
+    private void OnCollisionEnter(Collision collision)
+    {
+        // 아이템을 슬롯에서 꺼낼 때 Stop 상태로 변경된다.
+        // Stop 상태에서 바닥과 충돌했을 경우
+        if (collision.collider.CompareTag("Floor") && state == State.Stop)
+        {
+            // 디버그
+            Debug.Log("Floor");
+
+            // 1초 후에 상태 초기화 코루틴 실행
+            Action func = ResetState;
+            Coroutine(func, 1f);
+        }
+    }
+    #endregion
+
+    /*************************************************
+     *                Public Methods
+     *************************************************/
+    #region [+]
+    // 함수를 코루틴으로 실행함
+    public void Coroutine(Action func, float delay)
+    {
+        StartCoroutine(RunCoroutineFunction(func, delay));
+    }
+
+    // 물리 효과 토글
+    public void ToggleKinematic()
+    {
+        rigidBody.isKinematic = !rigidBody.isKinematic;
+    }
+
+    // 상태 초기화
+    public void ResetState()
+    {
+        state = State.Default;
     }
 
     #endregion
@@ -78,6 +128,20 @@ public class ItemColliderHandler : MonoBehaviour
         return isVisible;
     }
 
+    #endregion
+    /*************************************************
+     *                   Coroutines
+     *************************************************/
+    #region [+]
+    // 코루틴에 함수를 넣어서 실행하는 코루틴 함수
+    public IEnumerator RunCoroutineFunction(Action func, float delay)
+    {
+        // 대기
+        yield return new WaitForSeconds(delay);
+
+        // 받아온 함수 실행
+        func();
+    }
 
     #endregion
 }

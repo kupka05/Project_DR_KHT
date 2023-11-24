@@ -33,6 +33,7 @@ public class SkillManager : MonoBehaviour
     [Header("TeraDrill")]
     public float TD_collDown;       // 스킬 쿨다운
     public float TD_drillSize;      // 드릴 크기 증가
+    public float TD_drillDistance;
     IEnumerator teradrillRoutine;
 
     [Header("GrinderDrill")]
@@ -87,6 +88,7 @@ public class SkillManager : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             drills[i].GetComponent<RaycastWeaponDrill>().drillHead.transform.localScale = new Vector3(TD_drillSize, TD_drillSize, TD_drillSize);
+            drills[i].GetComponent<RaycastWeaponDrill>().MaxRange = 0.5f * TD_drillSize;
         }
         Damage.instance.isTeradrill = true;
     }
@@ -98,6 +100,7 @@ public class SkillManager : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             drills[i].GetComponent<RaycastWeaponDrill>().drillHead.transform.localScale = Vector3.one;
+            drills[i].GetComponent<RaycastWeaponDrill>().MaxRange = 0.5f;
         }
         Damage.instance.isTeradrill = false;
     }
@@ -130,14 +133,18 @@ public class SkillManager : MonoBehaviour
         while (0 <= GD_collDown)
         {
             GD_collDown -= 1f * Time.deltaTime;
+            
             if (GD_collDown <= 0)
-            { GD_collDown = 0; }
+            { 
+                GD_collDown = 0;
+                DeActiveGrinderDrill();
+            }
+            
             grinderSlider.value = GD_collDown;
             grinderVal.text = string.Format("" + GD_collDown);
 
             yield return null;
         }
-        DeActiveGrinderDrill();
     }
     // 드릴 연마 스킬 시전
     private void ActiveGrinderDrill()

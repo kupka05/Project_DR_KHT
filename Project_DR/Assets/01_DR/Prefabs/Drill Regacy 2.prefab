@@ -2180,6 +2180,7 @@ GameObject:
   - component: {fileID: 3095930890634181592}
   - component: {fileID: 3555177097017120675}
   - component: {fileID: 129725741452043816}
+  - component: {fileID: 1353273575700889536}
   m_Layer: 2
   m_Name: model_1_Mesh1
   m_TagString: Weapon
@@ -2252,6 +2253,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1353273575700889536
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6824032687766064725}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2624836706733999201, guid: 44af9176b40037d4a84e9d8100473f9c, type: 3}
 --- !u!1 &7102724552721124383
 GameObject:
   m_ObjectHideFlags: 0
@@ -3071,8 +3086,9 @@ GameObject:
   - component: {fileID: 3038501380516454709}
   - component: {fileID: 175642213109327402}
   - component: {fileID: 747878795694139402}
+  - component: {fileID: 2427799753264454126}
   m_Layer: 9
-  m_Name: Drill
+  m_Name: Drill Regacy 2
   m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3703,6 +3719,20 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!136 &2427799753264454126
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8768672552246940888}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  m_Radius: 0.095
+  m_Height: 0.38
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0.1}
 --- !u!1 &9088329491147949960
 GameObject:
   m_ObjectHideFlags: 0

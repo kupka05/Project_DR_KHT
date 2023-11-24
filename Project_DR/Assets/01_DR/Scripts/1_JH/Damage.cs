@@ -56,7 +56,7 @@ public class Damage : MonoBehaviour
         //Debug.Log("치명타 확률" + critChance +"+"+ grinderCritChance + "이번 확률 :" + val);
         float _critIncrease = critChance + _grinderCritChance <= val ? 0 : critIncrease ;
 
-        Debug.Log(_damage + " * = (1 + " + _teraIncrease + " ) * ( 1 + (" + _critIncrease + " + " + _grinderIncrease + " + " + _landingIncrease + ")");
+        //Debug.Log(_damage + " * = (1 + " + _teraIncrease + " ) * ( 1 + (" + _critIncrease + " + " + _grinderIncrease + " + " + _landingIncrease + ")");
         //공격 계산식 = {기본 공격력*(1+테라드릴 증가)}*{1+(치명타 배율+드릴 연마 배율+랜딩 스킬 배율)}
         _damage *= (1 + _teraIncrease) * (1 + (_critIncrease + _grinderIncrease + _landingIncrease));
 

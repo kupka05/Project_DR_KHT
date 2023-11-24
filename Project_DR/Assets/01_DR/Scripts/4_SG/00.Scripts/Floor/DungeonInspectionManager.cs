@@ -8,9 +8,10 @@ public class DungeonInspectionManager : MonoBehaviour
 {
     Coroutine coroutine;
     DungeonCreator creator = null;
+    // 던전 생성이 끝났는지 확인해줄 변수 -> 생성중에 다시생성시 오류생김 방지
+    public bool isCreateDungeonEnd = false;
     // 현재 재생성 하고 있는중인지 체크하는 변수(코루틴 내부에서만 값이 바뀔거임)
     private bool isTryDungeonCreate = false;
-
     public static DungeonInspectionManager dungeonManagerInstance;
     private void Awake()
     {
@@ -24,16 +25,23 @@ public class DungeonInspectionManager : MonoBehaviour
 
     public void CheckDungeonReCreating()
     {
-        if(isTryDungeonCreate == false)
+        if(isTryDungeonCreate == false && isCreateDungeonEnd == true)
         {
             coroutine = StartCoroutine(TryDungeonReCreate());
         }
         else
         {
-            return;
+            ReCheckCheckDungeonReCreating();
         }
         
     }       // CheckDungeonReCreating()
+
+    // 위에 곂쳤을때에 들어왔는데 던전 생성 덜되었을떄에 한프레임뒤에 다시 체크하도록 제작
+    IEnumerator ReCheckCheckDungeonReCreating()
+    {
+        yield return null;
+        CheckDungeonReCreating();
+    }   // ReCheckCheckDungeonReCreating()
 
     IEnumerator TryDungeonReCreate()
     {
@@ -45,7 +53,8 @@ public class DungeonInspectionManager : MonoBehaviour
 
         creator.CreateDungeon();
         isTryDungeonCreate = false;
+        isCreateDungeonEnd = false;
         StopAllCoroutines();
-    }
+    }       // TryDungeonReCreate()
 
 }       // Class

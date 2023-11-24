@@ -1,7 +1,10 @@
+using Rito.InventorySystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEditor.Searcher.SearcherWindow.Alignment;
@@ -77,7 +80,8 @@ public class DungeonCreator : MonoBehaviour
     List<Vector3Int> possibleWallHorizontalPosition;
     List<Vector3Int> possibleWallVerticalPosition;
 
-
+    // 커스텀 방 이후 제작된 bsp방을 관리할 List
+    List<Transform> bspRoom = new List<Transform>();
     void Start()
     {
         // 던전 생성 시작
@@ -150,22 +154,55 @@ public class DungeonCreator : MonoBehaviour
 
         NextStageRoomCreate(bossRoomCornerPos);
 
-        // BSP 각 방 셋팅
-        Debug.Log(floorParent.transform.childCount);
+        // BSP 각 방 셋팅        
         InItRoomsEvent(floorParent);
         
 
+
         //Debug.Log("던전 생성 끝");
+        DungeonInspectionManager.dungeonManagerInstance.isCreateDungeonEnd = true;
     }   // CreateDungeon()
 
     /// <summary>
-    /// 각방에 이벤트 설정 1. 전투 2. 이벤트
+    /// 각방에 이벤트 : 전투 or 이벤트 무작위로 넣어줌
     /// </summary>
     /// <param name="floorParent">방의 갯수는 parent의 ChildrenCount로 계산</param>
     private void InItRoomsEvent(GameObject floorParent)
-    {
+    {                
         int roomCount = floorParent.transform.childCount;
-        
+        int battleRoomCount = roomCount / 2;
+        int eventRoom = roomCount - battleRoomCount;
+
+        for (int i = 0; i < floorParent.transform.childCount; i++)
+        {       // List에 bsp의방 Transform을 Add
+            bspRoom.Add(floorParent.transform.GetChild(i));
+        }
+        // clone으로 만들어서 하나씩 remove하면서 각자 방에 넣어줄 예정
+        List<Transform> bspListClone = bspRoom;
+        Debug.Log($"ListCount : {bspListClone.Count}");
+        //Debug.Log($"event -> {eventRoom} Battle -> {battleRoomCount}");
+        while (battleRoomCount != 0 || eventRoom != 0)
+        {
+            int randomIdx = UnityEngine.Random.Range(0, bspListClone.Count);
+            int randomEvent = UnityEngine.Random.Range(0, 2);       // 0 ~ 1
+
+            if(randomEvent == 0 && battleRoomCount != 0)
+            {
+                bspListClone[randomIdx].AddComponent<BattleRoom>();
+                battleRoomCount -= 1;
+                bspListClone.Remove(bspListClone[randomIdx]);
+            }
+            else if(randomEvent == 1 && eventRoom != 0)
+            {
+                bspListClone[randomIdx].AddComponent<EventRoom>();
+                eventRoom -= 1;
+                bspListClone.Remove(bspListClone[randomIdx]);
+            }
+        }
+            Debug.LogFormat("각방 이벤트 선정 끝");
+
+
+
     }       // InItRoomsEvent()
 
     /// <summary>

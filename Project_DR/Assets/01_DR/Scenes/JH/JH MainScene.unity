@@ -10440,6 +10440,7 @@ MonoBehaviour:
   onRespawn:
     m_PersistentCalls:
       m_Calls: []
+  stun: 0
 --- !u!23 &1250791380
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11767,6 +11768,7 @@ MonoBehaviour:
   onRespawn:
     m_PersistentCalls:
       m_Calls: []
+  stun: 0
 --- !u!23 &1531979375
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -20258,6 +20260,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Dummy
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169530082974379608, guid: f3ee51265c0e22c418e6b97ab07eec66,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 9169530082974610035, guid: f3ee51265c0e22c418e6b97ab07eec66,
         type: 3}

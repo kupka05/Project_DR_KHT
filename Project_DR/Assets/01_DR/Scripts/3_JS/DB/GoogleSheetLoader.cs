@@ -18,8 +18,10 @@ public class GoogleSheetLoader : MonoBehaviour
         "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
 
         // JH
-        "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table"
+        "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table",
 
+        //YS
+        "Monster_Table"
     };
 
     // 코루틴에서 데이터를 반환하고
@@ -29,9 +31,6 @@ public class GoogleSheetLoader : MonoBehaviour
     // 모든 데이터가 데이터 매니저에 등록되었는지
     // 상태를 알려주는 변수
     public static bool isDone = false;
-
-    // 데이터가 전부 로드되면 넘어갈 다음 씬 이름
-    [SerializeField] private string sceneName = default;
 
     private void Start()
     {
@@ -77,8 +76,5 @@ public class GoogleSheetLoader : MonoBehaviour
 
         // 로딩 완료 상태 변경
         isDone = true;
-
-        // 씬을 불러옴
-        SceneManager.LoadScene(sceneName);
     }
 }

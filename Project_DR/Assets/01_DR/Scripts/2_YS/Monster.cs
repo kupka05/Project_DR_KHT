@@ -1,11 +1,12 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+
 using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.UI.GridLayoutGroup;
 
 
 public class Monster : MonoBehaviour
@@ -22,6 +23,11 @@ public class Monster : MonoBehaviour
 
     public State state = State.IDLE;
 
+    public enum MonsterGroup
+    {
+        NORMAL,
+        ELITE
+    }
 
     public enum Type
     {
@@ -32,6 +38,18 @@ public class Monster : MonoBehaviour
         SIMPLE_FUNGI,
         SIMPLE_SPOOK
     }
+
+    //[System.Serializable]
+    //public class MonsterData
+    //{
+    //    public Type MonsterType { get; set; }
+    //    public MonsterGroup MonsterGroup { get; set; }
+    //}
+
+    //public MonsterData monsterData = new MonsterData();
+
+    public int monsterId;
+
     public Type monsterType = Type.HUMAN_ROBOT;
 
     [Header("몬스터 원거리 관련")]
@@ -39,12 +57,17 @@ public class Monster : MonoBehaviour
     public GameObject monsterBullet;
 
     [Header("몬스터 테이블")]
+    
     public float hp = default;       //체력이랑 damageble 보내준다
     public float attack = default;
-    public float attDelay = default;   //공격간격
-    public float speed = default;
+    public float attDelay = default;   //몬스터 공격간격 
+    public float exp = default;
+    public float speed = default;      //몬스터 이동속도
     public float recRange = 30.0f;   //pc 인식범위
     public float attRange = 2.0f;   //pc 공격범위
+    public float stunDelay = 1f;
+    public float stunCount = default;  //경직 횟수, 일반 몬스터는 필요 없음
+    //몬스터 이름도 추가될 예정
 
     [Header("트랜스폼")]
     public Transform monsterTr;
@@ -54,8 +77,11 @@ public class Monster : MonoBehaviour
     public Animator anim;
     public Rigidbody rigid;
     public NavMeshAgent nav;
+   
 
-    Damageable damageable;
+    public DamageCollider[] damageCollider;
+
+    public Damageable damageable;
 
     public readonly int hashRun = Animator.StringToHash("isRun");
 
@@ -79,10 +105,12 @@ public class Monster : MonoBehaviour
     public bool isDie = false;
     public bool isStun = false;
 
+    IEnumerator stunRoutine; // 스턴 루틴
+
     // Start is called before the first frame update
-    void Awake()
+    private void Start()
     {
-        //GetData();
+        GetData(monsterId);
 
         monsterTr = GetComponent<Transform>();
         playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
@@ -92,18 +120,35 @@ public class Monster : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
 
+        damageable.Health = hp;
+
+        foreach (DamageCollider damageCollider in damageCollider)
+        {
+            attack = damageCollider.Damage;
+        }
+
+
+        nav.speed = speed;
+
+        InitMonster();
+    }
+
+    public void InitMonster()
+    {
+        isDie = false;
+        nav.isStopped = false;
         StartCoroutine(MonsterState());
         StartCoroutine(MonsterAction());
     }
 
-    void Update()
+
+    void FixedUpdate()
     {
-        if (state == State.TRACE || state == State.ATTACK)
+        if (state != State.DIE)
         {
             // Look At Y 각도로만 기울어지게 하기
-            Vector3 targetPostition = new Vector3(playerTr.position.x,
-            this.transform.position.y,
-                                       playerTr.position.z);
+            Vector3 targetPostition = 
+                new Vector3(playerTr.position.x,this.transform.position.y, playerTr.position.z);
             this.transform.LookAt(targetPostition);
             //transform.LookAt(playerTr.position);
         }
@@ -111,30 +156,34 @@ public class Monster : MonoBehaviour
        
     }
 
-    //public void GetData()
-    //{
-    //    damageable.Health = (float)DataManager.GetData(7001, "HP"); //이름으로 가져오는거라서 순서상관 X 0번째 행  //변수 선언은 해야함
-    //    speed = (float)DataManager.GetData(3001, "MoveSpeed");
-    //    coolTime = (float)DataManager.GetData(3001, "Cooltime");
-    //    //traceDist = (float)DataManager.GetData(3001, "CheckRange");
+    public void GetData(int id)
+    {
+        hp = (float)DataManager.instance.GetData(id, "MonHP", typeof(float));  
+        exp = (float)DataManager.instance.GetData(id, "MonExp", typeof(float));
+        attack = (float)DataManager.instance.GetData(id, "MonAtt", typeof(float));
+        attDelay = (float)DataManager.instance.GetData(id, "MonDel", typeof(float));
+        speed = (float)DataManager.instance.GetData(id, "MonSpd", typeof(float));
+        attRange = (float)DataManager.instance.GetData(id, "MonAtr", typeof(float));
+        recRange = (float)DataManager.instance.GetData(id, "MonRer", typeof(float));
+        stunDelay = (float)DataManager.instance.GetData(id, "MonSTFDel", typeof(float));
+       
+    }
 
-    //    speedReduce = (float)DataManager.GetData(7041, "Speed_Reduce");
-    //}
 
-  
-
+    // 스테이트를 관리하는 코루틴
+    // 역할 : 스테이트를 변환만 해준다. 다른건 없음.
     IEnumerator MonsterState()
     {
-        while (!isDie && !isStun)
+        while (true)
         {
-            yield return new WaitForSeconds(0.1f);
+            // 체력이 0 이하면 죽은 상태로 전이
+            if (damageable.Health <= 0)
+                state = State.DIE;
 
-            if (state == State.DIE) yield break;
-
-            if (isStun)
-            {
+            // 스턴을 맞을 경우 스턴 상태로 전이
+            else if(isStun)
                 state = State.STUN;
-            }
+
             else
             {
                 float distance = Vector3.Distance(playerTr.position, monsterTr.position);
@@ -152,319 +201,315 @@ public class Monster : MonoBehaviour
                     state = State.IDLE;
                 }
             }
+            yield return new WaitForSeconds(0.1f);
         }
-
-        
-  
     }
 
+    // 몬스터의 상태에 따라 전이되는 액션
     IEnumerator MonsterAction()
     {
-        while (!isDie && !isStun)
+        while(true)
+        { 
+        switch (state)
         {
-          
-            switch (state)
-            {
-                case State.IDLE:
-                    //Debug.Log("IDLE state");
-                    nav.isStopped = true;
-                    anim.SetBool(hashRun, false);
-                    anim.SetBool(hashidle, true);
-                    //anim.SetBool(hashWalkingAttack, false);
-                    anim.SetBool(hashAttack, false);
-                    anim.SetBool(hashAttack2, false);
-                    anim.SetBool(hashAttack3, false);
-                    anim.SetBool(hashAttack4, false);
-                    break;
+            // IDLE 상태 =======================================================
+            case State.IDLE:
+                //Debug.Log("IDLE state");
+                nav.isStopped = true;
+                anim.SetBool(hashRun, false);
+                anim.SetBool(hashidle, true);
+                //anim.SetBool(hashWalkingAttack, false);
+                anim.SetBool(hashAttack, false);
+                anim.SetBool(hashAttack2, false);
+                anim.SetBool(hashAttack3, false);
+                anim.SetBool(hashAttack4, false);
+                break;
 
-                case State.TRACE:
-                    //Debug.Log("TRACE state");
-                    nav.isStopped = false;
-                    nav.SetDestination(playerTr.position);
-                    anim.SetBool(hashRun, true);
-                    anim.SetBool(hashWalkingAttack, false);
-                    anim.SetBool(hashAttackRuning, true);
-                    anim.SetBool(hashAttackRuning2, true);
-                    anim.SetBool(hashAttackRuning3, true);
-                    break;
+            // TRACE 상태 =======================================================
+            case State.TRACE:
+                //Debug.Log("TRACE state");
+                nav.isStopped = false;
+                nav.SetDestination(playerTr.position);
+                anim.SetBool(hashRun, true);
+                anim.SetBool(hashWalkingAttack, false);
+                anim.SetBool(hashAttackRuning, true);
+                anim.SetBool(hashAttackRuning2, true);
+                anim.SetBool(hashAttackRuning3, true);
+                break;
 
-                case State.ATTACK:
+            // ATTACK 상태 =======================================================
+            case State.ATTACK:
                     
-                    //Debug.Log("ATTACK state");
+                //Debug.Log("ATTACK state");
 
-                    switch (monsterType)
-                    {
-                        case Type.HUMAN_ROBOT:
+                switch (monsterType)
+                {
+                    case Type.HUMAN_ROBOT:
 
-                            anim.SetBool(hashWalkingAttack, true);
-                            anim.SetBool(hashAttack, true);
-                            yield return new WaitForSeconds(0.5f);
-                            anim.SetBool(hashidle, true);
-                            anim.SetBool(hashAttack, false);
-                            anim.SetBool(hashRun, false);
-                            yield return new WaitForSeconds(0.3f);
-                            break;
+                        anim.SetBool(hashWalkingAttack, true);
+                        anim.SetBool(hashAttack, true);
+                        yield return new WaitForSeconds(0.5f);
+                        anim.SetBool(hashidle, true);
+                        anim.SetBool(hashAttack, false);
+                        anim.SetBool(hashRun, false);
+                        yield return new WaitForSeconds(0.3f);
+                        break;
 
-                        case Type.HUMAN_GOLEM:
+                    case Type.HUMAN_GOLEM:
 
-                            int humanGolem = Random.Range(0, 3);
+                        int humanGolem = Random.Range(0, 3);
 
-                            switch (humanGolem)
-                            {
-                                case 0:
-                                    anim.SetBool(hashWalkingAttack, true);
-                                    anim.SetBool(hashAttack, true);
-                                    yield return new WaitForSeconds(1.3f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack, false);
-                                    anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                        switch (humanGolem)
+                        {
+                            case 0:
+                                anim.SetBool(hashWalkingAttack, true);
+                                anim.SetBool(hashAttack, true);
+                                yield return new WaitForSeconds(1.3f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack, false);
+                                anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                                case 1:
-                                    //anim.SetBool(hashWalkingAttack, true);
-                                    anim.SetBool(hashAttack2, true);
+                            case 1:
+                                //anim.SetBool(hashWalkingAttack, true);
+                                anim.SetBool(hashAttack2, true);
                                     
-                                    yield return new WaitForSeconds(1.3f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack2, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                                yield return new WaitForSeconds(1.3f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack2, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                                case 2:
-                                    //anim.SetBool(hashWalkingAttack, true);
-                                    anim.SetBool(hashAttack3, true);
-                                    yield return new WaitForSeconds(1.2f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack3, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                            case 2:
+                                //anim.SetBool(hashWalkingAttack, true);
+                                anim.SetBool(hashAttack3, true);
+                                yield return new WaitForSeconds(1.2f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack3, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                            }
-                            break;
+                        }
+                        break;
 
-                        case Type.BEAST_SPIDER:
+                    case Type.BEAST_SPIDER:
 
-                            int spider = Random.Range(0, 3);
+                        int spider = Random.Range(0, 3);
 
-                            switch (spider)
-                            {
-                                case 0:
-                                    anim.SetBool(hashWalkingAttack, true);
-                                    anim.SetBool(hashAttack, true);
-                                    yield return new WaitForSeconds(0.8f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                        switch (spider)
+                        {
+                            case 0:
+                                anim.SetBool(hashWalkingAttack, true);
+                                anim.SetBool(hashAttack, true);
+                                yield return new WaitForSeconds(0.8f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                                case 1:
-                                    anim.SetBool(hashAttack2, true);
-                                    yield return new WaitForSeconds(0.8f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack2, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                            case 1:
+                                anim.SetBool(hashAttack2, true);
+                                yield return new WaitForSeconds(0.8f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack2, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                                case 2:
-                                    anim.SetBool(hashAttack3, true);
-                                    yield return new WaitForSeconds(0.8f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack3, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                            case 2:
+                                anim.SetBool(hashAttack3, true);
+                                yield return new WaitForSeconds(0.8f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack3, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                            }
-                            break;
+                        }
+                        break;
 
-                        case Type.BEAST_STING:
+                    case Type.BEAST_STING:
 
-                            int sting = Random.Range(0, 3);
+                        int sting = Random.Range(0, 3);
 
-                            switch (sting)
-                            {
-                                case 0:
-                                    anim.SetBool(hashWalkingAttack, true);
-                                    anim.SetBool(hashAttack, true);
-                                    yield return new WaitForSeconds(0.8f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                        switch (sting)
+                        {
+                            case 0:
+                                anim.SetBool(hashWalkingAttack, true);
+                                anim.SetBool(hashAttack, true);
+                                yield return new WaitForSeconds(0.8f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                                case 1:
-                                    anim.SetBool(hashAttack2, true);
-                                    yield return new WaitForSeconds(0.8f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack2, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                            case 1:
+                                anim.SetBool(hashAttack2, true);
+                                yield return new WaitForSeconds(0.8f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack2, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                                case 2:
-                                    anim.SetBool(hashAttack3, true);
-                                    yield return new WaitForSeconds(0.8f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack3, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
-                                //case 3:
-                                //    anim.SetBool(hashAttack4, true);
-                                //    yield return new WaitForSeconds(0.8f);
-                                //    anim.SetBool(hashidle, true);
-                                //    anim.SetBool(hashAttack4, false);
-                                //    //anim.SetBool(hashWalkingAttack, false);
-                                //    anim.SetBool(hashRun, false);
-                                //    yield return new WaitForSeconds(0.3f);
-                                //    break;
-                            }
-                            break;
+                            case 2:
+                                anim.SetBool(hashAttack3, true);
+                                yield return new WaitForSeconds(0.8f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack3, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
+                            //case 3:
+                            //    anim.SetBool(hashAttack4, true);
+                            //    yield return new WaitForSeconds(0.8f);
+                            //    anim.SetBool(hashidle, true);
+                            //    anim.SetBool(hashAttack4, false);
+                            //    //anim.SetBool(hashWalkingAttack, false);
+                            //    anim.SetBool(hashRun, false);
+                            //    yield return new WaitForSeconds(0.3f);
+                            //    break;
+                        }
+                        break;
 
-                        case Type.SIMPLE_FUNGI:
+                    case Type.SIMPLE_FUNGI:
 
-                            int fungi = Random.Range(0, 2);
+                        int fungi = Random.Range(0, 2);
 
-                            switch (fungi)
-                            {
-                                case 0:
-                                    anim.SetBool(hashWalkingAttack, true);
-                                    anim.SetBool(hashAttack, true);
-                                    yield return new WaitForSeconds(0.2f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                        switch (fungi)
+                        {
+                            case 0:
+                                anim.SetBool(hashWalkingAttack, true);
+                                anim.SetBool(hashAttack, true);
+                                yield return new WaitForSeconds(0.2f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                                case 1:
-                                    anim.SetBool(hashAttack2, true);
-                                    yield return new WaitForSeconds(0.2f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack2, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
-                            }
-                            break;
+                            case 1:
+                                anim.SetBool(hashAttack2, true);
+                                yield return new WaitForSeconds(0.2f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack2, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
+                        }
+                        break;
 
-                        case Type.SIMPLE_SPOOK:
+                    case Type.SIMPLE_SPOOK:
 
-                            int spook = Random.Range(0, 3);
+                        int spook = Random.Range(0, 3);
 
-                            switch (spook)
-                            {
-                                case 0:
-                                    anim.SetBool(hashWalkingAttack, true);
-                                    anim.SetBool(hashAttack, true);
-                                    yield return new WaitForSeconds(0.7f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                        switch (spook)
+                        {
+                            case 0:
+                                anim.SetBool(hashWalkingAttack, true);
+                                anim.SetBool(hashAttack, true);
+                                yield return new WaitForSeconds(0.7f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                                case 1:
+                            case 1:
                                     
-                                    anim.SetBool(hashAttack2, true);
-                                    yield return new WaitForSeconds(0.7f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack2, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
+                                anim.SetBool(hashAttack2, true);
+                                yield return new WaitForSeconds(0.7f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack2, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
 
-                                case 2:
-                                    anim.SetBool(hashAttack3, true);
-                                    yield return new WaitForSeconds(0.7f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack3, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
-                            }
-                            break;
-                    }
-                    break;
+                            case 2:
+                                anim.SetBool(hashAttack3, true);
+                                yield return new WaitForSeconds(0.7f);
+                                anim.SetBool(hashidle, true);
+                                anim.SetBool(hashAttack3, false);
+                                //anim.SetBool(hashWalkingAttack, false);
+                                anim.SetBool(hashRun, false);
+                                yield return new WaitForSeconds(0.3f);
+                                break;
+                        }
+                        break;
+                }
+                break;
 
-                case State.STUN:
-                    isStun = true;
-                    Debug.Log($"state:{state}");
-                    nav.isStopped = true;
-                    Debug.Log("nav.isStopped: " + nav.isStopped);
-                    break;
                     
-                case State.DIE:
-                    isDie = true;
-                    nav.isStopped = true;
-                    //Debug.Log("nav.isStopped: " + nav.isStopped);
-                    anim.SetTrigger(hashDie);
-                    //Destroy(this.gameObject, 2.0f); //damageable 쪽에서 처리
-                    break;
+            case State.DIE:
+                isDie = true;
+                nav.isStopped = true;
+                //Debug.Log("nav.isStopped: " + nav.isStopped);
+                anim.SetTrigger(hashDie);
+
+                //Destroy(this.gameObject, 1.3f); //damageable 쪽에서 처리
+                yield break;
             }
-            
-            yield return new WaitForSeconds(0.1f);
 
+        yield return new WaitForSeconds(0.1f);
         }
+        
+
     }
 
     public void OnDeal()
     {
-        if (!isDie && !isStun)
+        if (isStun)
+            return;
+        if (state != State.DIE && state != State.STUN)
         {
             if (damageable.Health >= 0)
             {
-                damageable.Health--;
+                // 만약에 스턴루틴에 이미 다른 코루틴이 실행중인 경우
+                if(stunRoutine != null)
+                {
+                    StopCoroutine(stunRoutine);
+                    stunRoutine = null;
+                }
 
-                StartCoroutine(OnStun());
-            }
+                stunRoutine = StunDelay();
+                StartCoroutine(stunRoutine);
 
-            if (damageable.Health <= 0)
-            {
-                state = State.DIE;
-                //Debug.Log($"state:{state}");
+                Debug.Log($"state:{state}");
             }
         }
         Debug.Log($"hp:{damageable.Health}");
     }
-
-    IEnumerator OnStun()
+    // 스턴 딜레이
+    IEnumerator StunDelay()
     {
         isStun = true;
-
         anim.SetTrigger(hashHit);
-        yield return new WaitForSeconds(0.5f);
-        
+        damageable.stun = true;
+        yield return new WaitForSeconds(stunDelay);
         isStun = false;
-        Debug.Log($"isStun:{isStun}");
-
-        //넘어가는 로직이 필요한데...
+        damageable.stun = false;
+        yield break;
     }
 
    
-
-
-
     void OnDrawGizmos()
     {
         if (state == State.TRACE)
@@ -483,46 +528,7 @@ public class Monster : MonoBehaviour
 
     
 
-    //int GetAttackHash(int attackIndex)
-    //{
-    //    switch (attackIndex)
-    //    {
-    //        case 0: return hashAttack;
-    //        case 1: return hashAttack2;
-    //        case 2: return hashAttack3;
-    //        case 3: return hashAttack4;
-    //        default: return hashAttack;
-    //    }
-    //}
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if(other.CompareTag("test"))
-    //    {
-    //        RaycastWeaponDrill weaponDrill = other.GetComponent<RaycastWeaponDrill>();
-    //        OnDamage(weaponDrill.Damage);
-    //    }
-    //}
-
-    //public void OnDamage(float Damage)
-    //{
-    //    if (!isDie)
-    //    {
-    //        RaycastWeaponDrill weaponDrill = GetComponent<RaycastWeaponDrill>();
-    //        hp -= Damage;
-    //        anim.SetTrigger(hashHit);
-
-
-    //        if (hp <= 0)
-    //        {          
-
-    //            state = State.DIE;
-    //            //Debug.Log($"state:{state}");
-
-    //        }
-    //    }
-    //    Debug.Log($"hp:{hp}");
-    //}
+   
 
 }
 

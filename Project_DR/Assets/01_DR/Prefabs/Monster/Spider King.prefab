@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 682895422}
   - component: {fileID: 682895423}
+  - component: {fileID: 2997131762027512465}
   m_Layer: 0
   m_Name: spider_hitPoint (2)
   m_TagString: Untagged
@@ -46,6 +47,19 @@ CapsuleCollider:
   m_Height: 1.89
   m_Direction: 0
   m_Center: {x: 0, y: -0.19, z: 0}
+--- !u!114 &2997131762027512465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682895421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8b439ff5b411f4e8f4b877b008d150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 6041716752347440668}
 --- !u!1 &1426643757
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,6 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1426643758}
   - component: {fileID: 1426643759}
+  - component: {fileID: 5563547626706334800}
   m_Layer: 0
   m_Name: spider_hitPoint
   m_TagString: Untagged
@@ -86,12 +101,25 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1426643757}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.56
   m_Height: 1.6
   m_Direction: 0
   m_Center: {x: 0.12, y: -0.02, z: 0}
+--- !u!114 &5563547626706334800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426643757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8b439ff5b411f4e8f4b877b008d150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 6041716752347440668}
 --- !u!1 &1794861417
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,6 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1794861418}
   - component: {fileID: 1794861419}
+  - component: {fileID: 1707928476389684340}
   m_Layer: 0
   m_Name: spider_hitPoint (1)
   m_TagString: Untagged
@@ -138,6 +167,19 @@ CapsuleCollider:
   m_Height: 1.89
   m_Direction: 1
   m_Center: {x: 0, y: -0.19, z: 0}
+--- !u!114 &1707928476389684340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1794861417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8b439ff5b411f4e8f4b877b008d150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 6041716752347440668}
 --- !u!1 &2007344343179049633
 GameObject:
   m_ObjectHideFlags: 0
@@ -753,20 +795,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  monsterId: 7004
   monsterType: 2
   bulletport: {fileID: 0}
   monsterBullet: {fileID: 0}
   hp: 0
   attack: 0
   attDelay: 0
+  exp: 0
   speed: 0
   recRange: 30
   attRange: 3.5
+  stunDelay: 1
+  stunCount: 0
   monsterTr: {fileID: 2007344343179077279}
   playerTr: {fileID: 0}
   anim: {fileID: 2007344343186327935}
   rigid: {fileID: 4463810638749152502}
   nav: {fileID: 7105239071218516308}
+  damageCollider:
+  - {fileID: 958297002537054432}
+  - {fileID: 958297000993922955}
+  - {fileID: 958297001914704943}
+  damageable: {fileID: 6041716752347440668}
   isDie: 0
   isStun: 0
 --- !u!114 &6041716752347440668
@@ -794,13 +845,26 @@ MonoBehaviour:
   RemoveBulletHolesOnDeath: 1
   onDamaged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 204670626296577417}
+        m_TargetAssemblyTypeName: Monster, Assembly-CSharp
+        m_MethodName: OnDeal
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onDestroyed:
     m_PersistentCalls:
       m_Calls: []
   onRespawn:
     m_PersistentCalls:
       m_Calls: []
+  stun: 0
 --- !u!1 &2007344343179049665
 GameObject:
   m_ObjectHideFlags: 0
@@ -2521,6 +2585,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 122373339}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &958297001914704943 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 122373339}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &716378132
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2631,6 +2707,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 716378132}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &958297002537054432 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 716378132}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1319731071
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2735,6 +2823,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}
+--- !u!114 &958297000993922955 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1319731071}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &958297000993922998 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,

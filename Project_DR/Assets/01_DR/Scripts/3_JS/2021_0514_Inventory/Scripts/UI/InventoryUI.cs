@@ -87,7 +87,7 @@ namespace Rito.InventorySystem
         [Space(16)]
         [SerializeField] private bool _mouseReversed = false; // 마우스 클릭 반전 여부
 
-        public global::BNG.UIPointer UIPointer; // UI 포인터
+        //public global::BNG.UIPointer UIPointer; // UI 포인터
         #endregion
         /***********************************************************************
         *                               Private Fields
@@ -139,23 +139,23 @@ namespace Rito.InventorySystem
         private void Update()
         {
             //_ped.position = Input.mousePosition;
-            _ped.position = UIPointer.publicUISystem.RightPointerTransform.position;
+            //_ped.position = UIPointer.publicUISystem.RightPointerTransform.position;
 
-            float convertX = Input.mousePosition.x - (_ped.position.x - Input.mousePosition.x);
-            float convertY = Input.mousePosition.y - (_ped.position.y - Input.mousePosition.y);
-            convertX = convertX / 2.000634366822615f;
-            convertY = convertY / 2.018859837119589f;
-            Vector2 convertedPos = new Vector2(convertX, convertY);
+            //float convertX = Input.mousePosition.x - (_ped.position.x - Input.mousePosition.x);
+            //float convertY = Input.mousePosition.y - (_ped.position.y - Input.mousePosition.y);
+            //convertX = convertX / 2.000634366822615f;
+            //convertY = convertY / 2.018859837119589f;
+            //Vector2 convertedPos = new Vector2(convertX, convertY);
 
-            _ped.position = Input.mousePosition;
-            OnPointerEnterAndExit();
+            //_ped.position = Input.mousePosition;
+            //OnPointerEnterAndExit();
             //if(_showTooltip) ShowOrHideItemTooltip();
             //Debug.Log($"0: Mouse Pos: {Input.mousePosition}");
             //Debug.Log($"0: Controller Pos: {_ped.position}");
             //Debug.Log($"0: Converted Pos: {convertedPos}");
-            OnPointerDown();
-            OnPointerDrag();
-            OnPointerUp();
+            //OnPointerDown();
+            //OnPointerDrag();
+            //OnPointerUp();
         }
 
         #endregion
@@ -395,35 +395,35 @@ namespace Rito.InventorySystem
         /// <summary> 슬롯에 클릭하는 경우 </summary>
         public void OnPointerDown()
         {
-            // Left Click : Begin Drag
-            if (global::BNG.InputBridge.Instance.RightTriggerDown)
-            {
-                _beginDragSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
+            //// Left Click : Begin Drag
+            //if (global::BNG.InputBridge.Instance.RightTriggerDown)
+            //{
+            //    _beginDragSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
 
-                // 아이템을 갖고 있는 슬롯만 해당
-                if (_beginDragSlot != null && _beginDragSlot.HasItem && _beginDragSlot.IsAccessible)
-                {
-                    //EditorLog($"Drag Begin : Slot [{_beginDragSlot.Index}]");
+            //    // 아이템을 갖고 있는 슬롯만 해당
+            //    if (_beginDragSlot != null && _beginDragSlot.HasItem && _beginDragSlot.IsAccessible)
+            //    {
+            //        //EditorLog($"Drag Begin : Slot [{_beginDragSlot.Index}]");
 
-                    // 위치 기억, 참조 등록
-                    _beginDragIconTransform = _beginDragSlot.IconRect.transform;
-                    _beginDragIconPoint = _beginDragIconTransform.position;
-                    Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
-                    _beginDragCursorPoint = rightControllerPos;
-                    //Debug.Log($"rightControlPos: {_beginDragCursorPoint}");
+            //        // 위치 기억, 참조 등록
+            //        _beginDragIconTransform = _beginDragSlot.IconRect.transform;
+            //        _beginDragIconPoint = _beginDragIconTransform.position;
+            //        Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
+            //        _beginDragCursorPoint = rightControllerPos;
+            //        //Debug.Log($"rightControlPos: {_beginDragCursorPoint}");
 
-                    // 맨 위에 보이기
-                    _beginDragSlotSiblingIndex = _beginDragSlot.transform.GetSiblingIndex();
-                    _beginDragSlot.transform.SetAsLastSibling();
+            //        // 맨 위에 보이기
+            //        _beginDragSlotSiblingIndex = _beginDragSlot.transform.GetSiblingIndex();
+            //        _beginDragSlot.transform.SetAsLastSibling();
 
-                    // 해당 슬롯의 하이라이트 이미지를 아이콘보다 뒤에 위치시키기
-                    _beginDragSlot.SetHighlightOnTop(false);
-                }
-                else
-                {
-                    _beginDragSlot = null;
-                }
-            }
+            //        // 해당 슬롯의 하이라이트 이미지를 아이콘보다 뒤에 위치시키기
+            //        _beginDragSlot.SetHighlightOnTop(false);
+            //    }
+            //    else
+            //    {
+            //        _beginDragSlot = null;
+            //    }
+            //}
 
             //// Right Click : Use Item
             //else if (Input.GetMouseButtonDown(_rightClick))
@@ -446,9 +446,9 @@ namespace Rito.InventorySystem
             {
                 //Debug.Log("1: TRUE");
                 // 위치 이동
-                Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
+                //Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
                 //Debug.Log($"Cursor Pos: {rightControllerPos}");
-                _beginDragIconTransform.position = (_beginDragIconPoint + rightControllerPos - _beginDragCursorPoint);
+                //_beginDragIconTransform.position = (_beginDragIconPoint + rightControllerPos - _beginDragCursorPoint);
                 //Debug.Log($"Current Pos: {rightControllerPos}");
                 //Debug.Log($"Dragged Pos: {_beginDragIconTransform.position}");
             }

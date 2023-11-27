@@ -7,7 +7,7 @@ public class SaveDataToFile
      *                 Private Methods
      *************************************************/
     #region [+]
-    private static string _fileName = "GameDataTable_";
+    private static string _fileName = "";
     #endregion
     /*************************************************
      *                 Public Methods
@@ -31,7 +31,8 @@ public class SaveDataToFile
 
     public static void WriteCsvToFile(string jsonData, string sheetName)
     {
-        string directory = "Resources/CSVs";
+#if UNITY_EDITOR
+        string directory = "Resources";
         string extension = ".csv";
         string filePath = Path.Combine(Application.dataPath, directory, _fileName + sheetName + extension);
 
@@ -43,6 +44,7 @@ public class SaveDataToFile
 
             Debug.Log($"{filePath} 경로에 CSV 데이터가 파일로 저장되었습니다.");
         }
+#endif
     }
     #endregion
 }

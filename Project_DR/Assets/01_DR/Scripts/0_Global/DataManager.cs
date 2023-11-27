@@ -70,12 +70,13 @@ public class DataManager : MonoBehaviour
     private string[] fileNames =
     {
         // JS
-        "GameDataTable_Item_Potion_Table", "GameDataTable_Item_Bomb_Table", "GameDataTable_Item_Material_Table",
-        "GameDataTable_Item_Quest_Table",
+        "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
 
         // JH
-        "GameDataTable_Player_Table", "GameDataTable_Drill_Table", "GameDataTable_Skill_Table",
-        "GameDataTable_SkillEffect_Table"
+        "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table",
+
+        //YS
+        "Monster_Table"
     };
 
     // dataTable에 ID로 접근하기 위해

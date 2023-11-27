@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 public struct MBTI
@@ -8,8 +9,16 @@ public struct MBTI
     public float N;
     public float F;
     public float P;
-
+    public MBTI SetMBTI(float i, float n, float f, float p)
+    {
+        I = i;
+        N = n;
+        F = f;
+        P = p;
+        return this;
+    }
 }
+
 public class MBTIManager : MonoBehaviour
 {
     public static MBTIManager Instance
@@ -25,17 +34,20 @@ public class MBTIManager : MonoBehaviour
         }
     }
 
+
     private static MBTIManager m_Instance; // 싱글톤이 할당될 static 변수    
 
 
   
-    public MBTI playerMBTI;
+    private MBTI playerMBTI;
 
-    [Header("Debug")]
+    [Header("PlayerMBTI")]
     public float I;
     public float N;
     public float F;
     public float P;
+    public TMP_Text debugTxt;
+
 
     // Start is called before the first frame update
     void Start()
@@ -55,11 +67,18 @@ public class MBTIManager : MonoBehaviour
         N = playerMBTI.N;
         F = playerMBTI.F;
         P = playerMBTI.P;
+
+        debugTxt.text = string.Format("I : " + I + ", N : " + N + ", F : " + F + ", P : " + P);
     }
 
     public void GetData()
     {
         
+    }
+    // 데이터를 서버에 업로드하는 부분
+    public void SetData()
+    {
+
     }
 
 

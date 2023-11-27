@@ -81,12 +81,15 @@ public class MBTIChecker : MonoBehaviour
 
 
     // 각 이벤트들
-
     private void GrabEvent()
     {
         if (checkCount-- < 0)
         {
             return;
+        }
+        else if (checkCount <= 0)
+        {
+            ActiveMBTI();
         }
     }
 

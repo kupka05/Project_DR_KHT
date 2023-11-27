@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     private ScreenText screenText;
 
     public string gameoverText;
+    public float testNum;
 
     void Start()
     {
@@ -40,6 +41,8 @@ public class GameManager : MonoBehaviour
         {
             input = player.transform.parent.GetComponent<InputBridge>();
         }
+        Debug.Log(testNum);
+
     }       // Start()
 
 

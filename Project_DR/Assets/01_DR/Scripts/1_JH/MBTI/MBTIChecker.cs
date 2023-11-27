@@ -15,8 +15,8 @@ public class MBTIChecker : MonoBehaviour
     public float checkTime; // 체크 시간
     public bool isDestroy; // 파괴 여부
 
-    [Header("MBTI Value")]
     MBTI checkerMBTI;
+    [Header("MBTI Value")]
     public float I;
     public float N;
     public float F;
@@ -45,7 +45,7 @@ public class MBTIChecker : MonoBehaviour
     public void ActiveMBTI()
     {
         // MBTI 계산
-        ResultMBTI(mbti, checkerMBTI);
+        MBTIManager.Instance.ResultMBTI(checkerMBTI);
 
         // 오브젝트 삭제 상태이면 삭제
         if (isDestroy)
@@ -53,57 +53,38 @@ public class MBTIChecker : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    // MBTI를 계산하고 반환하는 메서드
-    MBTI ResultMBTI(MBTI playerMBTI, MBTI value)
-    {
-        return
-        playerMBTI.SetMBTI(
-        ResultValue(playerMBTI.I, value.I),
-        ResultValue(playerMBTI.N, value.N),
-        ResultValue(playerMBTI.F, value.F),
-        ResultValue(playerMBTI.P, value.P)
-        );
-    }
-
-    // 각 값을 연산해주는 메서드
-    float ResultValue(float preValue, float value)
-    {
-        if(value == 0)
-        { return 0; }
-
-        else if (0 < value)
-        {
-            return preValue + value <= 100 ? preValue + value : 100;
-        }
-        else
-            return preValue - value >= 0 ? preValue - value : 100;
-    }
 
 
     // 각 이벤트들
-    private void GrabEvent()
+    public void GrabEvent()
     {
-        if (checkCount-- < 0)
+        if (checkCount < 0)
         {
             return;
         }
-        else if (checkCount <= 0)
+
+        checkCount--;
+
+        if (checkCount == 0)
         {
             ActiveMBTI();
         }
+        
+      
+       
     }
 
-    private void CollisionEvent()
+    public void CollisionEvent()
     {
 
     }
 
-    private void SightEvent()
+    public void SightEvent()
     {
 
     }
 
-    private void ChoiceEvent() 
+    public void ChoiceEvent() 
     { 
 
     }

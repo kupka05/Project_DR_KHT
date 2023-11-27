@@ -73,57 +73,40 @@ public class MBTIManager : MonoBehaviour
 
     public void GetData()
     {
-        
+        playerMBTI.I = 50f;
+        playerMBTI.N = 50f;
+        playerMBTI.F = 50f;
+        playerMBTI.P = 50f;
     }
     // 데이터를 서버에 업로드하는 부분
     public void SetData()
     {
 
     }
-
-
-    // 각 MBTI의 값들을 더하거나 빼는 부분
-    public void IncreaseI(float value)
+    // MBTI를 계산하고 반환하는 메서드
+    public void ResultMBTI(MBTI value)
     {
-        Increase(playerMBTI.I += value);
-    }
-    public void DecreaseI(float value)
-    {
-        Decrease(playerMBTI.I -= value);
-    }
-    public void IncreaseN(float value)
-    {
-        Increase(playerMBTI.N += value);
-    }
-    public void DecreaseN(float value)
-    {
-        Decrease(playerMBTI.N -= value);
-    }
-    public void IncreaseF(float value)
-    {
-        Increase(playerMBTI.F += value);
-    }
-    public void DecreaseF(float value)
-    {
-        Decrease(playerMBTI.F -= value);
-    }
-    public void IncreaseP(float value)
-    {
-        Increase(playerMBTI.P += value);
-    }
-    public void DecreaseP(float value)
-    {
-        Decrease(playerMBTI.P -= value);
+        playerMBTI.SetMBTI(
+        ResultValue(I, value.I),
+        ResultValue(N, value.N),
+        ResultValue(F, value.F),
+        ResultValue(P, value.P)
+        );
     }
 
+    // 각 값을 연산해주는 메서드
+    float ResultValue(float preValue, float value)
+    {
+        UnityEngine.Debug.Log(preValue + ", " + value);
 
-    // 값 연산하는 부분
-    private float Increase(float value)
-    {
-        return value < 100 ? value : 100;
+        if (value == 0)
+        { return 0; }
+        else if (0 < value)
+        {
+            return preValue + value <= 100 ? preValue + value : 100;
+        }
+        else
+            return preValue + value >= 0 ? preValue + value : 0;
     }
-    private float Decrease(float value)
-    {
-        return value > 0 ? value : 0;
-    }
+
 }

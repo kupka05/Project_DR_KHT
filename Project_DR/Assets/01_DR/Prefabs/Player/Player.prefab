@@ -30820,6 +30820,7 @@ GameObject:
   - component: {fileID: 3163790248258526406}
   - component: {fileID: 3163790248258526405}
   - component: {fileID: 3163790248258526424}
+  - component: {fileID: 6757648436143502869}
   m_Layer: 2
   m_Name: Grabber
   m_TagString: Untagged
@@ -30893,7 +30894,19 @@ MonoBehaviour:
   FreshGrip: 1
   onGrabEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onAfterGrabEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -31033,6 +31046,19 @@ MonoBehaviour:
   RemoteCollisionLayers:
     serializedVersion: 2
     m_Bits: 1
+--- !u!114 &6757648436143502869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3163790248258526428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65047c7fac31a83499783ffeb2b4d270, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _state: 0
 --- !u!1 &3173366925099495254
 GameObject:
   m_ObjectHideFlags: 0
@@ -47782,6 +47808,7 @@ MonoBehaviour:
   onRespawn:
     m_PersistentCalls:
       m_Calls: []
+  stun: 0
 --- !u!114 &942874828167954386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69248,6 +69275,7 @@ GameObject:
   - component: {fileID: 6757648434215542745}
   - component: {fileID: 7248780721353992718}
   - component: {fileID: 5808190486002320340}
+  - component: {fileID: 5751810932310615319}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -69318,6 +69346,18 @@ MonoBehaviour:
   GD_drillSize: 0
   grinderSlider: {fileID: 4179340105282339888}
   grinderVal: {fileID: 9017304718343651377}
+--- !u!114 &5751810932310615319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6757648434215542744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eaac7802acfa814b9679e9d6512eca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6757648434419130985
 GameObject:
   m_ObjectHideFlags: 0
@@ -80816,7 +80856,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4941136537522152712
 RectTransform:
   m_ObjectHideFlags: 0

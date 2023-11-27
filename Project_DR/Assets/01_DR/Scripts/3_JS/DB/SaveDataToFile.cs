@@ -7,7 +7,7 @@ public class SaveDataToFile
      *                 Private Methods
      *************************************************/
     #region [+]
-    private static string _fileName = "GameDataTable_";
+    private static string _fileName = "";
     #endregion
     /*************************************************
      *                 Public Methods

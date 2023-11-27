@@ -22,7 +22,6 @@ public class GoogleSheetLoader : MonoBehaviour
 
         //YS
         "Monster_Table"
-
     };
 
     // 코루틴에서 데이터를 반환하고

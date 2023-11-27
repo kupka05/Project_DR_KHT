@@ -46,13 +46,13 @@ public class ItemManager : MonoBehaviour
     {
         // 파괴 방지
         DontDestroyOnLoad(this);
+
+        // 아이템 DB Init
+        ItemDataManager.InitItemDB();
     }
 
     private void Start()
     {
-        // 아이템 DB Init
-        ItemDataManager.InitItemDB();
-
         // 테스트용 포션 생성
         CreateItem(Vector3.zero, 5001);
     }

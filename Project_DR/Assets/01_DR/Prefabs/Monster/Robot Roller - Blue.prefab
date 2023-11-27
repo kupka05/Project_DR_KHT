@@ -15564,14 +15564,20 @@ MonoBehaviour:
   hp: 100
   attack: 0
   attDelay: 0
+  exp: 0
   speed: 0
   recRange: 20
   attRange: 2.3
+  stunDelay: 1
+  stunCount: 0
   monsterTr: {fileID: 5781229974145385596}
   playerTr: {fileID: 0}
   anim: {fileID: 5781229974137763666}
   rigid: {fileID: 5781229974144954181}
   nav: {fileID: 1924480271}
+  damageCollider:
+  - {fileID: 958297002008718128}
+  damageable: {fileID: 3329566814893935045}
   isDie: 0
   isStun: 0
 --- !u!195 &1924480271
@@ -15640,6 +15646,7 @@ MonoBehaviour:
   onRespawn:
     m_PersistentCalls:
       m_Calls: []
+  stun: 0
 --- !u!1 &5781229974145137866
 GameObject:
   m_ObjectHideFlags: 0
@@ -15783,3 +15790,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 154454980}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &958297002008718128 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 154454980}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

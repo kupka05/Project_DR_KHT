@@ -199,11 +199,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack, true);
                                     anim.SetBool(hashidle, false);
 
-                                    GameObject instantBullet = Instantiate(monsterBullet, bulletPort.position, bulletPort.rotation);
-                                    MonsterBullet bullet = instantBullet.GetComponent<MonsterBullet>();
-                                    bulletPort.transform.LookAt(playerTr);
-                                    instantBullet.transform.LookAt(playerTr);
-
+                                   
                                     yield return new WaitForSeconds(0.2f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
@@ -217,10 +213,6 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashidle, false);
 
 
-                                    GameObject instantBulletRight = Instantiate(monsterBullet, bulletPortRight.position, bulletPortRight.rotation);
-                                    MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
-                                    bulletPortRight.transform.LookAt(playerTr);
-                                    instantBulletRight.transform.LookAt(playerTr);
 
                                     yield return new WaitForSeconds(0.2f);
                                     anim.SetBool(hashidle, true);
@@ -235,10 +227,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashidle, false);
 
 
-                                    GameObject instantBulletLeft = Instantiate(monsterBullet, bulletPortLeft.position, bulletPortLeft.rotation);
-                                    MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
-                                    bulletPortLeft.transform.LookAt(playerTr);
-                                    instantBulletLeft.transform.LookAt(playerTr);
+                                
 
                                     yield return new WaitForSeconds(0.7f);
                                     anim.SetBool(hashidle, true);
@@ -322,7 +311,37 @@ public class EliteMonster : Monster
 
             yield return new WaitForSeconds(0.1f);
         }
+    }
 
 
+    public void Shoot(int index)
+    {
+        switch(index)
+        {
+            case 0:
+                GameObject instantBullet = Instantiate(monsterBullet, bulletPort.position, bulletPort.rotation);
+                MonsterBullet bullet = instantBullet.GetComponent<MonsterBullet>();
+                bulletPort.transform.LookAt(playerTr);
+                instantBullet.transform.LookAt(playerTr);
+                break;
+
+            case 1:
+
+                GameObject instantBulletRight = Instantiate(monsterBullet, bulletPortRight.position, bulletPortRight.rotation);
+                MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
+                bulletPortRight.transform.LookAt(playerTr);
+                instantBulletRight.transform.LookAt(playerTr);
+                break;
+
+            case 2:
+
+                GameObject instantBulletLeft = Instantiate(monsterBullet, bulletPortLeft.position, bulletPortLeft.rotation);
+                MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
+                bulletPortLeft.transform.LookAt(playerTr);
+                instantBulletLeft.transform.LookAt(playerTr);
+                break;
+        }
+
+        
     }
 }

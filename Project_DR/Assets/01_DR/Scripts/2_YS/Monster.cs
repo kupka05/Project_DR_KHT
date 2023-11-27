@@ -1,10 +1,12 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.UI.GridLayoutGroup;
 
 
 public class Monster : MonoBehaviour
@@ -21,6 +23,11 @@ public class Monster : MonoBehaviour
 
     public State state = State.IDLE;
 
+    public enum MonsterGroup
+    {
+        NORMAL,
+        ELITE
+    }
 
     public enum Type
     {
@@ -31,6 +38,17 @@ public class Monster : MonoBehaviour
         SIMPLE_FUNGI,
         SIMPLE_SPOOK
     }
+
+    //[System.Serializable]
+    //public class MonsterData
+    //{
+    //    public Type MonsterType { get; set; }
+    //    public MonsterGroup MonsterGroup { get; set; }
+    //}
+
+    //public MonsterData monsterData = new MonsterData();
+
+
     public Type monsterType = Type.HUMAN_ROBOT;
 
     [Header("몬스터 원거리 관련")]
@@ -38,13 +56,17 @@ public class Monster : MonoBehaviour
     public GameObject monsterBullet;
 
     [Header("몬스터 테이블")]
+    
     public float hp = default;       //체력이랑 damageble 보내준다
     public float attack = default;
-    public float attDelay = default;   //공격간격
-    public float speed = default;
+    public float attDelay = default;   //몬스터 공격간격 
+    public float exp = default;
+    public float speed = default;      //몬스터 이동속도
     public float recRange = 30.0f;   //pc 인식범위
     public float attRange = 2.0f;   //pc 공격범위
     public float stunDelay = 1f;
+    public float stunCount = default;  //경직 횟수, 일반 몬스터는 필요 없음
+    //몬스터 이름도 추가될 예정
 
     [Header("트랜스폼")]
     public Transform monsterTr;
@@ -55,7 +77,9 @@ public class Monster : MonoBehaviour
     public Rigidbody rigid;
     public NavMeshAgent nav;
 
-    Damageable damageable;
+    public DamageCollider[] damageCollider;
+
+    public Damageable damageable;
 
     public readonly int hashRun = Animator.StringToHash("isRun");
 
@@ -82,14 +106,19 @@ public class Monster : MonoBehaviour
     IEnumerator stunRoutine; // 스턴 루틴
 
     // Start is called before the first frame update
-    void Awake()
-    {
-        //GetData();
-
-
-    }
     private void Start()
     {
+        GetData();
+
+        hp = damageable.Health;
+
+        foreach (DamageCollider damageCollider in damageCollider)
+        {
+            attack = damageCollider.Damage;
+        }
+
+        speed = nav.speed;
+
         monsterTr = GetComponent<Transform>();
         playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
 
@@ -123,17 +152,20 @@ public class Monster : MonoBehaviour
        
     }
 
-    //public void GetData()
-    //{
-    //    damageable.Health = (float)DataManager.GetData(7001, "HP"); //이름으로 가져오는거라서 순서상관 X 0번째 행  //변수 선언은 해야함
-    //    speed = (float)DataManager.GetData(3001, "MoveSpeed");
-    //    coolTime = (float)DataManager.GetData(3001, "Cooltime");
-    //    //traceDist = (float)DataManager.GetData(3001, "CheckRange");
+    public void GetData()
+    {
+        hp = (float)DataManager.instance.GetData(7001, "MonHP", typeof(float));  
+        exp = (float)DataManager.instance.GetData(7001, "MonExp", typeof(float));
+        attack = (float)DataManager.instance.GetData(7001, "MonAtt", typeof(float));
+        attDelay = (float)DataManager.instance.GetData(7001, "MonDel", typeof(float));
+        speed = (float)DataManager.instance.GetData(7001, "MonSpd", typeof(float));
+        attRange = (float)DataManager.instance.GetData(7001, "MonAtr", typeof(float));
+        recRange = (float)DataManager.instance.GetData(7001, "MonRer", typeof(float));
+        stunDelay = (float)DataManager.instance.GetData(7001, "MonSTFDel", typeof(float));
+       
+    }
 
-    //    speedReduce = (float)DataManager.GetData(7041, "Speed_Reduce");
-    //}
 
-  
     // 스테이트를 관리하는 코루틴
     // 역할 : 스테이트를 변환만 해준다. 다른건 없음.
     IEnumerator MonsterState()
@@ -431,10 +463,11 @@ public class Monster : MonoBehaviour
                 //Destroy(this.gameObject, 1.3f); //damageable 쪽에서 처리
                 yield break;
             }
+
         yield return new WaitForSeconds(0.1f);
         }
-
         
+
     }
 
     public void OnDeal()
@@ -472,23 +505,7 @@ public class Monster : MonoBehaviour
         yield break;
     }
 
-    //IEnumerator OnStun()
-    //{
-    //    isStun = true;
-
-    //    anim.SetTrigger(hashHit);
-    //    yield return new WaitForSeconds(0.5f);
-        
-    //    isStun = false;
-    //    Debug.Log($"isStun:{isStun}");
-
-    //    //넘어가는 로직이 필요한데...
-    //}
-
    
-
-
-
     void OnDrawGizmos()
     {
         if (state == State.TRACE)
@@ -507,46 +524,7 @@ public class Monster : MonoBehaviour
 
     
 
-    //int GetAttackHash(int attackIndex)
-    //{
-    //    switch (attackIndex)
-    //    {
-    //        case 0: return hashAttack;
-    //        case 1: return hashAttack2;
-    //        case 2: return hashAttack3;
-    //        case 3: return hashAttack4;
-    //        default: return hashAttack;
-    //    }
-    //}
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if(other.CompareTag("test"))
-    //    {
-    //        RaycastWeaponDrill weaponDrill = other.GetComponent<RaycastWeaponDrill>();
-    //        OnDamage(weaponDrill.Damage);
-    //    }
-    //}
-
-    //public void OnDamage(float Damage)
-    //{
-    //    if (!isDie)
-    //    {
-    //        RaycastWeaponDrill weaponDrill = GetComponent<RaycastWeaponDrill>();
-    //        hp -= Damage;
-    //        anim.SetTrigger(hashHit);
-
-
-    //        if (hp <= 0)
-    //        {          
-
-    //            state = State.DIE;
-    //            //Debug.Log($"state:{state}");
-
-    //        }
-    //    }
-    //    Debug.Log($"hp:{hp}");
-    //}
+   
 
 }
 

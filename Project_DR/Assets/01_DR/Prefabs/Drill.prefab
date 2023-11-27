@@ -1751,7 +1751,7 @@ GameObject:
   - component: {fileID: 7859955449433649545}
   - component: {fileID: 5504163496005958611}
   - component: {fileID: 4728141055475115454}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: model_1_Mesh1 (1)
   m_TagString: Weapon
   m_Icon: {fileID: 0}
@@ -3071,6 +3071,7 @@ GameObject:
   - component: {fileID: 3038501380516454709}
   - component: {fileID: 175642213109327402}
   - component: {fileID: 747878795694139402}
+  - component: {fileID: 6522720148562061179}
   m_Layer: 9
   m_Name: Drill
   m_TagString: Weapon
@@ -3365,7 +3366,7 @@ MonoBehaviour:
   RecoilDuration: 0.3
   ValidLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4097
   TriggerTransform: {fileID: 5942209166019146244}
   SlideTransform: {fileID: 0}
   MuzzlePointTransform: {fileID: 8768672551865264199}
@@ -3703,6 +3704,20 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!136 &6522720148562061179
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8768672552246940888}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.09
+  m_Height: 0.28
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0.08}
 --- !u!1 &9088329491147949960
 GameObject:
   m_ObjectHideFlags: 0

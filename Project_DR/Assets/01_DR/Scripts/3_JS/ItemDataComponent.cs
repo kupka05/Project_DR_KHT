@@ -67,7 +67,6 @@ public class ItemDataComponent : MonoBehaviour
             case QuestItemData questItemData:
                 _questData = (QuestItemData)_itemData;
                 break;
-
             default:
                 break;
         }

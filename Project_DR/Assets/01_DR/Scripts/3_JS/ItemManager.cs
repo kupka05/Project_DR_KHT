@@ -54,7 +54,7 @@ public class ItemManager : MonoBehaviour
         ItemDataManager.InitItemDB();
 
         // 테스트용 포션 생성
-        //CreateItem(5001, 10);
+        CreateItem(Vector3.zero, 5001);
     }
 
     #endregion

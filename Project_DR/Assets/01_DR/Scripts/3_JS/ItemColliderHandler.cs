@@ -23,6 +23,7 @@ public class ItemColliderHandler : MonoBehaviour
     {
         Default = 0,
         Processing,
+        Handed,
         Stop
     }
     public State state;

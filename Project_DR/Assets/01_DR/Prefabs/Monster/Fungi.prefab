@@ -490,14 +490,21 @@ MonoBehaviour:
   hp: 0
   attack: 0
   attDelay: 0
+  exp: 0
   speed: 0
   recRange: 50
   attRange: 2.3
+  stunDelay: 1
+  stunCount: 0
   monsterTr: {fileID: 0}
   playerTr: {fileID: 0}
   anim: {fileID: 0}
   rigid: {fileID: 0}
   nav: {fileID: 0}
+  damageCollider:
+  - {fileID: 2726796537936212458}
+  - {fileID: 2726796538880378303}
+  damageable: {fileID: 7304368072439908172}
   isDie: 0
   isStun: 0
 --- !u!114 &7304368072439908172
@@ -544,6 +551,7 @@ MonoBehaviour:
   onRespawn:
     m_PersistentCalls:
       m_Calls: []
+  stun: 0
 --- !u!1 &5290207536996896943
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,6 +1245,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2925942323634447691}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2726796538880378303 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2925942323634447691}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2925942324838666526
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1347,3 +1367,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2925942324838666526}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2726796537936212458 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2925942324838666526}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

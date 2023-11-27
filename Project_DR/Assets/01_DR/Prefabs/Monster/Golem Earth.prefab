@@ -755,16 +755,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  monsterId: 7002
   monsterType: 1
   bulletport: {fileID: 0}
   monsterBullet: {fileID: 0}
   hp: 10000
   attack: 0
   attDelay: 0
+  exp: 0
   speed: 0
   recRange: 50
   attRange: 3.5
   stunDelay: 1
+  stunCount: 0
   monsterTr: {fileID: 3608231402854440894}
   playerTr: {fileID: 0}
   anim: {fileID: 7274210064967239108}
@@ -773,6 +776,7 @@ MonoBehaviour:
   damageCollider:
   - {fileID: 958297001376935849}
   - {fileID: 958297001432788588}
+  damageable: {fileID: 0}
   isDie: 0
   isStun: 0
 --- !u!195 &640281645

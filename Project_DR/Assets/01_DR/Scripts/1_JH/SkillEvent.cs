@@ -46,7 +46,7 @@ public class SkillEvent : MonoBehaviour
             if (!other.gameObject.CompareTag("Weapon"))
             { return; }
 
-            if (other.gameObject.GetComponent<RaycastWeaponDrill>().isSpining)
+            if (other.gameObject.GetComponentInParent<RaycastWeaponDrill>().isSpining)
             {
                 if(trigger)
                 { return; }
@@ -69,16 +69,15 @@ public class SkillEvent : MonoBehaviour
             if (!other.gameObject.CompareTag("Weapon"))
             { return; }
 
-            if (other.gameObject.GetComponent<RaycastWeaponDrill>().isSpining && GetComponentInParent<RaycastWeaponDrill>().isSpining)
+            if (other.gameObject.GetComponentInParent<RaycastWeaponDrill>().isSpining && GetComponentInParent<RaycastWeaponDrill>().isSpining)
             {
                 if (trigger)
                 { return; }
                 InitRoutine(skillRoutine);
-                Debug.Log("시작한다..");
                 skillRoutine = IGrinderDrill();
                 StartCoroutine(skillRoutine);
             }
-            else if(!other.gameObject.GetComponent<RaycastWeaponDrill>().isSpining || !GetComponentInParent<RaycastWeaponDrill>().isSpining)
+            else if(!other.gameObject.GetComponentInParent<RaycastWeaponDrill>().isSpining || !GetComponentInParent<RaycastWeaponDrill>().isSpining)
             {
                 if (skillRoutine != null)
                 {
@@ -104,8 +103,7 @@ public class SkillEvent : MonoBehaviour
             if (!other.gameObject.CompareTag("Weapon"))
             { return; }
             InitRoutine(skillRoutine);
-            shootDisableEvent.Invoke();
-            Debug.Log("트리거 해제");
+            shootEnableEvent.Invoke();
         }
 
     }
@@ -128,7 +126,7 @@ public class SkillEvent : MonoBehaviour
     IEnumerator IGrinderDrill()
     {
             trigger = true;
-        shootEnableEvent.Invoke();
+        shootDisableEvent.Invoke();
         while (true)
         {
             yield return new WaitForSeconds(GDcheckerTiming); ;

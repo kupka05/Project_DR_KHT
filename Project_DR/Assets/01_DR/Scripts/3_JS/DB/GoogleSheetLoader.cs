@@ -30,9 +30,6 @@ public class GoogleSheetLoader : MonoBehaviour
     // 상태를 알려주는 변수
     public static bool isDone = false;
 
-    // 데이터가 전부 로드되면 넘어갈 다음 씬 이름
-    [SerializeField] private string sceneName = default;
-
     private void Start()
     {
         // 데이터 매니저를 설정하는 함수 호출
@@ -77,8 +74,5 @@ public class GoogleSheetLoader : MonoBehaviour
 
         // 로딩 완료 상태 변경
         isDone = true;
-
-        // 씬을 불러옴
-        SceneManager.LoadScene(sceneName);
     }
 }

@@ -20,13 +20,16 @@ namespace BNG
         // 드릴 작동을 위한 클래스
         protected WeaponDrill spinDrill;
         public bool isSpining;
-        public bool isShootPossible;
+        public bool isShootPossible = true;
+        public DamageCollider damageCollider;
+
 
         // 최대 사거리
-        public float MaxRange = 25f;
+        public float MaxRange = 0.5f;
 
         // 데미지 : "Damageable" 함수와 충돌했을 경우 입힐 데미지
         public float damage = 25f;
+        public float dotDamage = 5f;
         public float critChance = 0.1f;    // 치명타 확률
         public float critIncrease = 1.5f;  // 치명타 배율
 
@@ -214,6 +217,9 @@ namespace BNG
             weaponRigid = GetComponent<Rigidbody>();
             grappling = GetComponent<Grappling>();
             grappling.drill = drillHead;
+            damageCollider = GetComponent<DamageCollider>();
+            damageCollider.Damage = SetDamage();
+
             if (MuzzleFlashObject)
             {
                 MuzzleFlashObject.SetActive(false);
@@ -255,6 +261,8 @@ namespace BNG
             }
             else
                 isSpining = false;
+
+
 
             // These are here for convenience. Could be called through GrabbableUnityEvents instead
             //checkSlideInput();
@@ -394,8 +402,9 @@ namespace BNG
                 spinDrill.OnSpin();
             }
 
-            if (!isShootPossible)
+            if (isShootPossible)
             {
+                damageCollider.Damage = SetDamage();
 
                 // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
                 bool useProjectile = AlwaysFireProjectile || (FireProjectileInSlowMo && Time.timeScale < 1);
@@ -513,7 +522,7 @@ namespace BNG
             // Damage if possible
             Damageable d = hit.collider.GetComponent<Damageable>();
             DamageablePart damagePart = hit.collider.GetComponent<DamageablePart>();
-              
+
             if (d)
             {
                 d.DealDamage(FinalDamage(), hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
@@ -817,12 +826,19 @@ namespace BNG
         // 데미지 연산하는 함수
         private float FinalDamage()
         {
-            return Damage.instance.DamageCalculate(damage);
+            return Damage.instance.DamageCalculate(dotDamage);
         }
+
+        private float SetDamage()
+        {
+           return Damage.instance.DamageCalculate(damage);
+        }
+      
 
         private void GetData()
         {
             damage = (float)DataManager.instance.GetData(1100, "Damage", typeof(float)) ;
+            dotDamage = (float)DataManager.instance.GetData(1100, "DotDamage", typeof(float)) ;
             FiringRate = (float)DataManager.instance.GetData(1100, "AttackSpeed", typeof(float));
         }
     }

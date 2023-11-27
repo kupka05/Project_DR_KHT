@@ -1730,7 +1730,9 @@ MonoBehaviour:
   state: 0
   monsterId: 7006
   monsterType: 3
-  bulletport: {fileID: 0}
+  bulletPortLeft: {fileID: 0}
+  bulletPortRight: {fileID: 0}
+  bulletPort: {fileID: 0}
   monsterBullet: {fileID: 0}
   hp: 0
   attack: 0
@@ -2368,6 +2370,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+        type: 3}
+      propertyPath: ColliderRigidbody
+      value: 
+      objectReference: {fileID: 2652037704290814976}
     - target: {fileID: 958297001894207733, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_Constraints
@@ -2383,7 +2390,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 958297001894207733, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}
 --- !u!114 &4569722055958050839 stripped
 MonoBehaviour:
@@ -2500,6 +2508,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+        type: 3}
+      propertyPath: ColliderRigidbody
+      value: 
+      objectReference: {fileID: 2652037704290814976}
     - target: {fileID: 958297001894207733, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_UseGravity
@@ -2520,7 +2533,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 958297001894207733, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}
 --- !u!114 &4569722056386875605 stripped
 MonoBehaviour:

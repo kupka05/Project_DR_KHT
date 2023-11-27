@@ -48,6 +48,7 @@ public class Monster : MonoBehaviour
 
     //public MonsterData monsterData = new MonsterData();
 
+    public int monsterId;
 
     public Type monsterType = Type.HUMAN_ROBOT;
 
@@ -76,6 +77,7 @@ public class Monster : MonoBehaviour
     public Animator anim;
     public Rigidbody rigid;
     public NavMeshAgent nav;
+   
 
     public DamageCollider[] damageCollider;
 
@@ -108,16 +110,7 @@ public class Monster : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        GetData();
-
-        hp = damageable.Health;
-
-        foreach (DamageCollider damageCollider in damageCollider)
-        {
-            attack = damageCollider.Damage;
-        }
-
-        speed = nav.speed;
+        GetData(monsterId);
 
         monsterTr = GetComponent<Transform>();
         playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
@@ -126,6 +119,17 @@ public class Monster : MonoBehaviour
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
+
+        damageable.Health = hp;
+
+        foreach (DamageCollider damageCollider in damageCollider)
+        {
+            attack = damageCollider.Damage;
+        }
+
+
+        nav.speed = speed;
+
         InitMonster();
     }
 
@@ -152,16 +156,16 @@ public class Monster : MonoBehaviour
        
     }
 
-    public void GetData()
+    public void GetData(int id)
     {
-        hp = (float)DataManager.instance.GetData(7001, "MonHP", typeof(float));  
-        exp = (float)DataManager.instance.GetData(7001, "MonExp", typeof(float));
-        attack = (float)DataManager.instance.GetData(7001, "MonAtt", typeof(float));
-        attDelay = (float)DataManager.instance.GetData(7001, "MonDel", typeof(float));
-        speed = (float)DataManager.instance.GetData(7001, "MonSpd", typeof(float));
-        attRange = (float)DataManager.instance.GetData(7001, "MonAtr", typeof(float));
-        recRange = (float)DataManager.instance.GetData(7001, "MonRer", typeof(float));
-        stunDelay = (float)DataManager.instance.GetData(7001, "MonSTFDel", typeof(float));
+        hp = (float)DataManager.instance.GetData(id, "MonHP", typeof(float));  
+        exp = (float)DataManager.instance.GetData(id, "MonExp", typeof(float));
+        attack = (float)DataManager.instance.GetData(id, "MonAtt", typeof(float));
+        attDelay = (float)DataManager.instance.GetData(id, "MonDel", typeof(float));
+        speed = (float)DataManager.instance.GetData(id, "MonSpd", typeof(float));
+        attRange = (float)DataManager.instance.GetData(id, "MonAtr", typeof(float));
+        recRange = (float)DataManager.instance.GetData(id, "MonRer", typeof(float));
+        stunDelay = (float)DataManager.instance.GetData(id, "MonSTFDel", typeof(float));
        
     }
 

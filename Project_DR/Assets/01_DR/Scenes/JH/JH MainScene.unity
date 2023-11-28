@@ -27771,6 +27771,7 @@ GameObject:
   - component: {fileID: 1948218479697351278}
   - component: {fileID: 1948218479697351249}
   - component: {fileID: 1948218479697351279}
+  - component: {fileID: 1948218479697351280}
   m_Layer: 5
   m_Name: SlotCollider
   m_TagString: ItemSlot
@@ -27804,7 +27805,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BeingHeld: 0
-  GrabButton: 2
+  GrabButton: 0
   Grabtype: 2
   GrabPhysics: 2
   GrabMechanic: 1
@@ -27817,7 +27818,7 @@ MonoBehaviour:
   BreakDistance: 0
   HideHandGraphics: 0
   ParentToHands: 0
-  ParentHandModel: 1
+  ParentHandModel: 0
   SnapHandModel: 1
   CanBeDropped: 1
   CanBeSnappedToSnapZone: 1
@@ -27860,6 +27861,19 @@ MonoBehaviour:
   UseCustomInspector: 1
   lastFlickTime: 0
   FlickForce: 1
+--- !u!114 &1948218479697351280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948218479697351251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c94e0c5a94ea7ee4985a3897b6c9b9f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curGrabber: {fileID: 0}
 --- !u!222 &1948218479732526676
 CanvasRenderer:
   m_ObjectHideFlags: 0

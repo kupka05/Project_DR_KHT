@@ -28,27 +28,46 @@ public class PlayerEvent : MonoBehaviour
         {
             grabItem.GetComponent<PlayerInventory>().OpenInventory();
         }
-        // 아이템 슬롯인지 확인
-        if(grabItem.GetComponent<ItemSlotController>() != null)
-        {
-            // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우
-            if (CheckColliderVisibility(
-                grabItem.transform.parent.parent.parent.parent.parent.parent.GetComponent<RectTransform>(),
-                grabItem.GetComponent<RectTransform>()) == true)
-            {
-                Debug.Log($"name: {grabItem.transform.parent.name}");
+        Debug.Log("체크");
 
-                // 상태 변경
-            }
+        // 아이템 슬롯인지 확인
+        if (grabItem.GetComponent<ItemSlotController>() != null)
+        {
+            Debug.Log("아이템 슬롯");
+            // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우 반환
+            if (!CheckColliderVisibility(grabItem, grabItem.GetComponent<RectTransform>()) == true)
+            { return; }
+
+            Debug.Log($"아이템 ID: {grabItem.transform.parent.name}");
+
+            GameObject grabber = grabItem.GetComponent<SpawnItemSlot>().curGrabber;
+            if(grabber == null)
+            { return; }
+            Debug.Log($"핸드 : {grabber.name}");
+
+            Transform slot = grabItem.transform.parent;
+            GameObject item = ItemManager.instance.CreateItem(grabber.transform.position, 5001);
+            //grabber.GetComponent<Grabber>().GrabGrabbable();
+            grabItem.DropItem(grabber.GetComponent<Grabber>(),false, true);
+            grabber.GetComponent<Grabber>().TryRelease();
+            grabber.GetComponent<Grabber>().GrabGrabbable(item.GetComponent<Grabbable>());
+            ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
+            itemColliderHandler.state = ItemColliderHandler.State.Stop;
+
         }
     }
-    private bool CheckColliderVisibility(RectTransform scrollPanel, RectTransform other)
+
+    // 콜라이더 체크
+    private bool CheckColliderVisibility(Grabbable grabItem, RectTransform other)
     {
+        // TODO : 최적화 필요
+        RectTransform scrollPanel = grabItem.transform.parent.parent.parent.parent.parent.parent.GetComponent<RectTransform>();
         // 현재 객체가 스크롤 패널 내에 있는지 여부 확인
         bool isVisible = RectTransformUtility.RectangleContainsScreenPoint(scrollPanel, other.position);
 
         return isVisible;
     }
+
     // 아이템 놓는 상태
     public void ReleaseItem(Grabbable grabItem)
     {

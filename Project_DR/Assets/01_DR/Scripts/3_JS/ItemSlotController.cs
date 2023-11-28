@@ -20,7 +20,10 @@ public class ItemSlotController : MonoBehaviour
     #region [+]
     void Start()
     {
-        itemSlot = GetParentGameObject(transform);
+        if (itemSlot == null)
+        {
+            itemSlot = GetParentGameObject(transform);
+        }
         boxCollider = gameObject.GetComponent<BoxCollider>();
         if (isChangeSize)
         {

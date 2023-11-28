@@ -15,20 +15,14 @@ public class ItemSlotPanelUI : MonoBehaviour
     [SerializeField] private TMP_Text _name;
     [SerializeField] private Image _iconSprite;
     [SerializeField] private TMP_Text _count;
-    [SerializeField] int _index;
+    [SerializeField] private int _index;
 
     #endregion
     /*************************************************
-     *                Private Fields
+     *                Public Fields
      *************************************************/
     #region [+]
     public ItemData ItemData => _itemData;
-
-    #endregion
-    /*************************************************
-     *                 Private Methods
-     *************************************************/
-    #region [+]
     public int Index => _index;
 
     #endregion
@@ -37,11 +31,25 @@ public class ItemSlotPanelUI : MonoBehaviour
      *************************************************/
     #region [+]
     // Initalize
-    public void Initialize(int id)
+    public void Initialize(int id, int amount, int maxAmount, int index)
     {
+        // id가 0일 경우 리셋
+        if (id == 0)
+        {
+            _itemData = default;
+            _name.text = default;
+            _count.text = "0 / 0";
+            _iconSprite.sprite = default;
+            _index = default;
+
+            return;
+        }
         _itemData = ItemDataManager.SearchItemDB<ItemData>(id);
         _name.text = _itemData.Name;
         _iconSprite.sprite = _itemData.IconSprite;
+        string countText = amount + " / " + maxAmount;
+        UpdateCountText(countText);
+        _index = index;
         //switch (ItemDataManager.GetItemType(id))
         //{
         //    // Potion일 경우

@@ -7,14 +7,16 @@ using UnityEngine.UI;
 public class PlayerInventoryUI : MonoBehaviour
 {
     /*************************************************
-     *                 Private Methods
+     *                 Private Fields
      *************************************************/
     #region [+]
+    [Header("Inventory")]
+    [SerializeField] private Inventory _inventory;
     [Header("UI")]
     [SerializeField] private ItemTooltipUI _itemTooltip;
     [SerializeField] private GameObject itemSlotPanelPrefab;
-    [SerializeField] private List<GameObject> _itemSlots;
-    [SerializeField] private GameObject[] _defaultItemSlots = new GameObject[3];
+    [SerializeField] private List<ItemSlotPanelUI> _itemSlotPanels;
+    [SerializeField] private List<Item> _items;
     [SerializeField] private float _itemSlotInterval = 600f;
     private Vector2 _tooltipAnchorPos;
     private float _tooltipInterval = 300f;
@@ -26,12 +28,10 @@ public class PlayerInventoryUI : MonoBehaviour
     #region [+]
     void Start()
     {
-        _itemSlots = new List<GameObject>();
+        _itemSlotPanels = new List<ItemSlotPanelUI>();
         _tooltipAnchorPos = _itemTooltip.GetComponent<RectTransform>().anchoredPosition;
-        for (int i = 0; i < 10; i++)
-        {
-            AddItemSlot(5001);
-        }
+
+        UpdatePlayerInventory();
     }
 
     #endregion
@@ -41,23 +41,27 @@ public class PlayerInventoryUI : MonoBehaviour
     #region [+]
     public void UpdatePlayerInventory()
     {
-        // 빈 슬롯 활성화 관리
-        int count = _itemSlots.Count >= 3 ? 3 : _itemSlots.Count;
-        for (int i = 0; i < count; i++)
-        {
-            _defaultItemSlots[i].SetActive(false);
-        }
+        // 아이템 슬롯 오브젝트 풀링
+        CreateSlotPulling();
+
+        // 아이템 슬롯 업데이트
+        UpdateItemSlots();
     }
 
-    public void AddItemSlot(int id)
+    private void Update()
+    {
+        UpdateItemSlots();
+    }
+
+    public GameObject AddItemSlot()
     {
         GameObject itemSlot = Instantiate(itemSlotPanelPrefab, 
             itemSlotPanelPrefab.transform.parent);
         ItemSlotPanelUI itemSlotPanelUI = itemSlot.GetComponent<ItemSlotPanelUI>();
-        itemSlotPanelUI.Initialize(id);
+        //itemSlotPanelUI.Initialize(id);
         itemSlot.SetActive(true);
-        _itemSlots.Add(itemSlot);
-        int index = _itemSlots.Count - 1;
+        _itemSlotPanels.Add(itemSlotPanelUI);
+        int index = _itemSlotPanels.Count - 1;
         if (index > 0)
         {
             RectTransform itemSlotRect = itemSlot.GetComponent<RectTransform>();
@@ -68,19 +72,19 @@ public class PlayerInventoryUI : MonoBehaviour
             pos.x += (_itemSlotInterval / 2) * index;
             itemSlotRect.anchoredPosition = pos;
         }
-        // 기본 슬롯 비활성화
-        UpdatePlayerInventory();
 
         itemSlot.name = _panelName + " (" + index + ")";
         itemSlotPanelUI.SetIndex(index);
+
+        return itemSlot;
     }
 
     public void ShowTooltip(int index)
     {
-        if (_itemSlots[index])
+        if (_itemSlotPanels[index])
         {
             ItemSlotPanelUI itemSlotPanelUI = 
-                _itemSlots[index].GetComponent<ItemSlotPanelUI>(); 
+                _itemSlotPanels[index].GetComponent<ItemSlotPanelUI>(); 
             UpdateTooltipUI(itemSlotPanelUI.ItemData, index);
             _itemTooltip.Show();
         }
@@ -108,6 +112,64 @@ public class PlayerInventoryUI : MonoBehaviour
      *                Private Methods
      *************************************************/
     #region [+]
+    private void CreateSlotPulling()
+    {
+        for (int i = 0; i < _inventory.InitalCapacity; i++)
+        {
+            GameObject slot = AddItemSlot();
+            // 기본 슬롯 3개 표시를 위해 예외처리
+            if ((i < 3) == false)
+            {
+                slot.SetActive(false);
+            }
+        }
+    }
+
+    private void InitSlotData(int id, int amount, int maxAmount, int index)
+    {
+        _itemSlotPanels[index].Initialize(id, amount, maxAmount, index);
+        _itemSlotPanels[index].gameObject.SetActive(true);
+    }
+
+    private void ResetSlotData(int id = default, 
+        int amount = default, int maxAmount = default, int index = default)
+    {
+        _itemSlotPanels[index].Initialize(id, amount, maxAmount, index);
+        //_itemSlotPanels[index].gameObject.SetActive(true);
+    }
+
+    // 아이템 슬롯 업데이트
+    private void UpdateItemSlots()
+    {
+        // 인벤토리 슬롯 개수
+        int count = _inventory.InitalCapacity;
+        // 인벤토리에 있는 슬롯 개수만큼 순회
+        for (int i = 0; i < count; i++)
+        {
+            // 인벤토리에 슬롯이 비어있지 않을 경우
+            if (_inventory.Items[i] != null)
+            {
+                // 해당 슬롯에 있는 아이템이 PortionItem일 경우
+                if (_inventory.Items[i] is PortionItem pi)
+                {
+                    // 순차적으로 _itemSlotPanels을 순회
+                    for (int j = 0; j < count; j++)
+                    {
+                        // 비어있을 경우
+                        if (_itemSlotPanels[j].ItemData == default)
+                        {
+                            // Init
+                            int id = pi.Data.ID;
+                            int amount = pi.Amount;
+                            int maxAmount = pi.MaxAmount;
+                            InitSlotData(id, amount, maxAmount, i);
+                        }
+                    }
+                }
+
+            }
+        }
+    }
 
     #endregion
 }

@@ -75,6 +75,7 @@ namespace Rito.InventorySystem
         // 초기 수용 한도
         [SerializeField, Range(8, 64)]
         private int _initalCapacity = 8;
+        public int InitalCapacity => _initalCapacity;
 
         // 최대 수용 한도(아이템 배열 크기)
         [SerializeField, Range(8, 64)]
@@ -82,6 +83,9 @@ namespace Rito.InventorySystem
 
         [SerializeField]
         private InventoryUI _inventoryUI; // 연결된 인벤토리 UI
+
+        [SerializeField]
+        private PlayerInventoryUI _playerInventoryUI; // 연결된 플레이어 인벤토리 UI
 
         /// <summary> 아이템 목록 </summary>
         [SerializeField]
@@ -222,6 +226,8 @@ namespace Rito.InventorySystem
                 _inventoryUI.RemoveItem(index);
                 _inventoryUI.HideItemAmountText(index); // 수량 텍스트 숨기기
             }
+
+            _playerInventoryUI.UpdatePlayerInventory();
         }
 
         /// <summary> 해당하는 인덱스의 슬롯들의 상태 및 UI 갱신 </summary>

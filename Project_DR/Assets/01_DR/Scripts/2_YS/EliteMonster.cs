@@ -321,4 +321,14 @@ public class EliteMonster : Monster
         }
     }
 
+    public override void Explosion(int index)
+    {
+        switch(index)
+        {
+            case 0:
+                Destroy(this.gameObject);
+                break;
+        }
+        
+    }
 }

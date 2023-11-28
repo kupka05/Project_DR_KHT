@@ -533,9 +533,18 @@ public class Monster : MonoBehaviour
 
     }
 
-    
+    public virtual void Explosion(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                Destroy(this.gameObject);
+                break;
+        }
 
-   
+    }
+
+
 
 }
 

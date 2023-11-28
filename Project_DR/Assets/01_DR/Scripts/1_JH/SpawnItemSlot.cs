@@ -12,16 +12,13 @@ public class SpawnItemSlot : MonoBehaviour
     void Start()
     {
         boxCollider = GetComponent<BoxCollider>();
+
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void OnTriggerEnter(Collider other)
     {
-        
-    }
-    private void OnTriggerStay(Collider other)
-    {
-        if(other.GetComponent<Grabber>())
+        if (other.GetComponent<Grabber>())
         {
             curGrabber = other.gameObject;
         }
@@ -30,6 +27,7 @@ public class SpawnItemSlot : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if(other.gameObject == curGrabber)
         curGrabber = null;
     }
 }

@@ -28,12 +28,14 @@ public class PlayerEvent : MonoBehaviour
         {
             grabItem.GetComponent<PlayerInventory>().OpenInventory();
         }
-        Debug.Log("체크");
+    }
 
+    // 그랩 사이클이 끝나고 체크
+    public void AfterGrabCheck(Grabbable grabItem)
+    {
         // 아이템 슬롯인지 확인
         if (grabItem.GetComponent<ItemSlotController>() != null)
         {
-            Debug.Log("아이템 슬롯");
             // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우 반환
             if (!CheckColliderVisibility(grabItem, grabItem.GetComponent<RectTransform>()) == true)
             { return; }
@@ -41,21 +43,29 @@ public class PlayerEvent : MonoBehaviour
             Debug.Log($"아이템 ID: {grabItem.transform.parent.name}");
 
             GameObject grabber = grabItem.GetComponent<SpawnItemSlot>().curGrabber;
-            if(grabber == null)
-            { return; }
-            Debug.Log($"핸드 : {grabber.name}");
 
-            Transform slot = grabItem.transform.parent;
+            if (grabber == null)
+            { return; }
+
+            // 아이템 생성
             GameObject item = ItemManager.instance.CreateItem(grabber.transform.position, 5001);
-            //grabber.GetComponent<Grabber>().GrabGrabbable();
-            grabItem.DropItem(grabber.GetComponent<Grabber>(),false, true);
-            grabber.GetComponent<Grabber>().TryRelease();
-            grabber.GetComponent<Grabber>().GrabGrabbable(item.GetComponent<Grabbable>());
             ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
             itemColliderHandler.state = ItemColliderHandler.State.Stop;
 
+
+            // 들고있던 아이템 놔주기
+            grabItem.DropItem(grabber.GetComponent<Grabber>(), true, true);
+
+            // 생성한 아이템 다시 잡기
+            grabber.GetComponent<Grabber>().TryRelease();
+            grabber.GetComponent<Grabber>().GrabGrabbable(item.GetComponent<Grabbable>());
+
+
+
+
         }
     }
+
 
     // 콜라이더 체크
     private bool CheckColliderVisibility(Grabbable grabItem, RectTransform other)

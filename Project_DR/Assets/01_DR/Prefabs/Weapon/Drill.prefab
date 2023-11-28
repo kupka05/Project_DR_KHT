@@ -3170,8 +3170,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BeingHeld: 0
-  GrabButton: 2
-  Grabtype: 2
+  GrabButton: 0
+  Grabtype: 0
   GrabPhysics: 0
   GrabMechanic: 0
   GrabSpeed: 20
@@ -3180,7 +3180,7 @@ MonoBehaviour:
   RemoteGrabDistance: 2.5
   ThrowForceMultiplier: 2.5
   ThrowForceMultiplierAngular: 1.5
-  BreakDistance: 1
+  BreakDistance: 0
   HideHandGraphics: 0
   ParentToHands: 1
   ParentHandModel: 1
@@ -3465,6 +3465,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 1
+  canSelfHarm: 0
 --- !u!114 &3038501380516454709
 MonoBehaviour:
   m_ObjectHideFlags: 0

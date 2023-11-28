@@ -65,7 +65,7 @@ namespace BNG {
             }
             if(!canSelfHarm)
             {
-                if(this.transform.root.gameObject ==collision.gameObject)
+                if(this.transform.root.gameObject ==collision.transform.root.gameObject)
                 {
                     return;
                 }
@@ -79,6 +79,7 @@ namespace BNG {
             LastDamageForce = collision.impulse.magnitude;
             LastRelativeVelocity = collision.relativeVelocity.magnitude;
 
+
             if (LastDamageForce >= MinForce) {
 
                 // Can we damage what we hit?
@@ -86,12 +87,16 @@ namespace BNG {
                 DamageablePart damagePart = collision.gameObject.GetComponent<DamageablePart>();
                 if (d) {
                     d.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+                    Debug.Log(collision.gameObject.name + "에게 " + Damage);
+
                 }
-                else if(damagePart){
+                else if(damagePart)
+                {
                       damagePart.parent.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
-                    Debug.Log($"damage:{Damage}");
+                    Debug.Log(collision.gameObject.name + "파츠에게 " + Damage);
+
                 }
-                }
+            }
                 // Otherwise, can we take damage ourselves from this collision?
                 else if (TakeCollisionDamage && thisDamageable != null) {
                     thisDamageable.DealDamage(CollisionDamage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);

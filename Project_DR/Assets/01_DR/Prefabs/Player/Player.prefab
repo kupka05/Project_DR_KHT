@@ -329,6 +329,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &611287757877344652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14032,6 +14033,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &530031173480939933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14805,6 +14807,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &167113907646550020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20499,6 +20502,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &93448142521068276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22915,6 +22919,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &1341794677219681296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30820,7 +30825,6 @@ GameObject:
   - component: {fileID: 3163790248258526406}
   - component: {fileID: 3163790248258526405}
   - component: {fileID: 3163790248258526424}
-  - component: {fileID: 6757648436143502869}
   m_Layer: 2
   m_Name: Grabber
   m_TagString: Untagged
@@ -31058,19 +31062,6 @@ MonoBehaviour:
   RemoteCollisionLayers:
     serializedVersion: 2
     m_Bits: 1
---- !u!114 &6757648436143502869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3163790248258526428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65047c7fac31a83499783ffeb2b4d270, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _state: 0
 --- !u!1 &3173366925099495254
 GameObject:
   m_ObjectHideFlags: 0
@@ -36069,6 +36060,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &1006185840862004511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47860,6 +47852,7 @@ MonoBehaviour:
   health: 100
   maxHealth: 0
   dyingAmount: 0.25
+  knockbackSpeed: 0.5
   playerController: {fileID: 0}
   healthUpInput: 0b000000
   playerHealthUI:
@@ -49244,6 +49237,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &8246583119140640746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62965,6 +62959,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &7528243053479888042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76525,6 +76520,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &1257201234258451659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77979,6 +77975,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &1266050355521349310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79415,6 +79412,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &5595822707264958905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82998,6 +82996,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &7759840879073069010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84533,6 +84532,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &2330449186646317003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94447,6 +94447,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &8760366981206289038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96178,6 +96179,7 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
 --- !u!114 &4253340522480176976
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -63,6 +63,13 @@ namespace BNG {
             if(!this.isActiveAndEnabled) {
                 return;
             }
+            if(!canSelfHarm)
+            {
+                if(this.transform.root.gameObject ==collision.gameObject)
+                {
+                    return;
+                }
+            }
             if (isPlayer && collision.gameObject.CompareTag("Player"))
                 return;
             OnCollisionEvent(collision);

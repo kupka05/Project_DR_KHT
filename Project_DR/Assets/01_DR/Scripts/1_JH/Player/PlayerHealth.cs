@@ -101,7 +101,7 @@ public class PlayerHealth : MonoBehaviour
     public void KnockBack()
     {
         transform.position += -Vector3.forward * knockbackSpeed;
-
+        Debug.Log("넉백?");
     }
 
     private void OnTriggerEnter(Collider other)

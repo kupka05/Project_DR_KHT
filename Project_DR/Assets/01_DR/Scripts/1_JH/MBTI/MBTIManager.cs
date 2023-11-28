@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 public struct MBTI
 {
     public float I;
@@ -97,10 +96,10 @@ public class MBTIManager : MonoBehaviour
     // 각 값을 연산해주는 메서드
     float ResultValue(float preValue, float value)
     {
-        UnityEngine.Debug.Log(preValue + ", " + value);
+        //UnityEngine.Debug.Log(preValue + ", " + value);
 
         if (value == 0)
-        { return 0; }
+        { return preValue; }
         else if (0 < value)
         {
             return preValue + value <= 100 ? preValue + value : 100;

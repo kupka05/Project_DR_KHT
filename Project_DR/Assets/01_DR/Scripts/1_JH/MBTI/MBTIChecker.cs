@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class MBTIChecker : MonoBehaviour
 {
-    public enum CheckType { Grab, Collision, Sight, Choice}
+    public enum CheckType { Default, Grab, Collision, Sight, Choice}
     private MBTI mbti;
+    private BoxCollider boxCollider;
+
     [Header("MBTI Checker")]
 
     public int ID;
@@ -22,7 +24,8 @@ public class MBTIChecker : MonoBehaviour
     public float F;
     public float P;
 
-    //[Header("Event")]
+    [Header("Debug")]
+    public bool DEBUG;
 
 
 
@@ -30,6 +33,8 @@ public class MBTIChecker : MonoBehaviour
     void Start()
     {
         GetData(ID);
+        boxCollider = GetComponent<BoxCollider>();
+
 
       // 값들을 구조체로 저장
       checkerMBTI.SetMBTI(I, N, F, P);
@@ -47,47 +52,81 @@ public class MBTIChecker : MonoBehaviour
         // MBTI 계산
         MBTIManager.Instance.ResultMBTI(checkerMBTI);
 
-        // 오브젝트 삭제 상태이면 삭제
-        if (isDestroy)
-        {
-            Destroy(gameObject);
-        }
+        
     }
 
 
-    // 각 이벤트들
+    // 잡기 체크
     public void GrabEvent()
     {
-        if (checkCount < 0)
-        {
-            return;
-        }
+        if (checkCount < 0 )
+        { return; }
 
-        checkCount--;
 
-        if (checkCount == 0)
+        if (--checkCount == 0)
         {
             ActiveMBTI();
+            if (isDestroy)
+            {
+                Destroy(gameObject);
+            }
         }
-        
-      
-       
     }
 
-    public void CollisionEvent()
+    // 충돌 체크
+    public void CollisionEvent(Collider other)
     {
+        if (!other.CompareTag("Player"))
+        { return; }
 
+        ActiveMBTI();
+
+        if (isDestroy)
+        {
+            boxCollider.enabled = false;
+        }
     }
-
+    // 시야 체크
     public void SightEvent()
     {
-
+        ActiveMBTI();
+        if(isDestroy)
+        {
+            type = CheckType.Default;
+        }
+        if(DEBUG)
+        {
+            GetComponent<MeshRenderer>().materials[0].color = Color.yellow;
+        }
     }
-
+    public void DebugOn()
+    {
+        if (DEBUG)
+        {
+            GetComponent<MeshRenderer>().materials[0].color = Color.red;
+        }
+    }
+    public void DebugOff()
+    {
+        if (DEBUG)
+        {
+            GetComponent<MeshRenderer>().materials[0].color = Color.grey;
+        }
+    }
     public void ChoiceEvent() 
     { 
 
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        // 충돌 체크일 경우
+        if (type == CheckType.Collision)
+        {
+            CollisionEvent(other);
+        }
+    }
+
 
 
     // 데이터를 가져오는 함수

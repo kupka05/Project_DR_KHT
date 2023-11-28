@@ -18,6 +18,7 @@ public class PlayerInventoryUI : MonoBehaviour
     [SerializeField] private float _itemSlotInterval = 600f;
     private Vector2 _tooltipAnchorPos;
     private float _tooltipInterval = 300f;
+    private string _panelName = "ItemSlotPanel";
     #endregion
     /*************************************************
      *                  Unity Events
@@ -70,7 +71,7 @@ public class PlayerInventoryUI : MonoBehaviour
         // 기본 슬롯 비활성화
         UpdatePlayerInventory();
 
-        itemSlot.name = itemSlot.name + " (" + index + ")";
+        itemSlot.name = _panelName + " (" + index + ")";
         itemSlotPanelUI.SetIndex(index);
     }
 

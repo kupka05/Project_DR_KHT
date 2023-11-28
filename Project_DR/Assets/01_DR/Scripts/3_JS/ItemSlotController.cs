@@ -11,6 +11,7 @@ public class ItemSlotController : MonoBehaviour
     #region [+]
     [SerializeField] private GameObject itemSlot;
     private BoxCollider boxCollider;
+    [SerializeField] private bool isChangeSize = true;
 
     #endregion
     /*************************************************
@@ -21,7 +22,10 @@ public class ItemSlotController : MonoBehaviour
     {
         itemSlot = GetParentGameObject(transform);
         boxCollider = gameObject.GetComponent<BoxCollider>();
-        SetBoxColliderSize(GetSizeVector2(itemSlot), boxCollider);
+        if (isChangeSize)
+        {
+            SetBoxColliderSize(GetSizeVector2(itemSlot), boxCollider);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

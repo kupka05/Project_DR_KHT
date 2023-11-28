@@ -12,15 +12,18 @@ public class PlayerInventoryUI : MonoBehaviour
     #region [+]
     [Header("Inventory")]
     [SerializeField] private Inventory _inventory;
+
     [Header("UI")]
     [SerializeField] private ItemTooltipUI _itemTooltip;
     [SerializeField] private GameObject itemSlotPanelPrefab;
     [SerializeField] private List<ItemSlotPanelUI> _itemSlotPanels;
     [SerializeField] private List<Item> _items;
     [SerializeField] private float _itemSlotInterval = 600f;
+
     private Vector2 _tooltipAnchorPos;
     private float _tooltipInterval = 300f;
     private string _panelName = "ItemSlotPanel";
+
     #endregion
     /*************************************************
      *                  Unity Events
@@ -51,9 +54,13 @@ public class PlayerInventoryUI : MonoBehaviour
 
     private void Update()
     {
-        UpdateItemSlots();
+        // 디버그
+        //UpdateItemSlots();
+        // 현재 인벤토리에 아이템 추가할 때 마다
+        // UpdateItemSlot() 호출하게 설정했음
     }
 
+    // 아이템 슬롯(패널) 추가
     public GameObject AddItemSlot()
     {
         GameObject itemSlot = Instantiate(itemSlotPanelPrefab, 
@@ -80,32 +87,36 @@ public class PlayerInventoryUI : MonoBehaviour
         return itemSlot;
     }
 
+    // 미사용: 툴팁 활성화
     public void ShowTooltip(int index)
     {
-        if (_itemSlotPanels[index])
-        {
-            ItemSlotPanelUI itemSlotPanelUI = 
-                _itemSlotPanels[index].GetComponent<ItemSlotPanelUI>(); 
-            UpdateTooltipUI(itemSlotPanelUI.ItemData, index);
-            _itemTooltip.Show();
-        }
+        //if (_itemSlotPanels[index])
+        //{
+        //    ItemSlotPanelUI itemSlotPanelUI = 
+        //        _itemSlotPanels[index].GetComponent<ItemSlotPanelUI>(); 
+        //    UpdateTooltipUI(itemSlotPanelUI.ItemData, index);
+        //    _itemTooltip.Show();
+        //}
     }
 
+    // 미사용: 툴팁 비활성화
     public void HideToolTip()
     {
-        _itemTooltip.Hide();
+        //_itemTooltip.Hide();
     }
 
+    // 미사용: 툴팁 업데이트
     private void UpdateTooltipUI(ItemData data, int index)
     {
-        // 툴팁 정보 갱신
-        _itemTooltip.SetItemInfo(data);
+        //// 툴팁 정보 갱신
+        //_itemTooltip.SetItemInfo(data);
 
-        RectTransform tooltipRect = _itemTooltip.GetComponent<RectTransform>();
-        Vector2 tempAnchorPos = _tooltipAnchorPos;
-        tempAnchorPos.x += (_tooltipInterval * index);
-        // 툴팁 위치 조정
-        tooltipRect.anchoredPosition = tempAnchorPos;
+        //RectTransform tooltipRect = _itemTooltip.GetComponent<RectTransform>();
+        //Vector2 tempAnchorPos = _tooltipAnchorPos;
+        //tempAnchorPos.x += (_tooltipInterval * index);
+
+        //// 툴팁 위치 조정
+        //tooltipRect.anchoredPosition = tempAnchorPos;
     }
 
     #endregion
@@ -113,6 +124,7 @@ public class PlayerInventoryUI : MonoBehaviour
      *                Private Methods
      *************************************************/
     #region [+]
+    // 초기 슬롯 오브젝트 풀링
     private void CreateSlotPulling()
     {
         for (int i = 0; i < _inventory.InitalCapacity; i++)
@@ -126,17 +138,26 @@ public class PlayerInventoryUI : MonoBehaviour
         }
     }
 
+    // 슬롯에 데이터 Init
     private void InitSlotData(int id, int amount, int maxAmount, int index)
     {
         _itemSlotPanels[index].Initialize(id, amount, maxAmount, index);
         _itemSlotPanels[index].gameObject.SetActive(true);
     }
 
-    private void ResetSlotData(int id = default, 
-        int amount = default, int maxAmount = default, int index = default)
-    {
-        _itemSlotPanels[index].Initialize(id, amount, maxAmount, index);
-        //_itemSlotPanels[index].gameObject.SetActive(true);
+    // 지정 순번 이후의 모든 슬롯 초기화
+    private void ResetSlotDatas(int startIndex, int id = default,
+    int amount = default, int maxAmount = default, int index = default)
+    { 
+        for (int i = startIndex; i < _itemSlotPanels.Count; i++)
+        {
+            _itemSlotPanels[i].Initialize(id, amount, maxAmount, index);
+            // 기본 표시 슬롯 3개를 제외한 나머지 슬롯 비활성화
+            if (i >= 3)
+            {
+                _itemSlotPanels[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     // 아이템 슬롯 업데이트
@@ -177,6 +198,9 @@ public class PlayerInventoryUI : MonoBehaviour
 
             }
         }
+
+        // 슬롯 리셋
+        ResetSlotDatas(latestIndex + 1);
     }
 
     #endregion

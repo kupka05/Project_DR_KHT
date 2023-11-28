@@ -12,8 +12,8 @@ public class ItemColliderHandler : MonoBehaviour
     #region [+]
     private Rigidbody rigidBody = default;
     private float stateResetDelay = 5f;                     // 상태 초기화(슬롯에 보관)에 걸리는 시간
-    private GrabbableHaptics grabbableHaptics = default;    // 그립 여부를 파악하기 위해 객체 생성
-    public GrabbableHaptics GrabbableHaptics => grabbableHaptics;
+    //private GrabbableHaptics grabbableHaptics = default;    // 그립 여부를 파악하기 위해 객체 생성
+    //public GrabbableHaptics GrabbableHaptics => grabbableHaptics;
     #endregion
     /*************************************************
      *                Public Fields
@@ -35,7 +35,7 @@ public class ItemColliderHandler : MonoBehaviour
     #region [+]
     private void Awake()
     {
-        grabbableHaptics = GetComponent<GrabbableHaptics>();
+        //grabbableHaptics = GetComponent<GrabbableHaptics>();
         rigidBody = GetComponent<Rigidbody>();
     }
 

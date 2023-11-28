@@ -30913,7 +30913,19 @@ MonoBehaviour:
         m_CallState: 2
   onAfterGrabEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5751810932310615319}
+        m_TargetAssemblyTypeName: PlayerEvent, Assembly-CSharp
+        m_MethodName: AfterGrabCheck
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onReleaseEvent:
     m_PersistentCalls:
       m_Calls:
@@ -47345,7 +47357,7 @@ GameObject:
   - component: {fileID: 942874828167954386}
   - component: {fileID: 7291466226960562806}
   - component: {fileID: 6960626286820715422}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: PlayerController
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -47435,7 +47447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefaultLocomotion: 1
   LoadLocomotionFromPrefs: 0
-  locomotionToggleInput: 00000000
+  locomotionToggleInput: 
   LocomotionToggleAction: {fileID: 3512515067727415170, guid: e39f4b35a6db18348b41eb0262520e69,
     type: 3}
   locomoTypeText: {fileID: 2075576634420573280}
@@ -47818,6 +47830,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onKnockback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 942874828167954386}
+        m_TargetAssemblyTypeName: PlayerHealth, Assembly-CSharp
+        m_MethodName: OnKnockback
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onDestroyed:
     m_PersistentCalls:
       m_Calls:
@@ -47852,6 +47879,7 @@ MonoBehaviour:
   health: 100
   maxHealth: 0
   dyingAmount: 0.25
+  knockbackDistance: 1.5
   knockbackSpeed: 0.5
   playerController: {fileID: 0}
   healthUpInput: 0b000000

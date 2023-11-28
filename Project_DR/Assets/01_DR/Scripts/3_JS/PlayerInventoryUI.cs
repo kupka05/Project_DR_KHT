@@ -24,6 +24,9 @@ public class PlayerInventoryUI : MonoBehaviour
     private float _tooltipInterval = 300f;
     private string _panelName = "ItemSlotPanel";
 
+    [SerializeField] private GameObject _content; // 스크롤 패널 범위 오브젝트
+    private float _panelInterval = 180f; // 패널 간격
+
     #endregion
     /*************************************************
      *                  Unity Events
@@ -201,6 +204,24 @@ public class PlayerInventoryUI : MonoBehaviour
 
         // 슬롯 리셋
         ResetSlotDatas(latestIndex + 1);
+
+        // 스크롤 패널 범위 설정
+        SetScrollArea(latestIndex);
+    }
+
+    // 스크롤 패널 범위 설정
+    private void SetScrollArea(int count)
+    {
+        // 슬롯(count)이 3개 미만일 경우 기본 범위(스크롤 불가)
+        if (count < 3)
+        {
+            return;
+        }
+
+        RectTransform contentRect = _content.GetComponent<RectTransform>();
+        RectTransform slotRect = _itemSlotPanels[count].GetComponent<RectTransform>();
+        Vector2 slotAnchorPos = slotRect.anchoredPosition;
+        contentRect.sizeDelta = slotAnchorPos;
     }
 
     #endregion

@@ -63,6 +63,7 @@ namespace BNG {
         [Header("Events")]
         [Tooltip("Optional Event to be called when receiving damage. Takes damage amount as a float parameter.")]
         public FloatEvent onDamaged;
+       
 
         [Tooltip("Optional Event to be called once health is <= 0")]
         public UnityEvent onDestroyed;
@@ -103,6 +104,7 @@ namespace BNG {
             Health -= damageAmount;
 
             onDamaged?.Invoke(damageAmount);
+            //Debug.Log($"health{Health}");
 
             // Invector Integration
 #if INVECTOR_BASIC || INVECTOR_AI_TEMPLATE

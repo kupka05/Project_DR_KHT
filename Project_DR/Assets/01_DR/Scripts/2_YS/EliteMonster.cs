@@ -47,14 +47,34 @@ public class EliteMonster : Monster
                     {
                         case Type.HUMAN_ROBOTRED:
 
-                            anim.SetBool(hashWalkingAttack, true);
-                            anim.SetBool(hashAttack, true);
-                            
-                            yield return new WaitForSeconds(0.5f);
-                            anim.SetBool(hashidle, true);
-                            anim.SetBool(hashAttack, false);
-                            anim.SetBool(hashRun, false);
-                            yield return new WaitForSeconds(0.3f);
+                            int humanRobotRed = Random.Range(0, 2);
+
+                            switch (humanRobotRed)
+                            {
+                                case 0:
+                                    anim.SetBool(hashWalkingAttack, true);
+                                    anim.SetBool(hashAttack, true);
+                                    yield return new WaitForSeconds(1.3f);
+                                    anim.SetBool(hashidle, true);
+                                    anim.SetBool(hashAttack, false);
+                                    anim.SetBool(hashWalkingAttack, false);
+                                    anim.SetBool(hashRun, false);
+                                    yield return new WaitForSeconds(0.3f);
+                                    break;
+
+                                case 1:
+                                    //anim.SetBool(hashWalkingAttack, true);
+                                    anim.SetBool(hashAttack2, true);
+
+                                    yield return new WaitForSeconds(1.3f);
+                                    anim.SetBool(hashidle, true);
+                                    anim.SetBool(hashAttack2, false);
+                                    //anim.SetBool(hashWalkingAttack, false);
+                                    anim.SetBool(hashRun, false);
+                                    yield return new WaitForSeconds(0.3f);
+                                    break;
+
+                            }
                             break;
 
                         case Type.HUMAN_GOLEMFIRE:
@@ -142,10 +162,6 @@ public class EliteMonster : Monster
 
                         case Type.BEAST_QUEENWORM:
 
-                            int sting = Random.Range(0, 3);
-
-                            switch (sting)
-                            {
                                 case 0:
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
@@ -156,37 +172,6 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashRun, false);
                                     yield return new WaitForSeconds(0.3f);
                                     break;
-
-                                case 1:
-                                    anim.SetBool(hashAttack2, true);
-                                    yield return new WaitForSeconds(0.8f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack2, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
-
-                                case 2:
-                                    anim.SetBool(hashAttack3, true);
-                                    yield return new WaitForSeconds(0.8f);
-                                    anim.SetBool(hashidle, true);
-                                    anim.SetBool(hashAttack3, false);
-                                    //anim.SetBool(hashWalkingAttack, false);
-                                    anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
-                                    break;
-                                    //case 3:
-                                    //    anim.SetBool(hashAttack4, true);
-                                    //    yield return new WaitForSeconds(0.8f);
-                                    //    anim.SetBool(hashidle, true);
-                                    //    anim.SetBool(hashAttack4, false);
-                                    //    //anim.SetBool(hashWalkingAttack, false);
-                                    //    anim.SetBool(hashRun, false);
-                                    //    yield return new WaitForSeconds(0.3f);
-                                    //    break;
-                            }
-                            break;
 
                         case Type.SIMPLE_TOADSTOOL:
 
@@ -197,9 +182,7 @@ public class EliteMonster : Monster
                                 case 0:
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
-                                    anim.SetBool(hashidle, false);
-
-                                   
+                                
                                     yield return new WaitForSeconds(0.2f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
@@ -210,10 +193,7 @@ public class EliteMonster : Monster
 
                                 case 1:
                                     anim.SetBool(hashAttack2, true);
-                                    anim.SetBool(hashidle, false);
-
-
-
+                                    
                                     yield return new WaitForSeconds(0.2f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
@@ -224,10 +204,6 @@ public class EliteMonster : Monster
 
                                 case 2:
                                     anim.SetBool(hashAttack3, true);
-                                    anim.SetBool(hashidle, false);
-
-
-                                
 
                                     yield return new WaitForSeconds(0.7f);
                                     anim.SetBool(hashidle, true);
@@ -249,11 +225,6 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
 
-                                    GameObject instantBullet = Instantiate(monsterBullet, bulletPort.position, bulletPort.rotation);
-                                    MonsterBullet bullet = instantBullet.GetComponent<MonsterBullet>();
-                                    bulletPort.transform.LookAt(playerTr);
-                                    instantBullet.transform.LookAt(playerTr);
-
                                     yield return new WaitForSeconds(1.0f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
@@ -265,11 +236,6 @@ public class EliteMonster : Monster
                                 case 1:
                                     anim.SetBool(hashAttack2, true);
 
-                                    GameObject instantBulletRight = Instantiate(monsterBullet, bulletPortRight.position, bulletPortRight.rotation);
-                                    MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
-                                    bulletPortRight.transform.LookAt(playerTr);
-                                    instantBulletRight.transform.LookAt(playerTr);
-
                                     yield return new WaitForSeconds(1.0f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
@@ -280,11 +246,6 @@ public class EliteMonster : Monster
 
                                 case 2:
                                     anim.SetBool(hashAttack3, true);
-
-                                    GameObject instantBulletLeft = Instantiate(monsterBullet, bulletPortLeft.position, bulletPortLeft.rotation);
-                                    MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
-                                    bulletPortRight.transform.LookAt(playerTr);
-                                    instantBulletLeft.transform.LookAt(playerTr);
 
                                     yield return new WaitForSeconds(1.0f);
                                     anim.SetBool(hashidle, true);
@@ -311,8 +272,27 @@ public class EliteMonster : Monster
 
             yield return new WaitForSeconds(0.1f);
         }
+
+
     }
 
+    public void GolemShoot(int index)
+    {
+        switch(index)
+        {
+            case 0:
+                GameObject instantBulletLeft = Instantiate(monsterBullet, bulletPortLeft.position, bulletPortLeft.rotation);
+                MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
+                bulletPortRight.transform.LookAt(playerTr);
+                instantBulletLeft.transform.LookAt(playerTr);
+
+                GameObject instantBulletRight = Instantiate(monsterBullet, bulletPortRight.position, bulletPortRight.rotation);
+                MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
+                bulletPortRight.transform.LookAt(playerTr);
+                instantBulletRight.transform.LookAt(playerTr);
+                break;
+        }
+    }
 
     public void Shoot(int index)
     {
@@ -325,23 +305,20 @@ public class EliteMonster : Monster
                 instantBullet.transform.LookAt(playerTr);
                 break;
 
-            case 1:
-
+                case 1:
                 GameObject instantBulletRight = Instantiate(monsterBullet, bulletPortRight.position, bulletPortRight.rotation);
                 MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
                 bulletPortRight.transform.LookAt(playerTr);
                 instantBulletRight.transform.LookAt(playerTr);
                 break;
 
-            case 2:
-
+                case 2:
                 GameObject instantBulletLeft = Instantiate(monsterBullet, bulletPortLeft.position, bulletPortLeft.rotation);
                 MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
-                bulletPortLeft.transform.LookAt(playerTr);
+                bulletPortRight.transform.LookAt(playerTr);
                 instantBulletLeft.transform.LookAt(playerTr);
                 break;
         }
-
-        
     }
+
 }

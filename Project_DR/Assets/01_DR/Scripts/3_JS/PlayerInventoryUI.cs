@@ -31,6 +31,10 @@ public class PlayerInventoryUI : MonoBehaviour
         _itemSlotPanels = new List<ItemSlotPanelUI>();
         _tooltipAnchorPos = _itemTooltip.GetComponent<RectTransform>().anchoredPosition;
 
+        // 오브젝트 풀링
+        CreateSlotPulling();
+
+        // 슬롯 업데이트
         UpdatePlayerInventory();
     }
 
@@ -41,9 +45,6 @@ public class PlayerInventoryUI : MonoBehaviour
     #region [+]
     public void UpdatePlayerInventory()
     {
-        // 아이템 슬롯 오브젝트 풀링
-        CreateSlotPulling();
-
         // 아이템 슬롯 업데이트
         UpdateItemSlots();
     }
@@ -143,6 +144,7 @@ public class PlayerInventoryUI : MonoBehaviour
     {
         // 인벤토리 슬롯 개수
         int count = _inventory.InitalCapacity;
+        int latestIndex = -1;
         // 인벤토리에 있는 슬롯 개수만큼 순회
         for (int i = 0; i < count; i++)
         {
@@ -153,17 +155,23 @@ public class PlayerInventoryUI : MonoBehaviour
                 if (_inventory.Items[i] is PortionItem pi)
                 {
                     // 순차적으로 _itemSlotPanels을 순회
-                    for (int j = 0; j < count; j++)
+                    for (int j = latestIndex + 1; j < count; j++)
                     {
-                        // 비어있을 경우
-                        if (_itemSlotPanels[j].ItemData == default)
+                        // 추가할 패널이 비활성화인 경우
+                        if (_itemSlotPanels[j].gameObject.activeSelf == false)
                         {
-                            // Init
-                            int id = pi.Data.ID;
-                            int amount = pi.Amount;
-                            int maxAmount = pi.MaxAmount;
-                            InitSlotData(id, amount, maxAmount, i);
+                            // 활성화
+                            _itemSlotPanels[j].gameObject.SetActive(true);
                         }
+                        // 데이터 Init
+                        int id = pi.Data.ID;
+                        int amount = pi.Amount;
+                        int maxAmount = pi.MaxAmount;
+                        // i는 실제 인벤토리 아이템 인덱스 저장을 위해 보냄
+                        InitSlotData(id, amount, maxAmount, i);
+
+                        latestIndex = j;
+                        break;
                     }
                 }
 

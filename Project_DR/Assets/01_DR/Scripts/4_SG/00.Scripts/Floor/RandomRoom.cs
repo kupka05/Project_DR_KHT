@@ -1,0 +1,42 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RandomRoom : MonoBehaviour
+{       // 각 3종류의 방이 존재하는데 각 방Class는 RandomRoom을 상속받을것임
+
+    [SerializeField]
+    public bool isClearRoom = false;    // 해당방 클리어했는지 여부
+
+
+
+
+
+
+    /// <summary>
+    /// 상속해준 isClearRoom bool값을 리턴해주는 함수
+    /// </summary>
+    /// <returns>isClearRoom</returns>
+    protected bool GetClearRoomBool()
+    { 
+        return isClearRoom;
+    }       // GetClearRoomBool()
+
+    /// <summary>
+    /// clearRoom 변수를 true로 바꿔주는 함수
+    /// </summary>
+    protected void ClearRoomBoolSetTrue()
+    {
+        isClearRoom = true;
+    }       // ClearRoomBoolSetTrue()
+
+    /// <summary>
+    /// clearRoom 변수를 false로 바꿔주는 함수
+    /// </summary>
+    protected void ClearRoomBoolSetFalse()
+    {
+        isClearRoom = false;
+    }       // ClearRoomBoolSetFalse()
+
+
+}       // ClassEnd

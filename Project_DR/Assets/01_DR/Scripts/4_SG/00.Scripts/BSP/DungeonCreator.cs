@@ -92,6 +92,7 @@ public class DungeonCreator : MonoBehaviour
     // 던전 생성 함수
     public void CreateDungeon()
     {
+        bspRoom.Clear();
         // 기존 자식 객체 삭제
         DestroyAllChildren();
 
@@ -160,8 +161,8 @@ public class DungeonCreator : MonoBehaviour
         
 
 
-        //Debug.Log("던전 생성 끝");
         DungeonInspectionManager.dungeonManagerInstance.isCreateDungeonEnd = true;
+        Debug.Log("던전 생성 끝");
     }   // CreateDungeon()
 
     /// <summary>
@@ -171,8 +172,13 @@ public class DungeonCreator : MonoBehaviour
     private void InItRoomsEvent(GameObject floorParent)
     {         // 나중에 Llst대신 Queue를 사용해서 EnQueue로 넣고 DeQueue로 뺴는 식으로 해서 Count로 Random돌려도 될거같음  
         int roomCount = floorParent.transform.childCount;
-        int battleRoomCount = roomCount / 2;
-        int eventRoom = roomCount - battleRoomCount;
+        int battleRoomCount = roomCount / 3;
+        int eventRoom = battleRoomCount;
+        int nullRoom = battleRoomCount;
+        //int battleRoomCount = 2;
+        //int eventRoom = 2;
+        //int nullRoom = 2;
+        //Debug.Log($"RoomCount : {roomCount} NullRoom : {nullRoom}");
 
         for (int i = 0; i < floorParent.transform.childCount; i++)
         {       // List에 bsp의방 Transform을 Add
@@ -180,12 +186,16 @@ public class DungeonCreator : MonoBehaviour
         }
         // clone으로 만들어서 하나씩 remove하면서 각자 방에 넣어줄 예정
         List<Transform> bspListClone = bspRoom;
-        Debug.Log($"ListCount : {bspListClone.Count}");
+        //Debug.Log($"ListCount : {bspListClone.Count}");
         //Debug.Log($"event -> {eventRoom} Battle -> {battleRoomCount}");
-        while (battleRoomCount != 0 || eventRoom != 0)
+        while (battleRoomCount != 0 || eventRoom != 0 || nullRoom != 0)
         {
             int randomIdx = UnityEngine.Random.Range(0, bspListClone.Count);
-            int randomEvent = UnityEngine.Random.Range(0, 2);       // 0 ~ 1
+            int randomEvent = UnityEngine.Random.Range(0, 3);       // 0 ~ 2
+            if (bspListClone[randomIdx] == null)
+            {
+                break;
+            }
 
             if(randomEvent == 0 && battleRoomCount != 0)
             {
@@ -199,8 +209,14 @@ public class DungeonCreator : MonoBehaviour
                 eventRoom -= 1;
                 bspListClone.Remove(bspListClone[randomIdx]);
             }
+            else if(randomEvent == 2 && nullRoom != 0)
+            {
+                bspListClone[randomIdx].AddComponent<NullRoom>();
+                nullRoom -= 1;
+                bspListClone.Remove(bspListClone[randomIdx]);
+            }
         }
-            Debug.LogFormat("각방 이벤트 선정 끝");
+            //Debug.LogFormat("각방 이벤트 선정 끝");
 
 
 
@@ -525,8 +541,8 @@ public class DungeonCreator : MonoBehaviour
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }
         if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
-        colSizeX = colSizeX - 5f;
-        colSizeZ = colSizeZ - 5f;
+        colSizeX = colSizeX - 2f;
+        colSizeZ = colSizeZ - 2f;
         Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
         floorCol.size = colSize;
     }       // CreateDungeonInspection()
@@ -874,9 +890,9 @@ public class DungeonCreator : MonoBehaviour
 
 
     /// <summary>
-    /// 커스텀룸와 인근 방을 이어주는 복도 제작   
-    /// isPositive : PC = flase ,Boss : true, NextStage : ture
+    /// 커스텀룸와 인근 방을 이어주는 복도 제작       
     /// </summary>
+    /// isPositive : PC = flase ,Boss : true, NextStage : ture
     private void CustomRoomCorridorMeshCreate(bool isPositive_, float bspRoomBottomCenterPoint_,
         float bspRoomTopCenterPoint_, FloorMeshPos bspRoomPos_, GameObject parentRoom_)
     {
@@ -1322,77 +1338,79 @@ public class DungeonCreator : MonoBehaviour
             bottomRightV
         };
 
-        // UV 매핑을 위한 배열 생성
-        Vector2[] uvs = new Vector2[vertices.Length];
-        for (int i = 0; i < uvs.Length; i++)
-        {
-            uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
-        }
+        //// UV 매핑을 위한 배열 생성
+        //Vector2[] uvs = new Vector2[vertices.Length];
+        //for (int i = 0; i < uvs.Length; i++)
+        //{
+        //    uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+        //}
 
-        // 삼각형을 정의하는 배열 생성
-        int[] triangles = new int[]
-        {
-            0,
-            1,
-            2,
-            2,
-            1,
-            3
-        };
+        //// 삼각형을 정의하는 배열 생성
+        //int[] triangles = new int[]
+        //{
+        //    0,
+        //    1,
+        //    2,
+        //    2,
+        //    1,
+        //    3
+        //};
 
-        // 메시 생성 및 설정
-        Mesh mesh = new Mesh();
-        mesh.vertices = vertices;
-        mesh.uv = uvs;
-        mesh.triangles = triangles;
+        //// 메시 생성 및 설정
+        //Mesh mesh = new Mesh();
+        //mesh.vertices = vertices;
+        //mesh.uv = uvs;
+        //mesh.triangles = triangles;
 
 
-        GameObject dungeonFloor = new GameObject("NextStageRoomMesh" + InItNum + bottomLeftV,
-            typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
+        GameObject dungeonFloor = new GameObject("NextStageRoomMesh" + InItNum + bottomLeftV);            
+        //GameObject dungeonFloor = new GameObject("NextStageRoomMesh" + InItNum + bottomLeftV,
+        //    typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
 
         GameObject wallParnet = new GameObject("CustomRoomWallParent");
-        dungeonFloor.transform.parent = this.transform;
+        //dungeonFloor.transform.parent = this.transform;
         wallParnet.transform.parent = dungeonFloor.transform;
+        dungeonFloor.transform.parent = this.transform;
 
-        dungeonFloor.gameObject.tag = "Floor";
+        //dungeonFloor.gameObject.tag = "Floor";
 
-        InItNum++;
+        //InItNum++;
 
-        #region 메시의 콜라이더 Center,Size
+        //#region 메시의 콜라이더 Center,Size
 
-        //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
-        //Center
+        ////메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
+        ////Center
         Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0f, (topLeftV.z + bottomLeftV.z) / 2);
-        BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
-        floorCol.center = colCenter;
-        // Size
-        float colSizeX, colSizeY, colSizeZ;
-        colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = 0.03f;
-        colSizeZ = bottomLeftV.z - topLeftV.z;
-        // 음수값이 나오면 양수로 치환
-        if (colSizeX < 0) { colSizeX = -colSizeX; }
-        if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
-        Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
-        floorCol.size = colSize;
+        //BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
+        //floorCol.center = colCenter;
+        //// Size
+        //float colSizeX, colSizeY, colSizeZ;
+        //colSizeX = bottomLeftV.x - bottomRightV.x;
+        //colSizeY = 0.03f;
+        //colSizeZ = bottomLeftV.z - topLeftV.z;
+        //// 음수값이 나오면 양수로 치환
+        //if (colSizeX < 0) { colSizeX = -colSizeX; }
+        //if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
+        //Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
+        //floorCol.size = colSize;
 
-        BoxCollider stepOffCol = dungeonFloor.AddComponent<BoxCollider>();
-        dungeonFloor.AddComponent<NextstageRoomColliderController>().GetColliders(floorCol, stepOffCol);
+        //BoxCollider stepOffCol = dungeonFloor.AddComponent<BoxCollider>();
+        //dungeonFloor.AddComponent<NextstageRoomColliderController>().GetColliders(floorCol, stepOffCol);
 
 
-        stepOffCol.center = colCenter;
-        stepOffCol.size = new Vector3((float)nextStageRoomUnderObjCount, 0f, (float)nextStageRoomUnderObjCount);
-        #endregion 메시의 콜라이더 Center,Size
+        //stepOffCol.center = colCenter;
+        //stepOffCol.size = new Vector3((float)nextStageRoomUnderObjCount, 0f, (float)nextStageRoomUnderObjCount);
+        //#endregion 메시의 콜라이더 Center,Size
 
-        dungeonFloor.transform.position = Vector3.zero;
-        dungeonFloor.transform.localScale = Vector3.one;
+        //dungeonFloor.transform.position = Vector3.zero;
+        //dungeonFloor.transform.localScale = Vector3.one;
 
-        dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
-        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        //dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
+        //dungeonFloor.GetComponent<MeshRenderer>().material = material;
 
         // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
-        dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
-        nextStageRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
+        //dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
+        //nextStageRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
 
 
 
@@ -1401,136 +1419,136 @@ public class DungeonCreator : MonoBehaviour
         CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
 
-        CreateNextStageStoneObj(colCenter, dungeonFloor);
+        //CreateNextStageStoneObj(colCenter, dungeonFloor);
 
     }       // NextStageRoomCreate()
 
-    /// <summary>
-    /// 다음 던전이동 하기위한 뚫리는 돌 오브젝트 생성
-    /// </summary>
-    private void CreateNextStageStoneObj(Vector3 meshCenter, GameObject dungeonFloor)
-    {
-        // 포지션과 스케일 값을 수정해줄 Vector3
-        Vector3 cloneScale = new Vector3(3f, 3f, 3f);
-        Vector3 clonePos;
+    ///// <summary>
+    ///// 다음 던전이동 하기위한 뚫리는 돌 오브젝트 생성
+    ///// </summary>
+    //private void CreateNextStageStoneObj(Vector3 meshCenter, GameObject dungeonFloor)
+    //{
+    //    // 포지션과 스케일 값을 수정해줄 Vector3
+    //    Vector3 cloneScale = new Vector3(3f, 3f, 3f);
+    //    Vector3 clonePos;
 
-        // 프리펩을 클론딸 게임오브젝트
-        GameObject nextStageStoneObj;
+    //    // 프리펩을 클론딸 게임오브젝트
+    //    GameObject nextStageStoneObj;
 
-        nextStageStoneObj = Instantiate(nextStageStone, meshCenter, Quaternion.identity, dungeonFloor.transform);
+    //    nextStageStoneObj = Instantiate(nextStageStone, meshCenter, Quaternion.identity, dungeonFloor.transform);
 
-        // 이후 스프레트 시트로 바뀔수 있음        
-        nextStageStoneObj.transform.localScale = cloneScale;
+    //    // 이후 스프레트 시트로 바뀔수 있음        
+    //    nextStageStoneObj.transform.localScale = cloneScale;
 
-        clonePos = nextStageStoneObj.transform.position;
-        clonePos.y = (-nextStageStoneObj.transform.localScale.y / 2) + 0.1f;
-        nextStageStoneObj.transform.position = clonePos;
+    //    clonePos = nextStageStoneObj.transform.position;
+    //    clonePos.y = (-nextStageStoneObj.transform.localScale.y / 2) + 0.1f;
+    //    nextStageStoneObj.transform.position = clonePos;
 
-        CreateNextStageStoneWall(meshCenter, dungeonFloor, cloneScale, clonePos);
-    }       // CreateNextStageStoneObj()
+    //    CreateNextStageStoneWall(meshCenter, dungeonFloor, cloneScale, clonePos);
+    //}       // CreateNextStageStoneObj()
 
-    /// <summary>
-    /// 다음 스테이지 이동시 뚫리는 바닥주위로 벽 생성해주는 함수
-    /// </summary>   
-    private void CreateNextStageStoneWall(Vector3 colCenter, GameObject dungeonFloor,
-        Vector3 stoneScale, Vector3 stonePos)
-    {   // 던전의 벽만들듯이 꼭지점을 이용해서 제작
-        Vector3 bottomLeftV;
-        Vector3 bottomRightV;
-        Vector3 topLeftV;
-        Vector3 topRightV;
+    ///// <summary>
+    ///// 다음 스테이지 이동시 뚫리는 바닥주위로 벽 생성해주는 함수
+    ///// </summary>   
+    //private void CreateNextStageStoneWall(Vector3 colCenter, GameObject dungeonFloor,
+    //    Vector3 stoneScale, Vector3 stonePos)
+    //{   // 던전의 벽만들듯이 꼭지점을 이용해서 제작
+    //    Vector3 bottomLeftV;
+    //    Vector3 bottomRightV;
+    //    Vector3 topLeftV;
+    //    Vector3 topRightV;
 
-        bottomLeftV = new Vector3(((colCenter.x - (stoneScale.x / 2)) - 1f), colCenter.y - 1f,
-            ((colCenter.z - (stoneScale.z / 2)) - 1f));
-        bottomRightV = new Vector3(((colCenter.x + (stoneScale.x / 2)) + 1f), colCenter.y - 1f,
-            ((colCenter.z - (stoneScale.z / 2)) - 1f));
-        topLeftV = new Vector3(bottomLeftV.x, bottomLeftV.y, (colCenter.z + (stoneScale.z / 2f)) + 1f);
-        topRightV = new Vector3(bottomRightV.x, bottomRightV.y, (colCenter.z + (stoneScale.z / 2f)) + 1f);                                                                                                                                                                                                                                                                             
+    //    bottomLeftV = new Vector3(((colCenter.x - (stoneScale.x / 2)) - 1f), colCenter.y - 1f,
+    //        ((colCenter.z - (stoneScale.z / 2)) - 1f));
+    //    bottomRightV = new Vector3(((colCenter.x + (stoneScale.x / 2)) + 1f), colCenter.y - 1f,
+    //        ((colCenter.z - (stoneScale.z / 2)) - 1f));
+    //    topLeftV = new Vector3(bottomLeftV.x, bottomLeftV.y, (colCenter.z + (stoneScale.z / 2f)) + 1f);
+    //    topRightV = new Vector3(bottomRightV.x, bottomRightV.y, (colCenter.z + (stoneScale.z / 2f)) + 1f);                                                                                                                                                                                                                                                                             
 
-        // 땅속 벽들을 담아둘 게임 오브젝트
-        GameObject underWalls = new GameObject("UnderWall");
-        underWalls.transform.parent = dungeonFloor.transform;
-        // 인스턴스하기위한 게임오브젝트
-        GameObject underWallClone;
-        Vector3 tempPosition = bottomLeftV;     // 인스턴스해줄 위치를 저장할 임시 V3
-        float tempPosX = tempPosition.x;
-        #region 가로벽 생성
-        // 가로벽 생성
-        // Bottom
-        for (float horizontalY = 0f; horizontalY < (stoneScale.y * 2) * 3; horizontalY++)
-        {       // 높이
-            tempPosition.x = tempPosX;
+    //    // 땅속 벽들을 담아둘 게임 오브젝트
+    //    GameObject underWalls = new GameObject("UnderWall");
+    //    underWalls.transform.parent = dungeonFloor.transform;
+    //    // 인스턴스하기위한 게임오브젝트
+    //    GameObject underWallClone;
+    //    Vector3 tempPosition = bottomLeftV;     // 인스턴스해줄 위치를 저장할 임시 V3
+    //    float tempPosX = tempPosition.x;
+    //    #region 가로벽 생성
+    //    // 가로벽 생성
+    //    // Bottom
+    //    for (float horizontalY = 0f; horizontalY < (stoneScale.y * 2) * 3; horizontalY++)
+    //    {       // 높이
+    //        tempPosition.x = tempPosX;
 
-            for (float horizontal = bottomLeftV.x; horizontal <= bottomRightV.x; horizontal++)
-            {       // 가로 깔기
-                underWallClone = Instantiate(floorPrefabs[0],tempPosition,Quaternion.identity,underWalls.transform);
-                tempPosition.x = tempPosition.x + 1;
-            }
-            tempPosition.y -= 1f;
-        }
-        tempPosition = topLeftV;
-        tempPosX = tempPosition.x;
-        // Top
-        for (float horizontalY = 0f; horizontalY < (stoneScale.y * 2) * 3; horizontalY++)
-        {       // 높이
-            tempPosition.x = tempPosX;
-            for (float horizontal = topLeftV.x; horizontal <= topRightV.x; horizontal++)            
-            {   // 가로
-                underWallClone = Instantiate(floorPrefabs[0], tempPosition, Quaternion.identity, underWalls.transform);
-                tempPosition.x += 1f;
-            }
-            tempPosition.y -= 1f;
-        }
-        #endregion 가로벽 생성
+    //        for (float horizontal = bottomLeftV.x; horizontal <= bottomRightV.x; horizontal++)
+    //        {       // 가로 깔기
+    //            underWallClone = Instantiate(floorPrefabs[0],tempPosition,Quaternion.identity,underWalls.transform);
+    //            tempPosition.x = tempPosition.x + 1;
+    //        }
+    //        tempPosition.y -= 1f;
+    //    }
+    //    tempPosition = topLeftV;
+    //    tempPosX = tempPosition.x;
+    //    // Top
+    //    for (float horizontalY = 0f; horizontalY < (stoneScale.y * 2) * 3; horizontalY++)
+    //    {       // 높이
+    //        tempPosition.x = tempPosX;
+    //        for (float horizontal = topLeftV.x; horizontal <= topRightV.x; horizontal++)            
+    //        {   // 가로
+    //            underWallClone = Instantiate(floorPrefabs[0], tempPosition, Quaternion.identity, underWalls.transform);
+    //            tempPosition.x += 1f;
+    //        }
+    //        tempPosition.y -= 1f;
+    //    }
+    //    #endregion 가로벽 생성
 
-        tempPosition = bottomLeftV;
-        float tempPosZ = tempPosition.z;
-        #region 세로벽 생성
-        // 세로벽 생성
-        // L
-        for (float verticalY = 0; verticalY < (stoneScale.y * 2) * 3; verticalY++)
-        {       // 높이
-            tempPosition.z = tempPosZ;
-            for (float vertical = bottomLeftV.z; vertical <= topLeftV.z; vertical++)
-            {   // 세로
-                underWallClone = Instantiate(floorPrefabs[0], tempPosition, Quaternion.identity, underWalls.transform);
-                tempPosition.z += 1f;
-            }
-            tempPosition.y -= 1f;
-        }
-        tempPosition = bottomRightV;
-        tempPosZ = tempPosition.z;
-        // R
-        for (float verticalY = 0; verticalY < (stoneScale.y * 2) * 3; verticalY++)
-        {       // 높이
-            tempPosition.z = tempPosZ;
-            for (float vertical = bottomRightV.z; vertical <= topRightV.z; vertical++)
-            {   // 세로
-                underWallClone = Instantiate(floorPrefabs[0], tempPosition, Quaternion.identity, underWalls.transform);
-                tempPosition.z += 1f;
-            }
-            tempPosition.y -= 1f;
-        }
+    //    tempPosition = bottomLeftV;
+    //    float tempPosZ = tempPosition.z;
+    //    #region 세로벽 생성
+    //    // 세로벽 생성
+    //    // L
+    //    for (float verticalY = 0; verticalY < (stoneScale.y * 2) * 3; verticalY++)
+    //    {       // 높이
+    //        tempPosition.z = tempPosZ;
+    //        for (float vertical = bottomLeftV.z; vertical <= topLeftV.z; vertical++)
+    //        {   // 세로
+    //            underWallClone = Instantiate(floorPrefabs[0], tempPosition, Quaternion.identity, underWalls.transform);
+    //            tempPosition.z += 1f;
+    //        }
+    //        tempPosition.y -= 1f;
+    //    }
+    //    tempPosition = bottomRightV;
+    //    tempPosZ = tempPosition.z;
+    //    // R
+    //    for (float verticalY = 0; verticalY < (stoneScale.y * 2) * 3; verticalY++)
+    //    {       // 높이
+    //        tempPosition.z = tempPosZ;
+    //        for (float vertical = bottomRightV.z; vertical <= topRightV.z; vertical++)
+    //        {   // 세로
+    //            underWallClone = Instantiate(floorPrefabs[0], tempPosition, Quaternion.identity, underWalls.transform);
+    //            tempPosition.z += 1f;
+    //        }
+    //        tempPosition.y -= 1f;
+    //    }
 
-        #endregion 세로벽 생성
+    //    #endregion 세로벽 생성
 
-        CreateNextStagePotal(dungeonFloor, bottomLeftV, bottomRightV, topLeftV, topRightV);
-    }       // CreateNextStageStoneWall()
+    //    CreateNextStagePotal(dungeonFloor, bottomLeftV, bottomRightV, topLeftV, topRightV);
+    //}       // CreateNextStageStoneWall()
 
-    /// <summary>
-    /// 다음스테이지로 이동시켜줄 게임오브젝트 생성
-    /// </summary>   
-    private void CreateNextStagePotal(GameObject dungeonFloor, Vector3 bottomLeftV, 
-        Vector3 bottomRightV, Vector3 topLeftV, Vector3 topRightV)
-    {       // TODO : 1회차 다회차 마다 어디로 이동시켜줄지 구별시켜야함
-        Vector3 underCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, -18f, (bottomLeftV.z + topLeftV.z) / 2);
+    ///// <summary>
+    ///// 다음스테이지로 이동시켜줄 게임오브젝트 생성
+    ///// </summary>   
+    //private void CreateNextStagePotal(GameObject dungeonFloor, Vector3 bottomLeftV, 
+    //    Vector3 bottomRightV, Vector3 topLeftV, Vector3 topRightV)
+    //{       // TODO : 1회차 다회차 마다 어디로 이동시켜줄지 구별시켜야함
+    //    Vector3 underCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, -18f, (bottomLeftV.z + topLeftV.z) / 2);
 
-        GameObject potalClone;
+    //    GameObject potalClone;
 
-        potalClone = Instantiate(nextStagePotal, underCenter, Quaternion.identity, dungeonFloor.transform);        
-        potalClone.AddComponent<NextStagePotal>();                
+    //    potalClone = Instantiate(nextStagePotal, underCenter, Quaternion.identity, dungeonFloor.transform);        
+    //    potalClone.AddComponent<NextStagePotal>();                
 
-    }       // CreateNextStagePotal()
+    //}       // CreateNextStagePotal()
 
 
 

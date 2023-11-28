@@ -1,15 +1,32 @@
+using Rito.InventorySystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleRoom : MonoBehaviour
+public class BattleRoom : RandomRoom
 {       // BattleRoomClass는 Monster소환 Monster가 전부 죽었는지 체크할것
-   
-    
+        
+
+
+
+
     void Start()
     {
-        Debug.LogFormat("{0}는 BattleRoom을 가지게 됨", this.gameObject.name);
-    }
+        DungeonManager.clearList.Add(isClearRoom);
+    }       // Start()
 
+    private void OnDestroy()
+    {
+        DungeonManager.clearList.Remove(isClearRoom);
+    }       // OnDestroy()
+
+
+    /// <summary>
+    /// 몬스터를 스폰하는 함수
+    /// </summary>
+    private void SponMonster(int _monsterCount )
+    {
+
+    }       // SponMonster()
 
 }       // ClassEnd

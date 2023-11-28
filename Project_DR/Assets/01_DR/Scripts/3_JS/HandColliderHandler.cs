@@ -31,22 +31,22 @@ public class HandColliderHandler : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
     }
 
-    private void Update()
-    {
-        if (latestGripItem != null)
-        {
-            if (latestGripItem.GrabbableHaptics.CurrentGrabber == null)
-            {
-                Debug.Log("Grip Off Item");
+    //private void Update()
+    //{
+    //    if (latestGripItem != null)
+    //    {
+    //        if (latestGripItem.GrabbableHaptics.CurrentGrabber == null)
+    //        {
+    //            Debug.Log("Grip Off Item");
 
-                // 5초 후에 수납 가능 상태로 변경
-                latestGripItem.Coroutine(latestGripItem.ResetState, 5f);
+    //            // 5초 후에 수납 가능 상태로 변경
+    //            latestGripItem.Coroutine(latestGripItem.ResetState, 5f);
 
-                // 리셋
-                latestGripItem = default;
-            }
-        }
-    }
+    //            // 리셋
+    //            latestGripItem = default;
+    //        }
+    //    }
+    //}
 
     private void OnTriggerEnter(Collider other)
     {

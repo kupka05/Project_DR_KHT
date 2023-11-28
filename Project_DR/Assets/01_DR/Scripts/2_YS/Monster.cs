@@ -23,11 +23,11 @@ public class Monster : MonoBehaviour
 
     public State state = State.IDLE;
 
-    public enum MonsterGroup
-    {
-        NORMAL,
-        ELITE
-    }
+    //public enum MonsterGroup
+    //{
+    //    NORMAL,
+    //    ELITE
+    //}
 
     public enum Type
     {
@@ -36,7 +36,14 @@ public class Monster : MonoBehaviour
         BEAST_SPIDER,
         BEAST_STING,
         SIMPLE_FUNGI,
-        SIMPLE_SPOOK
+        SIMPLE_SPOOK,
+
+        HUMAN_ROBOTRED,
+        HUMAN_GOLEMFIRE,
+        BEAST_SCORPION,
+        BEAST_QUEENWORM,
+        SIMPLE_TOADSTOOL,
+        SIMPLE_PHANTOM
     }
 
     //[System.Serializable]
@@ -53,7 +60,9 @@ public class Monster : MonoBehaviour
     public Type monsterType = Type.HUMAN_ROBOT;
 
     [Header("몬스터 원거리 관련")]
-    public Transform bulletport;
+    public Transform bulletPortLeft;
+    public Transform bulletPortRight;
+    public Transform bulletPort;
     public GameObject monsterBullet;
 
     [Header("몬스터 테이블")]
@@ -152,8 +161,6 @@ public class Monster : MonoBehaviour
             this.transform.LookAt(targetPostition);
             //transform.LookAt(playerTr.position);
         }
-
-       
     }
 
     public void GetData(int id)
@@ -206,7 +213,7 @@ public class Monster : MonoBehaviour
     }
 
     // 몬스터의 상태에 따라 전이되는 액션
-    IEnumerator MonsterAction()
+    public virtual IEnumerator MonsterAction()
     {
         while(true)
         { 

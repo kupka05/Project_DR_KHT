@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MonsterBullet : MonoBehaviour
 {
-    [Header("Å×ÀÌºí °ü·Ã")]
+    [Header("í…Œì´ë¸” ê´€ë ¨")]
     public float damage = default;
     public float speed = default;
 
@@ -17,6 +17,14 @@ public class MonsterBullet : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
 
         rigid.velocity = transform.forward * speed;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.CompareTag("Player"))
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     // Update is called once per frame

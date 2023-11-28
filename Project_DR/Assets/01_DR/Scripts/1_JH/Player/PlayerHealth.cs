@@ -11,6 +11,7 @@ public class PlayerHealth : MonoBehaviour
     public float maxHealth;
     private DamageScreenFader fader;
     public float dyingAmount = 0.25f; // 빈사상태 수치
+    public float knockbackSpeed = 0.5f; // 넉백
 
     public PlayerController playerController;
 
@@ -57,7 +58,8 @@ public class PlayerHealth : MonoBehaviour
     {
         SetHealth();
         fader.OnDamage();
-        if(health <= maxHealth * dyingAmount)
+        KnockBack();
+        if (health <= maxHealth * dyingAmount)
         {
             fader.OnDying();
         }
@@ -93,6 +95,12 @@ public class PlayerHealth : MonoBehaviour
 
     public void Die()
     {
+
+    }
+
+    public void KnockBack()
+    {
+        transform.position += -Vector3.forward * knockbackSpeed;
 
     }
 

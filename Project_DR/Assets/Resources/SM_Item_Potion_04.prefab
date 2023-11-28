@@ -216,8 +216,6 @@ GameObject:
   - component: {fileID: 3278406120060304706}
   - component: {fileID: 3278406120060304704}
   - component: {fileID: 3278406120060304716}
-  - component: {fileID: 3278406120060304715}
-  - component: {fileID: 3278406120060304714}
   - component: {fileID: 7427661338581765944}
   - component: {fileID: 1787663934338942457}
   - component: {fileID: 6195694826714593869}
@@ -225,7 +223,7 @@ GameObject:
   - component: {fileID: 7220416822920735943}
   m_Layer: 9
   m_Name: SM_Item_Potion_04
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -357,35 +355,6 @@ MonoBehaviour:
   MaximumVolume: 1
   RecentlyPlayedSound: 0
   LastRelativeVelocity: 0
---- !u!114 &3278406120060304715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3278406120060304705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cfdb44674e5ecd4ca24efb780dbc601, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  state: 0
---- !u!114 &3278406120060304714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3278406120060304705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e16acbb32654a3c49b2a2e701e919824, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _potionData: {fileID: 11400000, guid: c76044d8a642b6341882e805becf92df, type: 2}
-  _bombData: {fileID: 0}
-  _materialData: {fileID: 0}
-  _questData: {fileID: 0}
 --- !u!114 &7427661338581765944
 MonoBehaviour:
   m_ObjectHideFlags: 0

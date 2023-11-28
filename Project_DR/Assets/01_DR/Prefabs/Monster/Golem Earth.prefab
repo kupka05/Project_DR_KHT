@@ -757,7 +757,9 @@ MonoBehaviour:
   state: 0
   monsterId: 7002
   monsterType: 1
-  bulletport: {fileID: 0}
+  bulletPortLeft: {fileID: 0}
+  bulletPortRight: {fileID: 0}
+  bulletPort: {fileID: 0}
   monsterBullet: {fileID: 0}
   hp: 10000
   attack: 0
@@ -1428,17 +1430,17 @@ PrefabInstance:
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.184
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.007
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
@@ -1565,12 +1567,12 @@ PrefabInstance:
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.38
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.01
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
@@ -1615,17 +1617,17 @@ PrefabInstance:
     - target: {fileID: 958297001894207690, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_Size.x
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207690, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_Size.y
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207690, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_Size.z
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207691, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
@@ -1650,7 +1652,7 @@ PrefabInstance:
     - target: {fileID: 958297001894207735, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}

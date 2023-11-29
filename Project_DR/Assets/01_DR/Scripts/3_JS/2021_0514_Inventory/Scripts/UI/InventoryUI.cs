@@ -200,6 +200,7 @@ namespace Rito.InventorySystem
 
             _slotUIList = new List<ItemSlotUI>(_verticalSlotCount * _horizontalSlotCount);
 
+            int index = default;
             // 슬롯들 동적 생성
             for (int j = 0; j < _verticalSlotCount; j++)
             {
@@ -224,6 +225,12 @@ namespace Rito.InventorySystem
 
                     // Next X
                     curPos.x += (_slotMargin + _slotSize);
+
+                    // 인벤토리에서 슬롯에 접근하기 위한 인덱스 할당
+                    slotUI.GetComponentInChildren<ItemSlotController>().SetIndex(index);
+                    
+                    // 인덱스 증가
+                    index++;
                 }
 
                 // Next Line

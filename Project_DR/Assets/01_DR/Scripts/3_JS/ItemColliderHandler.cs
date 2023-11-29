@@ -45,34 +45,39 @@ public class ItemColliderHandler : MonoBehaviour
         // 대상이 아이템 슬롯일 경우
         if (other.CompareTag("ItemSlot") && state == State.Default)
         {
-            Debug.Log($"name: {other.transform.parent.name}");
-            // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우
-            if (CheckColliderVisibility(
-                other.transform.parent.parent.parent.parent.parent.parent.GetComponent<RectTransform>(), 
-                other.GetComponent<RectTransform>()) == true)
+            ItemSlotController itemSlot = other.GetComponent<ItemSlotController>();
+            // 수납 가능한 경우에만 수납함
+            if (itemSlot.IsStorageAvailable)
             {
-                // 작업 상태로 변경
-                state = State.Processing;
-
-                ItemDataComponent itemDataComponent = gameObject.GetComponent<ItemDataComponent>();
-                Debug.Log($"GameObject {gameObject.GetComponent<ItemDataComponent>()}");
-                // ItemDataComponent가 있는지 확인
-                if (itemDataComponent != null)
+                //Debug.Log($"name: {other.transform.parent.name}");
+                // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우
+                if (CheckColliderVisibility(
+                    other.transform.parent.parent.parent.parent.parent.parent.GetComponent<RectTransform>(),
+                    other.GetComponent<RectTransform>()) == true)
                 {
-                    ItemData itemData = (ItemData)itemDataComponent.ItemData;
-                    int id = itemData.ID;
-                    ItemManager.instance.InventoryCreateItem(other.transform.position, id);
+                    // 작업 상태로 변경
+                    state = State.Processing;
+
+                    ItemDataComponent itemDataComponent = gameObject.GetComponent<ItemDataComponent>();
+                    //Debug.Log($"GameObject {gameObject.GetComponent<ItemDataComponent>()}");
+                    // ItemDataComponent가 있는지 확인
+                    if (itemDataComponent != null)
+                    {
+                        ItemData itemData = (ItemData)itemDataComponent.ItemData;
+                        int id = itemData.ID;
+                        ItemManager.instance.InventoryCreateItem(other.transform.position, id);
+                    }
+                    else
+                    {
+                        // 디버그용
+                        Debug.LogWarning("Item Error!");
+                    }
+                    Destroy(gameObject);
                 }
                 else
                 {
-                    // 디버그용
-                    Debug.LogWarning("Item Error!");
+                    Debug.Log("Out of range");
                 }
-                Destroy(gameObject);
-            }
-            else
-            {
-                Debug.Log("Out of range");
             }
         }
     }
@@ -92,7 +97,7 @@ public class ItemColliderHandler : MonoBehaviour
         if (collision.collider.CompareTag("Floor") && state == State.Stop)
         {
             // 디버그
-            Debug.Log("Floor");
+            //Debug.Log("Floor");
 
             // n초 후에 상태 초기화 코루틴 실행
             Action func = ResetState;

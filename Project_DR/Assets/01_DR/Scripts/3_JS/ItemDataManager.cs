@@ -25,8 +25,8 @@ public static class ItemDataManager
     private const int BOMB_TYPE_ID = 5101;
     private const int MATERIAL_TYPE_ID = 5201;
     private const int QUEST_TYPE_ID = 5301;
-    #endregion
 
+    #endregion
     /*************************************************
     *                 Public Methods
     *************************************************/

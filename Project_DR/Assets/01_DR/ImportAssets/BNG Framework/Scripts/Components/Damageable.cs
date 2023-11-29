@@ -108,7 +108,6 @@ namespace BNG {
             Health -= damageAmount;
 
             onDamaged?.Invoke(damageAmount);
-            onKnockback?.Invoke(hitPosition);
             //Debug.Log($"health{Health}");
 
             // Invector Integration
@@ -127,6 +126,10 @@ namespace BNG {
             if (Health <= 0) {
                 DestroyThis();
             }
+        }
+        public void OnKnockBack(Vector3 hitPosition)
+        {
+            onKnockback?.Invoke(hitPosition);
         }
 
         public virtual void DestroyThis() {

@@ -46,6 +46,7 @@ namespace BNG {
         public float CollisionDamage = 5;
         // 플레이어 여부, 플레이어는 자기 자신을 공격 할 수 없다.
         public bool isPlayer;
+        public bool isKnockback;
         public bool canSelfHarm = false; // 자해 여부
 
         Damageable thisDamageable;
@@ -87,12 +88,20 @@ namespace BNG {
                 DamageablePart damagePart = collision.gameObject.GetComponent<DamageablePart>();
                 if (d) {
                     d.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
-                    Debug.Log(collision.gameObject.name + "에게 " + Damage);
+
+                    if(isKnockback)
+                    {
+                        d.OnKnockBack(collision.GetContact(0).point);
+                    }
 
                 }
                 else if(damagePart)
                 {
                       damagePart.parent.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+                    if (isKnockback)
+                    {
+                        damagePart.parent.OnKnockBack(collision.GetContact(0).point);
+                    }
                     Debug.Log(collision.gameObject.name + "파츠에게 " + Damage);
 
                 }

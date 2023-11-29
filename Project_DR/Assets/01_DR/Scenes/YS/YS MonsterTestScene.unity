@@ -5081,6 +5081,7 @@ MonoBehaviour:
   CollisionDamage: 5
   isPlayer: 0
   canSelfHarm: 0
+  isKnockback: 1
 --- !u!54 &624144660
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5993,6 +5994,7 @@ MonoBehaviour:
   CollisionDamage: 5
   isPlayer: 0
   canSelfHarm: 0
+  isKnockback: 1
 --- !u!54 &897850463
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13310,6 +13312,9 @@ MonoBehaviour:
   onDamaged:
     m_PersistentCalls:
       m_Calls: []
+  onKnockback:
+    m_PersistentCalls:
+      m_Calls: []
   onDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -16157,6 +16162,9 @@ MonoBehaviour:
   RespawnTime: 10
   RemoveBulletHolesOnDeath: 1
   onDamaged:
+    m_PersistentCalls:
+      m_Calls: []
+  onKnockback:
     m_PersistentCalls:
       m_Calls: []
   onDestroyed:
@@ -27764,6 +27772,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemSlot: {fileID: 0}
+  isChangeSize: 1
 --- !u!1 &1948218479697351251
 GameObject:
   m_ObjectHideFlags: 0
@@ -28597,6 +28606,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a4b2c44d8917547b537c63a91226c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemSlotPanelUI: {fileID: 0}
+  _playerInventoryUI: {fileID: 0}
+  isPlayerInventory: 0
 --- !u!1 &1948218479823496800
 GameObject:
   m_ObjectHideFlags: 0
@@ -30366,6 +30378,7 @@ MonoBehaviour:
   _initalCapacity: 32
   _maxCapacity: 64
   _inventoryUI: {fileID: 1948218481239608727}
+  _playerInventoryUI: {fileID: 0}
 --- !u!4 &1948218480337742781
 Transform:
   m_ObjectHideFlags: 0
@@ -35045,7 +35058,7 @@ PrefabInstance:
     - target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23.1
+      value: 38.5
       objectReference: {fileID: 0}
     - target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -35055,7 +35068,7 @@ PrefabInstance:
     - target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -31.6
+      value: -35.8
       objectReference: {fileID: 0}
     - target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}

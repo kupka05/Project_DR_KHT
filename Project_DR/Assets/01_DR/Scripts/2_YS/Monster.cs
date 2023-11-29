@@ -66,7 +66,6 @@ public class Monster : MonoBehaviour
     public GameObject monsterBullet;
 
     [Header("몬스터 테이블")]
-    
     public float hp = default;       //체력이랑 damageble 보내준다
     public float attack = default;
     public float attDelay = default;   //몬스터 공격간격 
@@ -111,17 +110,19 @@ public class Monster : MonoBehaviour
 
     public readonly int hashidle = Animator.StringToHash("isIdle");
 
+    public readonly int hashStun = Animator.StringToHash("isStun");
+
     public bool isDie = false;
     public bool isStun = false;
 
-    IEnumerator stunRoutine; // 스턴 루틴
+    public IEnumerator stunRoutine; // 스턴 루틴
 
     [Header("Debug")]
     public float distanceDebug;
 
 
     // Start is called before the first frame update
-    private void Start()
+    void Start()
     {
         GetData(monsterId);
 
@@ -488,7 +489,7 @@ public class Monster : MonoBehaviour
 
     }
 
-    public void OnDeal()
+    public virtual void OnDeal()
     {
         if (isStun)
             return;
@@ -506,13 +507,13 @@ public class Monster : MonoBehaviour
                 stunRoutine = StunDelay();
                 StartCoroutine(stunRoutine);
 
-                Debug.Log($"state:{state}");
+                //Debug.Log($"state:{state}");
             }
         }
-        Debug.Log($"hp:{damageable.Health}");
+        //Debug.Log($"hp:{damageable.Health}");
     }
     // 스턴 딜레이
-    IEnumerator StunDelay()
+    public virtual IEnumerator StunDelay()
     {
         isStun = true;
         anim.SetTrigger(hashHit);

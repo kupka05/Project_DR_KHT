@@ -3126,17 +3126,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  player: {fileID: 0}
+  playerRigid: {fileID: 0}
   gun: {fileID: 8768672552246940895}
   muzzleTransform: {fileID: 8768672551865264199}
   grappleableLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4097
   drill: {fileID: 7353309825794527893}
   drillPrefab: {fileID: 8136475241427521122, guid: 4b50f1d3b73912a4cb235c724691d7f7,
     type: 3}
   maxGrappleDistance: 25
   grappleDelayTime: 0.25
-  GrappleReelForce: 15
+  GrappleReelForce: 3
   currentGrappleDistance: 0
   grapplingCd: 0.5
   debug: {fileID: 0}
@@ -3466,6 +3468,7 @@ MonoBehaviour:
   CollisionDamage: 5
   isPlayer: 1
   canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &3038501380516454709
 MonoBehaviour:
   m_ObjectHideFlags: 0

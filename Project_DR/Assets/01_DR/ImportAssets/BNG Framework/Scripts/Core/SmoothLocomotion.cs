@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace BNG {
@@ -148,6 +149,8 @@ namespace BNG {
         /// Any movement to apply after controller movement has been calculated
         /// </summary>
         Vector3 additionalMovement;
+
+        public UnityEvent setRigidEvent;
 
 
         #region Events
@@ -577,7 +580,7 @@ namespace BNG {
             }
             // RigidBody Movement Type moved in Fixed Update
             else if (ControllerType == PlayerControllerType.Rigidbody) {
-                // playerRigid.MovePosition(transform.position + motion * Time.deltaTime);
+                //playerRigid.MovePosition(transform.position + motion * Time.deltaTime);
             }
 
             // Call any After Move Events
@@ -706,12 +709,15 @@ namespace BNG {
         }
 
         public virtual void SetupRigidbodyPlayer() {
+            Debug.Log("리지드바디 생성");
             playerRigid = gameObject.AddComponent<Rigidbody>();
             playerRigid.mass = 50f;
             playerRigid.drag = 1f;
             playerRigid.angularDrag = 0.05f;
             playerRigid.freezeRotation = true;
             // playerRigid.useGravity = false; // Gravity is applied manually
+
+            setRigidEvent.Invoke(); // 리지드바디 생성 완료
 
             // Remove any CharacterControllers, if any
             CharacterController charController = GetComponent<CharacterController>();

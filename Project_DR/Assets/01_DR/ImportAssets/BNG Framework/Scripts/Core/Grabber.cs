@@ -649,6 +649,7 @@ namespace BNG {
                 flyingGrabbable.ResetGrabbing();
                 flyingGrabbable = null;
                 flyingTime = 0;
+                Debug.Log("리셋?");
             }
         }       
 

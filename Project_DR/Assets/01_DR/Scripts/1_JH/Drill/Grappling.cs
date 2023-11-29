@@ -16,9 +16,9 @@ public class Grappling : GrabbableEvents
     public State state = State.Idle;
 
     [Header("References")]
-    private GameObject player;
+    public GameObject player;
     private CharacterController characterController;
-    private Rigidbody playerRigid;
+    public Rigidbody playerRigid;
     private SmoothLocomotion smoothLocomotion;
     private PlayerTeleport teleport;
 
@@ -87,10 +87,15 @@ public class Grappling : GrabbableEvents
 #if JH_DEBUG
         DebugMode();
 #endif
+   
+    }
+    private void FixedUpdate()
+    {
         if (state != State.Grappling)
             return;
 
-            GrapplingMove(); // 그래플링일 경우에만 실행
+        GrapplingMove(); // 그래플링일 경우에만 실행
+
     }
 #if JH_DEBUG
 
@@ -220,9 +225,10 @@ public class Grappling : GrabbableEvents
             return;
         // 플레이어 이동
         Vector3 moveDirection = (grapplePoint - muzzleTransform.position) * GrappleReelForce;
-            smoothLocomotion.MoveCharacter(moveDirection * Time.deltaTime);  
-       
+        //smoothLocomotion.MoveCharacter(moveDirection * Time.deltaTime);
 
+        playerRigid.velocity = moveDirection;
+        //playerRigid.MovePosition(grapplePoint);
     }
 
     // 그래플링 멈춤
@@ -261,7 +267,7 @@ public class Grappling : GrabbableEvents
     }
     public void GrapleDisable()
     {
-        if (currentGrappleDistance < 1f && state == State.Grappling)
+        if (currentGrappleDistance < 1.8f && state == State.Grappling)
         {
             StopGrapple();
         }
@@ -299,11 +305,20 @@ public class Grappling : GrabbableEvents
         {
             playerGravity.ToggleGravity(gravityOn);
         }
+        playerRigid.useGravity = gravityOn;
     }
     // 데이터 가져오기
     void GetData()
     {
         maxGrappleDistance = (float)DataManager.instance.GetData(1100, "MaxDistance", typeof(float));
         grapplingCd = (float)DataManager.instance.GetData(1100, "GrappleDelay", typeof(float)) ;
+    }
+
+    public void SetRigid()
+    {
+        if (playerRigid != null)
+        { return; }
+
+        playerRigid = player.GetComponent<Rigidbody>();
     }
 }

@@ -54,7 +54,7 @@ public class PlayerEvent : MonoBehaviour
 
 
             // 들고있던 아이템 놔주기
-            grabItem.DropItem(grabber.GetComponent<Grabber>(), true, true);
+            grabItem.DropItem(grabber.GetComponent<Grabber>(), true, false);
 
             // 생성한 아이템 다시 잡기
             grabber.GetComponent<Grabber>().TryRelease();

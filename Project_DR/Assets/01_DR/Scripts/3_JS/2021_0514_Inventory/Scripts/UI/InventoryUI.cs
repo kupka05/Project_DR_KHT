@@ -87,7 +87,7 @@ namespace Rito.InventorySystem
         [Space(16)]
         [SerializeField] private bool _mouseReversed = false; // 마우스 클릭 반전 여부
 
-        public global::BNG.UIPointer UIPointer; // UI 포인터
+        //public global::BNG.UIPointer UIPointer; // UI 포인터
         #endregion
         /***********************************************************************
         *                               Private Fields
@@ -139,23 +139,23 @@ namespace Rito.InventorySystem
         private void Update()
         {
             //_ped.position = Input.mousePosition;
-            _ped.position = UIPointer.publicUISystem.RightPointerTransform.position;
+            //_ped.position = UIPointer.publicUISystem.RightPointerTransform.position;
 
-            float convertX = Input.mousePosition.x - (_ped.position.x - Input.mousePosition.x);
-            float convertY = Input.mousePosition.y - (_ped.position.y - Input.mousePosition.y);
-            convertX = convertX / 2.000634366822615f;
-            convertY = convertY / 2.018859837119589f;
-            Vector2 convertedPos = new Vector2(convertX, convertY);
+            //float convertX = Input.mousePosition.x - (_ped.position.x - Input.mousePosition.x);
+            //float convertY = Input.mousePosition.y - (_ped.position.y - Input.mousePosition.y);
+            //convertX = convertX / 2.000634366822615f;
+            //convertY = convertY / 2.018859837119589f;
+            //Vector2 convertedPos = new Vector2(convertX, convertY);
 
-            _ped.position = Input.mousePosition;
-            OnPointerEnterAndExit();
+            //_ped.position = Input.mousePosition;
+            //OnPointerEnterAndExit();
             //if(_showTooltip) ShowOrHideItemTooltip();
             //Debug.Log($"0: Mouse Pos: {Input.mousePosition}");
             //Debug.Log($"0: Controller Pos: {_ped.position}");
             //Debug.Log($"0: Converted Pos: {convertedPos}");
-            OnPointerDown();
-            OnPointerDrag();
-            OnPointerUp();
+            //OnPointerDown();
+            //OnPointerDrag();
+            //OnPointerUp();
         }
 
         #endregion
@@ -395,35 +395,35 @@ namespace Rito.InventorySystem
         /// <summary> 슬롯에 클릭하는 경우 </summary>
         public void OnPointerDown()
         {
-            // Left Click : Begin Drag
-            if (global::BNG.InputBridge.Instance.RightTriggerDown)
-            {
-                _beginDragSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
+            //// Left Click : Begin Drag
+            //if (global::BNG.InputBridge.Instance.RightTriggerDown)
+            //{
+            //    _beginDragSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
 
-                // 아이템을 갖고 있는 슬롯만 해당
-                if (_beginDragSlot != null && _beginDragSlot.HasItem && _beginDragSlot.IsAccessible)
-                {
-                    //EditorLog($"Drag Begin : Slot [{_beginDragSlot.Index}]");
+            //    // 아이템을 갖고 있는 슬롯만 해당
+            //    if (_beginDragSlot != null && _beginDragSlot.HasItem && _beginDragSlot.IsAccessible)
+            //    {
+            //        //EditorLog($"Drag Begin : Slot [{_beginDragSlot.Index}]");
 
-                    // 위치 기억, 참조 등록
-                    _beginDragIconTransform = _beginDragSlot.IconRect.transform;
-                    _beginDragIconPoint = _beginDragIconTransform.position;
-                    Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
-                    _beginDragCursorPoint = rightControllerPos;
-                    //Debug.Log($"rightControlPos: {_beginDragCursorPoint}");
+            //        // 위치 기억, 참조 등록
+            //        _beginDragIconTransform = _beginDragSlot.IconRect.transform;
+            //        _beginDragIconPoint = _beginDragIconTransform.position;
+            //        Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
+            //        _beginDragCursorPoint = rightControllerPos;
+            //        //Debug.Log($"rightControlPos: {_beginDragCursorPoint}");
 
-                    // 맨 위에 보이기
-                    _beginDragSlotSiblingIndex = _beginDragSlot.transform.GetSiblingIndex();
-                    _beginDragSlot.transform.SetAsLastSibling();
+            //        // 맨 위에 보이기
+            //        _beginDragSlotSiblingIndex = _beginDragSlot.transform.GetSiblingIndex();
+            //        _beginDragSlot.transform.SetAsLastSibling();
 
-                    // 해당 슬롯의 하이라이트 이미지를 아이콘보다 뒤에 위치시키기
-                    _beginDragSlot.SetHighlightOnTop(false);
-                }
-                else
-                {
-                    _beginDragSlot = null;
-                }
-            }
+            //        // 해당 슬롯의 하이라이트 이미지를 아이콘보다 뒤에 위치시키기
+            //        _beginDragSlot.SetHighlightOnTop(false);
+            //    }
+            //    else
+            //    {
+            //        _beginDragSlot = null;
+            //    }
+            //}
 
             //// Right Click : Use Item
             //else if (Input.GetMouseButtonDown(_rightClick))
@@ -446,9 +446,9 @@ namespace Rito.InventorySystem
             {
                 //Debug.Log("1: TRUE");
                 // 위치 이동
-                Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
+                //Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
                 //Debug.Log($"Cursor Pos: {rightControllerPos}");
-                _beginDragIconTransform.position = (_beginDragIconPoint + rightControllerPos - _beginDragCursorPoint);
+                //_beginDragIconTransform.position = (_beginDragIconPoint + rightControllerPos - _beginDragCursorPoint);
                 //Debug.Log($"Current Pos: {rightControllerPos}");
                 //Debug.Log($"Dragged Pos: {_beginDragIconTransform.position}");
             }
@@ -746,197 +746,197 @@ namespace Rito.InventorySystem
         *                               Editor Preview
         ***********************************************************************/
         #region .
-#if UNITY_EDITOR
-        [SerializeField] private bool __showPreview = false;
+//#if UNITY_EDITOR
+//        [SerializeField] private bool __showPreview = false;
 
-        [Range(0.01f, 1f)]
-        [SerializeField] private float __previewAlpha = 0.1f;
+//        [Range(0.01f, 1f)]
+//        [SerializeField] private float __previewAlpha = 0.1f;
 
-        private List<GameObject> __previewSlotGoList = new List<GameObject>();
-        private int __prevSlotCountPerLine;
-        private int __prevSlotLineCount;
-        private float __prevSlotSize;
-        private float __prevSlotMargin;
-        private float __prevContentPadding;
-        private float __prevAlpha;
-        private bool __prevShow = false;
-        private bool __prevMouseReversed = false;
+//        private List<GameObject> __previewSlotGoList = new List<GameObject>();
+//        private int __prevSlotCountPerLine;
+//        private int __prevSlotLineCount;
+//        private float __prevSlotSize;
+//        private float __prevSlotMargin;
+//        private float __prevContentPadding;
+//        private float __prevAlpha;
+//        private bool __prevShow = false;
+//        private bool __prevMouseReversed = false;
 
-        private void OnValidate()
-        {
-            if (__prevMouseReversed != _mouseReversed)
-            {
-                __prevMouseReversed = _mouseReversed;
-                InvertMouse(_mouseReversed);
+//        private void OnValidate()
+//        {
+//            if (__prevMouseReversed != _mouseReversed)
+//            {
+//                __prevMouseReversed = _mouseReversed;
+//                InvertMouse(_mouseReversed);
 
-                //EditorLog($"Mouse Reversed : {_mouseReversed}");
-            }
+//                //EditorLog($"Mouse Reversed : {_mouseReversed}");
+//            }
 
-            if (Application.isPlaying) return;
+//            if (Application.isPlaying) return;
 
-            if (__showPreview && !__prevShow)
-            {
-                CreateSlots();
-            }
-            __prevShow = __showPreview;
+//            if (__showPreview && !__prevShow)
+//            {
+//                CreateSlots();
+//            }
+//            __prevShow = __showPreview;
 
-            if (Unavailable())
-            {
-                ClearAll();
-                return;
-            }
-            if (CountChanged())
-            {
-                ClearAll();
-                CreateSlots();
-                __prevSlotCountPerLine = _horizontalSlotCount;
-                __prevSlotLineCount = _verticalSlotCount;
-            }
-            if (ValueChanged())
-            {
-                DrawGrid();
-                __prevSlotSize = _slotSize;
-                __prevSlotMargin = _slotMargin;
-                __prevContentPadding = _contentAreaPadding;
-            }
-            if (AlphaChanged())
-            {
-                SetImageAlpha();
-                __prevAlpha = __previewAlpha;
-            }
+//            if (Unavailable())
+//            {
+//                ClearAll();
+//                return;
+//            }
+//            if (CountChanged())
+//            {
+//                ClearAll();
+//                CreateSlots();
+//                __prevSlotCountPerLine = _horizontalSlotCount;
+//                __prevSlotLineCount = _verticalSlotCount;
+//            }
+//            if (ValueChanged())
+//            {
+//                DrawGrid();
+//                __prevSlotSize = _slotSize;
+//                __prevSlotMargin = _slotMargin;
+//                __prevContentPadding = _contentAreaPadding;
+//            }
+//            if (AlphaChanged())
+//            {
+//                SetImageAlpha();
+//                __prevAlpha = __previewAlpha;
+//            }
 
-            bool Unavailable()
-            {
-                return !__showPreview ||
-                        _horizontalSlotCount < 1 ||
-                        _verticalSlotCount < 1 ||
-                        _slotSize <= 0f ||
-                        _contentAreaRT == null ||
-                        _slotUiPrefab == null;
-            }
-            bool CountChanged()
-            {
-                return _horizontalSlotCount != __prevSlotCountPerLine ||
-                       _verticalSlotCount != __prevSlotLineCount;
-            }
-            bool ValueChanged()
-            {
-                return _slotSize != __prevSlotSize ||
-                       _slotMargin != __prevSlotMargin ||
-                       _contentAreaPadding != __prevContentPadding;
-            }
-            bool AlphaChanged()
-            {
-                return __previewAlpha != __prevAlpha;
-            }
-            void ClearAll()
-            {
-                foreach (var go in __previewSlotGoList)
-                {
-                    Destroyer.Destroy(go);
-                }
-                __previewSlotGoList.Clear();
-            }
-            void CreateSlots()
-            {
-                int count = _horizontalSlotCount * _verticalSlotCount;
-                __previewSlotGoList.Capacity = count;
+//            bool Unavailable()
+//            {
+//                return !__showPreview ||
+//                        _horizontalSlotCount < 1 ||
+//                        _verticalSlotCount < 1 ||
+//                        _slotSize <= 0f ||
+//                        _contentAreaRT == null ||
+//                        _slotUiPrefab == null;
+//            }
+//            bool CountChanged()
+//            {
+//                return _horizontalSlotCount != __prevSlotCountPerLine ||
+//                       _verticalSlotCount != __prevSlotLineCount;
+//            }
+//            bool ValueChanged()
+//            {
+//                return _slotSize != __prevSlotSize ||
+//                       _slotMargin != __prevSlotMargin ||
+//                       _contentAreaPadding != __prevContentPadding;
+//            }
+//            bool AlphaChanged()
+//            {
+//                return __previewAlpha != __prevAlpha;
+//            }
+//            void ClearAll()
+//            {
+//                foreach (var go in __previewSlotGoList)
+//                {
+//                    Destroyer.Destroy(go);
+//                }
+//                __previewSlotGoList.Clear();
+//            }
+//            void CreateSlots()
+//            {
+//                int count = _horizontalSlotCount * _verticalSlotCount;
+//                __previewSlotGoList.Capacity = count;
 
-                // 슬롯의 피벗은 Left Top으로 고정
-                RectTransform slotPrefabRT = _slotUiPrefab.GetComponent<RectTransform>();
-                slotPrefabRT.pivot = new Vector2(0f, 1f);
+//                // 슬롯의 피벗은 Left Top으로 고정
+//                RectTransform slotPrefabRT = _slotUiPrefab.GetComponent<RectTransform>();
+//                slotPrefabRT.pivot = new Vector2(0f, 1f);
 
-                for (int i = 0; i < count; i++)
-                {
-                    GameObject slotGo = Instantiate(_slotUiPrefab);
-                    slotGo.transform.SetParent(_contentAreaRT.transform);
-                    slotGo.SetActive(true);
-                    slotGo.AddComponent<PreviewItemSlot>();
+//                for (int i = 0; i < count; i++)
+//                {
+//                    GameObject slotGo = Instantiate(_slotUiPrefab);
+//                    slotGo.transform.SetParent(_contentAreaRT.transform);
+//                    slotGo.SetActive(true);
+//                    slotGo.AddComponent<PreviewItemSlot>();
 
-                    slotGo.transform.localScale = Vector3.one; // 버그 해결
+//                    slotGo.transform.localScale = Vector3.one; // 버그 해결
 
-                    HideGameObject(slotGo);
+//                    HideGameObject(slotGo);
 
-                    __previewSlotGoList.Add(slotGo);
-                }
+//                    __previewSlotGoList.Add(slotGo);
+//                }
 
-                DrawGrid();
-                SetImageAlpha();
-            }
-            void DrawGrid()
-            {
-                Vector2 beginPos = new Vector2(_contentAreaPadding, -_contentAreaPadding);
-                Vector2 curPos = beginPos;
+//                DrawGrid();
+//                SetImageAlpha();
+//            }
+//            void DrawGrid()
+//            {
+//                Vector2 beginPos = new Vector2(_contentAreaPadding, -_contentAreaPadding);
+//                Vector2 curPos = beginPos;
 
-                // Draw Slots
-                int index = 0;
-                for (int j = 0; j < _verticalSlotCount; j++)
-                {
-                    for (int i = 0; i < _horizontalSlotCount; i++)
-                    {
-                        GameObject slotGo = __previewSlotGoList[index++];
-                        RectTransform slotRT = slotGo.GetComponent<RectTransform>();
+//                // Draw Slots
+//                int index = 0;
+//                for (int j = 0; j < _verticalSlotCount; j++)
+//                {
+//                    for (int i = 0; i < _horizontalSlotCount; i++)
+//                    {
+//                        GameObject slotGo = __previewSlotGoList[index++];
+//                        RectTransform slotRT = slotGo.GetComponent<RectTransform>();
 
-                        slotRT.anchoredPosition = curPos;
-                        slotRT.sizeDelta = new Vector2(_slotSize, _slotSize);
-                        __previewSlotGoList.Add(slotGo);
+//                        slotRT.anchoredPosition = curPos;
+//                        slotRT.sizeDelta = new Vector2(_slotSize, _slotSize);
+//                        __previewSlotGoList.Add(slotGo);
 
-                        // Next X
-                        curPos.x += (_slotMargin + _slotSize);
-                    }
+//                        // Next X
+//                        curPos.x += (_slotMargin + _slotSize);
+//                    }
 
-                    // Next Line
-                    curPos.x = beginPos.x;
-                    curPos.y -= (_slotMargin + _slotSize);
-                }
-            }
-            void HideGameObject(GameObject go)
-            {
-                go.hideFlags = HideFlags.HideAndDontSave;
+//                    // Next Line
+//                    curPos.x = beginPos.x;
+//                    curPos.y -= (_slotMargin + _slotSize);
+//                }
+//            }
+//            void HideGameObject(GameObject go)
+//            {
+//                go.hideFlags = HideFlags.HideAndDontSave;
 
-                Transform tr = go.transform;
-                for (int i = 0; i < tr.childCount; i++)
-                {
-                    tr.GetChild(i).gameObject.hideFlags = HideFlags.HideAndDontSave;
-                }
-            }
-            void SetImageAlpha()
-            {
-                foreach (var go in __previewSlotGoList)
-                {
-                    var images = go.GetComponentsInChildren<Image>();
-                    foreach (var img in images)
-                    {
-                        img.color = new Color(img.color.r, img.color.g, img.color.b, __previewAlpha);
-                        var outline = img.GetComponent<Outline>();
-                        if (outline)
-                            outline.effectColor = new Color(outline.effectColor.r, outline.effectColor.g, outline.effectColor.b, __previewAlpha);
-                    }
-                }
-            }
-        }
+//                Transform tr = go.transform;
+//                for (int i = 0; i < tr.childCount; i++)
+//                {
+//                    tr.GetChild(i).gameObject.hideFlags = HideFlags.HideAndDontSave;
+//                }
+//            }
+//            void SetImageAlpha()
+//            {
+//                foreach (var go in __previewSlotGoList)
+//                {
+//                    var images = go.GetComponentsInChildren<Image>();
+//                    foreach (var img in images)
+//                    {
+//                        img.color = new Color(img.color.r, img.color.g, img.color.b, __previewAlpha);
+//                        var outline = img.GetComponent<Outline>();
+//                        if (outline)
+//                            outline.effectColor = new Color(outline.effectColor.r, outline.effectColor.g, outline.effectColor.b, __previewAlpha);
+//                    }
+//                }
+//            }
+//        }
 
-        private class PreviewItemSlot : MonoBehaviour { }
+//        private class PreviewItemSlot : MonoBehaviour { }
 
-        [UnityEditor.InitializeOnLoad]
-        private static class Destroyer
-        {
-            private static Queue<GameObject> targetQueue = new Queue<GameObject>();
+//        [UnityEditor.InitializeOnLoad]
+//        private static class Destroyer
+//        {
+//            private static Queue<GameObject> targetQueue = new Queue<GameObject>();
 
-            static Destroyer()
-            { 
-                UnityEditor.EditorApplication.update += () =>
-                {
-                    for (int i = 0; targetQueue.Count > 0 && i < 100000; i++)
-                    {
-                        var next = targetQueue.Dequeue();
-                        DestroyImmediate(next);
-                    }
-                };
-            }
-            public static void Destroy(GameObject go) => targetQueue.Enqueue(go);
-        }
-#endif
+//            static Destroyer()
+//            { 
+//                UnityEditor.EditorApplication.update += () =>
+//                {
+//                    for (int i = 0; targetQueue.Count > 0 && i < 100000; i++)
+//                    {
+//                        var next = targetQueue.Dequeue();
+//                        DestroyImmediate(next);
+//                    }
+//                };
+//            }
+//            public static void Destroy(GameObject go) => targetQueue.Enqueue(go);
+//        }
+//#endif
 
         #endregion
     }

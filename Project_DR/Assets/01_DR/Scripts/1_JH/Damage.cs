@@ -18,8 +18,7 @@ public class Damage : MonoBehaviour
     }
     private static Damage m_instance; // 싱글톤이 할당될 static 변수    
 
-    private float critChance;           // 치명타 확률
-    private float critIncrease;         // 치명타 배율
+  
 
     // 스킬 액티브 여부
     public bool isTeradrill = false;    // 테라 드릴
@@ -27,12 +26,15 @@ public class Damage : MonoBehaviour
     public bool isLanding = false;      // 랜딩 스킬
     public bool isSmash = false;        // 분쇄 디버프
 
+    public float critChance;           // 치명타 확률
+    public float critIncrease;         // 치명타 배율
+    public float grinderCritChance;     // 드릴 연마 추가 치명타 확률
+
     // 효과
-    private float teraIncrease;
-    private float grinderIncrease;      // 드릴 연마 추가 데미지
-    private float grinderCritChance;     // 드릴 연마 추가 치명타 확률
-    private float landingIncrease;
-    private float smashIncrease;
+    public float teraIncrease;
+    public float grinderIncrease;      // 드릴 연마 추가 데미지
+    public float landingIncrease;
+    public float smashIncrease;
 
 
 
@@ -45,20 +47,21 @@ public class Damage : MonoBehaviour
     // 데미지 계산기
     public float DamageCalculate(float _damage)
     {
-        grinderCritChance = isGrinder ? grinderCritChance : 0;
-        grinderIncrease = isGrinder ? grinderIncrease : 0;
-        landingIncrease = isLanding ? landingIncrease : 0;
+        float _teraIncrease = isTeradrill ? teraIncrease : 0;
+        float _grinderCritChance = isGrinder ? grinderCritChance : 0;
+        float _grinderIncrease = isGrinder ? grinderIncrease : 0;
+        float _landingIncrease = isLanding ? landingIncrease : 0;
 
         float val = Random.Range(0f, 100f);
-        critIncrease = critChance + grinderCritChance <= val ? 0 : critIncrease ;
+        //Debug.Log("치명타 확률" + critChance +"+"+ grinderCritChance + "이번 확률 :" + val);
+        float _critIncrease = critChance + _grinderCritChance <= val ? 0 : critIncrease ;
 
+        //Debug.Log(_damage + " * = (1 + " + _teraIncrease + " ) * ( 1 + (" + _critIncrease + " + " + _grinderIncrease + " + " + _landingIncrease + ")");
         //공격 계산식 = {기본 공격력*(1+테라드릴 증가)}*{1+(치명타 배율+드릴 연마 배율+랜딩 스킬 배율)}
-        _damage *= (1 + teraIncrease) * (1 + (critIncrease + grinderIncrease + landingIncrease));
+        _damage *= (1 + _teraIncrease) * (1 + (_critIncrease + _grinderIncrease + _landingIncrease));
 
-        // 최종 데미지
-        float finaldamage = _damage * (1 + smashIncrease);
-
-        return finaldamage;
+  
+        return _damage;
     }
 
     void GetData()

@@ -70,12 +70,13 @@ public class DataManager : MonoBehaviour
     private string[] fileNames =
     {
         // JS
-        "GameDataTable_Item_Potion_Table", "GameDataTable_Item_Bomb_Table", "GameDataTable_Item_Material_Table",
-        "GameDataTable_Item_Quest_Table",
+        "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
 
         // JH
-        "GameDataTable_Player_Table", "GameDataTable_Drill_Table", "GameDataTable_Skill_Table",
-        "GameDataTable_SkillEffect_Table"
+        "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",
+
+        //YS
+        "Monster_Table"
     };
 
     // dataTable에 ID로 접근하기 위해
@@ -302,7 +303,7 @@ public class DataManager : MonoBehaviour
     // CSV 파일을 Local 변수에 Init하는 함수
     public void InitLocalDataTable()
     {
-        string directory = "CSVs/";
+        string directory = "";
         for (int i = 0; i < fileNames.Length; i++)
         {
             TextAsset data = Resources.Load<TextAsset>(directory + fileNames[i]);

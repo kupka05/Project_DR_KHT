@@ -25,12 +25,13 @@ public class GameManager : MonoBehaviour
     }
     private static GameManager m_instance; // 싱글톤이 할당될 static 변수    
 
-    private GameObject player;
+    public GameObject player;
     private ScreenFader fader;
     private InputBridge input;
     private ScreenText screenText;
 
     public string gameoverText;
+    public float testNum;
 
     void Start()
     {
@@ -40,6 +41,8 @@ public class GameManager : MonoBehaviour
         {
             input = player.transform.parent.GetComponent<InputBridge>();
         }
+        Debug.Log(testNum);
+
     }       // Start()
 
 
@@ -57,9 +60,9 @@ public class GameManager : MonoBehaviour
         {
             fader = Camera.main.transform.GetComponent<ScreenFader>();
         }
-        screenText = player.GetComponent<ScreenText>();
 
         fader.DoFadeIn();
+        screenText = player.GetComponent<ScreenText>();
         screenText.OnScreenText(gameoverText);
         input.enabled = false;
 

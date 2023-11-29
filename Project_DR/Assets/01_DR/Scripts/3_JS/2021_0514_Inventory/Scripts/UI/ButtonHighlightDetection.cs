@@ -8,12 +8,22 @@ public class ButtonHighlightDetection : MonoBehaviour
     private Button _btn;
     private ItemSlotUI _itemSlotUI;
     private InventoryUI _inventoryUI;
+    [SerializeField] private ItemSlotPanelUI _itemSlotPanelUI;
+    [SerializeField] private PlayerInventoryUI _playerInventoryUI;
+    [SerializeField] private bool isPlayerInventory = false;
 
     void Start()
     {
         _btn = GetComponent<Button>();
-        _itemSlotUI = GetComponent<ItemSlotUI>();
-        _inventoryUI = _itemSlotUI.publicInventoryUI;
+        if (isPlayerInventory == false)
+        {
+            _itemSlotUI = GetComponent<ItemSlotUI>();
+            _inventoryUI = _itemSlotUI.publicInventoryUI;
+        }
+        else
+        {
+            _itemSlotPanelUI = gameObject.transform.parent.GetComponent<ItemSlotPanelUI>();
+        }
 
         // 이벤트 트리거 컴포넌트 추가
         EventTrigger eventTrigger = gameObject.AddComponent<EventTrigger>();
@@ -35,7 +45,14 @@ public class ButtonHighlightDetection : MonoBehaviour
     void OnHoverEnter()
     {
         //Debug.Log("Hover Enter");
-        _inventoryUI.ShowTooltip(_itemSlotUI.Index);
+        if (isPlayerInventory == false)
+        {
+            _inventoryUI.ShowTooltip(_itemSlotUI.Index);
+        }
+        else
+        {
+            _playerInventoryUI.ShowTooltip(_itemSlotPanelUI.Index);
+        }
         // 호버 진입 시 실행할 동작 추가
     }
 
@@ -43,7 +60,14 @@ public class ButtonHighlightDetection : MonoBehaviour
     void OnHoverExit()
     {
         //Debug.Log("Hover Exit");
-        _inventoryUI.HideTooltip();
+        if (isPlayerInventory == false)
+        {
+            _inventoryUI.HideTooltip();
+        }
+        else
+        {
+            _playerInventoryUI.HideToolTip();
+        }
         // 호버 해제 시 실행할 동작 추가
     }
 }

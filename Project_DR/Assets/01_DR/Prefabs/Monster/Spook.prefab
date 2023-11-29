@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 896290247}
   - component: {fileID: 896290248}
-  m_Layer: 0
+  - component: {fileID: 5558920955939675323}
+  m_Layer: 12
   m_Name: Spook_HitPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,12 +41,25 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 896290246}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.12
   m_Height: 0.41
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5558920955939675323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896290246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8b439ff5b411f4e8f4b877b008d150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 2811257125698052687}
 --- !u!1 &1249068966
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,7 +70,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1249068967}
   - component: {fileID: 1249068968}
-  m_Layer: 0
+  - component: {fileID: 4656883363253365141}
+  m_Layer: 12
   m_Name: Spook_HitPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,12 +101,25 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1249068966}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.43
   m_Height: 1.29
   m_Direction: 0
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4656883363253365141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249068966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8b439ff5b411f4e8f4b877b008d150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 2811257125698052687}
 --- !u!1 &1933876251
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,7 +130,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1933876252}
   - component: {fileID: 1933876253}
-  m_Layer: 0
+  - component: {fileID: 3290938044620454778}
+  m_Layer: 12
   m_Name: Spook_HitPoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,12 +161,25 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1933876251}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.12
   m_Height: 0.41
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3290938044620454778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933876251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8b439ff5b411f4e8f4b877b008d150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 2811257125698052687}
 --- !u!1 &5696125973314610945
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,7 +194,7 @@ GameObject:
   - component: {fileID: 8508694319158842978}
   - component: {fileID: 3746232991702239122}
   - component: {fileID: 2811257125698052687}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Spook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +269,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!195 &8508694319158842978
 NavMeshAgent:
@@ -264,20 +306,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  monsterId: 7005
   monsterType: 5
-  bulletport: {fileID: 0}
+  bulletPortLeft: {fileID: 0}
+  bulletPortRight: {fileID: 0}
+  bulletPort: {fileID: 0}
   monsterBullet: {fileID: 0}
   hp: 0
   attack: 0
   attDelay: 0
+  exp: 0
   speed: 0
   recRange: 50
   attRange: 2.1
+  stunDelay: 1
+  stunCount: 0
   monsterTr: {fileID: 5696125973314714401}
   playerTr: {fileID: 0}
   anim: {fileID: 5696125973323994305}
   rigid: {fileID: 1840997538}
   nav: {fileID: 8508694319158842978}
+  damageCollider:
+  - {fileID: 958297000898442001}
+  - {fileID: 958297001740393751}
+  - {fileID: 958297001827063393}
+  damageable: {fileID: 2811257125698052687}
   isDie: 0
   isStun: 0
 --- !u!114 &2811257125698052687
@@ -297,7 +350,7 @@ MonoBehaviour:
   ActivateGameObjectsOnDeath: []
   DeactivateGameObjectsOnDeath: []
   DeactivateCollidersOnDeath: []
-  DestroyOnDeath: 1
+  DestroyOnDeath: 0
   DropOnDeath: 1
   DestroyDelay: 0
   Respawn: 0
@@ -305,13 +358,26 @@ MonoBehaviour:
   RemoveBulletHolesOnDeath: 1
   onDamaged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3746232991702239122}
+        m_TargetAssemblyTypeName: Monster, Assembly-CSharp
+        m_MethodName: OnDeal
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onDestroyed:
     m_PersistentCalls:
       m_Calls: []
   onRespawn:
     m_PersistentCalls:
       m_Calls: []
+  stun: 0
 --- !u!1 &5696125973314610947
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +387,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714403}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -352,7 +418,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714405}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -384,7 +450,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714407}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigHeadGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -415,7 +481,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714409}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigLArm1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -448,7 +514,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714411}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigLArm1Gizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -479,7 +545,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714413}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigLArm2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -511,7 +577,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714415}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigLArm2Gizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -542,7 +608,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714417}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigLArmDigit11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -574,7 +640,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714419}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigLArmDigit12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -606,7 +672,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714421}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigLArmDigit13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -638,7 +704,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714423}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigLArmPalm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -670,7 +736,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714425}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigLArmPalmGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -701,7 +767,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714427}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigNeck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -734,7 +800,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714429}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigPelvis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -767,7 +833,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714431}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigPelvisGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -798,7 +864,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714465}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -830,7 +896,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714467}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail3Gizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -861,7 +927,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714469}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -893,7 +959,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714471}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail4Gizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -924,7 +990,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714473}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -956,7 +1022,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714475}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail5Gizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -987,7 +1053,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714477}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1018,7 +1084,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714479}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail6Gizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1050,7 +1116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5696125973314714481}
   - component: {fileID: 5696125973319887361}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Spook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1156,7 +1222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714369}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRArm1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1189,7 +1255,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714371}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRArm1Gizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1220,7 +1286,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714373}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRArm2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1252,7 +1318,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714375}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRArm2Gizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1283,7 +1349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714377}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRArmDigit11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1315,7 +1381,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714379}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRArmDigit12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1347,7 +1413,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714381}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRArmDigit13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1379,7 +1445,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714383}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRArmPalm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1411,7 +1477,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714385}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRArmPalmGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1442,7 +1508,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714387}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRibcage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1477,7 +1543,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714389}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigRibcageGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1508,7 +1574,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714391}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigSpine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1541,7 +1607,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714393}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1573,7 +1639,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714395}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail1Gizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1604,7 +1670,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714397}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1636,7 +1702,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5696125973314714399}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RigTail2Gizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1673,27 +1739,32 @@ PrefabInstance:
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.9999996
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.9999997
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.61799985
+      value: -0.017
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.034000043
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.28499982
+      value: -0.005
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
@@ -1703,17 +1774,17 @@ PrefabInstance:
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.00000002792154
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000009400536
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000008558229
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
@@ -1752,11 +1823,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207735, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 958297001894207735, guid: 664b69faab8dd60459c45403084b9f9e,
+        type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}
+--- !u!114 &958297000898442001 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1155945445}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &958297000898442028 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
@@ -1778,32 +1866,32 @@ PrefabInstance:
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.254
+      value: -0.102
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.557
+      value: 0.44
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
@@ -1862,11 +1950,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207735, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 958297001894207735, guid: 664b69faab8dd60459c45403084b9f9e,
+        type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}
+--- !u!114 &958297001740393751 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2033663459}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &958297001740393770 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
@@ -1887,18 +1992,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.596
+      value: -0.023
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.037
+      value: -0.001
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.35
+      value: -0.008
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
@@ -1957,6 +2077,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 958297001894207735, guid: 664b69faab8dd60459c45403084b9f9e,
         type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 958297001894207735, guid: 664b69faab8dd60459c45403084b9f9e,
+        type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -1968,3 +2093,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2080421525}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &958297001827063393 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2080421525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

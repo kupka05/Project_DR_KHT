@@ -184,6 +184,7 @@ public class Grappling : GrabbableEvents
     private void ShootDrill()
     {
         _drill = Instantiate(drillPrefab, drill.transform.position, drill.transform.rotation); // 드릴 인스턴스
+        _drill.transform.localScale = drill.transform.localScale;
         _drill.transform.LookAt(grapplePoint);                                                 // 타겟 바라보고
         _drill.GetComponent<DrillHead>().targetPos = grapplePoint;                             // 그래플링 포인트 세팅
         _drill.GetComponent<DrillHead>().grappling = this;                                     // 드릴이 만난 오브젝트의 체력이 0이하일 경우를 체크하기 위함

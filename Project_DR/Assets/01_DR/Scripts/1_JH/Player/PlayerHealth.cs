@@ -11,13 +11,13 @@ public class PlayerHealth : MonoBehaviour
     public float maxHealth;
     private DamageScreenFader fader;
     public float dyingAmount = 0.25f; // 빈사상태 수치
-    public float knockbackSpeed = 0.5f; // 넉백
+    public float knockbackDistance = 1.5f; // 넉백
+    public float knockbackSpeed = 2f; // 넉백
 
     public PlayerController playerController;
 
     public List<ControllerBinding> healthUpInput = new List<ControllerBinding>() { ControllerBinding.None };
-
-
+    IEnumerator knockbackRoutine;
     public PlayerStatusController[] playerHealthUI;
     // Start is called before the first frame update
 
@@ -56,9 +56,9 @@ public class PlayerHealth : MonoBehaviour
 
     public void OnDamage()
     {
+
         SetHealth();
         fader.OnDamage();
-        KnockBack();
         if (health <= maxHealth * dyingAmount)
         {
             fader.OnDying();
@@ -98,10 +98,38 @@ public class PlayerHealth : MonoBehaviour
 
     }
 
-    public void KnockBack()
+    public void OnKnockback(Vector3 targetPos)
     {
-        transform.position += -Vector3.forward * knockbackSpeed;
-        Debug.Log("넉백?");
+        Debug.Log(targetPos);
+        StopKnockBack();
+
+
+        //Vector3 knockbackTarget = transform.localPosition + (-transform.forward * knockbackDistance);
+        Vector3 knockbackTarget = transform.localPosition - targetPos*knockbackDistance;
+        knockbackRoutine = KnockBackRoutine(knockbackTarget);
+        StartCoroutine(knockbackRoutine);
+        Invoke("StopKnockBack", 0.5f);
+    }
+    public void StopKnockBack()
+    {
+        if (knockbackRoutine != null)
+        {
+            StopCoroutine(knockbackRoutine);
+            knockbackRoutine = null;
+        }
+    }
+    IEnumerator KnockBackRoutine(Vector3 target)
+    {
+        while (true)
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, target, Time.deltaTime * knockbackSpeed);
+            float distance = Vector3.Distance(transform.localPosition, target);
+            if (distance <= 0.05f)
+            {
+                break;
+            }
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     private void OnTriggerEnter(Collider other)

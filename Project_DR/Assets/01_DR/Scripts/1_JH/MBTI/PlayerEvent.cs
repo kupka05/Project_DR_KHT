@@ -48,8 +48,6 @@ public class PlayerEvent : MonoBehaviour
             if (!CheckColliderVisibility(grabItem, grabItem.GetComponent<RectTransform>()) == true)
             { return; }
 
-            Debug.Log($"아이템 ID: {grabItem.transform.parent.name}");
-
             GameObject grabber = grabItem.GetComponent<SpawnItemSlot>().curGrabber;
 
             if (grabber == null)
@@ -64,13 +62,12 @@ public class PlayerEvent : MonoBehaviour
             // 슬롯이 비어있을 경우
             if (inventory.HasItem(slotIndex) == false)
             {
-                Debug.Log("슬롯이 비어있습니다!");
                 return;
             }
 
             // 아이템 생성 (슬롯에서 꺼낼 때 1개씩 꺼내는걸로 고정되서 아래와 같이 구현했다.)
             int itemID = inventory.GetItemData(slotIndex).ID;
-            int itemAmount = inventory.GetCurrentAmount(slotIndex);  
+            int itemAmount = inventory.GetCurrentAmount(slotIndex);
             GameObject item = ItemManager.instance.CreateItem(grabber.transform.position,
                 itemID, itemAmount);
             ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
@@ -78,9 +75,6 @@ public class PlayerEvent : MonoBehaviour
 
             // 아이템 수량(1) 감소
             inventory.Use(slotIndex);
-
-            // 아이템 정렬
-            inventory.SortAll();
 
             // 들고있던 아이템 놔주기
             grabItem.DropItem(grabber.GetComponent<Grabber>(), true, true);

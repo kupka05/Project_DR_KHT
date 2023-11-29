@@ -5,166 +5,167 @@ using BNG;
 
 public class HandColliderHandler : MonoBehaviour
 {
-    /*************************************************
-     *                 Private Methods
-     *************************************************/
-    #region [+]
-    private enum State
-    {
-        Default = 0,
-        ProcessingOne,
-        ProcessingTwo
-    }
-    [SerializeField] private State _state;
-
-    private Rigidbody rigidBody = default;
-    private ItemColliderHandler latestGripItem = default;
-    private float chanageKinematicDelay = 3f;   // 물리 효과 종료 딜레이
-
-    #endregion
-    /*************************************************
-     *                 Unity Events
-     *************************************************/
-    #region [+]
-    void Start()
-    {
-        rigidBody = GetComponent<Rigidbody>();
-    }
-
-    //private void Update()
+    ///*************************************************
+    // *                 Private Methods
+    // *************************************************/
+    //#region [+]
+    //private enum State
     //{
-    //    if (latestGripItem != null)
+    //    Default = 0,
+    //    ProcessingOne,
+    //    ProcessingTwo
+    //}
+    //[SerializeField] private State _state;
+
+    //private Rigidbody rigidBody = default;
+    //private ItemColliderHandler latestGripItem = default;
+    //private float chanageKinematicDelay = 3f;   // 물리 효과 종료 딜레이
+
+    //#endregion
+    ///*************************************************
+    // *                 Unity Events
+    // *************************************************/
+    //#region [+]
+    //void Start()
+    //{
+    //    rigidBody = GetComponent<Rigidbody>();
+    //}
+
+    ////private void Update()
+    ////{
+    ////    if (latestGripItem != null)
+    ////    {
+    ////        if (latestGripItem.GrabbableHaptics.CurrentGrabber == null)
+    ////        {
+    ////            Debug.Log("Grip Off Item");
+
+    ////            // 5초 후에 수납 가능 상태로 변경
+    ////            latestGripItem.Coroutine(latestGripItem.ResetState, 5f);
+
+    ////            // 리셋
+    ////            latestGripItem = default;
+    ////        }
+    ////    }
+    ////}
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    // 감지된 콜라이더가 아이템 슬롯일 경우 & hand 상태가 기본일 경우
+    //    if (other.CompareTag("ItemSlot") && _state == State.Default)
     //    {
-    //        if (latestGripItem.GrabbableHaptics.CurrentGrabber == null)
+    //        ItemSlotController itemSlot = other.GetComponent<ItemSlotController>();
+    //        // 수납 가능한 경우에만 수납함
+    //        if (itemSlot.IsStorageAvailable)
     //        {
-    //            Debug.Log("Grip Off Item");
+    //            Debug.Log("수납");
+    //            // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우
+    //            if (CheckColliderVisibility(
+    //                other.transform.parent.parent.parent.parent.parent.parent.GetComponent<RectTransform>(),
+    //                other.GetComponent<RectTransform>()) == true)
+    //            {
+    //                Debug.Log($"name: {other.transform.parent.name}");
 
-    //            // 5초 후에 수납 가능 상태로 변경
-    //            latestGripItem.Coroutine(latestGripItem.ResetState, 5f);
-
-    //            // 리셋
-    //            latestGripItem = default;
+    //                // 상태 변경
+    //                _state = State.ProcessingOne;
+    //            }
+    //            else
+    //            {
+    //                Debug.Log("Out of range");
+    //            }
     //        }
     //    }
     //}
 
-    private void OnTriggerEnter(Collider other)
-    {
-        // 감지된 콜라이더가 아이템 슬롯일 경우 & hand 상태가 기본일 경우
-        if (other.CompareTag("ItemSlot") && _state == State.Default)
-        {
-            ItemSlotController itemSlot = other.GetComponent<ItemSlotController>();
-            // 수납 가능한 경우에만 수납함
-            if (itemSlot.IsStorageAvailable)
-            {
-                // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우
-                if (CheckColliderVisibility(
-                    other.transform.parent.parent.parent.parent.parent.parent.GetComponent<RectTransform>(),
-                    other.GetComponent<RectTransform>()) == true)
-                {
-                    Debug.Log($"name: {other.transform.parent.name}");
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    // 현재 작업 상태일 경우
+    //    if (other.CompareTag("ItemSlot") && _state == State.ProcessingOne)
+    //    {
+    //        // 왼쪽 컨트롤러에서 트리거 키를 눌렀을 경우
+    //        if (global::BNG.InputBridge.Instance.LeftTriggerDown)
+    //        {
+    //            // 상태 변경
+    //            _state = State.ProcessingTwo;
 
-                    // 상태 변경
-                    _state = State.ProcessingOne;
-                }
-                else
-                {
-                    Debug.Log("Out of range");
-                }
-            }
-        }
-    }
+    //            // 디버그
+    //            Debug.Log("Left Trigger Pressed");
 
-    private void OnTriggerStay(Collider other)
-    {
-        // 현재 작업 상태일 경우
-        if (other.CompareTag("ItemSlot") && _state == State.ProcessingOne)
-        {
-            // 왼쪽 컨트롤러에서 트리거 키를 눌렀을 경우
-            if (global::BNG.InputBridge.Instance.LeftTriggerDown)
-            {
-                // 상태 변경
-                _state = State.ProcessingTwo;
+    //            GripItem(other);
+    //        }
 
-                // 디버그
-                Debug.Log("Left Trigger Pressed");
+    //        // 오른쪽 컨트롤러에서 트리거 키를 눌렀을 경우
+    //        if (global::BNG.InputBridge.Instance.RightTriggerDown)
+    //        {
+    //            // 상태 변경
+    //            _state = State.ProcessingTwo;
 
-                GripItem(other);
-            }
+    //            // 디버그
+    //            Debug.Log("Right Trigger Pressed");
 
-            // 오른쪽 컨트롤러에서 트리거 키를 눌렀을 경우
-            if (global::BNG.InputBridge.Instance.RightTriggerDown)
-            {
-                // 상태 변경
-                _state = State.ProcessingTwo;
+    //            GripItem(other);
+    //        }
 
-                // 디버그
-                Debug.Log("Right Trigger Pressed");
+    //    }
+    //}
 
-                GripItem(other);
-            }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    //ChangeStateCoroutine(State.Default, 1f);
+    //    if (_state == State.ProcessingOne || _state == State.ProcessingTwo)
+    //    {
+    //        // 상태 변경
+    //        _state = State.Default;
+    //    }
+    //}
 
-        }
-    }
+    //#endregion
+    ///*************************************************
+    //*                 Private Methods
+    //*************************************************/
+    //#region [+]
+    //private void GripItem(Collider other)
+    //{
+    //    Transform slot = other.transform.parent;
+    //    GameObject item = ItemManager.instance.CreateItem(Vector3.zero, 5001);
+    //    ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
 
-    private void OnTriggerExit(Collider other)
-    {
-        //ChangeStateCoroutine(State.Default, 1f);
-        if (_state == State.ProcessingOne || _state == State.ProcessingTwo)
-        {
-            // 상태 변경
-            _state = State.Default;
-        }
-    }
+    //    // 슬롯에 넣을 수 없도록 아이템 상태 Stop으로 변경
+    //    itemColliderHandler.state = ItemColliderHandler.State.Stop;
 
-    #endregion
-    /*************************************************
-    *                 Private Methods
-    *************************************************/
-    #region [+]
-    private void GripItem(Collider other)
-    {
-        Transform slot = other.transform.parent;
-        GameObject item = ItemManager.instance.CreateItem(Vector3.zero, 5001);
-        ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
+    //    // 아이템 물리 효과 정지
+    //    itemColliderHandler.ChangeKinematic(true);
 
-        // 슬롯에 넣을 수 없도록 아이템 상태 Stop으로 변경
-        itemColliderHandler.state = ItemColliderHandler.State.Stop;
+    //    // hand 위치로 포지션 이동
+    //    item.transform.position = transform.position;
 
-        // 아이템 물리 효과 정지
-        itemColliderHandler.ChangeKinematic(true);
+    //    // 플레이어가 아이템을 잡고 손을 떼엇을 경우 다시 들어가야 하므로,
+    //    // n 초 후에 물리 효과 실행 및 아이템 슬롯에 들어가도록 설정
+    //    // itemColliderHandler.ChangeKinematic(false)의 참조인 func 선언 및 초기화
+    //    Action func = () => itemColliderHandler.ChangeKinematic(false);
+    //    itemColliderHandler.Coroutine(func, chanageKinematicDelay);
 
-        // hand 위치로 포지션 이동
-        item.transform.position = transform.position;
+    //    // 1초 후에 마지맏 그립 아이템 설정
+    //    StartCoroutine(SetLatestGripItemCoroutine(itemColliderHandler, 1f));
+    //}
 
-        // 플레이어가 아이템을 잡고 손을 떼엇을 경우 다시 들어가야 하므로,
-        // n 초 후에 물리 효과 실행 및 아이템 슬롯에 들어가도록 설정
-        // itemColliderHandler.ChangeKinematic(false)의 참조인 func 선언 및 초기화
-        Action func = () => itemColliderHandler.ChangeKinematic(false);
-        itemColliderHandler.Coroutine(func, chanageKinematicDelay);
+    //private bool CheckColliderVisibility(RectTransform scrollPanel, RectTransform other)
+    //{
+    //    // 현재 객체가 스크롤 패널 내에 있는지 여부 확인
+    //    bool isVisible = RectTransformUtility.RectangleContainsScreenPoint(scrollPanel, other.position);
 
-        // 1초 후에 마지맏 그립 아이템 설정
-        StartCoroutine(SetLatestGripItemCoroutine(itemColliderHandler, 1f));
-    }
+    //    return isVisible;
+    //}
 
-    private bool CheckColliderVisibility(RectTransform scrollPanel, RectTransform other)
-    {
-        // 현재 객체가 스크롤 패널 내에 있는지 여부 확인
-        bool isVisible = RectTransformUtility.RectangleContainsScreenPoint(scrollPanel, other.position);
+    //#endregion
+    ///*************************************************
+    // *                  Coroutines
+    // *************************************************/
+    //#region [+]  
+    //private IEnumerator SetLatestGripItemCoroutine(ItemColliderHandler item, float delay)
+    //{
+    //    yield return new WaitForSeconds(delay);
+    //    latestGripItem = item;
+    //}
 
-        return isVisible;
-    }
-
-    #endregion
-    /*************************************************
-     *                  Coroutines
-     *************************************************/
-    #region [+]  
-    private IEnumerator SetLatestGripItemCoroutine(ItemColliderHandler item, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        latestGripItem = item;
-    }
-
-    #endregion
+    //#endregion
 }

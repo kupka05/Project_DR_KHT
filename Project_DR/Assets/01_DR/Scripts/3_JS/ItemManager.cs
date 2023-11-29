@@ -95,6 +95,9 @@ public class ItemManager : MonoBehaviour
             {
                 InventoryCreateQuestItem(handPos, id, amount);
             }
+
+            // 인벤토리 정렬 및 PlayerInventoryUI 새로고침
+            _inventory.SortAndUpdatePlayerInventoryUI();
         }
         catch (Exception ex)
         {

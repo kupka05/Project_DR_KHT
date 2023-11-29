@@ -99,8 +99,9 @@ namespace Rito.InventorySystem
         private readonly static Dictionary<Type, int> _sortWeightDict = new Dictionary<Type, int>
         {
             { typeof(PortionItemData), 10000 },
-            { typeof(WeaponItemData),  20000 },
-            { typeof(ArmorItemData),   30000 },
+            { typeof(BombItemData),  20000 },
+            { typeof(MaterialItemData),   30000 },
+            { typeof(QuestItemData),   40000 },
         };
 
         private class ItemComparer : IComparer<Item>
@@ -502,12 +503,23 @@ namespace Rito.InventorySystem
 
                 if (succeeded)
                 {
+
+                    // 업데이트
                     UpdateSlot(index);
 
-                    // PlayerInventoryUI 갱신
-                    _playerInventoryUI.UpdatePlayerInventory();
+                    // 아이템 정렬 및 PlayerInventoryUI 갱신
+                    SortAndUpdatePlayerInventoryUI();
                 }
             }
+        }
+
+        public void SortAndUpdatePlayerInventoryUI()
+        {
+            // 아이템 정렬
+            SortAll();
+
+            // PlayerInventoryUI 갱신
+            _playerInventoryUI.UpdatePlayerInventory();
         }
 
         /// <summary> 모든 슬롯 UI에 접근 가능 여부 업데이트 </summary>

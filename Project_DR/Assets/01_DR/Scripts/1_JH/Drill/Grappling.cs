@@ -1,4 +1,5 @@
 using BNG;
+using Oculus.Interaction;
 using Oculus.Platform.Models;
 using System.Collections;
 using System.Collections.Generic;
@@ -166,12 +167,20 @@ public class Grappling : GrabbableEvents
         {
             grapplePoint = hit.point;                         // 충돌한 곳이 있으면 그래플링 포인트로
             smoothLocomotion.freeze = false;                  // 플레이어 움직일 수 있도록 전환
-
             // 만약  damageable 오브젝트와 충돌 시
             if (hit.collider.GetComponent<Damageable>())
             {
+                Debug.Log("충돌");
+
                 isDamageCheck = true;                             // 데미지 체크 켜고
                 target = hit.collider.GetComponent<Damageable>(); // 타겟 세팅
+            }
+            else if (hit.collider.GetComponent<DamageablePart>())
+            {
+                Debug.Log("충돌");
+
+                isDamageCheck = true;
+                target = hit.collider.GetComponent<DamageablePart>().parent;
             }
         }
 
@@ -193,10 +202,12 @@ public class Grappling : GrabbableEvents
     private void ShootDrill()
     {
         _drill = Instantiate(drillPrefab, drill.transform.position, drill.transform.rotation); // 드릴 인스턴스
-        _drill.transform.localScale = drill.transform.localScale;
+        //_drill.transform.localScale = drill.transform.localScale;
+        _drill.transform.localScale = Vector3.one;
         _drill.transform.LookAt(grapplePoint);                                                 // 타겟 바라보고
         _drill.GetComponent<DrillHead>().targetPos = grapplePoint;                             // 그래플링 포인트 세팅
         _drill.GetComponent<DrillHead>().grappling = this;                                     // 드릴이 만난 오브젝트의 체력이 0이하일 경우를 체크하기 위함
+
         Destroy(_drill,grappleDelayTime);
     }
     

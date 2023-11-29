@@ -27,7 +27,7 @@ public class DrillHead : MonoBehaviour
         col = damageCollider.GetComponent<CapsuleCollider>();
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (targetPos == null || isStop)
             return;

@@ -127,6 +127,7 @@ public class ItemColliderHandler : MonoBehaviour
                 // ItemDataComponent가 있는지 확인
                 if (itemDataComponent != null)
                 {
+                    Debug.Log(itemDataComponent.ItemData);
                     ItemData itemData = (ItemData)itemDataComponent.ItemData;
                     int id = itemData.ID;
                     ItemManager.instance.InventoryCreateItem(other.transform.position, id);

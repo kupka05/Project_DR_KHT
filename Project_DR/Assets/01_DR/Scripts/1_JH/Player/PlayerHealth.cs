@@ -107,7 +107,6 @@ public class PlayerHealth : MonoBehaviour
 
     public void OnKnockback(Vector3 targetPos)
     {
-        Debug.Log(targetPos);
         StopKnockBack();
 
 

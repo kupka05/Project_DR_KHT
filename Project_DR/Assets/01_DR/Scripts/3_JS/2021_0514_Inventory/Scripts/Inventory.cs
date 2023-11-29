@@ -503,6 +503,9 @@ namespace Rito.InventorySystem
                 if (succeeded)
                 {
                     UpdateSlot(index);
+
+                    // PlayerInventoryUI 갱신
+                    _playerInventoryUI.UpdatePlayerInventory();
                 }
             }
         }

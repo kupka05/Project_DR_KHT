@@ -9,8 +9,10 @@ public class ItemSlotController : MonoBehaviour
      *                 Private Fields
      *************************************************/
     #region [+]
+    [SerializeField] private Inventory _inventory;
     [SerializeField] private GameObject itemSlot;
     private BoxCollider boxCollider;
+    [SerializeField] private int _index;
     [SerializeField] private bool _isChangeSize = true;
     // 슬롯에 수납 가능 여부
     [SerializeField] private bool _isStorageAvailable = true;
@@ -20,7 +22,9 @@ public class ItemSlotController : MonoBehaviour
      *                 Private Fields
      *************************************************/
     #region [+]
+    public Inventory Inventory => _inventory;
     public bool IsStorageAvailable => _isStorageAvailable;
+    public int Index => _index;
 
     #endregion
     /*************************************************

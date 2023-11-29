@@ -11,7 +11,16 @@ public class ItemSlotController : MonoBehaviour
     #region [+]
     [SerializeField] private GameObject itemSlot;
     private BoxCollider boxCollider;
-    [SerializeField] private bool isChangeSize = true;
+    [SerializeField] private bool _isChangeSize = true;
+    // 슬롯에 수납 가능 여부
+    [SerializeField] private bool _isStorageAvailable = true;
+
+    #endregion
+    /*************************************************
+     *                 Private Fields
+     *************************************************/
+    #region [+]
+    public bool IsStorageAvailable => _isStorageAvailable;
 
     #endregion
     /*************************************************
@@ -24,8 +33,10 @@ public class ItemSlotController : MonoBehaviour
         {
             itemSlot = GetParentGameObject(transform);
         }
+
         boxCollider = gameObject.GetComponent<BoxCollider>();
-        if (isChangeSize)
+
+        if (_isChangeSize)
         {
             SetBoxColliderSize(GetSizeVector2(itemSlot), boxCollider);
         }

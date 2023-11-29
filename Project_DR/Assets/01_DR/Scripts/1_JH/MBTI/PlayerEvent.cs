@@ -47,6 +47,9 @@ public class PlayerEvent : MonoBehaviour
             if (grabber == null)
             { return; }
 
+
+        ////// TODO: 아이템 생성을 슬롯에 있는 데이터를 받아와서 생성되게 변경함
+        ///
             // 아이템 생성
             GameObject item = ItemManager.instance.CreateItem(grabber.transform.position, 5001);
             ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
@@ -59,10 +62,6 @@ public class PlayerEvent : MonoBehaviour
             // 생성한 아이템 다시 잡기
             grabber.GetComponent<Grabber>().TryRelease();
             grabber.GetComponent<Grabber>().GrabGrabbable(item.GetComponent<Grabbable>());
-
-
-
-
         }
     }
 

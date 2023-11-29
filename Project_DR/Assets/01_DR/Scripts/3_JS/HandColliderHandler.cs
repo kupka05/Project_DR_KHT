@@ -50,22 +50,27 @@ public class HandColliderHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // 감지된 콜라이더가 아이템 슬롯일 경우
+        // 감지된 콜라이더가 아이템 슬롯일 경우 & hand 상태가 기본일 경우
         if (other.CompareTag("ItemSlot") && _state == State.Default)
         {
-            // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우
-            if (CheckColliderVisibility(
-                other.transform.parent.parent.parent.parent.parent.parent.GetComponent<RectTransform>(),
-                other.GetComponent<RectTransform>()) == true)
+            ItemSlotController itemSlot = other.GetComponent<ItemSlotController>();
+            // 수납 가능한 경우에만 수납함
+            if (itemSlot.IsStorageAvailable)
             {
-                Debug.Log($"name: {other.transform.parent.name}");
+                // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우
+                if (CheckColliderVisibility(
+                    other.transform.parent.parent.parent.parent.parent.parent.GetComponent<RectTransform>(),
+                    other.GetComponent<RectTransform>()) == true)
+                {
+                    Debug.Log($"name: {other.transform.parent.name}");
 
-                // 상태 변경
-                _state = State.ProcessingOne;
-            }
-            else
-            {
-                Debug.Log("Out of range");
+                    // 상태 변경
+                    _state = State.ProcessingOne;
+                }
+                else
+                {
+                    Debug.Log("Out of range");
+                }
             }
         }
     }

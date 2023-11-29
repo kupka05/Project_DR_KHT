@@ -241,7 +241,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7158893497336324064}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &1211173816
 CapsuleCollider:
@@ -361,7 +361,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7158893497336324064}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &1519771659
 CapsuleCollider:
@@ -450,51 +450,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 693216724069016498}
---- !u!1 &1613203835
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1613203836}
-  - component: {fileID: 1613203837}
-  m_Layer: 12
-  m_Name: BulletPort
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1613203836
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1613203835}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.18, y: 1.41, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7158893497336324064}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1613203837
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1613203835}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.3, z: 0.3}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7158893497336087424
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,6 +689,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onKnockback:
+    m_PersistentCalls:
+      m_Calls: []
   onDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -776,11 +734,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  monsterId: 7009
+  monsterId: 7008
   monsterType: 11
   bulletPortLeft: {fileID: 1123171608}
   bulletPortRight: {fileID: 1101122362}
-  bulletPort: {fileID: 1613203836}
+  bulletPort: {fileID: 0}
   monsterBullet: {fileID: 8809067579740100126, guid: 3a21c71d5bf44ec40a4c4752ae400980,
     type: 3}
   hp: 0
@@ -792,6 +750,7 @@ MonoBehaviour:
   attRange: 2
   stunDelay: 1
   stunCount: 0
+  stopDistance: 0
   monsterTr: {fileID: 7158893497336324002}
   playerTr: {fileID: 0}
   anim: {fileID: 7158893497326710850}
@@ -801,6 +760,9 @@ MonoBehaviour:
   damageable: {fileID: 693216724069016498}
   isDie: 0
   isStun: 0
+  distanceDebug: 0
+  count: 0
+  maxCount: 3
 --- !u!1 &7158893497336087428
 GameObject:
   m_ObjectHideFlags: 0
@@ -1279,7 +1241,6 @@ Transform:
   - {fileID: 7158893497336324024}
   - {fileID: 7158893497336323982}
   - {fileID: 7158893497336323986}
-  - {fileID: 1613203836}
   - {fileID: 1519771658}
   - {fileID: 1211173815}
   m_Father: {fileID: 7158893497336324068}

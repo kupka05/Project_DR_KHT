@@ -64,7 +64,7 @@ public static class ItemDataManager
     public static T SearchItemDB<T>(int id) where T : class
     {
         // Potion일 경우
-        if (POTION_TYPE_ID <= id && id < BOMB_TYPE_ID)
+        if (GetItemType(id) == 0)
         {
             // db에 키 값이 있을 경우
             if (CheckIsValidKey(potionItemDB, id))
@@ -77,7 +77,7 @@ public static class ItemDataManager
         }
 
         // Bomb일 경우
-        else if (BOMB_TYPE_ID <= id && id < MATERIAL_TYPE_ID)
+        else if (GetItemType(id) == 1)
         {
             // db에 키 값이 있을 경우
             if (CheckIsValidKey(bombItemDB, id))
@@ -90,7 +90,7 @@ public static class ItemDataManager
         }
 
         // Material일 경우
-        else if (MATERIAL_TYPE_ID <= id && id < QUEST_TYPE_ID)
+        else if (GetItemType(id) == 2)
         {
             // db에 키 값이 있을 경우
             if (CheckIsValidKey(materialItemDB, id))
@@ -116,6 +116,37 @@ public static class ItemDataManager
         }
     }
     #endregion
+
+    // ID로 아이템의 타입을 찾는 함수
+    public static int GetItemType(int id)
+    {
+        int type = 0;   // 0 = Potion, 1 = Bomb, 2 = Material, 3 = Quest
+
+        if (POTION_TYPE_ID <= id && id < BOMB_TYPE_ID)
+        {
+            type = 0;
+        }
+
+        // Bomb일 경우
+        else if (BOMB_TYPE_ID <= id && id < MATERIAL_TYPE_ID)
+        {
+            type = 1;
+        }
+
+        // Material일 경우
+        else if (MATERIAL_TYPE_ID <= id && id < QUEST_TYPE_ID)
+        {
+            type = 2;
+        }
+
+        // Quest일 경우
+        else
+        {
+            type = 3;
+        }
+
+        return type;
+    }
 
     /*************************************************
      *                 Private Methods

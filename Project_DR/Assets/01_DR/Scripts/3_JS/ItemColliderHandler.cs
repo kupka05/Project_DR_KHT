@@ -55,7 +55,7 @@ public class ItemColliderHandler : MonoBehaviour
                 state = State.Processing;
 
                 ItemDataComponent itemDataComponent = gameObject.GetComponent<ItemDataComponent>();
-
+                Debug.Log($"GameObject {gameObject.GetComponent<ItemDataComponent>()}");
                 // ItemDataComponent가 있는지 확인
                 if (itemDataComponent != null)
                 {

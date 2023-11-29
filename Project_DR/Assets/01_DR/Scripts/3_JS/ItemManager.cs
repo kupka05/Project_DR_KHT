@@ -46,13 +46,13 @@ public class ItemManager : MonoBehaviour
     {
         // 파괴 방지
         DontDestroyOnLoad(this);
+
+        // 아이템 DB Init
+        ItemDataManager.InitItemDB();
     }
 
     private void Start()
     {
-        // 아이템 DB Init
-        ItemDataManager.InitItemDB();
-
         // 테스트용 포션 생성
         CreateItem(Vector3.zero, 5001);
     }
@@ -91,7 +91,7 @@ public class ItemManager : MonoBehaviour
             }
 
             // 생성할 아이템이 Quest 타입일 경우
-            else 
+            else
             {
                 InventoryCreateQuestItem(handPos, id, amount);
             }
@@ -163,7 +163,12 @@ public class ItemManager : MonoBehaviour
     }
 
     // 자동으로 타입을 찾아서 아이템을 생성
-    public GameObject CreateItem(Vector3 handPos, int id, int amount = 1)
+    public GameObject CreateItem(int id, int amount = 1)
+    {
+        return CreateItem(Vector3.zero, id, amount);
+    }
+
+    public GameObject CreateItem(Vector3 pos, int id, int amount = 1)
     {
         /////////////////////////////////////////////
         // amount 값이 변해도 하나만 생성하도록 고정함
@@ -174,25 +179,25 @@ public class ItemManager : MonoBehaviour
             // 생성할 아이템이 Potion 타입일 경우
             if (ItemDataManager.SearchItemDB<PortionItemData>(id))
             {
-                item = CreatePotionItem(handPos, id, amount);
+                item = CreatePotionItem(pos, id, amount);
             }
 
             // 생성할 아이템이 Bomb 타입일 경우
             else if (ItemDataManager.SearchItemDB<BombItemData>(id))
             {
-                item = CreateBombItem(handPos, id, amount);
+                item = CreateBombItem(pos, id, amount);
             }
 
             // 생성할 아이템이 Material 타입일 경우
             else if (ItemDataManager.SearchItemDB<MaterialItemData>(id))
             {
-                item = CreateMaterialItem(handPos, id, amount);
+                item = CreateMaterialItem(pos, id, amount);
             }
 
             // 생성할 아이템이 Quest 타입일 경우
             else
             {
-                item = CreateQuestItem(handPos, id, amount);
+                item = CreateQuestItem(pos, id, amount);
             }
 
             return item;

@@ -44,10 +44,13 @@ namespace BNG {
         /// 빠른 속도로 물체와 충돌할 경우 적용할 피해량
         /// </summary>
         public float CollisionDamage = 5;
+
+        [Header("Damage Option")]
         // 플레이어 여부, 플레이어는 자기 자신을 공격 할 수 없다.
         public bool isPlayer;
-        public bool isKnockback;
         public bool canSelfHarm = false; // 자해 여부
+        public bool isKnockback = true ;
+
 
         Damageable thisDamageable;
 
@@ -89,7 +92,7 @@ namespace BNG {
                 if (d) {
                     d.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
 
-                    if(isKnockback)
+                    if (isKnockback)
                     {
                         d.OnKnockBack(collision.GetContact(0).point);
                     }
@@ -97,7 +100,7 @@ namespace BNG {
                 }
                 else if(damagePart)
                 {
-                      damagePart.parent.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+                    damagePart.parent.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
                     if (isKnockback)
                     {
                         damagePart.parent.OnKnockBack(collision.GetContact(0).point);

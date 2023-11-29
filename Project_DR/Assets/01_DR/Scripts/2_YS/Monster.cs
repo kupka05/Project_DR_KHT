@@ -75,6 +75,7 @@ public class Monster : MonoBehaviour
     public float attRange = 2.0f;   //pc 공격범위
     public float stunDelay = 1f;
     public float stunCount = default;  //경직 횟수, 일반 몬스터는 필요 없음
+    public float stopDistance = default;
     //몬스터 이름도 추가될 예정
 
     [Header("트랜스폼")]
@@ -145,7 +146,8 @@ public class Monster : MonoBehaviour
 
         nav.speed = speed;
 
-        nav.stoppingDistance = attRange - 0.1f;
+        nav.stoppingDistance = stopDistance;
+        //nav.stoppingDistance = attRange - 0.5f;
 
         InitMonster();
     }
@@ -181,7 +183,8 @@ public class Monster : MonoBehaviour
         attRange = (float)DataManager.instance.GetData(id, "MonAtr", typeof(float));
         recRange = (float)DataManager.instance.GetData(id, "MonRer", typeof(float));
         stunDelay = (float)DataManager.instance.GetData(id, "MonSTFDel", typeof(float));
-       
+
+        stopDistance = (float)DataManager.instance.GetData(id, "MonStd", typeof(float));
     }
 
 

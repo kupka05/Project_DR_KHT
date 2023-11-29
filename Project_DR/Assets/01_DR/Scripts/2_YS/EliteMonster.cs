@@ -339,8 +339,7 @@ public class EliteMonster : Monster
                 {
                     count = 0;
                     anim.SetTrigger(hashStun);
-
-                    
+                   
                     Vector3 targetPosition = transform.position - transform.forward * 4.0f;
                     //transform.position = targetPosition;
 

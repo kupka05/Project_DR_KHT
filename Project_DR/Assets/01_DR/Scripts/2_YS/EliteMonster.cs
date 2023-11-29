@@ -1,11 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 public class EliteMonster : Monster
 {
-    
+    public float count = 0;
+    public float maxCount = 3;
+
+
+    private bool isMoving = false;
+    private float moveDuration = 1.0f;
+    private float moveTimer = 0.0f;
+    private Vector3 startPosition;
+    private Vector3 targetPosition;
+
+
+    void Update()
+    {
+        if (isMoving)
+        {
+            moveTimer += Time.deltaTime;
+
+            float t = Mathf.Clamp01(moveTimer / moveDuration);
+            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+
+            if (t >= 1.0f)
+            {
+                isMoving = false;
+                moveTimer = 0.0f;
+            }
+        }
+    }
+
+    public void MoveWithSmoothTransition(Vector3 target)
+    {
+        if (!isMoving)
+        {
+            isMoving = true;
+            startPosition = transform.position;
+            targetPosition = target;
+        }
+    }
 
     public override IEnumerator MonsterAction()
     {
@@ -275,6 +312,57 @@ public class EliteMonster : Monster
 
 
     }
+
+    public override void OnDeal()
+    {
+        if (isStun)
+            return;
+        if (state != State.DIE && state != State.STUN)
+        {
+            if (damageable.Health >= 0)
+            {
+                // 만약에 스턴루틴에 이미 다른 코루틴이 실행중인 경우
+                if (stunRoutine != null)
+                {
+                    StopCoroutine(stunRoutine);
+                    stunRoutine = null;
+                }
+
+                stunRoutine = StunDelay();
+                StartCoroutine(stunRoutine);
+
+                Debug.Log($"state:{state}");
+
+                count++;
+               
+                if (count >= maxCount)
+                {
+                    count = 0;
+                    anim.SetTrigger(hashStun);
+
+                    
+                    Vector3 targetPosition = transform.position - transform.forward * 4.0f;
+                    //transform.position = targetPosition;
+
+                    MoveWithSmoothTransition(targetPosition);
+                }
+            }
+        }
+        Debug.Log($"hp:{damageable.Health}");
+    }
+    // 스턴 딜레이
+    public override IEnumerator StunDelay()
+    {
+        isStun = true;
+        anim.SetTrigger(hashHit);
+        damageable.stun = true;
+        yield return new WaitForSeconds(stunDelay);
+        isStun = false;
+        damageable.stun = false;
+        yield break;
+    }
+
+    
 
     public void GolemShoot(int index)
     {

@@ -9,7 +9,6 @@ public class EliteMonster : Monster
     public float count = 0;
     public float maxCount = 3;
 
-
     private bool isMoving = false;
     private float moveDuration = 1.0f;
     private float moveTimer = 0.0f;

@@ -666,7 +666,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  monsterId: 7012
+  monsterId: 7009
   monsterType: 9
   bulletPortLeft: {fileID: 0}
   bulletPortRight: {fileID: 0}
@@ -682,6 +682,7 @@ MonoBehaviour:
   attRange: 2
   stunDelay: 1
   stunCount: 0
+  stopDistance: 0
   monsterTr: {fileID: 6284214424667939738}
   playerTr: {fileID: 0}
   anim: {fileID: 132345388006521312}
@@ -691,6 +692,9 @@ MonoBehaviour:
   damageable: {fileID: 1815641167}
   isDie: 0
   isStun: 0
+  distanceDebug: 0
+  count: 0
+  maxCount: 3
 --- !u!114 &1815641167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -729,6 +733,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onKnockback:
+    m_PersistentCalls:
+      m_Calls: []
   onDestroyed:
     m_PersistentCalls:
       m_Calls: []

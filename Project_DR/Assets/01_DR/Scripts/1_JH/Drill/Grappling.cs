@@ -56,6 +56,8 @@ public class Grappling : GrabbableEvents
     public TMP_Text debug;
     public TMP_Text debug2;
 
+    private Vector3 smallScale;
+
     public void OnEnable()
     {
         drill.SetActive(true);
@@ -65,6 +67,7 @@ public class Grappling : GrabbableEvents
 
     private void Start()
     {
+        smallScale = new Vector3(0.0001f, 0.0001f, 0.0001f);
         player = GameObject.FindGameObjectWithTag("Player");
         if (player)
         {
@@ -180,7 +183,8 @@ public class Grappling : GrabbableEvents
 
         line.enabled = true;                                  // 라인 켜주기
         line.SetPosition(1, grapplePoint);                    // 그래플링 포인트까지
-        drill.SetActive(false);                               // 달려있는 드릴 잠깐 꺼주고
+        //drill.SetActive(false);                               // 달려있는 드릴 잠깐 꺼주고
+        drill.transform.localScale = smallScale;
         ShootDrill();                                         // 그래플링용 드릴 발사
     }
 
@@ -240,6 +244,7 @@ public class Grappling : GrabbableEvents
         {
             changeGravity(true);
             smoothLocomotion.freeze = false;
+            playerRigid.velocity = Vector3.zero;
         }
         if (state == State.Grappling)
         {
@@ -251,7 +256,8 @@ public class Grappling : GrabbableEvents
 
         lastGrapplingTime = Time.time;
 
-        drill.SetActive(true);
+        //drill.SetActive(true);
+        drill.transform.localScale = Vector3.one;
         line.enabled = false;
         
         isDamageCheck = false;

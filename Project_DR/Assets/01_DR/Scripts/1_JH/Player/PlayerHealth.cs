@@ -66,6 +66,10 @@ public class PlayerHealth : MonoBehaviour
         {
             fader.OnDying();
         }
+        if(health <= 0)
+        {
+            Die();
+        }
     }
 
     private void GetData()
@@ -98,7 +102,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void Die()
     {
-
+        GameManager.instance.GameOver();
     }
 
     public void OnKnockback(Vector3 targetPos)

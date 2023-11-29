@@ -27779,8 +27779,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c3642421e8fe144b85ad6d36e67416b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inventory: {fileID: 0}
   itemSlot: {fileID: 0}
-  isChangeSize: 1
+  _index: 0
+  _isChangeSize: 1
+  _isStorageAvailable: 1
 --- !u!1 &1948218479697351251
 GameObject:
   m_ObjectHideFlags: 0
@@ -35095,6 +35098,11 @@ PrefabInstance:
     - target: {fileID: 5330090241013461563, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459314038795754053, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: onDestroyed.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5459314038795754053, guid: 9af8996cf7742564d86ec55ab5e912c0,

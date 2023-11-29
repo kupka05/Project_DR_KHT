@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
 
     public string gameoverText;
     public float testNum;
+    public string gameoverScene;
 
     void Start()
     {
@@ -71,8 +72,8 @@ public class GameManager : MonoBehaviour
     }
     public void ResetScene()
     {
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
+        //string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(gameoverScene);
     }
     public void GetData()
     {

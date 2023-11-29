@@ -32,12 +32,12 @@ public class PlayerEvent : MonoBehaviour
     // 그랩 사이클이 끝나고 체크
     public void AfterGrabCheck(Grabbable grabItem)
     {
-        // 아이템 생성 디버그
-        //GameObject itemaaa= ItemManager.instance.CreateItem(5001);
-        //GameObject itemaaa2 = ItemManager.instance.CreateItem(5002);
-        //GameObject itemaaa3 = ItemManager.instance.CreateItem(5003);
-        //GameObject itemaaa24 = ItemManager.instance.CreateItem(5101);
-        //GameObject itemaaa25 = ItemManager.instance.CreateItem(5102);
+        //아이템 생성 디버그
+       GameObject itemaaa = ItemManager.instance.CreateItem(5001);
+        GameObject itemaaa2 = ItemManager.instance.CreateItem(5002);
+        GameObject itemaaa3 = ItemManager.instance.CreateItem(5003);
+        GameObject itemaaa24 = ItemManager.instance.CreateItem(5101);
+        GameObject itemaaa25 = ItemManager.instance.CreateItem(5102);
 
         // 아이템 슬롯인지 확인
         if (grabItem.GetComponent<ItemSlotController>() != null)

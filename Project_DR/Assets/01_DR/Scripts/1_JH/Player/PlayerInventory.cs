@@ -10,6 +10,7 @@ public class PlayerInventory : MonoBehaviour
     private void Start()
     {
         grabberCollider = GetComponent<SphereCollider>();
+        inventory.SetActive(false);
     }
 
     // 인벤토리를 여는 이벤트

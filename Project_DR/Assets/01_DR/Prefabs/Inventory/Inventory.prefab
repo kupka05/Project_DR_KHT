@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1718985187232097687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2071128289502729390}
+  - component: {fileID: 8356834349041287013}
+  m_Layer: 0
+  m_Name: ItemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2071128289502729390
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718985187232097687}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.93149996, y: -0.62, z: -18.949}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 220835183476264577}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8356834349041287013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718985187232097687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e0f996be68e4f041b7b7741ef1cb76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inventory: {fileID: 3216023249470161758}
 --- !u!1 &3216023248743279163
 GameObject:
   m_ObjectHideFlags: 0
@@ -3409,7 +3454,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 220835183476264577}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3216023249470161758
 MonoBehaviour:
@@ -6122,7 +6167,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3216023249473996151}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.379717
+  m_Size: 0.37971693
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6411,7 +6456,7 @@ RectTransform:
   - {fileID: 3216023249746406303}
   - {fileID: 3216023249105429876}
   m_Father: {fileID: 220835183476264577}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7950,6 +7995,7 @@ MonoBehaviour:
   _index: 0
   _isChangeSize: 1
   _isStorageAvailable: 1
+  _isPlayerStorage: 0
 --- !u!114 &3216023250648087181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8796,6 +8842,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2071128289502729390}
   - {fileID: 3216023249470161759}
   - {fileID: 3216023250204439105}
   - {fileID: 4010713277729156710}
@@ -9618,8 +9665,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4010713277286957217}
   m_HandleRect: {fileID: 4010713277286957216}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12512,6 +12559,7 @@ MonoBehaviour:
   _index: 0
   _isChangeSize: 1
   _isStorageAvailable: 0
+  _isPlayerStorage: 0
 --- !u!114 &4010713277719347213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12638,7 +12686,7 @@ RectTransform:
   - {fileID: 4010713276187150239}
   - {fileID: 4010713277216616471}
   m_Father: {fileID: 220835183476264577}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

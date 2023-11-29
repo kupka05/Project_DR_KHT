@@ -45,7 +45,7 @@ public class ItemManager : MonoBehaviour
     private void Awake()
     {
         // 파괴 방지
-        DontDestroyOnLoad(this);
+        //DontDestroyOnLoad(this);
 
         // 아이템 DB Init
         ItemDataManager.InitItemDB();

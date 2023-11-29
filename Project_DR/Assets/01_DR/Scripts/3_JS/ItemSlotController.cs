@@ -56,6 +56,16 @@ public class ItemSlotController : MonoBehaviour
      *                Private Methods
      *************************************************/
     #region [+]
+    public void SetIndex(int index)
+    {
+        _index = index;
+    }
+
+    #endregion
+    /*************************************************
+     *                Private Methods
+     *************************************************/
+    #region [+]
     // 부모의 게임 오브젝트를 가져온다
     private GameObject GetParentGameObject(Transform child)
     {

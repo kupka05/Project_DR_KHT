@@ -32,7 +32,13 @@ public class PlayerEvent : MonoBehaviour
     // 그랩 사이클이 끝나고 체크
     public void AfterGrabCheck(Grabbable grabItem)
     {
+
         GameObject itemaaa= ItemManager.instance.CreateItem(5001);
+        GameObject itemaaa2 = ItemManager.instance.CreateItem(5002);
+        GameObject itemaaa3 = ItemManager.instance.CreateItem(5003);
+        GameObject itemaaa24 = ItemManager.instance.CreateItem(5101);
+        GameObject itemaaa25 = ItemManager.instance.CreateItem(5102);
+
 
         // 아이템 슬롯인지 확인
         if (grabItem.GetComponent<ItemSlotController>() != null)
@@ -72,6 +78,9 @@ public class PlayerEvent : MonoBehaviour
 
             // 아이템 수량(1) 감소
             inventory.Use(slotIndex);
+
+            // 아이템 정렬
+            inventory.SortAll();
 
             // 들고있던 아이템 놔주기
             grabItem.DropItem(grabber.GetComponent<Grabber>(), true, true);

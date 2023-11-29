@@ -11,7 +11,8 @@ public class ItemSlotPanelUI : MonoBehaviour
      *                Private Fields
      *************************************************/
     #region [+]
-    [SerializeField] private ItemData _itemData;
+    [SerializeField] private ItemSlotController _itemSlot;
+    private ItemData _itemData;
     [SerializeField] private TMP_Text _name;
     [SerializeField] private Image _iconSprite;
     [SerializeField] private TMP_Text _count;
@@ -41,6 +42,7 @@ public class ItemSlotPanelUI : MonoBehaviour
             _count.text = "0 / 0";
             _iconSprite.sprite = default;
             _index = default;
+            _itemSlot.SetIndex(_index);
 
             return;
         }
@@ -50,6 +52,7 @@ public class ItemSlotPanelUI : MonoBehaviour
         string countText = amount + " / " + maxAmount;
         UpdateCountText(countText);
         _index = index;
+        _itemSlot.SetIndex(_index);
         //switch (ItemDataManager.GetItemType(id))
         //{
         //    // Potion일 경우

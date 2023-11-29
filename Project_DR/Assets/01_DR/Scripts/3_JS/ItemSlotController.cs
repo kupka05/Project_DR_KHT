@@ -16,6 +16,7 @@ public class ItemSlotController : MonoBehaviour
     [SerializeField] private bool _isChangeSize = true;
     // 슬롯에 수납 가능 여부
     [SerializeField] private bool _isStorageAvailable = true;
+    [SerializeField] private bool _isPlayerStorage = false;
 
     #endregion
     /*************************************************
@@ -24,6 +25,7 @@ public class ItemSlotController : MonoBehaviour
     #region [+]
     public Inventory Inventory => _inventory;
     public bool IsStorageAvailable => _isStorageAvailable;
+    public bool IsPlayerStorage => _isPlayerStorage;
     public int Index => _index;
 
     #endregion
@@ -33,7 +35,7 @@ public class ItemSlotController : MonoBehaviour
     #region [+]
     void Start()
     {
-        if (itemSlot == null)
+        if (itemSlot == null && _isPlayerStorage == false)
         {
             itemSlot = GetParentGameObject(transform);
         }

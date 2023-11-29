@@ -1,3 +1,4 @@
+using Rito.InventorySystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,10 +9,20 @@ public class RandomRoom : MonoBehaviour
     [SerializeField]
     public bool isClearRoom = false;    // 해당방 클리어했는지 여부
 
+    public FloorMeshPos meshPos;        // 각방의 꼭지점Pos이 들어있는 Class
+    
 
 
 
 
+
+    /// <summary>
+    /// FloorMeshPos 컴포넌트를 가져오는 함수 : 각 방의 꼭지점 V3 값이 들어있는 컴포넌트
+    /// </summary>
+    protected void GetFloorPos()
+    {
+       meshPos = this.GetComponent<FloorMeshPos>();
+    }       // GetFloorPos()
 
     /// <summary>
     /// 상속해준 isClearRoom bool값을 리턴해주는 함수

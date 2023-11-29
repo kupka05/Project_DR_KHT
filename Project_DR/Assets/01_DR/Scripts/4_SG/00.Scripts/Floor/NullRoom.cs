@@ -8,6 +8,7 @@ public class NullRoom : RandomRoom
     void Start()
     {
         DungeonManager.clearList.Add(isClearRoom);
+        GetFloorPos();      // 꼭지점 가져와주는 Class
     }       // Start()
 
 
@@ -17,5 +18,6 @@ public class NullRoom : RandomRoom
     {
         DungeonManager.clearList.Remove(isClearRoom);
     }       // OnDestroy()
+
 
 }       // ClassEnd

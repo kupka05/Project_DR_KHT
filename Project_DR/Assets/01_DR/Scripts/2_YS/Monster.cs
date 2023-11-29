@@ -116,6 +116,10 @@ public class Monster : MonoBehaviour
 
     IEnumerator stunRoutine; // 스턴 루틴
 
+    [Header("Debug")]
+    public float distanceDebug;
+
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -133,11 +137,14 @@ public class Monster : MonoBehaviour
 
         foreach (DamageCollider damageCollider in damageCollider)
         {
-            attack = damageCollider.Damage;
+            damageCollider.Damage = attack;
+            //attack = damageCollider.Damage; // 지환 : attack은 시트에서 가져온 데이터 값
         }
 
 
         nav.speed = speed;
+
+        nav.stoppingDistance = attRange - 0.1f;
 
         InitMonster();
     }
@@ -194,7 +201,7 @@ public class Monster : MonoBehaviour
             else
             {
                 float distance = Vector3.Distance(playerTr.position, monsterTr.position);
-
+                distanceDebug = distance;
                 if (distance <= attRange)
                 {
                     state = State.ATTACK;
@@ -533,9 +540,18 @@ public class Monster : MonoBehaviour
 
     }
 
-    
+    public virtual void Explosion(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                Destroy(this.gameObject);
+                break;
+        }
 
-   
+    }
+
+
 
 }
 

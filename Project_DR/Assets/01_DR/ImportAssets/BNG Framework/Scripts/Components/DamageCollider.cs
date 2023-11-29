@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 namespace BNG {
@@ -45,6 +46,7 @@ namespace BNG {
         public float CollisionDamage = 5;
         // 플레이어 여부, 플레이어는 자기 자신을 공격 할 수 없다.
         public bool isPlayer;
+        public bool canSelfHarm = false; // 자해 여부
 
         Damageable thisDamageable;
 
@@ -61,6 +63,13 @@ namespace BNG {
             if(!this.isActiveAndEnabled) {
                 return;
             }
+            if(!canSelfHarm)
+            {
+                if(this.transform.root.gameObject ==collision.transform.root.gameObject)
+                {
+                    return;
+                }
+            }
             if (isPlayer && collision.gameObject.CompareTag("Player"))
                 return;
             OnCollisionEvent(collision);
@@ -70,6 +79,7 @@ namespace BNG {
             LastDamageForce = collision.impulse.magnitude;
             LastRelativeVelocity = collision.relativeVelocity.magnitude;
 
+
             if (LastDamageForce >= MinForce) {
 
                 // Can we damage what we hit?
@@ -77,12 +87,16 @@ namespace BNG {
                 DamageablePart damagePart = collision.gameObject.GetComponent<DamageablePart>();
                 if (d) {
                     d.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+                    Debug.Log(collision.gameObject.name + "에게 " + Damage);
+
                 }
-                else if(damagePart){
+                else if(damagePart)
+                {
                       damagePart.parent.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
-                    Debug.Log($"damage:{Damage}");
+                    Debug.Log(collision.gameObject.name + "파츠에게 " + Damage);
+
                 }
-                }
+            }
                 // Otherwise, can we take damage ourselves from this collision?
                 else if (TakeCollisionDamage && thisDamageable != null) {
                     thisDamageable.DealDamage(CollisionDamage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);

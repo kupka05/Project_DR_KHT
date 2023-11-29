@@ -64,6 +64,8 @@ namespace BNG {
         [Tooltip("Optional Event to be called when receiving damage. Takes damage amount as a float parameter.")]
         public FloatEvent onDamaged;
 
+        public Vector3Event onKnockback;
+
         [Tooltip("Optional Event to be called once health is <= 0")]
         public UnityEvent onDestroyed;
 
@@ -95,7 +97,10 @@ namespace BNG {
             DealDamage(damageAmount, transform.position);
         }
 
-        public virtual void DealDamage(float damageAmount, Vector3? hitPosition = null, Vector3? hitNormal = null, bool reactToHit = true, GameObject sender = null, GameObject receiver = null) {
+        //public virtual void DealDamage(float damageAmount, Vector3? hitPosition = null, Vector3? hitNormal = null, bool reactToHit = true, GameObject sender = null, GameObject receiver = null) {
+        public virtual void DealDamage(float damageAmount, Vector3 hitPosition, Vector3? hitNormal = null, bool reactToHit = true, GameObject sender = null, GameObject receiver = null)
+        {
+
 
             if (destroyed || stun) {
                 return;
@@ -103,6 +108,8 @@ namespace BNG {
             Health -= damageAmount;
 
             onDamaged?.Invoke(damageAmount);
+            onKnockback?.Invoke(hitPosition);
+            //Debug.Log($"health{Health}");
 
             // Invector Integration
 #if INVECTOR_BASIC || INVECTOR_AI_TEMPLATE

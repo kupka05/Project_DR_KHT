@@ -101,7 +101,7 @@ public class PlayerEvent : MonoBehaviour
     {
         if (grabItem.GetComponent<ItemColliderHandler>() != null)
         {
-            grabItem.GetComponent<ItemColliderHandler>().state = ItemColliderHandler.State.Default;
+            grabItem.GetComponent<ItemColliderHandler>().state = ItemColliderHandler.State.Grabbed;
         }
     }
 }

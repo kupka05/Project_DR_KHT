@@ -45,7 +45,7 @@ public class ItemManager : MonoBehaviour
     private void Awake()
     {
         // 파괴 방지
-        DontDestroyOnLoad(this);
+        //DontDestroyOnLoad(this);
 
         // 아이템 DB Init
         ItemDataManager.InitItemDB();
@@ -95,6 +95,9 @@ public class ItemManager : MonoBehaviour
             {
                 InventoryCreateQuestItem(handPos, id, amount);
             }
+
+            // 인벤토리 정렬 및 PlayerInventoryUI 새로고침
+            _inventory.SortAndUpdatePlayerInventoryUI();
         }
         catch (Exception ex)
         {

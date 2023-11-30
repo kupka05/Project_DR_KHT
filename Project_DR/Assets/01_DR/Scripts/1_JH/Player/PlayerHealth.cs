@@ -15,6 +15,8 @@ public class PlayerHealth : MonoBehaviour
     public float knockbackDistance = 1.5f; // 넉백
     public float knockbackSpeed = 2f; // 넉백
 
+    private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+
     public PlayerController playerController;
 
     public List<ControllerBinding> healthUpInput = new List<ControllerBinding>() { ControllerBinding.None };
@@ -64,6 +66,10 @@ public class PlayerHealth : MonoBehaviour
         {
             fader.OnDying();
         }
+        if(health <= 0)
+        {
+            Die();
+        }
     }
 
     private void GetData()
@@ -96,12 +102,11 @@ public class PlayerHealth : MonoBehaviour
 
     public void Die()
     {
-
+        GameManager.instance.GameOver();
     }
 
     public void OnKnockback(Vector3 targetPos)
     {
-        Debug.Log(targetPos);
         StopKnockBack();
 
 
@@ -123,13 +128,14 @@ public class PlayerHealth : MonoBehaviour
     {
         while (true)
         {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, target, Time.deltaTime * knockbackSpeed);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, target, Time.fixedDeltaTime * knockbackSpeed);
             float distance = Vector3.Distance(transform.localPosition, target);
             if (distance <= 0.05f)
             {
                 break;
             }
-            yield return null;
+            yield return waitForFixedUpdate;
+//            yield return null;
         }
     }
 

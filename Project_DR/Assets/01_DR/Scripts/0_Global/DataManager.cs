@@ -76,7 +76,12 @@ public class DataManager : MonoBehaviour
         "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",
 
         //YS
-        "Monster_Table"
+        "Monster_Table",
+        
+        // SG
+        "spawnNomalMonster_Table","spawnEliteMonster_Table","DungeonCreater_Table",
+        "Floor1_MonsterSpawn_Table","Floor2_MonsterSpawn_Table","Floor3_MonsterSpawn_Table",
+        "Floor4_MonsterSpawn_Table","Floor5_MonsterSpawn_Table"
     };
 
     // dataTable에 ID로 접근하기 위해

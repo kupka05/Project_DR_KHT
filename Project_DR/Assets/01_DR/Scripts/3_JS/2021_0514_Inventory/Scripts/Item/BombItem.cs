@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Rito.InventorySystem
 {
     /// <summary> 재료 아이템 </summary>
-    public class BombItem : CountableItem
+    public class BombItem : CountableItem, IUsableItem
     {
         public BombItem(BombItemData data, int amount = 1) : base(data, amount) { }
 

@@ -402,7 +402,7 @@ namespace BNG {
 
             // Cast capsule shape at the desired position to see if it is about to hit anything
             if (Physics.SphereCast(movePosition, capsuleRadius, transform.up, out hit, playerCapsule.height / 2, GroundedLayers, QueryTriggerInteraction.Ignore)) {
-                Debug.Log(hit.collider);
+                //Debug.Log(hit.collider);
                 noCollision = false;
             }
 

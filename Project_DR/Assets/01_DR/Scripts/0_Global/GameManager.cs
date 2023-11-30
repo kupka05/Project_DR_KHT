@@ -32,6 +32,17 @@ public class GameManager : MonoBehaviour
 
     public string gameoverText;
     public float testNum;
+    public string gameoverScene;
+
+
+    // ----------------------------------------------- SG ------------------------------------------------
+    public int nowFloor = 1;        // 현재 몇층인지 알려줄 변수
+
+    // string변수는 Resources폴더속 필요한 경로를 담고 있음 뒤에 몬스터의 이름을 붙여서 인스턴스할 계획
+    public string nomalMonsterSpawnPath = "";
+    public string eliteMonsterSpawnPath = "";
+
+    // ----------------------------------------------- SG ------------------------------------------------
 
     void Start()
     {
@@ -67,13 +78,18 @@ public class GameManager : MonoBehaviour
         input.enabled = false;
 
 
-        Invoke(nameof(ResetScene),5f);
+        Invoke(nameof(GameOverScene),5f);
     }
     public void ResetScene()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentSceneName);
     }
+    public void GameOverScene()
+    {
+        SceneManager.LoadScene(gameoverScene);
+    }
+        
     public void GetData()
     {
         gameoverText = (string)DataManager.instance.GetData(1001, "GameOverText", typeof(string));

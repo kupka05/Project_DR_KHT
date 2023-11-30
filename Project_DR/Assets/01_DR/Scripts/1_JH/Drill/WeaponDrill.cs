@@ -10,17 +10,16 @@ public class WeaponDrill : MonoBehaviour
 
     [SerializeField]
     [Range(0, 50)]
-    private float lerpSpeed = 0f;    
+    public float lerpSpeed = 0f;    
     public float addSpeed;
     private float maxSpeed;
 
+    IEnumerator spinRoutine;
 
 
     void Start()
     {
         GetData();
-
-        StartCoroutine("DrillSpin");
     }
     private void Update()
     {
@@ -32,6 +31,12 @@ public class WeaponDrill : MonoBehaviour
 
     public void OnSpin()
     {
+        if(spinRoutine == null)
+        {
+            spinRoutine = DrillSpin();
+            StartCoroutine(spinRoutine);
+        }
+
         lerpSpeed += addSpeed;
         if(maxSpeed < lerpSpeed)
             lerpSpeed = maxSpeed;
@@ -56,6 +61,11 @@ public class WeaponDrill : MonoBehaviour
                 time += Time.deltaTime * lerpSpeed;
                 yield return null;
             }
+
+            if(lerpSpeed <= 0.1f)
+            {
+                yield break;
+            }
         }
     }
     public void ResetDrill()
@@ -63,12 +73,18 @@ public class WeaponDrill : MonoBehaviour
         transform.localRotation = Quaternion.identity;
         lerpSpeed = 0;
         StopAllCoroutines();
-        StartCoroutine("DrillSpin");
-
+        if(spinRoutine !=null)
+        {
+            spinRoutine = DrillSpin();
+            StartCoroutine(spinRoutine);
+        }
     }
     private void GetData()
     {
-        addSpeed = (float)DataManager.instance.GetData(1100, "SpiralForce", typeof(float));
-        maxSpeed = (float)DataManager.instance.GetData(1100, "MaxSpiralSpeed", typeof(float));
+        IDatabase data = new Database();
+        addSpeed = data.GetData(1100, "SpiralForce", addSpeed);
+        maxSpeed = data.GetData(1100, "MaxSpiralSpeed", maxSpeed);
+        //    addSpeed = (float)DataManager.instance.GetData(1100, "SpiralForce", typeof(float));
+        //    maxSpeed = (float)DataManager.instance.GetData(1100, "MaxSpiralSpeed", typeof(float));
     }
 }

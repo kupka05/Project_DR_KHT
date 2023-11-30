@@ -170,7 +170,7 @@ public class BattleRoom : RandomRoom
     private void SpawnMonster(Vector3 _spawnPoint)
     {
         GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
-        Debug.Log($"GameObject : {prefabObj} , SB : {stringBuilder}");
+        //Debug.Log($"GameObject : {prefabObj} , SB : {stringBuilder}");
         spawnMonster = Instantiate(prefabObj, _spawnPoint, Quaternion.identity, monstersParent.transform);        
     }       // SponMonster()
 

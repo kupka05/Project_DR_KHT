@@ -17,10 +17,12 @@ namespace Rito.InventorySystem
         public float Duration => _duration;
         public float EffectAmount => _effectAmount;
         public float EffectDuration => _effectDuration;
+        public float MaxDuration => _maxDuration;
         [SerializeField] public float _value;
         [SerializeField] public float _duration;
         [SerializeField] public float _effectAmount;
         [SerializeField] public float _effectDuration;
+        [SerializeField] public float _maxDuration;
         public override Item CreateItem()
         {
             return new PortionItem(this);

@@ -16,9 +16,11 @@ namespace Rito.InventorySystem
         public float Value => _value;
         public float Duration => _duration;
         public float Radius => _radius;
+        public float EffectAmount => _effectAmount;
         [SerializeField] public float _value;
         [SerializeField] public float _duration;
         [SerializeField] public float _radius;
+        [SerializeField] public float _effectAmount;
         public override Item CreateItem()
         {
             return new BombItem(this);

@@ -34,6 +34,16 @@ public class GameManager : MonoBehaviour
     public float testNum;
     public string gameoverScene;
 
+
+    // ----------------------------------------------- SG ------------------------------------------------
+    public int nowFloor = 1;        // 현재 몇층인지 알려줄 변수
+
+    // string변수는 Resources폴더속 필요한 경로를 담고 있음 뒤에 몬스터의 이름을 붙여서 인스턴스할 계획
+    public string nomalMonsterSpawnPath = "";
+    public string eliteMonsterSpawnPath = "";
+
+    // ----------------------------------------------- SG ------------------------------------------------
+
     void Start()
     {
         GetData();

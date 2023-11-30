@@ -5370,7 +5370,7 @@ GameObject:
   - component: {fileID: 1927829856625710537}
   - component: {fileID: 7939552704754394365}
   m_Layer: 12
-  m_Name: Robot Roller - Red
+  m_Name: Robot RollerRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5501,6 +5501,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onKnockback:
+    m_PersistentCalls:
+      m_Calls: []
   onDestroyed:
     m_PersistentCalls:
       m_Calls: []
@@ -5521,7 +5524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  monsterId: 7015
+  monsterId: 7010
   monsterType: 6
   bulletPortLeft: {fileID: 865915322}
   bulletPortRight: {fileID: 444971427}
@@ -5537,6 +5540,7 @@ MonoBehaviour:
   attRange: 2
   stunDelay: 1
   stunCount: 0
+  stopDistance: 0
   monsterTr: {fileID: 459826078574243675}
   playerTr: {fileID: 0}
   anim: {fileID: 459826078567155639}
@@ -5546,6 +5550,9 @@ MonoBehaviour:
   damageable: {fileID: 1927829856625710537}
   isDie: 0
   isStun: 0
+  distanceDebug: 0
+  count: 0
+  maxCount: 3
 --- !u!1 &459826078574481517
 GameObject:
   m_ObjectHideFlags: 0

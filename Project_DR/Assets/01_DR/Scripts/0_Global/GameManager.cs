@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
 
     public string gameoverText;
     public float testNum;
+    public string gameoverScene;
 
 
     // ----------------------------------------------- SG ------------------------------------------------
@@ -77,13 +78,18 @@ public class GameManager : MonoBehaviour
         input.enabled = false;
 
 
-        Invoke(nameof(ResetScene),5f);
+        Invoke(nameof(GameOverScene),5f);
     }
     public void ResetScene()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentSceneName);
     }
+    public void GameOverScene()
+    {
+        SceneManager.LoadScene(gameoverScene);
+    }
+        
     public void GetData()
     {
         gameoverText = (string)DataManager.instance.GetData(1001, "GameOverText", typeof(string));

@@ -285,9 +285,9 @@ MonoBehaviour:
   GrabSpeed: 7.5
   RemoteGrabbable: 1
   RemoteGrabMechanic: 0
-  RemoteGrabDistance: 3
-  ThrowForceMultiplier: 1.5
-  ThrowForceMultiplierAngular: 2
+  RemoteGrabDistance: 5
+  ThrowForceMultiplier: 3
+  ThrowForceMultiplierAngular: 4
   BreakDistance: 1
   HideHandGraphics: 0
   ParentToHands: 1
@@ -415,6 +415,8 @@ MonoBehaviour:
   TakeCollisionDamage: 0
   CollisionDamage: 5
   isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &7220416822920735943
 MonoBehaviour:
   m_ObjectHideFlags: 0

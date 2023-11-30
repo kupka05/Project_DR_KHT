@@ -321,6 +321,7 @@ MonoBehaviour:
   attRange: 2.1
   stunDelay: 1
   stunCount: 0
+  stopDistance: 0
   monsterTr: {fileID: 5696125973314714401}
   playerTr: {fileID: 0}
   anim: {fileID: 5696125973323994305}
@@ -333,6 +334,7 @@ MonoBehaviour:
   damageable: {fileID: 2811257125698052687}
   isDie: 0
   isStun: 0
+  distanceDebug: 0
 --- !u!114 &2811257125698052687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,6 +373,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onKnockback:
+    m_PersistentCalls:
+      m_Calls: []
   onDestroyed:
     m_PersistentCalls:
       m_Calls: []

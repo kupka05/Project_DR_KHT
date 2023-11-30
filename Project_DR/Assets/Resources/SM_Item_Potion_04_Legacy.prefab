@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 7756608875672439704}
   - component: {fileID: -6764740539287606324}
   m_Layer: 0
-  m_Name: SM_Item_Potion_04_Regacy
+  m_Name: SM_Item_Potion_04_Legacy
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -136,12 +136,12 @@ MonoBehaviour:
   Grabtype: 2
   GrabPhysics: 4
   GrabMechanic: 1
-  GrabSpeed: 10
+  GrabSpeed: 7.5
   RemoteGrabbable: 0
   RemoteGrabMechanic: 0
-  RemoteGrabDistance: 1
-  ThrowForceMultiplier: 1.5
-  ThrowForceMultiplierAngular: 1.125
+  RemoteGrabDistance: 5
+  ThrowForceMultiplier: 3
+  ThrowForceMultiplierAngular: 4
   BreakDistance: 1.5
   HideHandGraphics: 0
   ParentToHands: 0

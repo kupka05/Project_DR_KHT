@@ -971,7 +971,7 @@ Transform:
   m_Children:
   - {fileID: 8978549120412235067}
   m_Father: {fileID: 7627447358138291877}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4525262021457375074
 GameObject:
@@ -1087,7 +1087,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7627447358138291877}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3654658131223172448
 MeshFilter:
@@ -2117,7 +2117,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7627447358138291877}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2605602983719995659
 MeshFilter:
@@ -2200,7 +2200,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7627447358138291877}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3555177097017120675
 MeshFilter:
@@ -2281,10 +2281,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4753420876096495035}
   - {fileID: 3632766638260579199}
   - {fileID: 9181724764029554111}
   - {fileID: 3095930890634181592}
-  - {fileID: 4753420876096495035}
   m_Father: {fileID: 4749243748706755000}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3126,17 +3126,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  player: {fileID: 0}
+  playerRigid: {fileID: 0}
   gun: {fileID: 8768672552246940895}
   muzzleTransform: {fileID: 8768672551865264199}
   grappleableLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4097
   drill: {fileID: 7353309825794527893}
   drillPrefab: {fileID: 8136475241427521122, guid: 4b50f1d3b73912a4cb235c724691d7f7,
     type: 3}
   maxGrappleDistance: 25
   grappleDelayTime: 0.25
-  GrappleReelForce: 15
+  GrappleReelForce: 3
   currentGrappleDistance: 0
   grapplingCd: 0.5
   debug: {fileID: 0}
@@ -3177,7 +3179,7 @@ MonoBehaviour:
   GrabSpeed: 20
   RemoteGrabbable: 1
   RemoteGrabMechanic: 0
-  RemoteGrabDistance: 2.5
+  RemoteGrabDistance: 5
   ThrowForceMultiplier: 2.5
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
@@ -3205,12 +3207,12 @@ MonoBehaviour:
   OtherGrabbableMustBeGrabbed: {fileID: 0}
   CollisionSpring: 3000
   CollisionSlerp: 300
-  CollisionLinearMotionX: 2
-  CollisionLinearMotionY: 2
-  CollisionLinearMotionZ: 2
-  CollisionAngularMotionX: 2
-  CollisionAngularMotionY: 2
-  CollisionAngularMotionZ: 2
+  CollisionLinearMotionX: 0
+  CollisionLinearMotionY: 0
+  CollisionLinearMotionZ: 0
+  CollisionAngularMotionX: 0
+  CollisionAngularMotionY: 0
+  CollisionAngularMotionZ: 0
   ApplyCorrectiveForce: 1
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
@@ -3466,6 +3468,7 @@ MonoBehaviour:
   CollisionDamage: 5
   isPlayer: 1
   canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &3038501380516454709
 MonoBehaviour:
   m_ObjectHideFlags: 0

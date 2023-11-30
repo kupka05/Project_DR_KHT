@@ -198,7 +198,29 @@ public class PlayerInventoryUI : MonoBehaviour
                         break;
                     }
                 }
+                // 해당 슬롯에 있는 아이템이 BombItem일 경우
+                else if (_inventory.Items[i] is BombItem bi)
+                {
+                    // 순차적으로 _itemSlotPanels을 순회
+                    for (int j = latestIndex + 1; j < count; j++)
+                    {
+                        // 추가할 패널이 비활성화인 경우
+                        if (_itemSlotPanels[j].gameObject.activeSelf == false)
+                        {
+                            // 활성화
+                            _itemSlotPanels[j].gameObject.SetActive(true);
+                        }
+                        // 데이터 Init
+                        int id = bi.Data.ID;
+                        int amount = bi.Amount;
+                        int maxAmount = bi.MaxAmount;
+                        // i는 실제 인벤토리 아이템 인덱스 저장을 위해 보냄
+                        InitSlotData(id, amount, maxAmount, i);
 
+                        latestIndex = j;
+                        break;
+                    }
+                }
             }
         }
 

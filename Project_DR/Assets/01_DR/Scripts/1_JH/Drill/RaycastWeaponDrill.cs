@@ -436,7 +436,7 @@ namespace BNG
                 }
             }
             // Apply recoil
-            ApplyRecoil();
+            //ApplyRecoil();
 
             // We just fired this bullet
             BulletInChamber = false;

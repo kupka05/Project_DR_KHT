@@ -1,4 +1,5 @@
 using BNG;
+using Oculus.Interaction;
 using Oculus.Platform.Models;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,9 +17,9 @@ public class Grappling : GrabbableEvents
     public State state = State.Idle;
 
     [Header("References")]
-    private GameObject player;
+    public GameObject player;
     private CharacterController characterController;
-    private Rigidbody playerRigid;
+    public Rigidbody playerRigid;
     private SmoothLocomotion smoothLocomotion;
     private PlayerTeleport teleport;
 
@@ -56,6 +57,8 @@ public class Grappling : GrabbableEvents
     public TMP_Text debug;
     public TMP_Text debug2;
 
+    private Vector3 smallScale;
+
     public void OnEnable()
     {
         drill.SetActive(true);
@@ -65,6 +68,7 @@ public class Grappling : GrabbableEvents
 
     private void Start()
     {
+        smallScale = new Vector3(0.0001f, 0.0001f, 0.0001f);
         player = GameObject.FindGameObjectWithTag("Player");
         if (player)
         {
@@ -87,10 +91,15 @@ public class Grappling : GrabbableEvents
 #if JH_DEBUG
         DebugMode();
 #endif
+   
+    }
+    private void FixedUpdate()
+    {
         if (state != State.Grappling)
             return;
 
-            GrapplingMove(); // 그래플링일 경우에만 실행
+        GrapplingMove(); // 그래플링일 경우에만 실행
+
     }
 #if JH_DEBUG
 
@@ -158,12 +167,20 @@ public class Grappling : GrabbableEvents
         {
             grapplePoint = hit.point;                         // 충돌한 곳이 있으면 그래플링 포인트로
             smoothLocomotion.freeze = false;                  // 플레이어 움직일 수 있도록 전환
-
             // 만약  damageable 오브젝트와 충돌 시
             if (hit.collider.GetComponent<Damageable>())
             {
+                Debug.Log("충돌");
+
                 isDamageCheck = true;                             // 데미지 체크 켜고
                 target = hit.collider.GetComponent<Damageable>(); // 타겟 세팅
+            }
+            else if (hit.collider.GetComponent<DamageablePart>())
+            {
+                Debug.Log("충돌");
+
+                isDamageCheck = true;
+                target = hit.collider.GetComponent<DamageablePart>().parent;
             }
         }
 
@@ -175,7 +192,8 @@ public class Grappling : GrabbableEvents
 
         line.enabled = true;                                  // 라인 켜주기
         line.SetPosition(1, grapplePoint);                    // 그래플링 포인트까지
-        drill.SetActive(false);                               // 달려있는 드릴 잠깐 꺼주고
+        //drill.SetActive(false);                               // 달려있는 드릴 잠깐 꺼주고
+        drill.transform.localScale = smallScale;
         ShootDrill();                                         // 그래플링용 드릴 발사
     }
 
@@ -184,10 +202,12 @@ public class Grappling : GrabbableEvents
     private void ShootDrill()
     {
         _drill = Instantiate(drillPrefab, drill.transform.position, drill.transform.rotation); // 드릴 인스턴스
-        _drill.transform.localScale = drill.transform.localScale;
+        //_drill.transform.localScale = drill.transform.localScale;
+        _drill.transform.localScale = Vector3.one;
         _drill.transform.LookAt(grapplePoint);                                                 // 타겟 바라보고
         _drill.GetComponent<DrillHead>().targetPos = grapplePoint;                             // 그래플링 포인트 세팅
         _drill.GetComponent<DrillHead>().grappling = this;                                     // 드릴이 만난 오브젝트의 체력이 0이하일 경우를 체크하기 위함
+
         Destroy(_drill,grappleDelayTime);
     }
     
@@ -214,15 +234,19 @@ public class Grappling : GrabbableEvents
     // 그래플링 이동 관련 : state가 그래플링일 경우 실행
     private void GrapplingMove()
     {
-
+        if(playerRigid == null)
+        {
+            SetRigid();
+        }
 
         if (currentGrappleDistance < 0.3f)
             return;
         // 플레이어 이동
         Vector3 moveDirection = (grapplePoint - muzzleTransform.position) * GrappleReelForce;
-            smoothLocomotion.MoveCharacter(moveDirection * Time.deltaTime);  
-       
+        //smoothLocomotion.MoveCharacter(moveDirection * Time.deltaTime);
 
+        playerRigid.velocity = moveDirection;
+        //playerRigid.MovePosition(grapplePoint);
     }
 
     // 그래플링 멈춤
@@ -234,6 +258,7 @@ public class Grappling : GrabbableEvents
         {
             changeGravity(true);
             smoothLocomotion.freeze = false;
+            playerRigid.velocity = Vector3.zero;
         }
         if (state == State.Grappling)
         {
@@ -245,7 +270,8 @@ public class Grappling : GrabbableEvents
 
         lastGrapplingTime = Time.time;
 
-        drill.SetActive(true);
+        //drill.SetActive(true);
+        drill.transform.localScale = Vector3.one;
         line.enabled = false;
         
         isDamageCheck = false;
@@ -261,7 +287,7 @@ public class Grappling : GrabbableEvents
     }
     public void GrapleDisable()
     {
-        if (currentGrappleDistance < 1f && state == State.Grappling)
+        if (currentGrappleDistance < 1.8f && state == State.Grappling)
         {
             StopGrapple();
         }
@@ -299,11 +325,18 @@ public class Grappling : GrabbableEvents
         {
             playerGravity.ToggleGravity(gravityOn);
         }
+        playerRigid.useGravity = gravityOn;
     }
     // 데이터 가져오기
     void GetData()
     {
         maxGrappleDistance = (float)DataManager.instance.GetData(1100, "MaxDistance", typeof(float));
         grapplingCd = (float)DataManager.instance.GetData(1100, "GrappleDelay", typeof(float)) ;
+    }
+
+    public void SetRigid()
+    {
+        Debug.Log("리지드바디 생성");
+        playerRigid = player.GetComponent<Rigidbody>();
     }
 }

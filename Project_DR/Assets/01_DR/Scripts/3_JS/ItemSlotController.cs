@@ -9,9 +9,24 @@ public class ItemSlotController : MonoBehaviour
      *                 Private Fields
      *************************************************/
     #region [+]
+    [SerializeField] private Inventory _inventory;
     [SerializeField] private GameObject itemSlot;
     private BoxCollider boxCollider;
-    [SerializeField] private bool isChangeSize = true;
+    [SerializeField] private int _index;
+    [SerializeField] private bool _isChangeSize = true;
+    // 슬롯에 수납 가능 여부
+    [SerializeField] private bool _isStorageAvailable = true;
+    [SerializeField] private bool _isPlayerStorage = false;
+
+    #endregion
+    /*************************************************
+     *                 Private Fields
+     *************************************************/
+    #region [+]
+    public Inventory Inventory => _inventory;
+    public bool IsStorageAvailable => _isStorageAvailable;
+    public bool IsPlayerStorage => _isPlayerStorage;
+    public int Index => _index;
 
     #endregion
     /*************************************************
@@ -20,12 +35,14 @@ public class ItemSlotController : MonoBehaviour
     #region [+]
     void Start()
     {
-        if (itemSlot == null)
+        if (itemSlot == null && _isPlayerStorage == false)
         {
             itemSlot = GetParentGameObject(transform);
         }
+
         boxCollider = gameObject.GetComponent<BoxCollider>();
-        if (isChangeSize)
+
+        if (_isChangeSize)
         {
             SetBoxColliderSize(GetSizeVector2(itemSlot), boxCollider);
         }
@@ -34,6 +51,16 @@ public class ItemSlotController : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Collision Enter");
+    }
+
+    #endregion
+    /*************************************************
+     *                Private Methods
+     *************************************************/
+    #region [+]
+    public void SetIndex(int index)
+    {
+        _index = index;
     }
 
     #endregion

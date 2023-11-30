@@ -24,7 +24,8 @@ public class ItemColliderHandler : MonoBehaviour
         Default = 0,
         Processing,
         Handed,
-        Stop
+        Stop,
+        Grabbed
     }
     public State state;
 
@@ -53,20 +54,20 @@ public class ItemColliderHandler : MonoBehaviour
     }
 
     // 아이템이 바닥과 충돌 했을 경우
-    private void OnCollisionEnter(Collision collision)
-    {
-        // 아이템을 슬롯에서 꺼낼 때 Stop 상태로 변경된다.
-        // Stop 상태에서 바닥과 충돌했을 경우
-        if (collision.collider.CompareTag("Floor") && state == State.Stop)
-        {
-            // 디버그
-            //Debug.Log("Floor");
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    // 아이템을 슬롯에서 꺼낼 때 Stop 상태로 변경된다.
+    //    // Stop 상태에서 바닥과 충돌했을 경우
+    //    if (collision.collider.CompareTag("Floor") && state == State.Stop)
+    //    {
+    //        // 디버그
+    //        //Debug.Log("Floor");
 
-            // n초 후에 상태 초기화 코루틴 실행
-            Action func = ResetState;
-            Coroutine(func, stateResetDelay);
-        }
-    }
+    //        // n초 후에 상태 초기화 코루틴 실행
+    //        Action func = ResetState;
+    //        Coroutine(func, stateResetDelay);
+    //    }
+    //}
     #endregion
 
     /*************************************************
@@ -100,7 +101,7 @@ public class ItemColliderHandler : MonoBehaviour
     private void ProcessItemInSlot(Collider other)
     {
         // 대상이 아이템 슬롯일 경우
-        if (other.CompareTag("ItemSlot") && state == State.Default)
+        if (other.CompareTag("ItemSlot") && state == State.Grabbed)
         {
             ItemSlotController itemSlot = other.GetComponent<ItemSlotController>();
             // 수납 가능한 경우에만 수납함
@@ -127,6 +128,7 @@ public class ItemColliderHandler : MonoBehaviour
                 // ItemDataComponent가 있는지 확인
                 if (itemDataComponent != null)
                 {
+                    Debug.Log(itemDataComponent.ItemData);
                     ItemData itemData = (ItemData)itemDataComponent.ItemData;
                     int id = itemData.ID;
                     ItemManager.instance.InventoryCreateItem(other.transform.position, id);

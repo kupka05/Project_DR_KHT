@@ -3179,7 +3179,7 @@ MonoBehaviour:
   GrabSpeed: 20
   RemoteGrabbable: 1
   RemoteGrabMechanic: 0
-  RemoteGrabDistance: 2.5
+  RemoteGrabDistance: 5
   ThrowForceMultiplier: 2.5
   ThrowForceMultiplierAngular: 1.5
   BreakDistance: 0
@@ -3207,12 +3207,12 @@ MonoBehaviour:
   OtherGrabbableMustBeGrabbed: {fileID: 0}
   CollisionSpring: 3000
   CollisionSlerp: 300
-  CollisionLinearMotionX: 2
-  CollisionLinearMotionY: 2
-  CollisionLinearMotionZ: 2
-  CollisionAngularMotionX: 2
-  CollisionAngularMotionY: 2
-  CollisionAngularMotionZ: 2
+  CollisionLinearMotionX: 0
+  CollisionLinearMotionY: 0
+  CollisionLinearMotionZ: 0
+  CollisionAngularMotionX: 0
+  CollisionAngularMotionY: 0
+  CollisionAngularMotionZ: 0
   ApplyCorrectiveForce: 1
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90

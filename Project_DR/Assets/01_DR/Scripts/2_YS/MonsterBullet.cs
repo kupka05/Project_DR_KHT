@@ -5,8 +5,8 @@ using UnityEngine;
 public class MonsterBullet : MonoBehaviour
 {
     [Header("테이블 관련")]
-    public float damage = default;
-    public float speed = default;
+    [SerializeField]
+    private float speed = 15.0f;
 
     private Rigidbody rigid;
 

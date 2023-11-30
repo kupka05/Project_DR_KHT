@@ -41,12 +41,6 @@ public class ItemStateManager : MonoBehaviour
     private WaitForSeconds _waitForSeconds;                     // WaitForSeconds 캐싱(최적화)
 
     private bool _isProcessing = false;                         // 작업 여부를 알려주는 상태
-    #endregion
-    /*************************************************
-     *                Public Fields
-     *************************************************/
-    #region [+]
-
 
     #endregion
     /*************************************************

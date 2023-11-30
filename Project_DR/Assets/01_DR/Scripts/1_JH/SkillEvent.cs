@@ -30,10 +30,10 @@ public class SkillEvent : MonoBehaviour
     void Start()
     {
         GetData();
-        if (skill == Skill.TeraDrill)
-        {
-            transform.position = new Vector3(transform.position.x, TDcheckerHeight, transform.position.z);
-        }
+        //if (skill == Skill.TeraDrill)
+        //{
+        //    transform.position = new Vector3(transform.position.x, TDcheckerHeight, transform.position.z);
+        //}
     }
 
 

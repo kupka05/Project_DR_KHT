@@ -626,6 +626,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Teleport Start",
+                    "type": "Button",
+                    "id": "87b4a1c1-8371-4134-ac34-cd33aace17d9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Teleport Activate",
                     "type": "Button",
                     "id": "a6c7231d-c55d-4dd4-9e87-877bb5522ef5",
@@ -915,6 +924,39 @@
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "01979e69-980d-4ff1-898b-f87c6f9c81aa",
+                    "path": "<XRController>{RightHand}/Primary2DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Noncontinuous Move",
+                    "action": "Teleport Start",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "2D Vector Keyboard",
+                    "id": "95893468-64bc-46e4-8098-70803af8fda0",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Teleport Start",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "8bd8ed5a-84d9-4eb9-aed9-c4db6f39c070",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Teleport Start",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

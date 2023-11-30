@@ -10,7 +10,7 @@ public class WeaponDrill : MonoBehaviour
 
     [SerializeField]
     [Range(0, 50)]
-    private float lerpSpeed = 0f;    
+    public float lerpSpeed = 0f;    
     public float addSpeed;
     private float maxSpeed;
 
@@ -81,7 +81,10 @@ public class WeaponDrill : MonoBehaviour
     }
     private void GetData()
     {
-        addSpeed = (float)DataManager.instance.GetData(1100, "SpiralForce", typeof(float));
-        maxSpeed = (float)DataManager.instance.GetData(1100, "MaxSpiralSpeed", typeof(float));
+        IDatabase data = new Database();
+        addSpeed = data.GetData(1100, "SpiralForce", addSpeed);
+        maxSpeed = data.GetData(1100, "MaxSpiralSpeed", maxSpeed);
+        //    addSpeed = (float)DataManager.instance.GetData(1100, "SpiralForce", typeof(float));
+        //    maxSpeed = (float)DataManager.instance.GetData(1100, "MaxSpiralSpeed", typeof(float));
     }
 }

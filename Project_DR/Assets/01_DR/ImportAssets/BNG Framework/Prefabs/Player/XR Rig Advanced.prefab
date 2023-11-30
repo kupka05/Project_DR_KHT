@@ -5801,7 +5801,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &3872616676426165026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15122,7 +15124,6 @@ GameObject:
   - component: {fileID: 699835362}
   - component: {fileID: 1776643964}
   - component: {fileID: 4144118093911848930}
-  - component: {fileID: 4144118093912075228}
   m_Layer: 9
   m_Name: PlayerController
   m_TagString: Player
@@ -15229,7 +15230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  ControllerType: 0
+  ControllerType: 1
   MovementSpeed: 1.25
   MovementForce: 500
   MaxHorizontalVelocity: 5
@@ -15265,13 +15266,19 @@ MonoBehaviour:
   activeGrapple: 0
   swinging: 0
   isGrappling: 0
+  grappleCount: 0
   AirControl: 1
   AirControlSpeed: 1
   grapplings: []
+  setRigidEvent:
+    m_PersistentCalls:
+      m_Calls: []
   Magnitude: 0
   GroundContacts: 0
   SurfaceAngle: 0
   SurfaceHeight: 0
+  debug: {fileID: 0}
+  debug2: {fileID: 0}
 --- !u!114 &4095492992128682948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15537,40 +15544,6 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4144118093912075228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2093207351254691191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa81333c13603f3458ac0f21739e4d86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MoveCharacterWithCamera: 1
-  RotateCharacterWithCamera: 1
-  ResizeCharacterHeightWithCamera: 1
-  TrackingSpace: {fileID: 0}
-  CameraRig: {fileID: 0}
-  CenterEyeAnchor: {fileID: 0}
-  GroundedLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  DistanceFromGround: 0
-  DistanceFromGroundOffset: 0
-  MinimumCapsuleHeight: 0.4
-  MaximumCapsuleHeight: 3
-  LastTeleportTime: 0
-  CharacterControllerYOffset: -0.025
-  CameraHeight: 0
-  ElevateCameraIfNoHMDPresent: 1
-  ElevateCameraHeight: 1.65
-  MinElevation: -6000
-  MaxElevation: 6000
-  LastPlayerMoveTime: 0
-  SphereColliderRadius: 0.08
 --- !u!1 &2095857085823052182
 GameObject:
   m_ObjectHideFlags: 0
@@ -17104,7 +17077,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &2617979139982263558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18015,7 +17990,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &7404229882738024664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26669,7 +26646,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &9047896865860548675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27215,7 +27194,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &3924750015774238810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27730,7 +27711,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &1184348194378456625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28936,7 +28919,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &5500609721469585718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30278,7 +30263,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &5527470001867617091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34150,7 +34137,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &6668709434458981756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38023,7 +38012,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &6887772138927226764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48485,7 +48476,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &6177891441558738436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55298,7 +55291,9 @@ MonoBehaviour:
   LastDamageForce: 0
   TakeCollisionDamage: 0
   CollisionDamage: 5
-  isTouch: 0
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
 --- !u!114 &5778485293220997783
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -373,7 +373,7 @@ MonoBehaviour:
   player: {fileID: 0}
   gameoverText: 
   testNum: 0
-  gameoverScene: 
+  gameoverScene: JH_LobbyScene
   obj: {fileID: 0}
   cloneObj: {fileID: 0}
   nowFloor: 1
@@ -946,6 +946,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.0009658963
+      objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -979,6 +984,11 @@ PrefabInstance:
     - target: {fileID: 8632280360072031270, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632280360072031270, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

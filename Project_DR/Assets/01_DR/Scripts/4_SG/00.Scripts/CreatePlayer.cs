@@ -20,7 +20,7 @@ public class CreatePlayer : MonoBehaviour
             yield return null;
         }
         player = GameManager.instance.player;
-        player.transform.position = this.transform.position;
+        player.transform.position = new Vector3 (this.transform.position.x, this.transform.position.y-60f, this.transform.position.z);
         
         
     }

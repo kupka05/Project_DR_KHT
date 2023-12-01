@@ -34,6 +34,10 @@ public class GameManager : MonoBehaviour
     public float testNum;
     public string gameoverScene;
 
+    public GameObject obj;
+    public GameObject cloneObj;
+
+
 
     // ----------------------------------------------- SG ------------------------------------------------
     public int nowFloor = 1;        // 현재 몇층인지 알려줄 변수
@@ -52,7 +56,7 @@ public class GameManager : MonoBehaviour
         {
             input = player.transform.parent.GetComponent<InputBridge>();
         }
-        Debug.Log(testNum);
+        //Debug.Log(testNum);
 
     }       // Start()
 

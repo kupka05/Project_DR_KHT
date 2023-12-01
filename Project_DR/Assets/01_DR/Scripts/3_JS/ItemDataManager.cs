@@ -213,6 +213,10 @@ public static class ItemDataManager
         {
             SetFieldIfExists(data, "_maxDuration", (float)DataManager.instance.GetData(id, "MaxDuration", typeof(float)));
         }
+        if (CheckField<T, float>(data, "_effectDuration"))
+        {
+            SetFieldIfExists(data, "_effectDuration", (float)DataManager.instance.GetData(id, "EffectDuration", typeof(float)));
+        }
 
         return data;
     }

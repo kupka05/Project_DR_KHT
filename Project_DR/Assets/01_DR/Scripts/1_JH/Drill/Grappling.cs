@@ -287,7 +287,7 @@ public class Grappling : GrabbableEvents
     }
     public void GrapleDisable()
     {
-        if (currentGrappleDistance < 1.8f && state == State.Grappling)
+        if (currentGrappleDistance < 1.3f && state == State.Grappling)
         {
             StopGrapple();
         }

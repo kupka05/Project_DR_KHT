@@ -67,6 +67,10 @@ public class DungeonCreator : MonoBehaviour
 
     public GameObject nextStagePotal;
 
+    public GameObject entrancePrefab;
+    public GameObject exitObjPrefab;        // !현재 위치값은 매직넘버로 이루어져있음
+    
+
 
     // 부숴지는벽이 나올 확률 // 임시 : 추후 스프레드시트로 바뀔수 있음 11.09
     private float wallBreakDownPercentage = 5;
@@ -199,18 +203,21 @@ public class DungeonCreator : MonoBehaviour
             if(randomEvent == 0 && battleRoomCount != 0)
             {
                 bspListClone[randomIdx].AddComponent<BattleRoom>();
+                bspListClone[randomIdx].AddComponent<BattleRoomObjCreate>();
                 battleRoomCount -= 1;
                 bspListClone.Remove(bspListClone[randomIdx]);
             }
             else if(randomEvent == 1 && eventRoom != 0)
             {
                 bspListClone[randomIdx].AddComponent<EventRoom>();
+                bspListClone[randomIdx].AddComponent<EventRoomObjCreate>();
                 eventRoom -= 1;
                 bspListClone.Remove(bspListClone[randomIdx]);
             }
             else if(randomEvent == 2 && nullRoom != 0)
             {
                 bspListClone[randomIdx].AddComponent<NullRoom>();
+                bspListClone[randomIdx].AddComponent<NullRoomObjCreate>();
                 nullRoom -= 1;
                 bspListClone.Remove(bspListClone[randomIdx]);
             }
@@ -822,10 +829,25 @@ public class DungeonCreator : MonoBehaviour
         #region PlayerStart CustomRoom
         CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
         CustomRoomCorridorMeshCreate(false, bspfirstRoomBottomCenterPoint, bspFirstRoomTopCenterPoint, firstRoomPos, dungeonFloor);
-        CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
+        CreatePlayerRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
+        CreateEntrance(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
         #endregion PlayerStart CustomRoom
     }       // PlayerStartRoomCreate()
+
+    /// <summary>
+    /// 플레이어 리스폰 지역 생성하는 함수
+    /// </summary>    
+    private void CreateEntrance(Vector3 bottomLeftV, Vector3 bottomRightV,
+        Vector3 topLeftV, Vector3 topRightV, GameObject dungeonFloor)
+    {
+        GameObject prefabClone = entrancePrefab;        
+        Vector3 roomTopCenter = new Vector3((bottomLeftV.x + bottomRightV.x) * 0.5f, (roopYpos.y + 7) + 100 ,
+            (bottomLeftV.z + topLeftV.z) * 0.5f);        
+
+        prefabClone = Instantiate(entrancePrefab, roomTopCenter,Quaternion.identity,dungeonFloor.transform);
+
+    }       // CreateEntrance()
 
     /// <summary>
     /// 플레이어 시작 위치에 벽 생성해주는 함수 (해당 방의 포지션이 음수인지 양수인지에 따라 계산이 다르기때문에 둘로 쪼개놓음)
@@ -1134,7 +1156,93 @@ public class DungeonCreator : MonoBehaviour
         if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
         Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
         floorCol.size = colSize;
+       
+        #endregion 메시의 콜라이더 Center,Size 수정
 
+        dungeonFloor.transform.position = Vector3.zero;
+        dungeonFloor.transform.localScale = Vector3.one;
+        dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
+        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+
+        dungeonFloor.transform.parent = roopParent.transform;
+        dungeonFloor.transform.position = roopYpos;
+
+    }   // CreateRoof()
+
+    /// <summary>
+    /// 플레이어방 지붕 생성
+    /// </summary>    
+    private void CreatePlayerRoomRoof(Vector3 bottomLeftV_, Vector3 bottomRightV_,
+        Vector3 topLeftV_, Vector3 topRightV_, GameObject roopParent)
+    {
+        topLeftV_.y = roopYpos.y;
+        topRightV_.y = roopYpos.y;
+        bottomLeftV_.y = roopYpos.y;
+        bottomRightV_.y = roopYpos.y;
+
+        // 바닥 메시를 위한 꼭지점 배열 생성
+        Vector3[] vertices = new Vector3[]
+        {
+            topLeftV_,
+            topRightV_,
+            bottomLeftV_,
+            bottomRightV_
+        };
+
+        // UV 매핑을 위한 배열 생성
+        Vector2[] uvs = new Vector2[vertices.Length];
+        for (int i = 0; i < uvs.Length; i++)
+        {
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+        }
+
+        // 삼각형을 정의하는 배열 생성
+        int[] triangles = new int[]
+        {
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+        };
+
+        // 메시 생성 및 설정
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices;
+        mesh.uv = uvs;
+        mesh.triangles = triangles;
+        mesh.triangles = mesh.triangles.Reverse().ToArray();
+
+        GameObject dungeonFloor = new GameObject("Mesh" + InItNum + bottomLeftV_,
+            typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
+        roopYpos.x = 0;
+        roopYpos.z = 0;
+
+
+        InItNum++;
+
+        #region 메시의 콜라이더 Center,Size 수정
+
+        // 메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
+        // Center
+        Vector3 colCenter = new Vector3((bottomLeftV_.x + bottomRightV_.x) / 2, roopYpos.y, (topLeftV_.z + bottomLeftV_.z) / 2);
+        BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
+        floorCol.center = colCenter;
+        // Size
+        float colSizeX, colSizeY, colSizeZ;
+        colSizeX = bottomLeftV_.x - bottomRightV_.x;
+        colSizeY = 0.03f;
+        colSizeZ = bottomLeftV_.z - topLeftV_.z;
+        // 음수값이 나오면 양수로 치환
+        if (colSizeX < 0) { colSizeX = -colSizeX; }
+        if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
+        Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
+        floorCol.size = colSize;
+
+        PlayerRoomTopFirstTrrigerController playerRoomRoof = dungeonFloor.AddComponent<PlayerRoomTopFirstTrrigerController>();
+        playerRoomRoof.GetBoxCollider(floorCol);
+        playerRoomRoof.StartTrrigerOn();
         #endregion 메시의 콜라이더 Center,Size 수정
 
         dungeonFloor.transform.position = Vector3.zero;
@@ -1416,11 +1524,26 @@ public class DungeonCreator : MonoBehaviour
         CustomRoomCorridorCreatePlusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
         CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, bossRoomCornerPos_, dungeonFloor);
         CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
+        CreateExitObj(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
 
         //CreateNextStageStoneObj(colCenter, dungeonFloor);
 
     }       // NextStageRoomCreate()
+
+    /// <summary>
+    /// 다음방 이동 오브젝트 생성
+    /// </summary>    
+    private void CreateExitObj(Vector3 bottomLeftV, Vector3 bottomRightV,
+        Vector3 topLeftV, Vector3 topRightV, GameObject dungeonFloor)
+    {
+        GameObject prefabClone = exitObjPrefab;
+        Vector3 roomUnderCenter = new Vector3((bottomLeftV.x + bottomRightV.x) * 0.5f, 0f,
+            (bottomLeftV.z + topLeftV.z) * 0.5f);
+
+        prefabClone = Instantiate(exitObjPrefab, roomUnderCenter, Quaternion.identity, dungeonFloor.transform);
+
+    }       // CreateExitObj()
 
     ///// <summary>
     ///// 다음 던전이동 하기위한 뚫리는 돌 오브젝트 생성

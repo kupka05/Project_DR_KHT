@@ -833,7 +833,11 @@ namespace BNG
         {
            return Damage.instance.DamageCalculate(damage);
         }
-      
+        public void ReleaseGrab()
+        {
+            isSpining = false;
+            readyToShoot = false;
+        }
 
         private void GetData()
         {

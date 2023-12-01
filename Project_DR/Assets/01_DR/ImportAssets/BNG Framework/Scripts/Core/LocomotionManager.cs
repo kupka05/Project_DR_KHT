@@ -18,6 +18,7 @@ namespace BNG {
         public LocomotionType SelectedLocomotion {
             get { return selectedLocomotion; }
         }
+        public bool bothLocomotion;
 
         /// <summary>
         /// If true, locomotion type will be saved and loaded from player prefs
@@ -37,6 +38,7 @@ namespace BNG {
         PlayerTeleport teleport;
         SmoothLocomotion smoothLocomotion;
 
+
         void Start() {
             player = GetComponentInChildren<PlayerController>();
             teleport = GetComponentInChildren<PlayerTeleport>();
@@ -49,20 +51,17 @@ namespace BNG {
                 ChangeLocomotion(DefaultLocomotion, false);
             }
 
-            if(selectedLocomotion == LocomotionType.Both)
+            if (bothLocomotion)
             {
                 teleport.enabled = true;
+                toggleTeleport(true);
             }
+
         }
 
         bool actionToggle = false;
 
         void Update() {
-            if(selectedLocomotion == LocomotionType.Both)
-            {
-                return;
-            }
-
             // Make sure we don't double toggle our inputs
             if(!actionToggle) {
                 CheckControllerToggleInput();

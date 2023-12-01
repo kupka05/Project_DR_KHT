@@ -156,7 +156,7 @@ Transform:
   m_GameObject: {fileID: 750317824092880083}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4164654459825980525}
@@ -835,6 +835,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19154983a0bb7b94fab4902b08ae1758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLobby: 0
+  dungeonScene: SG_TestScene
 --- !u!1 &4175839730869702316
 GameObject:
   m_ObjectHideFlags: 0

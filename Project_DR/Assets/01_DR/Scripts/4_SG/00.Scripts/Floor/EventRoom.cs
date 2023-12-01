@@ -19,6 +19,7 @@ public class EventRoom : RandomRoom
     private void OnDestroy()
     {
         DungeonManager.clearList.Remove(isClearRoom);
+        StopAllCoroutines();        // 예의치 못한 코루틴 으로 인한 이슈 방지
     }       // OnDestroy()
 
 

@@ -33,7 +33,7 @@ public class PlayerEvent : MonoBehaviour
     public void AfterGrabCheck(Grabbable grabItem)
     {
         //아이템 생성 디버그
-       GameObject itemaaa = ItemManager.instance.CreateItem(5001);
+        GameObject itemaaa = ItemManager.instance.CreateItem(5001);
         GameObject itemaaa2 = ItemManager.instance.CreateItem(5002);
         GameObject itemaaa3 = ItemManager.instance.CreateItem(5003);
         GameObject itemaaa24 = ItemManager.instance.CreateItem(5101);

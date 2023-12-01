@@ -8,7 +8,8 @@ namespace BNG {
     public enum LocomotionType {
         Teleport,
         SmoothLocomotion,
-        None
+        None,
+        Both
     }
 
     /// <summary>

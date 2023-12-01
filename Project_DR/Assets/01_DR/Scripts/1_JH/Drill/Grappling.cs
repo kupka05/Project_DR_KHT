@@ -234,7 +234,10 @@ public class Grappling : GrabbableEvents
     // 그래플링 이동 관련 : state가 그래플링일 경우 실행
     private void GrapplingMove()
     {
-
+        if(playerRigid == null)
+        {
+            SetRigid();
+        }
 
         if (currentGrappleDistance < 0.3f)
             return;
@@ -284,7 +287,7 @@ public class Grappling : GrabbableEvents
     }
     public void GrapleDisable()
     {
-        if (currentGrappleDistance < 1.8f && state == State.Grappling)
+        if (currentGrappleDistance < 1.3f && state == State.Grappling)
         {
             StopGrapple();
         }
@@ -333,9 +336,7 @@ public class Grappling : GrabbableEvents
 
     public void SetRigid()
     {
-        if (playerRigid != null)
-        { return; }
-
+        Debug.Log("리지드바디 생성");
         playerRigid = player.GetComponent<Rigidbody>();
     }
 }

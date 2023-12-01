@@ -186,7 +186,7 @@ public class BattleRoom : RandomRoom
         }
 
 
-        FirstSetting();         // Awake에서 초기화 할당 매서드
+        FirstSetting();         // Start에서 초기화 할당 매서드
 
         SettingSpawnCount();    // 여기서 부터 몬스터 생성 시작
 
@@ -203,6 +203,7 @@ public class BattleRoom : RandomRoom
         spawnPointList = new List<Vector3>();
         monstersParent = new GameObject("Monsters");
         monstersParent.transform.parent = this.transform;
+        
 
     }
 

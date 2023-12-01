@@ -41,9 +41,7 @@ public class DungeonManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
-
-
+        }        
         if (clearList == null || clearList == default)
         {
             clearList = new List<bool>();

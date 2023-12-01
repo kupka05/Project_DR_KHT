@@ -31,11 +31,11 @@ public class UseItem : MonoBehaviour
 
     private void Update()
     {
-        // 디버그로 아이템 잡을 경우 Use 호출
-        if (item.state == ItemColliderHandler.State.Grabbed)
-        {
-            Use();
-        }
+        //// 디버그로 아이템 잡을 경우 Use 호출
+        //if (item.state == ItemColliderHandler.State.Grabbed)
+        //{
+        //    Use();
+        //}
     }
 
     #endregion
@@ -55,9 +55,6 @@ public class UseItem : MonoBehaviour
             // 현재 아이템의 타입을 가져온 후,
             // 아이템을 사용함
             Use(GetItemType());
-
-            // 아이템 삭제
-            Destroy(gameObject);
         }
     }
 
@@ -124,9 +121,9 @@ public class UseItem : MonoBehaviour
                 break;
 
             default:
-                // 디폴트가 나올 수 없음을 명시
-                Debug.Assert(false);
-                break;
+                Debug.LogWarning("Item의 데이터가 생성되기 전에 아이템 Use()가 발생했습니다. " +
+                    "/ 사용 오류");
+                return;
         }
 
         // 사용 후 현재 아이템 삭제

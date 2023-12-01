@@ -336,7 +336,10 @@ public class Grappling : GrabbableEvents
 
     public void SetRigid()
     {
-        Debug.Log("리지드바디 생성");
-        playerRigid = player.GetComponent<Rigidbody>();
+        if (player.GetComponent<Rigidbody>())
+        {
+            Debug.Log("리지드바디 생성");
+            playerRigid = player.GetComponent<Rigidbody>();
+        }
     }
 }

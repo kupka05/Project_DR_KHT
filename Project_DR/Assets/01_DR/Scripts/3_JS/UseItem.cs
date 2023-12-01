@@ -98,26 +98,28 @@ public class UseItem : MonoBehaviour
     // 타입에 맞는 아이템을 사용하는 함수
     private void Use(string type)
     {
+        float delay = default;
+
         switch (type)
         {
             case "Potion":
                 // 포션 아이템 사용
-                UsePotionItem();
+                delay = UsePotionItem();
                 break;
 
             case "Bomb":
                 // 폭탄 아이템 사용
-                UseBombItem();
+                delay = UseBombItem();
                 break;
 
             case "Material":
                 // 재료 아이템 사용
-                UseMaterialItem();
+                delay = UseMaterialItem();
                 break;
 
             case "Quest":
                 // 퀘스트 아이템 사용
-                UseQuestItem();
+                delay = UseQuestItem();
                 break;
 
             default:
@@ -126,12 +128,13 @@ public class UseItem : MonoBehaviour
                 return;
         }
 
-        // 사용 후 현재 아이템 삭제
-        Destroy(gameObject);
+        // 사용 후 일정 시간 후에 아이템 삭제
+        Action func = () => Destroy(gameObject);
+        NewInvoke(func, delay);
     }
 
     // 포션 아이템을 사용
-    private void UsePotionItem()
+    private float UsePotionItem()
     {
         // 포션 아이템 정보를 가져옴
         int id = _itemData.ID;
@@ -145,10 +148,12 @@ public class UseItem : MonoBehaviour
         PlayerHealth playerHealth = StateOnTick.Instance.Player.GetComponent<PlayerHealth>();
         Action healthFunc = () => playerHealth.RestoreHealth(effectDuration);
         StateOnTick.Instance.Add(id, healthFunc);
+
+        return default;
     }
 
     // 폭탄 아이템을 사용
-    private void UseBombItem()
+    private float UseBombItem()
     {
         // 폭탄 아이템 정보를 가져옴
         int id = _itemData.ID;
@@ -160,20 +165,26 @@ public class UseItem : MonoBehaviour
         // TODO: 적의 체력을 달게하는 함수 추가하기
         // StateOnTick에 폭탄 공격 추가
         ItemBombHandler bombHandler = gameObject.GetComponent<ItemBombHandler>();
-        //Action bombFunc = () => bombHandler.RestoreHealth(effectDuration);
-        //StateOnTick.Instance.Add(id, healthFunc);
+        Action bombFunc = () => bombHandler.DetonateBomb(effectDuration);
+        StateOnTick.Instance.Add(id, bombFunc);
+
+        return duration;
     }
 
     // 재료 아이템을 사용
-    private void UseMaterialItem()
+    private float UseMaterialItem()
     {
         MaterialItemData materialData = _itemData as MaterialItemData;
+
+        return default;
     }
 
     // 퀘스트 아이템을 사용
-    private void UseQuestItem()
+    private float UseQuestItem()
     {
         QuestItemData questData = _itemData as QuestItemData;
+
+        return default;
     }
 
     // 매개변수를 넣을 수 있는 새로운 Invoke
@@ -184,7 +195,7 @@ public class UseItem : MonoBehaviour
 
     #endregion
     /*************************************************
-     *               Private Methods
+     *                  Couroutines
      *************************************************/
     #region [+]
     // 함수를 코루틴으로 실행하는 코루틴 함수

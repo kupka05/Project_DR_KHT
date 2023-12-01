@@ -226,8 +226,7 @@ public class ItemManager : MonoBehaviour
         item.AddComponent<ItemColliderHandler>();
         // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
         // 정보를 등록함
-        ItemDataComponent itemData = 
-            item.AddComponent<ItemDataComponent>();
+        ItemDataComponent itemData = item.AddComponent<ItemDataComponent>();
         itemData.Initialize(data);
         SetOverItem(handPos, item);
         //PortionItemData portionItemData = (PortionItemData)itemData.ItemData;
@@ -245,8 +244,8 @@ public class ItemManager : MonoBehaviour
         item.AddComponent<ItemColliderHandler>();
         // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
         // 정보를 등록함
-        ItemDataComponent itemData =
-            item.AddComponent<ItemDataComponent>();
+        ItemDataComponent itemData = item.AddComponent<ItemDataComponent>();
+        item.AddComponent<ItemBombHandler>(); 
         itemData.Initialize(data);
         item.name = data.Name;
         SetOverItem(handPos, item);
@@ -266,8 +265,7 @@ public class ItemManager : MonoBehaviour
         item.AddComponent<ItemColliderHandler>();
         // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
         // 정보를 등록함
-        ItemDataComponent itemData =
-            item.AddComponent<ItemDataComponent>();
+        ItemDataComponent itemData = item.AddComponent<ItemDataComponent>();
         itemData.Initialize(data);
         SetOverItem(handPos, item);
         //MaterialItemData materialItemData = (MaterialItemData)itemData.ItemData;
@@ -286,8 +284,7 @@ public class ItemManager : MonoBehaviour
         item.AddComponent<ItemColliderHandler>();
         // Monobehaviour을 상속받지 않아 ItemDataComponent<T>로 우회해서
         // 정보를 등록함
-        ItemDataComponent itemData =
-            item.AddComponent<ItemDataComponent>();
+        ItemDataComponent itemData = item.AddComponent<ItemDataComponent>();
         itemData.Initialize(data);
         SetOverItem(handPos, item);
         //QuestItemData questItemData = (QuestItemData)itemData.ItemData;

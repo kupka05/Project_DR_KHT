@@ -287,7 +287,7 @@ public class Grappling : GrabbableEvents
     }
     public void GrapleDisable()
     {
-        if (currentGrappleDistance < 1.8f && state == State.Grappling)
+        if (currentGrappleDistance < 1.3f && state == State.Grappling)
         {
             StopGrapple();
         }
@@ -336,7 +336,10 @@ public class Grappling : GrabbableEvents
 
     public void SetRigid()
     {
-        Debug.Log("리지드바디 생성");
-        playerRigid = player.GetComponent<Rigidbody>();
+        if (player.GetComponent<Rigidbody>())
+        {
+            Debug.Log("리지드바디 생성");
+            playerRigid = player.GetComponent<Rigidbody>();
+        }
     }
 }

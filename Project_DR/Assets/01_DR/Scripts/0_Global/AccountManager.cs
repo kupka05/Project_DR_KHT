@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class AccountManager : MonoBehaviour
 {
@@ -66,7 +67,17 @@ public class AccountManager : MonoBehaviour
             {
                 // 로그인 성송기
                 case "Login Complete":
+                    description.text = string.Format("로그인 성공");
                     SceneManager.LoadScene(sceneName);
+                    break; 
+                case "Fail to login":
+                    description.text = string.Format("로그인 실패");
+                    break; 
+                case "Fail to register":
+                    description.text = string.Format("계정 생성 실패");
+                    break;                
+                case "Register complete":
+                    description.text = string.Format("계정 생성 성공");
                     break;
             }
 

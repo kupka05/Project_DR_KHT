@@ -48,11 +48,21 @@ namespace BNG {
             else {
                 ChangeLocomotion(DefaultLocomotion, false);
             }
+
+            if(selectedLocomotion == LocomotionType.Both)
+            {
+                teleport.enabled = true;
+            }
         }
 
         bool actionToggle = false;
 
         void Update() {
+            if(selectedLocomotion == LocomotionType.Both)
+            {
+                return;
+            }
+
             // Make sure we don't double toggle our inputs
             if(!actionToggle) {
                 CheckControllerToggleInput();

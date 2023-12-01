@@ -136,7 +136,7 @@ public class UseItem : MonoBehaviour
         // 포션 아이템 정보를 가져옴
         int id = _itemData.ID;
         PortionItemData potionData = _itemData as PortionItemData;
-        float effectAmount = potionData.EffectAmount;       // 회복량
+        //float effectAmount = potionData.EffectAmount;       // 총 회복량
         float duration = potionData.Duration;               // 지속 시간
         float maxDuration = potionData.MaxDuration;         // 최대 지속 누적시간
         float effectDuration = potionData.EffectDuration;   // 주기당 회복량
@@ -150,11 +150,18 @@ public class UseItem : MonoBehaviour
     // 폭탄 아이템을 사용
     private void UseBombItem()
     {
+        // 폭탄 아이템 정보를 가져옴
+        int id = _itemData.ID;
         BombItemData bombData = _itemData as BombItemData;
-        float effectAmount = bombData.EffectAmount;     // 피해량 
+        //float effectAmount = bombData.EffectAmount;     // 총 피해량
         float duration = bombData.Duration;             // 지속 시간
+        float effectDuration = bombData.EffectDuration; // 주기당 데미지 피해
 
         // TODO: 적의 체력을 달게하는 함수 추가하기
+        // StateOnTick에 폭탄 공격 추가
+        ItemBombHandler bombHandler = gameObject.GetComponent<ItemBombHandler>();
+        //Action bombFunc = () => bombHandler.RestoreHealth(effectDuration);
+        //StateOnTick.Instance.Add(id, healthFunc);
     }
 
     // 재료 아이템을 사용

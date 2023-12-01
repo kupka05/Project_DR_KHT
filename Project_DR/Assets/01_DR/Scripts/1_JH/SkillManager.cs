@@ -48,7 +48,6 @@ public class SkillManager : MonoBehaviour
     public TMP_Text grinderVal;
     IEnumerator sliderRoutine;
 
-
     // Start is called before the first frame update
     void Start()
     {

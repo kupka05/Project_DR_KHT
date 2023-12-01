@@ -30,7 +30,7 @@ public class PlayerBackDash : MonoBehaviour
         Getdata();
         locomo = GetComponent<SmoothLocomotion>();
         waitForSeconds = new WaitForSeconds(coolDown); ;
-        playerRigid = transform.GetComponent<Rigidbody>();
+        playerRigid = gameObject.GetOrAddRigidbody();
 
     }
 

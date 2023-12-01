@@ -14,6 +14,10 @@ public static class Extensions
         if (rb == null)
         {
             rb = gameObject.AddComponent<Rigidbody>();
+            rb.mass = 50f;
+            rb.drag = 1f;
+            rb.angularDrag = 0.05f;
+            rb.freezeRotation = true;
         }
         
         return rb;

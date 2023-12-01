@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class ReCreateDungeon : MonoBehaviour
 {
-    Rigidbody rigid;
+    //Rigidbody rigid;
+    //BoxCollider boxCollider;
 
     private bool secondCheck = false;       // 재 생성시 간혹 곂침현상이 일어나서 재생성후 CollisonStay에서 한번더 체크
 
     private void Start()
     {
-        rigid = GetComponent<Rigidbody>();
+        //rigid = GetComponent<Rigidbody>();
+        //boxCollider = GetComponent<BoxCollider>();
         StartCoroutine(DesRigid());
         StartCoroutine(SecondCheckStart());
     }
@@ -46,7 +48,9 @@ public class ReCreateDungeon : MonoBehaviour
     IEnumerator DesRigid()
     {
         yield return new WaitForSeconds(3f);
-        Destroy(rigid);
+        //Destroy(rigid);
+        //Destroy(boxCollider);
+        Destroy(this.gameObject);
         EndCoroutine();
     }
 

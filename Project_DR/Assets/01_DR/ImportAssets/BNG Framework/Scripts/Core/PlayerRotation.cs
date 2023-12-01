@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,7 +38,7 @@ namespace BNG {
         public float SmoothTurnSpeed = 40f;
 
         [Tooltip("Thumbstick X axis must be >= this amount to be considered an input event")]
-        public float SmoothTurnMinInput = 0.1f;
+        public float SmoothTurnMinInput = 0.5f;
 
         float recentSnapTurnTime;        
 
@@ -90,20 +90,33 @@ namespace BNG {
             // Check Raw Input
             if(inputAxis != null) {
                 for (int i = 0; i < inputAxis.Count; i++) {
-                    float axisVal = InputBridge.Instance.GetInputAxisValue(inputAxis[i]).x;
+
+                    float yAxisVal = InputBridge.Instance.GetInputAxisValue(inputAxis[i]).y;
+                    float xAxisVal = InputBridge.Instance.GetInputAxisValue(inputAxis[i]).x;
+
+                    // 중앙 데드존
+                    if (Math.Abs(xAxisVal) < 0.5 && Math.Abs(yAxisVal) < 0.3)
+                    {
+                        return 0;
+                    }
+                    if(Math.Abs(yAxisVal) > 0.45)
+                    {
+                        return 0;
+                    }
 
                     // Always take this value if our last entry was 0. 
                     if (lastVal == 0) {
-                        lastVal = axisVal;
+                        lastVal = xAxisVal;
                     }
-                    else if (axisVal != 0 && axisVal > lastVal) {
-                        lastVal = axisVal;
+                    else if (xAxisVal != 0 && xAxisVal > lastVal) {
+                        lastVal = xAxisVal;
                     }
                 }
             }
 
             // Check Unity Input Action
             if(RotateAction != null) {
+
                 float axisVal = RotateAction.action.ReadValue<Vector2>().x;
                 // Always take this value if our last entry was 0. 
                 if (lastVal == 0) {

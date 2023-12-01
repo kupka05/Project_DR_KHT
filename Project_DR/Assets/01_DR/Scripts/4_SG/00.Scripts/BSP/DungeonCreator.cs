@@ -69,6 +69,8 @@ public class DungeonCreator : MonoBehaviour
 
     public GameObject entrancePrefab;
     public GameObject exitObjPrefab;        // !현재 위치값은 매직넘버로 이루어져있음
+    public GameObject bossMonsterSkin;      // 보스몬스터 인형
+    public GameObject bossMonsterCapsule;   // 보스몬스터 본체
     
 
 
@@ -1355,7 +1357,35 @@ public class DungeonCreator : MonoBehaviour
         CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, lastRoomPos, dungeonFloor);
         CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
+        CreateBossMonster(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
     }       // BossRoomCreate()
+
+
+    /// <summary>
+    /// 보스몬스터를 인스턴트하는 함수        // TODO : 추후 스테이지에 따라 다르게 생성하도록 변경해야함
+    /// </summary>    
+    private void CreateBossMonster(Vector3 centerPos, Vector3 bottomLeftV, Vector3 bottomRightV,
+        Vector3 topLeftV, GameObject dungeonFloor)
+    {
+        GameObject monsterParent = new GameObject("BossMonster");
+        monsterParent.transform.parent = dungeonFloor.transform;
+
+        GameObject bossClone;
+        Vector3 bossPos = centerPos;
+        bossPos.y = bossPos.y + 3f;
+        
+        bossClone = Instantiate(bossMonsterSkin,bossPos,Quaternion.Euler(0f,180f,0f), monsterParent.transform);
+        //bossClone.transform.localRotation = Quaternion.EulerRotation
+        bossPos = centerPos;
+        bossPos.z = bossPos.z - 3f;
+        bossPos.y = 1f;
+        
+
+        bossClone = Instantiate(bossMonsterCapsule, bossPos, Quaternion.identity, monsterParent.transform);
+
+
+
+    }       // CreateBossMonster()
 
     /// <summary>
     /// 보스방,다음스테이지방 위치에 벽 생성해주는 함수 (해당 방의 포지션이 음수인지 양수인지에 따라 계산이 다르기때문에 둘로 쪼개놓음)           

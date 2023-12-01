@@ -31,11 +31,11 @@ public class UseItem : MonoBehaviour
 
     private void Update()
     {
-        // 디버그로 아이템 잡을 경우 Use 호출
-        if (item.state == ItemColliderHandler.State.Grabbed)
-        {
-            Use();
-        }
+        //// 디버그로 아이템 잡을 경우 Use 호출
+        //if (item.state == ItemColliderHandler.State.Grabbed)
+        //{
+        //    Use();
+        //}
     }
 
     #endregion
@@ -55,9 +55,6 @@ public class UseItem : MonoBehaviour
             // 현재 아이템의 타입을 가져온 후,
             // 아이템을 사용함
             Use(GetItemType());
-
-            // 아이템 삭제
-            Destroy(gameObject);
         }
     }
 
@@ -124,9 +121,9 @@ public class UseItem : MonoBehaviour
                 break;
 
             default:
-                // 디폴트가 나올 수 없음을 명시
-                Debug.Assert(false);
-                break;
+                Debug.LogWarning("Item의 데이터가 생성되기 전에 아이템 Use()가 발생했습니다. " +
+                    "/ 사용 오류");
+                return;
         }
 
         // 사용 후 현재 아이템 삭제
@@ -139,7 +136,7 @@ public class UseItem : MonoBehaviour
         // 포션 아이템 정보를 가져옴
         int id = _itemData.ID;
         PortionItemData potionData = _itemData as PortionItemData;
-        float effectAmount = potionData.EffectAmount;       // 회복량
+        //float effectAmount = potionData.EffectAmount;       // 총 회복량
         float duration = potionData.Duration;               // 지속 시간
         float maxDuration = potionData.MaxDuration;         // 최대 지속 누적시간
         float effectDuration = potionData.EffectDuration;   // 주기당 회복량
@@ -153,11 +150,18 @@ public class UseItem : MonoBehaviour
     // 폭탄 아이템을 사용
     private void UseBombItem()
     {
+        // 폭탄 아이템 정보를 가져옴
+        int id = _itemData.ID;
         BombItemData bombData = _itemData as BombItemData;
-        float effectAmount = bombData.EffectAmount;     // 피해량 
+        //float effectAmount = bombData.EffectAmount;     // 총 피해량
         float duration = bombData.Duration;             // 지속 시간
+        float effectDuration = bombData.EffectDuration; // 주기당 데미지 피해
 
         // TODO: 적의 체력을 달게하는 함수 추가하기
+        // StateOnTick에 폭탄 공격 추가
+        ItemBombHandler bombHandler = gameObject.GetComponent<ItemBombHandler>();
+        //Action bombFunc = () => bombHandler.RestoreHealth(effectDuration);
+        //StateOnTick.Instance.Add(id, healthFunc);
     }
 
     // 재료 아이템을 사용

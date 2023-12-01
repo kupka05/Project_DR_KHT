@@ -38,11 +38,9 @@ public class PlayerEvent : MonoBehaviour
         GameObject itemaaa3 = ItemManager.instance.CreateItem(5003);
         GameObject itemaaa24 = ItemManager.instance.CreateItem(5101);
         GameObject itemaaa25 = ItemManager.instance.CreateItem(5102);
-        GetComponent<Rigidbody>();
 
 
-        
-
+       
         // 아이템 슬롯인지 확인
         if (grabItem.GetComponent<ItemSlotController>() != null)
         {

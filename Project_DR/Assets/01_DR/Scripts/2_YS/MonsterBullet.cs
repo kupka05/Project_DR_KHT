@@ -5,8 +5,8 @@ using UnityEngine;
 public class MonsterBullet : MonoBehaviour
 {
     [Header("테이블 관련")]
-    public float damage = default;
-    public float speed = default;
+    [SerializeField]
+    private float speed = 15.0f;
 
     private Rigidbody rigid;
 
@@ -19,7 +19,7 @@ public class MonsterBullet : MonoBehaviour
         rigid.velocity = transform.forward * speed;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public virtual void OnCollisionEnter(Collision collision)
     {
         if(collision.collider.CompareTag("Player"))
         {

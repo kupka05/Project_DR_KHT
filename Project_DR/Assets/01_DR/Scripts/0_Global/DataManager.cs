@@ -76,7 +76,7 @@ public class DataManager : MonoBehaviour
         "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",
 
         //YS
-        "Monster_Table",
+        "Monster_Table", "Boss_Table",
         
         // SG
         "spawnNomalMonster_Table","spawnEliteMonster_Table","DungeonCreater_Table",
@@ -332,25 +332,32 @@ public class DataManager : MonoBehaviour
 
         // dataTable의 길이 - 1 를 딕셔너리 접근 인덱스로 설정
         int index = dataTable.Count - 1;
-
-        // data[ID_HEADER]의 길이 만큼 순회
-        for (int i = 0; i < data[ID_HEADER].Count; i++)
+        try
         {
-            int id = int.Parse(data[ID_HEADER][i]);
-            int index2 = i;
-            // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
-            if (idTable.ContainsKey(id))
+            // data[ID_HEADER]의 길이 만큼 순회
+            for (int i = 0; i < data[ID_HEADER].Count; i++)
             {
-                Debug.LogWarning($"SetIDTable(): 등록하는 ID: [{id}]는 " +
-                    $"기존에 있는 ID와 중복됩니다. CSV 파일의 ID 값을 변경하시거나, " +
-                    $"CSV파일이 중복으로 SetData()를 호출하는지 확인해주세요.");
+                int id = int.Parse(data[ID_HEADER][i]);
+                int index2 = i;
+                // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
+                if (idTable.ContainsKey(id))
+                {
+                    Debug.LogWarning($"SetIDTable(): 등록하는 ID: [{id}]는 " +
+                        $"기존에 있는 ID와 중복됩니다. CSV 파일의 ID 값을 변경하시거나, " +
+                        $"CSV파일이 중복으로 SetData()를 호출하는지 확인해주세요.");
+                }
+                // 딕셔너리의 키값으로 ID를 설정하고, 내부 List에 실제 인덱스를 저장한다.
+                // index는 딕셔너리의 위치, index2는 실제 데이터 열이 저장된 위치
+                idTable.Add(id, new List<int>());
+                idTable[id].Add(index); // [0] 딕셔너리의 위치
+                idTable[id].Add(index2); // [1] 실제 데이터 열이 저장된 위치
             }
-            // 딕셔너리의 키값으로 ID를 설정하고, 내부 List에 실제 인덱스를 저장한다.
-            // index는 딕셔너리의 위치, index2는 실제 데이터 열이 저장된 위치
-            idTable.Add(id, new List<int>());
-            idTable[id].Add(index); // [0] 딕셔너리의 위치
-            idTable[id].Add(index2); // [1] 실제 데이터 열이 저장된 위치
         }
+        catch (Exception ex)
+        {
+            Debug.Log($"DataManager.SetIDTable()[{fileNames[index]}] ID 테이블 오류 발생 + {ex.Message}");
+        }
+
     }
 
     // ref로 주소 값 전달해서 값 변경하려는데 안돼서
@@ -359,24 +366,30 @@ public class DataManager : MonoBehaviour
     {
         // dataTable의 길이 - 1 를 딕셔너리 접근 인덱스로 설정
         int index = localDataTable.Count - 1;
-
-        // data[ID_HEADER]의 길이 만큼 순회
-        for (int i = 0; i < data[ID_HEADER].Count; i++)
+        try
         {
-            int id = int.Parse(data[ID_HEADER][i]);
-            int index2 = i;
-            // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
-            if (localIDTable.ContainsKey(id))
+            // data[ID_HEADER]의 길이 만큼 순회
+            for (int i = 0; i < data[ID_HEADER].Count; i++)
             {
-                Debug.LogWarning($"SetIDTable(): 등록하는 ID: [{id}]는 " +
-                    $"기존에 있는 ID와 중복됩니다. CSV 파일의 ID 값을 변경하시거나, " +
-                    $"CSV파일이 중복으로 SetData()를 호출하는지 확인해주세요.");
-            }
-            // 딕셔너리의 키값으로 ID를 설정하고, 내부 List에 실제 인덱스를 저장한다.
-            // index는 딕셔너리의 위치, index2는 실제 데이터 열이 저장된 위치
-            localIDTable.Add(id, new List<int>());
-            localIDTable[id].Add(index); // [0] 딕셔너리의 위치
-            localIDTable[id].Add(index2); // [1] 실제 데이터 열이 저장된 위치
+                int id = int.Parse(data[ID_HEADER][i]);
+                int index2 = i;
+                // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
+                if (localIDTable.ContainsKey(id))
+                {
+                    Debug.LogWarning($"SetIDTable(): 등록하는 ID: [{id}]는 " +
+                        $"기존에 있는 ID와 중복됩니다. CSV 파일의 ID 값을 변경하시거나, " +
+                        $"CSV파일이 중복으로 SetData()를 호출하는지 확인해주세요.");
+                }
+                // 딕셔너리의 키값으로 ID를 설정하고, 내부 List에 실제 인덱스를 저장한다.
+                // index는 딕셔너리의 위치, index2는 실제 데이터 열이 저장된 위치
+                localIDTable.Add(id, new List<int>());
+                localIDTable[id].Add(index); // [0] 딕셔너리의 위치
+                localIDTable[id].Add(index2); // [1] 실제 데이터 열이 저장된 위치
+            }          
+        }
+        catch (Exception ex)
+        {
+            Debug.Log($"DataManager.SetLocalIDTable() [{fileNames[index]}] Local ID 테이블 오류 발생 + {ex.Message}");
         }
     }
 

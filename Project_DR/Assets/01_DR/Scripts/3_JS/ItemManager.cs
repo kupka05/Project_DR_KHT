@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Rito.InventorySystem;
 using System;
+using System.Collections;
 
 public class ItemManager : MonoBehaviour
 {
@@ -53,8 +54,10 @@ public class ItemManager : MonoBehaviour
 
     private void Start()
     {
-        // 테스트용 포션 생성
-        CreateItem(Vector3.zero, 5001);
+        // 1초 후에 테스트용 포션 생성
+        Action func = () => CreateItem(5001);
+        NewInvoke(func, 1f);
+        
     }
 
     #endregion
@@ -334,5 +337,22 @@ public class ItemManager : MonoBehaviour
         // n초 후에 슬롯에 들어가도록 설정
         itemColliderHandler.Coroutine(itemColliderHandler.ResetState, overItemResetStateDelay);
     }
+    private void NewInvoke(Action func, float t)
+    {
+        StartCoroutine(RunFuncToCoroutine(func, t));
+    }
+
+    #endregion
+    /*************************************************
+     *               Private Methods
+     *************************************************/
+    #region [+]
+    // 함수를 코루틴으로 실행하는 코루틴 함수
+    private IEnumerator RunFuncToCoroutine(Action func, float t)
+    {
+        yield return new WaitForSeconds(t);
+        func();
+    }
+
     #endregion
 }

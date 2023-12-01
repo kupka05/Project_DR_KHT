@@ -709,8 +709,9 @@ namespace BNG {
         }
 
         public virtual void SetupRigidbodyPlayer() {
+            // 리지드 바디 호출 후 없으면 생성하는 확장 메서드 호출
             Debug.Log("리지드바디 생성");
-            playerRigid = gameObject.AddComponent<Rigidbody>();
+            playerRigid = gameObject.GetOrAddRigidbody();
             playerRigid.mass = 50f;
             playerRigid.drag = 1f;
             playerRigid.angularDrag = 0.05f;

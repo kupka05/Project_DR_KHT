@@ -13,6 +13,7 @@ namespace BNG {
         ThumbstickDown,
         // Hold BButton to teleport, release to teleport
         BButton,
+        AxisHandler,
         None
     }
 
@@ -134,6 +135,9 @@ namespace BNG {
         Transform cameraRig;
         ScreenFader fader;
 
+        AxisHandler axis;
+        public bool axisHandler;
+
         protected bool aimingTeleport = false;
         public bool AimingTeleport {
             get {
@@ -177,6 +181,7 @@ namespace BNG {
             controller = GetComponentInChildren<CharacterController>();
             cameraRig = playerController.CameraRig;
             fader = cameraRig.GetComponentInChildren<ScreenFader>();
+            axis = GetComponent<AxisHandler>();
 
             segments = new Vector3[SegmentCount];
 
@@ -645,54 +650,36 @@ namespace BNG {
                 return false;
             }
 
-            //// Check Unity Action First
-            //if (InitiateTeleportAction != null) {
-            //    teleportAxis = InitiateTeleportAction.action.ReadValue<Vector2>();
-            //    if (Math.Abs(teleportAxis.x) >= 0.75 || Math.Abs(teleportAxis.y) >= 0.75) {
-            //        _reachThumbThreshold = true;
-            //        return true;
-            //    }
-            //    // In dead zone
-            //    else if (_reachThumbThreshold && (Math.Abs(teleportAxis.x) > 0.25 || Math.Abs(teleportAxis.y) > 0.25)) {
-            //        return true;
-            //    }
-            //}
-
-
-            // Press stick in any direction to initiate teleport
-            if (ControlType == TeleportControls.ThumbstickRotate)
+            // Check Unity Action First
+            if (InitiateTeleportAction != null)
             {
-                if (Math.Abs(handedThumbstickAxis.x) < 0.5 && Math.Abs(handedThumbstickAxis.y) < 0.3)
+                teleportAxis = InitiateTeleportAction.action.ReadValue<Vector2>();
+                if (Math.Abs(teleportAxis.x) >= 0.75 || Math.Abs(teleportAxis.y) >= 0.75)
                 {
-
-                    return false; 
-                }
-
-                if (0 <handedThumbstickAxis.y && Math.Abs(handedThumbstickAxis.x) < 0.8f)
-                {
-                    Debug.Log("텔레포트 가능");
-
                     _reachThumbThreshold = true;
                     return true;
                 }
                 // In dead zone
-                //else if (_reachThumbThreshold && (Math.Abs(handedThumbstickAxis.x) > 0.25 || Math.Abs(handedThumbstickAxis.y) > 0.25))
-                //{
-                //    return true;
-                //}
+                else if (_reachThumbThreshold && (Math.Abs(teleportAxis.x) > 0.25 || Math.Abs(teleportAxis.y) > 0.25))
+                {
+                    return true;
+                }
             }
-            // Regacy
-            //// Press stick in any direction to initiate teleport
-            //if (ControlType == TeleportControls.ThumbstickRotate) {
-            //    if(Math.Abs(handedThumbstickAxis.x) >= 0.75 || Math.Abs(handedThumbstickAxis.y) >= 0.75) {
-            //        _reachThumbThreshold = true;
-            //        return true;
-            //    }
-            //    // In dead zone
-            //    else if (_reachThumbThreshold && (Math.Abs(handedThumbstickAxis.x) > 0.25 || Math.Abs(handedThumbstickAxis.y) > 0.25)) {
-            //        return true;
-            //    }
-            //}
+
+            // Press stick in any direction to initiate teleport
+            if (ControlType == TeleportControls.ThumbstickRotate)
+            {
+                if (Math.Abs(handedThumbstickAxis.x) >= 0.75 || Math.Abs(handedThumbstickAxis.y) >= 0.75)
+                {
+                    _reachThumbThreshold = true;
+                    return true;
+                }
+                // In dead zone
+                else if (_reachThumbThreshold && (Math.Abs(handedThumbstickAxis.x) > 0.25 || Math.Abs(handedThumbstickAxis.y) > 0.25))
+                {
+                    return true;
+                }
+            }
             // Hold down Thumbstick to intiate
             else if (ControlType == TeleportControls.ThumbstickDown) {
                 if (input.LeftThumbstick && HandSide == ControllerHand.Left) {
@@ -702,8 +689,16 @@ namespace BNG {
                     return true;
                 }
             }
-            else if(ControlType == TeleportControls.BButton) {
+            else if (ControlType == TeleportControls.BButton) {
                 return input.BButton;
+            } 
+            else if (ControlType == TeleportControls.AxisHandler)
+            {
+
+                if (axis.state == AxisHandler.State.Teleport)
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -713,12 +708,17 @@ namespace BNG {
 
             // Stick has returned back past input position
             if (ControlType == TeleportControls.ThumbstickRotate) {
-                if(Math.Abs(input.LeftThumbstickAxis.x) <= 0.25 && Math.Abs(input.LeftThumbstickAxis.y) <= 0.25) {
+                //if(Math.Abs(input.LeftThumbstickAxis.x) <= 0.25 && Math.Abs(input.LeftThumbstickAxis.y) <= 0.25) {
+                //    // Reset threshold
+                //    _reachThumbThreshold = false;
+                //    return true;
+                //}
+                if (Math.Abs(input.RightThumbstickAxis.x) <= 0.25 && Math.Abs(input.RightThumbstickAxis.y) <= 0.25)
+                {
                     // Reset threshold
                     _reachThumbThreshold = false;
                     return true;
                 }
-
                 return false;
             }
             // Or no longer holding down Thumbstick
@@ -729,7 +729,10 @@ namespace BNG {
             else if (ControlType == TeleportControls.BButton) {
                 return !input.BButton;
             }
-
+            else if (ControlType == TeleportControls.AxisHandler)
+            {
+                return axis.isDeadZone;
+            }
             return true;
         }
 

@@ -1,17 +1,27 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerOption : MonoBehaviour
 {
+    private PlayerRotation rotation;
+
     public GameObject optionUI;
+    public TMP_Text rotationText;
+
 
     [Header("Input")]
     //[Tooltip("The key(s) to use to toggle locomotion type")]
     public List<ControllerBinding> optionInput = new List<ControllerBinding>() { ControllerBinding.None };
     public InputActionReference InputAction = default;
+
+    private void Start()
+    {
+        rotation = GetComponent<PlayerRotation>();
+    }
 
 
     public virtual void CheckOptionToggleInput()
@@ -46,5 +56,11 @@ public class PlayerOption : MonoBehaviour
         {
             optionUI.SetActive(!optionUI.activeSelf);
         }
+    }
+
+    public void SetRotation()
+    {
+        rotation.SetRotation();
+        rotationText.text = string.Format(rotation.SnapRotationAmount + "˚");
     }
 }

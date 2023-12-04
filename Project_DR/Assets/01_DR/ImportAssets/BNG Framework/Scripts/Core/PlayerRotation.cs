@@ -226,6 +226,15 @@ namespace BNG {
                 OnAfterRotate?.Invoke();
             }
         }
+
+        public void SetRotation()
+        {
+            SnapRotationAmount += 15f;
+            if (45 < SnapRotationAmount)
+            {
+                SnapRotationAmount = 15;
+            }
+        }
     }
 }
 

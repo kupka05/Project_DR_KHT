@@ -5,4 +5,15 @@ using UnityEngine;
 public class EventRoomObjCreate : RandomRoomObjCreate
 {
 
+    int lightCreateTableID = 16010;
+    int envCreateTableId = 16011;
+    int matCreateTableId = 16012;
+
+    protected override void Start()
+    {
+        base.Start();
+        SpawnLightObj(lightCreateTableID);
+        SpawnEnvObj(envCreateTableId);
+        SpawnMatObj(matCreateTableId);
+    }
 }       // ClassEnd

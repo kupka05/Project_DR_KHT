@@ -74,8 +74,8 @@ public static class PlayerDataManager
      *************************************************/
     #region [+]
     /// <summary>
-    /// GameManager를 트리거로 비동기로 코루틴을 실행 후, DB에서 데이터를 
-    /// 호출하고 PlayerDataManager의 데이터를 갱신한다.
+    /// GameManager를 트리거로 비동기로 코루틴을 실행 후, 
+    /// <br></br>DB에서 데이터를 호출하고 PlayerDataManager의 데이터를 갱신한다.
     /// </summary>
     public static void Update()
     {
@@ -84,11 +84,11 @@ public static class PlayerDataManager
     }
     /// <summary>
     /// GameManager를 트리거로 비동기로 코루틴을 실행 후, DB에 데이터를 
-    /// 저장한다. 평균적으로 값이 업데이트 되는데 1~3초가 걸린다.
+    /// 저장한다. <br></br>평균적으로 값이 업데이트 되는데 1~3초가 걸린다.
+    /// <br></br>사용 예제는 다음과 같다
+    /// <br></br>PlayerDataManager.Save("gold", "2000");
+    /// <br></br>PlayerDataManager.Save("weapon_cri_rate", "300.5");
     /// </summary>
-    /// 사용법 예제는 다음과 같다
-    /// PlayerDataManager.Save("gold", "2000");
-    /// PlayerDataManager.Save("weapon_cri_rate", "300.5");
     public static void Save(string column, string value, bool isUpdate = false)
     {
         // 게임 매니저에 코루틴을 요청해서 SaveCoroutine을 실행

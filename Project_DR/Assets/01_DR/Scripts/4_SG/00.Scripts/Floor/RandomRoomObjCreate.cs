@@ -29,16 +29,13 @@ public class RandomRoomObjCreate : MonoBehaviour
     private bool createPass;            // 이번생성 Pass할지 체크할 bool값
 
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
-        StartInIt();
+        AwakeInIt();
     }
 
-    /// <summary>
-    /// Start사이클에서 기입해줄 Component
-    /// </summary>
-    private void StartInIt()
-    {     
+    private void AwakeInIt()
+    {
         stringBuilder = new StringBuilder();
         spawnPosList = new List<Vector3>();
         parentObj = new GameObject("SpawnObjs");
@@ -49,6 +46,28 @@ public class RandomRoomObjCreate : MonoBehaviour
         reCallCount = 0;
         createPass = false;
     }
+        
+
+    //protected virtual void Start()
+    //{
+    //    StartInIt();
+    //}
+
+    ///// <summary>
+    ///// Start사이클에서 기입해줄 Component
+    ///// </summary>
+    //private void StartInIt()
+    //{     
+    //    stringBuilder = new StringBuilder();
+    //    spawnPosList = new List<Vector3>();
+    //    parentObj = new GameObject("SpawnObjs");
+    //    cornerPos = GetComponent<FloorMeshPos>();
+
+    //    parentObj.transform.parent = this.transform;
+
+    //    reCallCount = 0;
+    //    createPass = false;
+    //}     // LEGACY
 
     /// <summary>
     /// Light를 스폰해주는 함수 
@@ -180,7 +199,9 @@ public class RandomRoomObjCreate : MonoBehaviour
             
             if(dis < 2f)
             {
+                reCallCount++;
                 return PickSpwanPos(_CreateObjId);
+
             }
         }
 
@@ -224,6 +245,13 @@ public class RandomRoomObjCreate : MonoBehaviour
         }
         else { /*PASS*/ }
         GameObject spawnObjClone = Instantiate(_spawnObj, _spawnPos, Quaternion.identity, parentObj.transform);
+
+        int layerMask = LayerMask.GetMask("Water");
+        //int layerMask = 1 << 2;     // 임시 LayerMask
+        spawnObjClone.layer = 4;
+        Debug.Log($"{spawnObjClone.layer}");
+
+
         reCallCount = 0;
     }       // InstantiateObj(GameObject,Vecotr3)
 

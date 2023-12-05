@@ -9,12 +9,22 @@ public class NullRoomObjCreate : RandomRoomObjCreate
     int envCreateTableId = 16021;
     int matCreateTableId = 16022;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
         SpawnLightObj(lightCreateTableID);
         SpawnEnvObj(envCreateTableId);
         SpawnMatObj(matCreateTableId);
+
     }
+
+
+    //protected override void Start()
+    //{
+    //    base.Start();
+    //    SpawnLightObj(lightCreateTableID);
+    //    SpawnEnvObj(envCreateTableId);
+    //    SpawnMatObj(matCreateTableId);
+    //}
 
 }       // ClassEnd

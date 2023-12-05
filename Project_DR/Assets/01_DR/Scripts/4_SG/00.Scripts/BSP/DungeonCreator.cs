@@ -205,8 +205,9 @@ public class DungeonCreator : MonoBehaviour
 
             if(randomEvent == 0 && battleRoomCount != 0)
             {
-                bspListClone[randomIdx].AddComponent<BattleRoom>();
                 bspListClone[randomIdx].AddComponent<BattleRoomObjCreate>();
+                bspListClone[randomIdx].AddComponent<BattleRoomRunTimeNav>();
+                bspListClone[randomIdx].AddComponent<BattleRoom>();
                 battleRoomCount -= 1;
                 bspListClone.Remove(bspListClone[randomIdx]);
             }

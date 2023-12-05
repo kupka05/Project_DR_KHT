@@ -13,7 +13,7 @@ public static class PlayerDataManager
     /***********************
      *      Properties
      **********************/
-    public static string PlayerID => GameManager.instance.PlayerID; // 임시로 플레이어 ID 123 할당
+    public static string PlayerID => _id;
     public static float HP => _hp;
     public static int Gold => _gold;
     public static float Exp => _exp;
@@ -43,6 +43,7 @@ public static class PlayerDataManager
         "https://80koj3uzn4.execute-api.ap-northeast-2.amazonaws.com/default/UserTableLambda";
 
     [Header("Player")]
+    private static string _id;                // 플레이어의 ID
     private static float _hp;                 // 플레이어의 체력
     private static int _gold;                 // 플레이어의 소지금
     private static float _exp;                // 플레이어의 경험치
@@ -95,6 +96,13 @@ public static class PlayerDataManager
         GameManager.instance.StartCoroutine(SaveCoroutine(column, value, isUpdate));
     }
 
+    /// <summary>
+    /// 플레이어의 ID를 설정한다.
+    /// </summary>
+    public static void SetID(string id)
+    {
+        _id = id;
+    }
     #endregion
     /*************************************************
      *                 Private Methods

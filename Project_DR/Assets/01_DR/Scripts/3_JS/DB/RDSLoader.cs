@@ -15,14 +15,12 @@ public class RDSLoader : MonoBehaviour
     #region [+]
     private bool _isDone = false;
     [SerializeField] string url;
-  
 
     private void Start()
     {
-
         PlayerDataManager.Update();
 
-        PlayerDataManager.Save("weapon_cri_rate", "53321.8");
+        PlayerDataManager.Save("weapon_cri_rate", "77777", true);
     }
     #endregion
 }

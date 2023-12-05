@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
     public GameObject obj;
     public GameObject cloneObj;
 
+    private string _playerID = "123"; // 임시로 123 할당
+    public string PlayerID => _playerID;
 
 
     // ----------------------------------------------- SG ------------------------------------------------
@@ -99,5 +101,8 @@ public class GameManager : MonoBehaviour
         gameoverText = (string)DataManager.instance.GetData(1001, "GameOverText", typeof(string));
     }
 
-
+    public void SetPlayerID(string id)
+    {
+        _playerID = id;
+    }
 }       // ClassEnd

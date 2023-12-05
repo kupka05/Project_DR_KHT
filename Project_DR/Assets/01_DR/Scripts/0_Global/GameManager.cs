@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     public GameObject obj;
     public GameObject cloneObj;
 
-    private string _playerID = "123"; // 임시로 123 할당
+    private string _playerID; // SetPlayerID(string id) 메서드로 설정함
     public string PlayerID => _playerID;
 
 
@@ -49,6 +49,12 @@ public class GameManager : MonoBehaviour
     public string eliteMonsterSpawnPath = "";
 
     // ----------------------------------------------- SG ------------------------------------------------
+
+    private void Awake()
+    {
+        // DB 테스트를 위해 DontDestroy로 할당
+        DontDestroyOnLoad(gameObject);
+    }
 
     void Start()
     {

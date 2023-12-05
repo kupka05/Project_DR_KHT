@@ -51,6 +51,49 @@ public class SG_Test : MonoBehaviour
 
     Stack<int> testStack = new Stack<int>();
 
+    List<int> testList = new List<int>();
 
+    private void Start()
+    {
+        Debug.Log("Start함수 실행");
+
+        for (int i = 0; i < 10; i++)
+        {
+            int test = Test001();
+
+        }
+        Debug.Log("Test001 함수 이후");
+        Test002();
+
+        foreach (int test in testList)
+        {
+            Debug.Log($"List내부값 : {test}");
+        }
+
+        Debug.Log("Start함수 실행끝");
+
+
+    }
+
+
+    private int Test001()
+    {
+        int num = UnityEngine.Random.Range(0, 10);
+        Debug.Log($"함수 돌기 시작");
+        if(testList.Contains(num))
+        {
+            Debug.Log($"중복된 값이 있으므로 재귀 시작");
+            return Test001();
+        }
+
+        testList.Add(num);
+        Debug.Log($"함수끝");
+        return num;
+    }
+
+    private void Test002()
+    {
+        Debug.Log("다음함수 불러오나?");
+    }
 
 }       // SG_Test

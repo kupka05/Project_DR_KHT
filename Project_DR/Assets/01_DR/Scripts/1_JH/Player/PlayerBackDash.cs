@@ -7,7 +7,7 @@ using UnityEngine.Windows;
 
 public class PlayerBackDash : MonoBehaviour
 {
-
+    private AxisHandler axis;
     private SmoothLocomotion locomo;
     public Rigidbody playerRigid;
     public float force = 1.5f; // 넉백
@@ -15,7 +15,6 @@ public class PlayerBackDash : MonoBehaviour
     public bool onBackDash = false;
     public float coolDown = 1.5f;
 
-    Camera cam;
 
     [Tooltip("Used to determine whether to turn left / right. This can be an X Axis on the thumbstick, for example. -1 to snap left, 1 to snap right.")]
     public List<InputAxis> inputAxis = new List<InputAxis>() { InputAxis.RightThumbStickAxis };
@@ -28,22 +27,23 @@ public class PlayerBackDash : MonoBehaviour
     void Start()
     {
         Getdata();
+        axis = GetComponent<AxisHandler>();
         locomo = GetComponent<SmoothLocomotion>();
         waitForSeconds = new WaitForSeconds(coolDown); ;
         playerRigid = gameObject.GetOrAddRigidbody();
 
     }
 
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        input = GetAxis();
+    //// Update is called once per frame
+    //void LateUpdate()
+    //{
+    //    input = GetAxis();
 
-        if(input)
-        {
-            OnBackDash();
-        }
-    }
+    //    if(input)
+    //    {
+    //        OnBackDash();
+    //    }
+    //}
 
 
     public bool GetAxis()
@@ -86,8 +86,6 @@ public class PlayerBackDash : MonoBehaviour
 
         if (locomo.state == PlayerState.grounded || locomo.state == PlayerState.walking)
         {
-
-
             onBackDash = true;
             playerRigid.AddForce(-transform.forward * force, ForceMode.Impulse);
 
@@ -110,7 +108,7 @@ public class PlayerBackDash : MonoBehaviour
 
     public void Getdata()
     {
-        force = (float)DataManager.instance.GetData(1001, "BackDash", typeof(float))*50f;
+        force = (float)DataManager.instance.GetData(1001, "BackDash", typeof(float))*1000f;
         coolDown = (float)DataManager.instance.GetData(1001, "BackDashCD", typeof(float));
     }
 }

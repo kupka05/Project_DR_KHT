@@ -66,10 +66,11 @@ public class Damage : MonoBehaviour
 
     void GetData()
     {
-        critChance = (float)DataManager.instance.GetData(1100, "CritChance", typeof(float));
-        critIncrease = (float)DataManager.instance.GetData(1100, "CritIncrease", typeof(float));
-        teraIncrease = (float)DataManager.instance.GetData(20001, "Value1", typeof(float));
-        grinderCritChance = (float)DataManager.instance.GetData(20015, "Value1", typeof(float));
-        grinderIncrease = (float)DataManager.instance.GetData(20016, "Value1", typeof(float));
+        critChance = (float)DataManager.instance.GetData(1100, "CritChance", typeof(float));      // 치명타 확률
+        critIncrease = (float)DataManager.instance.GetData(1100, "CritIncrease", typeof(float));  // 치명타 증가율
+        teraIncrease = (float)DataManager.instance.GetData(721100, "Value1", typeof(float));      // 테라드릴 증가율
+        grinderCritChance = (float)DataManager.instance.GetData(721114, "Value1", typeof(float)); // 드릴연마 치확
+        grinderIncrease = (float)DataManager.instance.GetData(721115, "Value1", typeof(float));    // 드릴연마 증가
+        landingIncrease = (float)DataManager.instance.GetData(720217, "Value2", typeof(float));
     }
 }

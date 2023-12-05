@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
+using UnityEngine.Windows;
 
 namespace BNG {
 
     public enum RotationMechanic {
         Snap,
-        Smooth
+        Smooth,
+        Axis
     }
     public class PlayerRotation : MonoBehaviour {
 
@@ -60,7 +63,7 @@ namespace BNG {
 
         void Update() {
 
-            if(!AllowInput) {
+            if(!AllowInput || RotationType == RotationMechanic.Axis) {
                 return;
             }
 
@@ -179,6 +182,58 @@ namespace BNG {
 
             // Apply rotation
             transform.rotation = Quaternion.Euler(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + rotationAmount, transform.eulerAngles.z));
+        }
+
+
+        public void RatateRight()
+        {
+            rotationAmount = 0;
+            rotationAmount += SnapRotationAmount;
+
+            if (Math.Abs(rotationAmount) > 0)
+            {
+
+                // Call any Before Rotation Events
+                OnBeforeRotate?.Invoke();
+
+                // Apply rotation
+                transform.rotation = Quaternion.Euler(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + rotationAmount, transform.eulerAngles.z));
+
+                recentSnapTurnTime = Time.time;
+
+                // Call any After Rotation Events
+                OnAfterRotate?.Invoke();
+            }
+        }
+        public void RatateLeft()
+        {
+            rotationAmount = 0;
+
+            rotationAmount -= SnapRotationAmount;
+
+            if (Math.Abs(rotationAmount) > 0)
+            {
+
+                // Call any Before Rotation Events
+                OnBeforeRotate?.Invoke();
+
+                // Apply rotation
+                transform.rotation = Quaternion.Euler(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + rotationAmount, transform.eulerAngles.z));
+
+                recentSnapTurnTime = Time.time;
+
+                // Call any After Rotation Events
+                OnAfterRotate?.Invoke();
+            }
+        }
+
+        public void SetRotation()
+        {
+            SnapRotationAmount += 15f;
+            if (45 < SnapRotationAmount)
+            {
+                SnapRotationAmount = 15;
+            }
         }
     }
 }

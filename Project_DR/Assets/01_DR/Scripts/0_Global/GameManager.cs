@@ -24,23 +24,22 @@ public class GameManager : MonoBehaviour
         }
     }
     private static GameManager m_instance; // 싱글톤이 할당될 static 변수    
-
+    
+    
+    [Header("Player Object")]
     public GameObject player;
     private ScreenFader fader;
     private InputBridge input;
     private ScreenText screenText;
 
+    [Header("Game Over")]
     public string gameoverText;
-    public float testNum;
     public string gameoverScene;
-
-    public GameObject obj;
-    public GameObject cloneObj;
 
     private string _playerID; // SetPlayerID(string id) 메서드로 설정함
     public string PlayerID => _playerID;
 
-
+    [Header("Dungeon")]
     // ----------------------------------------------- SG ------------------------------------------------
     public int nowFloor = 1;        // 현재 몇층인지 알려줄 변수
 
@@ -58,24 +57,26 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // 데이터 가져오기
         GetData();
+
+        // 플레이어 찾아오기
         player = GameObject.FindGameObjectWithTag("Player");
         if (player)
         {
             input = player.transform.parent.GetComponent<InputBridge>();
         }
-        //Debug.Log(testNum);
+        else
+        {
+            Debug.Log("플레이어를 찾지 못했습니다.");
+        }
+
 
     }       // Start()
 
 
-    void Update()
-    {
 
-
-    }       // Update()
-
-
+    // 게임오버
     public void GameOver()
     {
         // 스크린 페이더 가져오기
@@ -92,21 +93,28 @@ public class GameManager : MonoBehaviour
 
         Invoke(nameof(GameOverScene),5f);
     }
+
+    // 현재 씬 리셋
     public void ResetScene()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentSceneName);
     }
+
+    // 게임오버시 씬 이동
     public void GameOverScene()
     {
         SceneManager.LoadScene(gameoverScene);
     }
         
+
+    // 데이터 가져오기
     public void GetData()
     {
         gameoverText = (string)DataManager.instance.GetData(1001, "GameOverText", typeof(string));
     }
 
+    // 아이디 가져오기
     public void SetPlayerID(string id)
     {
         _playerID = id;

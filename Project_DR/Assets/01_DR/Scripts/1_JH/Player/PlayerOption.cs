@@ -140,13 +140,14 @@ public class PlayerOption : MonoBehaviour
     // 배경음 조정
     public void SetBackGroundSlider(float value)
     {
-        //ToDo: 효과음 연동 필요
+        AudioManager.Instance.MusicVolume(value);
     }
 
     // 효과음 조정 
     public void SetSoundEffectSlider(float value)
     {
-        //ToDo: 효과음 연동 필요
+        AudioManager.Instance.SFXVolume(value);
+
     }
 
     // 값 체크

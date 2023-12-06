@@ -9,18 +9,11 @@ using UnityEngine.SceneManagement;
 // 기본 정보를 모두 가져올 경우 다음 씬으로 넘어간다.
 public class RDSLoader : MonoBehaviour
 {
-    /*************************************************
-     *                 Private Fields
-     *************************************************/
-    #region [+]
-    private bool _isDone = false;
-    [SerializeField] string url;
 
     private void Start()
     {
-        PlayerDataManager.Update();
+        
 
-        PlayerDataManager.Save("weapon_cri_rate", "77777", true);
     }
-    #endregion
+
 }

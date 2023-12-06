@@ -77,7 +77,7 @@ public class UserDataManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
-        PlayerDataManager.Update();
+        PlayerDataManager.Update(true);
 
     }
     public void GetDataToDB()

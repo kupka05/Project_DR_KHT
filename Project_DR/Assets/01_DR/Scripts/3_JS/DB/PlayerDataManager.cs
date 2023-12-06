@@ -78,10 +78,10 @@ public static class PlayerDataManager
     /// GameManager를 트리거로 비동기로 코루틴을 실행 후, 
     /// <br></br>DB에서 데이터를 호출하고 PlayerDataManager의 데이터를 갱신한다.
     /// </summary>
-    public static void Update()
+    public static void Update(bool isUserDataManagerUpdate = false)
     {
         // 게임 매니저에 코루틴을 요청해서 UpdateCoroutine을 실행
-        GameManager.instance.StartCoroutine(UpdateCoroutine());
+        GameManager.instance.StartCoroutine(UpdateCoroutine(isUserDataManagerUpdate));
     }
     /// <summary>
     /// GameManager를 트리거로 비동기로 코루틴을 실행 후, DB에 데이터를 
@@ -205,7 +205,7 @@ public static class PlayerDataManager
      *************************************************/
     #region [+]
     // DB에서 데이터를 가져오기 위한 비동기 코루틴
-    private static IEnumerator UpdateCoroutine()
+    private static IEnumerator UpdateCoroutine(bool isUserDataManagerUpdate)
     {
         // 폼 생성
         WWWForm form = MakeForm("search_all", PlayerID);
@@ -231,8 +231,15 @@ public static class PlayerDataManager
                 // 파싱된 데이터를 PlayerDataManager에 넣는다.
                 AssignPlayerDataToManager(playerDataList);
 
+                // isUserDataManagerUpdate == true
+                if (isUserDataManagerUpdate)
+                {
+                    UserDataManager.Instance.GetDataToDB();
+                }
+
                 // 디버그
                 DebugData();
+
             }
 
             // using문을 사용해도 메모리 누수가 발생하여

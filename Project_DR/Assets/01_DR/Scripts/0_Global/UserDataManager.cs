@@ -47,7 +47,7 @@ public class UserDataManager : MonoBehaviour
     [Header("PC Data")]
     public float HP;                  // 플레이어 체력
     public float Exp;                 // 플레이어 현재 경험치
-    public float Gold;                // 플레이어 현재 골드
+    public int Gold;                // 플레이어 현재 골드
     public float ExpIncrease;         // 플레이어 경험치 증가량
     public float GoldIncrease;        // 플레이어 골드 증가량
 
@@ -73,13 +73,12 @@ public class UserDataManager : MonoBehaviour
     public ClearDatas ClearDatas;  // 클리어 데이터 모음
     #endregion
 
-
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
         PlayerDataManager.Update(true);
-
     }
+
     public void GetDataToDB()
     {
 

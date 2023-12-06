@@ -79,16 +79,18 @@ public class UserDataManager : MonoBehaviour
     {
         DontDestroyOnLoad(this.gameObject);
         PlayerDataManager.Update(true);
+        if(PlayerID == "")
+        {
+            SetDebugData();
+        }
 
     }
     public void Start()
     {
-        SaveClearData("TEST");
-        SaveClearData("MBTI");
     }
-    public void GetDataToDB()
+    // DB에서 데이터 받아오기
+    public void GetDataFromDB()
     {
-
         PlayerID = PlayerDataManager.PlayerID;
         HP = PlayerDataManager.HP;
         Gold = PlayerDataManager.Gold;
@@ -114,12 +116,14 @@ public class UserDataManager : MonoBehaviour
         // .NET Framework 디코딩이 필요
         string decodedString = System.Web.HttpUtility.UrlDecode(JsonData);
 
-        Console.WriteLine(decodedString);
         clearDatas = JsonUtility.FromJson<ClearDatas>(decodedString);
-        Debug.Log(clearDatas);
-
+    }
+    // 디버그용 PC 데이터 세팅
+    public void SetDebugData()
+    {
 
     }
+
 
     // 클리어 데이터 신규 저장
     public void SaveClearData(string MBTI)

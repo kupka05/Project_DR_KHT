@@ -234,7 +234,7 @@ public static class PlayerDataManager
                 // isUserDataManagerUpdate == true
                 if (isUserDataManagerUpdate)
                 {
-                    UserDataManager.Instance.GetDataToDB();
+                    UserDataManager.Instance.GetDataFromDB();
                 }
 
                 // 디버그

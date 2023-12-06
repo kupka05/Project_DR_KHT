@@ -81,7 +81,7 @@ public static class PlayerDataManager
     public static void Update(bool isUserDataManagerUpdate = false)
     {
         // 게임 매니저에 코루틴을 요청해서 UpdateCoroutine을 실행
-        GameManager.instance.StartCoroutine(UpdateCoroutine(isUserDataManagerUpdate));
+        UserDataManager.Instance.StartCoroutine(UpdateCoroutine(isUserDataManagerUpdate));
     }
     /// <summary>
     /// GameManager를 트리거로 비동기로 코루틴을 실행 후, DB에 데이터를 
@@ -93,7 +93,7 @@ public static class PlayerDataManager
     public static void Save(string column, string value, bool isUpdate = false)
     {
         // 게임 매니저에 코루틴을 요청해서 SaveCoroutine을 실행
-        GameManager.instance.StartCoroutine(SaveCoroutine(column, value, isUpdate));
+        UserDataManager.Instance.StartCoroutine(SaveCoroutine(column, value, isUpdate));
     }
 
     /// <summary>

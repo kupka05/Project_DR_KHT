@@ -30,6 +30,9 @@ public class LobbyEvent : MonoBehaviour
     public GameObject skillStatusDis;       // 스킬 상태창
 
 
+    //[Header("Status Upgrade")]
+
+
     public void Start()
     {
         // 상태창 세팅

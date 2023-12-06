@@ -65,7 +65,7 @@ public class DungeonCreator : MonoBehaviour
     
     public GameObject nextStageStone;
 
-    public GameObject nextStagePotal;
+    //public GameObject nextStagePotal; // LEGACY
 
     public GameObject entrancePrefab;
     public GameObject exitObjPrefab;        // !현재 위치값은 매직넘버로 이루어져있음
@@ -163,6 +163,7 @@ public class DungeonCreator : MonoBehaviour
 
         // BSP 각 방 셋팅        
         InItRoomsEvent(floorParent);
+        
         
 
 

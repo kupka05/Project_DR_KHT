@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossBullet : MonsterBullet
+public class Trigger : MonoBehaviour
 {
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,9 @@ public class BossBullet : MonsterBullet
     void Update()
     {
         
+    }
+    void OnTriggerEnter(Collider collider)
+    {
+        //this.transform.parent.GetComponent<Boss>().OnTriggerEnter(this.gameObject, collider.gameObject);
     }
 }

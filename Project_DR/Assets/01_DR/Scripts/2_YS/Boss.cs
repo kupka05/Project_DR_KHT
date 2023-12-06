@@ -1,37 +1,33 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
+  
     public Rigidbody rigid;
     public Damageable damageable;
     GameObject instantLazer;
     public int bossId;
-   
+
+    public float power = 15.0f;
 
     [Header("레이저 관련")]
     public Transform lazerPort;
     public GameObject lazer;
 
     [Header("원거리 공격")]
-    public Transform bulletPort;
-    public Transform bulletPortLeft;
-    public Transform bulletPortRight;
-    public GameObject smallBullet;
+    public int bulletCount = 6;
+    public GameObject smallBulletPrefab;
 
-    [Header("원거리 공격 2번째")]
-    public Transform bulletTopLeft;
-    public Transform bulletTopRight;
-    public GameObject bigBullet;
-
-    [Header("원거리 공격 3번째")]
-    public Transform wallPort;
-    public Transform wallPortSecond;
-    public Transform wallPortThird;
-    public GameObject wall;
+    [Header("애드벌룬 투사체 생성")]
+    public Transform bouncePort;
+    public Transform bouncePortLeft;
+    public Transform bouncePortRight;
+    public GameObject bounce;
 
     [Header("타겟")]
     public Transform target;
@@ -45,134 +41,110 @@ public class Boss : MonoBehaviour
     public bool isPattern = false;
     public bool isDie = false;
     public bool isPatternExecuting = false;
+    public bool isShoot = false;
 
     [Header("패턴 간격")]
-    public float patternInterval = 5.0f;
+    public float patternInterval = 2.0f;
 
-    
+    [Header("포물선 터지는 오브젝트")]
+    public GameObject testPrefab;
+    public Transform testPosition;
+
+    [Header("포물선 안 터지는 오브젝트")]
+    public Transform bigBrickPort;
+    public Transform bigBrickPortLeft;
+    public Transform bigBrickPortRight;
+    public GameObject bigBrick;
 
     void Awake()
     {
-        //hp = maxHp;
         GetData(bossId);
     }
 
+    void InitializeBoss()
+    {
+        Debug.Log($"게임시작");
+        
+        rigid = GetComponent<Rigidbody>();
+        target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
+        damageable.Health = maxHp;
+        hp = maxHp;
+        StartCoroutine(ExecutePattern());
+    }
+
+
     void Start()
     {
-        damageable.Health = hp;
 
         rigid = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
-        
-        //StartCoroutine(PatternController());
+
+        damageable.Health = maxHp;
+        hp = maxHp;
+
         StartCoroutine(ExecutePattern());
     }
 
     public void GetData(int id)
     {
         maxHp = (float)DataManager.instance.GetData(id, "BossHP", typeof(float));
-        hp = maxHp;
+
     }
-    
 
     void PushPlayerBackward()
     {
-        //target.gameObject.GetComponent<Damageable>().OnKnockBack(target.transform.forward * 0.3f);
+        target.gameObject.GetComponent<Damageable>().OnKnockBack(target.transform.forward * 0.3f);
     }
-
-
-
-    //IEnumerator PatternController()
-    //{
-    //    while (true)
-    //    {
-    //        if (!isPatternExecuting && !isDie)
-    //        {
-    //            StartCoroutine(ExecutePattern());
-    //        }
-
-    //        yield return null;
-    //    }
-    //}
 
     IEnumerator ExecutePattern()
     {
-        
+        //Debug.Log("코루틴이 한번만 실행이 되는지");
 
         while (!isDie && !isPatternExecuting)
         {
             //Debug.Log($"hp{hp}");
             yield return new WaitForSeconds(0.1f);
 
-            float healthRatio = hp / maxHp;
+            //float healthRatio = hp / maxHp;
 
-            // 체력에 따라 랜덤으로 패턴 선택
-            //if (hp <= maxHp * 1.0f && hp >= maxHp * 0.76f)
-            //{
-            //    Debug.Log("작동");
-            //    RandomPattern();
-            //    isPatternExecuting = true;
-            //    yield return new WaitForSeconds(patternInterval);
-
-            //}
-            //else if (hp <= maxHp * 0.75f && hp >= maxHp * 0.51f)
-            //{
-            //    Debug.Log("작동2");
-            //    PushPlayerBackward();
-            //    Debug.Log("push");
-            //    isPatternExecuting = true;
-            //    yield return new WaitForSeconds(patternInterval);
-
-            //}
-            //else if (hp <= maxHp * 0.5f && hp >= maxHp * 0.26f)
-            //{
-            //    Debug.Log("작동3");
-            //    PushPlayerBackward();
-            //    isPatternExecuting = true;
-            //    yield return new WaitForSeconds(patternInterval);
-
-            //}
-            //else if (hp <= maxHp * 0.25f)
-            //{
-            //    Debug.Log("작동4");
-            //    PushPlayerBackward();
-            //    isPatternExecuting = true;
-            //    yield return new WaitForSeconds(patternInterval);
-
-            //}
-            if (healthRatio <= 1.0f && healthRatio >= 0.76f)
+            //체력에 따라 랜덤으로 패턴 선택
+            if (hp <= maxHp * 1.0f && hp > maxHp * 0.75f)
             {
                 Debug.Log("작동");
                 RandomPattern();
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
+
             }
-            else if (healthRatio <= 0.75f && healthRatio >= 0.51f)
+            else if (hp <= maxHp * 0.75f && hp > maxHp * 0.5f)
             {
                 Debug.Log("작동2");
                 PushPlayerBackward();
                 Debug.Log("push");
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
+
             }
-            else if (healthRatio <= 0.5f && healthRatio >= 0.26f)
+            else if (hp <= maxHp * 0.5f && hp > maxHp * 0.25f)
             {
                 Debug.Log("작동3");
                 PushPlayerBackward();
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
+
             }
-            else if (healthRatio <= 0.25f)
+            else if (hp < maxHp * 0.25f)
             {
                 Debug.Log("작동4");
                 PushPlayerBackward();
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
             }
-            isPatternExecuting = false;
+          
 
+            isPatternExecuting = false;
         }
-        
+
 
     }
 
@@ -183,72 +155,70 @@ public class Boss : MonoBehaviour
         switch (random)
         {
             case 0:
-                LazerShoot();
+                StartCoroutine(PlayShoot());
                 break;
             case 1:
-                SmallShoot();
+               
                 break;
             case 2:
-                BigShoot();
+                
                 break;
-                case 3:
-                WallShoot();
+            case 3:
+               
                 break;
         }
     }
 
-    void SmallShoot()
-    {
-        GameObject instantBullet = Instantiate(smallBullet, bulletPort.position, bulletPort.rotation);
-        MonsterBullet bullet = instantBullet.GetComponent<MonsterBullet>();
-        Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
-        rigidBullet.velocity = transform.forward * 10.0f;
+    
+      IEnumerator PlayShoot()
+      {
+            if (!isShoot)
+            {
+                isShoot = true;
 
-        GameObject instantBulletRight =
-            Instantiate(smallBullet, bulletPortRight.position, Quaternion.Euler(bulletPortRight.rotation.eulerAngles + new Vector3(0, 10, 0)));
-        MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
-        Rigidbody rigidBulletRight = instantBulletRight.GetComponent<Rigidbody>();
-        rigidBulletRight.velocity = transform.forward * 10.0f;
+                for (int i = 0; i < bulletCount; i++)
+                {
+                    // 위치 조절
+                    Vector3 offset = Vector3.zero;
 
-        GameObject instantBulletLeft =
-            Instantiate(smallBullet, bulletPortLeft.position, Quaternion.Euler(bulletPortLeft.rotation.eulerAngles + new Vector3(0, -10, 0)));
-        MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
-        Rigidbody rigidBulletLeft = instantBulletLeft.GetComponent<Rigidbody>();
-        rigidBulletLeft.velocity = transform.forward * 10.0f;
-    }
+                    if (i % 2 == 0)
+                    {
+                        offset = new Vector3(2.0f, 0, 0); // 짝수 번째 총알은 오른쪽으로
+                    }
+                    else
+                    {
+                        if (i % 4 == 1)
+                        {
+                            offset = new Vector3(0, 2.0f, 0); // 홀수 번째 중 1, 5, 9번째 총알은 위로
+                        }
+                        else
+                        {
+                            offset = new Vector3(-2.0f, 0, 0); // 홀수 번째 중 3, 7, 11번째 총알은 왼쪽으로
+                        }
+                    }
 
-    void WallShoot()
-    {
-        GameObject instantWall = Instantiate(wall, wallPort.position, wallPort.rotation);
-        WallBullet bulletWall = instantWall.GetComponent<WallBullet>();
-        Rigidbody rigidWall = instantWall.GetComponent<Rigidbody>();
-        rigidWall.velocity = transform.forward * 10.0f;
-        //wallPort.transform.LookAt(target.position);
 
-        GameObject instantWallSecond = Instantiate(wall, wallPortSecond.position, wallPortSecond.rotation);
-        Rigidbody rigidWallSecond = instantWallSecond.GetComponent<Rigidbody>();
-        rigidWallSecond.velocity = transform.forward * 10.0f;
-        //wallPortSecond.transform.LookAt(target.position);
+                    GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
 
-        GameObject instantWallThird = Instantiate(wall, wallPortThird.position, wallPortThird.rotation);
-        Rigidbody rigidWallThird = instantWallThird.GetComponent<Rigidbody>();
-        rigidWallThird.velocity = transform.forward * 10.0f;
-        //wallPortThird.transform.LookAt(target.position);
 
-    }
+                    Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
 
-    void BigShoot()
-    {
-        GameObject instantBulletLeft = Instantiate(bigBullet, bulletTopLeft.position, bulletTopLeft.rotation);
-        MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
-        instantBulletLeft.transform.LookAt(target.position);
-        bulletPortLeft.transform.LookAt(target.position);
+                    // 총알 속도 설정
+                    rigidBullet.velocity = offset.normalized * 10.0f;
 
-        GameObject instantBulletRight = Instantiate(bigBullet, bulletTopRight.position, bulletTopRight.rotation);
-        MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
-        instantBulletRight.transform.LookAt(target.position);
-        bulletPortRight.transform.LookAt(target.position);
-    }
+                    instantBullet.transform.LookAt(target);
+
+                    yield return new WaitForSeconds(0.4f);
+                    
+
+                }
+
+                
+
+                isShoot = false;
+            }
+      }
+    
 
     void LazerShoot()
     {
@@ -256,7 +226,8 @@ public class Boss : MonoBehaviour
         instantLazer.transform.LookAt(target.position);
         lazerPort.transform.LookAt(target.position);
 
-        Invoke("LazerDestroy", 0.5f);
+        Invoke("LazerDestroy", 1.5f);
+        //Debug.Log($"작동:{Invoke}");
     }
 
     void LazerDestroy()
@@ -264,26 +235,78 @@ public class Boss : MonoBehaviour
         Destroy(instantLazer);
     }
 
-
-    
-
-    // Other shoot methods remain unchanged
-
-    void OnDrawGizmos()
+    public Vector3 BigBrick()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, 20.0f);
+        Vector3 forwardPos = transform.forward;
+        forwardPos.y += 45f;
+
+        Vector3 combinedVector = bigBrickPort.forward * power +
+                              bigBrickPortRight.forward * power * 2.0f +
+                              bigBrickPortLeft.forward * power * 5.0f;
+
+
+        return combinedVector;
     }
 
-
-
-    public void OnDamage()
+    void BigBrickShoot()
     {
-        if(damageable.Health <= 0)
+
+        GameObject instantBrick = Instantiate(bigBrick, bigBrickPort.position, Quaternion.identity);
+        instantBrick.GetComponent<Rigidbody>().AddForce(BigBrick(), ForceMode.Impulse);
+
+        GameObject instantBrickLeft = Instantiate(bigBrick, bigBrickPortLeft.position, Quaternion.identity);
+        instantBrickLeft.GetComponent<Rigidbody>().AddForce(BigBrick(), ForceMode.Impulse);
+
+        GameObject instantBrickRight = Instantiate(bigBrick, bigBrickPortRight.position, Quaternion.identity);
+        instantBrickRight.GetComponent<Rigidbody>().AddForce(BigBrick(), ForceMode.Impulse);
+    }
+
+    public Vector3 CalculateForce()
+    {
+        Vector3 targetPos = target.transform.position;
+        targetPos.y += 45f;
+        testPosition.LookAt(targetPos);  
+
+        return testPosition.forward * power;
+    }
+
+    void ExplosionShoot()
+    {
+        GameObject test = Instantiate(testPrefab, testPosition.position, Quaternion.identity);
+        test.GetComponent<Rigidbody>().AddForce(CalculateForce(), ForceMode.Impulse);
+    }
+
+    void BounceShoot()
+    {
+        GameObject instantBounce = Instantiate(bounce, bouncePort.position, bouncePort.rotation);
+
+        GameObject bounceLeft = Instantiate(bounce, bouncePortLeft.position, bouncePortLeft.rotation);
+
+        GameObject bounceRight = Instantiate(bounce, bouncePortRight.position, bouncePortRight.rotation);
+    }
+
+    public void OnDeal()
+    {
+        if (hp >= 0)
+        {
+            Debug.Log($"Current HP: {hp}");
+        }
+
+        if (hp <= 0)
         {
             isDie = true;
             Debug.Log($"isDie:{isDie}");
             StopAllCoroutines();
         }
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("인식되냐");
+            InitializeBoss();
+        }
+    }
+
 }

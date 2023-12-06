@@ -10,10 +10,12 @@ public class MonsterBullet : MonoBehaviour
 
     private Rigidbody rigid;
 
+   
 
     // Start is called before the first frame update
     void Start()
     {
+       
         rigid = GetComponent<Rigidbody>();
 
         rigid.velocity = transform.forward * speed;

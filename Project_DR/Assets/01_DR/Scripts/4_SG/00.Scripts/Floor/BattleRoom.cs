@@ -10,7 +10,7 @@ public class BattleRoom : RandomRoom
     private List<GameObject> monsterList; // 소환한 몬스터를 관리해줄 List
     private List<Vector3> spawnPointList;      // 소환된 몬스터의 위치를 관리해줄 List
     private GameObject spawnMonster;     // 몬스터 스폰시 사용될 GameObject
-    GameObject monstersParent;          // 하이얼하키창에서 몬스터를 담아줄 parentObj
+    private GameObject monstersParent;          // 하이얼하키창에서 몬스터를 담아줄 parentObj
     private StringBuilder stringBuilder;        // 변화하는 string사용을 최저한 StringBuilder
 
     void Start()

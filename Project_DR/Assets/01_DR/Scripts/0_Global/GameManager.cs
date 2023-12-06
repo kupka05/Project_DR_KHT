@@ -1,4 +1,5 @@
 using BNG;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ public enum Layer
     Default = 0,
     TransparentFX = 1,
     IgnoreRaycast = 2,
-    // 3,
+    // 3 == null,
     Water = 4,
     UI = 5,
     Grabbable = 9,
@@ -56,13 +57,34 @@ public class GameManager : MonoBehaviour
     private string _playerID; // SetPlayerID(string id) 메서드로 설정함
     public string PlayerID => _playerID;
 
+    
     [Header("Dungeon")]
     // ----------------------------------------------- SG ------------------------------------------------
+    
+    
     public int nowFloor = 1;        // 현재 몇층인지 알려줄 변수
 
-    // string변수는 Resources폴더속 필요한 경로를 담고 있음 뒤에 몬스터의 이름을 붙여서 인스턴스할 계획
-    public string nomalMonsterSpawnPath = "";
-    public string eliteMonsterSpawnPath = "";
+    public static List<bool> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
+
+    private bool isClear = false;
+
+    public bool IsClear
+    {
+        get { return isClear; }
+        set 
+        {
+            if(isClear != value)
+            {
+                isClear = value;
+                DoorControll(IsClear);
+            }
+        }
+    }
+
+    public event System.Action DoorOnEvent;
+    public event System.Action DoorOffEvent;
+
+
 
     // ----------------------------------------------- SG ------------------------------------------------
 
@@ -70,6 +92,8 @@ public class GameManager : MonoBehaviour
     {
         // DB 테스트를 위해 DontDestroy로 할당
         DontDestroyOnLoad(gameObject);
+
+        AwakeInIt();
     }
 
     void Start()
@@ -88,8 +112,51 @@ public class GameManager : MonoBehaviour
             Debug.Log("플레이어를 찾지 못했습니다.");
         }
 
+        
 
     }       // Start()
+
+
+    /// <summary>
+    /// Awake사이클에서 초기화해야하는것 초기화하는 함수
+    /// </summary>
+    private void AwakeInIt()
+    {
+        if(isClearRoomList == null || isClearRoomList == default)
+        {
+            isClearRoomList = new List<bool>();
+        }
+
+        
+
+    }       // AwakeInIt()
+
+
+    /// <summary>
+    /// 문을 열고 닫는 함수를 하나로 묶은것
+    /// </summary>
+    /// <param name="_isDoorOn">문을 열지 닫을지 bool값</param>
+    private void DoorControll(bool _isDoorOn)
+    {
+        if(_isDoorOn == true)
+        {
+            DoorOn();
+        }
+        else if(_isDoorOn == false)
+        {
+            DoorOff();
+        }
+    }       // DoorControll()
+
+    private void DoorOn()
+    {
+        DoorOnEvent.Invoke();
+    }       // DoorOn()
+
+    private void DoorOff()
+    {
+        DoorOffEvent.Invoke();
+    }       // DoorOff()
 
 
 

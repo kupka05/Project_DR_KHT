@@ -13,9 +13,12 @@ public class BattleRoom : RandomRoom
     private GameObject monstersParent;          // 하이얼하키창에서 몬스터를 담아줄 parentObj
     private StringBuilder stringBuilder;        // 변화하는 string사용을 최저한 StringBuilder
 
+    private int recallCount; // 재귀를 몇번했는지 체크할 함수
+    private int maxRecallCount; // 최대재귀횟수
+
     void Start()
     {
-        DungeonManager.clearList.Add(isClearRoom);
+        GameManager.isClearRoomList.Add(isClearRoom);
 
         StartCoroutine(StartMethodDelay());
 
@@ -23,7 +26,7 @@ public class BattleRoom : RandomRoom
 
     private void OnDestroy()
     {
-        DungeonManager.clearList.Remove(isClearRoom);
+        GameManager.isClearRoomList.Remove(isClearRoom);
         StopAllCoroutines();        // 예의치 못한 코루틴 으로 인한 이슈 방지
     }       // OnDestroy()
 
@@ -130,8 +133,9 @@ public class BattleRoom : RandomRoom
         float spawnPointZ = Random.Range(meshPos.bottomLeftCorner.z + 3f, meshPos.topLeftCorner.z - 3f);        
         Vector3 spawnPoint = new Vector3(spawnPointX,spawnPointY,spawnPointZ);
         bool isExamineSpawnPosition = ExamineSpawnPosition(spawnPoint);
-        if(isExamineSpawnPosition == true)
+        if (isExamineSpawnPosition == true && recallCount < maxRecallCount)
         {
+            recallCount++;
             SettingSpawnPoint();
         }
 
@@ -169,6 +173,11 @@ public class BattleRoom : RandomRoom
     /// <param name="_spawnPoint">스폰할 몬스터의 좌표</param>    
     private void SpawnMonster(Vector3 _spawnPoint)
     {
+        if (recallCount >= maxRecallCount)
+        {
+            recallCount = 0;
+            return;
+        }
         GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
         //Debug.Log($"GameObject : {prefabObj} , SB : {stringBuilder}");
         spawnMonster = Instantiate(prefabObj, _spawnPoint, Quaternion.identity, monstersParent.transform);        
@@ -203,8 +212,16 @@ public class BattleRoom : RandomRoom
         spawnPointList = new List<Vector3>();
         monstersParent = new GameObject("Monsters");
         monstersParent.transform.parent = this.transform;
-        
+        recallCount = 0;
+        maxRecallCount = 5;
 
+
+
+    }
+
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        base.OnCollisionEnter(collision);
     }
 
     private void GetMonsterData()

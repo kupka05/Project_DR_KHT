@@ -95,6 +95,11 @@ public static class PlayerDataManager
         // 게임 매니저에 코루틴을 요청해서 SaveCoroutine을 실행
         UserDataManager.Instance.StartCoroutine(SaveCoroutine(column, value, isUpdate));
     }
+    public static void Save(string column, object value, bool isUpdate = false)
+    {
+        // 게임 매니저에 코루틴을 요청해서 SaveCoroutine을 실행
+        UserDataManager.Instance.StartCoroutine(SaveCoroutine(column, value.ToString(), isUpdate));
+    }
 
     /// <summary>
     /// 플레이어의 ID를 설정한다.

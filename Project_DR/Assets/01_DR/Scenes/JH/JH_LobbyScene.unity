@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 203844588}
-  m_IndirectSpecularColor: {r: 0.0014929533, g: 0.001392815, b: 0.0013208939, a: 1}
+  m_IndirectSpecularColor: {r: 0.0014785795, g: 0.0013591028, b: 0.0012890887, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 10689376}
   - component: {fileID: 10689375}
   m_Layer: 5
-  m_Name: Upgrade Result
+  m_Name: Upgrade Accept
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -583,6 +583,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 52614957}
+  - component: {fileID: 52614958}
   m_Layer: 5
   m_Name: EXP Upgrade
   m_TagString: Untagged
@@ -614,6 +615,29 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 50}
   m_SizeDelta: {x: 380, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &52614958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52614956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  leftButton: {fileID: 1365886508}
+  rightButton: {fileID: 1411284734}
+  acceptPannel: {fileID: 10689373}
+  beforeValue: {fileID: 1776957417}
+  afterValue: {fileID: 525900856}
+  index: 10
+  level: 0
+  contentPos: {fileID: 1951589742}
+  item: {fileID: 1990699889}
+  isActive: 0
 --- !u!1 &53717014
 GameObject:
   m_ObjectHideFlags: 0
@@ -1794,6 +1818,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6757648434215542744, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_RootOrder
@@ -1867,7 +1896,7 @@ PrefabInstance:
     - target: {fileID: 7837797319980225010, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0028038986
+      value: -0.0038259611
       objectReference: {fileID: 0}
     - target: {fileID: 7837797319993773063, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -1917,7 +1946,7 @@ PrefabInstance:
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.00080047385
+      value: -0.00081635424
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -2229,7 +2258,7 @@ GameObject:
   - component: {fileID: 142934263}
   - component: {fileID: 142934262}
   m_Layer: 5
-  m_Name: cur Value
+  m_Name: after Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4887,8 +4916,9 @@ GameObject:
   - component: {fileID: 359544686}
   - component: {fileID: 359544688}
   - component: {fileID: 359544687}
+  - component: {fileID: 359544689}
   m_Layer: 5
-  m_Name: Cur
+  m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4953,6 +4983,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 359544685}
   m_CullTransparentMesh: 1
+--- !u!114 &359544689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359544685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 0.2784314, g: 0.2784314, b: 0.2784314, a: 1}
+    m_HighlightedColor: {r: 0.4627451, g: 0.4627451, b: 0.4627451, a: 1}
+    m_PressedColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
+    m_SelectedColor: {r: 0.2784314, g: 0.2784314, b: 0.2784314, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 5
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Highlighted
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 359544687}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 758546119}
+        m_TargetAssemblyTypeName: LobbyDisplayButton, Assembly-CSharp
+        m_MethodName: PlayerStatusUpgradeButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Main
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &363188064
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10356,6 +10442,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 758546118}
+  - component: {fileID: 758546119}
   m_Layer: 5
   m_Name: HP Upgrade
   m_TagString: Untagged
@@ -10387,6 +10474,29 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: 380, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &758546119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758546117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  leftButton: {fileID: 1658801826}
+  rightButton: {fileID: 1906992472}
+  acceptPannel: {fileID: 10689373}
+  beforeValue: {fileID: 2058465578}
+  afterValue: {fileID: 719112949}
+  index: 10
+  level: 5
+  contentPos: {fileID: 584599418}
+  item: {fileID: 1811617386}
+  isActive: 0
 --- !u!1 &768623304
 GameObject:
   m_ObjectHideFlags: 0
@@ -11690,7 +11800,7 @@ GameObject:
   - component: {fileID: 836052998}
   - component: {fileID: 836052997}
   m_Layer: 5
-  m_Name: cur Value
+  m_Name: spend Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12627,7 +12737,7 @@ GameObject:
   - component: {fileID: 877444997}
   - component: {fileID: 877444996}
   m_Layer: 5
-  m_Name: cur Value
+  m_Name: remain Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13722,7 +13832,7 @@ GameObject:
   - component: {fileID: 988907454}
   - component: {fileID: 988907453}
   m_Layer: 5
-  m_Name: cur Value
+  m_Name: after Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14589,8 +14699,9 @@ GameObject:
   - component: {fileID: 1064259207}
   - component: {fileID: 1064259209}
   - component: {fileID: 1064259208}
+  - component: {fileID: 1064259210}
   m_Layer: 5
-  m_Name: Cur
+  m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14655,6 +14766,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1064259206}
   m_CullTransparentMesh: 1
+--- !u!114 &1064259210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064259206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 0.2784314, g: 0.2784314, b: 0.2784314, a: 1}
+    m_HighlightedColor: {r: 0.4627451, g: 0.4627451, b: 0.4627451, a: 1}
+    m_PressedColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
+    m_SelectedColor: {r: 0.2784314, g: 0.2784314, b: 0.2784314, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 5
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Highlighted
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1064259208}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1676996235}
+        m_TargetAssemblyTypeName: LobbyDisplayButton, Assembly-CSharp
+        m_MethodName: PlayerStatusUpgradeButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Main
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1065571285
 GameObject:
   m_ObjectHideFlags: 0
@@ -14888,14 +15055,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1920788381}
-        m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
-        m_Mode: 5
+      - m_Target: {fileID: 1676996235}
+        m_TargetAssemblyTypeName: LobbyDisplayButton, Assembly-CSharp
+        m_MethodName: SetLevelButton
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: Main
           m_BoolArgument: 0
@@ -16733,14 +16900,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1920788381}
-        m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
-        m_Mode: 5
+      - m_Target: {fileID: 1676996235}
+        m_TargetAssemblyTypeName: LobbyDisplayButton, Assembly-CSharp
+        m_MethodName: SetLevelButton
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: -1
           m_FloatArgument: 0
           m_StringArgument: Main
           m_BoolArgument: 0
@@ -16765,7 +16932,7 @@ GameObject:
   - component: {fileID: 1201815965}
   - component: {fileID: 1201815964}
   m_Layer: 5
-  m_Name: cur Value
+  m_Name: before Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17295,8 +17462,9 @@ GameObject:
   - component: {fileID: 1217724781}
   - component: {fileID: 1217724783}
   - component: {fileID: 1217724782}
+  - component: {fileID: 1217724784}
   m_Layer: 5
-  m_Name: Cur
+  m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17361,6 +17529,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1217724780}
   m_CullTransparentMesh: 1
+--- !u!114 &1217724784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217724780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 0.2784314, g: 0.2784314, b: 0.2784314, a: 1}
+    m_HighlightedColor: {r: 0.4627451, g: 0.4627451, b: 0.4627451, a: 1}
+    m_PressedColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
+    m_SelectedColor: {r: 0.2784314, g: 0.2784314, b: 0.2784314, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 5
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Highlighted
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1217724782}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 52614958}
+        m_TargetAssemblyTypeName: LobbyDisplayButton, Assembly-CSharp
+        m_MethodName: PlayerStatusUpgradeButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Main
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1219959002
 GameObject:
   m_ObjectHideFlags: 0
@@ -18994,17 +19218,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: SPON
       objectReference: {fileID: 0}
-    - target: {fileID: 1589909508595142, guid: 9c497fb69241f2244b41ccc375bc8606, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4302838756563234, guid: 9c497fb69241f2244b41ccc375bc8606, type: 3}
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4302838756563234, guid: 9c497fb69241f2244b41ccc375bc8606, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.372177
+      value: -13.37218
       objectReference: {fileID: 0}
     - target: {fileID: 4302838756563234, guid: 9c497fb69241f2244b41ccc375bc8606, type: 3}
       propertyPath: m_LocalPosition.y
@@ -19040,11 +19260,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4302838756563234, guid: 9c497fb69241f2244b41ccc375bc8606, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 64550876165246560, guid: 9c497fb69241f2244b41ccc375bc8606,
-        type: 3}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -19190,14 +19405,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1920788381}
-        m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
-        m_Mode: 5
+      - m_Target: {fileID: 52614958}
+        m_TargetAssemblyTypeName: LobbyDisplayButton, Assembly-CSharp
+        m_MethodName: SetLevelButton
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: -1
           m_FloatArgument: 0
           m_StringArgument: Main
           m_BoolArgument: 0
@@ -19645,7 +19860,7 @@ GameObject:
   - component: {fileID: 1409031570}
   - component: {fileID: 1409031569}
   m_Layer: 5
-  m_Name: cur Value
+  m_Name: after Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19884,14 +20099,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1920788381}
-        m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
-        m_Mode: 5
+      - m_Target: {fileID: 52614958}
+        m_TargetAssemblyTypeName: LobbyDisplayButton, Assembly-CSharp
+        m_MethodName: SetLevelButton
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: Main
           m_BoolArgument: 0
@@ -24181,14 +24396,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1920788381}
-        m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
-        m_Mode: 5
+      - m_Target: {fileID: 758546119}
+        m_TargetAssemblyTypeName: LobbyDisplayButton, Assembly-CSharp
+        m_MethodName: SetLevelButton
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: -1
           m_FloatArgument: 0
           m_StringArgument: Main
           m_BoolArgument: 0
@@ -24262,9 +24477,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerID: 
-  HP: 0
-  Exp: 0
-  Gold: 0
   ExpIncrease: 0
   GoldIncrease: 0
   WeaponAtk: 0
@@ -24279,6 +24491,21 @@ MonoBehaviour:
   ClearCount: 0
   clearDatas:
     list: []
+  LoadDataEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1920788381}
+        m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
+        m_MethodName: GetDataFromDB
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1660772256
 Transform:
   m_ObjectHideFlags: 0
@@ -24396,12 +24623,12 @@ GameObject:
   - component: {fileID: 1674047493}
   - component: {fileID: 1674047492}
   m_Layer: 5
-  m_Name: Cur
+  m_Name: Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1674047491
 RectTransform:
   m_ObjectHideFlags: 0
@@ -24417,9 +24644,9 @@ RectTransform:
   m_Father: {fileID: 571314227}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 140, y: -22.5}
   m_SizeDelta: {x: 18, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1674047492
@@ -24605,6 +24832,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1676996234}
+  - component: {fileID: 1676996235}
   m_Layer: 5
   m_Name: 'Gold Upgrade '
   m_TagString: Untagged
@@ -24636,6 +24864,29 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 380, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1676996235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676996233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  leftButton: {fileID: 1187195410}
+  rightButton: {fileID: 1090300859}
+  acceptPannel: {fileID: 10689373}
+  beforeValue: {fileID: 743705232}
+  afterValue: {fileID: 1727678078}
+  index: 10
+  level: 2
+  contentPos: {fileID: 571314227}
+  item: {fileID: 1674047490}
+  isActive: 0
 --- !u!1001 &1682687636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26688,7 +26939,7 @@ GameObject:
   - component: {fileID: 1799614479}
   - component: {fileID: 1799614478}
   m_Layer: 5
-  m_Name: cur Value
+  m_Name: before Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26891,12 +27142,12 @@ GameObject:
   - component: {fileID: 1811617389}
   - component: {fileID: 1811617388}
   m_Layer: 5
-  m_Name: Cur
+  m_Name: Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1811617387
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26912,9 +27163,9 @@ RectTransform:
   m_Father: {fileID: 584599418}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 140, y: -22.5}
   m_SizeDelta: {x: 18, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1811617388
@@ -27827,7 +28078,7 @@ GameObject:
   - component: {fileID: 1885887280}
   - component: {fileID: 1885887279}
   m_Layer: 5
-  m_Name: cur Value
+  m_Name: before Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28434,14 +28685,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1920788381}
-        m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
-        m_Mode: 5
+      - m_Target: {fileID: 758546119}
+        m_TargetAssemblyTypeName: LobbyDisplayButton, Assembly-CSharp
+        m_MethodName: SetLevelButton
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: Main
           m_BoolArgument: 0
@@ -28488,27 +28739,33 @@ MonoBehaviour:
   openDoorButton: {fileID: 835015863}
   mainDisplay: {fileID: 100686778}
   mbtiDisplay: {fileID: 858404010}
-  clearDatas:
-  - "2023/11/21 08:23 0\uD68C\uCC28 MBTI INFP "
-  - "2023/11/21 08:23 1\uD68C\uCC28 MBTI INFP "
-  - "2023/11/21 08:23 2\uD68C\uCC28 MBTI INFP "
-  - "2023/11/21 08:23 3\uD68C\uCC28 MBTI INFP "
-  - "2023/11/21 08:23 4\uD68C\uCC28 MBTI INFP "
-  - "2023/11/21 08:23 4\uD68C\uCC28 MBTI INFP "
-  - "2023/11/21 08:23 4\uD68C\uCC28 MBTI INFP "
-  - "2023/11/21 08:23 4\uD68C\uCC28 MBTI INFP "
-  - "2023/11/21 08:23 4\uD68C\uCC28 MBTI INFP "
-  - "2023/11/21 08:23 4\uD68C\uCC28 MBTI INFP "
-  - "2023/11/21 08:23 4\uD68C\uCC28 MBTI INFP "
+  clearDatas: []
   clearDataObj: {fileID: 1143982039}
   contentPos: {fileID: 1493497087}
   statusDisplay: {fileID: 719821487}
   statusPos: {fileID: 946235405}
   selectStatusDis: {fileID: 95631383}
   playerStatusDis: {fileID: 2128464969}
+  playerAcceptPannel: {fileID: 10689373}
   weaponStatusDis: {fileID: 1420482423}
   selectSkillStatusDis: {fileID: 49167407}
   skillStatusDis: {fileID: 1113509160}
+  playerLevel: {fileID: 1151022968}
+  playerID: {fileID: 1113575024}
+  playerGold: {fileID: 1626335512}
+  playerExp: {fileID: 1863508066}
+  curPlayerHp: {fileID: 945941515}
+  beforePlayerHp: {fileID: 1201815964}
+  afterPlayerHp: {fileID: 1409031569}
+  curGoldIncre: {fileID: 1674816673}
+  beforeGoldIncre: {fileID: 1799614478}
+  afterGoldIncre: {fileID: 142934262}
+  curExpIncre: {fileID: 341057951}
+  beforeExpIncre: {fileID: 1885887279}
+  afterExpIncre: {fileID: 988907453}
+  curExp: {fileID: 1987543359}
+  spendExp: {fileID: 836052997}
+  remainExp: {fileID: 877444996}
 --- !u!4 &1920788382
 Transform:
   m_ObjectHideFlags: 0
@@ -29943,12 +30200,12 @@ GameObject:
   - component: {fileID: 1990699892}
   - component: {fileID: 1990699891}
   m_Layer: 5
-  m_Name: Cur
+  m_Name: Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1990699890
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29964,9 +30221,9 @@ RectTransform:
   m_Father: {fileID: 1951589742}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 140, y: -22.5}
   m_SizeDelta: {x: 18, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1990699891

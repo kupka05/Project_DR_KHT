@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,14 +8,14 @@ using UnityEngine;
 [System.Serializable]
 public class ClearDatas
 {
-    public ClearData[] clearData;
+    public List<ClearData> list;
 }
 [System.Serializable]
 
 public class ClearData
 {
-    public string clearMBTI;
-    public string clearDate;
+    public string MBTI;
+    public string Date;
 }
 
 
@@ -40,14 +41,14 @@ public class UserDataManager : MonoBehaviour
     #endregion
 
     #region 유저 데이터
- 
+
     [Header("User Data")]
     public string PlayerID;
 
     [Header("PC Data")]
     public float HP;                  // 플레이어 체력
     public float Exp;                 // 플레이어 현재 경험치
-    public float Gold;                // 플레이어 현재 골드
+    public int Gold;                  // 플레이어 현재 골드
     public float ExpIncrease;         // 플레이어 경험치 증가량
     public float GoldIncrease;        // 플레이어 골드 증가량
 
@@ -69,8 +70,8 @@ public class UserDataManager : MonoBehaviour
 
     [Header("Clear Data")]
     public int ClearCount;         // 클리어 횟수
-    public string ClearData;       // Json을 담을 직렬화된 클리어 데이터
-    public ClearDatas ClearDatas;  // 클리어 데이터 모음
+    private string JsonData;       // Json을 담을 직렬화된 클리어 데이터
+    public ClearDatas clearDatas;  // 클리어 데이터 모음
     #endregion
 
 
@@ -80,10 +81,15 @@ public class UserDataManager : MonoBehaviour
         PlayerDataManager.Update(true);
 
     }
+    public void Start()
+    {
+        SaveClearData("TEST");
+        SaveClearData("MBTI");
+    }
     public void GetDataToDB()
     {
 
-        PlayerID = PlayerDataManager.PlayerID; 
+        PlayerID = PlayerDataManager.PlayerID;
         HP = PlayerDataManager.HP;
         Gold = PlayerDataManager.Gold;
         Exp = PlayerDataManager.Exp;
@@ -103,13 +109,39 @@ public class UserDataManager : MonoBehaviour
         QuestMain = PlayerDataManager.QuestMain;
         ClearCount = PlayerDataManager.ClearCount;
 
-        ClearData = JsonUtility.ToJson(PlayerDataManager.ClearMBTIValue);
-        ClearDatas = JsonUtility.FromJson<ClearDatas>(ClearData);
+        JsonData = PlayerDataManager.ClearMBTIValue;
+
+        // .NET Framework 디코딩이 필요
+        string decodedString = System.Web.HttpUtility.UrlDecode(JsonData);
+
+        Console.WriteLine(decodedString);
+        clearDatas = JsonUtility.FromJson<ClearDatas>(decodedString);
+        Debug.Log(clearDatas);
+
+
     }
 
-    
+    // 클리어 데이터 신규 저장
+    public void SaveClearData(string MBTI)
+    {
+        // 넣을 데이터 생성
+        ClearData newData = new ClearData();
+        newData.Date = GetCurrentDate();             // 현재 시간
+        newData.MBTI = MBTI;                         // 매개변수 MBTI
+        clearDatas.list.Add(newData);                // 리스트에 추가
+        ClearCount = clearDatas.list.Count;          // 클리어 데이터 리스트의 길이가 곧 클리어 카운트
+
+        JsonData = JsonUtility.ToJson(clearDatas);   // json으로 변환
+
+        // 저장 후 업데이트
+        PlayerDataManager.Save("clear_mbti_value", JsonData);
+        PlayerDataManager.Save("clear_count", ClearCount.ToString());
+        PlayerDataManager.Update(true);
+    }
+
+
     // 클리어 시간을 가져오는 함수
-    public string GetCurrentDate()
+    private string GetCurrentDate()
     {
         return DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
     }

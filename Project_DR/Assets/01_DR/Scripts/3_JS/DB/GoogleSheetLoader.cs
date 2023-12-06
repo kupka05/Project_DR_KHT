@@ -63,7 +63,6 @@ public class GoogleSheetLoader : MonoBehaviour
                     // 매개변수로 보내 데이터 타입을 변경
                     Dictionary<string, List<string>> dataDictionary =
                     CSVReader.NewReadCSVFile(data);
-
                     // dataDictionary를 데이터 매니저에 추가
                     DataManager.instance.SetData(dataDictionary);
                 }));

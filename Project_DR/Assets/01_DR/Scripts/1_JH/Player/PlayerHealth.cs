@@ -143,10 +143,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<HealthItem>())
-        {
-            float newHealth = other.GetComponent<HealthItem>().health;
-            RestoreHealth(newHealth);
-        }
+        
     }
 }

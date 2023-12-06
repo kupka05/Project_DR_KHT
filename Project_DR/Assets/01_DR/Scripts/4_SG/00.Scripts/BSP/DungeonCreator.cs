@@ -161,6 +161,12 @@ public class DungeonCreator : MonoBehaviour
 
         NextStageRoomCreate(bossRoomCornerPos);
 
+        // 각 복도에 문을 생성해주는 함수
+        for(int i = 0; i < corridorParnet.transform.childCount; i++)
+        {
+            CreateCorridorDoor(corridorParnet.transform.GetChild(i));
+        }
+
         // BSP 각 방 셋팅        
         InItRoomsEvent(floorParent);
         
@@ -170,6 +176,15 @@ public class DungeonCreator : MonoBehaviour
         DungeonInspectionManager.dungeonManagerInstance.isCreateDungeonEnd = true;
         Debug.Log("던전 생성 끝");
     }   // CreateDungeon()
+
+    /// <summary>
+    /// 복도 Mesh에 문을 설치해주는 컴포넌트 추가해주는 함수
+    /// </summary>
+    /// <param name="transform">복도의 parent가 가지고 있는 자식Trasform</param>
+    private void CreateCorridorDoor(Transform _corridor)
+    {
+        //_corridor.gameObject.AddComponent<CorridorDoorCreate>();
+    }       // CreateCorridorDoor()
 
     /// <summary>
     /// 각방에 이벤트 : 전투 or 이벤트 무작위로 넣어줌
@@ -205,8 +220,9 @@ public class DungeonCreator : MonoBehaviour
 
             if(randomEvent == 0 && battleRoomCount != 0)
             {
-                bspListClone[randomIdx].AddComponent<BattleRoom>();
                 bspListClone[randomIdx].AddComponent<BattleRoomObjCreate>();
+                bspListClone[randomIdx].AddComponent<BattleRoomRunTimeNav>();
+                bspListClone[randomIdx].AddComponent<BattleRoom>();
                 battleRoomCount -= 1;
                 bspListClone.Remove(bspListClone[randomIdx]);
             }
@@ -716,6 +732,7 @@ public class DungeonCreator : MonoBehaviour
             wallList.Add(point);
         }
     }       // AddWallPositionToList()
+    
 
     /// <summary>
     /// 모든 자식 오브젝트 삭제 함수

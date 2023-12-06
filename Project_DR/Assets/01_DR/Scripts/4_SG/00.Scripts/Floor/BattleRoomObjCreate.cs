@@ -14,13 +14,24 @@ public class BattleRoomObjCreate : RandomRoomObjCreate
     int matCreateTableId = 16002;
 
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
         SpawnLightObj(lightCreateTableID);
         SpawnEnvObj(envCreateTableId);
         SpawnMatObj(matCreateTableId);
+
     }
+
+    //protected override void Start()
+    //{
+    //    base.Start();
+    //    SpawnLightObj(lightCreateTableID);
+    //    SpawnEnvObj(envCreateTableId);
+    //    SpawnMatObj(matCreateTableId);
+    //}
+
+
 
 
 }       // ClassEnd

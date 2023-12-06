@@ -29,16 +29,13 @@ public class RandomRoomObjCreate : MonoBehaviour
     private bool createPass;            // 이번생성 Pass할지 체크할 bool값
 
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
-        StartInIt();
+        AwakeInIt();
     }
 
-    /// <summary>
-    /// Start사이클에서 기입해줄 Component
-    /// </summary>
-    private void StartInIt()
-    {     
+    private void AwakeInIt()
+    {
         stringBuilder = new StringBuilder();
         spawnPosList = new List<Vector3>();
         parentObj = new GameObject("SpawnObjs");
@@ -49,6 +46,28 @@ public class RandomRoomObjCreate : MonoBehaviour
         reCallCount = 0;
         createPass = false;
     }
+        
+
+    //protected virtual void Start()
+    //{
+    //    StartInIt();
+    //}
+
+    ///// <summary>
+    ///// Start사이클에서 기입해줄 Component
+    ///// </summary>
+    //private void StartInIt()
+    //{     
+    //    stringBuilder = new StringBuilder();
+    //    spawnPosList = new List<Vector3>();
+    //    parentObj = new GameObject("SpawnObjs");
+    //    cornerPos = GetComponent<FloorMeshPos>();
+
+    //    parentObj.transform.parent = this.transform;
+
+    //    reCallCount = 0;
+    //    createPass = false;
+    //}     // LEGACY
 
     /// <summary>
     /// Light를 스폰해주는 함수 
@@ -180,7 +199,9 @@ public class RandomRoomObjCreate : MonoBehaviour
             
             if(dis < 2f)
             {
+                reCallCount++;
                 return PickSpwanPos(_CreateObjId);
+
             }
         }
 
@@ -203,7 +224,7 @@ public class RandomRoomObjCreate : MonoBehaviour
         stringBuilder.Clear();
         stringBuilder.Append((string)DataManager.instance.GetData(_objId, "PrefabName", typeof(string)));
         //Debug.Log($"들어간 Sb : {stringBuilder}\n sb에 참조된 ID : {_objId}");        
-        GameObject prefabObj = Resources.Load<GameObject>(stringBuilder.ToString());
+        GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
         //Debug.Log($"지정된 Prefab : {prefabObj}");
         return prefabObj;
     }       // spawnObjInIt(int)
@@ -217,15 +238,26 @@ public class RandomRoomObjCreate : MonoBehaviour
     {
         if (createPass == true)
         {
-            Debug.Log($"제작 패스");
+            //Debug.Log($"제작 패스");
             createPass = false;
             reCallCount = 0;
             return;
         }
         else { /*PASS*/ }
         GameObject spawnObjClone = Instantiate(_spawnObj, _spawnPos, Quaternion.identity, parentObj.transform);
+
         reCallCount = 0;
+        ObjectLayerSetting(spawnObjClone);
+
     }       // InstantiateObj(GameObject,Vecotr3)
+
+    /// <summary>
+    /// 인스턴스 된 오브젝트에 레이어를 수정해주는 함수
+    /// </summary>
+    private void ObjectLayerSetting(GameObject _spawnObj)
+    {               
+        _spawnObj.layer = (int)Layer.MapObject;
+    }       // ObjectLayerSetting()
 
 
 }       // ClassEnd

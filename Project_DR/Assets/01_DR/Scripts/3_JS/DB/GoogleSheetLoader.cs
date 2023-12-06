@@ -16,6 +16,7 @@ public class GoogleSheetLoader : MonoBehaviour
     {
         // JS
         "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
+        "Item_Shop_Table",
 
         // JH
         "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",
@@ -63,7 +64,6 @@ public class GoogleSheetLoader : MonoBehaviour
                     // 매개변수로 보내 데이터 타입을 변경
                     Dictionary<string, List<string>> dataDictionary =
                     CSVReader.NewReadCSVFile(data);
-
                     // dataDictionary를 데이터 매니저에 추가
                     DataManager.instance.SetData(dataDictionary);
                 }));

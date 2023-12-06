@@ -6,28 +6,35 @@ using System;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager instance;
+    #region 싱글톤
+    public static AudioManager Instance
+    {
+        get
+        {
+            // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
+            if (m_Instance == null)
+            {
+                // 씬에서 GameManager 오브젝트를 찾아 할당
+                m_Instance = FindObjectOfType<AudioManager>();
+            }
 
+            // 싱글톤 오브젝트를 반환
+            return m_Instance;
+        }
+    }
+    private static AudioManager m_Instance; // 싱글톤이 할당될 static 변수    
+    #endregion
+
+    public Sound backGroundMusic;
     public Sound[] musicSounds, sfxSounds;
     public AudioSource musicSource, sfxSource;
 
-    public Sound[] loopSounds;
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
     private void Start()
     {
-        PlayMusic("TitleBGM");
+        if (backGroundMusic != null)
+        {
+            PlayMusic(backGroundMusic.name);
+        }
     }
 
     public void PlayMusic(string name)
@@ -62,6 +69,7 @@ public class AudioManager : MonoBehaviour
         }
 
     }
+
 
     public void MusicVolume(float volume)
     {

@@ -71,6 +71,7 @@ public class DataManager : MonoBehaviour
     {
         // JS
         "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
+        "Item_Shop_Table",
 
         // JH
         "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",
@@ -337,7 +338,7 @@ public class DataManager : MonoBehaviour
             // data[ID_HEADER]의 길이 만큼 순회
             for (int i = 0; i < data[ID_HEADER].Count; i++)
             {
-                int id = int.Parse(data[ID_HEADER][i]);
+                int id = int.Parse(data[ID_HEADER][i].Replace("_", ""));
                 int index2 = i;
                 // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
                 if (idTable.ContainsKey(id))
@@ -371,7 +372,7 @@ public class DataManager : MonoBehaviour
             // data[ID_HEADER]의 길이 만큼 순회
             for (int i = 0; i < data[ID_HEADER].Count; i++)
             {
-                int id = int.Parse(data[ID_HEADER][i]);
+                int id = int.Parse(data[ID_HEADER][i].Replace("_", ""));
                 int index2 = i;
                 // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
                 if (localIDTable.ContainsKey(id))

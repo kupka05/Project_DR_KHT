@@ -48,8 +48,14 @@ public class SG_Test : MonoBehaviour
     //    Debug.Log($"ActionParamiter -> {tempNum_}");
     //}
     #endregion STB_DelegateTEST
+   
 
-    Stack<int> testStack = new Stack<int>();
+    private void Start()
+    {
+
+
+    }
+
 
 
 

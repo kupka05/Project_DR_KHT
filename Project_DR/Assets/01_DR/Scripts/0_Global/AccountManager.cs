@@ -49,12 +49,12 @@ public class AccountManager : MonoBehaviour
     //}
     IEnumerator AccountCo(string command)
     {
+        string id = idInput.text;
         WWWForm form = new WWWForm();
         form.AddField("command", command);
         form.AddField("id", idInput.text);
         form.AddField("password", passwordInput.text);
         form.AddField("mbti", infoInput.text);
-
         // using문을 사용하여 메모리 누수 해결
         // 사용이 끝난 후 할당 해제
         using (UnityWebRequest www = UnityWebRequest.Post(url, form))
@@ -68,6 +68,7 @@ public class AccountManager : MonoBehaviour
                 // 로그인 성송기
                 case "Login Complete":
                     description.text = string.Format("로그인 성공");
+                    PlayerDataManager.SetID(id);
                     SceneManager.LoadScene(sceneName);
                     break; 
                 case "Fail to login":

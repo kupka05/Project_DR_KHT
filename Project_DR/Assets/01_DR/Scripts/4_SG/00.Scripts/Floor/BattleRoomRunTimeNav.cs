@@ -5,17 +5,18 @@ using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+
 public class BattleRoomRunTimeNav : MonoBehaviour
 {
 
 
-    private NavMeshSurface navgation;
-    private NavMeshData navMeshData;
+    private NavMeshSurface navgation;    
     private FloorMeshPos cornerPos;
     private void Awake()
     {
         AwakeInIt();
-        Test();
+        SettingNavLayer();
         BuildNavMesh();
     }
 
@@ -26,7 +27,21 @@ public class BattleRoomRunTimeNav : MonoBehaviour
         cornerPos = GetComponent<FloorMeshPos>();                
 
     }
-    
+
+    /// <summary>
+    /// 네비게이션레이어설정해주는 함수
+    /// </summary>
+    private void SettingNavLayer()
+    {
+        //int floorLayer = (int)Layer.BattleRoomFloor;    // Layer : BattleRoomLayer 가져와야함
+        this.gameObject.layer = (int)Layer.BattleRoomFloor;
+
+        LayerMask layerMask = 1 << (int)Layer.MapObject | 1 << (int)Layer.BattleRoomFloor;
+        navgation.layerMask = layerMask;
+
+    }       // SettingNavLayer()
+
+
 
     /// <summary>
     /// 네비매시 베이크하는 함수
@@ -36,26 +51,7 @@ public class BattleRoomRunTimeNav : MonoBehaviour
         navgation.BuildNavMesh();
     }
 
-    private void Test()
-    {
-        int navLayerMask = LayerMask.GetMask("Monster") | LayerMask.GetMask("Water");
-        this.gameObject.layer = 4;
-        navgation.layerMask = navLayerMask;
-        Debug.Log($"Layer : {this.gameObject.layer}\n navLayer : {navgation.layerMask}");
 
-
-
-
-        navMeshData = new NavMeshData();
-        navMeshData.position = new Vector3(
-            (cornerPos.bottomLeftCorner.x + cornerPos.bottomLeftCorner.x) * 0.5f,
-            0.2f,
-            (cornerPos.bottomLeftCorner.z + cornerPos.topLeftCorner.z) * 0.5f);
-        
-        
-        navgation.navMeshData = navMeshData;
-
-    }
 
 
 

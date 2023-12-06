@@ -224,7 +224,7 @@ public class RandomRoomObjCreate : MonoBehaviour
         stringBuilder.Clear();
         stringBuilder.Append((string)DataManager.instance.GetData(_objId, "PrefabName", typeof(string)));
         //Debug.Log($"들어간 Sb : {stringBuilder}\n sb에 참조된 ID : {_objId}");        
-        GameObject prefabObj = Resources.Load<GameObject>(stringBuilder.ToString());
+        GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
         //Debug.Log($"지정된 Prefab : {prefabObj}");
         return prefabObj;
     }       // spawnObjInIt(int)
@@ -238,7 +238,7 @@ public class RandomRoomObjCreate : MonoBehaviour
     {
         if (createPass == true)
         {
-            Debug.Log($"제작 패스");
+            //Debug.Log($"제작 패스");
             createPass = false;
             reCallCount = 0;
             return;
@@ -246,14 +246,18 @@ public class RandomRoomObjCreate : MonoBehaviour
         else { /*PASS*/ }
         GameObject spawnObjClone = Instantiate(_spawnObj, _spawnPos, Quaternion.identity, parentObj.transform);
 
-        int layerMask = LayerMask.GetMask("Water");
-        //int layerMask = 1 << 2;     // 임시 LayerMask
-        spawnObjClone.layer = 4;
-        Debug.Log($"{spawnObjClone.layer}");
-
-
         reCallCount = 0;
+        ObjectLayerSetting(spawnObjClone);
+
     }       // InstantiateObj(GameObject,Vecotr3)
+
+    /// <summary>
+    /// 인스턴스 된 오브젝트에 레이어를 수정해주는 함수
+    /// </summary>
+    private void ObjectLayerSetting(GameObject _spawnObj)
+    {               
+        _spawnObj.layer = (int)Layer.MapObject;
+    }       // ObjectLayerSetting()
 
 
 }       // ClassEnd

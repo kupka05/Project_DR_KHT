@@ -6,6 +6,23 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum Layer
+{
+    Default = 0,
+    TransparentFX = 1,
+    IgnoreRaycast = 2,
+    // 3,
+    Water = 4,
+    UI = 5,
+    Grabbable = 9,
+    Drill = 11,
+    Monster = 12,
+    MonsterWall = 13,
+    Player = 14,
+    MapObject = 19,
+    BattleRoomFloor = 20
+}       // Layer
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance

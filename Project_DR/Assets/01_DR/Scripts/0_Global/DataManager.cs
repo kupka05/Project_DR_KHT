@@ -110,8 +110,16 @@ public class DataManager : MonoBehaviour
      *************************************************/
     private void Awake()
     {
-        // 파괴 방지
-        DontDestroyOnLoad(this);
+        // 싱글톤 인스턴스 초기화
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
         // 로컬용 CSV 파일을 테이블에 Init
         InitLocalDataTable();

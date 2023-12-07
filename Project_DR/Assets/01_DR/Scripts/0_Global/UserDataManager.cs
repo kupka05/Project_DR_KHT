@@ -32,14 +32,15 @@ public class UserDataManager : MonoBehaviour
             // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
             if (m_Instance == null)
             {
-                // 씬에서 GameManager 오브젝트를 찾아 할당
-                m_Instance = FindObjectOfType<UserDataManager>();
+                GameObject obj = new GameObject("UserDataManager");
+                m_Instance = obj.AddComponent<UserDataManager>();
             }
+
             // 싱글톤 오브젝트를 반환
             return m_Instance;
         }
     }
-    private static UserDataManager m_Instance; // 싱글톤이 할당될 static 변수    
+    private static UserDataManager m_Instance; // 싱글톤이 할당될 static 변수
     #endregion
 
     // 옵저버 패턴
@@ -129,10 +130,19 @@ public class UserDataManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
-        
+        // 싱글톤 인스턴스 초기화
+        if (m_Instance == null)
+        {
+            m_Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         // 디버그 캐릭터면 시트에서 데이터 가져오기
-        if(PlayerID == "")
+        if (PlayerID == "")
         { SetDebugData(); }
 
         PlayerDataManager.Update(true);

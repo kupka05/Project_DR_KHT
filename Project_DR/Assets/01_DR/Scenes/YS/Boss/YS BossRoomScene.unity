@@ -1456,8 +1456,6 @@ MonoBehaviour:
   gameoverText: 
   gameoverScene: 
   nowFloor: 1
-  nomalMonsterSpawnPath: 
-  eliteMonsterSpawnPath: 
 --- !u!4 &1005570377
 Transform:
   m_ObjectHideFlags: 0
@@ -3222,10 +3220,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7755644396598797804, guid: f44877a732d5a2f45895a09eca75a342,
+    - target: {fileID: 5382452775802719783, guid: f44877a732d5a2f45895a09eca75a342,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 65.9
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5382452775802719783, guid: f44877a732d5a2f45895a09eca75a342,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7755644396602740827, guid: f44877a732d5a2f45895a09eca75a342,
         type: 3}

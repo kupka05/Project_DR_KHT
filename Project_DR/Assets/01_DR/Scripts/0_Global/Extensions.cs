@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -21,5 +22,13 @@ public static class Extensions
         }
         
         return rb;
+    }
+
+    // 게으른 초기화
+    // TMP_Text 객체에 값이 없을 경우 GetComponent함
+    // 있을 경우 if 연산 없이 바로 객체 값 반환
+    public static TMP_Text GetTMPText(this GameObject gameObject, ref TMP_Text text)
+    {
+        return text ?? (text = gameObject.GetComponent<TMP_Text>());
     }
 }

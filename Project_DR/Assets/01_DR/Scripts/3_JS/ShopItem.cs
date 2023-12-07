@@ -26,17 +26,6 @@ public class ShopItem : MonoBehaviour
 
     #endregion
     /*************************************************
-     *                 Unity Events
-     *************************************************/
-    #region [+]
-    private void Start()
-    {
-        // 자식 GameObject를 순회하면서 컴포넌트를 추가
-        //AddComponentsToChildren();
-    }
-
-    #endregion
-    /*************************************************
      *                 Public Methods
      *************************************************/
     #region [+]
@@ -95,8 +84,8 @@ public class ShopItem : MonoBehaviour
     // _id가 변경될 때 호출하는 콜백
     private void OnIDChangeCallback()
     {
-        // _shopItemText에 변경된 ID 할당
-        _shopItemText.SetID(_id);
+        // _shopItemText Init
+        _shopItemText.Initialize(_id);
 
         // _shopItemText 텍스트 갱신
         _shopItemText.GetDataAndSetText();

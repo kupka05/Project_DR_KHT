@@ -45,6 +45,9 @@ public class PlayerOption : MonoBehaviour
         volume.profile.TryGet<ColorAdjustments>(out brightness);
         if (brightness == null)
             Debug.LogError("볼륨을 찾을 수 없음");
+
+        // 세팅 값 가져오기
+        GetSettingValue();
     }
 
     public void Update()
@@ -108,6 +111,7 @@ public class PlayerOption : MonoBehaviour
     public void BrightnessSlider(float value)
     {
         brightness.postExposure.value= value;
+        UserDataManager.Instance.brightness = value; // 유저 데이터에 저장
     }
 
     // 마스터 조절 버튼
@@ -130,24 +134,40 @@ public class PlayerOption : MonoBehaviour
         float newValue = ValueCheck(soundEffectSlider.value, value);
         soundEffectSlider.value = newValue;
         SetSoundEffectSlider(newValue);
+
     }
 
     // 마스터 사운드 조정
     public void SetMasterSlider(float value)
     {
         //ToDo: 마스터 사운드 연동 필요
+        UserDataManager.Instance.masterSound = value; // 유저 데이터에 저장
     }
     // 배경음 조정
     public void SetBackGroundSlider(float value)
     {
         AudioManager.Instance.MusicVolume(value);
+        UserDataManager.Instance.backgroundSound = value; // 유저 데이터에 저장
     }
 
     // 효과음 조정 
     public void SetSoundEffectSlider(float value)
     {
         AudioManager.Instance.SFXVolume(value);
+        UserDataManager.Instance.sfx = value; // 유저 데이터에 저장
+    }
 
+    public void GetSettingValue()
+    {
+        if(!UserDataManager.Instance)
+        {
+            Debug.LogError("User Data Manager를 찾지 못했습니다.");
+            return;
+        }
+
+        SetMasterButton(UserDataManager.Instance.masterSound);
+        SetBackgroundButton(UserDataManager.Instance.backgroundSound);
+        SetSoundEffectButton(UserDataManager.Instance.sfx);
     }
 
     // 값 체크

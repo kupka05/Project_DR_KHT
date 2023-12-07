@@ -49,7 +49,6 @@ public class DataManager : MonoBehaviour
         }
     }
 
-
     [Header("Choi")]
     // 데이터를 보관하는 변수
     private Dictionary<int, Dictionary<string, List<string>>>

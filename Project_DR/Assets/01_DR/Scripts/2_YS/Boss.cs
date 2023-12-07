@@ -56,8 +56,10 @@ public class Boss : MonoBehaviour
     public float patternInterval = 2.0f;
 
     [Header("포물선 터지는 오브젝트")]
-    public GameObject testPrefab;
-    public Transform testPosition;
+    public GameObject explosionPrefab;
+    public Transform explosionPort;
+    public Transform explosionPortLeft;
+    public Transform explosionPortRight;
 
     [Header("포물선 안 터지는 오브젝트")]
     public Transform bigBrickPort;
@@ -301,6 +303,7 @@ public class Boss : MonoBehaviour
 
                     yield return new WaitForSeconds(0.4f);
                     
+                    Destroy(instantBullet, 6.0f);
 
                 }
 
@@ -399,23 +402,61 @@ public class Boss : MonoBehaviour
         // 오른쪽 위치에 대해 오브젝트를 생성하고 힘을 적용
         GameObject instantBrickRight = Instantiate(bigBrick, bigBrickPortRight.position, Quaternion.identity);
         instantBrickRight.GetComponent<Rigidbody>().AddForce(BigBrick(bigBrickPortRight.position), ForceMode.Impulse);
+
+        Destroy(instantBrick, 6.0f);
+        Destroy(instantBrickLeft, 6.0f);
+        Destroy(instantBrickRight, 6.0f);
     }
 
 
 
-    public Vector3 CalculateForce()
+    //public Vector3 CalculateForce()
+    //{
+    //    Vector3 targetPos = target.transform.position;
+    //    targetPos.y += 45f;
+    //    testPosition.LookAt(targetPos);  
+
+    //    return testPosition.forward * power;
+    //}
+
+    public Vector3 ExplosionBox(Vector3 portPosition)
     {
-        Vector3 targetPos = target.transform.position;
-        targetPos.y += 45f;
-        testPosition.LookAt(targetPos);  
+        // 해당 위치에 따라 초기 속도 설정
+        Vector3 initialVelocity = transform.forward * 10.0f;
 
-        return testPosition.forward * power;
+        Vector3 target = transform.forward * 5.0f;
+
+        // 각 포트 위치에 따라 Y축 오프셋 값 조절
+        if (portPosition == explosionPort.position)
+        {
+            target.y += 10.0f;
+        }
+        else if (portPosition == explosionPortLeft.position)
+        {
+            target.y += 8.0f;
+        }
+        else if (portPosition == explosionPortRight.position)
+        {
+            target.y += 5.0f;
+        }
+
+        // 초기 속도와 목표 위치를 결합
+        Vector3 combinedVector = initialVelocity + target;
+
+        return combinedVector;
     }
+
 
     void ExplosionShoot()
     {
-        GameObject test = Instantiate(testPrefab, testPosition.position, Quaternion.identity);
-        test.GetComponent<Rigidbody>().AddForce(CalculateForce(), ForceMode.Impulse);
+        GameObject instantExplosion = Instantiate(explosionPrefab, explosionPort.position, Quaternion.identity);
+        instantExplosion.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPort.position), ForceMode.Impulse);
+
+        GameObject instantExplosionLeft = Instantiate(explosionPrefab, explosionPortLeft.position, Quaternion.identity);
+        instantExplosionLeft.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortLeft.position), ForceMode.Impulse);
+
+        GameObject instantExplosionRight = Instantiate(explosionPrefab, explosionPortRight.position, Quaternion.identity);
+        instantExplosionRight.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortRight.position), ForceMode.Impulse);
     }
 
     void BounceShoot()
@@ -425,6 +466,10 @@ public class Boss : MonoBehaviour
         GameObject bounceLeft = Instantiate(bounce, bouncePortLeft.position, bouncePortLeft.rotation);
 
         GameObject bounceRight = Instantiate(bounce, bouncePortRight.position, bouncePortRight.rotation);
+
+        Destroy(instantBounce, 8.0f);
+        Destroy(bounceLeft, 8.0f);
+        Destroy(bounceRight, 8.0f);
     }
 
     public void OnDeal()

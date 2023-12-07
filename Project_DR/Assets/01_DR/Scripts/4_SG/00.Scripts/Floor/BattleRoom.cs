@@ -7,7 +7,7 @@ using UnityEngine;
 public class BattleRoom : RandomRoom
 {       // BattleRoomClass는 Monster소환 Monster가 전부 죽었는지 체크할것
 
-    private List<GameObject> monsterList; // 소환한 몬스터를 관리해줄 List
+    public List<GameObject> monsterList; // 소환한 몬스터를 관리해줄 List
     private List<Vector3> spawnPointList;      // 소환된 몬스터의 위치를 관리해줄 List
     private GameObject spawnMonster;     // 몬스터 스폰시 사용될 GameObject
     private GameObject monstersParent;          // 하이얼하키창에서 몬스터를 담아줄 parentObj
@@ -180,8 +180,29 @@ public class BattleRoom : RandomRoom
         }
         GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
         //Debug.Log($"GameObject : {prefabObj} , SB : {stringBuilder}");
-        spawnMonster = Instantiate(prefabObj, _spawnPoint, Quaternion.identity, monstersParent.transform);        
+        spawnMonster = Instantiate(prefabObj, _spawnPoint, Quaternion.identity, monstersParent.transform);
+
+
+        SpawnMonsterSetting(spawnMonster);
+        
+
     }       // SponMonster()
+
+
+    /// <summary>
+    /// 스폰한 몬스터에 자신의 스크립트를 참조하게 하고 List에 자신을 넣게 해주는 함수
+    /// </summary>
+    /// <param name="spawnMonster"></param>
+    private void SpawnMonsterSetting(GameObject spawnMonster)
+    {
+        spawnMonster.AddComponent<MonsterDeadCheck>();
+        MonsterDeadCheck monsterDeadCheck = spawnMonster.GetComponent<MonsterDeadCheck>();
+
+        monsterDeadCheck.BattleRoomInIt(this);
+        monsterDeadCheck.AddList();
+        // ! 몬스터가 OnDestroy될떄에 List에서 자기자신을 삭제할거임
+
+    }       // SpawnMonsterSetting()
 
     /// <summary>
     /// Start함수에서 딜레이 준뒤에 몬스터 셋팅 시작하도록할 코루틴
@@ -215,18 +236,26 @@ public class BattleRoom : RandomRoom
         recallCount = 0;
         maxRecallCount = 5;
 
+    }       // FirstSetting()
 
 
-    }
+    /// <summary>
+    /// 해당 방이 클리어 됬는지 체크할 함수(List<GameObject> 의 count == 0일때 클리어)
+    /// </summary>
+    public void CheckClearRoom()
+    {
+        if(monsterList.Count == 0)
+        {
+            ClearRoomBoolSetTrue();
+        }
+
+    }       // CheckClearRoom()
 
     protected override void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);
     }
 
-    private void GetMonsterData()
-    {
-        //sponMonster = Resources.Load<GameObject>($"Resources/Prefabs/Monster/{stringBuilder.ToString()}");
-    }
+
 
 }       // ClassEnd

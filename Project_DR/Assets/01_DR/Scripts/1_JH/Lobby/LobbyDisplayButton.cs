@@ -56,11 +56,13 @@ public class LobbyDisplayButton : MonoBehaviour
     }
     public void OnDisable()
     {
-        foreach (var item in items)
+        if (items != null)
         {
-            Destroy(item.gameObject);
+            foreach (var item in items)
+            {
+                Destroy(item.gameObject);
+            }
         }
-
     }
 
     // 플레이어 스탯 업그레이드 버튼

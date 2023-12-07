@@ -91,8 +91,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        // DB 테스트를 위해 DontDestroy로 할당
-        DontDestroyOnLoad(gameObject);
+        // 싱글톤 인스턴스 초기화
+        if (m_instance == null)
+        {
+            m_instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
         AwakeInIt();
     }

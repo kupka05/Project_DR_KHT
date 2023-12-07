@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelWasLoaded()
     {
-        Debug.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
+       // Debug.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
         // 데이터 가져오기
         GetData();
 

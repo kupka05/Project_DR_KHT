@@ -6,6 +6,7 @@ using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.GraphicsBuffer;
 
 public class Boss : MonoBehaviour
 {
@@ -64,9 +65,13 @@ public class Boss : MonoBehaviour
 
     void Update()
     {
-        transform.LookAt(target.position);
+        if (target)
+        {
+            transform.LookAt(target.position);
+        }
         
     }
+
     void Awake()
     {
         GetData(bossId);

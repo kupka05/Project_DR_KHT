@@ -1,19 +1,24 @@
 using BNG;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Boss : MonoBehaviour
 {
-  
+    //public static Action boss;
+
+    public UnityEvent unityEvent;
+
     public Rigidbody rigid;
     public Damageable damageable;
     GameObject instantLazer;
     public int bossId;
 
-    public float power = 15.0f;
+    public float power = 5.0f;
 
     [Header("레이저 관련")]
     public Transform lazerPort;
@@ -42,6 +47,7 @@ public class Boss : MonoBehaviour
     public bool isDie = false;
     public bool isPatternExecuting = false;
     public bool isShoot = false;
+    public bool isPushPlayer = false;
 
     [Header("패턴 간격")]
     public float patternInterval = 2.0f;
@@ -68,7 +74,7 @@ public class Boss : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         damageable.Health = maxHp;
-        hp = maxHp;
+        
         StartCoroutine(ExecutePattern());
     }
 
@@ -76,13 +82,13 @@ public class Boss : MonoBehaviour
     void Start()
     {
 
-        rigid = GetComponent<Rigidbody>();
-        target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
+        //rigid = GetComponent<Rigidbody>();
+        //target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
 
-        damageable.Health = maxHp;
-        hp = maxHp;
+        //damageable.Health = maxHp;
+        //hp = maxHp;
 
-        StartCoroutine(ExecutePattern());
+        //StartCoroutine(ExecutePattern());
     }
 
     public void GetData(int id)
@@ -93,7 +99,20 @@ public class Boss : MonoBehaviour
 
     void PushPlayerBackward()
     {
+        isPushPlayer = true;
         target.gameObject.GetComponent<Damageable>().OnKnockBack(target.transform.forward * 0.3f);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.CompareTag("Player") && !isPushPlayer)
+        {
+            if(!isPushPlayer)
+            {
+                PushPlayerBackward();
+            }
+
+        }
     }
 
     IEnumerator ExecutePattern()
@@ -108,7 +127,7 @@ public class Boss : MonoBehaviour
             //float healthRatio = hp / maxHp;
 
             //체력에 따라 랜덤으로 패턴 선택
-            if (hp <= maxHp * 1.0f && hp > maxHp * 0.75f)
+            if (damageable.Health <= maxHp * 1.0f && damageable.Health > maxHp * 0.75f)
             {
                 Debug.Log("작동");
                 RandomPattern();
@@ -116,27 +135,28 @@ public class Boss : MonoBehaviour
                 yield return new WaitForSeconds(patternInterval);
 
             }
-            else if (hp <= maxHp * 0.75f && hp > maxHp * 0.5f)
+            else if (damageable.Health <= maxHp * 0.75f && damageable.Health > maxHp * 0.5f)
             {
                 Debug.Log("작동2");
-                PushPlayerBackward();
+                
                 Debug.Log("push");
+                isPushPlayer = true;
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
 
             }
-            else if (hp <= maxHp * 0.5f && hp > maxHp * 0.25f)
+            else if (damageable.Health <= maxHp * 0.5f && damageable.Health > maxHp * 0.25f)
             {
                 Debug.Log("작동3");
-                PushPlayerBackward();
+                isPushPlayer = true;
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
 
             }
-            else if (hp < maxHp * 0.25f)
+            else if (damageable.Health < maxHp * 0.25f)
             {
                 Debug.Log("작동4");
-                PushPlayerBackward();
+                isPushPlayer = true;
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
             }
@@ -150,12 +170,12 @@ public class Boss : MonoBehaviour
 
     void RandomPattern()
     {
-        int random = Random.Range(0, 4);
+        int pattern = UnityEngine.Random.Range(0, 4);
 
-        switch (random)
+        switch (pattern)
         {
             case 0:
-                StartCoroutine(PlayShoot());
+                BigBrickShoot();
                 break;
             case 1:
                
@@ -235,31 +255,82 @@ public class Boss : MonoBehaviour
         Destroy(instantLazer);
     }
 
-    public Vector3 BigBrick()
+    //public Vector3 BigBrick()
+    //{
+    //    // 초기 속도 및 방향 설정
+    //    Vector3 initialVelocity = transform.forward * 10.0f;
+
+    //    Vector3 target = transform.forward * 5.0f;
+    //    target.y += 10.0f;
+
+    //    //Vector3 combinedVector = bigBrickPort.forward * power +
+    //    //                         bigBrickPortRight.forward * power +
+    //    //                         bigBrickPortLeft.forward * power;
+
+    //    //return combinedVector;
+    //    Vector3 combinedVector = initialVelocity + target;
+
+    //    return combinedVector;
+    //}
+
+    //void BigBrickShoot()
+    //{
+
+    //    GameObject instantBrick = Instantiate(bigBrick, bigBrickPort.position, Quaternion.identity);
+    //    instantBrick.GetComponent<Rigidbody>().AddForce(BigBrick(), ForceMode.Impulse);
+
+    //    GameObject instantBrickLeft = Instantiate(bigBrick, bigBrickPortLeft.position, Quaternion.identity);
+    //    instantBrickLeft.GetComponent<Rigidbody>().AddForce(BigBrick(), ForceMode.Impulse);
+
+    //    GameObject instantBrickRight = Instantiate(bigBrick, bigBrickPortRight.position, Quaternion.identity);
+    //    instantBrickRight.GetComponent<Rigidbody>().AddForce(BigBrick(), ForceMode.Impulse);
+
+    //    //Destroy(bigBrick, 4.0f);
+    //}
+
+    public Vector3 BigBrick(Vector3 portPosition)
     {
-        Vector3 forwardPos = transform.forward;
-        forwardPos.y += 45f;
+        // 해당 위치에 따라 초기 속도 설정
+        Vector3 initialVelocity = transform.forward * 10.0f;
 
-        Vector3 combinedVector = bigBrickPort.forward * power +
-                              bigBrickPortRight.forward * power * 2.0f +
-                              bigBrickPortLeft.forward * power * 5.0f;
+        Vector3 target = transform.forward * 5.0f;
 
+        // 각 포트 위치에 따라 Y축 오프셋 값 조절
+        if (portPosition == bigBrickPort.position)
+        {
+            target.y += 10.0f;
+        }
+        else if (portPosition == bigBrickPortLeft.position)
+        {
+            target.y += 15.0f;
+        }
+        else if (portPosition == bigBrickPortRight.position)
+        {
+            target.y += 5.0f;
+        }
+
+        // 초기 속도와 목표 위치를 결합
+        Vector3 combinedVector = initialVelocity + target;
 
         return combinedVector;
     }
 
     void BigBrickShoot()
     {
-
+        // 가운데 위치에 대해 오브젝트를 생성하고 힘을 적용
         GameObject instantBrick = Instantiate(bigBrick, bigBrickPort.position, Quaternion.identity);
-        instantBrick.GetComponent<Rigidbody>().AddForce(BigBrick(), ForceMode.Impulse);
+        instantBrick.GetComponent<Rigidbody>().AddForce(BigBrick(bigBrickPort.position), ForceMode.Impulse);
 
+        // 왼쪽 위치에 대해 오브젝트를 생성하고 힘을 적용
         GameObject instantBrickLeft = Instantiate(bigBrick, bigBrickPortLeft.position, Quaternion.identity);
-        instantBrickLeft.GetComponent<Rigidbody>().AddForce(BigBrick(), ForceMode.Impulse);
+        instantBrickLeft.GetComponent<Rigidbody>().AddForce(BigBrick(bigBrickPortLeft.position), ForceMode.Impulse);
 
+        // 오른쪽 위치에 대해 오브젝트를 생성하고 힘을 적용
         GameObject instantBrickRight = Instantiate(bigBrick, bigBrickPortRight.position, Quaternion.identity);
-        instantBrickRight.GetComponent<Rigidbody>().AddForce(BigBrick(), ForceMode.Impulse);
+        instantBrickRight.GetComponent<Rigidbody>().AddForce(BigBrick(bigBrickPortRight.position), ForceMode.Impulse);
     }
+
+
 
     public Vector3 CalculateForce()
     {
@@ -287,18 +358,27 @@ public class Boss : MonoBehaviour
 
     public void OnDeal()
     {
-        if (hp >= 0)
+        if(!isDie)
         {
-            Debug.Log($"Current HP: {hp}");
-        }
+            if (damageable.Health >= 0)
+            {
+                Debug.Log($"Current HP: {damageable.Health}");
+            }
 
-        if (hp <= 0)
-        {
-            isDie = true;
-            Debug.Log($"isDie:{isDie}");
-            StopAllCoroutines();
+            if (damageable.Health <= 0)
+            {
+                isDie = true;
+                Debug.Log($"isDie:{isDie}");
+                // 이벤트 호출
+                unityEvent?.Invoke();
+
+                StopAllCoroutines();
+            }
         }
+      
     }
+
+   
 
     void OnTriggerEnter(Collider other)
     {

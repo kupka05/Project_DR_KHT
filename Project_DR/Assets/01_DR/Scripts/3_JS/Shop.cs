@@ -5,9 +5,18 @@ using UnityEngine;
 public class Shop : MonoBehaviour
 {
     /*************************************************
+     *                 Public Fields
+     *************************************************/
+    #region [+]
+    public ShopItemPurchaseHandler ShopItemPurchaseHandler => _shopItemPurchaseHandler;
+
+    #endregion
+    /*************************************************
      *                 Private Fields
      *************************************************/
     #region [+]
+    [SerializeField] private ShopItemPurchaseHandler _shopItemPurchaseHandler
+        = new ShopItemPurchaseHandler();
     [SerializeField] private ShopPlayerGoldTextController _playerGoldText = default;
     [SerializeField] private List<ShopItemReference> _shopItems = default;
 
@@ -41,8 +50,6 @@ public class Shop : MonoBehaviour
 
         // _shopItems에 ID를 Init
         InitializeShopItemIDs();
-
-       //StartCoroutine(하이승규());
     }   
 
     #endregion
@@ -91,15 +98,4 @@ public class Shop : MonoBehaviour
     }
 
     #endregion
-
-    // test
-    private IEnumerator 하이승규()
-    {
-        yield return new WaitForSeconds(1f);
-
-        UserDataManager.Instance.AddGold(1);
-        Debug.Log(UserDataManager.Instance.Gold);
-
-        StartCoroutine(하이승규());
-    }
 }

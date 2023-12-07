@@ -28,7 +28,6 @@ public class VibrateManager : MonoBehaviour
             Debug.LogError("인풋을 찾을 수 없음");
         }
     }
-    // 커스텀 진동
     public void Vibrate(float frequency, float amplitude, float duration, ControllerHand hand)
     {
         input.VibrateController(frequency, amplitude, duration, hand);
@@ -37,6 +36,7 @@ public class VibrateManager : MonoBehaviour
     // 기본값 진동
     public void Vibrate(ControllerHand hand)
     {
+        Debug.Log("Vibrate");
         float frequency = 0.2f;
         float amplitude = 0.1f;
         float duration = 0.2f;

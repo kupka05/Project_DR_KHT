@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public class ClearDatas
@@ -25,21 +26,25 @@ public class UserDataManager : MonoBehaviour
 {
     // DB에서 가져온 유저의 데이터를 관리하는 클래스
     #region 싱글톤 패턴
+
+
+    private static UserDataManager m_Instance = null; // 싱글톤이 할당될 static 변수    
+
     public static UserDataManager Instance
     {
         get
         {
-            // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
             if (m_Instance == null)
-            {
-                // 씬에서 GameManager 오브젝트를 찾아 할당
                 m_Instance = FindObjectOfType<UserDataManager>();
+            if(m_Instance == null)
+            {
+                GameObject obj = new GameObject("UserDataManager");
+                m_Instance = obj.AddComponent<UserDataManager>();
+                DontDestroyOnLoad(obj);
             }
-            // 싱글톤 오브젝트를 반환
             return m_Instance;
         }
     }
-    private static UserDataManager m_Instance; // 싱글톤이 할당될 static 변수    
     #endregion
 
     // 옵저버 패턴
@@ -129,7 +134,13 @@ public class UserDataManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        if(m_Instance == null)
+        {
+            m_Instance = this;
+            DontDestroyOnLoad(this.gameObject);            
+        }
+        else
+        { Destroy(gameObject); }
         
         // 디버그 캐릭터면 시트에서 데이터 가져오기
         if(PlayerID == "")

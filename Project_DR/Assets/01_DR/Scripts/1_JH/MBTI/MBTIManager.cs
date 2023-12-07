@@ -62,6 +62,7 @@ public class MBTIManager : MonoBehaviour
 
     public void Debug()
     {
+
         I = playerMBTI.I;
         N = playerMBTI.N;
         F = playerMBTI.F;

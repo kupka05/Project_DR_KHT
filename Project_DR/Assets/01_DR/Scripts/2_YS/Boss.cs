@@ -6,12 +6,15 @@ using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
     //public static Action boss;
 
     public UnityEvent unityEvent;
+
+    public UnityEngine.UI.Slider bossHPSlider;
 
     public Rigidbody rigid;
     public Damageable damageable;
@@ -62,6 +65,12 @@ public class Boss : MonoBehaviour
     public Transform bigBrickPortRight;
     public GameObject bigBrick;
 
+    void Update()
+    {
+        
+
+        
+    }
     void Awake()
     {
         GetData(bossId);
@@ -74,10 +83,25 @@ public class Boss : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         damageable.Health = maxHp;
-        
+
+        SetMaxHealth(maxHp);
+
         StartCoroutine(ExecutePattern());
+
+        //transform.LookAt(target.position);
     }
 
+    void FixedUpdate()
+    {
+       
+            // Look At Y 각도로만 기울어지게 하기
+            Vector3 targetPostition =
+                new Vector3(target.position.x, this.transform.position.y, target.position.z);
+            this.transform.LookAt(targetPostition);
+            //transform.LookAt(playerTr.position);
+        
+
+    }
 
     void Start()
     {
@@ -97,23 +121,59 @@ public class Boss : MonoBehaviour
 
     }
 
-    void PushPlayerBackward()
+    public void SetMaxHealth(float newHealth)
     {
-        isPushPlayer = true;
-        target.gameObject.GetComponent<Damageable>().OnKnockBack(target.transform.forward * 0.3f);
+        bossHPSlider.maxValue = newHealth;
+        bossHPSlider.value = newHealth;
+    }
+    public void SetHealth(float newHealth)
+    {
+        bossHPSlider.value = newHealth;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.collider.CompareTag("Player") && !isPushPlayer)
-        {
-            if(!isPushPlayer)
-            {
-                PushPlayerBackward();
-            }
+    //void PushPlayerBackward()
+    //{
+    //    if (!isPushPlayer)
+    //    {
+    //        isPushPlayer = true;
+    //        Debug.Log($"ispushPlayer:{isPushPlayer}");  
+    //        target.gameObject.GetComponent<Damageable>().OnKnockBack(target.transform.forward * 2.0f);
+    //        Debug.Log("밀림 작동");
+    //        // 여기서 isPushPlayer를 false로 설정하여 패턴이 다시 실행되도록 합니다.
+    //        StartCoroutine(ResetPushPlayer());
+    //    }
+    //}
 
+    //IEnumerator ResetPushPlayer()
+    //{
+    //    // 어떤 조건이든 충족되면 기다린 후 isPushPlayer를 false로 설정합니다.
+    //    yield return new WaitForSeconds(0.1f); // 예시로 1초 대기
+    //    isPushPlayer = false;
+    //}
+
+
+    IEnumerator PushPlayerBack()
+    {
+        if (!isPushPlayer)
+        {
+            isPushPlayer = true;
+            Debug.Log($"pushPlayer:{isPushPlayer}");
+            target.gameObject.GetComponent<Damageable>().OnKnockBack(target.transform.forward * 5.0f);
+            Debug.Log("넉백");
+
+            yield return new WaitForSeconds(0.1f);
+            isPushPlayer = false;
         }
     }
+
+    //private void OnCollisionEnter(Collision other)
+    //{
+    //    if(other.collider.tag.Equals("Weapon"))
+    //    {
+    //        Debug.Log("콜리전 작동");
+
+    //    }
+    //}
 
     IEnumerator ExecutePattern()
     {
@@ -133,36 +193,47 @@ public class Boss : MonoBehaviour
                 RandomPattern();
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
+                isPatternExecuting = false;
 
             }
             else if (damageable.Health <= maxHp * 0.75f && damageable.Health > maxHp * 0.5f)
             {
                 Debug.Log("작동2");
-                
-                Debug.Log("push");
+
+                if (!isPushPlayer)
+                {
+                    isPushPlayer = true;
+                    Debug.Log($"push:{isPushPlayer}");
+                    StartCoroutine(PushPlayerBack());
+                }
                 isPushPlayer = true;
+                Debug.Log($"push:{isPushPlayer}");
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
-
+                isPatternExecuting = false;
             }
             else if (damageable.Health <= maxHp * 0.5f && damageable.Health > maxHp * 0.25f)
             {
                 Debug.Log("작동3");
                 isPushPlayer = true;
+                Debug.Log($"push:{isPushPlayer}");
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
+                isPatternExecuting = false;
 
             }
             else if (damageable.Health < maxHp * 0.25f)
             {
                 Debug.Log("작동4");
                 isPushPlayer = true;
+                Debug.Log($"push:{isPushPlayer}");
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
+                isPatternExecuting = false;
             }
           
 
-            isPatternExecuting = false;
+            
         }
 
 
@@ -178,13 +249,13 @@ public class Boss : MonoBehaviour
                 BigBrickShoot();
                 break;
             case 1:
-               
+                PlayShoot();
                 break;
             case 2:
-                
+                BounceShoot();
                 break;
             case 3:
-               
+               ExplosionShoot();
                 break;
         }
     }
@@ -302,7 +373,7 @@ public class Boss : MonoBehaviour
         }
         else if (portPosition == bigBrickPortLeft.position)
         {
-            target.y += 15.0f;
+            target.y += 8.0f;
         }
         else if (portPosition == bigBrickPortRight.position)
         {
@@ -362,11 +433,13 @@ public class Boss : MonoBehaviour
         {
             if (damageable.Health >= 0)
             {
+                SetHealth(damageable.Health);
                 Debug.Log($"Current HP: {damageable.Health}");
             }
 
             if (damageable.Health <= 0)
             {
+                SetHealth(0);
                 isDie = true;
                 Debug.Log($"isDie:{isDie}");
                 // 이벤트 호출

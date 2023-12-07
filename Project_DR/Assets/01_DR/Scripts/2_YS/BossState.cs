@@ -25,7 +25,7 @@ public class BossState : MonoBehaviour
         switch (index)
         {
             case 0:
-                Destroy(this.gameObject);
+                Destroy(this.gameObject,1f);
                 break;
         }
 

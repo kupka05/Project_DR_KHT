@@ -62,12 +62,15 @@ public class MBTIManager : MonoBehaviour
 
     public void Debug()
     {
-        I = playerMBTI.I;
-        N = playerMBTI.N;
-        F = playerMBTI.F;
-        P = playerMBTI.P;
+        if (debugTxt)
+        {
+            I = playerMBTI.I;
+            N = playerMBTI.N;
+            F = playerMBTI.F;
+            P = playerMBTI.P;
 
-        debugTxt.text = string.Format("I : " + I + ", N : " + N + ", F : " + F + ", P : " + P);
+            debugTxt.text = string.Format("I : " + I + ", N : " + N + ", F : " + F + ", P : " + P);
+        }
     }
 
     public void GetData()

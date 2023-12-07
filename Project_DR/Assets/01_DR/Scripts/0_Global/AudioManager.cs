@@ -28,7 +28,10 @@ public class AudioManager : MonoBehaviour
     public Sound backGroundMusic;
     public Sound[] musicSounds, sfxSounds;
     public AudioSource musicSource, sfxSource;
-
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
     private void Start()
     {
         if (backGroundMusic != null)

@@ -33,8 +33,9 @@ public class GameManager : MonoBehaviour
             // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
             if (m_instance == null)
             {
-                // 씬에서 GameManager 오브젝트를 찾아 할당
-                m_instance = FindObjectOfType<GameManager>();
+                // 생성 후 할당
+                GameObject obj = new GameObject("GameManager");
+                m_instance = obj.AddComponent<GameManager>();
             }
 
             // 싱글톤 오브젝트를 반환
@@ -90,8 +91,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        // DB 테스트를 위해 DontDestroy로 할당
-        DontDestroyOnLoad(gameObject);
+        // 싱글톤 인스턴스 초기화
+        if (m_instance == null)
+        {
+            m_instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
         AwakeInIt();
     }
@@ -112,9 +121,28 @@ public class GameManager : MonoBehaviour
             Debug.Log("플레이어를 찾지 못했습니다.");
         }
 
-        
 
-    }       // Start()
+
+    }       // Start()    
+
+    private void OnLevelWasLoaded()
+    {
+        Debug.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
+        // 데이터 가져오기
+        GetData();
+
+        // 플레이어 찾아오기
+        player = GameObject.FindGameObjectWithTag("Player");
+        if (player)
+        {
+            input = player.transform.parent.GetComponent<InputBridge>();
+        }
+        else
+        {
+            Debug.Log("플레이어를 찾지 못했습니다.");
+        }
+
+    }
 
 
     /// <summary>

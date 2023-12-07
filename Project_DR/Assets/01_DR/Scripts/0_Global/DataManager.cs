@@ -42,17 +42,12 @@ public class DataManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<DataManager>();
-                if (_instance == null)
-                {
-                    GameObject obj = new GameObject("DataManager");
-                    _instance = obj.AddComponent<DataManager>();
-                }
+                GameObject obj = new GameObject("DataManager");
+                _instance = obj.AddComponent<DataManager>();
             }
             return _instance;
         }
     }
-
 
     [Header("Choi")]
     // 데이터를 보관하는 변수
@@ -114,8 +109,16 @@ public class DataManager : MonoBehaviour
      *************************************************/
     private void Awake()
     {
-        // 파괴 방지
-        DontDestroyOnLoad(this);
+        // 싱글톤 인스턴스 초기화
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
         // 로컬용 CSV 파일을 테이블에 Init
         InitLocalDataTable();

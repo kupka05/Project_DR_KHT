@@ -52,14 +52,6 @@ public class ItemManager : MonoBehaviour
         ItemDataManager.InitItemDB();
     }
 
-    private void Start()
-    {
-        // 1초 후에 테스트용 포션 생성
-        Action func = () => CreateItem(5001);
-        NewInvoke(func, 1f);
-        
-    }
-
     #endregion
     /*************************************************
     *                 Public Methods

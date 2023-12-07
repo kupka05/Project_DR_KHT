@@ -117,6 +117,7 @@ public class UserDataManager : MonoBehaviour
     public ClearDatas clearDatas;  // 클리어 데이터 모음
     #endregion
 
+    // 로드되면 이벤트 호출
     public UnityEvent LoadDataEvent;
 
     private void Awake()
@@ -217,7 +218,7 @@ public class UserDataManager : MonoBehaviour
 
         PlayerDataManager.Save("hp", HP);
         PlayerDataManager.Save("gold", 5000);
-        PlayerDataManager.Save("_exp", 5000);
+        PlayerDataManager.Save("exp", 5000);
         PlayerDataManager.Save("weapon_atk", WeaponAtk);
         PlayerDataManager.Save("weapon_cri_rate", WeaponCriRate);
         PlayerDataManager.Save("weapon_cri_damage", WeaponCriDamage);

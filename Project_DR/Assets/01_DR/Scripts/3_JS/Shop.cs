@@ -30,6 +30,9 @@ public class Shop : MonoBehaviour
     #region [+]
     void Start()
     {
+        // 옵저버 등록
+        UserDataManager.Instance.OnUserDataUpdate += UpdatePlayerGoldText;
+
         // _shopItems에 컴포넌트를 연결
         ConnectItemsToComponent();
 
@@ -38,7 +41,9 @@ public class Shop : MonoBehaviour
 
         // _shopItems에 ID를 Init
         InitializeShopItemIDs();
-    }
+
+       //StartCoroutine(하이승규());
+    }   
 
     #endregion
     /*************************************************
@@ -48,6 +53,7 @@ public class Shop : MonoBehaviour
     // 플레이어 골드 안내 텍스트 갱신
     public void UpdatePlayerGoldText()
     {
+        Debug.Log("UpdatePlayerGoldText()");
         _playerGoldText.GetDataAndSetText();
     }
 
@@ -85,4 +91,15 @@ public class Shop : MonoBehaviour
     }
 
     #endregion
+
+    // test
+    private IEnumerator 하이승규()
+    {
+        yield return new WaitForSeconds(1f);
+
+        UserDataManager.Instance.AddGold(1);
+        Debug.Log(UserDataManager.Instance.Gold);
+
+        StartCoroutine(하이승규());
+    }
 }

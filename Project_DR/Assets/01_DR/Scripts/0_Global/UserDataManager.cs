@@ -224,4 +224,9 @@ public class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("weapon_cri_damage", WeaponCriDamage);
         PlayerDataManager.Save("weapon_atk_rate", WeaponAtkRate);
     }
+
+    public void AddGold(int num)
+    {
+        Gold += num;
+    }
 }

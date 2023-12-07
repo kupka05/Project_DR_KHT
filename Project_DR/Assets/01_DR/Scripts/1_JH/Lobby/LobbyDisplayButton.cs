@@ -58,8 +58,9 @@ public class LobbyDisplayButton : MonoBehaviour
     }
     public void OnDisable()
     {
-        if(items!= null)
-        { 
+        if (items != null)
+        {
+
             foreach (var item in items)
             {
                 Destroy(item.gameObject);

@@ -1,3 +1,4 @@
+using BNG;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ public class ShopItem : MonoBehaviour
     public int ID => _id;
     public ShopItemText ShopItemText => _shopItemText;
     public Collider ShopItemCollider => _shopItemCollider;
+    public bool IsItem => _isItem;
+    public Shop Shop => _shop;
 
     #endregion
     /*************************************************
@@ -22,6 +25,8 @@ public class ShopItem : MonoBehaviour
     [SerializeField] private int _id = default;
     [SerializeField] private ShopItemText _shopItemText;
     [SerializeField] private Collider _shopItemCollider;
+    [SerializeField] private bool _isItem;
+    private const int ITEM_ID_MAX_RANGE = 5999;
     private Shop _shop;
 
     #endregion
@@ -71,6 +76,13 @@ public class ShopItem : MonoBehaviour
             {
                 // 가지고 있을 경우 할당
                 _shopItemCollider = collider;
+
+                // ShopItemColliderHandler 컴포넌트 추가
+                child.gameObject.AddComponent<ShopItemColliderHandler>();
+
+                // Grabbable 컴포넌트 추가 및 프리셋 설정
+                Grabbable grabbable = child.gameObject.AddComponent<Grabbable>();
+                grabbable.GrabbablePreset();
             }
         }
     }
@@ -84,6 +96,9 @@ public class ShopItem : MonoBehaviour
     // _id가 변경될 때 호출하는 콜백
     private void OnIDChangeCallback()
     {
+        // _isItem 확인
+        _isItem = CheckIsItem(_id);
+
         // _shopItemText Init
         _shopItemText.Initialize(_id);
 
@@ -91,5 +106,17 @@ public class ShopItem : MonoBehaviour
         _shopItemText.GetDataAndSetText();
     }
 
+    // 현재 ID에 해당하는 상점 아이템이
+    // 실제 아이템인지 확인
+    public bool CheckIsItem(int id)
+    {
+        id = (int)DataManager.instance.GetData(id, "KeyID", typeof(int));
+        if (id < ITEM_ID_MAX_RANGE)
+        {
+            return true;
+        }
+
+        return false;
+    }
     #endregion
 }

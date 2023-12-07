@@ -141,7 +141,7 @@ public class PlayerEvent : MonoBehaviour
                 if (shopItem.IsItem)
                 {
                     GameObject item = ItemManager.instance.CreateItem(grabber.transform.position,
-                        itemID);
+                        5001);
                     ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
                     itemColliderHandler.state = ItemColliderHandler.State.Stop;
 

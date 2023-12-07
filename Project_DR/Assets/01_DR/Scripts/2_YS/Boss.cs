@@ -93,7 +93,10 @@ public class Boss : MonoBehaviour
 
     void FixedUpdate()
     {
-       
+       if(!target)
+        {
+            return;
+        }
             // Look At Y 각도로만 기울어지게 하기
             Vector3 targetPostition =
                 new Vector3(target.position.x, this.transform.position.y, target.position.z);

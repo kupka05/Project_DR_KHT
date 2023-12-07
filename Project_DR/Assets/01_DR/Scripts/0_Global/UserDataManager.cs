@@ -64,7 +64,6 @@ public class UserDataManager : MonoBehaviour
     [Header("User Data")]
     public string PlayerID;
 
-    //[Header("PC Data")]
     public float HP  // 플레이어 체력
     {
         get  { return _HP; }
@@ -92,6 +91,7 @@ public class UserDataManager : MonoBehaviour
             OnUserDataUpdate?.Invoke();
         }
     }
+    [Header("PC Data")]
     public float ExpIncrease;         // 플레이어 경험치 증가량
     public float GoldIncrease;        // 플레이어 골드 증가량
 
@@ -115,6 +115,13 @@ public class UserDataManager : MonoBehaviour
     public int ClearCount;         // 클리어 횟수
     private string JsonData;       // Json을 담을 직렬화된 클리어 데이터
     public ClearDatas clearDatas;  // 클리어 데이터 모음
+
+    [Header("Setting")]
+    [Range(0, 100)]
+    public float masterSound, sfx, backgroundSound = 100;
+    [Range(0, 100)]
+    public float brightness = 50;
+
     #endregion
 
     // 로드되면 이벤트 호출

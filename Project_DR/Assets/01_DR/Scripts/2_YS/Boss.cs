@@ -16,6 +16,8 @@ public class Boss : MonoBehaviour
 
     public UnityEngine.UI.Slider bossHPSlider;
 
+    public GameObject boss;
+
     public Rigidbody rigid;
     public Damageable damageable;
     GameObject instantLazer;
@@ -76,17 +78,21 @@ public class Boss : MonoBehaviour
         GetData(bossId);
     }
 
+    void Start()
+    {
+        InitializeBoss();
+    }
     void InitializeBoss()
     {
         Debug.Log($"게임시작");
-        
+        boss =  GameObject.FindWithTag("Boss");
+
         rigid = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         damageable.Health = maxHp;
 
         SetMaxHealth(maxHp);
 
-        StartCoroutine(ExecutePattern());
 
         //transform.LookAt(target.position);
     }
@@ -106,17 +112,6 @@ public class Boss : MonoBehaviour
 
     }
 
-    void Start()
-    {
-
-        //rigid = GetComponent<Rigidbody>();
-        //target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
-
-        //damageable.Health = maxHp;
-        //hp = maxHp;
-
-        //StartCoroutine(ExecutePattern());
-    }
 
     public void GetData(int id)
     {
@@ -448,6 +443,10 @@ public class Boss : MonoBehaviour
                 // 이벤트 호출
                 unityEvent?.Invoke();
 
+                if (boss)
+                {
+                    boss.GetComponent<BossState>().Die();
+                }
                 StopAllCoroutines();
             }
         }
@@ -461,7 +460,7 @@ public class Boss : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("인식되냐");
-            InitializeBoss();
+            StartCoroutine(ExecutePattern());
         }
     }
 

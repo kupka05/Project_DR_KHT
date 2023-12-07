@@ -15,8 +15,8 @@ public class ItemBombHandler : MonoBehaviour
             collision.collider.GetComponent<ItemColliderHandler>();
         if (itemHandler != null)
         {
-            Debug.Log(itemHandler.state);
-            Debug.Log(collision.collider.tag);
+            //Debug.Log(itemHandler.state);
+            //Debug.Log(collision.collider.tag);
             if (collision.collider.CompareTag("Floor")
                 && itemHandler.state == ItemColliderHandler.State.Grabbed)
             {

@@ -1,3 +1,4 @@
+using BNG;
 using TMPro;
 using UnityEngine;
 
@@ -31,4 +32,16 @@ public static class Extensions
     {
         return text ?? (text = gameObject.GetComponent<TMP_Text>());
     }
+
+    // Grabbable 설정 프리셋
+    public static void GrabbablePreset(this Grabbable grabbable)
+    {
+        // 프리셋 (1)
+        grabbable.GrabButton = GrabButton.Grip;
+        grabbable.GrabPhysics = GrabPhysics.None;
+        grabbable.ParentHandModel = false;
+        grabbable.CanBeSnappedToSnapZone = false;
+        grabbable.handPoseType = HandPoseType.AnimatorID;
+    }
+
 }

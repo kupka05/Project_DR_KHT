@@ -7,14 +7,14 @@ public class Lazer : MonoBehaviour
 {
     public Damageable damageable;
 
-    public float damage = 0.0001f;
+    public float damage = 0.1f;
 
-    public Transform target;
+  
 
     // Start is called before the first frame update
     void Start()
     {
-        target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
+       
     }
 
     // Update is called once per frame

@@ -187,16 +187,16 @@ public class SkillManager : MonoBehaviour
 
     private void GetData()
     {
-        IDatabase data = new Database();
+        //IDatabase data = new Database();
 
-        TD_collDown = data.GetData(721100, "Value2", TD_collDown);
-        TD_drillSize = data.GetData(721101, "Value1", TD_drillSize);
-        GD_addTime = data.GetData(721114, "Value2", GD_addTime);
-        GD_maxTime =data.GetData(721114, "Value4", GD_maxTime);
+        //TD_collDown = data.GetData(721100, "Value2", TD_collDown);
+        //TD_drillSize = data.GetData(721101, "Value1", TD_drillSize);
+        //GD_addTime = data.GetData(721114, "Value2", GD_addTime);
+        //GD_maxTime =data.GetData(721114, "Value4", GD_maxTime);
 
-        //TD_collDown = (float)DataManager.instance.GetData(20001, "Value2", typeof(float));
-        //TD_drillSize = (float)DataManager.instance.GetData(20002, "Value1", typeof(float));
-        //GD_addTime = (float)DataManager.instance.GetData(20015, "Value2", typeof(float));
-        //GD_maxTime = (float)DataManager.instance.GetData(20015, "Value4", typeof(float));
+        TD_collDown = (float)DataManager.instance.GetData(721100, "Value2", typeof(float));
+        TD_drillSize = (float)DataManager.instance.GetData(721101, "Value1", typeof(float));
+        GD_addTime = (float)DataManager.instance.GetData(721114, "Value2", typeof(float));
+        GD_maxTime = (float)DataManager.instance.GetData(721114, "Value4", typeof(float));
     }
 }

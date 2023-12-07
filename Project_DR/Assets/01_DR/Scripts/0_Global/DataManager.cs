@@ -42,12 +42,8 @@ public class DataManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<DataManager>();
-                if (_instance == null)
-                {
-                    GameObject obj = new GameObject("DataManager");
-                    _instance = obj.AddComponent<DataManager>();
-                }
+                GameObject obj = new GameObject("DataManager");
+                _instance = obj.AddComponent<DataManager>();
             }
             return _instance;
         }

@@ -33,8 +33,9 @@ public class GameManager : MonoBehaviour
             // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
             if (m_instance == null)
             {
-                // 씬에서 GameManager 오브젝트를 찾아 할당
-                m_instance = FindObjectOfType<GameManager>();
+                // 생성 후 할당
+                GameObject obj = new GameObject("GameManager");
+                m_instance = obj.AddComponent<GameManager>();
             }
 
             // 싱글톤 오브젝트를 반환

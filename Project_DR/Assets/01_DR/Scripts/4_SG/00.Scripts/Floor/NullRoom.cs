@@ -7,7 +7,7 @@ public class NullRoom : RandomRoom
 
     void Start()
     {
-        DungeonManager.clearList.Add(isClearRoom);
+        GameManager.isClearRoomList.Add(isClearRoom);
         GetFloorPos();      // 꼭지점 가져와주는 Class
     }       // Start()
 
@@ -16,9 +16,25 @@ public class NullRoom : RandomRoom
 
     private void OnDestroy()
     {
-        DungeonManager.clearList.Remove(isClearRoom);
+        GameManager.isClearRoomList.Remove(isClearRoom);
         StopAllCoroutines();        // 예의치 못한 코루틴 으로 인한 이슈 방지
     }       // OnDestroy()
 
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        base.OnCollisionEnter(collision);
+
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            StartCoroutine(NullRoomClear());
+        }
+    }
+
+    IEnumerator NullRoomClear()
+    {
+        yield return new WaitForSeconds(5f);
+        ClearRoomBoolSetTrue();
+
+    }
 
 }       // ClassEnd

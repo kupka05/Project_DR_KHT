@@ -7,15 +7,18 @@ using UnityEngine;
 public class BattleRoom : RandomRoom
 {       // BattleRoomClass는 Monster소환 Monster가 전부 죽었는지 체크할것
 
-    private List<GameObject> monsterList; // 소환한 몬스터를 관리해줄 List
+    public List<GameObject> monsterList; // 소환한 몬스터를 관리해줄 List
     private List<Vector3> spawnPointList;      // 소환된 몬스터의 위치를 관리해줄 List
     private GameObject spawnMonster;     // 몬스터 스폰시 사용될 GameObject
     private GameObject monstersParent;          // 하이얼하키창에서 몬스터를 담아줄 parentObj
     private StringBuilder stringBuilder;        // 변화하는 string사용을 최저한 StringBuilder
 
+    private int recallCount; // 재귀를 몇번했는지 체크할 함수
+    private int maxRecallCount; // 최대재귀횟수
+
     void Start()
     {
-        DungeonManager.clearList.Add(isClearRoom);
+        GameManager.isClearRoomList.Add(isClearRoom);
 
         StartCoroutine(StartMethodDelay());
 
@@ -23,7 +26,7 @@ public class BattleRoom : RandomRoom
 
     private void OnDestroy()
     {
-        DungeonManager.clearList.Remove(isClearRoom);
+        GameManager.isClearRoomList.Remove(isClearRoom);
         StopAllCoroutines();        // 예의치 못한 코루틴 으로 인한 이슈 방지
     }       // OnDestroy()
 
@@ -130,8 +133,9 @@ public class BattleRoom : RandomRoom
         float spawnPointZ = Random.Range(meshPos.bottomLeftCorner.z + 3f, meshPos.topLeftCorner.z - 3f);        
         Vector3 spawnPoint = new Vector3(spawnPointX,spawnPointY,spawnPointZ);
         bool isExamineSpawnPosition = ExamineSpawnPosition(spawnPoint);
-        if(isExamineSpawnPosition == true)
+        if (isExamineSpawnPosition == true && recallCount < maxRecallCount)
         {
+            recallCount++;
             SettingSpawnPoint();
         }
 
@@ -169,10 +173,36 @@ public class BattleRoom : RandomRoom
     /// <param name="_spawnPoint">스폰할 몬스터의 좌표</param>    
     private void SpawnMonster(Vector3 _spawnPoint)
     {
+        if (recallCount >= maxRecallCount)
+        {
+            recallCount = 0;
+            return;
+        }
         GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
         //Debug.Log($"GameObject : {prefabObj} , SB : {stringBuilder}");
-        spawnMonster = Instantiate(prefabObj, _spawnPoint, Quaternion.identity, monstersParent.transform);        
+        spawnMonster = Instantiate(prefabObj, _spawnPoint, Quaternion.identity, monstersParent.transform);
+
+
+        SpawnMonsterSetting(spawnMonster);
+        
+
     }       // SponMonster()
+
+
+    /// <summary>
+    /// 스폰한 몬스터에 자신의 스크립트를 참조하게 하고 List에 자신을 넣게 해주는 함수
+    /// </summary>
+    /// <param name="spawnMonster"></param>
+    private void SpawnMonsterSetting(GameObject spawnMonster)
+    {
+        spawnMonster.AddComponent<MonsterDeadCheck>();
+        MonsterDeadCheck monsterDeadCheck = spawnMonster.GetComponent<MonsterDeadCheck>();
+
+        monsterDeadCheck.BattleRoomInIt(this);
+        monsterDeadCheck.AddList();
+        // ! 몬스터가 OnDestroy될떄에 List에서 자기자신을 삭제할거임
+
+    }       // SpawnMonsterSetting()
 
     /// <summary>
     /// Start함수에서 딜레이 준뒤에 몬스터 셋팅 시작하도록할 코루틴
@@ -203,13 +233,29 @@ public class BattleRoom : RandomRoom
         spawnPointList = new List<Vector3>();
         monstersParent = new GameObject("Monsters");
         monstersParent.transform.parent = this.transform;
-        
+        recallCount = 0;
+        maxRecallCount = 5;
 
-    }
+    }       // FirstSetting()
 
-    private void GetMonsterData()
+
+    /// <summary>
+    /// 해당 방이 클리어 됬는지 체크할 함수(List<GameObject> 의 count == 0일때 클리어)
+    /// </summary>
+    public void CheckClearRoom()
     {
-        //sponMonster = Resources.Load<GameObject>($"Resources/Prefabs/Monster/{stringBuilder.ToString()}");
+        if(monsterList.Count == 0)
+        {
+            ClearRoomBoolSetTrue();
+        }
+
+    }       // CheckClearRoom()
+
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        base.OnCollisionEnter(collision);
     }
+
+
 
 }       // ClassEnd

@@ -8,6 +8,10 @@ public class CorridorDoorCreate : MonoBehaviour
 {
     public GameObject doorPrefab;
 
+    private void Awake()
+    {
+        doorPrefab = Resources.Load<GameObject>("TempDoor");
+    }
     void Start()
     {
         // TODO : prefab찾는 함수 제작해야함
@@ -21,13 +25,18 @@ public class CorridorDoorCreate : MonoBehaviour
     private void InstantiateDoor()
     {
         FloorMeshPos cornerPos = this.GetComponent<FloorMeshPos>();
-        // TODO : Vector3 Y포지션 수정 해야할수도 있음
-        Vector3 centerPos = new Vector3((cornerPos.bottomLeftCorner.x + cornerPos.bottomRightCorner.x) * 0.5f,5f,
+        // TODO : Vector3 Y포지션 수정 해야할수도 있음        
+        Vector3 centerPos = new Vector3((cornerPos.bottomLeftCorner.x + cornerPos.bottomRightCorner.x) * 0.5f,
+            doorPrefab.transform.localScale.y * 0.5f,
             (cornerPos.bottomLeftCorner.z + cornerPos.topLeftCorner.z) * 0.5f);
 
         GameObject doorClone = Instantiate(doorPrefab,centerPos,Quaternion.identity,this.transform);
-        
-        
+
+        doorClone.AddComponent<DoorOnOff>();
+
+        SetRotation(doorClone);
+
+
     }       // InstantiateDoor()
 
     // 문의 로테이션을 조건에 맞게 바꿔줄 함수
@@ -64,35 +73,39 @@ public class CorridorDoorCreate : MonoBehaviour
             }
         }
         
-        bool up = false;
-        bool down = false;
+        bool forward = false;
+        bool back = false;
         bool left = false;
         bool right = false;
 
         if (highDis == hitsDis[0])
         {
-            up = true;
+            forward = true;
+            //Debug.Log($"{this.gameObject.name} : 은 forward가 true");
         }
         else if (highDis == hitsDis[1])
         {
-            down = true;
+            back = true;
+            //Debug.Log($"{this.gameObject.name} : 은 back이 true");
         }
         else if (highDis == hitsDis[2])
         {
             left = true;
+            //Debug.Log($"{this.gameObject.name} : 은 Left가 true");
         }
         else if (highDis == hitsDis[3])
         {
             right = true;
+            //Debug.Log($"{this.gameObject.name} : 은 Right가 true");
         }
         else { Debug.Log("문이 쏜레이가 맞은 포인트가 맞지 않음"); }
 
 
-        if (up == true) 
+        if (forward == true) 
         {
             _doorClone.transform.rotation = Quaternion.Euler(0f, 0f, 0f);                
         }
-        else if (down == true)
+        else if (back == true)
         {
             _doorClone.transform.rotation = Quaternion.Euler(0f, -180f, 0f);
         }

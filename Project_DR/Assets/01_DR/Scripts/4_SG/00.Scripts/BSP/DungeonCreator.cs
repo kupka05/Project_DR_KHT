@@ -86,6 +86,9 @@ public class DungeonCreator : MonoBehaviour
     List<Vector3Int> possibleWallHorizontalPosition;
     List<Vector3Int> possibleWallVerticalPosition;
 
+    public float floorYPos = -0.5f;   // 바닥 콜라이더 y포지션
+    public float floorSize = 1f;     // 바닥 콜라이더 크기
+
     // 커스텀 방 이후 제작된 bsp방을 관리할 List
     List<Transform> bspRoom = new List<Transform>();
     void Start()
@@ -306,13 +309,13 @@ public class DungeonCreator : MonoBehaviour
 
         // 메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         // Center
-        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, roopYpos.y, (topLeftV.z + bottomLeftV.z) / 2);
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
         BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         floorCol.center = colCenter;
         // Size
         float colSizeX, colSizeY, colSizeZ;
         colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = 0.03f;
+        colSizeY = floorSize ;
         colSizeZ = bottomLeftV.z - topLeftV.z;
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }
@@ -481,13 +484,13 @@ public class DungeonCreator : MonoBehaviour
 
         //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         //Center
-        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0f, (topLeftV.z + bottomLeftV.z) / 2);
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2,floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
         BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         floorCol.center = colCenter;
         // Size
         float colSizeX, colSizeY, colSizeZ;
         colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = 0.03f;
+        colSizeY = floorSize;
         colSizeZ = bottomLeftV.z - topLeftV.z;
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }
@@ -557,11 +560,12 @@ public class DungeonCreator : MonoBehaviour
         dungeonInspectionClone = Instantiate(dungeonInspection, Vector3.zero, Quaternion.identity, dungeonFloor.transform);
 
         BoxCollider floorCol = dungeonInspectionClone.GetComponent<BoxCollider>();
+        nodeCenter.y = floorYPos;
         floorCol.center = nodeCenter;
         // Size
         float colSizeX, colSizeY, colSizeZ;
         colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = 0.03f;
+        colSizeY = floorSize;
         colSizeZ = bottomLeftV.z - topLeftV.z;
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }
@@ -821,17 +825,20 @@ public class DungeonCreator : MonoBehaviour
 
         //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         //Center
-        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0f, (topLeftV.z + bottomLeftV.z) / 2);
+        //Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0, (topLeftV.z + bottomLeftV.z) / 2);
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
         BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         floorCol.center = colCenter;
         // Size
         float colSizeX, colSizeY, colSizeZ;
         colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = 0.03f;
+        //colSizeY = 0.03f;
+        colSizeY = 1;
         colSizeZ = bottomLeftV.z - topLeftV.z;
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }
         if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
+        //Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
         Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
         floorCol.size = colSize;
 
@@ -1020,13 +1027,15 @@ public class DungeonCreator : MonoBehaviour
 
         //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         //Center
-        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0f, (topLeftV.z + bottomLeftV.z) / 2);
+        //Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0f, (topLeftV.z + bottomLeftV.z) / 2);
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
         BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         floorCol.center = colCenter;
         // Size
         float colSizeX, colSizeY, colSizeZ;
         colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = 0.03f;
+        //colSizeY = 0.03f;
+        colSizeY = floorSize;
         colSizeZ = bottomLeftV.z - topLeftV.z;
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }
@@ -1344,13 +1353,13 @@ public class DungeonCreator : MonoBehaviour
 
         //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         //Center
-        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0f, (topLeftV.z + bottomLeftV.z) / 2);
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
         BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         floorCol.center = colCenter;
         // Size
         float colSizeX, colSizeY, colSizeZ;
         colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = 0.03f;
+        colSizeY = floorSize;
         colSizeZ = bottomLeftV.z - topLeftV.z;
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }

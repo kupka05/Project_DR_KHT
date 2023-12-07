@@ -31,6 +31,11 @@ public class LobbyEvent : MonoBehaviour
     public GameObject selectSkillStatusDis; // 스킬 선택창
     public GameObject skillStatusDis;       // 스킬 상태창
 
+    public GameObject skillUpgrade1;       // 스킬 상태창
+    public GameObject skillUpgrade2;       // 스킬 상태창
+    public GameObject skillUpgrade3;       // 스킬 상태창
+    public GameObject skillUpgrade4;       // 스킬 상태창
+
 
     [Header("Player Status")]
     public TMP_Text playerLevel;
@@ -57,8 +62,6 @@ public class LobbyEvent : MonoBehaviour
     public TMP_Text curExp;
     public TMP_Text spendExp;
     public TMP_Text remainExp;
-
-
 
     public void Start()
     {
@@ -201,9 +204,14 @@ public class LobbyEvent : MonoBehaviour
         selectStatusDis.SetActive(false);
         playerStatusDis.SetActive(false);
         playerAcceptPannel.SetActive(false);
+
         weaponStatusDis.SetActive(false);
         selectSkillStatusDis.SetActive(false);
-        skillStatusDis.SetActive(false);
+
+        skillUpgrade1.SetActive(false);
+        skillUpgrade2.SetActive(false);
+        skillUpgrade3.SetActive(false);
+        skillUpgrade4.SetActive(false);
 
         switch (name)
         {
@@ -219,8 +227,17 @@ public class LobbyEvent : MonoBehaviour
             case "SelectSkill":
                 selectSkillStatusDis.SetActive(true);
                 break;
-            case "Skill":
-                skillStatusDis.SetActive(true);
+            case "Skill1":
+                skillUpgrade1.SetActive(true);
+                break;
+            case "Skill2":
+                skillUpgrade2.SetActive(true);
+                break;
+            case "Skill3":
+                skillUpgrade3.SetActive(true);
+                break;
+            case "Skill4":
+                skillUpgrade4.SetActive(true);
                 break;
         }
 

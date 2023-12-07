@@ -42,7 +42,9 @@ public class LobbyDisplayButton : MonoBehaviour
             case ButtonType.PlayerStatus:
                 leftButton.SetActive(false);
                 rightButton.SetActive(false);
+                if(beforeValue)
                 beforeValue.SetActive(true);
+                if (afterValue)
                 afterValue.SetActive(false);
                 acceptPannel.SetActive(false);
 
@@ -58,6 +60,7 @@ public class LobbyDisplayButton : MonoBehaviour
     {
         if (items != null)
         {
+
             foreach (var item in items)
             {
                 Destroy(item.gameObject);
@@ -75,8 +78,9 @@ public class LobbyDisplayButton : MonoBehaviour
         leftButton.SetActive(true);
         rightButton.SetActive(true);
         acceptPannel.SetActive(true);
-
+        if (beforeValue)
         beforeValue.SetActive(false);
+        if (afterValue)
         afterValue.SetActive(true);
         SetLevelItem(index, level);
     }

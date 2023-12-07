@@ -183,7 +183,7 @@ public class DungeonCreator : MonoBehaviour
     /// <param name="transform">복도의 parent가 가지고 있는 자식Trasform</param>
     private void CreateCorridorDoor(Transform _corridor)
     {
-        //_corridor.gameObject.AddComponent<CorridorDoorCreate>();
+        _corridor.gameObject.AddComponent<CorridorDoorCreate>();        
     }       // CreateCorridorDoor()
 
     /// <summary>

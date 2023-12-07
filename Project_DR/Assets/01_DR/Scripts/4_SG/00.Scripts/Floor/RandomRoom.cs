@@ -36,6 +36,7 @@ public class RandomRoom : MonoBehaviour
     protected void ClearRoomBoolSetTrue()
     {
         isClearRoom = true;
+        GameManager.instance.IsClear = isClearRoom;
     }       // ClearRoomBoolSetTrue()
 
     /// <summary>
@@ -45,6 +46,17 @@ public class RandomRoom : MonoBehaviour
     {
         isClearRoom = false;
     }       // ClearRoomBoolSetFalse()
+
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            if(isClearRoom == false)
+            {
+                GameManager.instance.IsClear = isClearRoom;
+            }
+        }        
+    }
 
 
 }       // ClassEnd

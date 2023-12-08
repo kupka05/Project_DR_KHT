@@ -11,6 +11,8 @@ using static UnityEngine.UI.GridLayoutGroup;
 
 public class Monster : MonoBehaviour
 {
+    public UnityEngine.UI.Slider monsterHpSlider;
+
     //스턴 추가 - hit상태
     public enum State
     {
@@ -149,6 +151,8 @@ public class Monster : MonoBehaviour
         nav.stoppingDistance = stopDistance;
         //nav.stoppingDistance = attRange - 0.5f;
 
+        SetMaxHealth(hp);
+
         InitMonster();
     }
 
@@ -187,6 +191,17 @@ public class Monster : MonoBehaviour
         stopDistance = (float)DataManager.instance.GetData(id, "MonStd", typeof(float));
     }
 
+    public void SetMaxHealth(float newHealth)
+    {
+        monsterHpSlider.maxValue = newHealth;
+        monsterHpSlider.value = newHealth;
+    }
+
+    public void SetHealth(float newHealth)
+    {
+        monsterHpSlider.value = newHealth;
+    }
+
 
     // 스테이트를 관리하는 코루틴
     // 역할 : 스테이트를 변환만 해준다. 다른건 없음.
@@ -196,7 +211,11 @@ public class Monster : MonoBehaviour
         {
             // 체력이 0 이하면 죽은 상태로 전이
             if (damageable.Health <= 0)
+            {
+                SetHealth(0);
                 state = State.DIE;
+            }
+           
 
             // 스턴을 맞을 경우 스턴 상태로 전이
             else if(isStun)
@@ -500,8 +519,9 @@ public class Monster : MonoBehaviour
         {
             if (damageable.Health >= 0)
             {
+                SetHealth(damageable.Health);
                 // 만약에 스턴루틴에 이미 다른 코루틴이 실행중인 경우
-                if(stunRoutine != null)
+                if (stunRoutine != null)
                 {
                     StopCoroutine(stunRoutine);
                     stunRoutine = null;

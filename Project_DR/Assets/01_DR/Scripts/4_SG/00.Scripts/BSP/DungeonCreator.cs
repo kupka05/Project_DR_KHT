@@ -192,10 +192,10 @@ public class DungeonCreator : MonoBehaviour
     // 바닥에 깔아둘 ObjPrefabs
     public GameObject[] floorPrefabs;
     // 가능한 문 및 벽 위치 목록
-    List<Vector3Int> possibleDoorVerticalPosition;
-    List<Vector3Int> possibleDoorHorizontalPosition;
-    List<Vector3Int> possibleWallHorizontalPosition;
-    List<Vector3Int> possibleWallVerticalPosition;
+    private List<Vector3Int> possibleDoorVerticalPosition;
+    private List<Vector3Int> possibleDoorHorizontalPosition;
+    private List<Vector3Int> possibleWallHorizontalPosition;
+    private List<Vector3Int> possibleWallVerticalPosition;
 
     public float floorYPos = -0.5f;   // 바닥 콜라이더 y포지션
     public float floorSize = 1f;     // 바닥 콜라이더 크기

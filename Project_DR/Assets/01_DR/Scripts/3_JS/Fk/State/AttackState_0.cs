@@ -45,6 +45,7 @@ namespace BossMonster
         // 상태 진입시
         public void EnterState(Boss boss)
         {
+
         }
 
         // 상태 업데이트시

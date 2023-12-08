@@ -21,7 +21,7 @@ namespace BossMonster
          *                 Private Fields
          *************************************************/
         // 패턴에 따라 정의되는 상태
-        [SerializeField] private BossData _bossData;                      // 보스 데이터
+        [SerializeField] private BossData _bossData;     // 보스 데이터
         private IState _currentState;                    // 현재 상태
         private IState _idleState;                       // 대기 상태
         private IState _hitState;                        // 피격 상태

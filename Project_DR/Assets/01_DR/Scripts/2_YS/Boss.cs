@@ -67,10 +67,9 @@ public class Boss : MonoBehaviour
 
     void Update()
     {
-        
-
-        
+           
     }
+
     void Awake()
     {
         GetData(bossId);

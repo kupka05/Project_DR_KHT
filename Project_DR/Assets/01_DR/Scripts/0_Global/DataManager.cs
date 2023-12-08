@@ -76,10 +76,11 @@ public class DataManager : MonoBehaviour
         
         // SG
         "spawnNomalMonster_Table","spawnEliteMonster_Table","DungeonCreater_Table",
-        "Floor1_MonsterSpawn_Table","Floor2_MonsterSpawn_Table","Floor3_MonsterSpawn_Table",
-        "Floor4_MonsterSpawn_Table","Floor5_MonsterSpawn_Table","BattleRoomObjectCreate_Table",
-        "EventRoomObjectCreate_Table","NullRoomObjectCreate_Table","LightObject_Table",
-        "EnvObject_Table","MatObject_Table"
+        "DungeonCreaterCustomRoom_Table","Floor1_MonsterSpawn_Table","Floor2_MonsterSpawn_Table",
+        "Floor3_MonsterSpawn_Table","Floor4_MonsterSpawn_Table","Floor5_MonsterSpawn_Table",
+        "BattleRoomObjectCreate_Table","EventRoomObjectCreate_Table","NullRoomObjectCreate_Table",
+        "LightObject_Table","EnvObject_Table","MatObject_Table"
+
     };
 
     // dataTable에 ID로 접근하기 위해

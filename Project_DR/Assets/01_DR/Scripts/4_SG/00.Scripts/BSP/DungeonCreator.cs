@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Rito.InventorySystem;
 using System;
 using System.Collections;
@@ -10,46 +11,156 @@ using UnityEngine.UIElements;
 
 public class DungeonCreator : MonoBehaviour
 {
+    enum DungeonTableID
+    {
+        // BSP Room
+        DungeonWidth = 9000,
+        DungeonHeight = 9001,
+        RoomWidthMin = 9002,
+        RoomLengthMin = 9003,
+        MaxIterations = 9004,
+        CorridorWidth = 9005,
+        RoomBottomCornerModifier = 9006,
+        RoomTopCornerModifier = 9007,
+        RoomOffset = 9008,
+        RoopYpos = 9009,
+        // CustomRoom
+
+        PcRoomDistance = 9101,
+        PcRoomWidth = 9102,
+        PcRoomHeight = 9103,
+        BossRoomDistance = 9104,
+        BossRoomWidth = 9105,
+        BossRoomHeight = 9106,
+        NextStageRoomDistance = 9107,
+        NextStageRoomWidth = 9108,
+        NextStageRoomHeight = 9109,
+        WallBreakDownPercentage = 9110
+    }
+
     // 확인용 변수
     private int InItNum = 1;
 
+    #region 변수 시트화전 (Public)
+
+    //[Header("BSPRoom")]
+    //// 던전 크기 설정
+    //public int dungeonWidth;      // 던전의 넓이
+    //public int dungeonHeight;     // 던전의 높이
+    //// 방 크기 및 기준 설정
+    //public int roomWidthMin, roomLengthMin;     // 방의 최소 넓이와 길이
+    //public int maxIterations;       // 던전 생성 최대 반복 횟수
+    //public int corridorWidth;       // 복도 넓이
+
+    //// 그래픽 설정
+    //public Material material;  // 던전 바닥의 재질
+
+    //// 방 모양 수정자 설정
+    //[Range(0.0f, 0.3f)]
+    //public float roomBottomCornerModifier;  // 방의 하단 모서리 수정자
+    //[Range(0.7f, 1.0f)]
+    //public float roomTopCornerModifier;     // 방의 상단 모서리 수정자
+    //[Range(0, 2)]
+    //public int roomOffset;                // 방 오프셋    
+    //// 벽이 생성될때에 어디에 생성할지 지정해줄 좌표        // Y축이 벽의 영향을 받음
+    //public Vector3 roopYpos;
+    ////public Vector3 roopYpos = new Vector3(1, 26, 1); LEGACY
+
+    //[Header("CustomRoom")]
+    //public float pcRoomDistance;  // 플레이어방과 첫번째 방의 거리
+    //public int pcRoomWidth;       // 플레이어방 넓이
+    //public int pcRoomHeight;      // 플레이어방 높이
+    //private FloorMeshPos playerRoomCornerPos;       // 플레이어방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
+    //[Space]
+    //public float bossRoomDistance;      // 마지막 방과 보스방의 거리
+    //public int bossRoomWidth;           // 보스방 넓이
+    //public int bossRoomHeight;          // 보스방 높이
+    //private FloorMeshPos bossRoomCornerPos;         // 보스방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
+    //[Space]
+    //public float nextStageRoomDistance; // 보스방과 다음스테이지의 거리
+    //public int nextStageRoomWidth;      // 다음스테이지방 넓이
+    //public int nextStageRoomHeight;     // 다음스테이지방 높이    
+    //private FloorMeshPos nextStageRoomCornerPos;   // 다음스테이지방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
+    //[Header("WallObj")]
+    //// 벽 오브젝트 설정
+    //public GameObject wallVertical;
+    //public GameObject wallHorizontal;
+    //public GameObject wallBreakdown;
+    //// 이 오브젝트는 프리펩이며 커스텀 방에서 막힌 벽을 뚫어주는데 사용될거임
+    //// 벽이 한개만 있는게 아닌 3단 으로 쌓여있기에 이렇게 사용
+    //public GameObject demolisherWall;
+
+    //[Header("Prefabs")]
+    //public GameObject dungeonInspection;
+
+    //public GameObject nextStageStone;
+
+    ////public GameObject nextStagePotal; // LEGACY
+
+    //public GameObject entrancePrefab;
+    //public GameObject exitObjPrefab;        // !현재 위치값은 매직넘버로 이루어져있음
+    //public GameObject bossMonsterSkin;      // 보스몬스터 인형
+    //public GameObject bossMonsterCapsule;   // 보스몬스터 본체
+
+
+
+    //// 부숴지는벽이 나올 확률 
+    //private float wallBreakDownPercentage;
+
+    //[Header("FloorObj")]
+    //// 바닥에 깔아둘 ObjPrefabs
+    //public GameObject[] floorPrefabs;
+    //// 가능한 문 및 벽 위치 목록
+    //List<Vector3Int> possibleDoorVerticalPosition;
+    //List<Vector3Int> possibleDoorHorizontalPosition;
+    //List<Vector3Int> possibleWallHorizontalPosition;
+    //List<Vector3Int> possibleWallVerticalPosition;
+
+    //public float floorYPos = -0.5f;   // 바닥 콜라이더 y포지션
+    //public float floorSize = 1f;     // 바닥 콜라이더 크기
+
+    //// 커스텀 방 이후 제작된 bsp방을 관리할 List
+    //List<Transform> bspRoom = new List<Transform>();
+
+
+    #endregion 변수 시트화전 (Public)
     [Header("BSPRoom")]
     // 던전 크기 설정
-    public int dungeonWidth;      // 던전의 넓이
-    public int dungeonHeight;     // 던전의 높이
+    private int dungeonWidth;      // 던전의 넓이
+    private int dungeonHeight;     // 던전의 높이
     // 방 크기 및 기준 설정
-    public int roomWidthMin, roomLengthMin;     // 방의 최소 넓이와 길이
-    public int maxIterations;       // 던전 생성 최대 반복 횟수
-    public int corridorWidth;       // 복도 넓이
+    private int roomWidthMin, roomLengthMin;     // 방의 최소 넓이와 길이
+    private int maxIterations;       // 던전 생성 최대 반복 횟수
+    private int corridorWidth;       // 복도 넓이
 
     // 그래픽 설정
     public Material material;  // 던전 바닥의 재질
 
     // 방 모양 수정자 설정
-    [Range(0.0f, 0.3f)]
-    public float roomBottomCornerModifier;  // 방의 하단 모서리 수정자
-    [Range(0.7f, 1.0f)]
-    public float roomTopCornerModifier;     // 방의 상단 모서리 수정자
-    [Range(0, 2)]
-    public int roomOffset;                // 방 오프셋    
+    //[Range(0.0f, 0.3f)]
+    private float roomBottomCornerModifier;  // 방의 하단 모서리 수정자
+    //[Range(0.7f, 1.0f)]
+    private float roomTopCornerModifier;     // 방의 상단 모서리 수정자
+    //[Range(0, 2)]
+    private int roomOffset;                // 방 오프셋    
     // 벽이 생성될때에 어디에 생성할지 지정해줄 좌표        // Y축이 벽의 영향을 받음
-    public Vector3 roopYpos = new Vector3(1, 26, 1);
+    private Vector3 roopYpos;
+    //public Vector3 roopYpos = new Vector3(1, 26, 1); LEGACY
 
     [Header("CustomRoom")]
-    public float pcRoomDistance;  // 플레이어방과 첫번째 방의 거리
-    public int pcRoomWidth;       // 플레이어방 넓이
-    public int pcRoomHeight;      // 플레이어방 높이
+    private float pcRoomDistance;  // 플레이어방과 첫번째 방의 거리
+    private int pcRoomWidth;       // 플레이어방 넓이
+    private int pcRoomHeight;      // 플레이어방 높이
     private FloorMeshPos playerRoomCornerPos;       // 플레이어방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
     [Space]
-    public float bossRoomDistance;      // 마지막 방과 보스방의 거리
-    public int bossRoomWidth;           // 보스방 넓이
-    public int bossRoomHeight;          // 보스방 높이
+    private float bossRoomDistance;      // 마지막 방과 보스방의 거리
+    private int bossRoomWidth;           // 보스방 넓이
+    private int bossRoomHeight;          // 보스방 높이
     private FloorMeshPos bossRoomCornerPos;         // 보스방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
     [Space]
-    public float nextStageRoomDistance; // 보스방과 다음스테이지의 거리
-    public int nextStageRoomWidth;      // 다음스테이지방 넓이
-    public int nextStageRoomHeight;     // 다음스테이지방 높이
-    public int nextStageRoomUnderObjCount;      // 다음방 가기위해 깔아둘 벽돌 갯수 = 깊이
+    private float nextStageRoomDistance; // 보스방과 다음스테이지의 거리
+    private int nextStageRoomWidth;      // 다음스테이지방 넓이
+    private int nextStageRoomHeight;     // 다음스테이지방 높이    
     private FloorMeshPos nextStageRoomCornerPos;   // 다음스테이지방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
     [Header("WallObj")]
     // 벽 오브젝트 설정
@@ -62,7 +173,7 @@ public class DungeonCreator : MonoBehaviour
 
     [Header("Prefabs")]
     public GameObject dungeonInspection;
-    
+
     public GameObject nextStageStone;
 
     //public GameObject nextStagePotal; // LEGACY
@@ -71,28 +182,32 @@ public class DungeonCreator : MonoBehaviour
     public GameObject exitObjPrefab;        // !현재 위치값은 매직넘버로 이루어져있음
     public GameObject bossMonsterSkin;      // 보스몬스터 인형
     public GameObject bossMonsterCapsule;   // 보스몬스터 본체
-    
 
 
-    // 부숴지는벽이 나올 확률 // 임시 : 추후 스프레드시트로 바뀔수 있음 11.09
-    private float wallBreakDownPercentage = 5;
+
+    // 부숴지는벽이 나올 확률 
+    private float wallBreakDownPercentage;
 
     [Header("FloorObj")]
     // 바닥에 깔아둘 ObjPrefabs
     public GameObject[] floorPrefabs;
     // 가능한 문 및 벽 위치 목록
-    List<Vector3Int> possibleDoorVerticalPosition;
-    List<Vector3Int> possibleDoorHorizontalPosition;
-    List<Vector3Int> possibleWallHorizontalPosition;
-    List<Vector3Int> possibleWallVerticalPosition;
+    private List<Vector3Int> possibleDoorVerticalPosition;
+    private List<Vector3Int> possibleDoorHorizontalPosition;
+    private List<Vector3Int> possibleWallHorizontalPosition;
+    private List<Vector3Int> possibleWallVerticalPosition;
 
     public float floorYPos = -0.5f;   // 바닥 콜라이더 y포지션
     public float floorSize = 1f;     // 바닥 콜라이더 크기
 
     // 커스텀 방 이후 제작된 bsp방을 관리할 List
     List<Transform> bspRoom = new List<Transform>();
+
+
+
     void Start()
     {
+        DungeonValueInIt();
         // 던전 생성 시작
         CreateDungeon();
     }
@@ -165,20 +280,57 @@ public class DungeonCreator : MonoBehaviour
         NextStageRoomCreate(bossRoomCornerPos);
 
         // 각 복도에 문을 생성해주는 함수
-        for(int i = 0; i < corridorParnet.transform.childCount; i++)
+        for (int i = 0; i < corridorParnet.transform.childCount; i++)
         {
             CreateCorridorDoor(corridorParnet.transform.GetChild(i));
         }
 
         // BSP 각 방 셋팅        
         InItRoomsEvent(floorParent);
-        
-        
+
+
 
 
         DungeonInspectionManager.dungeonManagerInstance.isCreateDungeonEnd = true;
         Debug.Log("던전 생성 끝");
     }   // CreateDungeon()
+
+
+    /// <summary>
+    /// 던전의 변수의 값을 스프레드 시트에 있는 값으로 대입하는 함수
+    /// </summary>
+    private void DungeonValueInIt()
+    {
+        
+        dungeonWidth = (int)DataManager.instance.GetData((int)DungeonTableID.DungeonWidth, "DungeonWidth", typeof(int));
+        dungeonHeight = (int)DataManager.instance.GetData((int)DungeonTableID.DungeonHeight, "DungeonHeight", typeof(int));
+        roomWidthMin = (int)DataManager.instance.GetData((int)DungeonTableID.RoomWidthMin, "RoomWidthMin", typeof(int));
+        roomLengthMin = (int)DataManager.instance.GetData((int)DungeonTableID.RoomLengthMin, "RoomLengthMin", typeof(int));        
+        maxIterations = (int)DataManager.instance.GetData((int)DungeonTableID.MaxIterations, "MaxIterations", typeof(int));
+        corridorWidth = (int)DataManager.instance.GetData((int)DungeonTableID.CorridorWidth, "CorridorWidth", typeof(int));
+        roomBottomCornerModifier = (float)DataManager.instance.GetData((int)DungeonTableID.RoomBottomCornerModifier, "RoomBottomCornerModifier", typeof(float));
+        roomTopCornerModifier = (float)DataManager.instance.GetData((int)DungeonTableID.RoomTopCornerModifier, "RoomTopCornerModifier", typeof(float));        
+        roomOffset = (int)DataManager.instance.GetData((int)DungeonTableID.RoomOffset, "RoomOffset", typeof(int));
+        roopYpos = new Vector3(1f, (float)DataManager.instance.GetData((int)DungeonTableID.RoopYpos, "RoopYpos",typeof(float)), 1f);
+
+        // CustomRoom
+        pcRoomDistance = (float)DataManager.instance.GetData((int)DungeonTableID.PcRoomDistance, "PcRoomDistance", typeof(float));
+        pcRoomWidth = (int)DataManager.instance.GetData((int)DungeonTableID.PcRoomWidth, "PcRoomWidth", typeof(int));
+        pcRoomHeight = (int)DataManager.instance.GetData((int)DungeonTableID.PcRoomHeight, "PcRoomHeight", typeof(int));
+
+        bossRoomDistance = (float)DataManager.instance.GetData((int)DungeonTableID.BossRoomDistance, "BossRoomDistance", typeof(float));
+        bossRoomWidth = (int)DataManager.instance.GetData((int)DungeonTableID.BossRoomWidth, "BossRoomWidth", typeof(int));
+        bossRoomHeight = (int)DataManager.instance.GetData((int)DungeonTableID.BossRoomHeight, "BossRoomHeight", typeof(int));
+
+        nextStageRoomDistance = (float)DataManager.instance.GetData((int)DungeonTableID.NextStageRoomDistance, "NextStageRoomDistance", typeof(float));
+        nextStageRoomWidth = (int)DataManager.instance.GetData((int)DungeonTableID.NextStageRoomWidth, "NextStageRoomWidth", typeof(int));
+        nextStageRoomHeight = (int)DataManager.instance.GetData((int)DungeonTableID.NextStageRoomHeight, "NextStageRoomHeight", typeof(int));
+        wallBreakDownPercentage = (float)DataManager.instance.GetData((int)DungeonTableID.WallBreakDownPercentage, "WallBreakDownPercentage", typeof(float));
+
+
+        
+
+    }       // DungeonValueInIt()
 
     /// <summary>
     /// 복도 Mesh에 문을 설치해주는 컴포넌트 추가해주는 함수
@@ -186,7 +338,7 @@ public class DungeonCreator : MonoBehaviour
     /// <param name="transform">복도의 parent가 가지고 있는 자식Trasform</param>
     private void CreateCorridorDoor(Transform _corridor)
     {
-        _corridor.gameObject.AddComponent<CorridorDoorCreate>();        
+        _corridor.gameObject.AddComponent<CorridorDoorCreate>();
     }       // CreateCorridorDoor()
 
     /// <summary>
@@ -221,7 +373,7 @@ public class DungeonCreator : MonoBehaviour
                 break;
             }
 
-            if(randomEvent == 0 && battleRoomCount != 0)
+            if (randomEvent == 0 && battleRoomCount != 0)
             {
                 bspListClone[randomIdx].AddComponent<BattleRoomObjCreate>();
                 bspListClone[randomIdx].AddComponent<BattleRoomRunTimeNav>();
@@ -229,14 +381,14 @@ public class DungeonCreator : MonoBehaviour
                 battleRoomCount -= 1;
                 bspListClone.Remove(bspListClone[randomIdx]);
             }
-            else if(randomEvent == 1 && eventRoom != 0)
+            else if (randomEvent == 1 && eventRoom != 0)
             {
                 bspListClone[randomIdx].AddComponent<EventRoom>();
                 bspListClone[randomIdx].AddComponent<EventRoomObjCreate>();
                 eventRoom -= 1;
                 bspListClone.Remove(bspListClone[randomIdx]);
             }
-            else if(randomEvent == 2 && nullRoom != 0)
+            else if (randomEvent == 2 && nullRoom != 0)
             {
                 bspListClone[randomIdx].AddComponent<NullRoom>();
                 bspListClone[randomIdx].AddComponent<NullRoomObjCreate>();
@@ -244,7 +396,7 @@ public class DungeonCreator : MonoBehaviour
                 bspListClone.Remove(bspListClone[randomIdx]);
             }
         }
-            //Debug.LogFormat("각방 이벤트 선정 끝");
+        //Debug.LogFormat("각방 이벤트 선정 끝");
 
 
 
@@ -315,7 +467,7 @@ public class DungeonCreator : MonoBehaviour
         // Size
         float colSizeX, colSizeY, colSizeZ;
         colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = floorSize ;
+        colSizeY = floorSize;
         colSizeZ = bottomLeftV.z - topLeftV.z;
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }
@@ -484,7 +636,7 @@ public class DungeonCreator : MonoBehaviour
 
         //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         //Center
-        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2,floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
         BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         floorCol.center = colCenter;
         // Size
@@ -736,7 +888,7 @@ public class DungeonCreator : MonoBehaviour
             wallList.Add(point);
         }
     }       // AddWallPositionToList()
-    
+
 
     /// <summary>
     /// 모든 자식 오브젝트 삭제 함수
@@ -868,11 +1020,11 @@ public class DungeonCreator : MonoBehaviour
     private void CreateEntrance(Vector3 bottomLeftV, Vector3 bottomRightV,
         Vector3 topLeftV, Vector3 topRightV, GameObject dungeonFloor)
     {
-        GameObject prefabClone = entrancePrefab;        
-        Vector3 roomTopCenter = new Vector3((bottomLeftV.x + bottomRightV.x) * 0.5f, (roopYpos.y + 7) + 100 ,
-            (bottomLeftV.z + topLeftV.z) * 0.5f);        
+        GameObject prefabClone = entrancePrefab;
+        Vector3 roomTopCenter = new Vector3((bottomLeftV.x + bottomRightV.x) * 0.5f, (roopYpos.y + 7) + 100,
+            (bottomLeftV.z + topLeftV.z) * 0.5f);
 
-        prefabClone = Instantiate(entrancePrefab, roomTopCenter,Quaternion.identity,dungeonFloor.transform);
+        prefabClone = Instantiate(entrancePrefab, roomTopCenter, Quaternion.identity, dungeonFloor.transform);
 
     }       // CreateEntrance()
 
@@ -1185,7 +1337,7 @@ public class DungeonCreator : MonoBehaviour
         if (colSizeZ < 0) { colSizeZ = -colSizeZ; }
         Vector3 colSize = new Vector3(colSizeX, colSizeY, colSizeZ);
         floorCol.size = colSize;
-       
+
         #endregion 메시의 콜라이더 Center,Size 수정
 
         dungeonFloor.transform.position = Vector3.zero;
@@ -1400,13 +1552,13 @@ public class DungeonCreator : MonoBehaviour
         GameObject bossClone;
         Vector3 bossPos = centerPos;
         bossPos.y = bossPos.y + 3f;
-        
-        bossClone = Instantiate(bossMonsterSkin,bossPos,Quaternion.Euler(0f,180f,0f), monsterParent.transform);
+
+        bossClone = Instantiate(bossMonsterSkin, bossPos, Quaternion.Euler(0f, 180f, 0f), monsterParent.transform);
         //bossClone.transform.localRotation = Quaternion.EulerRotation
         bossPos = centerPos;
         bossPos.z = bossPos.z - 3f;
         bossPos.y = 1f;
-        
+
 
         bossClone = Instantiate(bossMonsterCapsule, bossPos, Quaternion.identity, monsterParent.transform);
 
@@ -1527,7 +1679,7 @@ public class DungeonCreator : MonoBehaviour
         //mesh.triangles = triangles;
 
 
-        GameObject dungeonFloor = new GameObject("NextStageRoomMesh" + InItNum + bottomLeftV);            
+        GameObject dungeonFloor = new GameObject("NextStageRoomMesh" + InItNum + bottomLeftV);
         //GameObject dungeonFloor = new GameObject("NextStageRoomMesh" + InItNum + bottomLeftV,
         //    typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
 

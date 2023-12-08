@@ -66,7 +66,6 @@ public class LobbyEvent : MonoBehaviour
     public void Start()
     {
         ChangeDisplayButton("Main");          // 메인 디스플레이 시작 시 메인 패널로
-        GetClearData();
         SetStatusDisplay();
         ChangeStatusDisplayButton("Main");    // 상태창 시작 시 메인 패널로
 

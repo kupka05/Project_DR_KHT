@@ -22,6 +22,11 @@ public class AxisHandler : MonoBehaviour
 
     public Vector2 axis;        // 방향
     public bool isDeadZone;     // 데드존 여부
+    public float deadZoneVal;    
+    public bool isActiveZone;     // 데드존 여부
+    public float activeZoneVal;
+
+
 
     [Tooltip("Used to determine whether to turn left / right. This can be an X Axis on the thumbstick, for example. -1 to snap left, 1 to snap right.")]
     public List<InputAxis> inputAxis = new List<InputAxis>() { InputAxis.RightThumbStickAxis };
@@ -29,6 +34,11 @@ public class AxisHandler : MonoBehaviour
     public UnityEvent BackDashEvent;
     public UnityEvent LeftEvent;
     public UnityEvent RightEvent;
+
+    private void Start()
+    {
+        GetData();
+    }
 
     // Update is called once per frame
     void LateUpdate()
@@ -89,12 +99,20 @@ public class AxisHandler : MonoBehaviour
     public void CheckDeadZone()
     {
 
-        if (Math.Pow(axis.x, 2f) + Math.Pow(axis.y, 2f) <= 0.25f)
+        if (Math.Pow(axis.x, 2f) + Math.Pow(axis.y, 2f) <= Math.Pow(deadZoneVal, 2f))
         {
-            isDeadZone = true;
+            isDeadZone = true;                        
         }
         else
             isDeadZone = false;
+
+
+        if (Math.Pow(axis.x, 2f) + Math.Pow(axis.y, 2f) <= Math.Pow(activeZoneVal, 2f))
+        {
+            isActiveZone = true;
+        }
+        else
+            isActiveZone = false;
 
     }
 
@@ -102,7 +120,7 @@ public class AxisHandler : MonoBehaviour
 
     public void ActiveEvent()
     {
-        if (isDeadZone)
+        if (isActiveZone)
         {
 
             if (state == State.Backdash)
@@ -122,5 +140,12 @@ public class AxisHandler : MonoBehaviour
             state = State.Default;
 
         }
+    }
+
+    public void GetData()
+    {
+        deadZoneVal = (float)DataManager.instance.GetData(1001, "DeadZone", typeof(float));
+        activeZoneVal = (float)DataManager.instance.GetData(1001, "ActiveZone", typeof(float));
+
     }
 }

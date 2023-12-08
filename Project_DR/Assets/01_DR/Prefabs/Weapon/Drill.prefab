@@ -3102,6 +3102,7 @@ Transform:
   - {fileID: 8768672551645038193}
   - {fileID: 4171276086412129329}
   - {fileID: 8002591255658997789}
+  - {fileID: 2788154637153174172}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3374,8 +3375,7 @@ MonoBehaviour:
   MuzzlePointTransform: {fileID: 8768672551865264199}
   EjectPointTransform: {fileID: 8768672551645038193}
   ChamberedBullet: {fileID: 0}
-  MuzzleFlashObject: {fileID: 1092013624344405315, guid: 9872ce4a05e8b4a419b17728344764fa,
-    type: 3}
+  MuzzleFlashObject: {fileID: 3586594589866669912}
   BulletCasingPrefab: {fileID: 4293907302815737054, guid: f8313a7c0e07bba40ac0f3634a590caf,
     type: 3}
   ProjectilePrefab: {fileID: 1449094533667961452, guid: 4af46545725f628459794cfc7c0f7d54,
@@ -3899,4 +3899,85 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 435952, guid: e12d217556ea3f1488bbf3a2b9fa66cf,
     type: 3}
   m_PrefabInstance: {fileID: 1849745334502613793}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5536693247994016599
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8768672552246940895}
+    m_Modifications:
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011823707343782927, guid: 8bc5831baa1acf744b71e6991f776090,
+        type: 3}
+      propertyPath: m_Name
+      value: None
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8bc5831baa1acf744b71e6991f776090, type: 3}
+--- !u!4 &2788154637153174172 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7667320033007317451, guid: 8bc5831baa1acf744b71e6991f776090,
+    type: 3}
+  m_PrefabInstance: {fileID: 5536693247994016599}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3586594589866669912 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9011823707343782927, guid: 8bc5831baa1acf744b71e6991f776090,
+    type: 3}
+  m_PrefabInstance: {fileID: 5536693247994016599}
   m_PrefabAsset: {fileID: 0}

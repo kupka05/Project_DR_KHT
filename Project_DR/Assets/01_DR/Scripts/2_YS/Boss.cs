@@ -80,7 +80,7 @@ public class Boss : MonoBehaviour
     void InitializeBoss()
     {
         Debug.Log($"게임시작");
-        bossState =  GameObject.FindWithTag("Boss");
+        //bossState =  GameObject.FindWithTag("Boss");
 
         rigid = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
@@ -437,11 +437,12 @@ public class Boss : MonoBehaviour
                 isDie = true;
                 Debug.Log($"isDie:{isDie}");
                 // 이벤트 호출
+                Debug.Log("UnityEvent 호출 중");
                 unityEvent?.Invoke();
 
                 if (bossState)
-                {
-                    bossState.GetComponent<BossState>().Die();
+                {                    
+                    GameObject.FindWithTag("Boss").GetComponent<BossState>().Die();
                 }
                 StopAllCoroutines();
             }

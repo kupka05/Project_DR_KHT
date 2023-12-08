@@ -50,10 +50,6 @@ public class PlayerOption : MonoBehaviour
         GetSettingValue();
     }
 
-    public void Update()
-    {
-    }
-
     // 환경설정 UI 입력
     public virtual void CheckOptionToggleInput()
     {

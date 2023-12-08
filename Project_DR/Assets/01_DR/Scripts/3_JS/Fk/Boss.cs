@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
@@ -13,8 +11,7 @@ namespace BossMonster
          *************************************************/
         public IState CurrentState => _currentState;
         public IState IdleState => _idleState;
-        public IState HitState => _hitState;
-        public IState DefendState => _defendState;
+        public IState DieState => _dieState;
         public IState[] AttackStates => _attackStates;
 
 
@@ -22,12 +19,11 @@ namespace BossMonster
          *                 Private Fields
          *************************************************/
         // 패턴에 따라 정의되는 상태
-        [SerializeField] private BossData _bossData;     // 보스 데이터
-        private IState _currentState;                    // 현재 상태
-        private IState _idleState;                       // 대기 상태
-        private IState _hitState;                        // 피격 상태
-        private IState _defendState;                     // 방어 상태
-        private IState[] _attackStates = new IState[10]; // 공격 상태 패턴(0 ~ 9)[10]        
+        [SerializeField] private BossData _bossData;        // 보스 데이터
+        private IState _currentState;                       // 현재 상태
+        private IState _idleState;                          // 대기 상태
+        private IState _dieState;                           // 죽음 상태
+        private IState[] _attackStates = new IState[10];    // 공격 상태 패턴(0 ~ 9)[10]        
 
 
         /*************************************************
@@ -41,8 +37,7 @@ namespace BossMonster
             StringBuilder stringBuilder = new StringBuilder();
             // 상태 초기화
             _idleState = new IdleState();
-            _hitState = new HitState();
-            _defendState = new DefendState();
+            _dieState = new DieState();
             for (int i = 0; i < _attackStates.Length; i++)
             {
                 // 타입을 찾을 때 네임스페이스명 + 찾을 타입명으로 검색해야 함

@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace BossMonster
 {
-    public class DefendState : IState
+    public class DieState : IState
     {
         // 상태 진입시
         public void EnterState(Boss boss)
         {
-
+            Debug.Log("죽음상태 진입 ");
         }
 
         // 상태 업데이트시

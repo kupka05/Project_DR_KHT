@@ -34,13 +34,20 @@ public class ShopItem : MonoBehaviour
      *                 Public Methods
      *************************************************/
     #region [+]
-    // ID를 초기화한다
-    public void InitializeID(int id)
+    // Init
+    public void Initialize(int id)
     {
+        // id 할당
         _id = id;
 
-        // 콜백 호출
-        OnIDChangeCallback();
+        // _isItem 확인
+        _isItem = CheckIsItem(_id);
+
+        // _shopItemText Init
+        _shopItemText.Initialize(_id);
+
+        // _shopItemText 텍스트 갱신
+        _shopItemText.GetDataAndSetText();
     }
 
     // 상점을 연결한다
@@ -92,20 +99,6 @@ public class ShopItem : MonoBehaviour
      *                Private Methods
      *************************************************/
     #region [+]
-
-    // _id가 변경될 때 호출하는 콜백
-    private void OnIDChangeCallback()
-    {
-        // _isItem 확인
-        _isItem = CheckIsItem(_id);
-
-        // _shopItemText Init
-        _shopItemText.Initialize(_id);
-
-        // _shopItemText 텍스트 갱신
-        _shopItemText.GetDataAndSetText();
-    }
-
     // 현재 ID에 해당하는 상점 아이템이
     // 실제 아이템인지 확인
     public bool CheckIsItem(int id)

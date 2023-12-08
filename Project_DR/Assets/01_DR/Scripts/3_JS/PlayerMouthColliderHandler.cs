@@ -10,6 +10,7 @@ public class PlayerMouthColliderHandler : MonoBehaviour
     #region [+]
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("PlayerMouthColliderHandler.OnTriggerEnter");
         // 아이템이 입 안에 들어왔을 경우
         if (other.CompareTag("ItemPotion"))
         {

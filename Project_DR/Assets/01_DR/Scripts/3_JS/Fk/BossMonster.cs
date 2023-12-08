@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BossMonster
 {
-    public class BossMonster_1 : MonoBehaviour
+    public class BossMonster : MonoBehaviour
     {
         /*************************************************
          *                 Public Fields

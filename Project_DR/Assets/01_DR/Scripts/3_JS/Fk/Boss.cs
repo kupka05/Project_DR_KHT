@@ -50,7 +50,7 @@ namespace BossMonster
                 stringBuilder.Clear();
                 stringBuilder.Append("BossMonster.AttackState_");
                 stringBuilder.Append(i);
-                //string type = "BossMonster.AttackState_" + i;
+                //string type = "BossMonster.AttackState_" + i;     //Legacy:
                 // 타입 검색
                 Type attackStateType = Type.GetType(stringBuilder.ToString());
                 // 타입이 있을 경우

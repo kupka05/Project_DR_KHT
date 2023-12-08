@@ -9,23 +9,27 @@ namespace BossMonster
         /*************************************************
          *                  Public Fields
          *************************************************/
-        // 패턴(3) 연쇄총알 데이터
+        // 패턴(3) 투사체-연쇄총알 데이터
         // 추가 할 데이터 넣어도 됩니다.
-        public float AreaSpeed => _areaSpeed;              // 영역 속도
-        public float AreaRange => _areaRange;              // 영역 범위
-        public float AreaSpawnTime => _areaSpawnTime;      // 영역 생성 시간
-        public float AreaDamage => _areaDamage;            // 영역 데미지
-        public float OutputInterval => _outputInterval;    // 출력 간격
-        public BossData BossData => _bossData;             // 보스 정보
+        public int ProjectileType => _projectileType;              // 투사체 타입
+        public int ProjectileCount => _projectileCount;            // 투사체 개수
+        public float ProjectileHP => _projectileHP;                // 투사체 HP
+        public float ProjectileSpeed => _projectileSpeed;          // 투사체 이동속도
+        public float ProjectileDuration => _projectileDuration;    // 투사체 지속시간
+        public float ProjectileDamage => _projectileDamage;        // 투사체 데미지
+        public float OutputInterval => _outputInterval;            // 출력 간격
+        public BossData BossData => _bossData;                     // 보스 정보
 
 
         /*************************************************
          *                Private Fields
          *************************************************/
-        private float _areaSpeed;
-        private float _areaRange;
-        private float _areaSpawnTime;
-        private float _areaDamage;
+        private int _projectileType;
+        private int _projectileCount;
+        private float _projectileHP;
+        private float _projectileSpeed;
+        private float _projectileDuration;
+        private float _projectileDamage;
         private float _outputInterval;
         private BossData _bossData;
 
@@ -36,12 +40,15 @@ namespace BossMonster
         // 생성자 & 부모 생성자
         public AttackStateData_3(int id, BossData bossData)
         {
+            int patternID = (int)DataManager.instance.GetData(id, "AttackPatternKeyID", typeof(int));
             _bossData = bossData;
-            _areaSpeed = (float)DataManager.instance.GetData(id, "AreaSpeed", typeof(float));
-            _areaRange = (float)DataManager.instance.GetData(id, "AreaRange", typeof(float));
-            _areaSpawnTime = (float)DataManager.instance.GetData(id, "AreaSpawnTime", typeof(float));
-            _areaDamage = (float)DataManager.instance.GetData(id, "AreaDamage", typeof(float));
-            _outputInterval = (float)DataManager.instance.GetData(id, "OutputInterval", typeof(float));
+            _projectileType = (int)DataManager.instance.GetData(patternID, "ProjectileType", typeof(int));
+            _projectileCount = (int)DataManager.instance.GetData(patternID, "ProjectileCount", typeof(int));
+            _projectileHP = (float)DataManager.instance.GetData(patternID, "ProjectileHP", typeof(float));
+            _projectileSpeed = (float)DataManager.instance.GetData(patternID, "ProjectileSpeed", typeof(float));
+            _projectileDuration = (float)DataManager.instance.GetData(patternID, "ProjectileDuration", typeof(float));
+            _projectileDamage = (float)DataManager.instance.GetData(patternID, "ProjectileDamage", typeof(float));
+            _outputInterval = (float)DataManager.instance.GetData(patternID, "OutputInterval", typeof(float));
         }
     }
 }

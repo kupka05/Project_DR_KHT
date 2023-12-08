@@ -9,23 +9,23 @@ namespace BossMonster
         /*************************************************
          *                  Public Fields
          *************************************************/
-        // 패턴(9) 지옥눈알 데이터
+        // 패턴(8) 투사체-지옥눈알 데이터
         // 추가 할 데이터 넣어도 됩니다.
-        public float AreaSpeed => _areaSpeed;              // 영역 속도
-        public float AreaRange => _areaRange;              // 영역 범위
-        public float AreaSpawnTime => _areaSpawnTime;      // 영역 생성 시간
-        public float AreaDamage => _areaDamage;            // 영역 데미지
-        public float OutputInterval => _outputInterval;    // 출력 간격
-        public BossData BossData => _bossData;             // 보스 정보
+        public int ProjectileType => _projectileType;           // 투사체 타입
+        public int LaserCount => _laserCount;                   // 레이저 개수
+        public float LaserAttackSpeed => _laserAttackSpeed;     // 레이저 공격속도
+        public float LaserDamage => _laserDamage;               // 레이저 데미지
+        public float OutputInterval => _outputInterval;         // 출력 간격
+        public BossData BossData => _bossData;                  // 보스 정보
 
 
         /*************************************************
          *                Private Fields
          *************************************************/
-        private float _areaSpeed;
-        private float _areaRange;
-        private float _areaSpawnTime;
-        private float _areaDamage;
+        private int _projectileType;
+        private int _laserCount;
+        private float _laserAttackSpeed;
+        private float _laserDamage;
         private float _outputInterval;
         private BossData _bossData;
 
@@ -36,12 +36,13 @@ namespace BossMonster
         // 생성자 & 부모 생성자
         public AttackStateData_8(int id, BossData bossData)
         {
+            int patternID = (int)DataManager.instance.GetData(id, "AttackPatternKeyID", typeof(int));
             _bossData = bossData;
-            _areaSpeed = (float)DataManager.instance.GetData(id, "AreaSpeed", typeof(float));
-            _areaRange = (float)DataManager.instance.GetData(id, "AreaRange", typeof(float));
-            _areaSpawnTime = (float)DataManager.instance.GetData(id, "AreaSpawnTime", typeof(float));
-            _areaDamage = (float)DataManager.instance.GetData(id, "AreaDamage", typeof(float));
-            _outputInterval = (float)DataManager.instance.GetData(id, "OutputInterval", typeof(float));
+            _projectileType = (int)DataManager.instance.GetData(patternID, "ProjectileType", typeof(int));
+            _laserCount = (int)DataManager.instance.GetData(patternID, "LaserCount", typeof(int));
+            _laserAttackSpeed = (float)DataManager.instance.GetData(patternID, "LaserAttackSpeed", typeof(float));
+            _laserDamage = (float)DataManager.instance.GetData(patternID, "LaserDamage", typeof(float));
+            _outputInterval = (float)DataManager.instance.GetData(patternID, "OutputInterval", typeof(float));
         }
     }
 }

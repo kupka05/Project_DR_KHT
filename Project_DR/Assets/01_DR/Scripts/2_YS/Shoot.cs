@@ -91,10 +91,11 @@ public class Shoot : MonoBehaviour
 
                 yield return new WaitForSeconds(0.2f);
 
+                Destroy(instantBullet, 6.0f);
             }
 
-            yield return new WaitForSeconds(2.0f);
-            Destroy(smallBulletPrefab, 3.0f);
+            yield return new WaitForSeconds(4.0f);
+            
 
             isShoot = false;
         }

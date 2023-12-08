@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2980608042471265788}
   - component: {fileID: 2971026312252518248}
   - component: {fileID: 2963248590332751136}
-  - component: {fileID: 3003599814853015190}
+  - component: {fileID: 3219146733578526750}
   m_Layer: 0
   m_Name: Env_CampBrazier
   m_TagString: Untagged
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3003599814853015190
-MeshCollider:
+--- !u!65 &3219146733578526750
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -95,10 +95,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: bf51a09031db9ae4f96ec3de12bc82be, type: 2}
+  serializedVersion: 2
+  m_Size: {x: 0.55425507, y: 0.5934206, z: 0.55400026}
+  m_Center: {x: 0, y: 0.2967103, z: -0.0000006109476}
 --- !u!1 &2976577132309006410
 GameObject:
   m_ObjectHideFlags: 0

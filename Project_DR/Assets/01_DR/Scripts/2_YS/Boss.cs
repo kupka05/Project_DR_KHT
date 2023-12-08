@@ -6,13 +6,15 @@ using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
     //public static Action boss;
 
     public UnityEvent unityEvent;
+
+    public UnityEngine.UI.Slider bossHPSlider;
 
     public Rigidbody rigid;
     public Damageable damageable;
@@ -65,13 +67,10 @@ public class Boss : MonoBehaviour
 
     void Update()
     {
-        if (target)
-        {
-            transform.LookAt(target.position);
-        }
+        
+
         
     }
-
     void Awake()
     {
         GetData(bossId);
@@ -84,10 +83,28 @@ public class Boss : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         damageable.Health = maxHp;
-        
+
+        SetMaxHealth(maxHp);
+
         StartCoroutine(ExecutePattern());
+
+        //transform.LookAt(target.position);
     }
 
+    void FixedUpdate()
+    {
+       if(!target)
+        {
+            return;
+        }
+            // Look At Y 각도로만 기울어지게 하기
+            Vector3 targetPostition =
+                new Vector3(target.position.x, this.transform.position.y, target.position.z);
+            this.transform.LookAt(targetPostition);
+            //transform.LookAt(playerTr.position);
+        
+
+    }
 
     void Start()
     {
@@ -105,6 +122,16 @@ public class Boss : MonoBehaviour
     {
         maxHp = (float)DataManager.instance.GetData(id, "BossHP", typeof(float));
 
+    }
+
+    public void SetMaxHealth(float newHealth)
+    {
+        bossHPSlider.maxValue = newHealth;
+        bossHPSlider.value = newHealth;
+    }
+    public void SetHealth(float newHealth)
+    {
+        bossHPSlider.value = newHealth;
     }
 
     //void PushPlayerBackward()
@@ -130,14 +157,16 @@ public class Boss : MonoBehaviour
 
     IEnumerator PushPlayerBack()
     {
+        if (!isPushPlayer)
+        {
+            isPushPlayer = true;
+            Debug.Log($"pushPlayer:{isPushPlayer}");
+            target.gameObject.GetComponent<Damageable>().OnKnockBack(target.transform.forward * 5.0f);
+            Debug.Log("넉백");
 
-        isPushPlayer = true;
-        Debug.Log($"pushPlayer:{isPushPlayer}");
-        target.gameObject.GetComponent<Damageable>().OnKnockBack(target.transform.forward * 5.0f);
-        Debug.Log("넉백");
-
-        yield return new WaitForSeconds(0.1f);
-        isPushPlayer = false;
+            yield return new WaitForSeconds(0.1f);
+            isPushPlayer = false;
+        }
     }
 
     //private void OnCollisionEnter(Collision other)
@@ -167,17 +196,24 @@ public class Boss : MonoBehaviour
                 RandomPattern();
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
+                isPatternExecuting = false;
 
             }
             else if (damageable.Health <= maxHp * 0.75f && damageable.Health > maxHp * 0.5f)
             {
                 Debug.Log("작동2");
 
+                if (!isPushPlayer)
+                {
+                    isPushPlayer = true;
+                    Debug.Log($"push:{isPushPlayer}");
+                    StartCoroutine(PushPlayerBack());
+                }
                 isPushPlayer = true;
                 Debug.Log($"push:{isPushPlayer}");
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
-
+                isPatternExecuting = false;
             }
             else if (damageable.Health <= maxHp * 0.5f && damageable.Health > maxHp * 0.25f)
             {
@@ -186,7 +222,7 @@ public class Boss : MonoBehaviour
                 Debug.Log($"push:{isPushPlayer}");
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
-                
+                isPatternExecuting = false;
 
             }
             else if (damageable.Health < maxHp * 0.25f)
@@ -196,11 +232,11 @@ public class Boss : MonoBehaviour
                 Debug.Log($"push:{isPushPlayer}");
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
-                
+                isPatternExecuting = false;
             }
           
 
-            isPatternExecuting = false;
+            
         }
 
 
@@ -400,11 +436,13 @@ public class Boss : MonoBehaviour
         {
             if (damageable.Health >= 0)
             {
+                SetHealth(damageable.Health);
                 Debug.Log($"Current HP: {damageable.Health}");
             }
 
             if (damageable.Health <= 0)
             {
+                SetHealth(0);
                 isDie = true;
                 Debug.Log($"isDie:{isDie}");
                 // 이벤트 호출

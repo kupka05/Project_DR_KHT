@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public class ClearDatas
@@ -25,21 +26,25 @@ public class UserDataManager : MonoBehaviour
 {
     // DB에서 가져온 유저의 데이터를 관리하는 클래스
     #region 싱글톤 패턴
+
+
+    private static UserDataManager m_Instance = null; // 싱글톤이 할당될 static 변수    
+
     public static UserDataManager Instance
     {
         get
         {
-            // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
             if (m_Instance == null)
-            {
-                // 씬에서 GameManager 오브젝트를 찾아 할당
                 m_Instance = FindObjectOfType<UserDataManager>();
+            if(m_Instance == null)
+            {
+                GameObject obj = new GameObject("UserDataManager");
+                m_Instance = obj.AddComponent<UserDataManager>();
+                DontDestroyOnLoad(obj);
             }
-            // 싱글톤 오브젝트를 반환
             return m_Instance;
         }
     }
-    private static UserDataManager m_Instance; // 싱글톤이 할당될 static 변수    
     #endregion
 
     // 옵저버 패턴
@@ -64,7 +69,6 @@ public class UserDataManager : MonoBehaviour
     [Header("User Data")]
     public string PlayerID;
 
-    //[Header("PC Data")]
     public float HP  // 플레이어 체력
     {
         get  { return _HP; }
@@ -92,6 +96,7 @@ public class UserDataManager : MonoBehaviour
             OnUserDataUpdate?.Invoke();
         }
     }
+    [Header("PC Data")]
     public float ExpIncrease;         // 플레이어 경험치 증가량
     public float GoldIncrease;        // 플레이어 골드 증가량
 
@@ -115,6 +120,13 @@ public class UserDataManager : MonoBehaviour
     public int ClearCount;         // 클리어 횟수
     private string JsonData;       // Json을 담을 직렬화된 클리어 데이터
     public ClearDatas clearDatas;  // 클리어 데이터 모음
+
+    [Header("Setting")]
+    [Range(0, 100)]
+    public float masterSound, sfx, backgroundSound = 100;
+    [Range(0, 100)]
+    public float brightness = 50;
+
     #endregion
 
     // 로드되면 이벤트 호출
@@ -122,7 +134,13 @@ public class UserDataManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        if(m_Instance == null)
+        {
+            m_Instance = this;
+            DontDestroyOnLoad(this.gameObject);            
+        }
+        else
+        { Destroy(gameObject); }
         
         // 디버그 캐릭터면 시트에서 데이터 가져오기
         if(PlayerID == "")

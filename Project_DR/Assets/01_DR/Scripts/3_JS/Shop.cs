@@ -5,9 +5,18 @@ using UnityEngine;
 public class Shop : MonoBehaviour
 {
     /*************************************************
+     *                 Public Fields
+     *************************************************/
+    #region [+]
+    public ShopItemPurchaseHandler ShopItemPurchaseHandler => _shopItemPurchaseHandler;
+
+    #endregion
+    /*************************************************
      *                 Private Fields
      *************************************************/
     #region [+]
+    [SerializeField] private ShopItemPurchaseHandler _shopItemPurchaseHandler
+        = new ShopItemPurchaseHandler();
     [SerializeField] private ShopPlayerGoldTextController _playerGoldText = default;
     [SerializeField] private List<ShopItemReference> _shopItems = default;
 
@@ -39,10 +48,8 @@ public class Shop : MonoBehaviour
         // _shopItems에 Shop을 연결
         ConnectItemsToShop();
 
-        // _shopItems에 ID를 Init
-        InitializeShopItemIDs();
-
-       //StartCoroutine(하이승규());
+        // _shopItems를 Init
+        InitializeShopItem();
     }   
 
     #endregion
@@ -53,7 +60,6 @@ public class Shop : MonoBehaviour
     // 플레이어 골드 안내 텍스트 갱신
     public void UpdatePlayerGoldText()
     {
-        Debug.Log("UpdatePlayerGoldText()");
         _playerGoldText.GetDataAndSetText();
     }
 
@@ -62,13 +68,13 @@ public class Shop : MonoBehaviour
      *                 Private Methods
      *************************************************/
     #region [+]
-    // _shopItems에 ID를 Init한다
-    private void InitializeShopItemIDs()
+    // _shopItems를 Init한다
+    private void InitializeShopItem()
     {
         for (int i = 0; i < _shopItems.Count; i++)
         {
             int id = _shopItems[i].ID;
-            _shopItems[i].ShopItem.InitializeID(id);
+            _shopItems[i].ShopItem.Initialize(id);
         }
     }
 
@@ -91,15 +97,4 @@ public class Shop : MonoBehaviour
     }
 
     #endregion
-
-    // test
-    private IEnumerator 하이승규()
-    {
-        yield return new WaitForSeconds(1f);
-
-        UserDataManager.Instance.AddGold(1);
-        Debug.Log(UserDataManager.Instance.Gold);
-
-        StartCoroutine(하이승규());
-    }
 }

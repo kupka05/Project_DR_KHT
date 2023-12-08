@@ -33,4 +33,14 @@ public class VibrateManager : MonoBehaviour
         input.VibrateController(frequency, amplitude, duration, hand);
     }
 
+    // 기본값 진동
+    public void Vibrate(ControllerHand hand)
+    {
+        Debug.Log("Vibrate");
+        float frequency = 0.2f;
+        float amplitude = 0.1f;
+        float duration = 0.2f;
+
+        input.VibrateController(frequency, amplitude, duration, hand);
+    }
 }

@@ -320,6 +320,7 @@ public class EliteMonster : Monster
         {
             if (damageable.Health >= 0)
             {
+                SetHealth(damageable.Health);
                 // 만약에 스턴루틴에 이미 다른 코루틴이 실행중인 경우
                 if (stunRoutine != null)
                 {

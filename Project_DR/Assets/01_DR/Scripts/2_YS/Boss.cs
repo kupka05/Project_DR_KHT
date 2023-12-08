@@ -16,6 +16,8 @@ public class Boss : MonoBehaviour
 
     public UnityEngine.UI.Slider bossHPSlider;
 
+    public GameObject bossState;
+
     public Rigidbody rigid;
     public Damageable damageable;
     GameObject instantLazer;
@@ -65,38 +67,35 @@ public class Boss : MonoBehaviour
     public Transform bigBrickPortRight;
     public GameObject bigBrick;
 
-    void Update()
-    {
-        
-
-        
-    }
+    
     void Awake()
     {
         GetData(bossId);
     }
 
+    void Start()
+    {
+        InitializeBoss();
+    }
     void InitializeBoss()
     {
         Debug.Log($"게임시작");
-        
+        bossState =  GameObject.FindWithTag("Boss");
+
         rigid = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         damageable.Health = maxHp;
 
         SetMaxHealth(maxHp);
 
-        StartCoroutine(ExecutePattern());
-
-        //transform.LookAt(target.position);
     }
 
     void FixedUpdate()
     {
        if(!target)
-        {
-            return;
-        }
+       {
+          return;
+       }
             // Look At Y 각도로만 기울어지게 하기
             Vector3 targetPostition =
                 new Vector3(target.position.x, this.transform.position.y, target.position.z);
@@ -106,17 +105,6 @@ public class Boss : MonoBehaviour
 
     }
 
-    void Start()
-    {
-
-        //rigid = GetComponent<Rigidbody>();
-        //target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
-
-        //damageable.Health = maxHp;
-        //hp = maxHp;
-
-        //StartCoroutine(ExecutePattern());
-    }
 
     public void GetData(int id)
     {
@@ -252,13 +240,16 @@ public class Boss : MonoBehaviour
                 BigBrickShoot();
                 break;
             case 1:
-                PlayShoot();
+                //StartCoroutine(PlayShoot());
+                BigBrickShoot();
                 break;
             case 2:
-                BounceShoot();
+                //BounceShoot();
+                BigBrickShoot();
                 break;
             case 3:
-               ExplosionShoot();
+                //ExplosionShoot();
+                BigBrickShoot();
                 break;
         }
     }
@@ -448,6 +439,10 @@ public class Boss : MonoBehaviour
                 // 이벤트 호출
                 unityEvent?.Invoke();
 
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().Die();
+                }
                 StopAllCoroutines();
             }
         }
@@ -461,7 +456,7 @@ public class Boss : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("인식되냐");
-            InitializeBoss();
+            StartCoroutine(ExecutePattern());
         }
     }
 

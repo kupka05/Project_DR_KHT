@@ -16,7 +16,7 @@ public class GoogleSheetLoader : MonoBehaviour
     {
         // JS
         "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
-        "Item_Shop_Table", "BossMonster_Table",
+        "Item_Shop_Table", "BossMonster_Table", "AttackPattern_Table",
 
         // JH
         "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",

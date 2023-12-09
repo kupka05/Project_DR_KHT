@@ -33,6 +33,7 @@ public class PlayerOption : MonoBehaviour
     public Slider soundEffectSlider; // 효과음 슬라이더
     public Slider brightSlider;      // 화면 밝기 슬라이더
 
+    public VREmulator vrEmulator;
 
     [Header("Input")]
     //[Tooltip("The key(s) to use to toggle locomotion type")]
@@ -41,6 +42,11 @@ public class PlayerOption : MonoBehaviour
 
     private void Start()
     {
+
+#if UNITY_EDITOR
+        vrEmulator.enabled = true;
+#endif
+
         rotation = player.GetComponent<PlayerRotation>();
         volume.profile.TryGet<ColorAdjustments>(out brightness);
         if (brightness == null)

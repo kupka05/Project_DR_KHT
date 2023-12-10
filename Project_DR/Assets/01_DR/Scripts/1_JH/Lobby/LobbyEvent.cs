@@ -84,12 +84,15 @@ public class LobbyEvent : MonoBehaviour
 
     // ============================ 데이터 불러오기 ============================
 
+    public void RequestData()
+    {
+
+    }
+
+
     // DB에서 데이터 불러오기 완료 후 이벤트로 실행
     public void GetDataFromDB()
     {
-        // ToDo. 데이터 불러와지면 삭제예정
-        UserDataManager.Instance.Exp = 5000;
-
         GetClearData();
         UpdatePlayerStatusUI();
     }

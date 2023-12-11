@@ -1,11 +1,18 @@
+using Meta.WitAi.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LobbyEvent : MonoBehaviour
 {
+
+    [Header("Data")]
+    public Action dbRequest;
+
     [Header("Door")]
     public GameObject spawnroomDoor;
     public GameObject openDoorButton;
@@ -65,8 +72,14 @@ public class LobbyEvent : MonoBehaviour
     public TMP_Text spendExp;
     public TMP_Text remainExp;
 
+
+
     public void Start()
     {
+        dbRequest += GetDataFromDB;                     // DB 데이터 요청 성공 시 액션 추가
+        UserDataManager.Instance.DBRequst(dbRequest);   // DB 데이터 요청
+
+
         ChangeDisplayButton("Main");          // 메인 디스플레이 시작 시 메인 패널로
         SetStatusDisplay();
         ChangeStatusDisplayButton("Main");    // 상태창 시작 시 메인 패널로
@@ -86,12 +99,6 @@ public class LobbyEvent : MonoBehaviour
 
     // ============================ 데이터 불러오기 ============================
 
-    public void RequestData()
-    {
-
-    }
-
-
     // DB에서 데이터 불러오기 완료 후 이벤트로 실행
     public void GetDataFromDB()
     {
@@ -101,8 +108,6 @@ public class LobbyEvent : MonoBehaviour
 
     public void UpdatePlayerStatusUI()
     {
-        Debug.Log("실행하나?");
-
         // ToDo : 테스트 값에 넣어야 할 데이터 세팅
         int testValue = 100;
 
@@ -135,13 +140,21 @@ public class LobbyEvent : MonoBehaviour
     // 클리어 데이터 가져오기
     public void GetClearData()
     {
+        int index = 0;
+        if(UserDataManager.Instance.clearDatas.list != null)
+        {
+            index = UserDataManager.Instance.clearDatas.list.Count;
+        }
+
         // 클리어 카운트 가져와서 카운트만큼 배열 할당
-        clearDatas = new string[UserDataManager.Instance.clearDatas.list.Count];
+        clearDatas = new string[index];
         for (int i = 0; i < clearDatas.Length; i++)
         {
             string Date = UserDataManager.Instance.clearDatas.list[i].Date;
             string MBTI = UserDataManager.Instance.clearDatas.list[i].MBTI;
 
+
+            //TODO : 스트링빌더로 업데이트
             // 아래 형식으로 데이터 변환
             // 2023/11/21 08:23 0회차 MBTI INFP 
             string clearData = $"{Date} | {i + 1} 회차 | MBTI {MBTI}";
@@ -165,8 +178,29 @@ public class LobbyEvent : MonoBehaviour
             clearData.SetActive(true);
         }
     }
+    // 클리어 데이터 저장 테스트
+    public void SaveTest()
+    {
+        string[] mbti = { "ISTJ", "ISTP", "ISFJ","ISFP", "INTJ", "INTP", "INFJ", "INFP", "ESTJ", "ESTP", "ESFJ", "ESFP", "ENTJ", "ENTP", "ENTJ", "ENFP" };
+        int rand = Random.Range(0,16);
+        UserDataManager.Instance.SaveClearData(mbti[rand]);
+
+        GameObject clearData;
+        clearData = Instantiate(clearDataObj, clearDataObj.transform.position, clearDataObj.transform.rotation, contentPos);      // 클리어 데이터 추가
+        clearData.transform.localScale = Vector3.one;
+
+        string Date = UserDataManager.Instance.clearDatas.list[clearDatas.Length].Date;
+        string MBTI = UserDataManager.Instance.clearDatas.list[clearDatas.Length].MBTI;
 
 
+        //TODO : 스트링빌더로 업데이트
+        // 아래 형식으로 데이터 변환
+        // 2023/11/21 08:23 0회차 MBTI INFP 
+        string txt = $"{Date} | {clearDatas.Length} 회차 | MBTI {MBTI}";
+
+        clearData.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = txt;
+        clearData.SetActive(true);
+    }
     // ============================ 메인 디스플레이 ============================
 
     // 메인 디스플레이 패널 변경 버튼

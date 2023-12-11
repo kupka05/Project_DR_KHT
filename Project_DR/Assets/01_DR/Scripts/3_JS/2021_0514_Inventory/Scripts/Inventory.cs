@@ -74,7 +74,8 @@ namespace Rito.InventorySystem
 
         // 초기 수용 한도
         [SerializeField, Range(8, 64)]
-        private int _initalCapacity = 8;
+        private int _initalCapacity = 32;
+        public int InitalCapacity => _initalCapacity;
 
         // 최대 수용 한도(아이템 배열 크기)
         [SerializeField, Range(8, 64)]
@@ -83,9 +84,13 @@ namespace Rito.InventorySystem
         [SerializeField]
         private InventoryUI _inventoryUI; // 연결된 인벤토리 UI
 
+        [SerializeField]
+        private PlayerInventoryUI _playerInventoryUI; // 연결된 플레이어 인벤토리 UI
+
         /// <summary> 아이템 목록 </summary>
         [SerializeField]
         private Item[] _items;
+        public Item[] Items => _items;
 
         /// <summary> 업데이트 할 인덱스 목록 </summary>
         private readonly HashSet<int> _indexSetForUpdate = new HashSet<int>();
@@ -94,8 +99,9 @@ namespace Rito.InventorySystem
         private readonly static Dictionary<Type, int> _sortWeightDict = new Dictionary<Type, int>
         {
             { typeof(PortionItemData), 10000 },
-            { typeof(WeaponItemData),  20000 },
-            { typeof(ArmorItemData),   30000 },
+            { typeof(BombItemData),  20000 },
+            { typeof(MaterialItemData),   30000 },
+            { typeof(QuestItemData),   40000 },
         };
 
         private class ItemComparer : IComparer<Item>
@@ -179,13 +185,11 @@ namespace Rito.InventorySystem
             if (!IsValidIndex(index)) return;
 
             Item item = _items[index];
-
             // 1. 아이템이 슬롯에 존재하는 경우
             if (item != null)
             {
                 // 아이콘 등록
                 _inventoryUI.SetItemIcon(index, item.Data.IconSprite);
-
                 // 1-1. 셀 수 있는 아이템
                 if (item is CountableItem ci)
                 {
@@ -223,6 +227,8 @@ namespace Rito.InventorySystem
                 _inventoryUI.RemoveItem(index);
                 _inventoryUI.HideItemAmountText(index); // 수량 텍스트 숨기기
             }
+
+            _playerInventoryUI.UpdatePlayerInventory();
         }
 
         /// <summary> 해당하는 인덱스의 슬롯들의 상태 및 UI 갱신 </summary>
@@ -316,7 +322,6 @@ namespace Rito.InventorySystem
         public int Add(ItemData itemData, int amount = 1)
         {
             int index;
-
             // 1. 수량이 있는 아이템
             if (itemData is CountableItemData ciData)
             {
@@ -498,9 +503,23 @@ namespace Rito.InventorySystem
 
                 if (succeeded)
                 {
+
+                    // 업데이트
                     UpdateSlot(index);
+
+                    // 아이템 정렬 및 PlayerInventoryUI 갱신
+                    SortAndUpdatePlayerInventoryUI();
                 }
             }
+        }
+
+        public void SortAndUpdatePlayerInventoryUI()
+        {
+            // 아이템 정렬
+            SortAll();
+
+            // PlayerInventoryUI 갱신
+            _playerInventoryUI.UpdatePlayerInventory();
         }
 
         /// <summary> 모든 슬롯 UI에 접근 가능 여부 업데이트 </summary>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace BNG {
         public float FadeOutSpeed = 6f;
 
         [Tooltip("Wait X seconds before fading scene in")]
-        public float SceneFadeInDelay = 1f;
+        public float SceneFadeInDelay = 2f;
 
         GameObject fadeObject;
         RectTransform fadeObjectRect;
@@ -101,7 +101,6 @@ namespace BNG {
         /// Fade from transparent to solid color
         /// </summary>
         public virtual void DoFadeIn() {
-
             // Stop if currently running
             if (fadeRoutine != null) {
                 StopCoroutine(fadeRoutine);
@@ -161,7 +160,6 @@ namespace BNG {
                         alpha = alphaTo;
                     }
                 }
-
                 updateImageAlpha(alpha);
 
                 yield return new WaitForEndOfFrame();

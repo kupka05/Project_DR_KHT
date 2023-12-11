@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -110,6 +110,8 @@ namespace BNG {
 
 
         void Start() {
+
+            GetData();
             gZone = GetComponent<GrabbablesInTrigger>();
             _scaleTo = ScaleItem;
 
@@ -495,6 +497,8 @@ namespace BNG {
             // 만약 들고있는 아이템이 없는 경우 : 있으면 되돌릴 필요가 없기 때문에
             if (HeldItem == null)
             {
+                StartingItem.gameObject.SetActive(false);
+                StartingItem.gameObject.SetActive(true);
                 StartingItem.transform.position = transform.position;
                 GrabGrabbable(StartingItem);
             }
@@ -505,6 +509,11 @@ namespace BNG {
         {
             yield return new WaitForSeconds(resetTime);
             ResetItem();
+        }
+
+        private void GetData()
+        {
+            resetTime = (float)DataManager.instance.GetData(1100, "ResetTimer", typeof(float));
         }
     }
 }

@@ -54,6 +54,16 @@ using UnityEngine;
 
 namespace Rito.InventorySystem
 {
+    // 인벤토리 아이템 데이터를 저장하는 클래스
+    public static class InventoryItemData
+    {
+        /*************************************************
+         *                 Public Fields
+         *************************************************/
+        public static Item[] items = new Item[Inventory.MaxCapacity];
+
+    }
+
     public class Inventory : MonoBehaviour
     {
         /***********************************************************************
@@ -79,7 +89,8 @@ namespace Rito.InventorySystem
 
         // 최대 수용 한도(아이템 배열 크기)
         [SerializeField, Range(8, 64)]
-        private int _maxCapacity = 64;
+        private static int _maxCapacity = 64;
+        public static int MaxCapacity => _maxCapacity;
 
         [SerializeField]
         private InventoryUI _inventoryUI; // 연결된 인벤토리 UI
@@ -89,7 +100,7 @@ namespace Rito.InventorySystem
 
         /// <summary> 아이템 목록 </summary>
         [SerializeField]
-        private Item[] _items;
+        private Item[] _items = InventoryItemData.items;
         public Item[] Items => _items;
 
         /// <summary> 업데이트 할 인덱스 목록 </summary>
@@ -129,7 +140,6 @@ namespace Rito.InventorySystem
 #endif
         private void Awake()
         {
-            _items = new Item[_maxCapacity];
             Capacity = _initalCapacity;
             _inventoryUI.SetInventoryReference(this);
         }

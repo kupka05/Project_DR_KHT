@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using Unity.VisualScripting;
+using Rito.InventorySystem;
 
 [System.Serializable]
 public class ClearDatas
@@ -141,6 +142,9 @@ public class UserDataManager : MonoBehaviour
     [Range(-5, 5)]
     public float brightness = 0;
 
+    [Header("Inventory Data")]
+    // 호출 순서 문제로 인해 static으로 설정
+    public static Item[] items = new Item[Inventory.MaxCapacity];
 
 
     #endregion

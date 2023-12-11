@@ -16,7 +16,6 @@ public class AccountManager : MonoBehaviour
     [SerializeField] InputField infoInput;
     [SerializeField] TMP_Text description;
 
-    [SerializeField] string url;
     [SerializeField] string sceneName;
 
     public void LoginClick() => StartCoroutine(AccountCo("login"));
@@ -25,7 +24,7 @@ public class AccountManager : MonoBehaviour
 
     public void SaveClick() => StartCoroutine(AccountCo("save"));
 
-////// 기존
+    ////// 기존
     //IEnumerator AccountCo(string command)
     //{
     //    WWWForm form = new WWWForm();
@@ -46,11 +45,11 @@ public class AccountManager : MonoBehaviour
     //            SceneManager.LoadScene("JH MainScene");
     //            break;
     //    }
-      
+
     //}
     IEnumerator AccountCo(string command)
     {
-        
+
         string id = idInput.text;
         WWWForm form = new WWWForm();
         form.AddField("command", command);
@@ -58,16 +57,7 @@ public class AccountManager : MonoBehaviour
         form.AddField("password", passwordInput.text);
         form.AddField("mbti", infoInput.text);
 
-        Debug.Log(url);
-
-        TextAsset txt = Resources.Load("231211") as TextAsset;
-        string[] key = txt.text.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-        Debug.Log(key[0] + ", " + key[1]);
-        url = Crypto.DecryptAESByBase64Key(url, key[0], key[1]);
-
-
-        Debug.Log(url);
-
+        string url = SecureURLHandler.GetURL();
 
         // using문을 사용하여 메모리 누수 해결
         // 사용이 끝난 후 할당 해제
@@ -84,13 +74,13 @@ public class AccountManager : MonoBehaviour
                     description.text = string.Format("로그인 성공");
                     PlayerDataManager.SetID(id);
                     SceneManager.LoadScene(sceneName);
-                    break; 
+                    break;
                 case "Fail to login":
                     description.text = string.Format("로그인 실패");
-                    break; 
+                    break;
                 case "Fail to register":
                     description.text = string.Format("계정 생성 실패");
-                    break;                
+                    break;
                 case "Register complete":
                     description.text = string.Format("계정 생성 성공");
                     break;
@@ -100,16 +90,6 @@ public class AccountManager : MonoBehaviour
             // 추가로 Dipose()함수를 호출해서 할당 해제
             www.Dispose();
         }
-    }
-
-    public string DecryptURL(string url)
-    {
-        TextAsset txt = Resources.Load("231211") as TextAsset; 
-        string[] key = txt.text.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-        Debug.Log(key[0] + ", " + key[1]);
-        url = Crypto.DecryptAESByBase64Key(url, key[0], key[1]);
-
-        return url;
     }
 
     //IEnumerator AccountCo(string command)

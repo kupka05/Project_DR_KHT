@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using Unity.VisualScripting;
 using Rito.InventorySystem;
+using static StatusData;
 
 [System.Serializable]
 public class ClearDatas
@@ -22,10 +23,10 @@ public class ClearData
     public string Date;
 }
 
+// DB에서 가져온 유저의 데이터를 관리하는 클래스
 
 public class UserDataManager : MonoBehaviour
 {
-    // DB에서 가져온 유저의 데이터를 관리하는 클래스
     #region 싱글톤 패턴
 
 
@@ -48,7 +49,7 @@ public class UserDataManager : MonoBehaviour
     }
     #endregion
 
-    // 옵저버 패턴
+    #region 옵저버 패턴
     public delegate void UserDataUpdateDelegate();
     public event UserDataUpdateDelegate OnUserDataUpdate;
     public void UpdateUserData()
@@ -56,30 +57,33 @@ public class UserDataManager : MonoBehaviour
         // 데이터가 변경될 때마다 호출
         OnUserDataUpdate?.Invoke();
     }
-
-    #region 옵저버 패턴 private 유저 데이터
-    private float _HP;
-    private float _Exp;
-    private int _Gold;
-
     #endregion
+
     #region 유저 데이터
     [Header("DB")]
     public bool dataLoadSuccess;    // 데이터 불러옴 여부
 
-[Header("User Data")]
+    [Header("User Data")]           // 유저 데이터
     public string PlayerID;
+    public float HP;
+    public float GainGold;
+    public float GainExp;
 
-    public float HP  // 플레이어 체력
+    [SerializeField]
+    private int _Level;
+    public int Level 
     {
-        get  { return _HP; }
-        set 
-        { 
-            _HP = value; 
+        get { return _Level; }
+        set
+        {
+            _Level = HPUpgrade + GainGoldUpgrade + GainExpUpgrade ;
             OnUserDataUpdate?.Invoke();
         }
     }
-    public float Exp // 플레이어 현재 경험치
+
+    [SerializeField]
+    private int _Exp;
+    public int Exp // 플레이어 현재 경험치
     {
         get { return _Exp; }
         set
@@ -87,7 +91,10 @@ public class UserDataManager : MonoBehaviour
             _Exp = value;
             OnUserDataUpdate?.Invoke();
         }
-    }                 
+    }
+
+    [SerializeField]
+    private int _Gold;
     public int Gold  // 플레이어 현재 골드
     {
         get { return _Gold; }
@@ -97,32 +104,43 @@ public class UserDataManager : MonoBehaviour
             OnUserDataUpdate?.Invoke();
         }
     }
-    [Header("PC Data")]
-    public float ExpIncrease;         // 플레이어 경험치 증가량
-    public float GoldIncrease;        // 플레이어 골드 증가량
+
+    [Header("PC Status Data")]      // PC 스탯 업그레이드 데이터
+    [SerializeField]
+    private int _HPUpgrade;
+    public int HPUpgrade  // 플레이어 체력
+    {
+        get { return _HPUpgrade; }
+        set
+        {
+            _HPUpgrade = value;
+            OnUserDataUpdate?.Invoke();
+        }
+    }
+    public int GainExpUpgrade;         // 플레이어 경험치 증가량
+    public int GainGoldUpgrade;        // 플레이어 골드 증가량
+
 
     [Header("Weapon Data")]
-
-    public float WeaponAtk;          // 공격력
-    public float WeaponCriRate;      // 치명타 확률
-    public float WeaponCriDamage;    // 치명타 증가율
-    public float WeaponAtkRate;      // 공격 속도
+    public int WeaponAtk;           // 공격력
+    public int WeaponCriRate;       // 치명타 확률
+    public int WeaponCriDamage;     // 치명타 증가율
+    public int WeaponAtkRate;       // 공격 속도
 
     [Header("Skill Data")]
-    public int TeraLv;        // 테라드릴 레벨
-    public int GrinderLv;     // 드릴연마 레벨
-    public int CrashLv;       // 드릴분쇄 레벨
-    public int LandingLv;     // 드릴랜딩 레벨
+    public int TeraLv;                // 테라드릴 레벨
+    public int GrinderLv;             // 드릴연마 레벨
+    public int CrashLv;               // 드릴분쇄 레벨
+    public int LandingLv;             // 드릴랜딩 레벨
 
     [Header("Quest Data")]
-    public string QuestMain;           // 현재 퀘스트
+    public string QuestMain;          // 현재 퀘스트
 
     [Header("Clear Data")]
-    public int ClearCount;         // 클리어 횟수
-    private string JsonData;       // Json을 담을 직렬화된 클리어 데이터
+    public int ClearCount;            // 클리어 횟수
+    private string JsonData;          // Json을 담을 직렬화된 클리어 데이터
     private ClearDatas _clearDatas;
-
-    public ClearDatas clearDatas  // 클리어 데이터 모음
+    public ClearDatas clearDatas      // 클리어 데이터 리스트
     {
         get { return _clearDatas; }
         set
@@ -130,12 +148,13 @@ public class UserDataManager : MonoBehaviour
             _clearDatas = value;
             if (value == null)
             {
-                Debug.Log("신규 데이터 생성");
+                Debug.Log("클리어 데이터 없음. 신규 데이터 생성");
                 _clearDatas = new ClearDatas();
             }
         }
     }
-    [Header("Setting Data")]
+
+    [Header("Setting Data")]          // 환경 설정
     public float rotationAmount = 45f;
     [Range(0, 100)]
     public float masterSound, sfx, backgroundSound;
@@ -146,16 +165,15 @@ public class UserDataManager : MonoBehaviour
     // 호출 순서 문제로 인해 static으로 설정
     public static Item[] items = new Item[Inventory.MaxCapacity];
 
-
+    [Header("Reference Data")]
+    public StatData statData;   // 업그레이드 스탯 정보가 담긴 데이터
     #endregion
 
-
-    // 로드되면 이벤트 호출
-    public UnityEvent LoadDataEvent;
+    // ####################### Awake #######################
 
     private void Awake()
     {
-
+        // 싱글톤 패턴
         if (m_Instance == null)
         {
             m_Instance = this;
@@ -163,26 +181,50 @@ public class UserDataManager : MonoBehaviour
         }
         else
         { Destroy(gameObject); }
-        
 
         Debug.Log("데이터 요청 시간 : " + GetCurrentDate());
-        PlayerDataManager.Update(true);
-    }
-    public void Start()
-    {
-    }
-    // ============================ 데이터 로드 ============================
 
+        GetReferenceData();
+        PlayerDataManager.Update(true); // 데이터 요청
+    }
+
+    // ####################### 데이터 로드 #######################
+    
+    // 참조 데이터 로드
+    public void GetReferenceData()
+    {
+        StatusData statusData = new StatusData();
+        statusData.GetData(statData);
+    }
 
     // 로그인 후, DB에서 데이터 받아오기
     public void GetDataFromDB()
     {
         PlayerID = PlayerDataManager.PlayerID;
-        HP = PlayerDataManager.HP;
         Gold = PlayerDataManager.Gold;
         Exp = PlayerDataManager.Exp;
-        GoldIncrease = PlayerDataManager.GoldIncrease;
-        ExpIncrease = PlayerDataManager.ExpIncrease;
+
+        // 업그레이드 먼저 불러오기
+        HPUpgrade = PlayerDataManager.HP;
+        GainGoldUpgrade = PlayerDataManager.GoldIncrease;
+        GainExpUpgrade = PlayerDataManager.ExpIncrease;
+
+        // HP 업그레이드 세팅
+        HP = (float)DataManager.instance.GetData(1001, "Health", typeof(float));
+        if(HPUpgrade != 0)
+        {
+            HP += statData.upgradeHp[HPUpgrade-1].sum;
+        }
+        // 골드 획득량 업그레이드 세팅
+        if (GainGoldUpgrade != 0)
+        {
+            GainGold += statData.upgradeGainGold[GainGoldUpgrade-1].sum;
+        }
+        // 경험치 획득량 업그레이드 세팅
+        if (GainExpUpgrade != 0)
+        {
+            GainExp = statData.upgradeGainExp[GainExpUpgrade-1].sum;
+        }
 
         WeaponAtk = PlayerDataManager.WeaponAtk;
         WeaponCriRate = PlayerDataManager.WeaponCriRate;
@@ -194,6 +236,9 @@ public class UserDataManager : MonoBehaviour
         CrashLv = PlayerDataManager.SkillLevel3;
         LandingLv = PlayerDataManager.SkillLevel4;
 
+        // 총 레벨
+        Level = (HPUpgrade + GainGoldUpgrade + GainExpUpgrade);
+
         QuestMain = PlayerDataManager.QuestMain;
         ClearCount = PlayerDataManager.ClearCount;
 
@@ -204,7 +249,7 @@ public class UserDataManager : MonoBehaviour
 
         clearDatas = JsonUtility.FromJson<ClearDatas>(decodedString);
 
-        if(clearDatas.list == null)
+        if(clearDatas.list == null) // 리스트가 없으면 새로 만들기
         {
             clearDatas.list = new List<ClearData>();
         }
@@ -213,8 +258,6 @@ public class UserDataManager : MonoBehaviour
         // Ex. 플레이어 상태창, 상점의 현재 골드 등
         dataLoadSuccess = true;
         Debug.Log("데이터 로드 시간 : " + GetCurrentDate());
-
-       
     }
 
     // DB에 데이터를 요청하기 위한 메서드
@@ -231,11 +274,10 @@ public class UserDataManager : MonoBehaviour
             action();
             yield break;
         }
-        Debug.Log("데이터 로드를 시도하나?");
         yield return null;
     }
 
-    // =========================== 세이브 데이터 ===========================
+    // ####################### 세이브 데이터 ####################### \\
     // 클리어 데이터 신규 저장
     public void SaveClearData(string MBTI)
     {
@@ -257,6 +299,11 @@ public class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("clear_count", ClearCount);
         PlayerDataManager.Update(true);
     }
+    // 클리어 시간을 가져오는 함수
+    private string GetCurrentDate()
+    {
+        return DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+    }
 
     // 클리어 저장
     // TODO : 플레이어 클리어시 저장하는 유저 데이터
@@ -265,31 +312,23 @@ public class UserDataManager : MonoBehaviour
 
     }
 
-    // 클리어 시간을 가져오는 함수
-    private string GetCurrentDate()
-    {
-        return DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
-    }
 
-
-
-    // ====================== 디버그용 PC 데이터 세팅 ======================
+    // ####################### 디버그용 PC 데이터 세팅 ####################### \\
     public void SetDebugData()
     {
-        HP = (float)DataManager.instance.GetData(1001, "Health", typeof(float));
-        WeaponAtk = (float)DataManager.instance.GetData(1100, "Damage", typeof(float));
-        WeaponCriRate = (float)DataManager.instance.GetData(1100, "CritChance", typeof(float));
-        WeaponCriDamage = (float)DataManager.instance.GetData(1100, "CritIncrease", typeof(float));
-        WeaponAtkRate = (float)DataManager.instance.GetData(1100, "AttackSpeed", typeof(float));
-
-        PlayerDataManager.Save("hp", HP);
+        PlayerDataManager.Save("hp", 1);
         PlayerDataManager.Save("gold", 5000);
         PlayerDataManager.Save("exp", 5000);
-        PlayerDataManager.Save("weapon_atk", WeaponAtk);
-        PlayerDataManager.Save("weapon_cri_rate", WeaponCriRate);
-        PlayerDataManager.Save("weapon_cri_damage", WeaponCriDamage);
-        PlayerDataManager.Save("weapon_atk_rate", WeaponAtkRate);
+        PlayerDataManager.Save("gold_increase", 3);
+        PlayerDataManager.Save("exp_increase", 9);
+
+        PlayerDataManager.Save("weapon_atk", 3);
+        PlayerDataManager.Save("weapon_cri_rate", 5);
+        PlayerDataManager.Save("weapon_cri_damage", 9);
+        PlayerDataManager.Save("weapon_atk_rate", 10);
     }
+
+    // #######################  PC 데이터 세팅  ####################### \\
 
     public void AddGold(int num)
     {

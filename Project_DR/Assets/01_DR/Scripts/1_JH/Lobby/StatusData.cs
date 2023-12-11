@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 // 스탯 데이터를 담을 클래스
 [System.Serializable]
 public class StatData
-{ 
+{
     public List<UpgradePC> upgradeHp;
     public List<UpgradePC> upgradeGainExp;
-    public List<UpgradePC> upgradeGaingold;
+    public List<UpgradePC> upgradeGainGold;
     public List<UpgradeWeapon> upgradeAtk;
     public List<UpgradeWeapon> upgradeCrit;
     public List<UpgradeWeapon> upgradeCritDmg;
@@ -18,7 +19,7 @@ public class StatData
 
 // PC업그레이드 값을 담을 클래스
 [System.Serializable]
-public class UpgradePC      
+public class UpgradePC
 {
     public int level;       // 현재 레벨
     public float value;     // 증가값
@@ -40,8 +41,7 @@ public class UpgradeWeapon
     public int exp;         // 소모 경험치
 }
 
-
-public class StatusData : MonoBehaviour
+public class StatusData
 {
     // 스프레드 시트의 데이터 ID
     [Header("Data ID")]
@@ -60,24 +60,23 @@ public class StatusData : MonoBehaviour
 
    
 
-    public void Start()
-    {
-        //Debug.Log(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
-        GetData();
-
-    }
+    //public void Awake()
+    //{
+    //    GetData(data);
+    //}
 
     // 데이터 가져오기
-    public void GetData()
+    public StatData GetData(StatData _data)
     {
-        data.upgradeHp = GetPcData(hpID);
-        data.upgradeGainExp = GetPcData(gainExpID);
-        data.upgradeGaingold = GetPcData(gainGoldID);
+        _data.upgradeHp = GetPcData(hpID);
+        _data.upgradeGainExp = GetPcData(gainExpID);
+        _data.upgradeGainGold = GetPcData(gainGoldID);
 
-        data.upgradeAtk = GetWeaponData(atkID);
-        data.upgradeCrit = GetWeaponData(critID);
-        data.upgradeCritDmg = GetWeaponData(critDmgID);
-        data.upgradeAtkSpd = GetWeaponData(atkspd);
+        _data.upgradeAtk = GetWeaponData(atkID);
+        _data.upgradeCrit = GetWeaponData(critID);
+        _data.upgradeCritDmg = GetWeaponData(critDmgID);
+        _data.upgradeAtkSpd = GetWeaponData(atkspd);
+        return _data;
     }
 
 

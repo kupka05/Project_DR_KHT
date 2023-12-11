@@ -54,16 +54,6 @@ using UnityEngine;
 
 namespace Rito.InventorySystem
 {
-    // 인벤토리 아이템 데이터를 저장하는 클래스
-    public static class InventoryItemData
-    {
-        /*************************************************
-         *                 Public Fields
-         *************************************************/
-        public static Item[] items = new Item[Inventory.MaxCapacity];
-
-    }
-
     public class Inventory : MonoBehaviour
     {
         /***********************************************************************
@@ -100,7 +90,7 @@ namespace Rito.InventorySystem
 
         /// <summary> 아이템 목록 </summary>
         [SerializeField]
-        private Item[] _items = InventoryItemData.items;
+        private Item[] _items = UserDataManager.items;
         public Item[] Items => _items;
 
         /// <summary> 업데이트 할 인덱스 목록 </summary>

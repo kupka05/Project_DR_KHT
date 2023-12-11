@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using System;
 
 public class AccountManager : MonoBehaviour
 {
@@ -49,12 +50,25 @@ public class AccountManager : MonoBehaviour
     //}
     IEnumerator AccountCo(string command)
     {
+        
         string id = idInput.text;
         WWWForm form = new WWWForm();
         form.AddField("command", command);
         form.AddField("id", idInput.text);
         form.AddField("password", passwordInput.text);
         form.AddField("mbti", infoInput.text);
+
+        Debug.Log(url);
+
+        TextAsset txt = Resources.Load("231211") as TextAsset;
+        string[] key = txt.text.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        Debug.Log(key[0] + ", " + key[1]);
+        url = Crypto.DecryptAESByBase64Key(url, key[0], key[1]);
+
+
+        Debug.Log(url);
+
+
         // using문을 사용하여 메모리 누수 해결
         // 사용이 끝난 후 할당 해제
         using (UnityWebRequest www = UnityWebRequest.Post(url, form))
@@ -88,7 +102,15 @@ public class AccountManager : MonoBehaviour
         }
     }
 
+    public string DecryptURL(string url)
+    {
+        TextAsset txt = Resources.Load("231211") as TextAsset; 
+        string[] key = txt.text.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        Debug.Log(key[0] + ", " + key[1]);
+        url = Crypto.DecryptAESByBase64Key(url, key[0], key[1]);
 
+        return url;
+    }
 
     //IEnumerator AccountCo(string command)
     //{

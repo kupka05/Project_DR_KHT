@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -36,6 +37,7 @@ public class LobbyEvent : MonoBehaviour
     public GameObject skillUpgrade3;       // 스킬 상태창
     public GameObject skillUpgrade4;       // 스킬 상태창
 
+    public CryptoComponent crypto;
 
     [Header("Player Status")]
     public TMP_Text playerLevel;

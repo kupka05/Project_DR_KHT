@@ -7,20 +7,29 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Reference")]
+    public PlayerController playerController;
+    public Rigidbody playerRigid;
     private Damageable playerDamage;
+    private DamageScreenFader fader;
+    private SmoothLocomotion locomo;
+
+    [Header("Health")]
     public float health;
     public float maxHealth;
-    private DamageScreenFader fader;
     public float dyingAmount = 0.25f; // 빈사상태 수치
-    public float knockbackDistance = 1.5f; // 넉백
-    public float knockbackSpeed = 2f; // 넉백
+
+    [Header("Damage")]
+    public float knockbackForce = 1.5f; // 넉백
+
+
 
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
-
-    public PlayerController playerController;
-
-    public List<ControllerBinding> healthUpInput = new List<ControllerBinding>() { ControllerBinding.None };
     IEnumerator knockbackRoutine;
+
+
+    [Header("Input")]
+    public List<ControllerBinding> healthUpInput = new List<ControllerBinding>() { ControllerBinding.None };
     public PlayerStatusController[] playerHealthUI;
     // Start is called before the first frame update
 
@@ -38,6 +47,9 @@ public class PlayerHealth : MonoBehaviour
         SetMaxHealthUIUpdate();
 
         playerController = GetComponent<PlayerController>();
+        playerRigid = gameObject.GetOrAddRigidbody();
+        locomo = GetComponent<SmoothLocomotion>();
+
         if (Camera.main)
         {
             fader = Camera.main.transform.GetComponent<DamageScreenFader>();
@@ -109,37 +121,47 @@ public class PlayerHealth : MonoBehaviour
 
     public void OnKnockback(Vector3 targetPos)
     {
-        StopKnockBack();
+        if (locomo.state == PlayerState.grounded || locomo.state == PlayerState.walking)
+        {
+            playerRigid.AddForce(transform.localPosition - targetPos * knockbackForce, ForceMode.Impulse);          
+        }
+
+    }
+
+    // Regacy
+    //public void OnKnockback(Vector3 targetPos)
+    //{
+    //    StopKnockBack();
 
 
-        //Vector3 knockbackTarget = transform.localPosition + (-transform.forward * knockbackDistance);
-        Vector3 knockbackTarget = transform.localPosition - targetPos*knockbackDistance;
-        knockbackRoutine = KnockBackRoutine(knockbackTarget);
-        StartCoroutine(knockbackRoutine);
-        Invoke("StopKnockBack", 0.5f);
-    }
-    public void StopKnockBack()
-    {
-        if (knockbackRoutine != null)
-        {
-            StopCoroutine(knockbackRoutine);
-            knockbackRoutine = null;
-        }
-    }
-    IEnumerator KnockBackRoutine(Vector3 target)
-    {
-        while (true)
-        {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, target, Time.fixedDeltaTime * knockbackSpeed);
-            float distance = Vector3.Distance(transform.localPosition, target);
-            if (distance <= 0.05f)
-            {
-                break;
-            }
-            yield return waitForFixedUpdate;
-//            yield return null;
-        }
-    }
+    //    //Vector3 knockbackTarget = transform.localPosition + (-transform.forward * knockbackDistance);
+    //    Vector3 knockbackTarget = transform.localPosition - targetPos*knockbackDistance;
+    //    knockbackRoutine = KnockBackRoutine(knockbackTarget);
+    //    StartCoroutine(knockbackRoutine);
+    //    Invoke("StopKnockBack", 0.5f);
+    //}
+//    IEnumerator KnockBackRoutine(Vector3 target)
+//    {
+//        while (true)
+//        {
+//            transform.localPosition = Vector3.Lerp(transform.localPosition, target, Time.fixedDeltaTime * knockbackSpeed);
+//            float distance = Vector3.Distance(transform.localPosition, target);
+//            if (distance <= 0.05f)
+//            {
+//                break;
+//            }
+//            yield return waitForFixedUpdate;
+////            yield return null;
+//        }
+//    }
+    //public void StopKnockBack()
+    //{
+    //    if (knockbackRoutine != null)
+    //    {
+    //        StopCoroutine(knockbackRoutine);
+    //        knockbackRoutine = null;
+    //    }
+    //}
 
     private void OnTriggerEnter(Collider other)
     {

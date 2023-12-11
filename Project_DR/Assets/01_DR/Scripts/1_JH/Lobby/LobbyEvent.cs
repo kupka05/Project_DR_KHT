@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -36,6 +37,7 @@ public class LobbyEvent : MonoBehaviour
     public GameObject skillUpgrade3;       // 스킬 상태창
     public GameObject skillUpgrade4;       // 스킬 상태창
 
+    public CryptoComponent crypto;
 
     [Header("Player Status")]
     public TMP_Text playerLevel;
@@ -84,12 +86,15 @@ public class LobbyEvent : MonoBehaviour
 
     // ============================ 데이터 불러오기 ============================
 
+    public void RequestData()
+    {
+
+    }
+
+
     // DB에서 데이터 불러오기 완료 후 이벤트로 실행
     public void GetDataFromDB()
     {
-        // ToDo. 데이터 불러와지면 삭제예정
-        UserDataManager.Instance.Exp = 5000;
-
         GetClearData();
         UpdatePlayerStatusUI();
     }

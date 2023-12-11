@@ -65,8 +65,10 @@ public class UserDataManager : MonoBehaviour
 
 
     #region 유저 데이터
+    [Header("DB")]
+    public bool dataLoadSuccess;    // 데이터 불러옴 여부
 
-    [Header("User Data")]
+[Header("User Data")]
     public string PlayerID;
 
     public float HP  // 플레이어 체력
@@ -121,11 +123,14 @@ public class UserDataManager : MonoBehaviour
     private string JsonData;       // Json을 담을 직렬화된 클리어 데이터
     public ClearDatas clearDatas;  // 클리어 데이터 모음
 
-    [Header("Setting")]
+    [Header("Setting Data")]
+    public float rotationAmount = 45f;
     [Range(0, 100)]
-    public float masterSound, sfx, backgroundSound = 100;
-    [Range(0, 100)]
-    public float brightness = 50;
+    public float masterSound, sfx, backgroundSound;
+    [Range(-5, 5)]
+    public float brightness = 0;
+
+
 
     #endregion
 
@@ -134,7 +139,8 @@ public class UserDataManager : MonoBehaviour
 
     private void Awake()
     {
-        if(m_Instance == null)
+
+        if (m_Instance == null)
         {
             m_Instance = this;
             DontDestroyOnLoad(this.gameObject);            
@@ -142,12 +148,9 @@ public class UserDataManager : MonoBehaviour
         else
         { Destroy(gameObject); }
         
-        // 디버그 캐릭터면 시트에서 데이터 가져오기
-        if(PlayerID == "")
-        { SetDebugData(); }
 
+        Debug.Log("데이터 요청 시간 : " + GetCurrentDate());
         PlayerDataManager.Update(true);
-
     }
     public void Start()
     {
@@ -187,7 +190,10 @@ public class UserDataManager : MonoBehaviour
 
         // 데이터를 불러오고 해야할 이벤트가 있다면 이벤트 실행
         // Ex. 플레이어 상태창, 상점의 현재 골드 등
-        LoadDataEvent?.Invoke();
+        dataLoadSuccess = true;
+        Debug.Log("데이터 로드 시간 : " + GetCurrentDate());
+
+       
     }
 
 

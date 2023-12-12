@@ -1,7 +1,6 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
-
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,6 +10,8 @@ using static UnityEngine.UI.GridLayoutGroup;
 
 public class Monster : MonoBehaviour
 {
+    public UnityEngine.UI.Image smashImage;
+
     public UnityEngine.UI.Slider monsterHpSlider;
 
     //스턴 추가 - hit상태
@@ -61,11 +62,9 @@ public class Monster : MonoBehaviour
 
     public Type monsterType = Type.HUMAN_ROBOT;
 
-    [Header("몬스터 원거리 관련")]
-    public Transform bulletPortLeft;
-    public Transform bulletPortRight;
-    public Transform bulletPort;
-    public GameObject monsterBullet;
+    [Header("분쇄")]
+    public int smashCount = 0;      //깍아냄
+    public int smashMaxCount = 10;  //깍아냄 횟수 충족
 
     [Header("몬스터 테이블")]
     public float hp = default;       //체력이랑 damageble 보내준다
@@ -123,11 +122,14 @@ public class Monster : MonoBehaviour
     [Header("Debug")]
     public float distanceDebug;
 
-
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         GetData(monsterId);
+    }
+
+    // Start is called before the first frame update
+    public virtual void Start()
+    {
 
         monsterTr = GetComponent<Transform>();
         playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
@@ -144,7 +146,6 @@ public class Monster : MonoBehaviour
             damageCollider.Damage = attack;
             //attack = damageCollider.Damage; // 지환 : attack은 시트에서 가져온 데이터 값
         }
-
 
         nav.speed = speed;
 
@@ -173,11 +174,14 @@ public class Monster : MonoBehaviour
             Vector3 targetPostition = 
                 new Vector3(playerTr.position.x,this.transform.position.y, playerTr.position.z);
             this.transform.LookAt(targetPostition);
-            //transform.LookAt(playerTr.position);
+            
         }
+
+        if (playerTr == null)
+            return;
     }
 
-    public void GetData(int id)
+    public virtual void GetData(int id)
     {
         hp = (float)DataManager.instance.GetData(id, "MonHP", typeof(float));  
         exp = (float)DataManager.instance.GetData(id, "MonExp", typeof(float));
@@ -538,6 +542,16 @@ public class Monster : MonoBehaviour
     // 스턴 딜레이
     public virtual IEnumerator StunDelay()
     {
+        ////분쇄 카운터
+        //if (smashCount >= smashMaxCount)
+        //{
+        //    //TODO:데미지 받아서 카운트 충족시 디버프
+
+
+        //    //smashImage.enabled = true;
+
+        //}
+
         isStun = true;
         anim.SetTrigger(hashHit);
         damageable.stun = true;
@@ -547,6 +561,9 @@ public class Monster : MonoBehaviour
         yield break;
     }
 
+    
+
+    
    
     void OnDrawGizmos()
     {

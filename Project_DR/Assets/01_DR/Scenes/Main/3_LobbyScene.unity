@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 203844588}
-  m_IndirectSpecularColor: {r: 0.0014929533, g: 0.001392815, b: 0.0013208939, a: 1}
+  m_IndirectSpecularColor: {r: 0.0014834992, g: 0.0013713579, b: 0.0013408005, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -781,6 +781,7 @@ MonoBehaviour:
   afterValue: {fileID: 525900856}
   index: 10
   level: 0
+  newLevel: 0
   contentPos: {fileID: 1951589742}
   item: {fileID: 1990699889}
   isActive: 0
@@ -2087,7 +2088,7 @@ PrefabInstance:
     - target: {fileID: 7837797319980225010, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.003334418
+      value: -0.0038272226
       objectReference: {fileID: 0}
     - target: {fileID: 7837797319993773063, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -2137,7 +2138,7 @@ PrefabInstance:
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0031937473
+      value: -0.0008375065
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -6506,8 +6507,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dataLoadSuccess: 0
   PlayerID: 
-  ExpIncrease: 0
-  GoldIncrease: 0
+  HP: 0
+  GainGold: 0
+  GainExp: 0
+  _Level: 0
+  _Exp: 0
+  _Gold: 0
+  _HPUpgrade: 0
+  GainExpUpgrade: 0
+  GainGoldUpgrade: 0
   WeaponAtk: 0
   WeaponCriRate: 0
   WeaponCriDamage: 0
@@ -6523,21 +6531,14 @@ MonoBehaviour:
   sfx: 100
   backgroundSound: 100
   brightness: 0
-  LoadDataEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1920788381}
-        m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: GetDataFromDB
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  statData:
+    upgradeHp: []
+    upgradeGainExp: []
+    upgradeGaingold: []
+    upgradeAtk: []
+    upgradeCrit: []
+    upgradeCritDmg: []
+    upgradeAtkSpd: []
 --- !u!4 &275829605
 Transform:
   m_ObjectHideFlags: 0
@@ -6614,6 +6615,7 @@ MonoBehaviour:
   afterValue: {fileID: 0}
   index: 10
   level: 5
+  newLevel: 0
   contentPos: {fileID: 1974216585}
   item: {fileID: 500682381}
   isActive: 0
@@ -8060,6 +8062,7 @@ MonoBehaviour:
   afterValue: {fileID: 0}
   index: 10
   level: 2
+  newLevel: 0
   contentPos: {fileID: 755431155}
   item: {fileID: 716805896}
   isActive: 0
@@ -10230,6 +10233,7 @@ MonoBehaviour:
   afterValue: {fileID: 1099165027}
   index: 10
   level: 5
+  newLevel: 0
   contentPos: {fileID: 1172301742}
   item: {fileID: 266600349}
   isActive: 0
@@ -11594,6 +11598,7 @@ MonoBehaviour:
   afterValue: {fileID: 0}
   index: 10
   level: 5
+  newLevel: 0
   contentPos: {fileID: 1497101089}
   item: {fileID: 416788898}
   isActive: 0
@@ -12630,6 +12635,7 @@ MonoBehaviour:
   afterValue: {fileID: 0}
   index: 10
   level: 2
+  newLevel: 0
   contentPos: {fileID: 620836685}
   item: {fileID: 1686910740}
   isActive: 0
@@ -15957,6 +15963,7 @@ MonoBehaviour:
   afterValue: {fileID: 1263195488}
   index: 10
   level: 2
+  newLevel: 0
   contentPos: {fileID: 1768108038}
   item: {fileID: 443686438}
   isActive: 0
@@ -19959,7 +19966,8 @@ MonoBehaviour:
   beforeValue: {fileID: 2058465578}
   afterValue: {fileID: 719112949}
   index: 10
-  level: 5
+  level: 0
+  newLevel: 0
   contentPos: {fileID: 584599418}
   item: {fileID: 1811617386}
   isActive: 0
@@ -20598,6 +20606,7 @@ MonoBehaviour:
   afterValue: {fileID: 1099165027}
   index: 10
   level: 5
+  newLevel: 0
   contentPos: {fileID: 1947873380}
   item: {fileID: 947000777}
   isActive: 0
@@ -22845,6 +22854,7 @@ MonoBehaviour:
   afterValue: {fileID: 0}
   index: 10
   level: 2
+  newLevel: 0
   contentPos: {fileID: 1416341145}
   item: {fileID: 1605520975}
   isActive: 0
@@ -32763,6 +32773,7 @@ MonoBehaviour:
   afterValue: {fileID: 1263195488}
   index: 10
   level: 2
+  newLevel: 0
   contentPos: {fileID: 2074813953}
   item: {fileID: 1938047101}
   isActive: 0
@@ -44783,6 +44794,7 @@ MonoBehaviour:
   afterValue: {fileID: 0}
   index: 10
   level: 2
+  newLevel: 0
   contentPos: {fileID: 499191357}
   item: {fileID: 805212731}
   isActive: 0
@@ -46686,6 +46698,7 @@ MonoBehaviour:
   afterValue: {fileID: 0}
   index: 10
   level: 5
+  newLevel: 0
   contentPos: {fileID: 491592147}
   item: {fileID: 940711349}
   isActive: 0
@@ -49025,6 +49038,7 @@ MonoBehaviour:
   afterValue: {fileID: 1727678078}
   index: 10
   level: 2
+  newLevel: 0
   contentPos: {fileID: 571314227}
   item: {fileID: 1674047490}
   isActive: 0
@@ -59297,7 +59311,6 @@ GameObject:
   - component: {fileID: 1920788382}
   - component: {fileID: 1920788381}
   - component: {fileID: 1920788383}
-  - component: {fileID: 1920788384}
   m_Layer: 2
   m_Name: Lobby Event
   m_TagString: Untagged
@@ -59317,13 +59330,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b09679d73afb83459f3c062f27b8d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnroomDoor: {fileID: 1925988123}
-  openDoorButton: {fileID: 835015863}
   mainDisplay: {fileID: 100686778}
   mbtiDisplay: {fileID: 858404010}
   clearDatas: []
   clearDataObj: {fileID: 1143982039}
   contentPos: {fileID: 1493497087}
+  spawnroomDoor: {fileID: 1925988123}
+  openDoorButton: {fileID: 835015863}
   statusDisplay: {fileID: 719821487}
   statusPos: {fileID: 946235405}
   selectStatusDis: {fileID: 95631383}
@@ -59336,11 +59349,13 @@ MonoBehaviour:
   skillUpgrade2: {fileID: 1112672935}
   skillUpgrade3: {fileID: 1667110437}
   skillUpgrade4: {fileID: 2120684865}
-  crypto: {fileID: 0}
   playerLevel: {fileID: 1151022968}
   playerID: {fileID: 1113575024}
   playerGold: {fileID: 1626335512}
   playerExp: {fileID: 1863508066}
+  hpUpBtn: {fileID: 758546119}
+  goldIncreBtn: {fileID: 1676996235}
+  expIncreBtn: {fileID: 52614958}
   curPlayerHp: {fileID: 945941515}
   beforePlayerHp: {fileID: 1201815964}
   afterPlayerHp: {fileID: 1409031569}
@@ -59381,33 +59396,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 6
   m_Center: {x: 16, y: 1, z: -34}
---- !u!114 &1920788384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1920788380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3582dcf0780cb241b81a49361e3f8a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hpID: 901101
-  gainExpID: 901201
-  gainGoldID: 901301
-  atkID: 911101
-  critID: 911201
-  critDmgID: 911301
-  atkspd: 911401
-  data:
-    upgradeHp: []
-    upgradeGainExp: []
-    upgradeGaingold: []
-    upgradeAtk: []
-    upgradeCrit: []
-    upgradeCritDmg: []
-    upgradeAtkSpd: []
 --- !u!1 &1925988123 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1463575113664835173, guid: cfb0e872e1c4f314592b6d2923e9696b,
@@ -63298,6 +63286,7 @@ MonoBehaviour:
   afterValue: {fileID: 0}
   index: 10
   level: 2
+  newLevel: 0
   contentPos: {fileID: 1325030095}
   item: {fileID: 1271348035}
   isActive: 0
@@ -65148,6 +65137,7 @@ MonoBehaviour:
   afterValue: {fileID: 0}
   index: 10
   level: 2
+  newLevel: 0
   contentPos: {fileID: 582654351}
   item: {fileID: 1353642330}
   isActive: 0

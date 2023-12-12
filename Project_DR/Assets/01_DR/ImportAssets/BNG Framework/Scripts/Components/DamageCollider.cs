@@ -50,7 +50,8 @@ namespace BNG {
         public bool isPlayer;
         public bool canSelfHarm = false; // 자해 여부
         public bool isKnockback = true ;
-        public bool isBossProjectile;    // 보스 투사체 여부
+        public bool isBossProjectile;  //보스 예외 처리
+        public bool isEliteProjectile; //엘리트몬스터 예외 처리
 
 
         Damageable thisDamageable;
@@ -78,10 +79,14 @@ namespace BNG {
             if (isPlayer && collision.gameObject.CompareTag("Player"))
                 return;
 
-            // 보스 투사체면 보스일 경우 예외
-            if(isBossProjectile && collision.gameObject.GetComponent<Boss>())
+            if (!isBossProjectile && collision.gameObject.GetComponent<Boss>())
                 return;
-            
+
+            if (!isEliteProjectile && collision.gameObject.GetComponent<EliteMonster>())
+                return;
+
+
+
             OnCollisionEvent(collision);
         }
 

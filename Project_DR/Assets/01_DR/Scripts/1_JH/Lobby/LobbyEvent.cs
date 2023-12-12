@@ -12,10 +12,7 @@ public class LobbyEvent : MonoBehaviour
 
     [Header("Data")]
     public Action dbRequest;
-
-    [Header("Door")]
-    public GameObject spawnroomDoor;
-    public GameObject openDoorButton;
+    //private StatData data;
 
     [Header("Main Display")]
     public GameObject mainDisplay;
@@ -26,11 +23,16 @@ public class LobbyEvent : MonoBehaviour
     public GameObject clearDataObj;
     public Transform contentPos;
 
+    [Header("Spawn Room Door")]
+    public GameObject spawnroomDoor;
+    public GameObject openDoorButton;
+
     [Header("Status Display")]
     public GameObject statusDisplay;        // 디스플레이 오브젝트
     public Transform statusPos;             // 디스플레이가 생성될 포지션
     private SphereCollider statusCollider;  // 디스플레이 트리거 콜라이더
     [Space(10f)]
+
     [Header("Status Pannel")]
     public GameObject selectStatusDis;      // 선택창
     public GameObject playerStatusDis;      // 플레이어 상태창
@@ -44,8 +46,6 @@ public class LobbyEvent : MonoBehaviour
     public GameObject skillUpgrade3;       // 스킬 상태창
     public GameObject skillUpgrade4;       // 스킬 상태창
 
-    public CryptoComponent crypto;
-
     [Header("Player Status")]
     public TMP_Text playerLevel;
     public TMP_Text playerID;
@@ -53,9 +53,15 @@ public class LobbyEvent : MonoBehaviour
     public TMP_Text playerExp;
 
     [Header("Player Upgrade")]
+    public LobbyDisplayButton hpUpBtn;      // hp 증가 버튼
+    public LobbyDisplayButton goldIncreBtn; // 골드 증가 버튼
+    public LobbyDisplayButton expIncreBtn;  // 경험치 증가 버튼
+
     public TMP_Text curPlayerHp;
     public TMP_Text beforePlayerHp;
     public TMP_Text afterPlayerHp;
+
+
 
     [Header("Gold Upgrade")]
     public TMP_Text curGoldIncre;
@@ -73,9 +79,12 @@ public class LobbyEvent : MonoBehaviour
     public TMP_Text remainExp;
 
 
+    // ################################## START ##################################
 
     public void Start()
     {
+        //data = GetComponent<StatusData>().data;
+
         dbRequest += GetDataFromDB;                     // DB 데이터 요청 성공 시 액션 추가
         UserDataManager.Instance.DBRequst(dbRequest);   // DB 데이터 요청
 
@@ -89,59 +98,23 @@ public class LobbyEvent : MonoBehaviour
         UserDataManager.Instance.OnUserDataUpdate += UpdatePlayerStatusUI;
     }
 
-    public void Update()
-    {
-        if(Input.GetKeyDown("."))
-        {
-            UserDataManager.Instance.Gold += 500;
-        }
-    }
-
-    // ============================ 데이터 불러오기 ============================
+    // ############################### 데이터 불러오기 ###############################
 
     // DB에서 데이터 불러오기 완료 후 이벤트로 실행
     public void GetDataFromDB()
     {
         GetClearData();
+
+        UpdateClearDataUI(clearDatas);             // 메인 디스플레이의 클리어 데이터 업데이트
         UpdatePlayerStatusUI();
+        UpdatePlayerUpgradeUI();
     }
 
-    public void UpdatePlayerStatusUI()
-    {
-        // ToDo : 테스트 값에 넣어야 할 데이터 세팅
-        int testValue = 100;
-
-        if(UserDataManager.Instance.PlayerID == "")
-        {
-            UserDataManager.Instance.PlayerID = "Admin";
-        }
-
-        playerID.text = UserDataManager.Instance.PlayerID;
-        playerGold.text = UserDataManager.Instance.Gold.ToString();
-        playerExp.text = UserDataManager.Instance.Exp.ToString();
-
-        curPlayerHp.text = UserDataManager.Instance.HP.ToString();
-        beforePlayerHp.text = UserDataManager.Instance.HP.ToString();
-        afterPlayerHp.text = (UserDataManager.Instance.HP + testValue).ToString();
-
-        curGoldIncre.text = UserDataManager.Instance.GoldIncrease.ToString();
-        beforeGoldIncre.text = UserDataManager.Instance.GoldIncrease.ToString();
-        afterGoldIncre.text = (UserDataManager.Instance.GoldIncrease + testValue).ToString();
-
-        curExpIncre.text = UserDataManager.Instance.ExpIncrease.ToString();
-        beforeExpIncre.text = UserDataManager.Instance.ExpIncrease.ToString();
-        afterExpIncre.text = (UserDataManager.Instance.ExpIncrease + testValue).ToString();
-
-        curExp.text = (UserDataManager.Instance.Exp).ToString();
-        spendExp.text = (testValue).ToString();
-        remainExp.text = (UserDataManager.Instance.Exp- testValue).ToString();
-    }
-
-    // 클리어 데이터 가져오기
+    // 클리어 데이터 불러오기
     public void GetClearData()
     {
         int index = 0;
-        if(UserDataManager.Instance.clearDatas.list != null)
+        if (UserDataManager.Instance.clearDatas.list != null)
         {
             index = UserDataManager.Instance.clearDatas.list.Count;
         }
@@ -162,11 +135,56 @@ public class LobbyEvent : MonoBehaviour
             // 배열에 담기
             clearDatas[i] = clearData;
         }
-        SetClearData(clearDatas);
     }
 
-    // 클리어 데이터 세팅
-    public void SetClearData(string[] clearDataList)
+    // ################################# UI 업데이트 #################################
+
+    // 상태창 UI 업데이트 : 시작하고 바로 업데이트 해야하는 것들은 이곳에서 업데이트
+    public void UpdatePlayerStatusUI()
+    {
+        if(UserDataManager.Instance.PlayerID == "")
+        {
+            UserDataManager.Instance.PlayerID = "Admin";
+        }                     // 어드민 설정
+
+        // 플레이어 스탯
+        playerID.text = UserDataManager.Instance.PlayerID;                  // ID
+        playerLevel.text = UserDataManager.Instance.Level.ToString();
+        playerGold.text = UserDataManager.Instance.Gold.ToString();         // 골드
+        playerExp.text = UserDataManager.Instance.Exp.ToString();           // 경험치
+
+        curPlayerHp.text = UserDataManager.Instance.HP.ToString();
+        beforePlayerHp.text = UserDataManager.Instance.HP.ToString();
+        afterPlayerHp.text = (UserDataManager.Instance.HP + UserDataManager.Instance.statData.upgradeHp[UserDataManager.Instance.HPUpgrade].sum).ToString();
+
+        curGoldIncre.text = UserDataManager.Instance.GainGold.ToString();
+        beforeGoldIncre.text = UserDataManager.Instance.GainGold.ToString();
+        afterGoldIncre.text = (UserDataManager.Instance.statData.upgradeGainGold[UserDataManager.Instance.GainGoldUpgrade].sum).ToString();
+
+        curExpIncre.text = UserDataManager.Instance.GainExp.ToString();
+        beforeExpIncre.text = UserDataManager.Instance.GainExp.ToString();
+        afterExpIncre.text = (UserDataManager.Instance.statData.upgradeGainExp[UserDataManager.Instance.GainExpUpgrade].sum).ToString();
+
+
+        hpUpBtn.level = UserDataManager.Instance.HPUpgrade;
+        goldIncreBtn.level = UserDataManager.Instance.GainGoldUpgrade;
+        expIncreBtn.level = UserDataManager.Instance.GainExpUpgrade;
+
+        curExp.text = UserDataManager.Instance.Exp.ToString();
+    }
+
+    public void UpdatePlayerUpgradeUI()
+    {
+       
+    }
+    public void UpdateHPUpgradeUI()
+    {
+        curPlayerHp.text = UserDataManager.Instance.HP.ToString();
+        beforePlayerHp.text = UserDataManager.Instance.HP.ToString();
+    }
+
+    // 클리어 UI 업데이트 가져오기
+    public void UpdateClearDataUI(string[] clearDataList)
     {
         foreach (var item in clearDataList)
         {
@@ -178,6 +196,7 @@ public class LobbyEvent : MonoBehaviour
             clearData.SetActive(true);
         }
     }
+
     // 클리어 데이터 저장 테스트
     public void SaveTest()
     {
@@ -201,8 +220,9 @@ public class LobbyEvent : MonoBehaviour
         clearData.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = txt;
         clearData.SetActive(true);
     }
-    // ============================ 메인 디스플레이 ============================
 
+    // ############################### 메인 디스플레이 ###############################
+    #region 메인 디스플레이
     // 메인 디스플레이 패널 변경 버튼
     public void ChangeDisplayButton(string name)
     {
@@ -218,7 +238,6 @@ public class LobbyEvent : MonoBehaviour
                 mbtiDisplay.SetActive(true);
                 break;
         }
-
     }
 
     // 메인디스플레이와 상호작용 시 문 열림
@@ -227,9 +246,10 @@ public class LobbyEvent : MonoBehaviour
         spawnroomDoor.GetComponent<Animation>().Play("SpawnRoom_Open");
         openDoorButton.SetActive(false);
     }
+    #endregion
 
-    // ============================ 상태창 디스플레이 ============================
-    
+    // ############################## 상태창 디스플레이 ##############################
+    #region 상태창 디스플레이
     // 상태창을 위한 세팅
     private void SetStatusDisplay()
     {
@@ -280,20 +300,17 @@ public class LobbyEvent : MonoBehaviour
                 skillUpgrade4.SetActive(true);
                 break;
         }
-
     }
+    #endregion
 
-
-
-
-
-    // ========================= 상태창 디스플레이 트리거 =========================
-
+    // ########################### 상태창 디스플레이 트리거 ###########################
+    #region 디스플레이 트리거
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
             statusDisplay.GetComponent<Animation>().Play("Status_On");
+            ChangeStatusDisplayButton("Main");   
         }
     }
     public void OnTriggerExit(Collider other)
@@ -303,6 +320,6 @@ public class LobbyEvent : MonoBehaviour
             statusDisplay.GetComponent<Animation>().Play("Status_Off");
         }
     }
-
+    #endregion
 
 }

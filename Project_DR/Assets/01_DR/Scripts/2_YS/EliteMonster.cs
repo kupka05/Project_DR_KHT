@@ -1,20 +1,30 @@
+using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
 
 public class EliteMonster : Monster
 {
-    public float count = 0;
-    public float maxCount = 3;
-
     private bool isMoving = false;
     private float moveDuration = 1.0f;
     private float moveTimer = 0.0f;
     private Vector3 startPosition;
     private Vector3 targetPosition;
 
+    public MonsterBullet monsterBullet;
+
+    [Header("몬스터 원거리 관련")]
+    public Transform bulletPortLeft;
+    public Transform bulletPortRight;
+    public Transform bulletPort;
+    public GameObject monsterBulletPrefab;
+
+    [Header("넉백 카운터")]
+    public float count = 0;
+    public float maxCount = 3;
 
     void Update()
     {
@@ -368,12 +378,12 @@ public class EliteMonster : Monster
         switch(index)
         {
             case 0:
-                GameObject instantBulletLeft = Instantiate(monsterBullet, bulletPortLeft.position, bulletPortLeft.rotation);
+                GameObject instantBulletLeft = Instantiate(monsterBulletPrefab, bulletPortLeft.position, bulletPortLeft.rotation);
                 MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
                 bulletPortRight.transform.LookAt(playerTr);
                 instantBulletLeft.transform.LookAt(playerTr);
 
-                GameObject instantBulletRight = Instantiate(monsterBullet, bulletPortRight.position, bulletPortRight.rotation);
+                GameObject instantBulletRight = Instantiate(monsterBulletPrefab, bulletPortRight.position, bulletPortRight.rotation);
                 MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
                 bulletPortRight.transform.LookAt(playerTr);
                 instantBulletRight.transform.LookAt(playerTr);
@@ -386,21 +396,21 @@ public class EliteMonster : Monster
         switch(index)
         {
             case 0:
-                GameObject instantBullet = Instantiate(monsterBullet, bulletPort.position, bulletPort.rotation);
+                GameObject instantBullet = Instantiate(monsterBulletPrefab, bulletPort.position, bulletPort.rotation);
                 MonsterBullet bullet = instantBullet.GetComponent<MonsterBullet>();
                 bulletPort.transform.LookAt(playerTr);
                 instantBullet.transform.LookAt(playerTr);
                 break;
 
                 case 1:
-                GameObject instantBulletRight = Instantiate(monsterBullet, bulletPortRight.position, bulletPortRight.rotation);
+                GameObject instantBulletRight = Instantiate(monsterBulletPrefab, bulletPortRight.position, bulletPortRight.rotation);
                 MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
                 bulletPortRight.transform.LookAt(playerTr);
                 instantBulletRight.transform.LookAt(playerTr);
                 break;
 
                 case 2:
-                GameObject instantBulletLeft = Instantiate(monsterBullet, bulletPortLeft.position, bulletPortLeft.rotation);
+                GameObject instantBulletLeft = Instantiate(monsterBulletPrefab, bulletPortLeft.position, bulletPortLeft.rotation);
                 MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
                 bulletPortRight.transform.LookAt(playerTr);
                 instantBulletLeft.transform.LookAt(playerTr);

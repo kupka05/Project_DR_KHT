@@ -8879,13 +8879,13 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.02e-43, y: 0, z: 0, w: -1.1498541e+20}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -33128,13 +33128,13 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 7.43868e-39, z: 9.78048e-39, w: 1.37753e-40}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -49881,7 +49881,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4584197512417670389}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.15, z: 0.25}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -51437,9 +51437,6 @@ MonoBehaviour:
   state: 0
   axis: {x: 0, y: 0}
   isDeadZone: 0
-  deadZoneVal: 0
-  isActiveZone: 0
-  activeZoneVal: 0
   inputAxis: 03000000
   BackDashEvent:
     m_PersistentCalls:
@@ -74202,7 +74199,7 @@ GameObject:
   - component: {fileID: 5751810932310615319}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96272,7 +96269,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8717664012075506620}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4b00acd070e37747b9e19b276d11877, type: 3}
   m_Name: 
@@ -98874,15 +98871,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 4668945887704089343}
   optionUI: {fileID: 8822906912926717993}
-  fader: {fileID: 0}
-  loginSceneName: 1__LoginScene
+  loginSceneName: JH_LoginScene
   rotationText: {fileID: 4545225095952776954}
   volume: {fileID: 6838551177672409525}
   masterSlider: {fileID: 152042555746027518}
   backgroundSlider: {fileID: 686141785022028390}
   soundEffectSlider: {fileID: 8263150200948354262}
   brightSlider: {fileID: 6829467266509580962}
-  vrEmulator: {fileID: 6757648435622825461}
   optionInput: 15000000
   InputAction: {fileID: 4860515764186564299, guid: e39f4b35a6db18348b41eb0262520e69,
     type: 3}
@@ -102561,12 +102556,12 @@ PrefabInstance:
     - target: {fileID: 3216023249193137484, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.99999493
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3216023249193137484, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3216023249193137522, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102621,12 +102616,12 @@ PrefabInstance:
     - target: {fileID: 3216023250103863860, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.3797169
+      value: 0.379717
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250103863860, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Value
-      value: 0.999993
+      value: 0.9999929
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250103863867, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102666,7 +102661,7 @@ PrefabInstance:
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.002069683
+      value: 0.0013114181
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102726,7 +102721,7 @@ PrefabInstance:
     - target: {fileID: 4010713276122279518, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0034859073
+      value: 0.00051498914
       objectReference: {fileID: 0}
     - target: {fileID: 4010713276122279518, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102751,7 +102746,7 @@ PrefabInstance:
     - target: {fileID: 4010713277854409151, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.999998
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4010713277854409151, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}

@@ -51289,7 +51289,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.05
+  m_Radius: 0.25
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -51365,12 +51365,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7df49f39c9b30a4e9f198f7196dc5c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 0}
+  playerRigid: {fileID: 0}
   health: 100
   maxHealth: 0
   dyingAmount: 0.25
-  knockbackDistance: 1
-  knockbackSpeed: 0.1
-  playerController: {fileID: 0}
+  knockbackForce: 1.5
   healthUpInput: 0b000000
   playerHealthUI:
   - {fileID: 7713320565821249815}
@@ -51452,6 +51452,7 @@ MonoBehaviour:
   deadZoneVal: 0
   isActiveZone: 0
   activeZoneVal: 0
+  activeTime: 0
   inputAxis: 03000000
   BackDashEvent:
     m_PersistentCalls:
@@ -98900,6 +98901,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 4668945887704089343}
   optionUI: {fileID: 8822906912926717993}
+  fader: {fileID: 0}
   loginSceneName: 2_LoginScene
   rotationText: {fileID: 4545225095952776954}
   volume: {fileID: 6838551177672409525}
@@ -98907,6 +98909,7 @@ MonoBehaviour:
   backgroundSlider: {fileID: 686141785022028390}
   soundEffectSlider: {fileID: 8263150200948354262}
   brightSlider: {fileID: 6829467266509580962}
+  vrEmulator: {fileID: 6757648435622825461}
   optionInput: 15000000
   InputAction: {fileID: 4860515764186564299, guid: e39f4b35a6db18348b41eb0262520e69,
     type: 3}
@@ -102589,7 +102592,7 @@ PrefabInstance:
     - target: {fileID: 3216023249193137484, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.999998
       objectReference: {fileID: 0}
     - target: {fileID: 3216023249193137484, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102694,7 +102697,7 @@ PrefabInstance:
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0019616864
+      value: 0.00183089
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}

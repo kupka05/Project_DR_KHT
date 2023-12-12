@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using System;
 
 public class AccountManager : MonoBehaviour
 {
@@ -15,9 +16,7 @@ public class AccountManager : MonoBehaviour
     [SerializeField] InputField infoInput;
     [SerializeField] TMP_Text description;
 
-    [SerializeField] string url;
-    //[SerializeField] string sceneName;
-    public VRSceneLoder sceneLoader;
+    [SerializeField] string sceneName;
 
     public void LoginClick() => StartCoroutine(AccountCo("login"));
 
@@ -25,7 +24,7 @@ public class AccountManager : MonoBehaviour
 
     public void SaveClick() => StartCoroutine(AccountCo("save"));
 
-////// 기존
+    ////// 기존
     //IEnumerator AccountCo(string command)
     //{
     //    WWWForm form = new WWWForm();
@@ -46,16 +45,20 @@ public class AccountManager : MonoBehaviour
     //            SceneManager.LoadScene("JH MainScene");
     //            break;
     //    }
-      
+
     //}
     IEnumerator AccountCo(string command)
     {
+
         string id = idInput.text;
         WWWForm form = new WWWForm();
         form.AddField("command", command);
         form.AddField("id", idInput.text);
         form.AddField("password", passwordInput.text);
         form.AddField("mbti", infoInput.text);
+
+        string url = SecureURLHandler.GetURL();
+
         // using문을 사용하여 메모리 누수 해결
         // 사용이 끝난 후 할당 해제
         using (UnityWebRequest www = UnityWebRequest.Post(url, form))
@@ -70,14 +73,14 @@ public class AccountManager : MonoBehaviour
                 case "Login Complete":
                     description.text = string.Format("로그인 성공");
                     PlayerDataManager.SetID(id);
-                    sceneLoader.LoadScene();
-                    break; 
+                    SceneManager.LoadScene(sceneName);
+                    break;
                 case "Fail to login":
                     description.text = string.Format("로그인 실패");
-                    break; 
+                    break;
                 case "Fail to register":
                     description.text = string.Format("계정 생성 실패");
-                    break;                
+                    break;
                 case "Register complete":
                     description.text = string.Format("계정 생성 성공");
                     break;
@@ -88,8 +91,6 @@ public class AccountManager : MonoBehaviour
             www.Dispose();
         }
     }
-
-
 
     //IEnumerator AccountCo(string command)
     //{

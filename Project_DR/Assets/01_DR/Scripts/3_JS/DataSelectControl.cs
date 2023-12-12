@@ -3,18 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class DataSelectControl : MonoBehaviour
 {
-    public string googleSheet;
-    public string csv;
     // Google Sheets 로드
     public void LoadGoogleSheet()
     {
-        SceneManager.LoadScene(googleSheet);
+        SceneManager.LoadScene("1_DataLodingScene");
     }
 
     // CSV 로드
     public void LoadLocalCSV()
     {
-        SceneManager.LoadScene(csv);
+        SceneManager.LoadScene("2_LoginScene");
     }
 }
 

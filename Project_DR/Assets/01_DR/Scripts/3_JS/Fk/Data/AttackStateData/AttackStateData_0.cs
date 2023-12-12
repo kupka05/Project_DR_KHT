@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace BossMonster
 {
@@ -33,13 +36,12 @@ namespace BossMonster
         // 생성자 & 부모 생성자
         public AttackStateData_0(int id, BossData bossData)
         {
-            int patternID = (int)DataManager.instance.GetData(id, "AttackPatternKeyID", typeof(int));
             _bossData = bossData;
-            _areaSpeed = (float)DataManager.instance.GetData(patternID, "AreaSpeed", typeof(float));
-            _areaRange = (float)DataManager.instance.GetData(patternID, "AreaRange", typeof(float));
-            _areaSpawnTime = (float)DataManager.instance.GetData(patternID, "AreaSpawnTime", typeof(float));
-            _areaDamage = (float)DataManager.instance.GetData(patternID, "AreaDamage", typeof(float));
-            _outputInterval = (float)DataManager.instance.GetData(patternID, "OutputInterval", typeof(float));
+            _areaSpeed = (float)DataManager.instance.GetData(id, "AreaSpeed", typeof(float));
+            _areaRange = (float)DataManager.instance.GetData(id, "AreaRange", typeof(float));
+            _areaSpawnTime = (float)DataManager.instance.GetData(id, "AreaSpawnTime", typeof(float));
+            _areaDamage = (float)DataManager.instance.GetData(id, "AreaDamage", typeof(float));
+            _outputInterval = (float)DataManager.instance.GetData(id, "OutputInterval", typeof(float));
         }
     }
 }

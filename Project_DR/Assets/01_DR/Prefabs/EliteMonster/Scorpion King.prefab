@@ -1264,15 +1264,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d91a25aa74ccb97449418725a480b5ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smashImage: {fileID: 0}
   monsterHpSlider: {fileID: 7701623811677327196}
   state: 0
   monsterId: 7011
   monsterType: 8
-  bulletPortLeft: {fileID: 264180344}
-  bulletPortRight: {fileID: 104558093}
-  bulletPort: {fileID: 1833448853}
-  monsterBullet: {fileID: 8809067579740100126, guid: 3a21c71d5bf44ec40a4c4752ae400980,
-    type: 3}
+  smashCount: 0
+  smashMaxCount: 10
   hp: 0
   attack: 0
   attDelay: 0
@@ -1293,6 +1291,13 @@ MonoBehaviour:
   isDie: 0
   isStun: 0
   distanceDebug: 0
+  monsterBullet: {fileID: 4063682356961887160, guid: 3a21c71d5bf44ec40a4c4752ae400980,
+    type: 3}
+  bulletPortLeft: {fileID: 264180344}
+  bulletPortRight: {fileID: 104558093}
+  bulletPort: {fileID: 1833448853}
+  monsterBulletPrefab: {fileID: 8809067579740100126, guid: 3a21c71d5bf44ec40a4c4752ae400980,
+    type: 3}
   count: 0
   maxCount: 3
 --- !u!114 &1383605409

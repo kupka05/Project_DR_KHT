@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using Unity.VisualScripting;
-using Rito.InventorySystem;
 
 [System.Serializable]
 public class ClearDatas
@@ -63,11 +62,11 @@ public class UserDataManager : MonoBehaviour
     private int _Gold;
 
     #endregion
-    #region 유저 데이터
-    [Header("DB")]
-    public bool dataLoadSuccess;    // 데이터 불러옴 여부
 
-[Header("User Data")]
+
+    #region 유저 데이터
+
+    [Header("User Data")]
     public string PlayerID;
 
     public float HP  // 플레이어 체력
@@ -120,43 +119,22 @@ public class UserDataManager : MonoBehaviour
     [Header("Clear Data")]
     public int ClearCount;         // 클리어 횟수
     private string JsonData;       // Json을 담을 직렬화된 클리어 데이터
-    private ClearDatas _clearDatas;
+    public ClearDatas clearDatas;  // 클리어 데이터 모음
 
-    public ClearDatas clearDatas  // 클리어 데이터 모음
-    {
-        get { return _clearDatas; }
-        set
-        {
-            _clearDatas = value;
-            if (value == null)
-            {
-                Debug.Log("신규 데이터 생성");
-                _clearDatas = new ClearDatas();
-            }
-        }
-    }
-    [Header("Setting Data")]
-    public float rotationAmount = 45f;
+    [Header("Setting")]
     [Range(0, 100)]
-    public float masterSound, sfx, backgroundSound;
-    [Range(-5, 5)]
-    public float brightness = 0;
-
-    [Header("Inventory Data")]
-    // 호출 순서 문제로 인해 static으로 설정
-    public static Item[] items = new Item[Inventory.MaxCapacity];
-
+    public float masterSound, sfx, backgroundSound = 100;
+    [Range(0, 100)]
+    public float brightness = 50;
 
     #endregion
-
 
     // 로드되면 이벤트 호출
     public UnityEvent LoadDataEvent;
 
     private void Awake()
     {
-
-        if (m_Instance == null)
+        if(m_Instance == null)
         {
             m_Instance = this;
             DontDestroyOnLoad(this.gameObject);            
@@ -164,9 +142,12 @@ public class UserDataManager : MonoBehaviour
         else
         { Destroy(gameObject); }
         
+        // 디버그 캐릭터면 시트에서 데이터 가져오기
+        if(PlayerID == "")
+        { SetDebugData(); }
 
-        Debug.Log("데이터 요청 시간 : " + GetCurrentDate());
         PlayerDataManager.Update(true);
+
     }
     public void Start()
     {
@@ -204,36 +185,11 @@ public class UserDataManager : MonoBehaviour
 
         clearDatas = JsonUtility.FromJson<ClearDatas>(decodedString);
 
-        if(clearDatas.list == null)
-        {
-            clearDatas.list = new List<ClearData>();
-        }
-
         // 데이터를 불러오고 해야할 이벤트가 있다면 이벤트 실행
         // Ex. 플레이어 상태창, 상점의 현재 골드 등
-        dataLoadSuccess = true;
-        Debug.Log("데이터 로드 시간 : " + GetCurrentDate());
-
-       
+        LoadDataEvent?.Invoke();
     }
 
-    // DB에 데이터를 요청하기 위한 메서드
-    // 메서드를 action에 담아 호출하면, 데이터가 로드 시 코루틴은 멈춘다.
-    public void DBRequst(Action action)
-    {
-        StartCoroutine(CheckData(action));
-    }
-    IEnumerator CheckData(Action action)
-    {
-        if (dataLoadSuccess)
-        {
-            Debug.Log(action + "데이터 로드 완료");
-            action();
-            yield break;
-        }
-        Debug.Log("데이터 로드를 시도하나?");
-        yield return null;
-    }
 
     // =========================== 세이브 데이터 ===========================
     // 클리어 데이터 신규 저장
@@ -243,10 +199,6 @@ public class UserDataManager : MonoBehaviour
         ClearData newData = new ClearData();
         newData.Date = GetCurrentDate();             // 현재 시간
         newData.MBTI = MBTI;                         // 매개변수 MBTI
-        Debug.Log(clearDatas);
-        Debug.Log(clearDatas.list);
-        Debug.Log(clearDatas.list.Count);
-
         clearDatas.list.Add(newData);                // 리스트에 추가
         ClearCount = clearDatas.list.Count;          // 클리어 데이터 리스트의 길이가 곧 클리어 카운트
 

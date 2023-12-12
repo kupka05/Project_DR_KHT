@@ -20,10 +20,8 @@ public static class Extensions
             rb.drag = 1f;
             rb.angularDrag = 0.05f;
             rb.freezeRotation = true;
-            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
         }
-
+        
         return rb;
     }
 

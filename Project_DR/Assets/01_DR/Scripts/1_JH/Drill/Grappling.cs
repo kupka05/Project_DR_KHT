@@ -12,7 +12,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Grappling : GrabbableEvents
 {
-    public enum State { Idle, Shooting, Grappling, Waiting };
+    public enum State { Idle, Shooting, Grappling };
 
     public State state = State.Idle;
 
@@ -187,7 +187,6 @@ public class Grappling : GrabbableEvents
         else
         {
             grapplePoint = gun.position + gun.forward * maxGrappleDistance; // 충돌한곳이 없다면 최대사거리로 쏘고 
-            state = State.Waiting;
             Invoke(nameof(StopGrapple), grappleDelayTime);                  // 그래플링 정지
         }
 
@@ -217,14 +216,10 @@ public class Grappling : GrabbableEvents
     public void ExecuteGrapple()
     {
         if (Time.time - lastGrapplingTime < grapplingCd)
-        {
             Invoke(nameof(Excute), grappleDelayTime);                  // 그래플링 실행
-            Debug.Log("if");
-        }
 
         else
-            Debug.Log("else");
-        Excute();
+            Excute();
     }
     public void Excute()
     {
@@ -281,6 +276,8 @@ public class Grappling : GrabbableEvents
         
         isDamageCheck = false;
         target = null;
+
+
 
         //if (_drill != null)
         //{

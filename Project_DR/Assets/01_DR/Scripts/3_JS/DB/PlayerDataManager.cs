@@ -14,16 +14,16 @@ public static class PlayerDataManager
      *      Properties
      **********************/
     public static string PlayerID => _id;
-    public static float HP => _hp;
+    public static int HP => _hp;
     public static int Gold => _gold;
-    public static float Exp => _exp;
-    public static float GoldIncrease => _gold_increase;
-    public static float ExpIncrease => _exp_increase;
-    public static float WeaponAtk => _weapon_atk;
-    public static float WeaponCriRate => _weapon_cri_rate;
-    public static float WeaponCriDamage => _weapon_cri_damage;
-    public static float WeaponAtkRate => _weapon_atk_rate;
-    public static float WeaponExp => _weapon_exp;
+    public static int Exp => _exp;
+    public static int GoldIncrease => _gold_increase;
+    public static int ExpIncrease => _exp_increase;
+    public static int WeaponAtk => _weapon_atk;
+    public static int WeaponCriRate => _weapon_cri_rate;
+    public static int WeaponCriDamage => _weapon_cri_damage;
+    public static int WeaponAtkRate => _weapon_atk_rate;
+    public static int WeaponExp => _weapon_exp;
     public static int SkillLevel1 => _skill_level_1;
     public static int SkillLevel2 => _skill_level_2;
     public static int SkillLevel3 => _skill_level_3;
@@ -44,18 +44,18 @@ public static class PlayerDataManager
 
     [Header("Player")]
     private static string _id = "";           // 플레이어의 ID
-    private static float _hp;                 // 플레이어의 체력
+    private static int _hp;                   // 플레이어의 체력
     private static int _gold;                 // 플레이어의 소지금
-    private static float _exp;                // 플레이어의 경험치
-    private static float _gold_increase;      // 경험치 증가량
-    private static float _exp_increase;       // 골드 증가량
+    private static int _exp;                  // 플레이어의 경험치
+    private static int _gold_increase;        // 경험치 증가량
+    private static int _exp_increase;         // 골드 증가량
 
     [Header("Weapon")]
-    private static float _weapon_atk;         // 무기 공격력
-    private static float _weapon_cri_rate;    // 무기 치명타 확률
-    private static float _weapon_cri_damage;  // 무기 치명타 공격력
-    private static float _weapon_atk_rate;    // 무기 공격 간격
-    private static float _weapon_exp;         // 무기 경험치
+    private static int _weapon_atk;           // 무기 공격력
+    private static int _weapon_cri_rate;      // 무기 치명타 확률
+    private static int _weapon_cri_damage;    // 무기 치명타 공격력
+    private static int _weapon_atk_rate;      // 무기 공격 간격
+    private static int _weapon_exp;           // 무기 경험치
 
     [Header("Skill")]
     private static int _skill_level_1;        // 스킬 테라드릴 레벨
@@ -128,9 +128,9 @@ public static class PlayerDataManager
 
     // PlayerDataManager의 데이터를 갱신한다.
     private static void UpdatePlayerDataManager(
-        float hp, int gold, float exp, float goldIncrease, float expIncrease,
-        float weaponAtk, float weaponCriRate, float weaponCriDamage, float weaponAtkRate,
-        float weaponExp, int skillLevel1, int skillLevel2, int skillLevel3, int skillLevel4,
+        int hp, int gold, int exp, int goldIncrease, int expIncrease,
+        int weaponAtk, int weaponCriRate, int weaponCriDamage, int weaponAtkRate,
+        int weaponExp, int skillLevel1, int skillLevel2, int skillLevel3, int skillLevel4,
         string questMain, int clearCount, string clearMBTIValue, string clearTime
         )
     {

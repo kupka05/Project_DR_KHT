@@ -8,13 +8,13 @@ public class ShopNpc : AnnouncementNPC
     private void Awake()
     {
         AwakeInIt();
-    }
+    }       // Awake()
 
 
     private void Start()
     {
-        
-    }
+
+    }       // Start()
 
 
     private void AwakeInIt()
@@ -22,6 +22,7 @@ public class ShopNpc : AnnouncementNPC
         animator = GetComponent<Animator>();
         dialogue = new System.Text.StringBuilder();
     }       // AwakeInIt()
+
 
 
 

@@ -9,7 +9,6 @@ using Random = UnityEngine.Random;
 
 public class LobbyEvent : MonoBehaviour
 {
-
     [Header("Data")]
     public Action dbRequest;
     //private StatData data;
@@ -61,7 +60,11 @@ public class LobbyEvent : MonoBehaviour
     public TMP_Text beforePlayerHp;
     public TMP_Text afterPlayerHp;
 
-
+    // 강화 계산용 변수
+    private int hpLv;
+    private int goldLv;
+    private int expLv;
+    private int playerSpendExp;
 
     [Header("Gold Upgrade")]
     public TMP_Text curGoldIncre;
@@ -142,7 +145,7 @@ public class LobbyEvent : MonoBehaviour
     // 상태창 UI 업데이트 : 시작하고 바로 업데이트 해야하는 것들은 이곳에서 업데이트
     public void UpdatePlayerStatusUI()
     {
-        if(UserDataManager.Instance.PlayerID == "")
+        if (UserDataManager.Instance.PlayerID == "")
         {
             UserDataManager.Instance.PlayerID = "Admin";
         }                     // 어드민 설정
@@ -155,15 +158,12 @@ public class LobbyEvent : MonoBehaviour
 
         curPlayerHp.text = UserDataManager.Instance.HP.ToString();
         beforePlayerHp.text = UserDataManager.Instance.HP.ToString();
-        afterPlayerHp.text = (UserDataManager.Instance.HP + UserDataManager.Instance.statData.upgradeHp[UserDataManager.Instance.HPUpgrade].sum).ToString();
 
         curGoldIncre.text = UserDataManager.Instance.GainGold.ToString();
         beforeGoldIncre.text = UserDataManager.Instance.GainGold.ToString();
-        afterGoldIncre.text = (UserDataManager.Instance.statData.upgradeGainGold[UserDataManager.Instance.GainGoldUpgrade].sum).ToString();
 
         curExpIncre.text = UserDataManager.Instance.GainExp.ToString();
         beforeExpIncre.text = UserDataManager.Instance.GainExp.ToString();
-        afterExpIncre.text = (UserDataManager.Instance.statData.upgradeGainExp[UserDataManager.Instance.GainExpUpgrade].sum).ToString();
 
 
         hpUpBtn.level = UserDataManager.Instance.HPUpgrade;
@@ -171,17 +171,54 @@ public class LobbyEvent : MonoBehaviour
         expIncreBtn.level = UserDataManager.Instance.GainExpUpgrade;
 
         curExp.text = UserDataManager.Instance.Exp.ToString();
+        spendExp.text = 0.ToString();
+        remainExp.text = 0.ToString();
     }
 
     public void UpdatePlayerUpgradeUI()
     {
-       
+        hpLv = hpUpBtn.newLevel - 1;
+        goldLv = goldIncreBtn.newLevel - 1;
+        expLv = expIncreBtn.newLevel - 1;
+
+        // 레벨은 0이하로 될 수 없음. 삼항연산자 활용
+        afterPlayerHp.text = MinusCheck(hpLv) ? (UserDataManager.Instance.DefaultHP + UserDataManager.Instance.statData.upgradeHp[hpLv].sum).ToString() : beforePlayerHp.text;
+        afterGoldIncre.text = MinusCheck(goldLv) ? (UserDataManager.Instance.statData.upgradeGainGold[goldLv].sum).ToString() : beforeGoldIncre.text;
+        afterExpIncre.text = MinusCheck(expLv) ? (UserDataManager.Instance.statData.upgradeGainExp[expLv].sum).ToString() : beforeExpIncre.text;
+
+        playerSpendExp = PlayerCalculator();
+        spendExp.text = playerSpendExp.ToString();
+        remainExp.text = (UserDataManager.Instance.Exp- playerSpendExp).ToString();
+
     }
-    public void UpdateHPUpgradeUI()
+
+    public int PlayerCalculator()
     {
-        curPlayerHp.text = UserDataManager.Instance.HP.ToString();
-        beforePlayerHp.text = UserDataManager.Instance.HP.ToString();
+        int result, afterHP, curHP, afterGold, curGold, afterExp, curExp;
+
+        afterHP = MinusCheck(hpUpBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeHp[hpUpBtn.newLevel - 1].totalExp : 0;
+        curHP = MinusCheck(hpUpBtn.level - 1) ? UserDataManager.Instance.statData.upgradeHp[hpUpBtn.level - 1].totalExp : 0;
+        afterGold = MinusCheck(goldIncreBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeGainGold[goldIncreBtn.newLevel - 1].totalExp : 0;
+        curGold = MinusCheck(goldIncreBtn.level - 1) ? UserDataManager.Instance.statData.upgradeGainGold[goldIncreBtn.level - 1].totalExp : 0;
+        afterExp = MinusCheck(expIncreBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeGainExp[expIncreBtn.newLevel - 1].totalExp : 0;
+        curExp = MinusCheck(expIncreBtn.level - 1) ? UserDataManager.Instance.statData.upgradeGainExp[expIncreBtn.level - 1].totalExp : 0;
+
+        result = (afterHP - curHP) + (afterGold - curGold) + (afterExp - curExp);
+
+        return result;
     }
+
+    // 음수 값이면 거짓
+    public bool MinusCheck(int value)
+    {
+        if (0 <= value )
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
 
     // 클리어 UI 업데이트 가져오기
     public void UpdateClearDataUI(string[] clearDataList)
@@ -200,8 +237,8 @@ public class LobbyEvent : MonoBehaviour
     // 클리어 데이터 저장 테스트
     public void SaveTest()
     {
-        string[] mbti = { "ISTJ", "ISTP", "ISFJ","ISFP", "INTJ", "INTP", "INFJ", "INFP", "ESTJ", "ESTP", "ESFJ", "ESFP", "ENTJ", "ENTP", "ENTJ", "ENFP" };
-        int rand = Random.Range(0,16);
+        string[] mbti = { "ISTJ", "ISTP", "ISFJ", "ISFP", "INTJ", "INTP", "INFJ", "INFP", "ESTJ", "ESTP", "ESFJ", "ESFP", "ENTJ", "ENTP", "ENTJ", "ENFP" };
+        int rand = Random.Range(0, 16);
         UserDataManager.Instance.SaveClearData(mbti[rand]);
 
         GameObject clearData;
@@ -310,7 +347,7 @@ public class LobbyEvent : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             statusDisplay.GetComponent<Animation>().Play("Status_On");
-            ChangeStatusDisplayButton("Main");   
+            ChangeStatusDisplayButton("Main");
         }
     }
     public void OnTriggerExit(Collider other)

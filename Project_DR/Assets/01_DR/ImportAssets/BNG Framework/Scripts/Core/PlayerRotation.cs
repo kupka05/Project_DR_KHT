@@ -235,11 +235,6 @@ namespace BNG {
                 SnapRotationAmount = 15;
             }
         }
-        public void SetRotation(float value)
-        {
-            SnapRotationAmount = value;
-
-        }
     }
 }
 

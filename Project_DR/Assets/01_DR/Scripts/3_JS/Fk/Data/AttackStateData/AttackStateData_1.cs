@@ -11,13 +11,10 @@ namespace BossMonster
          *************************************************/
         // 패턴(1) 화염지옥 데이터
         // 추가 할 데이터 넣어도 됩니다.
-        public int AreaCount => _areaCount;                // 영역 개수
-        public float AreaRange => _areaRange;              // 영역 범위
         public float AreaSpeed => _areaSpeed;              // 영역 속도
-        public float AreaSpawnTime => _areaSpawnTime;      // 영역 생성시간
-        public float ExplosionDamage => _explosionDamage;  // 폭발 데미지
-        public float FireDamage => _fireDamage;            // 화염 데미지
-        public float FireDuration => _fireDuration;        // 화염 지속시간
+        public float AreaRange => _areaRange;              // 영역 범위
+        public float AreaSpawnTime => _areaSpawnTime;      // 영역 생성 시간
+        public float AreaDamage => _areaDamage;            // 영역 데미지
         public float OutputInterval => _outputInterval;    // 출력 간격
         public BossData BossData => _bossData;             // 보스 정보
 
@@ -25,13 +22,10 @@ namespace BossMonster
         /*************************************************
          *                Private Fields
          *************************************************/
-        private int _areaCount;
-        private float _areaRange;
         private float _areaSpeed;
+        private float _areaRange;
         private float _areaSpawnTime;
-        private float _explosionDamage;
-        private float _fireDamage;
-        private float _fireDuration;
+        private float _areaDamage;
         private float _outputInterval;
         private BossData _bossData;
 
@@ -42,17 +36,12 @@ namespace BossMonster
         // 생성자 & 부모 생성자
         public AttackStateData_1(int id, BossData bossData)
         {
-            int patternID = (int)DataManager.instance.GetData(id, "AttackPatternKeyID", typeof(int));
             _bossData = bossData;
-            _areaCount = (int)DataManager.instance.GetData(patternID, "AreaCount", typeof(int));
-            _areaRange = (float)DataManager.instance.GetData(patternID, "AreaRange", typeof(float));
-            _areaSpeed = (float)DataManager.instance.GetData(patternID, "AreaSpeed", typeof(float));
-            _areaSpawnTime = (float)DataManager.instance.GetData(patternID, "AreaSpawnTime", typeof(float));
-            _explosionDamage = (float)DataManager.instance.GetData(patternID, "ExplosionDamage", typeof(float));
-            _fireDamage = (float)DataManager.instance.GetData(patternID, "FireDamage", typeof(float));
-            _fireDuration = (float)DataManager.instance.GetData(patternID, "FireDuration", typeof(float));
-            _areaSpawnTime = (float)DataManager.instance.GetData(patternID, "AreaSpawnTime", typeof(float));
-            _outputInterval = (float)DataManager.instance.GetData(patternID, "OutputInterval", typeof(float));
+            _areaSpeed = (float)DataManager.instance.GetData(id, "AreaSpeed", typeof(float));
+            _areaRange = (float)DataManager.instance.GetData(id, "AreaRange", typeof(float));
+            _areaSpawnTime = (float)DataManager.instance.GetData(id, "AreaSpawnTime", typeof(float));
+            _areaDamage = (float)DataManager.instance.GetData(id, "AreaDamage", typeof(float));
+            _outputInterval = (float)DataManager.instance.GetData(id, "OutputInterval", typeof(float));
         }
     }
 }

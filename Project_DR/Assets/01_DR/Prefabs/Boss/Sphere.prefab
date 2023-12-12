@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3926116842542408540}
   - component: {fileID: 3926116842542408541}
   - component: {fileID: 547113660154123960}
-  - component: {fileID: 6178568735780517401}
+  - component: {fileID: 5854378859240105760}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -139,6 +139,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!114 &547113660154123960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +159,7 @@ MonoBehaviour:
   isThink: 0
   bulletCount: 6
   target: {fileID: 0}
---- !u!114 &6178568735780517401
+--- !u!114 &5854378859240105760
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,7 +168,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 3926116842542408542}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef7476ee5c316eb42bb8cd7563e0416e, type: 3}
+  m_Script: {fileID: 11500000, guid: ca9a1e965d30e774dab1281c9e07b376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageCollider: {fileID: 3926116842542408541}
   speed: 15

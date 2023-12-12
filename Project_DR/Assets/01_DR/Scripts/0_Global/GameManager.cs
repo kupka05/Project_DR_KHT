@@ -116,6 +116,7 @@ public class GameManager : MonoBehaviour
         // 데이터 가져오기
         GetData();
         StartInIt();
+
         // 플레이어 찾아오기
         player = GameObject.FindGameObjectWithTag("Player");
         if (player)
@@ -126,9 +127,11 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("플레이어를 찾지 못했습니다.");
         }
-
-
-
+        // 스크린 페이더 가져오기
+        if (Camera.main)
+        {
+            fader = Camera.main.transform.GetComponent<ScreenFader>();
+        }
     }       // Start()    
 
     private void OnLevelWasLoaded()
@@ -213,28 +216,19 @@ public class GameManager : MonoBehaviour
     // 게임오버
     public void GameOver()
     {
-        // 스크린 페이더 가져오기
-        if (Camera.main)
-        {
-            fader = Camera.main.transform.GetComponent<ScreenFader>();
-        }
-
         fader.DoFadeIn();
         screenText = player.GetComponent<ScreenText>();
         screenText.OnScreenText(gameoverText);
         input.enabled = false;
 
-
-        Invoke(nameof(GameOverScene),5f);
+        SceneLoad(gameoverScene); // 게임오버 씬 전환
     }
 
     // 현재 씬 리셋
     public void ResetScene()
-    {
-        
+    {        
         string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
-
+        SceneLoad(currentSceneName);
     }
 
     /// <summary>
@@ -243,15 +237,33 @@ public class GameManager : MonoBehaviour
     public void ClearDungeon()
     {
         string lobbySceneName = "3_LobbyScene";
-        SceneManager.LoadScene(lobbySceneName);
+        SceneLoad(lobbySceneName);
     }       // ClearDungeon()
 
-    // 게임오버시 씬 이동
-    public void GameOverScene()
+ 
+    // 씬 전환 함수
+    public void SceneLoad(string _sceneName)
     {
-        SceneManager.LoadScene(gameoverScene);
+        if (string.IsNullOrEmpty(_sceneName))
+        {
+            Debug.Log("전환할 씬을 찾지 못했습니다.");
+            return;
+        }
+        StartCoroutine(_sceneName);
     }
-        
+
+    // 플레이어의 페이드를 포함한 씬 전환 델레이
+    IEnumerator SceneChangeDelay(string _sceneName)
+    {
+        if (fader)
+        {
+            fader.DoFadeIn();
+        }
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(_sceneName);
+    }
+
 
     // 데이터 가져오기
     public void GetData()

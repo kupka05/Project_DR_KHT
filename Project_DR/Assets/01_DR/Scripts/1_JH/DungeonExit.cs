@@ -11,6 +11,9 @@ public class DungeonExit : MonoBehaviour
     public string dungeonScene;
     public ScreenFader fader;
 
+    // 12.12 SG 추가
+
+
     public void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -22,11 +25,15 @@ public class DungeonExit : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("다음씬으로?");
+            //Debug.Log("다음씬으로?");
             if (isLobby)
             {
                 fader.DoFadeIn();
                 StartCoroutine(SceneChange(dungeonScene));
+            }
+            else if(GameManager.instance.isPlayerMaxFloor <=GameManager.instance.nowFloor )
+            {
+                GameManager.instance.ClearDungeon();
             }
             else
             {

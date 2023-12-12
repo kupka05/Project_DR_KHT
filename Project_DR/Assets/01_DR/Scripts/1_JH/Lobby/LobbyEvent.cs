@@ -192,6 +192,7 @@ public class LobbyEvent : MonoBehaviour
 
     }
 
+    // 업그레이드를 위한 계산기
     public int PlayerCalculator()
     {
         int result, afterHP, curHP, afterGold, curGold, afterExp, curExp;

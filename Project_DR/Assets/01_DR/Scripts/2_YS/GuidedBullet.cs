@@ -25,7 +25,7 @@ public class GuidedBullet : MonoBehaviour
     void Start()
     {
         // 플레이어를 찾아서 타겟으로 설정
-        target = GameObject.FindWithTag("Player")?.GetComponent<PlayerPosition>()?.playerPos;
+        target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
 
         // 타겟이 없을 경우 리턴
         if (target == null)

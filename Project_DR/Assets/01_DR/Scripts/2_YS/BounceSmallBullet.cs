@@ -4,34 +4,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-public class MonsterBullet : MonoBehaviour
+public class BounceSmallBullet : MonoBehaviour
 {
     public Rigidbody rigid;
     public DamageCollider damageCollider;
 
-    public int ProjectileID;
+    public int BounceSmallTableID;
 
     [Header("테이블 관련")]
-    public float speed = default;
     public float damage = default;
-    
 
-   
+
+
     // Start is called before the first frame update
     void Start()
     {
-        GetData(ProjectileID);
-        
+        GetData(BounceSmallTableID);
+
         rigid = GetComponent<Rigidbody>();
-        rigid.velocity = transform.forward * speed;
+        rigid.velocity = transform.forward * 10.0f;
 
         damageCollider.Damage = damage;
     }
-    
-    public virtual void GetData(int ProjectileID)
+
+    public virtual void GetData(int BounceSmallTableID)
     {
-        speed = (float)DataManager.instance.GetData(ProjectileID, "MonSpd", typeof(float));
-        damage = (float)DataManager.instance.GetData(ProjectileID, "MonAtt", typeof(float));
+        //6913
+        damage = (float)DataManager.instance.GetData(BounceSmallTableID, "Damage", typeof(float));
     }
 
     public virtual void OnCollisionEnter(Collision collision)
@@ -43,3 +42,4 @@ public class MonsterBullet : MonoBehaviour
         }
     }
 }
+

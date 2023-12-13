@@ -185,10 +185,11 @@ public class UserDataManager : MonoBehaviour
 
     [Header("Inventory Data")]
     // 호출 순서 문제로 인해 static으로 설정
-    public static Item[] items = new Item[] { };
+    public static Item[] items = new Item[Inventory.MaxCapacity];
 
     [Header("Reference Data")]
-    public StatData statData;   // 업그레이드 스탯 정보가 담긴 데이터
+    private StatusData  statusData = new StatusData();
+    public StatData statData = new StatData();   // 업그레이드 스탯 정보가 담긴 데이터
     #endregion
 
     // ####################### Awake #######################
@@ -223,7 +224,6 @@ public class UserDataManager : MonoBehaviour
     // 참조 데이터 로드
     public void GetReferenceData()
     {
-        StatusData statusData = new StatusData();
         statusData.GetData(statData);
     }
 

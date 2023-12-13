@@ -694,7 +694,7 @@ namespace BNG {
             } 
             else if (ControlType == TeleportControls.AxisHandler)
             {
-
+                // 텔레포트 체크 시작
                 if (axis.state == AxisHandler.State.Teleport)
                 {
                     return true;
@@ -731,7 +731,7 @@ namespace BNG {
             }
             else if (ControlType == TeleportControls.AxisHandler)
             {
-                return axis.isDeadZone;
+                return axis.state != AxisHandler.State.Teleport;
             }
             return true;
         }

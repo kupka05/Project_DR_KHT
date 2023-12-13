@@ -203,12 +203,12 @@ public class GameManager : MonoBehaviour
 
     private void DoorOn()
     {
-        DoorOnEvent.Invoke();
+        DoorOnEvent?.Invoke();
     }       // DoorOn()
 
     private void DoorOff()
     {
-        DoorOffEvent.Invoke();
+        DoorOffEvent?.Invoke();
     }       // DoorOff()
 
 
@@ -252,7 +252,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(_sceneName);
     }
 
-    // 플레이어의 페이드를 포함한 씬 전환 델레이
+    // 플레이어의 페이드를 포함한 씬 전환 딜레이
     IEnumerator SceneChangeDelay(string _sceneName)
     {
         if (fader)

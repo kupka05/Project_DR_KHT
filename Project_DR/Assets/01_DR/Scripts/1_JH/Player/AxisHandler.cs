@@ -29,6 +29,8 @@ public class AxisHandler : MonoBehaviour
     public float activeZoneVal;
     public float activeTime;
 
+    public bool isActiveTeleport;
+
     [Header("Inputs")]
     [Tooltip("Used to determine whether to turn left / right. This can be an X Axis on the thumbstick, for example. -1 to snap left, 1 to snap right.")]
     public List<InputAxis> inputAxis = new List<InputAxis>() { InputAxis.RightThumbStickAxis };
@@ -43,8 +45,8 @@ public class AxisHandler : MonoBehaviour
 
     private void Start()
     {
-        waitForSeconds = new WaitForSeconds(activeTime);
         GetData();
+        waitForSeconds = new WaitForSeconds(activeTime);
     }
 
     // Update is called once per frame
@@ -66,7 +68,12 @@ public class AxisHandler : MonoBehaviour
 
     public void StateHandler()
     {
-        if(Math.Abs(axis.x) <= 0.2 && 0 < axis.y)
+        if (isDeadZone)
+        {
+            return;
+        }
+
+        if (Math.Abs(axis.x) <= 0.2 && 0 < axis.y)
         {
             state = State.Teleport;
         }
@@ -129,7 +136,8 @@ public class AxisHandler : MonoBehaviour
     {
         if (isActiveZone)
         {
-            if (ActiveCheckRoutine == null)
+            ActiveEvent();
+            if (state == State.Teleport && ActiveCheckRoutine == null)
             {
                 ActiveCheckRoutine = ActiveChecking();
                 StartCoroutine(ActiveCheckRoutine);
@@ -137,7 +145,7 @@ public class AxisHandler : MonoBehaviour
         }
         else if (!isActiveZone)
         {
-            if (ActiveCheckRoutine != null)
+            if (state == State.Teleport && ActiveCheckRoutine != null)
             {
                 StopCoroutine(ActiveCheckRoutine);
                 ActiveCheckRoutine = null;
@@ -149,7 +157,8 @@ public class AxisHandler : MonoBehaviour
     {
         Debug.Log("체크시작하나?");
         yield return waitForSeconds;
-        ActiveEvent();
+        //ActiveEvent();
+        state = State.Default;
 
         yield break;
     }
@@ -159,6 +168,9 @@ public class AxisHandler : MonoBehaviour
 
     public void ActiveEvent()
     {
+        if (state == State.Teleport)
+            return;
+
         if (state == State.Backdash)
         {
             BackDashEvent.Invoke();
@@ -180,6 +192,6 @@ public class AxisHandler : MonoBehaviour
     {
         deadZoneVal = (float)DataManager.instance.GetData(1001, "DeadZone", typeof(float));
         activeZoneVal = (float)DataManager.instance.GetData(1001, "ActiveZone", typeof(float));
-
+        activeTime = (float)DataManager.instance.GetData(1001, "ActiveTime", typeof(float));
     }
 }

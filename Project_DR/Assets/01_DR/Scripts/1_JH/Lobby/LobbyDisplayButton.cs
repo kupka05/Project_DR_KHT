@@ -14,6 +14,7 @@ public class LobbyDisplayButton : MonoBehaviour
     }
 
     public ButtonType type = ButtonType.Default;
+    private LobbyEvent lobbyEvent;
 
     [Header("Player Status")]
 
@@ -31,6 +32,11 @@ public class LobbyDisplayButton : MonoBehaviour
     private GameObject[] items;
 
     public bool isActive=false;
+
+    public void Start()
+    {
+        lobbyEvent = transform.root.GetComponent<LobbyEvent>();
+    }
 
     public void OnEnable()
     {
@@ -83,6 +89,7 @@ public class LobbyDisplayButton : MonoBehaviour
         afterValue.SetActive(true);
         SetLevelItem(index, level);
     }
+
     // 레벨 생성
     private void SetLevelItem(int _index, int _level)
     {
@@ -105,6 +112,17 @@ public class LobbyDisplayButton : MonoBehaviour
     public void SetLevelButton(int value)
     {
         newLevel += value;
+        if(newLevel < 0 )
+        {
+            newLevel = 0;
+            return;
+        }
+        else if (10 < newLevel)
+        {
+            newLevel = 10;
+            return;
+        }
+
 
         if (newLevel <= level)
         {
@@ -128,6 +146,8 @@ public class LobbyDisplayButton : MonoBehaviour
                 items[i].GetComponent<Image>().color = Color.white;
             }
         }
+
+        lobbyEvent.UpdatePlayerUpgradeUI();
     }
 
 }

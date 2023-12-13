@@ -58,8 +58,9 @@ public class GoogleSheetLoader : MonoBehaviour
             // 코루틴으로 구글 시트 데이터를 불러온다.
             // isCsvConert = true를 매개변수로 할당해서
             // Csv 데이터로 변환한다.
+            int waitframe = (i + 1) * 3;
             StartCoroutine(GoogleSheetsReader.GetGoogleSheetsData(
-                spreadsheetId, apiKey, sheetNames[i], true, data =>
+                spreadsheetId, apiKey, sheetNames[i], true, waitframe, data =>
                 {
                     // callBack 변수에서 받은 data를
                     // CSVReader.NewReadCSVFile()에
@@ -85,5 +86,6 @@ public class GoogleSheetLoader : MonoBehaviour
 
         // 로딩 완료 상태 변경
         isDone = true;
+        Debug.Log("isDOne");
     }
 }

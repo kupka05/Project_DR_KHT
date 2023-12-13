@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 203844588}
-  m_IndirectSpecularColor: {r: 0.0014834992, g: 0.0013713579, b: 0.0013408005, a: 1}
+  m_IndirectSpecularColor: {r: 0.0014926303, g: 0.001392539, b: 0.0013206189, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2088,7 +2088,7 @@ PrefabInstance:
     - target: {fileID: 7837797319980225010, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0038312913
+      value: -0.0038298403
       objectReference: {fileID: 0}
     - target: {fileID: 7837797319993773063, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -2108,47 +2108,47 @@ PrefabInstance:
     - target: {fileID: 8632280358501397911, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8632280358501397911, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: -17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8632280358700687417, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8632280358700687417, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8632280358700687417, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8632280358700687417, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: -17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0007954607
+      value: -0.0008301945
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8632280360070396635, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -6515,8 +6515,8 @@ MonoBehaviour:
   _Exp: 0
   _Gold: 0
   _HPUpgrade: 0
-  GainExpUpgrade: 0
   GainGoldUpgrade: 0
+  GainExpUpgrade: 0
   WeaponAtk: 0
   WeaponCriRate: 0
   WeaponCriDamage: 0
@@ -42912,8 +42912,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1920788381}
         m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
-        m_Mode: 5
+        m_MethodName: PlayerUpgrade
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -49038,7 +49038,7 @@ MonoBehaviour:
   beforeValue: {fileID: 743705232}
   afterValue: {fileID: 1727678078}
   index: 10
-  level: 2
+  level: 0
   newLevel: 0
   contentPos: {fileID: 571314227}
   item: {fileID: 1674047490}
@@ -59360,6 +59360,10 @@ MonoBehaviour:
   curPlayerHp: {fileID: 945941515}
   beforePlayerHp: {fileID: 1201815964}
   afterPlayerHp: {fileID: 1409031569}
+  hpLv: 0
+  goldLv: 0
+  expLv: 0
+  playerSpendExp: 0
   curGoldIncre: {fileID: 1674816673}
   beforeGoldIncre: {fileID: 1799614478}
   afterGoldIncre: {fileID: 142934262}

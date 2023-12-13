@@ -24,7 +24,7 @@ public class GoogleSheetLoader : MonoBehaviour
         "Upgrade_Weapon_Atk_Table", "Upgrade_Weapon_CR_Table", "Upgrade_Weapon_CRD_Table", "Upgrade_Weapon_ATKSpeed_Table",
 
         //YS
-        "Monster_Table", "Boss_Table",
+        "Monster_Table", "Boss_Table", "Boss_projectile_Table",
 
         // SG
         "spawnNomalMonster_Table","spawnEliteMonster_Table","DungeonCreater_Table",

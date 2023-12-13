@@ -171,7 +171,7 @@ public class PlayerInventoryUI : MonoBehaviour
         int latestIndex = -1;
         // 인벤토리에 있는 슬롯 개수만큼 순회
         for (int i = 0; i < count; i++)
-        {
+        {            
             // 인벤토리에 슬롯이 비어있지 않을 경우
             if (_inventory.Items[i] != null)
             {

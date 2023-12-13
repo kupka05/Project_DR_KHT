@@ -9,8 +9,6 @@ public class Lazer : MonoBehaviour
 
     public float damage = 0.1f;
 
-  
-
     // Start is called before the first frame update
     void Start()
     {

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8809067579740100131}
   - component: {fileID: 8809067579740100124}
   - component: {fileID: 8809067579740100125}
-  - component: {fileID: 8448115372236242429}
+  - component: {fileID: 3772454959762014762}
   m_Layer: 0
   m_Name: BossSmallbullet
   m_TagString: Untagged
@@ -140,7 +140,7 @@ MonoBehaviour:
   isKnockback: 0
   isBossProjectile: 0
   isEliteProjectile: 0
---- !u!114 &8448115372236242429
+--- !u!114 &3772454959762014762
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,8 +149,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8809067579740100126}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef7476ee5c316eb42bb8cd7563e0416e, type: 3}
+  m_Script: {fileID: 11500000, guid: d919bd3330bb5ae47ba21ccfbf9aa09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smallTableID: 6910
   damageCollider: {fileID: 8809067579740100125}
-  speed: 15
+  rigid: {fileID: 8809067579740100124}
+  damage: 0

@@ -12,6 +12,9 @@ namespace BNG {
     /// </summary>
     public class Damageable : MonoBehaviour {
 
+        // 보스 할당
+        private BossMonster.Boss _boss;
+        
         public float Health = 100;
         private float _startingHealth;
 
@@ -93,6 +96,20 @@ namespace BNG {
             }
         }
 
+        // Init
+        public void Initialize(BossMonster.Boss boss)
+        {
+            _boss = boss;
+            _startingHealth = boss.BossData.MaxHP;
+            Health = _startingHealth;
+        }
+
+        // 데미지를 받았을 경우 처리
+        private void OnDamageReceived(float damage)
+        {
+            _boss.OnDamage(damage);
+        }
+
         public virtual void DealDamage(float damageAmount) {
             DealDamage(damageAmount, transform.position);
         }
@@ -100,14 +117,16 @@ namespace BNG {
         //public virtual void DealDamage(float damageAmount, Vector3? hitPosition = null, Vector3? hitNormal = null, bool reactToHit = true, GameObject sender = null, GameObject receiver = null) {
         public virtual void DealDamage(float damageAmount, Vector3 hitPosition, Vector3? hitNormal = null, bool reactToHit = true, GameObject sender = null, GameObject receiver = null)
         {
-
-
             if (destroyed || stun) {
                 return;
             }
             Health -= damageAmount;
 
             onDamaged?.Invoke(damageAmount);
+
+            // 데미지 받았을 경우 관련 처리
+            OnDamageReceived(damageAmount);
+
             //Debug.Log($"health{Health}");
 
             // Invector Integration

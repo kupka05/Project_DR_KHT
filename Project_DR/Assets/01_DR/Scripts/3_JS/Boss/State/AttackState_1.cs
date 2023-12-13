@@ -10,6 +10,7 @@ namespace BossMonster
          *                 Public Fields
          *************************************************/
         public int ID => _id;
+        public Boss Boss => _boss;
         public BossData BossData => _bossData;
         public AttackStateData_1 StateData => _stateData;
 
@@ -18,6 +19,7 @@ namespace BossMonster
          *                 Public Fields
          *************************************************/
         private int _id;
+        private Boss _boss;
         private BossData _bossData;
         private AttackStateData_1 _stateData;
 
@@ -26,16 +28,17 @@ namespace BossMonster
          *                Public Methods
          *************************************************/
         // 생성자
-        public AttackState_1(int id, BossData bossData)
+        public AttackState_1(int id, Boss boss)
         {
-            // 보스 정보 참조
-            _bossData = bossData;
+            // 보스 및 보스 데이터 참조
+            _boss = boss;
+            _bossData = _boss.BossData;
 
             // 공격 패턴 (1)에 해당하는 구글 시트 ID 할당
             _id = id;
 
             // 상태 정보 객체 생성 및 초기화
-            _stateData = new AttackStateData_1(_id, bossData);
+            _stateData = new AttackStateData_1(_id, _bossData);
         }
 
 
@@ -45,6 +48,7 @@ namespace BossMonster
         // 상태 진입시
         public void EnterState(Boss boss)
         {
+
         }
 
         // 상태 업데이트시

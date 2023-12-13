@@ -45,8 +45,8 @@ namespace BossMonster
             _boss = boss;
             _bossData = boss.BossData;
 
-            // 데미지 관련 처리 컴포넌트 추가 및 체력 설정
-            _damageable = gameObject.AddComponent<BNG.Damageable>();
+            // 데미지 관련 처리 컴포넌트 호출 및 체력 설정
+            _damageable = gameObject.GetComponent<BNG.Damageable>();
             _damageable.Initialize(boss);
 
             // 보스 HP 캔버스 생성

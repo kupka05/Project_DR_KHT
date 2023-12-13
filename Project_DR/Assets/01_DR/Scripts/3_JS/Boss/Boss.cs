@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace BossMonster
 {
@@ -73,8 +74,10 @@ namespace BossMonster
             // 보스 소환석 생성 및 Init
             CreateSummoningStone();
 
-            // 데미지 관련 처리 할당
+            // 데미지 관련 처리 할당 및 OnDamaged 이벤트 추가
             _bossData.SetDamageable(_bossSummoningStone.Damageable);
+            _bossData.Damageable.onDamaged = new FloatEvent();
+            _bossData.Damageable.onDamaged.AddListener(OnDamage);
 
             // 공격 패턴 랜덤 설정
             ChooseRandomPattern();

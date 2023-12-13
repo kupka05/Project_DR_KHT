@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -104,12 +105,6 @@ namespace BNG {
             Health = _startingHealth;
         }
 
-        // 데미지를 받았을 경우 처리
-        private void OnDamageReceived(float damage)
-        {
-            _boss.OnDamage(damage);
-        }
-
         public virtual void DealDamage(float damageAmount) {
             DealDamage(damageAmount, transform.position);
         }
@@ -123,9 +118,6 @@ namespace BNG {
             Health -= damageAmount;
 
             onDamaged?.Invoke(damageAmount);
-
-            // 데미지 받았을 경우 관련 처리
-            OnDamageReceived(damageAmount);
 
             //Debug.Log($"health{Health}");
 

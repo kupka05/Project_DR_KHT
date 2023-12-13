@@ -15,13 +15,13 @@ namespace BossMonster
         // 상태 업데이트시
         public void UpdateState(Boss boss)
         {
-
+            Debug.Log("대기상태업데이트");
         }
 
         // 상태에서 나갈시
         public void ExitState(Boss boss)
         {
-
+            Debug.Log("대기상태나가기");
         }
     }
 }

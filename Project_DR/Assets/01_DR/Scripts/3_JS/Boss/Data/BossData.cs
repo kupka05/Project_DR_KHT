@@ -46,5 +46,11 @@ namespace BossMonster
             _giveEXP = (float)DataManager.instance.GetData(id, "GiveEXP", typeof(float));
             _giveGold = (int)DataManager.instance.GetData(id, "GiveGold", typeof(int));
         }
+
+        // 데미지 처리
+        public void OnDamage(float damage)
+        {
+            _hp -= damage;
+        }
     }
 }

@@ -1,14 +1,60 @@
+using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BounceBullet : MonsterBullet
+public class BounceBullet : MonoBehaviour
 {
-    public override void OnCollisionEnter(Collision collision)
+    public Rigidbody rigid;
+    public DamageCollider damageCollider;
+
+    public int BounceTableId;
+
+    [Header("테이블 관련")]
+    public float speed = default;
+    public float damage = default;
+    public float destoryTime = default;
+
+    [Header("조건")]
+    public bool isShoot = false;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        if (collision.collider.CompareTag("Player"))
-        {
-            //Destroy(this.gameObject);
-        }
+        GetData(BounceTableId);
+
+        rigid = GetComponent<Rigidbody>();
+
+        damageCollider.Damage = damage;
+
+        StartCoroutine(Activate());
     }
+
+    IEnumerator Activate()
+    {
+        // 오브젝트 활성화
+        gameObject.SetActive(true);
+        Debug.Log($"활성화:{gameObject}");
+        
+        yield return new WaitForSeconds(4.0f);
+        Debug.Log("대기중");
+        // 발사
+        Play();
+    }
+
+    void Play()
+    {
+        rigid.velocity = transform.forward * speed;
+    }
+
+    
+
+    public virtual void GetData(int BounceTableId)
+    {
+        //6912
+        speed = (float)DataManager.instance.GetData(BounceTableId, "Speed", typeof(float));
+        damage = (float)DataManager.instance.GetData(BounceTableId, "Damage", typeof(float));
+        destoryTime = (float)DataManager.instance.GetData(BounceTableId, "DesTime", typeof(float));
+    }
+
 }

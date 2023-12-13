@@ -13,6 +13,7 @@ public class PlayerBackDash : MonoBehaviour
     public float force = 1.5f; // 넉백
     public bool input = false;
     public bool onBackDash = false;
+    public bool onKnockBack = false;
     public float coolDown = 1.5f;
 
 
@@ -20,6 +21,7 @@ public class PlayerBackDash : MonoBehaviour
     public List<InputAxis> inputAxis = new List<InputAxis>() { InputAxis.RightThumbStickAxis };
 
     IEnumerator dashRoutine;
+    IEnumerator knockBackRoutine;
     private WaitForSeconds waitForSeconds;
 
 
@@ -103,6 +105,7 @@ public class PlayerBackDash : MonoBehaviour
     {
         yield return waitForSeconds;
         onBackDash = false;
+        onKnockBack = false;
         yield break;
     }
 
@@ -110,5 +113,28 @@ public class PlayerBackDash : MonoBehaviour
     {
         force = (float)DataManager.instance.GetData(1001, "BackDash", typeof(float))*1000f;
         coolDown = (float)DataManager.instance.GetData(1001, "BackDashCD", typeof(float));
+    }
+
+    public void OnKnockBack(float _force)
+    {
+        if (onKnockBack)
+        {
+            return;
+        }
+
+        if (locomo.state == PlayerState.grounded || locomo.state == PlayerState.walking)
+        {
+            Debug.Log("knockBack");
+            onKnockBack = true;
+            playerRigid.AddForce(-transform.forward * _force, ForceMode.Impulse);
+
+            if (knockBackRoutine != null)
+            {
+                StopCoroutine(knockBackRoutine);
+                knockBackRoutine = null;
+            }
+            knockBackRoutine = BackDashRoutine();
+            StartCoroutine(knockBackRoutine);
+        }
     }
 }

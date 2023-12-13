@@ -72,7 +72,7 @@ public class DataManager : MonoBehaviour
         "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",
 
         //YS
-        "Monster_Table", "Boss_Table",
+        "Monster_Table", "Boss_Table", "Boss_projectile_Table",
         
         // SG
         "spawnNomalMonster_Table","spawnEliteMonster_Table","DungeonCreater_Table",

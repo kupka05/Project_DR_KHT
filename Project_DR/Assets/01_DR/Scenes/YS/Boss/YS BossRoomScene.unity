@@ -496,7 +496,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &305129975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1110,7 +1110,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &711409668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1790,7 +1790,12 @@ MonoBehaviour:
     type: 3}
   isShoot: 0
   isThink: 0
+  tableID: 0
   bulletCount: 12
+  speed: 0
+  destoryTime: 0
+  delayTime: 0
+  delay: 0
   target: {fileID: 8809067579740100128, guid: 3a21c71d5bf44ec40a4c4752ae400980, type: 3}
 --- !u!65 &1119697632
 BoxCollider:
@@ -3144,7 +3149,7 @@ PrefabInstance:
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0018174633
+      value: 0.0011863193
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}

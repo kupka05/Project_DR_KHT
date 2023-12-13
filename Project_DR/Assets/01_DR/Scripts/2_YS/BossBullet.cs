@@ -1,101 +1,52 @@
-//using BNG;
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using static UnityEngine.GraphicsBuffer;
-//using static UnityEngine.Rendering.DebugUI;
+using BNG;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Rendering;
+using UnityEngine;
 
-//public class BossBullet : MonsterBullet
-//{
-//    public bool isShoot = false;
+public class BossBullet : MonoBehaviour
+{
+    public int smallTableID;
 
-//    public Transform target;
-//    public Rigidbody rigid;
+    public DamageCollider damageCollider;
 
-//    [Header("테이블 관련")]
-//    private float hp = default;
-//    private float bulletCount = 6;
+    public Rigidbody rigid;
 
-//    [Header("테이블 아이디")]
-//    public int tableId;
-
-//    void Awake()
-//    {
-//        GetData(tableId);
-//    }
-
-//    // Start is called before the first frame update
-//    void Start()
-//    {
-//        rigid = GetComponent<Rigidbody>();
-//        rigid.velocity = transform.forward * speed;
-
-//        target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
-
-//        StartCoroutine(PlayShoot());
-//    }
-
-//    public void GetData(int tableId)
-//    {
-//        hp = (float)DataManager.instance.GetData(tableId, "Hp", typeof(float));
-//        speed = (float)DataManager.instance.GetData(tableId, "Speed", typeof(float));
-//    }
-
-//    public IEnumerator PlayShoot()
-//    {
-//        if (!isShoot)
-//        {
-//            isShoot = true;
-
-//            for (int i = 0; i < bulletCount; i++)
-//            {
-//                // 위치 조절
-//                Vector3 offset = Vector3.zero;
-
-//                if (i % 2 == 0)
-//                {
-//                    offset = new Vector3(2.0f, 0, 0);
-//                }
-//                else
-//                {
-//                    if (i % 4 == 1)
-//                    {
-//                        offset = new Vector3(0, 2.0f, 0);
-//                    }
-//                    else
-//                    {
-//                        offset = new Vector3(-2.0f, 0, 0);
-//                    }
-//                }
+    [Header("테이블")]
+    public float damage = default;
 
 
-//                //GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
-//                //Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
+    void Awake()
+    {
+        GetData(smallTableID);
+    }
 
-//                GameObject instantBullet = new GameObject(); // 새로운 GameObject 생성
-//                Rigidbody rigidBullet = instantBullet.AddComponent<Rigidbody>(); // Rigidbody 추가
+    void Start()
+    {
+        rigid = GetComponent<Rigidbody>();
+        damageCollider = GetComponent<DamageCollider>();
+        rigid.velocity = transform.forward;
 
-//                // 총알 속도 설정
-//                rigidBullet.velocity = offset.normalized * 10.0f;
+        damageCollider.Damage = damage;
+    }
 
-//                instantBullet.transform.LookAt(target);
+    void Update()
+    {
+        
+    }
 
-//                yield return new WaitForSeconds(0.4f);
+    public void GetData(int smallTableID)
+    {
+        //6910
+        damage = (float)DataManager.instance.GetData(smallTableID, "Damage", typeof(float));
+    }
 
-//                Destroy(instantBullet, 6.0f);
 
-//            }
-
-//            isShoot = false;
-//        }
-//    }
-
-//    // Update is called once per frame
-//    void Update()
-//    {
-//        if (hp >= 0)
-//        {
-//            Destroy(this.gameObject);
-//        }
-//    }
-//}
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player") || collision.collider.CompareTag("Wall"))
+        {
+            Destroy(this.gameObject);
+        }
+    }
+}

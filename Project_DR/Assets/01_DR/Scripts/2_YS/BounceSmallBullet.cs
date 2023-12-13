@@ -2,38 +2,35 @@ using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
-public class BounceBullet : MonoBehaviour
+public class BounceSmallBullet : MonoBehaviour
 {
     public Rigidbody rigid;
     public DamageCollider damageCollider;
 
-    public int BounceTableId;
+    public int BounceSmallTableID;
 
     [Header("테이블 관련")]
-    public float speed = default;
     public float damage = default;
-    public float destoryTime = default;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        GetData(BounceTableId);
+        GetData(BounceSmallTableID);
 
         rigid = GetComponent<Rigidbody>();
-        rigid.velocity = transform.forward * speed;
+        rigid.velocity = transform.forward;
 
         damageCollider.Damage = damage;
     }
 
-    public virtual void GetData(int BounceTableId)
+    public virtual void GetData(int BounceSmallTableID)
     {
-        //6912
-        speed = (float)DataManager.instance.GetData(BounceTableId, "Speed", typeof(float));
-        damage = (float)DataManager.instance.GetData(BounceTableId, "Damage", typeof(float));
-        destoryTime = (float)DataManager.instance.GetData(BounceTableId, "DesTime", typeof(float));
+        //6913
+        damage = (float)DataManager.instance.GetData(BounceSmallTableID, "Damage", typeof(float));
     }
 
     public virtual void OnCollisionEnter(Collision collision)
@@ -45,3 +42,4 @@ public class BounceBullet : MonoBehaviour
         }
     }
 }
+

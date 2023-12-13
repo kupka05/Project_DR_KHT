@@ -20,9 +20,15 @@ public class Boss : MonoBehaviour
     public GameObject bossState;
 
     public Rigidbody rigid;
+    
     public Damageable damageable;
+    
+
     GameObject instantLazer;
-    public int bossId;
+
+    [Header("보스 및 투사체 테이블 관련")]
+    public int bossId;  //보스 테이블
+    public int bossProjectileId;  //투사체 테이블
 
     public float power = 5.0f;
 
@@ -37,9 +43,12 @@ public class Boss : MonoBehaviour
     public Transform lazerPort;
     public GameObject lazer;
 
-    [Header("원거리 공격")]
-    public int bulletCount = 6;
+    [Header("원거리 공격 소형 투사체")]
+    public float bulletCount = default;
     public GameObject smallBulletPrefab;
+    public float delayTime = default;
+    public float destoryTime = default;
+    public float speed = default;
 
     [Header("애드벌룬 투사체 생성")]
     public Transform bouncePort;
@@ -63,7 +72,7 @@ public class Boss : MonoBehaviour
     public bool isPushPlayer = false;
 
     [Header("패턴 간격")]
-    public float patternInterval = 2.0f;
+    public float patternInterval = default;
 
     [Header("포물선 터지는 오브젝트")]
     public GameObject explosionPrefab;
@@ -81,16 +90,10 @@ public class Boss : MonoBehaviour
     public Transform testPort;
     public GameObject testBullet;
 
-    public void GetData(int id)
-    {
-        maxHp = (float)DataManager.instance.GetData(id, "BossHP", typeof(float));
-
-        
-    }
-
+    
     void Awake()
     {
-        GetData(bossId);
+        GetData(bossId, bossProjectileId);
     }
 
     void Start()
@@ -130,6 +133,22 @@ public class Boss : MonoBehaviour
 
     }
 
+    public void GetData(int bossId, int bossProjectileId)
+    {
+        //보스
+        maxHp = (float)DataManager.instance.GetData(bossId, "BossHP", typeof(float));
+
+        //소형 투사체 6910
+        bulletCount = (float)DataManager.instance.GetData(bossProjectileId, "Duration", typeof(float));
+        delayTime = (float)DataManager.instance.GetData(bossProjectileId, "Delay", typeof(float));
+        patternInterval = (float)DataManager.instance.GetData(bossProjectileId, "DelTime", typeof(float)); //이건 하나만
+        destoryTime = (float)DataManager.instance.GetData(bossProjectileId, "DesTime", typeof(float));
+        speed = (float)DataManager.instance.GetData(bossProjectileId, "Speed", typeof(float));
+
+        
+    }
+
+
     public void SetMaxHealth(float newHealth)
     {
         bossHPSlider.maxValue = newHealth;
@@ -140,21 +159,42 @@ public class Boss : MonoBehaviour
         bossHPSlider.value = newHealth;
     }
 
-  
+
 
     IEnumerator ExecutePattern()
     {
-        //Debug.Log("코루틴이 한번만 실행이 되는지");
+        Debug.Log("코루틴이 한번만 실행이 되는지");
 
         while (!isDie && !isPatternExecuting)
         {
-            //Debug.Log($"hp{hp}");
+            Debug.Log($"hp{hp}");
             yield return new WaitForSeconds(0.1f);
 
             //체력에 따라 랜덤으로 패턴 선택
-            //if (damageable.Health <= maxHp * 1.0f && damageable.Health > maxHp * 0.75f)
-            //{
+            if (damageable.Health <= maxHp * 1.0f && damageable.Health > maxHp * 0.75f)
+            {
                 Debug.Log("작동");
+                RandomPattern();
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().Attack();
+                }
+
+                //T0DO:넉백시
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().CastSpell();
+                }
+
+                isPatternExecuting = true;
+                yield return new WaitForSeconds(patternInterval);
+                isPatternExecuting = false;
+
+            }
+            else if (damageable.Health <= maxHp * 0.75f && damageable.Health > maxHp * 0.5f)
+            {
+                Debug.Log("작동2");
+
                 RandomPattern();
                 if (bossState)
                 {
@@ -171,73 +211,52 @@ public class Boss : MonoBehaviour
                 yield return new WaitForSeconds(patternInterval);
                 isPatternExecuting = false;
 
-            //}
-            //else if (damageable.Health <= maxHp * 0.75f && damageable.Health > maxHp * 0.5f)
-            //{
-            //    Debug.Log("작동2");
-
-            //    RandomPattern();
-            //    if (bossState)
-            //    {
-            //        bossState.GetComponent<BossState>().Attack();
-            //    }
-
-            //    ////T0DO:넉백시
-            //    //if(bossState)
-            //    //{
-            //    //    bossState.GetComponent<BossState>().CastSpell();
-            //    //}
-
-            //    isPatternExecuting = true;
-            //    yield return new WaitForSeconds(patternInterval);
-            //    isPatternExecuting = false;
-                
-            //}
-            //else if (damageable.Health <= maxHp * 0.5f && damageable.Health > maxHp * 0.25f)
-            //{
-            //    Debug.Log("작동3");
+            }
+            else if (damageable.Health <= maxHp * 0.5f && damageable.Health > maxHp * 0.25f)
+            {
+                Debug.Log("작동3");
 
 
-            //    RandomPattern();
-            //    if (bossState)
-            //    {
-            //        bossState.GetComponent<BossState>().Attack();
-            //    }
+                RandomPattern();
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().Attack();
+                }
 
-            //    ////T0DO:넉백시
-            //    //if(bossState)
-            //    //{
-            //    //    bossState.GetComponent<BossState>().CastSpell();
-            //    //}
+                ////T0DO:넉백시
+                //if(bossState)
+                //{
+                //    bossState.GetComponent<BossState>().CastSpell();
+                //}
 
 
-            //    isPatternExecuting = true;
-            //    yield return new WaitForSeconds(patternInterval);
-            //    isPatternExecuting = false;
-               
+                isPatternExecuting = true;
+                yield return new WaitForSeconds(patternInterval);
+                isPatternExecuting = false;
 
-            //}
-            //else if (damageable.Health < maxHp * 0.25f)
-            //{
-            //    Debug.Log("작동4");
 
-            //    RandomPattern();
-            //    if (bossState)
-            //    {
-            //        bossState.GetComponent<BossState>().Attack();
-            //    }
+            }
+            else if (damageable.Health < maxHp * 0.25f)
+            {
+                Debug.Log("작동4");
 
-            //    ////T0DO:넉백시
-            //    //if(bossState)
-            //    //{
-            //    //    bossState.GetComponent<BossState>().CastSpell();
-            //    //}
+                RandomPattern();
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().Attack();
+                }
 
-            //    isPatternExecuting = true;
-            //    yield return new WaitForSeconds(patternInterval);
-            //    isPatternExecuting = false;
-               
-            //}
+                ////T0DO:넉백시
+                //if(bossState)
+                //{
+                //    bossState.GetComponent<BossState>().CastSpell();
+                //}
+
+                isPatternExecuting = true;
+                yield return new WaitForSeconds(patternInterval);
+                isPatternExecuting = false;
+
+            }
 
 
 
@@ -253,16 +272,16 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                PlayShoot();
+                BounceShoot();
                 break;
             case 1:
-                TestShoot();
+                //TestShoot();
                 break;
             case 2:
-                BigBrickShoot();
+                //BigBrickShoot();
                 break;
             case 3:
-                BounceShoot();
+                //BounceShoot();
                 break;
         }
     }
@@ -295,17 +314,16 @@ public class Boss : MonoBehaviour
                 }
 
                 GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
-
                 Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
 
                 // 총알 속도 설정
-                rigidBullet.velocity = offset.normalized * 10.0f;
+                rigidBullet.velocity = offset.normalized * speed;
 
                 instantBullet.transform.LookAt(target);
 
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(delayTime);  //0.4f
 
-                Destroy(instantBullet, 6.0f);
+                Destroy(instantBullet, destoryTime);
 
             }
             isShoot = false;
@@ -320,11 +338,18 @@ public class Boss : MonoBehaviour
     //    // BossBullet 컴포넌트를 가져옴
     //    BossBullet bossBulletInstance = bossBulletObject.GetComponent<BossBullet>();
 
-    //    // target 설정 (필요에 따라 PlayerPosition 스크립트 등을 이용하여 설정)
-    //    bossBulletInstance.target = target;
+    //    if (bossBulletInstance != null)
+    //    {
+    //        // target 설정 (필요에 따라 PlayerPosition 스크립트 등을 이용하여 설정)
+    //        bossBulletInstance.target = target;
 
-    //    // 시작하거나 특정 메서드 호출 (PlayShoot를 시작하도록 함)
-    //    bossBulletInstance.StartCoroutine(bossBulletInstance.PlayShoot());
+    //        // 시작하거나 특정 메서드 호출 (PlayShoot를 시작하도록 함)
+    //        bossBulletInstance.StartCoroutine(PlayShoot());
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("BossBullet component not found on the instantiated object.");
+    //    }
     //}
 
 
@@ -342,8 +367,6 @@ public class Boss : MonoBehaviour
     {
         Destroy(instantLazer);
     }
-
-
 
     public Vector3 BigBrick(Vector3 portPosition)
     {

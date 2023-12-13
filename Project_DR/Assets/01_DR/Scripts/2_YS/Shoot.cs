@@ -1,6 +1,7 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class Shoot : MonoBehaviour
@@ -10,30 +11,39 @@ public class Shoot : MonoBehaviour
     public bool isShoot = false;
     public bool isThink = false;
 
-    public int bulletCount = 12;
+    public int tableID;
+
+    [Header("테이블 관련")]
+    public float bulletCount = default;
+    public float speed = default;
+    public float destoryTime = default;
+    public float delayTime = default;
+    public float delay = default;
 
     public Transform target;
+
+    void Awake()
+    {
+        GetData(tableID);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        //GameObject playerObject = GameObject.FindWithTag("Player");
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
-        //if (playerObject != null)
-        //{
-        //    target = playerObject.GetComponent<PlayerPosition>().playerPos;
-        //}
-        //else
-        //{
-        //    Debug.LogError("씬에서 'Player' 태그가 지정된 플레이어를 찾을 수 없습니다.");
-        //}
+        
         StartCoroutine(Think());
     }
 
-    // Update is called once per frame
-    void Update()
+    public void GetData(int tableID)
     {
-        
+        //6913
+        speed = (float)DataManager.instance.GetData(tableID, "Speed", typeof(float));
+        bulletCount = (float)DataManager.instance.GetData(tableID, "Duration", typeof(float));
+        destoryTime = (float)DataManager.instance.GetData(tableID, "DesTime", typeof(float));
+        delayTime = (float)DataManager.instance.GetData(tableID, "DelTime", typeof(float));
+        delay = (float)DataManager.instance.GetData(tableID, "Delay", typeof(float));
+
     }
 
     IEnumerator Think()
@@ -41,10 +51,10 @@ public class Shoot : MonoBehaviour
         if(!isThink)
         {
             isThink = true;
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(delayTime);
             isThink = false;
             StartCoroutine(PlayShoot());
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(delayTime);
 
         }
       
@@ -78,25 +88,19 @@ public class Shoot : MonoBehaviour
                     }
                 }
 
-
-                GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
-                
+                GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);          
 
                 Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
 
                 // 총알 속도 설정
-                rigidBullet.velocity = offset.normalized * 10.0f;
+                rigidBullet.velocity = offset.normalized * speed;   //10.0f;
 
                 instantBullet.transform.LookAt(target);
 
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(delay);   //0.4f
 
-                Destroy(instantBullet, 6.0f);
+                Destroy(instantBullet, destoryTime);
             }
-
-            yield return new WaitForSeconds(4.0f);
-            
-
             isShoot = false;
         }
     }

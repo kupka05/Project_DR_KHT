@@ -163,7 +163,7 @@ public class UserDataManager : MonoBehaviour
 
     [Header("Inventory Data")]
     // 호출 순서 문제로 인해 static으로 설정
-    public static Item[] items = new Item[Inventory.MaxCapacity];
+    public static Item[] items = new Item[] { };
 
     [Header("Reference Data")]
     public StatData statData;   // 업그레이드 스탯 정보가 담긴 데이터

@@ -22,7 +22,7 @@ public class BounceSmallBullet : MonoBehaviour
         GetData(BounceSmallTableID);
 
         rigid = GetComponent<Rigidbody>();
-        rigid.velocity = transform.forward;
+        rigid.velocity = transform.forward * 10.0f;
 
         damageCollider.Damage = damage;
     }

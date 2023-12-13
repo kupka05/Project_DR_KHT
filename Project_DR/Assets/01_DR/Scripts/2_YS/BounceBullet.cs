@@ -15,7 +15,8 @@ public class BounceBullet : MonoBehaviour
     public float damage = default;
     public float destoryTime = default;
 
-
+    [Header("조건")]
+    public bool isShoot = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,10 +24,30 @@ public class BounceBullet : MonoBehaviour
         GetData(BounceTableId);
 
         rigid = GetComponent<Rigidbody>();
-        rigid.velocity = transform.forward * speed;
 
         damageCollider.Damage = damage;
+
+        StartCoroutine(Activate());
     }
+
+    IEnumerator Activate()
+    {
+        // 오브젝트 활성화
+        gameObject.SetActive(true);
+        Debug.Log($"활성화:{gameObject}");
+        
+        yield return new WaitForSeconds(4.0f);
+        Debug.Log("대기중");
+        // 발사
+        Play();
+    }
+
+    void Play()
+    {
+        rigid.velocity = transform.forward * speed;
+    }
+
+    
 
     public virtual void GetData(int BounceTableId)
     {
@@ -36,12 +57,4 @@ public class BounceBullet : MonoBehaviour
         destoryTime = (float)DataManager.instance.GetData(BounceTableId, "DesTime", typeof(float));
     }
 
-    public virtual void OnCollisionEnter(Collision collision)
-    {
-
-        if (collision.collider.CompareTag("Player") || collision.collider.CompareTag("Wall"))
-        {
-            Destroy(this.gameObject);
-        }
-    }
 }

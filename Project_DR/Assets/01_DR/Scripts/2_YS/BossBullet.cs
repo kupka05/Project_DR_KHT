@@ -25,14 +25,10 @@ public class BossBullet : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         damageCollider = GetComponent<DamageCollider>();
-        rigid.velocity = transform.forward;
 
+        rigid.velocity = transform.forward * 10.0f;
         damageCollider.Damage = damage;
-    }
 
-    void Update()
-    {
-        
     }
 
     public void GetData(int smallTableID)

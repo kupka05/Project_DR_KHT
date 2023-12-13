@@ -38,10 +38,6 @@ public static class PlayerDataManager
      *                 Private Fields
      *************************************************/
     #region [+]
-    [Header("RDS")]
-    private static string _url =
-        "https://80koj3uzn4.execute-api.ap-northeast-2.amazonaws.com/default/UserTableLambda";
-
     [Header("Player")]
     private static string _id = "";           // 플레이어의 ID
     private static int _hp;                   // 플레이어의 체력
@@ -155,8 +151,8 @@ public static class PlayerDataManager
         _skill_level_4 = skillLevel4;          // 스킬 그린랜딩 레벨
 
         // [ClearData]
-////// TODO: 클리어 데이터의 직렬화를 변환하는 함수를 구현 및
-////// 연동하기
+        ////// TODO: 클리어 데이터의 직렬화를 변환하는 함수를 구현 및
+        ////// 연동하기
         _quest_main = questMain;               // 메인 퀘스트 진행도(직렬화 데이터)
         _clear_count = clearCount;             // 게임 클리어 횟수
         _clear_mbti_value = clearMBTIValue;    // 저장된 MBTI 수치(직렬화 데이터)
@@ -167,7 +163,7 @@ public static class PlayerDataManager
     private static List<PlayerData> ConvertDataToPlayerData(string data)
     {
         // DB에서 받아온 데이터를 객체화
-        string jsonData = "{\"items\": "+ data +"}";
+        string jsonData = "{\"items\": " + data + "}";
 
         // PlayerData 리스트에 배열을 파싱
         List<PlayerData> playerDataList = ParseJsonArray(jsonData);
@@ -215,8 +211,9 @@ public static class PlayerDataManager
         // 폼 생성
         WWWForm form = MakeForm("search_all", PlayerID);
 
+        string url = SecureURLHandler.GetURL();
         // using문을 사용하여 메모리 누수를 해결
-        using (UnityWebRequest www = UnityWebRequest.Post(_url, form))
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {
             yield return www.SendWebRequest();
 
@@ -230,7 +227,7 @@ public static class PlayerDataManager
             else
             {
                 // 가져온 데이터를 파싱한다.
-                List<PlayerData> playerDataList = 
+                List<PlayerData> playerDataList =
                     ConvertDataToPlayerData(www.downloadHandler.text);
 
                 // 파싱된 데이터를 PlayerDataManager에 넣는다.
@@ -260,8 +257,9 @@ public static class PlayerDataManager
         // 폼 생성
         WWWForm form = MakeForm("add", PlayerID, column, value);
 
+        string url = SecureURLHandler.GetURL();
         // using문을 사용하여 메모리 누수를 해결
-        using (UnityWebRequest www = UnityWebRequest.Post(_url, form))
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {
             yield return www.SendWebRequest();
 

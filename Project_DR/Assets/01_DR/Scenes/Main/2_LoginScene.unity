@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0014902266, g: 0.00139016, b: 0.0013183705, a: 1}
+  m_IndirectSpecularColor: {r: 0.0014834992, g: 0.0013713579, b: 0.0013408005, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -240,7 +240,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &92975348
 Transform:
@@ -635,6 +635,53 @@ CapsuleCollider:
   m_Height: 0.035
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &388062036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 388062038}
+  - component: {fileID: 388062037}
+  m_Layer: 0
+  m_Name: "\u25C6 SceneLoder"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &388062037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388062036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f23687c73a6259438976e2623c0176a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: 3_LobbyScene
+  sceneDelay: 3
+  autoLoad: 0
+--- !u!4 &388062038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388062036}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -21.92152, y: -14.753397, z: -37.07093}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!222 &412182752
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1929,7 +1976,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -255.8, z: 0}
 --- !u!1 &1147281398
 GameObject:
@@ -1960,7 +2007,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1161003192
 GameObject:
@@ -2336,7 +2383,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1811262156
 GameObject:
@@ -2703,7 +2750,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!222 &2065841056
 CanvasRenderer:
@@ -7937,6 +7984,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &624268137138975896
 GameObject:
   m_ObjectHideFlags: 0
@@ -10222,6 +10270,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!4 &847388283857355281
 Transform:
   m_ObjectHideFlags: 0
@@ -11807,6 +11856,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!23 &1040113587417731907
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -18753,6 +18803,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!136 &1802062037129507571
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -23129,6 +23180,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &2220389717281967862
 GameObject:
   m_ObjectHideFlags: 0
@@ -27504,7 +27556,7 @@ Transform:
   - {fileID: 5148716643021992539}
   - {fileID: 1989293052133795112}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2683195716673387867
 Transform:
@@ -29728,6 +29780,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!4 &2863597733210573257
 Transform:
   m_ObjectHideFlags: 0
@@ -38265,6 +38318,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!4 &3719865056914463971
 Transform:
   m_ObjectHideFlags: 0
@@ -38431,6 +38485,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!4 &3719865058147859305
 Transform:
   m_ObjectHideFlags: 0
@@ -41806,6 +41861,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!136 &4047185360849687435
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -42500,6 +42556,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!4 &4096997679530526907
 Transform:
   m_ObjectHideFlags: 0
@@ -44053,7 +44110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FadeOnSceneLoaded: 1
-  FadeColor: {r: 0, g: 0, b: 0, a: 0.9882353}
+  FadeColor: {r: 0, g: 0, b: 0, a: 1}
   FadeInSpeed: 2
   FadeOutSpeed: 1
   SceneFadeInDelay: 0.5
@@ -49827,6 +49884,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &4803334785710898568
 GameObject:
   m_ObjectHideFlags: 0
@@ -50286,6 +50344,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &4853969519600664091
 GameObject:
   m_ObjectHideFlags: 0
@@ -72126,6 +72185,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &7079520541311170839
 GameObject:
   m_ObjectHideFlags: 0
@@ -72449,6 +72509,7 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!136 &7130124194769379174
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78450,7 +78511,7 @@ PrefabInstance:
     - target: {fileID: 7118031046378352820, guid: bc29a31153eae444ab0b79a65321c3dd,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7118031046378352820, guid: bc29a31153eae444ab0b79a65321c3dd,
         type: 3}
@@ -79001,6 +79062,11 @@ PrefabInstance:
       propertyPath: sceneName
       value: 3_LobbyScene
       objectReference: {fileID: 0}
+    - target: {fileID: 7118031048017860352, guid: bc29a31153eae444ab0b79a65321c3dd,
+        type: 3}
+      propertyPath: sceneLoader
+      value: 
+      objectReference: {fileID: 388062037}
     - target: {fileID: 7118031048056041362, guid: bc29a31153eae444ab0b79a65321c3dd,
         type: 3}
       propertyPath: url

@@ -716,6 +716,8 @@ namespace BNG {
             playerRigid.drag = 1f;
             playerRigid.angularDrag = 0.05f;
             playerRigid.freezeRotation = true;
+            playerRigid.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
             // playerRigid.useGravity = false; // Gravity is applied manually
 
             setRigidEvent.Invoke(); // 리지드바디 생성 완료

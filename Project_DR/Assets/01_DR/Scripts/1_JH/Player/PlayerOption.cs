@@ -16,6 +16,7 @@ public class PlayerOption : MonoBehaviour
     public GameObject player;
     public GameObject optionUI;      // 켜지고 꺼질 옵션의 UI
     private PlayerRotation rotation;
+    public ScreenFader fader;
 
     [Header("Scene")]
     public string loginSceneName;    // 이동할 로그인씬 명
@@ -33,6 +34,7 @@ public class PlayerOption : MonoBehaviour
     public Slider soundEffectSlider; // 효과음 슬라이더
     public Slider brightSlider;      // 화면 밝기 슬라이더
 
+    public VREmulator vrEmulator;
 
     [Header("Input")]
     //[Tooltip("The key(s) to use to toggle locomotion type")]
@@ -41,7 +43,14 @@ public class PlayerOption : MonoBehaviour
 
     private void Start()
     {
+// 에디터에서만 vr에뮬레이터 켜기
+#if UNITY_EDITOR
+        vrEmulator.enabled = true;
+#endif
+
+
         rotation = player.GetComponent<PlayerRotation>();
+        fader = player.GetComponentInChildren<ScreenFader>();
         volume.profile.TryGet<ColorAdjustments>(out brightness);
         if (brightness == null)
             Debug.LogError("볼륨을 찾을 수 없음");
@@ -90,13 +99,26 @@ public class PlayerOption : MonoBehaviour
     {
         rotation.SetRotation();
         rotationText.text = string.Format(rotation.SnapRotationAmount + "˚");
+        UserDataManager.Instance.rotationAmount = rotation.SnapRotationAmount;
+    }
+    public void SetRotation(float value)
+    {
+        rotation.SetRotation(value);
+        rotationText.text = string.Format(rotation.SnapRotationAmount + "˚");
     }
 
     // 메인으로 이동
     public void GotoMain()
     {
-        SceneManager.LoadScene(loginSceneName);
+        fader.DoFadeIn();
+        StartCoroutine(SceneChange(loginSceneName));
     }
+    IEnumerator SceneChange(string sceneName)
+    {
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene(sceneName);
+    }
+
     // 게임 종료
     public void QuitGame()
     {
@@ -137,12 +159,14 @@ public class PlayerOption : MonoBehaviour
     public void SetMasterSlider(float value)
     {
         //ToDo: 마스터 사운드 연동 필요
+        masterSlider.value = value;
         UserDataManager.Instance.masterSound = value; // 유저 데이터에 저장
     }
     // 배경음 조정
     public void SetBackGroundSlider(float value)
     {
         AudioManager.Instance.MusicVolume(value);
+        backgroundSlider.value = value;
         UserDataManager.Instance.backgroundSound = value; // 유저 데이터에 저장
     }
 
@@ -150,6 +174,7 @@ public class PlayerOption : MonoBehaviour
     public void SetSoundEffectSlider(float value)
     {
         AudioManager.Instance.SFXVolume(value);
+        soundEffectSlider.value = value;
         UserDataManager.Instance.sfx = value; // 유저 데이터에 저장
     }
 
@@ -161,9 +186,11 @@ public class PlayerOption : MonoBehaviour
             return;
         }
 
-        SetMasterButton(UserDataManager.Instance.masterSound);
-        SetBackgroundButton(UserDataManager.Instance.backgroundSound);
-        SetSoundEffectButton(UserDataManager.Instance.sfx);
+        SetRotation(UserDataManager.Instance.rotationAmount);
+        SetMasterSlider(UserDataManager.Instance.masterSound);
+        SetBackGroundSlider(UserDataManager.Instance.backgroundSound);
+        SetSoundEffectSlider(UserDataManager.Instance.sfx);
+        BrightnessSlider(UserDataManager.Instance.brightness);
     }
 
     // 값 체크

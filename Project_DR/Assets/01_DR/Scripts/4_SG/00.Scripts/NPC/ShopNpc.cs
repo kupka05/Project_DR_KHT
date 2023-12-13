@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShopNpc : AnnouncementNPC
-{
+{       // 상점 NPC의 Class
 
-    private void Awake()
+    
+
+    protected override void Awake()
     {
+        base.Awake();
         AwakeInIt();
     }       // Awake()
 
@@ -19,8 +22,8 @@ public class ShopNpc : AnnouncementNPC
 
     private void AwakeInIt()
     {
-        animator = GetComponent<Animator>();
-        dialogue = new System.Text.StringBuilder();
+        npcID = 11_1_12_01;
+        
     }       // AwakeInIt()
 
 

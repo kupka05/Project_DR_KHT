@@ -25,13 +25,8 @@ public class LobbyDisplayButton : MonoBehaviour
     public GameObject afterValue;
 
     public int index;                   // 아이템의 개수
-    [SerializeField]
-    private int _lv;
-    public int level
-    {
-        get { return _lv; }
-        set { _lv = value; Debug.Log(this.gameObject.name + "변환 시도 : " + value); }
-    }
+    public int level;
+  
     public int newLevel;                 
     public Transform contentPos;        // 아이템이 들어갈 컨텐츠의 위치
     public GameObject item;             // 레벨에 따라 들어가는 아이템

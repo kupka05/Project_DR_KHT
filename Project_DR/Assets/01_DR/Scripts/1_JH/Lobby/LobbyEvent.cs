@@ -186,6 +186,7 @@ public class LobbyEvent : MonoBehaviour
 
        
     }
+    // 플레이어 업그레이드
     public void PlayerUpgrade()
     {
         if(playerSpendExp == 0)
@@ -221,6 +222,8 @@ public class LobbyEvent : MonoBehaviour
         UpdatePlayerStatusUI();
         UpdatePlayerUpgradeUI();
         ChangeStatusDisplayButton("Player");
+        UserDataManager.Instance.SavePlayerUpgrade();
+
     }
 
     // 업그레이드를 위한 계산기

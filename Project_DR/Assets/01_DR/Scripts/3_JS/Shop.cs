@@ -50,6 +50,9 @@ public class Shop : MonoBehaviour
 
         // _shopItems를 Init
         InitializeShopItem();
+
+        // 골드 텍스트 갱신
+        UpdatePlayerGoldText();
     }   
 
     #endregion

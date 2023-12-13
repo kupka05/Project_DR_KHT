@@ -20,7 +20,7 @@ namespace BNG {
         public float FadeOutSpeed = 6f;
 
         [Tooltip("Wait X seconds before fading scene in")]
-        public float SceneFadeInDelay = 1f;
+        public float SceneFadeInDelay = 2f;
 
         GameObject fadeObject;
         RectTransform fadeObjectRect;

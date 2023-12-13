@@ -58,16 +58,22 @@ public class GameManager : MonoBehaviour
     private string _playerID; // SetPlayerID(string id) 메서드로 설정함
     public string PlayerID => _playerID;
 
-    
+
     [Header("Dungeon")]
     // ----------------------------------------------- SG ------------------------------------------------
-    
-    
+
+    public bool IsProtoType = true;
+
     public int nowFloor = 1;        // 현재 몇층인지 알려줄 변수
+    public int isPlayerMaxFloor;    // 현재 플레이어의 회차의따라서 아래 const변수값이 대입될것임
+    // 던전 진행 Max층을 알려줄 const int 변수
+    public const int PROTOTYPE = 1;
+    public const int FIRSTTIME = 3;
+    public const int FIRSTAFTER = 5;
 
     public static List<bool> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
 
-    private bool isClear = false;
+    private bool isClear = false;       // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
 
     public bool IsClear
     {
@@ -109,6 +115,7 @@ public class GameManager : MonoBehaviour
     {
         // 데이터 가져오기
         GetData();
+        StartInIt();
 
         // 플레이어 찾아오기
         player = GameObject.FindGameObjectWithTag("Player");
@@ -120,9 +127,11 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("플레이어를 찾지 못했습니다.");
         }
-
-
-
+        // 스크린 페이더 가져오기
+        if (Camera.main)
+        {
+            fader = Camera.main.transform.GetComponent<ScreenFader>();
+        }
     }       // Start()    
 
     private void OnLevelWasLoaded()
@@ -154,10 +163,26 @@ public class GameManager : MonoBehaviour
         {
             isClearRoomList = new List<bool>();
         }
-
         
-
     }       // AwakeInIt()
+
+    private void StartInIt()
+    {
+        // TODO : 프로토타입 이후 수정 예정
+        if(IsProtoType == true)
+        {
+            isPlayerMaxFloor = PROTOTYPE;
+            return;
+        }
+        if(UserDataManager.Instance.ClearCount <= 1)
+        {
+            isPlayerMaxFloor = FIRSTAFTER;
+        }
+        else
+        {
+            isPlayerMaxFloor = FIRSTTIME;
+        }
+    }       // StartInIt()
 
 
     /// <summary>
@@ -191,34 +216,54 @@ public class GameManager : MonoBehaviour
     // 게임오버
     public void GameOver()
     {
-        // 스크린 페이더 가져오기
-        if (Camera.main)
-        {
-            fader = Camera.main.transform.GetComponent<ScreenFader>();
-        }
-
         fader.DoFadeIn();
         screenText = player.GetComponent<ScreenText>();
         screenText.OnScreenText(gameoverText);
         input.enabled = false;
 
-
-        Invoke(nameof(GameOverScene),5f);
+        SceneLoad(gameoverScene); // 게임오버 씬 전환
     }
 
     // 현재 씬 리셋
     public void ResetScene()
-    {
+    {        
         string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
+        SceneLoad(currentSceneName);
     }
 
-    // 게임오버시 씬 이동
-    public void GameOverScene()
+    /// <summary>
+    /// 던전 클리어후 로비로 보내줄 함수
+    /// </summary>
+    public void ClearDungeon()
     {
-        SceneManager.LoadScene(gameoverScene);
+        string lobbySceneName = "3_LobbyScene";
+        SceneLoad(lobbySceneName);
+    }       // ClearDungeon()
+
+ 
+    // 씬 전환 함수
+    public void SceneLoad(string _sceneName)
+    {
+        if (string.IsNullOrEmpty(_sceneName))
+        {
+            Debug.Log("전환할 씬을 찾지 못했습니다.");
+            return;
+        }
+        StartCoroutine(_sceneName);
     }
-        
+
+    // 플레이어의 페이드를 포함한 씬 전환 델레이
+    IEnumerator SceneChangeDelay(string _sceneName)
+    {
+        if (fader)
+        {
+            fader.DoFadeIn();
+        }
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(_sceneName);
+    }
+
 
     // 데이터 가져오기
     public void GetData()

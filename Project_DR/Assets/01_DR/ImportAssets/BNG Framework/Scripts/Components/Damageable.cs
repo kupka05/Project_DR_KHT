@@ -105,7 +105,6 @@ namespace BNG {
             if (destroyed || stun) {
                 return;
             }
-
             Health -= damageAmount;
 
             onDamaged?.Invoke(damageAmount);

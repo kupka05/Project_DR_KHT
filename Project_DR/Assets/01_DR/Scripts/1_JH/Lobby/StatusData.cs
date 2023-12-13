@@ -25,6 +25,7 @@ public class UpgradePC
     public float value;     // 증가값
     public float sum;       // 누적 
     public int exp;         // 소모 경험치
+    public int totalExp;
 }
 [System.Serializable]
 public class UpgradeWeapon
@@ -84,7 +85,7 @@ public class StatusData
     public List<UpgradePC> GetPcData(int id)
     {
         List<UpgradePC> list = new List<UpgradePC>();
-
+        int total = 0;
         for (int i = 0; i < 10; i++)
         {
             UpgradePC newData = new UpgradePC();
@@ -94,6 +95,8 @@ public class StatusData
             newData.value = (float)DataManager.instance.GetData(id + i, "Value1", typeof(float));
             newData.sum = (float)DataManager.instance.GetData(id + i, "Value2", typeof(float));
             newData.exp = (int)DataManager.instance.GetData(id + i, "EXP", typeof(int));
+            total += newData.exp;
+            newData.totalExp = total;
             list.Add(newData);
         }
 

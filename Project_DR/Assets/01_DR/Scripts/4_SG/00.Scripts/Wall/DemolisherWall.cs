@@ -14,17 +14,17 @@ public class DemolisherWall : MonoBehaviour
         if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("EventWall"))
         {
             Destroy(collision.gameObject);
-            //Debug.Log($"ÆÄ±« µÈ°Ç ÀÖ³ª? -> {collision.gameObject.name}");
+            //Debug.Log($"íŒŒê´´ ëœê±´ ìžˆë‚˜? -> {collision.gameObject.name}");
         }
     }
 
     IEnumerator DestroyTime()
     {
-        //for (int i = 0; i < 3; i++)
-        //{
-        //    yield return null;
-        //}
-        yield return null;
+        for (int i = 0; i < 3; i++)
+        {
+            yield return null;
+        }
+        //yield return null;
         Destroy(this.gameObject);
     }
 

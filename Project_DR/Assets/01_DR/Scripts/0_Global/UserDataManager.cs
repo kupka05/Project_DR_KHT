@@ -65,7 +65,8 @@ public class UserDataManager : MonoBehaviour
 
     [Header("User Data")]           // 유저 데이터
     public string PlayerID;
-    public float HP;
+    public float DefaultHP;         // 초기 체력
+    public float HP;                // 업그레이드 반영된 체력
     public float GainGold;
     public float GainExp;
 
@@ -182,6 +183,7 @@ public class UserDataManager : MonoBehaviour
         else
         { Destroy(gameObject); }
 
+        SetDebugData();
         Debug.Log("데이터 요청 시간 : " + GetCurrentDate());
 
         GetReferenceData();
@@ -210,10 +212,11 @@ public class UserDataManager : MonoBehaviour
         GainExpUpgrade = PlayerDataManager.ExpIncrease;
 
         // HP 업그레이드 세팅
-        HP = (float)DataManager.instance.GetData(1001, "Health", typeof(float));
+        DefaultHP = (float)DataManager.instance.GetData(1001, "Health", typeof(float));
+        HP = DefaultHP;
         if(HPUpgrade != 0)
         {
-            HP += statData.upgradeHp[HPUpgrade-1].sum;
+            HP = DefaultHP + statData.upgradeHp[HPUpgrade-1].sum;
         }
         // 골드 획득량 업그레이드 세팅
         if (GainGoldUpgrade != 0)
@@ -316,7 +319,7 @@ public class UserDataManager : MonoBehaviour
     // ####################### 디버그용 PC 데이터 세팅 ####################### \\
     public void SetDebugData()
     {
-        PlayerDataManager.Save("hp", 1);
+        PlayerDataManager.Save("hp", 0);
         PlayerDataManager.Save("gold", 5000);
         PlayerDataManager.Save("exp", 5000);
         PlayerDataManager.Save("gold_increase", 3);

@@ -14,6 +14,7 @@ public class LobbyDisplayButton : MonoBehaviour
     }
 
     public ButtonType type = ButtonType.Default;
+    private LobbyEvent lobbyEvent;
 
     [Header("Player Status")]
 
@@ -25,12 +26,17 @@ public class LobbyDisplayButton : MonoBehaviour
 
     public int index;                   // 아이템의 개수
     public int level;                   // 해당 아이템의 레벨
-    private int newLevel;                 
+    public int newLevel;                 
     public Transform contentPos;        // 아이템이 들어갈 컨텐츠의 위치
     public GameObject item;             // 레벨에 따라 들어가는 아이템
     private GameObject[] items;
 
     public bool isActive=false;
+
+    public void Start()
+    {
+        lobbyEvent = transform.root.GetComponent<LobbyEvent>();
+    }
 
     public void OnEnable()
     {
@@ -83,6 +89,7 @@ public class LobbyDisplayButton : MonoBehaviour
         afterValue.SetActive(true);
         SetLevelItem(index, level);
     }
+
     // 레벨 생성
     private void SetLevelItem(int _index, int _level)
     {
@@ -94,7 +101,7 @@ public class LobbyDisplayButton : MonoBehaviour
             items[i].transform.localScale = Vector3.one;
             items[i].SetActive(true);
 
-            if (i <= _level)
+            if (i < _level)
             {
                 items[i].GetComponent<Image>().color = Color.white;
             }
@@ -105,31 +112,42 @@ public class LobbyDisplayButton : MonoBehaviour
     public void SetLevelButton(int value)
     {
         newLevel += value;
+        if(newLevel < 0 )
+        {
+            newLevel = 0;
+            return;
+        }
+        else if (10 < newLevel)
+        {
+            newLevel = 10;
+            return;
+        }
 
-        if (newLevel < level)
+
+        if (newLevel <= level)
         {
             newLevel = level;
-            return;
         }
         else if(index < newLevel)
         {
             newLevel = index;
-            return;
         }
 
         for (int i = 0; i < index; i++)
         {
             items[i].GetComponent<Image>().color = Color.black;
-            if (i <= newLevel)
+            if (i < newLevel)
             {
                 items[i].GetComponent<Image>().color = Color.yellow;
             }
 
-            if (i <= level)
+            if (i < level)
             {
                 items[i].GetComponent<Image>().color = Color.white;
             }
         }
+
+        lobbyEvent.UpdatePlayerUpgradeUI();
     }
 
 }

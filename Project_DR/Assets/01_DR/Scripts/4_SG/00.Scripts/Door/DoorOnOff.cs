@@ -26,11 +26,7 @@ public class DoorOnOff : MonoBehaviour
         StartInIt();
     }
 
-    private void StartInIt()
-    {
-        GameManager.instance.DoorOnEvent += OnDoor;
-        GameManager.instance.DoorOffEvent += OffDoor;
-    }       // StartInIt()
+
     private void AwakeInIt()
     {
         defaultV3 = transform.position;
@@ -41,6 +37,12 @@ public class DoorOnOff : MonoBehaviour
         doorOnTime = 5f;
         doorOffTime = 8f;
     }       // AwakeInIt()
+
+    private void StartInIt()
+    {
+        GameManager.instance.DoorOnEvent += OnDoor;
+        GameManager.instance.DoorOffEvent += OffDoor;
+    }       // StartInIt()
 
     public void OnDoor()
     {

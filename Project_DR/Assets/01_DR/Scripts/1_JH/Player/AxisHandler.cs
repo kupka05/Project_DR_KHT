@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using BNG;
-
-
+using Unity.VisualScripting;
 
 public class AxisHandler : MonoBehaviour
 {
@@ -17,26 +16,34 @@ public class AxisHandler : MonoBehaviour
         Right,
         Backdash,
     }
-
+    [Header("Axis")]
     public State state = State.Default;
-
     public Vector2 axis;        // 방향
+
+    [Header ("Dead Zone")]
     public bool isDeadZone;     // 데드존 여부
-    public float deadZoneVal;    
+    public float deadZoneVal;
+
+    [Header("Active Zone")]
     public bool isActiveZone;     // 데드존 여부
     public float activeZoneVal;
+    public float activeTime;
 
-
-
+    [Header("Inputs")]
     [Tooltip("Used to determine whether to turn left / right. This can be an X Axis on the thumbstick, for example. -1 to snap left, 1 to snap right.")]
     public List<InputAxis> inputAxis = new List<InputAxis>() { InputAxis.RightThumbStickAxis };
 
+    [Header("Event")]
     public UnityEvent BackDashEvent;
     public UnityEvent LeftEvent;
     public UnityEvent RightEvent;
 
+    IEnumerator ActiveCheckRoutine;
+    WaitForSeconds waitForSeconds;
+
     private void Start()
     {
+        waitForSeconds = new WaitForSeconds(activeTime);
         GetData();
     }
 
@@ -49,7 +56,8 @@ public class AxisHandler : MonoBehaviour
 
         if (state != State.Default)
         {
-            ActiveEvent();
+            //ActiveEvent();
+            ActiveCheck();
             return; 
         }
 
@@ -116,30 +124,56 @@ public class AxisHandler : MonoBehaviour
 
     }
 
+    // 실행 전 시간 체크
+    public void ActiveCheck()
+    {
+        if (isActiveZone)
+        {
+            if (ActiveCheckRoutine == null)
+            {
+                ActiveCheckRoutine = ActiveChecking();
+                StartCoroutine(ActiveCheckRoutine);
+            }
+        }
+        else if (!isActiveZone)
+        {
+            if (ActiveCheckRoutine != null)
+            {
+                StopCoroutine(ActiveCheckRoutine);
+                ActiveCheckRoutine = null;
+            }
+        }
+    }
+    // 체크 코루틴
+    IEnumerator ActiveChecking()
+    {
+        Debug.Log("체크시작하나?");
+        yield return waitForSeconds;
+        ActiveEvent();
+
+        yield break;
+    }
+
+
     // 이벤트
 
     public void ActiveEvent()
     {
-        if (isActiveZone)
+        if (state == State.Backdash)
         {
-
-            if (state == State.Backdash)
-            {
-                BackDashEvent.Invoke();
-            }
-            else if (state == State.Left)
-            {
-                LeftEvent.Invoke();
-
-            }
-            else if (state == State.Right)
-            {
-                RightEvent.Invoke();
-            }
-
-            state = State.Default;
+            BackDashEvent.Invoke();
+        }
+        else if (state == State.Left)
+        {
+            LeftEvent.Invoke();
 
         }
+        else if (state == State.Right)
+        {
+            RightEvent.Invoke();
+        }
+
+        state = State.Default;
     }
 
     public void GetData()

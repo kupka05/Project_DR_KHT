@@ -26,7 +26,6 @@ public class ExitFloor : MonoBehaviour
             yield return new FixedUpdate();
 
         }
-        Debug.Log("다팠다");
         transform.parent.gameObject.SetActive(false);
 
         yield break; 

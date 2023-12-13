@@ -1183,7 +1183,6 @@ Transform:
   - {fileID: 1314775231115690785}
   - {fileID: 1314775231115690815}
   - {fileID: 67599115}
-  - {fileID: 6690321332477818892}
   m_Father: {fileID: 1314775231115690797}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1504,7 +1503,6 @@ Transform:
   - {fileID: 1314775231115690869}
   - {fileID: 1314775231115690867}
   - {fileID: 1769070449}
-  - {fileID: 8439489839740678135}
   m_Father: {fileID: 1314775231115690849}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2013,7 +2011,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 112073181}
-  - {fileID: 2924599243279251406}
   m_Father: {fileID: 1314775231115690843}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2180,15 +2177,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d91a25aa74ccb97449418725a480b5ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smashImage: {fileID: 0}
   monsterHpSlider: {fileID: 4737659251255697239}
   state: 0
   monsterId: 7012
   monsterType: 10
-  bulletPortLeft: {fileID: 8439489839740678135}
-  bulletPortRight: {fileID: 6690321332477818892}
-  bulletPort: {fileID: 2924599243279251406}
-  monsterBullet: {fileID: 8809067579740100126, guid: 3a21c71d5bf44ec40a4c4752ae400980,
-    type: 3}
+  smashCount: 0
+  smashMaxCount: 10
   hp: 0
   attack: 0
   attDelay: 0
@@ -2202,13 +2197,20 @@ MonoBehaviour:
   monsterTr: {fileID: 1314775231115690861}
   playerTr: {fileID: 0}
   anim: {fileID: 1314775231125318797}
-  rigid: {fileID: 0}
-  nav: {fileID: 0}
+  rigid: {fileID: 1596593167}
+  nav: {fileID: 1596593166}
   damageCollider: []
   damageable: {fileID: 1596593164}
   isDie: 0
   isStun: 0
   distanceDebug: 0
+  monsterBullet: {fileID: 4063682356961887160, guid: 3a21c71d5bf44ec40a4c4752ae400980,
+    type: 3}
+  bulletPortLeft: {fileID: 1769070449}
+  bulletPortRight: {fileID: 67599115}
+  bulletPort: {fileID: 112073181}
+  monsterBulletPrefab: {fileID: 8809067579740100126, guid: 3a21c71d5bf44ec40a4c4752ae400980,
+    type: 3}
   count: 0
   maxCount: 3
 --- !u!54 &1596593167
@@ -2534,141 +2536,6 @@ Transform:
   m_Father: {fileID: 1314775231115690825}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4150177983582754036
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8439489839740678135}
-  - component: {fileID: 362297329590270112}
-  m_Layer: 12
-  m_Name: BulletPortLeft
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8439489839740678135
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4150177983582754036}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1314775231115690825}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &362297329590270112
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4150177983582754036}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.3, z: 0.3}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &7432684572391165776
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6690321332477818892}
-  - component: {fileID: 4712909375610373416}
-  m_Layer: 12
-  m_Name: BulletPortRight
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6690321332477818892
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7432684572391165776}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.505}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1314775231115690805}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4712909375610373416
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7432684572391165776}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.3, z: 0.3}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &8963320552776362401
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2924599243279251406}
-  - component: {fileID: 7085786153826567548}
-  m_Layer: 12
-  m_Name: BulletPort
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2924599243279251406
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8963320552776362401}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.287, y: 0.967, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1314775231115690857}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7085786153826567548
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8963320552776362401}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.3, z: 0.3}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &3735747836806415200
 PrefabInstance:
   m_ObjectHideFlags: 0

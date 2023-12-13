@@ -26,9 +26,17 @@ public class GoogleSheetsReader
     // 코루틴을 사용하는게 좋다.
     // 매개변수 isCSVConvert = true / false 값을 통해
     // 자동으로 csv 형식으로 변환할 수 있다. 
+    private static WaitForEndOfFrame waitForEndOfFrame;
     public static IEnumerator GetGoogleSheetsData(string spreadsheetId, 
-        string apiKey, string sheetName, bool isCsvConvert, Action<string> callBack)
+        string apiKey, string sheetName, bool isCsvConvert, int waitFrame, Action<string> callBack)
     {
+        Debug.Log($"프레임대기: {waitFrame}");
+        // waitFrame만큼 대기
+        for (int i = 0; i < waitFrame; i++)
+        {
+            yield return null;
+        }
+
         // 구글 문서 url 할당
         string url = $"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{sheetName}?key={apiKey}";
 

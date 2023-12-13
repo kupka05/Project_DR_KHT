@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
 
-namespace BNG {
+namespace BNG
+{
 
     /// <summary>
     /// This collider will Damage a Damageable object on impact
     /// </summary>
-    public class DamageCollider : MonoBehaviour {
+    public class DamageCollider : MonoBehaviour
+    {
 
         /// <summary>
         /// 데미지 양
         /// </summary>
         public float Damage = 25f;
 
-       
+
 
         /// <summary>
         /// 이 충돌체의 속도를 결정하는 데 사용됩니다.
@@ -49,47 +51,65 @@ namespace BNG {
         // 플레이어 여부, 플레이어는 자기 자신을 공격 할 수 없다.
         public bool isPlayer;
         public bool canSelfHarm = false; // 자해 여부
-        public bool isKnockback = true ;
+        public bool isKnockback = true;
+        public bool isBossProjectile;  //보스 예외 처리
+        public bool isEliteProjectile; //엘리트몬스터 예외 처리
 
 
         Damageable thisDamageable;
 
-        private void Start() {
-            if (ColliderRigidbody == null) {
+        private void Start()
+        {
+            if (ColliderRigidbody == null)
+            {
                 ColliderRigidbody = GetComponent<Rigidbody>();
             }
 
             thisDamageable = GetComponent<Damageable>();
         }
 
-        private void OnCollisionEnter(Collision collision) {
+        private void OnCollisionEnter(Collision collision)
+        {
 
-            if(!this.isActiveAndEnabled) {
+            if (!this.isActiveAndEnabled)
+            {
                 return;
             }
-            if(!canSelfHarm)
+            if (!canSelfHarm)
             {
-                if(this.transform.root.gameObject ==collision.transform.root.gameObject)
+                if (this.transform.root.gameObject == collision.transform.root.gameObject)
                 {
                     return;
                 }
             }
             if (isPlayer && collision.gameObject.CompareTag("Player"))
                 return;
+
+            if (!isBossProjectile && collision.gameObject.GetComponent<Boss>())
+                return;
+
+            if (!isEliteProjectile && collision.gameObject.GetComponent<EliteMonster>())
+                return;
+
+
+
             OnCollisionEvent(collision);
         }
 
-        public virtual void OnCollisionEvent(Collision collision) {
+        public virtual void OnCollisionEvent(Collision collision)
+        {
             LastDamageForce = collision.impulse.magnitude;
             LastRelativeVelocity = collision.relativeVelocity.magnitude;
 
 
-            if (LastDamageForce >= MinForce) {
+            if (LastDamageForce >= MinForce)
+            {
 
                 // Can we damage what we hit?
                 Damageable d = collision.gameObject.GetComponent<Damageable>();
                 DamageablePart damagePart = collision.gameObject.GetComponent<DamageablePart>();
-                if (d) {
+                if (d)
+                {
                     d.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
 
                     if (isKnockback)
@@ -100,7 +120,7 @@ namespace BNG {
                     }
 
                 }
-                else if(damagePart)
+                else if (damagePart)
                 {
                     damagePart.parent.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
                     if (isKnockback)
@@ -111,11 +131,12 @@ namespace BNG {
 
                 }
             }
-                // Otherwise, can we take damage ourselves from this collision?
-                else if (TakeCollisionDamage && thisDamageable != null) {
-                    thisDamageable.DealDamage(CollisionDamage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
-                }
+            // Otherwise, can we take damage ourselves from this collision?
+            else if (TakeCollisionDamage && thisDamageable != null)
+            {
+                thisDamageable.DealDamage(CollisionDamage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
             }
-           
         }
+
     }
+}

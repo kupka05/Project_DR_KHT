@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 25
+  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0
   LastRelativeVelocity: 0
@@ -138,6 +138,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 0
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!114 &4063682356961887160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,4 +152,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef7476ee5c316eb42bb8cd7563e0416e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  damageCollider: {fileID: 8809067579740100125}
+  speed: 15

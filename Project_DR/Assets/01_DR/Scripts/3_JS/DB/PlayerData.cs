@@ -3,16 +3,16 @@ using System;
 [Serializable]
 public class PlayerData
 {
-    public float hp;
+    public int hp;
     public int gold;
-    public float exp;
-    public float gold_increase;
-    public float exp_increase;
-    public float weapon_atk;
-    public float weapon_cri_rate;
-    public float weapon_cri_damage;
-    public float weapon_atk_rate;
-    public float weapon_exp;
+    public int exp;
+    public int gold_increase;
+    public int exp_increase;
+    public int weapon_atk;
+    public int weapon_cri_rate;
+    public int weapon_cri_damage;
+    public int weapon_atk_rate;
+    public int weapon_exp;
     public int skill_level_1;
     public int skill_level_2;
     public int skill_level_3;

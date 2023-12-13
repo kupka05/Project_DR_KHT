@@ -1455,7 +1455,9 @@ MonoBehaviour:
   player: {fileID: 0}
   gameoverText: 
   gameoverScene: 
+  IsProtoType: 1
   nowFloor: 1
+  isPlayerMaxFloor: 0
 --- !u!4 &1005570377
 Transform:
   m_ObjectHideFlags: 0
@@ -3149,7 +3151,7 @@ PrefabInstance:
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0011863193
+      value: 0.0018692625
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -3275,5 +3277,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 338878315}
+    - target: {fileID: 7755644396602740829, guid: f44877a732d5a2f45895a09eca75a342,
+        type: 3}
+      propertyPath: bossProjectileID
+      value: 6914
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f44877a732d5a2f45895a09eca75a342, type: 3}

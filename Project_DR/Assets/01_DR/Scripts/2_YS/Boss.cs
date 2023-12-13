@@ -29,6 +29,7 @@ public class Boss : MonoBehaviour
     [Header("보스 및 투사체 테이블 관련")]
     public int bossId;  //보스 테이블
     public int bossProjectileId;  //투사체 테이블
+    public int bossProjectileID;
 
     public float power = 5.0f;
 
@@ -85,6 +86,7 @@ public class Boss : MonoBehaviour
     public Transform bigBrickPortLeft;
     public Transform bigBrickPortRight;
     public GameObject bigBrick;
+    public float destroy = default;
 
     [Header("유도 미사일 테스트")]
     public Transform testPort;
@@ -93,7 +95,7 @@ public class Boss : MonoBehaviour
     
     void Awake()
     {
-        GetData(bossId, bossProjectileId);
+        GetData(bossId, bossProjectileId, bossProjectileID);
     }
 
     void Start()
@@ -133,7 +135,7 @@ public class Boss : MonoBehaviour
 
     }
 
-    public void GetData(int bossId, int bossProjectileId)
+    public void GetData(int bossId, int bossProjectileId, int bossProjectileID)
     {
         //보스
         maxHp = (float)DataManager.instance.GetData(bossId, "BossHP", typeof(float));
@@ -145,7 +147,9 @@ public class Boss : MonoBehaviour
         destoryTime = (float)DataManager.instance.GetData(bossProjectileId, "DesTime", typeof(float));
         speed = (float)DataManager.instance.GetData(bossProjectileId, "Speed", typeof(float));
 
-        
+        //6914
+        destroy = (float)DataManager.instance.GetData(bossProjectileID, "DesTime", typeof(float));
+
     }
 
 
@@ -411,9 +415,9 @@ public class Boss : MonoBehaviour
         GameObject instantBrickRight = Instantiate(bigBrick, bigBrickPortRight.position, Quaternion.identity);
         instantBrickRight.GetComponent<Rigidbody>().AddForce(BigBrick(bigBrickPortRight.position), ForceMode.Impulse);
 
-        Destroy(instantBrick, 6.0f);
-        Destroy(instantBrickLeft, 6.0f);
-        Destroy(instantBrickRight, 6.0f);
+        Destroy(instantBrick, destroy);
+        Destroy(instantBrickLeft, destroy);
+        Destroy(instantBrickRight, destroy);
     }
 
     public Vector3 ExplosionBox(Vector3 portPosition)

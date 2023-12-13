@@ -153,11 +153,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28efc4beb690a4d45addef78345c995c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smallBulletPrefab: {fileID: 8809067579740100126, guid: 3a21c71d5bf44ec40a4c4752ae400980,
+  smallBulletPrefab: {fileID: 8809067579740100126, guid: 1473c929d5eae3a4383a9a076f7f8c41,
     type: 3}
   isShoot: 0
   isThink: 0
-  bulletCount: 6
+  tableID: 6913
+  bulletCount: 0
+  speed: 0
+  destoryTime: 0
+  delayTime: 0
+  delay: 0
   target: {fileID: 0}
 --- !u!114 &5854378859240105760
 MonoBehaviour:
@@ -171,5 +176,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca9a1e965d30e774dab1281c9e07b376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rigid: {fileID: 3926116842542408540}
   damageCollider: {fileID: 3926116842542408541}
-  speed: 15
+  BounceTableId: 6912
+  speed: 0
+  damage: 0
+  destoryTime: 0

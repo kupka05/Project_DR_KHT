@@ -46,6 +46,8 @@ namespace BossMonster
             _bossData = boss.BossData;
 
             // 데미지 관련 처리 컴포넌트 호출 및 체력 설정
+            // 원래는 호출이 아니라 Add로 추가하는데 Damageable의 경우
+            // OnDamaged 이벤트에 하나라도 추가가 안되있을 경우 오류가 발생 
             _damageable = gameObject.GetComponent<BNG.Damageable>();
             _damageable.Initialize(boss);
 

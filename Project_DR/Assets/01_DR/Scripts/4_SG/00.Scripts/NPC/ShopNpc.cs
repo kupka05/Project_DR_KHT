@@ -54,7 +54,9 @@ public class ShopNpc : AnnouncementNPC
     /// </summary>
     private void ConvertionEventInIt()
     {
-        StartConvertionEvent += StartConvertion;
+        StartConverationEvent += StartConvertion;
+        EndConverationEvent += EndConveration;
+
     }       // ConvertionEventInIt()
 
     /// <summary>
@@ -65,6 +67,16 @@ public class ShopNpc : AnnouncementNPC
         OnCanvasObj();
         OutPutShopText();
     }       // StartConvertion()
+
+    protected override void NextConveration()
+    {
+        // ID 주소값 받아와야함
+    }
+
+    protected override void EndConveration()
+    {
+        OffCanvasObj();
+    }       // EndConveration()
 
     private void OutPutShopText()
     {   // 6개의 대사중 랜덤으로 대사가 출력되는 함수
@@ -80,6 +92,11 @@ public class ShopNpc : AnnouncementNPC
         NpcCanvas.OutPutChoices(conversationRefIDs[randIndex]); // 선택지를 출력해주는 함수
 
     }       // OutPutShopText()
+
+    private void OnDestroy()
+    {
+        
+    }
 
 
 

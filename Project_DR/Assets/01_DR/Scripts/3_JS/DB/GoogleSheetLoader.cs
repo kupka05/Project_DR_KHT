@@ -31,7 +31,8 @@ public class GoogleSheetLoader : MonoBehaviour
         "DungeonCreaterCustomRoom_Table","Floor1_MonsterSpawn_Table","Floor2_MonsterSpawn_Table",
         "Floor3_MonsterSpawn_Table","Floor4_MonsterSpawn_Table","Floor5_MonsterSpawn_Table",
         "BattleRoomObjectCreate_Table","EventRoomObjectCreate_Table","NullRoomObjectCreate_Table",
-        "LightObject_Table","EnvObject_Table","MatObject_Table"
+        "LightObject_Table","EnvObject_Table","MatObject_Table",
+        "NPC_Table","NPC_Comunication_Table"
     };
 
     // 코루틴에서 데이터를 반환하고

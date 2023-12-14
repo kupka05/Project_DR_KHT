@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NPC_CanvasController : MonoBehaviour
 {       // NPC의 Text ,RayHit판정 Image등 관련해서 조정할수 있게 해주는 Class
@@ -18,17 +19,29 @@ public class NPC_CanvasController : MonoBehaviour
     private TextMeshProUGUI choice2Text;         // 선택지 2의 TextMeshPro
     private TextMeshProUGUI choice3Text;         // 선택지 3의 TextMeshPro
 
+    private ChoiceImage choice1Image;                 // 선택지 1의 이미지
+    private ChoiceImage choice2Image;                 // 선택지 2의 이미지
+    private ChoiceImage choice3Image;                 // 선택지 3의 이미지
+
     private Color aZeroColor;         // 투명한 색
     private Color aMaxColor;          // 흰색
 
     private string isNon;                       // 해당 선택지가 존재하지 않는지 -> 존재하지 않으면 "0"으로 표시될것
     private string underBar;                    // Underbar도 선택지가 존재하지 않는다는 의미로 사용될것임
+
+    private int nowConversationRefID;           // 현재 대화에서 참조 되고 있는 ID
+    private const int NPCREFMAXCAPACITY = 10;
     // TODO : Ray의 판정을 위해 Image컴포넌트를 가져와야할수도 있음
 
 
     private void Awake()
     {
         AwakeInIt();
+    }
+
+    private void Start()
+    {
+        StartInIt();
     }
 
     private void AwakeInIt()
@@ -40,13 +53,26 @@ public class NPC_CanvasController : MonoBehaviour
         aZeroColor = new Color(1, 1, 1, 0);
         aMaxColor = new Color(1, 1, 1, 1);
 
+
+
+    }       // AwakeInIt()
+
+    private void StartInIt()
+    {
         npcNameText = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
         npcTitleText = transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>();
+
         npcConversationText = transform.GetChild(0).GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
+
         choice1Text = transform.GetChild(0).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
         choice2Text = transform.GetChild(0).GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>();
         choice3Text = transform.GetChild(0).GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>();
-    }
+
+        choice1Image = transform.GetChild(0).GetChild(3).GetComponent<ChoiceImage>();
+        choice2Image = transform.GetChild(0).GetChild(4).GetComponent<ChoiceImage>();
+        choice3Image = transform.GetChild(0).GetChild(5).GetComponent<ChoiceImage>();
+
+    }       // StartInIt()
 
 
     /// <summary>
@@ -75,30 +101,31 @@ public class NPC_CanvasController : MonoBehaviour
     /// 선택지 출력해주는 함수
     /// </summary>
     /// <param name="_converationRefID">출력해야하는 대사의 ID값</param>
-    public void OutPutChoices(int _converationRefID)
+    public void OutPutChoices(int _conversationRefID)
     {
+        nowConversationRefID = _conversationRefID;
 
         // Choice1Event가 존재한다면 그것의 ID를 풀어내서 참조해야함(플레이어퀘스트 || 이후 영향이 줄것)
-        string choice1Event = (string)DataManager.instance.GetData(_converationRefID, "Choice1Event", typeof(string));
+        string choice1Event = (string)DataManager.instance.GetData(_conversationRefID, "Choice1Event", typeof(string));
 
-        string choice1 = (string)DataManager.instance.GetData(_converationRefID, "Choice1", typeof(string));
-        CheckChoiceNull(choice1, choice1Text);
+        string choice1 = (string)DataManager.instance.GetData(_conversationRefID, "Choice1", typeof(string));
+        CheckChoiceNull(choice1, 1,choice1Text,choice1Image);
 
-        string choice2 = (string)DataManager.instance.GetData(_converationRefID, "Choice2", typeof(string));
-        CheckChoiceNull(choice2, choice2Text);
+        string choice2 = (string)DataManager.instance.GetData(_conversationRefID, "Choice2", typeof(string));
+        CheckChoiceNull(choice2, 2, choice2Text,choice2Image);
 
         // 아래 Choice3는 존재하면 띄우는 조건이 만족하는지 한번 체크해야함 (12.13기준 퀘스트가 나와야 클리어여부를 끌어와서 체크할수있음)
-        string choice3 = (string)DataManager.instance.GetData(_converationRefID, "Choice3", typeof(string));
-        CheckChoiceNull(choice3, choice3Text); // 임시사용 함수
+        string choice3 = (string)DataManager.instance.GetData(_conversationRefID, "Choice3", typeof(string));
+        CheckChoiceNull(choice3, 3,choice3Text, choice3Image); // 임시사용 함수
         //CheckChoice3();
 
     }       // CheckExistChoices()
 
     /// <summary>
-    /// 해당 선택지가 비어있는지 확인하는 함수
-    /// </summary>
-    /// <param name="_choice"></param>
-    private void CheckChoiceNull(string _choice,TextMeshProUGUI _outputText)
+    /// 해당 선택지가 비어있는지 확인후 비버있지않으면 출력하는 함수
+    /// </summary>    
+    private void CheckChoiceNull(string _choice, int _choiceNum,
+        TextMeshProUGUI _outputText, ChoiceImage _choiceImageComponent)
     {
         if (_choice == isNon || _choice == underBar)
         {
@@ -107,7 +134,7 @@ public class NPC_CanvasController : MonoBehaviour
             return;
         }
         else { /*DoNothing*/ }
-
+        _choiceImageComponent.choiceNum = _choiceNum;
         ChoiceTextAColorOn(_outputText);
         _outputText.text = _choice;
 
@@ -138,5 +165,93 @@ public class NPC_CanvasController : MonoBehaviour
     {
         _outputText.color = aZeroColor;
     }       // ChoiceTextAColorOff()
+
+    /// <summary>
+    /// 플레이어가 누른 선택지를 확인하는 함수
+    /// </summary>
+    public void CheckOnClickChoice(ChoiceImage _choiceImage)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        string choice = "Choice";
+        string choiceNum = _choiceImage.choiceNum.ToString();
+        string eventText = "Event";
+        stringBuilder.Append(choice);
+        stringBuilder.Append(choiceNum);
+        stringBuilder.Append(eventText);
+
+        string eventRefId = (string)DataManager.instance.GetData(nowConversationRefID, stringBuilder.ToString(), typeof(string));
+
+        if(eventRefId == isNon || eventRefId == underBar)
+        {
+            // 이벤트가 없으므로 대화 끝
+            NPC npc;
+            npc = this.transform.parent.parent.GetComponent<NPC>();
+            npc.InvokeEndConverationEvent();
+            return;
+        }
+
+        // 이벤트가 존재한다면
+        // 해당 이벤트 시트에서 가져오기 -> 참조의 ID 확인
+        // -> 그 ID 값이 퀘스트인지 보상인지 구별하기 -> 퀘스트,보상 실행
+        eventRefId = eventRefId.Replace("#", ",");
+        eventRefId = eventRefId.Replace("\\n", "\n");
+        eventRefId = eventRefId.Replace("\\", "");
+
+        string[] splitEventRefId = new string[NPCREFMAXCAPACITY];
+
+        splitEventRefId = eventRefId.Split("\n");
+
+        int[] eventRefIds = new int[NPCREFMAXCAPACITY];
+
+        // 참조하는 ID값을 Int데이터타입 배열에 넣어주는 for문
+        for (int i = 0; i < splitEventRefId.Length; i++)
+        {
+            splitEventRefId[i].Replace("_", "");
+            eventRefIds[i] = int.Parse(splitEventRefId[i]);
+        }
+
+        int defaultCompensation = 320000;
+        int defaultQuest = 3100000;
+        int defaultConveration = 300000000;
+
+        // 여기서 나온값이 퀘스트인지 보상인지 대사인지 확인할것임
+        for (int i = 0; i < eventRefIds.Length; i++)
+        {
+            if (eventRefIds[i] >= defaultCompensation && eventRefId[i] < defaultQuest)
+            {
+                ItCompensation(eventRefIds[i]);
+            }
+            else if (eventRefIds[i] >= defaultQuest && eventRefIds[i] < defaultConveration)
+            {
+                ItQuest(eventRefIds[i]);
+            }
+            else if (eventRefIds[i] >= defaultConveration)
+            {
+                ItConveration(eventRefIds[i]);
+            }
+        }
+        
+
+    }       // CheckOnClickChoice()
+    private void ItCompensation(int _eventRefId)
+    {
+        // 보상
+        // 플레이어의 인벤토리에 보상 넣어주는 기능
+    }
+
+
+    private void ItQuest(int _eventRefId)
+    {
+        // 퀘스트
+        // 플레이어에게 퀘스트를 부여하는 기능
+    }
+    private void ItConveration(int _eventRefId)
+    {
+        // 대사
+        // 다음 대사 출력하는 기능
+    }
+
+
+
 
 }       // ClassEnd

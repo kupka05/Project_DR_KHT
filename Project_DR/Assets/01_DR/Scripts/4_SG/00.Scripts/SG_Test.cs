@@ -5,42 +5,32 @@ using System.Text;
 using System;
 using Newtonsoft.Json.Bson;
 using TMPro;
+using System.ComponentModel;
 
-public class SG_Test : MonoBehaviour
+public class SG_Test : SG_Test002
 {
 
-    public string data = "30_1_0_999_0_1\n30_1_0_999_0_2\n30_1_0_999_0_3\n30_1_0_999_0_4\n30_1_0_999_0_5\n30_1_0_999_0_6";
 
-    void Start()
+
+    protected override void Start()
     {
-        //ParseData();
-        int[] tet = new int[10];
-        Debug.Log($"Length : {tet.Length}");
-        for( int i = 0; i < tet.Length; i++)
-        {
-            Debug.Log(i);
-        }
+        base.Start();
+        Debug.Log("SG_Test에서 Base호출 이후 Start내부 실행");
+        testEvent += ISINVOKE;
+        StartCoroutine(TestCoroutine());
+
     }
 
-    void ParseData()
+    private void ISINVOKE()
     {
-        // 데이터를 줄 바꿈 문자('\n')로 나누어 배열에 저장
-        string[] lines = data.Split('\n');
-
-        // 결과를 저장할 컬렉션(List) 생성
-        List<int> parsedValues = new List<int>();
-
-        for (int i = 0; i < lines.Length ; i++)
-        {
-            lines[i] = lines[i].Replace("_", "");
-
-            Debug.Log(lines[i]);
-        }
-
-        int tempID = int.Parse(lines[1]);
-
-        Debug.Log($"변환 잘 됬나? : {tempID}");
-
-        
+        Debug.Log("최상위 부모 클래스에서 INVOKE하면 잘 불러와지나?");
     }
+
+    IEnumerator TestCoroutine()
+    {
+        yield return new WaitForSeconds(5);
+        IsTest = true;
+    }
+
+
 }       // SG_Test

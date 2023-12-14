@@ -46,13 +46,17 @@ public class NPC : MonoBehaviour
 
 
     protected delegate void StartConversationDelegate();            // NPC와 대화를 시작하는지 체크할 델리게이트
-    protected event StartConversationDelegate StartConvertionEvent; // StartConversationDelegate의 이벤트
+    protected event StartConversationDelegate StartConverationEvent; // StartConversationDelegate의 이벤트
 
-    protected delegate void StopConversationDelegate();             // NPC와 대화가 끝나면 호출될 델리게이트
-    protected event StopConversationDelegate StopConvertionEvent;   // StopConversationDelegate의 이벤트
+    protected delegate void NextConverationDelegate();              // 다음대화가 존재한다면 해당 이벤트를 불러서 NPC의 다음 대사가 나오도록하는 델리게이트
+    protected event NextConverationDelegate NextConverationEvent;
 
-    //protected delegate void 여기서 이벤트를 호출해서 어떤 선택지를 눌렀는지 확인해야할거같은데
-    //                          이렇게 안해도 될거같기고 하고 
+    protected delegate void EndConverationDelegate();             // NPC와 대화가 끝나면 호출될 델리게이트
+    protected event EndConverationDelegate EndConverationEvent;   // StopConversationDelegate의 이벤트
+
+    protected delegate void ChoiceImageGetDelegate();           // 선택지 어떤거 선택했는지 확인할 델리게이트
+    protected event ChoiceImageGetDelegate ChoiceImageGetEvent;     // 선택한것이 어떤것인지 확인하는 이벤트
+    
 
 
 
@@ -121,10 +125,14 @@ public class NPC : MonoBehaviour
     /// <param name="_npcID">해당 NPC의 ID값</param>
     private void ConvertionTextInIt(int _npcID)
     {
+        
         string tableIDs = (string)DataManager.instance.GetData(_npcID, "ConversationTableID", typeof(string));
         int[] conversationRefIDs;
 
-        string[] splits = tableIDs.Split('\n');
+
+        tableIDs = tableIDs.Replace("\\n","\n");
+        string[] splits = new string[10];
+        splits = tableIDs.Split('\n');
 
         conversationRefIDs = new int[splits.Length];
 
@@ -139,6 +147,8 @@ public class NPC : MonoBehaviour
         for (int i = 0; i < conversationTexts.Length; i++)
         {
             conversationTexts[i] = (string)DataManager.instance.GetData(conversationRefIDs[i], "OutPutText", typeof(string));
+            conversationTexts[i] = conversationTexts[i].Replace("#", ",");
+            conversationTexts[i] = conversationTexts[i].Replace("\\", "");
         }
 
     }       // ConvertionRefIDInIt()
@@ -164,15 +174,42 @@ public class NPC : MonoBehaviour
     /// <summary>
     /// 대화 시작시 플레이어가 이 함수를 호출해서 대화 시작을 알릴거임
     /// </summary>
-    public void InvokeConvertionEvent()
+    public void InvokeStartConverationEvent()
     {
-        StartConvertionEvent?.Invoke();
+        StartConverationEvent?.Invoke();
     }       // InvokeConvertionEvent()
 
+    public void InvokeEndConverationEvent()
+    {
+        EndConverationEvent?.Invoke();
+    }       // InvokeEndConverationEvent()
+
+    public void InvokeNextConverationEvent()
+    {
+        NextConverationEvent?.Invoke();
+    }       // InvokeNextConverationEvent()
+
+    /// <summary>
+    /// 대화 시작시 돌아가야하는 로직 (빈함수)
+    /// </summary>
     protected virtual void StartConvertion()
     {
         // 대화시작시 실행은 각각 다를예정
     }       // StartConvertion()
+
+    protected virtual void NextConveration()
+    {
+        // 이건 Start이후 진행중에 필요하면 호출될 함수
+    }       // NextConveration()
+
+    /// <summary>
+    /// 대화가 끝날때에 돌아가야할 로직 (빈함수)
+    /// </summary>
+    protected virtual void EndConveration()
+    {
+        // NPC들의 Canvas를 SetActive = false 해야할듯
+
+    }       // EndConveration()
 
     /// <summary>
     /// CanvasOBj의 SetActive = true

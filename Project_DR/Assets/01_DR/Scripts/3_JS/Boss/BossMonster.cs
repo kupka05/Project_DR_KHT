@@ -7,16 +7,11 @@ namespace BossMonster
     public class BossMonster : MonoBehaviour
     {
         /*************************************************
-         *                 Public Fields
-         *************************************************/
-        public Boss Boss => _boss;
-
-
-        /*************************************************
          *                 Private Fields
           *************************************************/
         [SerializeField] private int _id = default;     // 인스펙터에서 ID를 할당해야 합니다.
         private Boss _boss;
+        private WaitForSeconds _waitForSeconds;
 
 
         /*************************************************
@@ -28,24 +23,53 @@ namespace BossMonster
             _boss = gameObject.AddComponent<Boss>();
             _boss.Initialize(_id);
 
-            Invoke("AttackAnimation", 3f);
+            // 패턴 간격으로 WaitForSeconds 캐싱
+            _waitForSeconds = new WaitForSeconds(_boss.BossData.PatternInterval);
+
+            // 공격 실행
+            StartAttack();
         }
 
 
         /*************************************************
          *               Private Methods
          *************************************************/
-        private void AttackAnimation()
+        // 패턴 간격에 따라 공격 패턴 실행
+        private void StartAttack()
         {
-            _boss.BossAnimationHandler.AttackAnimation();
-            Invoke("AttackAnimation", 3f);
+            StartCoroutine(StartBossAttackPatternsCoroutine());
         }
-
+        
 
         /*************************************************
          *                 Coroutines
          *************************************************/
+        // 보스가 사용 가능한 공격 패턴들을 패턴 간격에 따라 실행한다.
+        public IEnumerator StartBossAttackPatternsCoroutine()
+        {
+            int patternCount = _boss.BossData.AvailableAttackPatternsList.Count;
+            for (int i = 0; i < patternCount; i++)
+            {
+                // 보스가 죽었을 경우
+                if (_boss.BossData.IsDead) { break; }
 
+                // 패턴 간격만큼 대기
+                yield return _waitForSeconds;
 
+                // 공격 패턴 변경
+                _boss.DOAttackPattern(_boss.BossData.AvailableAttackPatternsList[i]);
+                Debug.Log($"사용하는 패턴: {_boss.BossData.AvailableAttackPatternsList[i]}");
+            }
+
+            // 보스가 살아있을 경우 재귀 호출
+            if (! _boss.BossData.IsDead)
+            {
+                StartCoroutine(StartBossAttackPatternsCoroutine());
+            }
+
+        /////TODO: 보스가 죽었을 때 간혹 패턴이 실행되는 경우가 있음
+        /////그러므로 죽었을 때 일정 시간동안(ex 3초) 플레이어를 무적으로 하는게 좋아보임
+        /////
+        }
     }
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 203844588}
-  m_IndirectSpecularColor: {r: 0.0014926303, g: 0.001392539, b: 0.0013206189, a: 1}
+  m_IndirectSpecularColor: {r: 0.0014834992, g: 0.0013713579, b: 0.0013408005, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1896,7 +1896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &95631384
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2068,7 +2068,7 @@ PrefabInstance:
     - target: {fileID: 7837797319980225010, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0037921453
+      value: -0.003793057
       objectReference: {fileID: 0}
     - target: {fileID: 7837797319993773063, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -2085,10 +2085,50 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8632280358501397911, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632280358501397911, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632280358700687417, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632280358700687417, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632280358700687417, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632280358700687417, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.00080482755
+      value: -0.0008216314
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8632280360070396635, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -31891,7 +31931,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Skill1
+          m_StringArgument: Main
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &1155197922
@@ -39827,19 +39867,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1386388030}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1920788381}
-        m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Skill
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!222 &1386388032
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -59247,19 +59275,34 @@ MonoBehaviour:
   curPlayerHp: {fileID: 945941515}
   beforePlayerHp: {fileID: 1201815964}
   afterPlayerHp: {fileID: 1409031569}
-  hpLv: 0
-  goldLv: 0
-  expLv: 0
-  playerSpendExp: 0
   curGoldIncre: {fileID: 1674816673}
   beforeGoldIncre: {fileID: 1799614478}
   afterGoldIncre: {fileID: 142934262}
   curExpIncre: {fileID: 341057951}
   beforeExpIncre: {fileID: 1885887279}
   afterExpIncre: {fileID: 988907453}
-  curExp: {fileID: 1987543359}
-  spendExp: {fileID: 836052997}
-  remainExp: {fileID: 877444996}
+  pcCurExp: {fileID: 1987543359}
+  pcSpendExp: {fileID: 836052997}
+  pcRemainExp: {fileID: 877444996}
+  atkUpBtn: {fileID: 388521787}
+  critRateUpBtn: {fileID: 1174721509}
+  critDmgBtn: {fileID: 605071906}
+  atkRateBtn: {fileID: 783370999}
+  curAtk: {fileID: 1490520116}
+  beforeAtk: {fileID: 1911338067}
+  afterAtk: {fileID: 750071367}
+  curCritRate: {fileID: 1609801520}
+  beforeCritRate: {fileID: 2052151621}
+  afterCritRate: {fileID: 1859682547}
+  curCritDamage: {fileID: 1895794874}
+  beforeCritDamage: {fileID: 721299618}
+  afterCritDamage: {fileID: 1392247054}
+  curAtkRate: {fileID: 822517341}
+  beforeAtkRate: {fileID: 601280224}
+  afterAtkRate: {fileID: 1654054953}
+  weaponCurExp: {fileID: 1056185948}
+  weaponSpendExp: {fileID: 356516135}
+  weaponRemainExp: {fileID: 1818277040}
 --- !u!4 &1920788382
 Transform:
   m_ObjectHideFlags: 0
@@ -66214,7 +66257,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2128464970
 RectTransform:
   m_ObjectHideFlags: 0

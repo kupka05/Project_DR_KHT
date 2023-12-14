@@ -78,7 +78,7 @@ public class UserDataManager : MonoBehaviour
         get { return _Level; }
         set
         {
-            _Level = HPUpgrade + GainGoldUpgrade + GainExpUpgrade ;
+            _Level = value;
             OnUserDataUpdate?.Invoke();
         }
     }
@@ -175,6 +175,7 @@ public class UserDataManager : MonoBehaviour
             }
         }
     }
+    private string decodedString;
 
     [Header("Setting Data")]          // 환경 설정
     public float rotationAmount = 45f;
@@ -249,7 +250,7 @@ public class UserDataManager : MonoBehaviour
         // 골드 획득량 업그레이드 세팅
         if (GainGoldUpgrade != 0)
         {
-            GainGold += statData.upgradeGainGold[GainGoldUpgrade-1].sum;
+            GainGold = statData.upgradeGainGold[GainGoldUpgrade-1].sum;
         }
         // 경험치 획득량 업그레이드 세팅
         if (GainExpUpgrade != 0)
@@ -276,7 +277,7 @@ public class UserDataManager : MonoBehaviour
         JsonData = PlayerDataManager.ClearMBTIValue;
 
         // json으로 변환된 string은 .NET Framework 디코딩이 필요
-        string decodedString = System.Web.HttpUtility.UrlDecode(JsonData);
+        decodedString = System.Web.HttpUtility.UrlDecode(JsonData);
 
         clearDatas = JsonUtility.FromJson<ClearDatas>(decodedString);
 
@@ -343,7 +344,6 @@ public class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("hp", HPUpgrade);
         PlayerDataManager.Save("gold_increase", GainGoldUpgrade);
         PlayerDataManager.Save("exp_increase", GainExpUpgrade);
-        PlayerDataManager.Update(true);
     }
 
 
@@ -365,6 +365,36 @@ public class UserDataManager : MonoBehaviour
     }
 
     // #######################  PC 데이터 세팅  ####################### \\
+
+    public void PlayerStatusUpgrade(int hpLv, int gainGoldLv, int gainExpLv)
+    {
+        int newHpLv = hpLv;
+        int newGainGoldLv = gainGoldLv;
+        int newgainExpLv = gainExpLv;
+
+        HPUpgrade = newHpLv;
+        GainGoldUpgrade = newGainGoldLv;
+        GainExpUpgrade = newgainExpLv;
+
+        Level = HPUpgrade + GainGoldUpgrade + GainExpUpgrade;
+
+        HP = DefaultHP;
+        if (HPUpgrade != 0)
+        {
+            HP = DefaultHP + statData.upgradeHp[HPUpgrade - 1].sum;
+        }
+        // 골드 획득량 업그레이드 세팅
+        if (GainGoldUpgrade != 0)
+        {
+            GainGold = statData.upgradeGainGold[GainGoldUpgrade - 1].sum;
+        }
+        // 경험치 획득량 업그레이드 세팅
+        if (GainExpUpgrade != 0)
+        {
+            GainExp = statData.upgradeGainExp[GainExpUpgrade - 1].sum;
+        }
+    }
+
 
     public void AddGold(int num)
     {

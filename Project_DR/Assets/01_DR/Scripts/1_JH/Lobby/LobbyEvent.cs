@@ -81,7 +81,6 @@ public class LobbyEvent : MonoBehaviour
     public TMP_Text spendExp;
     public TMP_Text remainExp;
 
-
     // ################################## START ##################################
 
     public void Start()
@@ -107,9 +106,14 @@ public class LobbyEvent : MonoBehaviour
     {
         GetClearData();
 
-        UpdateClearDataUI(clearDatas);             // 메인 디스플레이의 클리어 데이터 업데이트
+        // 메인 디스플레이의 클리어 데이터 업데이트
+        UpdateClearDataUI(clearDatas);            
+
+
+        // 상태창 : 플레이어 강화
         UpdatePlayerStatusUI();
         UpdatePlayerUpgradeUI();
+        SetPlayerLevelBtn();
     }
 
     // 클리어 데이터 불러오기
@@ -167,10 +171,18 @@ public class LobbyEvent : MonoBehaviour
         curExp.text = UserDataManager.Instance.Exp.ToString();
         spendExp.text = 0.ToString();
         remainExp.text = 0.ToString();
+
+    }
+
+    public void SetPlayerLevelBtn()
+    {
+        hpUpBtn.level = UserDataManager.Instance.HPUpgrade;
+        goldIncreBtn.level = UserDataManager.Instance.GainGoldUpgrade;
+        expIncreBtn.level = UserDataManager.Instance.GainExpUpgrade;
     }
     // 플레이어 업그레이드 상태창 UI 업데이트
     public void UpdatePlayerUpgradeUI()
-    {
+    {        
         hpLv = hpUpBtn.newLevel-1;
         goldLv = goldIncreBtn.newLevel-1;
         expLv = expIncreBtn.newLevel-1;
@@ -182,9 +194,7 @@ public class LobbyEvent : MonoBehaviour
 
         playerSpendExp = PlayerCalculator();        // 사용 금액
         spendExp.text = playerSpendExp.ToString();
-        remainExp.text = (UserDataManager.Instance.Exp - playerSpendExp).ToString();
-
-       
+        remainExp.text = (UserDataManager.Instance.Exp - playerSpendExp).ToString();       
     }
     // 플레이어 업그레이드
     public void PlayerUpgrade()
@@ -194,25 +204,22 @@ public class LobbyEvent : MonoBehaviour
             return;
         }
 
+        // 구매했을 떄 일어나는 이벤트
         if (playerSpendExp <= UserDataManager.Instance.Exp)
         {
-            Debug.Log("구매 완료");        
+            Debug.Log("구매 완료");
+
+            Debug.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
+            // 업그레이드 레벨을 새 레벨로 적용
             hpUpBtn.level = hpUpBtn.newLevel;
             goldIncreBtn.level = goldIncreBtn.newLevel;
             expIncreBtn.level = expIncreBtn.newLevel;
 
+            Debug.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
+            // 경험치 소모
             UserDataManager.Instance.Exp -= playerSpendExp;
-            if (hpUpBtn.level > 1)
-            { UserDataManager.Instance.HP = UserDataManager.Instance.DefaultHP + UserDataManager.Instance.statData.upgradeHp[hpUpBtn.level-1].sum; }
-            if (goldIncreBtn.level > 1)
-            { UserDataManager.Instance.GainGold = UserDataManager.Instance.statData.upgradeGainGold[goldIncreBtn.level-1].sum; }
-            if (expIncreBtn.level > 1)
-            { UserDataManager.Instance.GainExp = UserDataManager.Instance.statData.upgradeGainExp[expIncreBtn.level-1].sum; }
-
-            UserDataManager.Instance.HPUpgrade = hpUpBtn.level;
-            UserDataManager.Instance.GainGoldUpgrade = goldIncreBtn.level;
-            UserDataManager.Instance.GainExpUpgrade = expIncreBtn.level;
-            UserDataManager.Instance.Level = hpUpBtn.level + goldIncreBtn.level + expIncreBtn.level;
+            // 레벨 업데이트
+            UserDataManager.Instance.PlayerStatusUpgrade(hpUpBtn.level, goldIncreBtn.level, expIncreBtn.level);               
         }
         else
         {
@@ -223,7 +230,6 @@ public class LobbyEvent : MonoBehaviour
         UpdatePlayerUpgradeUI();
         ChangeStatusDisplayButton("Player");
         UserDataManager.Instance.SavePlayerUpgrade();
-
     }
 
     // 업그레이드를 위한 계산기

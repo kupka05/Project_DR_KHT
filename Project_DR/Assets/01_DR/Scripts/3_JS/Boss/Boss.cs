@@ -193,10 +193,11 @@ namespace BossMonster
             // 프리팹에 등록된 보스 소환석 생성
             GameObject bossStonePrefab = Resources.Load<GameObject>(_bossStoneName);
             GameObject bossStone = Instantiate(bossStonePrefab, transform);
-                // 디버그용
-                Vector3 position = new Vector3(0f, 1.013f, 4.42f);
+            // 디버그용
+                // 추후 DungeonCreator.BossRoomCreate()함수에 추가 및 수정
+                Vector3 position = new Vector3(0f, 1.013f, -7.8f);
                 bossStone.transform.position = position;
-                // 디버그용
+            // 디버그용
             bossStone.name = _bossStoneName;
             _bossStone = bossStone;
 

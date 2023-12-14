@@ -52,13 +52,13 @@ namespace BossMonster
         public BossData(int id)
         {
             _id = id;
-            _hp = (float)DataManager.instance.GetData(id, "HP", typeof(float));
-            _maxHP = (float)DataManager.instance.GetData(id, "MaxHP", typeof(float));
-            _atk = (float)DataManager.instance.GetData(id, "Atk", typeof(float));
-            _def = (float)DataManager.instance.GetData(id, "Def", typeof(float));
-            _giveEXP = (float)DataManager.instance.GetData(id, "GiveEXP", typeof(float));
-            _giveGold = (int)DataManager.instance.GetData(id, "GiveGold", typeof(int));
-            _patternCount = (int)DataManager.instance.GetData(id, "Stage", typeof(int));
+            _hp = Data.GetFloat(id, "HP");
+            _maxHP = Data.GetFloat(id, "MaxHP");
+            _atk = Data.GetFloat(id, "Atk");
+            _def = Data.GetFloat(id, "Def");
+            _giveEXP = Data.GetFloat(id, "GiveEXP");
+            _giveGold = Data.GetInt(id, "GiveGold");
+            _patternCount = Data.GetInt(id, "Stage");
         }
         
         // 리지드 바디 할당

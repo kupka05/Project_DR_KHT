@@ -84,8 +84,6 @@ public class Boss : MonoBehaviour
     public void GetData(int id)
     {
         maxHp = (float)DataManager.instance.GetData(id, "BossHP", typeof(float));
-
-        
     }
 
     void Awake()

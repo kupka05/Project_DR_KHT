@@ -152,6 +152,10 @@ public class DataManager : MonoBehaviour
     {
         try
         {
+            // 사용자를 위해 카테고리 문자의 앞, 뒤 공백을 제거
+            // 간혹 실수로 사용자가 공백을 넣는 경우가 있어 추가함
+            category = category.Trim();
+
             // GoogleSheetLoader에서 모든 데이터를
             // 불러왔을 경우 
             if (GoogleSheetLoader.isDone)

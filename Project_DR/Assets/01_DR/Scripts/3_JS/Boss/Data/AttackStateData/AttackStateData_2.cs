@@ -50,7 +50,7 @@ namespace BossMonster
             _areaSpawnTime = (float)DataManager.instance.GetData(patternID, "AreaSpawnTime", typeof(float));
             _objectDuration = (float)DataManager.instance.GetData(patternID, "ObjectDuration", typeof(float));
             _objectReflectionDistance = (float)DataManager.instance.GetData(patternID, "ObjectReflectionDistance", typeof(float));
-            _objectDamage = (float)DataManager.instance.GetData(patternID, "ObjectDamage ", typeof(float));
+            _objectDamage = (float)DataManager.instance.GetData(patternID, "ObjectDamage", typeof(float));
             _outputInterval = (float)DataManager.instance.GetData(patternID, "OutputInterval", typeof(float));
         }
     }

@@ -25,6 +25,7 @@ namespace BossMonster
         public Type BossType => _bossType;                                      // 보스 타입
         public int AttackAnimationRange => _bossData.AttackAnimationRange;      // 공격 애니메이션 범위
 
+
         /*************************************************
          *                Private Fields
          *************************************************/
@@ -45,6 +46,7 @@ namespace BossMonster
             _animator = boss.Animator;
             _bossType = (Type)_bossData.BossType;
         }
+
 
         /*************************************************
          *              Animation Methods

@@ -349,7 +349,7 @@ public class DataManager : MonoBehaviour
             // data[ID_HEADER]의 길이 만큼 순회
             for (int i = 0; i < data[ID_HEADER].Count; i++)
             {
-                int id = int.Parse(data[ID_HEADER][i].Replace("_", ""));
+                int id = int.Parse(data[ID_HEADER][i].RemoveUnderbar());
                 int index2 = i;
                 // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
                 if (idTable.ContainsKey(id))
@@ -383,7 +383,7 @@ public class DataManager : MonoBehaviour
             // data[ID_HEADER]의 길이 만큼 순회
             for (int i = 0; i < data[ID_HEADER].Count; i++)
             {
-                int id = int.Parse(data[ID_HEADER][i].Replace("_", ""));
+                int id = int.Parse(data[ID_HEADER][i].RemoveUnderbar());
                 int index2 = i;
                 // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
                 if (localIDTable.ContainsKey(id))

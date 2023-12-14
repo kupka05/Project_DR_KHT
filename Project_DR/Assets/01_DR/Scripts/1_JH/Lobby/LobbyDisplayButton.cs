@@ -59,6 +59,7 @@ public class LobbyDisplayButton : MonoBehaviour
 
         }
         lobbyEvent?.UpdatePlayerUpgradeUI();
+        lobbyEvent?.SetPlayerLevelBtn();
         isActive = false;
 
     }

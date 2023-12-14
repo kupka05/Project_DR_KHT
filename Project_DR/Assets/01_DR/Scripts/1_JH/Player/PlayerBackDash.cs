@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.Windows;
+using Input = UnityEngine.Input;
 
 public class PlayerBackDash : MonoBehaviour
 {
@@ -34,6 +34,13 @@ public class PlayerBackDash : MonoBehaviour
         waitForSeconds = new WaitForSeconds(coolDown); ;
         playerRigid = gameObject.GetOrAddRigidbody();
 
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            OnBackDash();
+        };
     }
 
     //// Update is called once per frame
@@ -100,7 +107,29 @@ public class PlayerBackDash : MonoBehaviour
             StartCoroutine(dashRoutine);
         }
     }
-    
+    // 힘 조절이 필요할 경우
+    public void OnBackDash(float _force)
+    {
+        if (onBackDash)
+        {
+            return;
+        }
+
+        if (locomo.state == PlayerState.grounded || locomo.state == PlayerState.walking)
+        {
+            onBackDash = true;
+            playerRigid.AddForce(-transform.forward * (_force*1000), ForceMode.Impulse);
+
+            if (dashRoutine != null)
+            {
+                StopCoroutine(dashRoutine);
+                dashRoutine = null;
+            }
+            dashRoutine = BackDashRoutine();
+            StartCoroutine(dashRoutine);
+        }
+    }
+
     IEnumerator BackDashRoutine()
     {
         yield return waitForSeconds;
@@ -115,26 +144,4 @@ public class PlayerBackDash : MonoBehaviour
         coolDown = (float)DataManager.instance.GetData(1001, "BackDashCD", typeof(float));
     }
 
-    public void OnKnockBack(float _force)
-    {
-        if (onKnockBack)
-        {
-            return;
-        }
-
-        if (locomo.state == PlayerState.grounded || locomo.state == PlayerState.walking)
-        {
-            Debug.Log("knockBack");
-            onKnockBack = true;
-            playerRigid.AddForce(-transform.forward * _force, ForceMode.Impulse);
-
-            if (knockBackRoutine != null)
-            {
-                StopCoroutine(knockBackRoutine);
-                knockBackRoutine = null;
-            }
-            knockBackRoutine = BackDashRoutine();
-            StartCoroutine(knockBackRoutine);
-        }
-    }
 }

@@ -9,6 +9,7 @@ using UnityEngine.Events;
 using Unity.VisualScripting;
 using Rito.InventorySystem;
 using static StatusData;
+using OVR.OpenVR;
 
 [System.Serializable]
 public class ClearDatas
@@ -118,8 +119,28 @@ public class UserDataManager : MonoBehaviour
             OnUserDataUpdate?.Invoke();
         }
     }
-    public int GainExpUpgrade;         // 플레이어 경험치 증가량
-    public int GainGoldUpgrade;        // 플레이어 골드 증가량
+    [SerializeField]
+    private int _GainGoldUpgrade;
+    public int GainGoldUpgrade        // 플레이어 골드 증가량
+    {
+        get { return _GainGoldUpgrade; }
+        set
+        {
+            _GainGoldUpgrade = value;
+            OnUserDataUpdate?.Invoke();
+        }
+    }
+    [SerializeField]
+    private int _GainExpUpgrade;
+    public int GainExpUpgrade         // 플레이어 경험치 증가량
+    {
+        get { return _GainExpUpgrade; }
+        set
+        {
+            _GainExpUpgrade = value;
+            OnUserDataUpdate?.Invoke();
+        }
+    }
 
 
     [Header("Weapon Data")]
@@ -164,10 +185,11 @@ public class UserDataManager : MonoBehaviour
 
     [Header("Inventory Data")]
     // 호출 순서 문제로 인해 static으로 설정
-    public static Item[] items = new Item[] { };
+    public static Item[] items = new Item[Inventory.MaxCapacity];
 
     [Header("Reference Data")]
-    public StatData statData;   // 업그레이드 스탯 정보가 담긴 데이터
+    private StatusData  statusData = new StatusData();
+    public StatData statData = new StatData();   // 업그레이드 스탯 정보가 담긴 데이터
     #endregion
 
     // ####################### Awake #######################
@@ -183,19 +205,25 @@ public class UserDataManager : MonoBehaviour
         else
         { Destroy(gameObject); }
 
-        SetDebugData();
+        //SetDebugData();
         Debug.Log("데이터 요청 시간 : " + GetCurrentDate());
 
         GetReferenceData();
         PlayerDataManager.Update(true); // 데이터 요청
     }
+    public void Update()
+    {
+        if(Input.GetKeyDown("r"))
+        {
+            SetDebugData();
+        }
+    }
 
     // ####################### 데이터 로드 #######################
-    
+
     // 참조 데이터 로드
     public void GetReferenceData()
     {
-        StatusData statusData = new StatusData();
         statusData.GetData(statData);
     }
 
@@ -308,11 +336,14 @@ public class UserDataManager : MonoBehaviour
         return DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
     }
 
-    // 클리어 저장
-    // TODO : 플레이어 클리어시 저장하는 유저 데이터
-    public void SavePlayerData()
+    // 플레이어 업그레이드 세이브
+    public void SavePlayerUpgrade()
     {
-
+        PlayerDataManager.Save("exp", Exp);
+        PlayerDataManager.Save("hp", HPUpgrade);
+        PlayerDataManager.Save("gold_increase", GainGoldUpgrade);
+        PlayerDataManager.Save("exp_increase", GainExpUpgrade);
+        PlayerDataManager.Update(true);
     }
 
 
@@ -320,15 +351,17 @@ public class UserDataManager : MonoBehaviour
     public void SetDebugData()
     {
         PlayerDataManager.Save("hp", 0);
-        PlayerDataManager.Save("gold", 5000);
-        PlayerDataManager.Save("exp", 5000);
-        PlayerDataManager.Save("gold_increase", 3);
-        PlayerDataManager.Save("exp_increase", 9);
+        PlayerDataManager.Save("gold", 100000);
+        PlayerDataManager.Save("exp", 100000);
+        PlayerDataManager.Save("gold_increase", 0);
+        PlayerDataManager.Save("exp_increase", 0);
 
-        PlayerDataManager.Save("weapon_atk", 3);
-        PlayerDataManager.Save("weapon_cri_rate", 5);
-        PlayerDataManager.Save("weapon_cri_damage", 9);
-        PlayerDataManager.Save("weapon_atk_rate", 10);
+        PlayerDataManager.Save("weapon_atk", 0);
+        PlayerDataManager.Save("weapon_cri_rate", 0);        
+        PlayerDataManager.Save("weapon_cri_damage", 0);
+        PlayerDataManager.Save("weapon_atk_rate", 0);
+
+        PlayerDataManager.Update(true);
     }
 
     // #######################  PC 데이터 세팅  ####################### \\

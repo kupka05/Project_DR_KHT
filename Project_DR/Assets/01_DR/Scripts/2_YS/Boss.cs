@@ -61,8 +61,8 @@ public class Boss : MonoBehaviour
 
     [Header("타겟")]
     public Transform target;
-    private GameObject player;
-
+    public GameObject player;
+    public PlayerBackDash knockBack;
     [Header("테이블")]
     public float hp = default;
     public float maxHp = default;
@@ -113,6 +113,7 @@ public class Boss : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         player = GameObject.FindWithTag("Player");
         target = player.GetComponent<PlayerPosition>().playerPos;
+        knockBack = player.GetComponent<PlayerBackDash>();
         Debug.Log("컴포넌트 불러오는가");
 
         damageable.Health = maxHp;
@@ -288,18 +289,21 @@ public class Boss : MonoBehaviour
 
     void PushPlayerBackward()
     {
-        Debug.Log("넉백작동");
+        if (knockBack)
+        {
+            Debug.Log("넉백작동");
 
-        player.GetComponent<PlayerBackDash>().OnKnockBack(20);
+            knockBack.OnBackDash(20);
+        }
         //if (playerHealth != null)
         //{
         //    playerHealth.OnKnockback(this.transform.position);
         //    //target.gameObject.GetComponent<PlayerHealth>().OnKnockback(target.forward * 5.0f);
         //}
-        
-            
-        
-        
+
+
+
+
     }
 
 

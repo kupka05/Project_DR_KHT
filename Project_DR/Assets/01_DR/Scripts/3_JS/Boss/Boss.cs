@@ -21,11 +21,12 @@ namespace BossMonster
         public IState IdleState => _idleState;
         public IState DieState => _dieState;
         public IState[] AttackStates => _attackStates;
+        public List<int> AvailableAttackPatternsList => _bossData.AvailableAttackPatternsList;  // 사용 가능한 공격 패턴(0 ~ 9)[10]
 
-        public Rigidbody Rigidbody => _bossData.Rigidbody;                          // 리지드 바디
-        public Damageable Damageable => _bossData.Damageable;                       // 데미지 관련 처리
-        public Transform Target => _bossData.Target;                                // 공격 대상
-        public Animator Animator => _bossData.Animator;                             // 애니메이터
+        public Rigidbody Rigidbody => _bossData.Rigidbody;                                      // 리지드 바디
+        public Damageable Damageable => _bossData.Damageable;                                   // 데미지 관련 처리
+        public Transform Target => _bossData.Target;                                            // 공격 대상
+        public Animator Animator => _bossData.Animator;                                         // 애니메이터
 
 
         /*************************************************
@@ -43,7 +44,6 @@ namespace BossMonster
         private IState _idleState;                                                  // 대기 상태
         private IState _dieState;                                                   // 죽음 상태
         private IState[] _attackStates = new IState[10];                            // 공격 상태 패턴(0 ~ 9)[10]
-        private List<int> _availableAttackStatesList = new List<int>();             // 사용 가능한 공격 패턴(0 ~ 9)[10]
 
 
         /*************************************************
@@ -53,7 +53,7 @@ namespace BossMonster
         public void Initialize(int id)
         {
             // 보스 관련 데이터 할당
-            _bossData = new BossData(id);                               // 보스 데이터 생성
+            _bossData = new BossData(this, id);                               // 보스 데이터 생성
             _bossData.SetRigidbody(GetComponent<Rigidbody>());          // 리지드 바디 할당 
             _bossData.SetTarget(FindTarget("Player"));                  // 플레이어를 타겟으로 설정
             _bossData.SetAnimator(GetComponent<Animator>());            // 애니메이터 할당
@@ -80,7 +80,7 @@ namespace BossMonster
             _bossData.Damageable.onDamaged.AddListener(OnDamage);
 
             // 공격 패턴 랜덤 설정
-            ChooseRandomPattern();
+            _bossData.ChooseRandomPattern();
         }
 
         // 데미지 처리
@@ -104,6 +104,7 @@ namespace BossMonster
         /*************************************************
          *                 Unity Methods
          *************************************************/
+        // 초당 60프레임 간격으로 고정해서 실행
         private void FixedUpdate()
         {
             // 공격 대상으로 LookAt
@@ -131,26 +132,6 @@ namespace BossMonster
 
             // 상태 업데이트
             _currentState.UpdateState(this);
-        }
-
-        // 랜덤으로 사용 가능한 공격 패턴을 결정
-        public void ChooseRandomPattern()
-        {
-            int patternCount = _bossData.PatternCount;
-            int i = 0;
-            while(i < patternCount)
-            {
-                int randomNumber = UnityEngine.Random.Range(0, _attackStates.Length);
-
-                // 패턴 중복 체크
-                if (! _availableAttackStatesList.Contains(randomNumber))
-                {
-                    // 중복이 아닐 경우 추가
-                    _availableAttackStatesList.Add(randomNumber);
-                }
-
-                i++;
-            }
         }
 
 

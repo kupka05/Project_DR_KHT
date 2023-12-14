@@ -27,6 +27,25 @@ namespace BossMonster
             // _boss 생성 및 초기화
             _boss = gameObject.AddComponent<Boss>();
             _boss.Initialize(_id);
+
+            Invoke("AttackAnimation", 3f);
         }
+
+
+        /*************************************************
+         *               Private Methods
+         *************************************************/
+        private void AttackAnimation()
+        {
+            _boss.BossAnimationHandler.AttackAnimation();
+            Invoke("AttackAnimation", 3f);
+        }
+
+
+        /*************************************************
+         *                 Coroutines
+         *************************************************/
+
+
     }
 }

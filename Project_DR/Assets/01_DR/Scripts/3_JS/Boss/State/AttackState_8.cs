@@ -48,19 +48,19 @@ namespace BossMonster
         // 상태 진입시
         public void EnterState(Boss boss)
         {
-
+            Debug.Log("공격 상태 패턴 8 진입");
         }
 
         // 상태 업데이트시
         public void UpdateState(Boss boss)
         {
-
+            Debug.Log("공격 상태 패턴 8 업데이트");
         }
 
         // 상태에서 나갈시
         public void ExitState(Boss boss)
         {
-
+            Debug.Log("공격 상태 패턴 8 나가기");
         }
     }
 }

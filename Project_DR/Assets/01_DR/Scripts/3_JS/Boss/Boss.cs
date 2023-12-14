@@ -53,7 +53,7 @@ namespace BossMonster
         public void Initialize(int id)
         {
             // 보스 관련 데이터 할당
-            _bossData = new BossData(this, id);                               // 보스 데이터 생성
+            _bossData = new BossData(this, id);                         // 보스 데이터 생성
             _bossData.SetRigidbody(GetComponent<Rigidbody>());          // 리지드 바디 할당 
             _bossData.SetTarget(FindTarget("Player"));                  // 플레이어를 타겟으로 설정
             _bossData.SetAnimator(GetComponent<Animator>());            // 애니메이터 할당
@@ -81,6 +81,13 @@ namespace BossMonster
 
             // 공격 패턴 랜덤 설정
             _bossData.ChooseRandomPattern();
+        }
+
+        // 보스의 공격 패턴 상태를 실행
+        public void DOAttackPattern(int index)
+        {
+            // 인덱스로 받은 공격 패턴을 실행
+            ChangeState(_attackStates[index]);
         }
 
         // 데미지 처리
@@ -138,7 +145,7 @@ namespace BossMonster
         /*************************************************
          *                 Private Methods
          *************************************************/
-        // 공격 상태를 할당
+        // 공격 상태 패턴들을 할당
         private void SetAttackStates(int id)
         {
             StringBuilder stringBuilder = new StringBuilder();

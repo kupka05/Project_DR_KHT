@@ -13,7 +13,7 @@ namespace BossMonster
          *                  Public Fields
          *************************************************/
         // 기본 스탯
-        public Boss Boss => _boss;                                                           // 보스
+        public Boss Boss => _boss;                                                      // 보스
         public int ID => _id;                                                           // 보스 아이디
         public int BossType => _bossType;                                               // 보스 타입
         public float HP => _hp;                                                         // 현재 체력
@@ -31,6 +31,7 @@ namespace BossMonster
         public int[] PhaseAttackPatternCounts => _phaseAttackPatternCounts;             // 각 페이즈 별 공격 패턴 갯수
         public int CurrentPatternCount => _currentPatternCount;                         // 현재 패턴 갯수      
         public List<int> AvailableAttackPatternsList => _availableAttackPatternsList;   // 사용 가능한 공격 패턴들
+        public bool IsDead => _isDead;                                                  // 죽음 여부
 
 
         /*************************************************
@@ -54,6 +55,7 @@ namespace BossMonster
         [SerializeField] private int[] _phaseAttackPatternCounts = new int[4];  // 페이즈는 4개로 고정.
         [SerializeField] private int _currentPatternCount;
         [SerializeField] private List<int> _availableAttackPatternsList = new List<int>();
+        [SerializeField] private bool _isDead;
 
 
         /*************************************************
@@ -111,6 +113,10 @@ namespace BossMonster
         public void OnDamage(float damage)
         {
             _hp -= damage;
+            if (_hp <= 0)
+            {
+                _isDead = true;
+            }
         }
 
         // 사용 가능한 공격 패턴 초기화

@@ -48,7 +48,8 @@ namespace BossMonster
         // 상태 진입시
         public void EnterState(Boss boss)
         {
-
+            // 공격 애니메이션 재생
+            _boss.BossAnimationHandler.AttackAnimation();
         }
 
         // 상태 업데이트시

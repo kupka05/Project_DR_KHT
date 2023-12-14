@@ -53,7 +53,7 @@ public class CSVReader
                         // 새로 줄이 생기는 현상이 있어
                         // 공백이 생길 경우 break 하도록 설정
                         if (line == "") { break; }
- 
+
                         string[] values = line.Split(DELIMITER);
 
                         for (int j = 0; j < values.Length; j++)

@@ -20,9 +20,18 @@ public class Boss : MonoBehaviour
     public GameObject bossState;
 
     public Rigidbody rigid;
+    
     public Damageable damageable;
+
+    public UnityEngine.UI.Image targetImage;
+
     GameObject instantLazer;
-    public int bossId;
+
+
+    [Header("보스 및 투사체 테이블 관련")]
+    public int bossId;  //보스 테이블
+    public int bossProjectileId;  //투사체 테이블
+    public int bossProjectileID;
 
     public float power = 5.0f;
 
@@ -37,9 +46,12 @@ public class Boss : MonoBehaviour
     public Transform lazerPort;
     public GameObject lazer;
 
-    [Header("원거리 공격")]
-    public int bulletCount = 6;
+    [Header("원거리 공격 소형 투사체")]
+    public float bulletCount = default;
     public GameObject smallBulletPrefab;
+    public float delayTime = default;
+    public float destoryTime = default;
+    public float speed = default;
 
     [Header("애드벌룬 투사체 생성")]
     public Transform bouncePort;
@@ -49,7 +61,8 @@ public class Boss : MonoBehaviour
 
     [Header("타겟")]
     public Transform target;
-
+    public GameObject player;
+    public PlayerBackDash knockBack;
     [Header("테이블")]
     public float hp = default;
     public float maxHp = default;
@@ -63,7 +76,7 @@ public class Boss : MonoBehaviour
     public bool isPushPlayer = false;
 
     [Header("패턴 간격")]
-    public float patternInterval = 2.0f;
+    public float patternInterval = default;
 
     [Header("포물선 터지는 오브젝트")]
     public GameObject explosionPrefab;
@@ -76,19 +89,16 @@ public class Boss : MonoBehaviour
     public Transform bigBrickPortLeft;
     public Transform bigBrickPortRight;
     public GameObject bigBrick;
+    public float destroy = default;
 
     [Header("유도 미사일 테스트")]
     public Transform testPort;
     public GameObject testBullet;
 
-    public void GetData(int id)
-    {
-        maxHp = (float)DataManager.instance.GetData(id, "BossHP", typeof(float));
-    }
-
+    
     void Awake()
     {
-        GetData(bossId);
+        GetData(bossId, bossProjectileId, bossProjectileID);
     }
 
     void Start()
@@ -101,7 +111,11 @@ public class Boss : MonoBehaviour
         bossState = GameObject.FindWithTag("Boss");
 
         rigid = GetComponent<Rigidbody>();
-        target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
+        player = GameObject.FindWithTag("Player");
+        target = player.GetComponent<PlayerPosition>().playerPos;
+        knockBack = player.GetComponent<PlayerBackDash>();
+        Debug.Log("컴포넌트 불러오는가");
+
         damageable.Health = maxHp;
 
         SetMaxHealth(maxHp);
@@ -128,6 +142,24 @@ public class Boss : MonoBehaviour
 
     }
 
+    public void GetData(int bossId, int bossProjectileId, int bossProjectileID)
+    {
+        //보스
+        maxHp = (float)DataManager.instance.GetData(bossId, "BossHP", typeof(float));
+
+        //소형 투사체 6910
+        bulletCount = (float)DataManager.instance.GetData(bossProjectileId, "Duration", typeof(float));
+        delayTime = (float)DataManager.instance.GetData(bossProjectileId, "Delay", typeof(float));
+        patternInterval = (float)DataManager.instance.GetData(bossProjectileId, "DelTime", typeof(float)); //이건 하나만
+        destoryTime = (float)DataManager.instance.GetData(bossProjectileId, "DesTime", typeof(float));
+        speed = (float)DataManager.instance.GetData(bossProjectileId, "Speed", typeof(float));
+
+        //6914
+        destroy = (float)DataManager.instance.GetData(bossProjectileID, "DesTime", typeof(float));
+
+    }
+
+
     public void SetMaxHealth(float newHealth)
     {
         bossHPSlider.maxValue = newHealth;
@@ -138,107 +170,97 @@ public class Boss : MonoBehaviour
         bossHPSlider.value = newHealth;
     }
 
-  
+
 
     IEnumerator ExecutePattern()
     {
-        //Debug.Log("코루틴이 한번만 실행이 되는지");
+        Debug.Log("코루틴이 한번만 실행이 되는지");
 
         while (!isDie && !isPatternExecuting)
         {
-            //Debug.Log($"hp{hp}");
+            Debug.Log($"hp{hp}");
             yield return new WaitForSeconds(0.1f);
 
             //체력에 따라 랜덤으로 패턴 선택
-            //if (damageable.Health <= maxHp * 1.0f && damageable.Health > maxHp * 0.75f)
-            //{
-                Debug.Log("작동");
+            if (damageable.Health <= maxHp * 1.0f && damageable.Health > maxHp * 0.75f)
+            {
                 RandomPattern();
                 if (bossState)
                 {
                     bossState.GetComponent<BossState>().Attack();
                 }
 
-                ////T0DO:넉백시
-                //if(bossState)
-                //{
-                //    bossState.GetComponent<BossState>().CastSpell();
-                //}
+                isPatternExecuting = true;
+                yield return new WaitForSeconds(patternInterval);
+                isPatternExecuting = false;
+
+            }
+            else if (damageable.Health <= maxHp * 0.75f && damageable.Health > maxHp * 0.5f)
+            {
+
+                RandomPattern();
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().Attack();
+                }
+
+                PushPlayerBackward();
+                //T0DO:넉백시
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().CastSpell();
+                }
 
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
                 isPatternExecuting = false;
 
-            //}
-            //else if (damageable.Health <= maxHp * 0.75f && damageable.Health > maxHp * 0.5f)
-            //{
-            //    Debug.Log("작동2");
-
-            //    RandomPattern();
-            //    if (bossState)
-            //    {
-            //        bossState.GetComponent<BossState>().Attack();
-            //    }
-
-            //    ////T0DO:넉백시
-            //    //if(bossState)
-            //    //{
-            //    //    bossState.GetComponent<BossState>().CastSpell();
-            //    //}
-
-            //    isPatternExecuting = true;
-            //    yield return new WaitForSeconds(patternInterval);
-            //    isPatternExecuting = false;
-                
-            //}
-            //else if (damageable.Health <= maxHp * 0.5f && damageable.Health > maxHp * 0.25f)
-            //{
-            //    Debug.Log("작동3");
+            }
+            else if (damageable.Health <= maxHp * 0.5f && damageable.Health > maxHp * 0.25f)
+            {
 
 
-            //    RandomPattern();
-            //    if (bossState)
-            //    {
-            //        bossState.GetComponent<BossState>().Attack();
-            //    }
+                RandomPattern();
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().Attack();
+                }
 
-            //    ////T0DO:넉백시
-            //    //if(bossState)
-            //    //{
-            //    //    bossState.GetComponent<BossState>().CastSpell();
-            //    //}
-
-
-            //    isPatternExecuting = true;
-            //    yield return new WaitForSeconds(patternInterval);
-            //    isPatternExecuting = false;
-               
-
-            //}
-            //else if (damageable.Health < maxHp * 0.25f)
-            //{
-            //    Debug.Log("작동4");
-
-            //    RandomPattern();
-            //    if (bossState)
-            //    {
-            //        bossState.GetComponent<BossState>().Attack();
-            //    }
-
-            //    ////T0DO:넉백시
-            //    //if(bossState)
-            //    //{
-            //    //    bossState.GetComponent<BossState>().CastSpell();
-            //    //}
-
-            //    isPatternExecuting = true;
-            //    yield return new WaitForSeconds(patternInterval);
-            //    isPatternExecuting = false;
-               
-            //}
+                PushPlayerBackward();
+                //T0DO:넉백시
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().CastSpell();
+                }
 
 
+                isPatternExecuting = true;
+                yield return new WaitForSeconds(patternInterval);
+                isPatternExecuting = false;
 
+
+            }
+            else if (damageable.Health < maxHp * 0.25f)
+            {
+
+                RandomPattern();
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().Attack();
+                }
+
+                PushPlayerBackward();
+                //T0DO:넉백시
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().CastSpell();
+                }
+
+                isPatternExecuting = true;
+                yield return new WaitForSeconds(patternInterval);
+                isPatternExecuting = false;
+
+            }
         }
 
 
@@ -251,64 +273,92 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                PlayShoot();
+                StartCoroutine(PlayShoot());
                 break;
             case 1:
-                TestShoot();
+                StartCoroutine(PlayShoot());
                 break;
             case 2:
-                BigBrickShoot();
+                StartCoroutine(PlayShoot());
                 break;
             case 3:
-                BounceShoot();
+                StartCoroutine(PlayShoot());
                 break;
         }
     }
 
-    IEnumerator PlayShoot()
+    void PushPlayerBackward()
     {
-        if (!isShoot)
+        if (knockBack)
         {
-            isShoot = true;
+            Debug.Log("넉백작동");
 
-            for (int i = 0; i < bulletCount; i++)
-            {
-                // 위치 조절
-                Vector3 offset = Vector3.zero;
-
-                if (i % 2 == 0)
-                {
-                    offset = new Vector3(2.0f, 0, 0);
-                }
-                else
-                {
-                    if (i % 4 == 1)
-                    {
-                        offset = new Vector3(0, 2.0f, 0);
-                    }
-                    else
-                    {
-                        offset = new Vector3(-2.0f, 0, 0);
-                    }
-                }
-
-                GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
-
-                Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
-
-                // 총알 속도 설정
-                rigidBullet.velocity = offset.normalized * 10.0f;
-
-                instantBullet.transform.LookAt(target);
-
-                yield return new WaitForSeconds(0.4f);
-
-                Destroy(instantBullet, 6.0f);
-
-            }
-            isShoot = false;
+            knockBack.OnBackDash(20);
         }
+        //if (playerHealth != null)
+        //{
+        //    playerHealth.OnKnockback(this.transform.position);
+        //    //target.gameObject.GetComponent<PlayerHealth>().OnKnockback(target.forward * 5.0f);
+        //}
+
+
+
+
     }
+
+
+
+    //IEnumerator PlayShoot()  //원래
+    //{
+    //    if (!isShoot)
+    //    {
+    //        isShoot = true;
+
+    //        for (int i = 0; i < bulletCount; i++)
+    //        {
+    //            // 위치 조절
+    //            Vector3 offset = Vector3.zero;
+
+    //            if (i % 2 == 0)
+    //            {
+    //                offset = new Vector3(2.0f, 0, 0);
+    //                Debug.Log("생성1");
+    //            }
+    //            else
+    //            {
+    //                if (i % 4 == 1)
+    //                {
+    //                    offset = new Vector3(0, 2.0f, 0);
+    //                    Debug.Log("생성2");
+    //                }
+    //                else
+    //                {
+    //                    offset = new Vector3(-2.0f, 0, 0);
+    //                    Debug.Log("생성3");
+    //                }
+    //            }
+    //            gameObject.SetActive(true);
+
+    //            yield return new WaitForSeconds(2.0f);
+
+    //            GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
+    //            Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
+    //            Debug.Log("생성4");
+
+    //            // 총알 속도 설정
+    //            rigidBullet.velocity = offset.normalized * speed;
+    //            Debug.Log("생성5");
+
+    //            instantBullet.transform.LookAt(target);
+
+    //            yield return new WaitForSeconds(delayTime);  //0.4f
+
+    //            Destroy(instantBullet, destoryTime);
+
+    //        }
+    //        isShoot = false;
+    //    }
+    //}
 
     //void PlayShoot()
     //{
@@ -318,30 +368,100 @@ public class Boss : MonoBehaviour
     //    // BossBullet 컴포넌트를 가져옴
     //    BossBullet bossBulletInstance = bossBulletObject.GetComponent<BossBullet>();
 
-    //    // target 설정 (필요에 따라 PlayerPosition 스크립트 등을 이용하여 설정)
-    //    bossBulletInstance.target = target;
+    //    if (bossBulletInstance != null)
+    //    {
+    //        // target 설정 (필요에 따라 PlayerPosition 스크립트 등을 이용하여 설정)
+    //        bossBulletInstance.target = target;
 
-    //    // 시작하거나 특정 메서드 호출 (PlayShoot를 시작하도록 함)
-    //    bossBulletInstance.StartCoroutine(bossBulletInstance.PlayShoot());
+    //        // 시작하거나 특정 메서드 호출 (PlayShoot를 시작하도록 함)
+    //        bossBulletInstance.StartCoroutine(PlayShoot());
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("BossBullet component not found on the instantiated object.");
+    //    }
     //}
 
+    IEnumerator PlayShoot()
+    {
+        if (!isShoot)
+        {
+            isShoot = true;
+
+            
+            for (int i = 0; i < bulletCount; i++)
+            {
+                Vector3 offset = Vector3.zero;
+
+                if (i % 2 == 0)
+                {
+                    offset = new Vector3(2.0f, 0, 0);
+                    //Debug.Log("생성1");
+                }
+                else
+                {
+                    if (i % 4 == 1)
+                    {
+                        offset = new Vector3(0, 2.0f, 0);
+                        //Debug.Log("생성2");
+                    }
+                    else
+                    {
+                        offset = new Vector3(-2.0f, 0, 0);
+                        //Debug.Log("생성3");
+                    }
+                }
+
+                // 총알 생성
+                GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
+                Rigidbody rigidBullet = instantBullet.GetComponent<Rigidbody>();
+                //Debug.Log("생성4");
+
+
+                // 총알 속도 설정
+                rigidBullet.velocity = offset.normalized * speed;
+                //Debug.Log("생성5");
+
+                instantBullet.transform.LookAt(target);
+
+                yield return new WaitForSeconds(0.2f);  // 0.2초 간격
+
+                Destroy(instantBullet, destoryTime);
+            }
+
+            //// 모든 총알 발사 후 게임 오브젝트 비활성화
+            //gameObject.SetActive(false);
+
+            isShoot = false;
+        }
+    }
 
     void LazerShoot()
-    {
+    {   
         instantLazer = Instantiate(lazer, lazerPort.position, lazerPort.rotation);
         instantLazer.transform.LookAt(target.position);
         lazerPort.transform.LookAt(target.position);
 
-        Invoke("LazerDestroy", 1.5f);
+
+        ShowRangeIndicator();
+
+        Invoke("LazerDestroy", 1.0f);
         //Debug.Log($"작동:{Invoke}");
+    }
+
+    void ShowRangeIndicator()
+    {
+        if (targetImage != null)
+        {
+            targetImage.transform.position = target.position;
+            targetImage.gameObject.SetActive(true);
+        }
     }
 
     void LazerDestroy()
     {
         Destroy(instantLazer);
     }
-
-
 
     public Vector3 BigBrick(Vector3 portPosition)
     {
@@ -386,9 +506,9 @@ public class Boss : MonoBehaviour
         GameObject instantBrickRight = Instantiate(bigBrick, bigBrickPortRight.position, Quaternion.identity);
         instantBrickRight.GetComponent<Rigidbody>().AddForce(BigBrick(bigBrickPortRight.position), ForceMode.Impulse);
 
-        Destroy(instantBrick, 6.0f);
-        Destroy(instantBrickLeft, 6.0f);
-        Destroy(instantBrickRight, 6.0f);
+        Destroy(instantBrick, destroy);
+        Destroy(instantBrickLeft, destroy);
+        Destroy(instantBrickRight, destroy);
     }
 
     public Vector3 ExplosionBox(Vector3 portPosition)
@@ -432,12 +552,11 @@ public class Boss : MonoBehaviour
         instantExplosionRight.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortRight.position), ForceMode.Impulse);
     }
 
+    
     void BounceShoot()
     {
         GameObject instantBounce = Instantiate(bounce, bouncePort.position, bouncePort.rotation);
-
         GameObject bounceLeft = Instantiate(bounce, bouncePortLeft.position, bouncePortLeft.rotation);
-
         GameObject bounceRight = Instantiate(bounce, bouncePortRight.position, bouncePortRight.rotation);
 
         Destroy(instantBounce, 8.0f);

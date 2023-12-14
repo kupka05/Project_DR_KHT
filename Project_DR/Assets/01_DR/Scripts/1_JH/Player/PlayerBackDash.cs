@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.Windows;
+using Input = UnityEngine.Input;
 
 public class PlayerBackDash : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class PlayerBackDash : MonoBehaviour
     public float force = 1.5f; // 넉백
     public bool input = false;
     public bool onBackDash = false;
+    public bool onKnockBack = false;
     public float coolDown = 1.5f;
 
 
@@ -20,6 +21,7 @@ public class PlayerBackDash : MonoBehaviour
     public List<InputAxis> inputAxis = new List<InputAxis>() { InputAxis.RightThumbStickAxis };
 
     IEnumerator dashRoutine;
+    IEnumerator knockBackRoutine;
     private WaitForSeconds waitForSeconds;
 
 
@@ -32,6 +34,13 @@ public class PlayerBackDash : MonoBehaviour
         waitForSeconds = new WaitForSeconds(coolDown); ;
         playerRigid = gameObject.GetOrAddRigidbody();
 
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            OnBackDash();
+        };
     }
 
     //// Update is called once per frame
@@ -98,11 +107,34 @@ public class PlayerBackDash : MonoBehaviour
             StartCoroutine(dashRoutine);
         }
     }
-    
+    // 힘 조절이 필요할 경우
+    public void OnBackDash(float _force)
+    {
+        if (onBackDash)
+        {
+            return;
+        }
+
+        if (locomo.state == PlayerState.grounded || locomo.state == PlayerState.walking)
+        {
+            onBackDash = true;
+            playerRigid.AddForce(-transform.forward * (_force*1000), ForceMode.Impulse);
+
+            if (dashRoutine != null)
+            {
+                StopCoroutine(dashRoutine);
+                dashRoutine = null;
+            }
+            dashRoutine = BackDashRoutine();
+            StartCoroutine(dashRoutine);
+        }
+    }
+
     IEnumerator BackDashRoutine()
     {
         yield return waitForSeconds;
         onBackDash = false;
+        onKnockBack = false;
         yield break;
     }
 
@@ -111,4 +143,5 @@ public class PlayerBackDash : MonoBehaviour
         force = (float)DataManager.instance.GetData(1001, "BackDash", typeof(float))*1000f;
         coolDown = (float)DataManager.instance.GetData(1001, "BackDashCD", typeof(float));
     }
+
 }

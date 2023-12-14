@@ -300,6 +300,7 @@ public class UserDataManager : MonoBehaviour
     }
     IEnumerator CheckData(Action action)
     {
+        yield return new WaitForSeconds(0.1f);
         if (dataLoadSuccess)
         {
             Debug.Log(action + "데이터 로드 완료");

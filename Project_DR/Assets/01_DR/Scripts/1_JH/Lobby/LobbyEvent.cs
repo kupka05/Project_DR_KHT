@@ -3,9 +3,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.ParticleSystem;
 using Random = UnityEngine.Random;
+
+
+
+// NPC 대사를 담을 클래스
+[System.Serializable]
+public class NpcDialogs
+{
+    public List<NpcDialog> logs;
+}
+[System.Serializable]
+public class NpcDialog
+{
+    public int ID;
+    public string[] _log;
+    public Queue log;
+    public int _event;
+}
 
 public class LobbyEvent : MonoBehaviour
 {
@@ -16,6 +37,15 @@ public class LobbyEvent : MonoBehaviour
     [Header("Main Display")]
     public GameObject mainDisplay;
     public GameObject mbtiDisplay;
+
+    [Header("Main NPC")]
+    public int questID;         // 시트에서 불러올 퀘스트 ID 
+    public int targetQuestID;   // 디스플레이에 표시할 퀘스트 ID
+    public TMP_Text npcDialog;  // 대사 텍스트
+
+    [Header("NPC Dialog")]
+    public NpcDialogs DialogData = new NpcDialogs();    // 대사 데이터
+    public NpcDialog dialog;                            // 현재 대사
 
     [Header("ClearData")]
     public string[] clearDatas;             // 디버그용 클리어 데이터
@@ -89,18 +119,21 @@ public class LobbyEvent : MonoBehaviour
         dbRequest += GetDataFromDB;                     // DB 데이터 요청 성공 시 액션 추가
         UserDataManager.Instance.DBRequst(dbRequest);   // DB 데이터 요청
 
+        // 메인 디스플레이 시작 시 세팅
+        ChangeDisplayButton("Main");
+        GetNPCDialog();
 
-        ChangeDisplayButton("Main");          // 메인 디스플레이 시작 시 메인 패널로
+        // 상태창 시작 시 세팅
         SetStatusDisplay();
-        ChangeStatusDisplayButton("Main");    // 상태창 시작 시 메인 패널로
-
+        SetNpcDialog(targetQuestID);
+        ChangeStatusDisplayButton("Main");    
 
         // 옵저버 등록
         UserDataManager.Instance.OnUserDataUpdate += UpdatePlayerStatusUI;
     }
 
     // ############################### 데이터 불러오기 ###############################
-
+    #region 데이터 로드
     // DB에서 데이터 불러오기 완료 후 이벤트로 실행
     public void GetDataFromDB()
     {
@@ -142,9 +175,10 @@ public class LobbyEvent : MonoBehaviour
             clearDatas[i] = clearData;
         }
     }
+    #endregion
 
-    // ################################# 플레이어 업그레이드 UI #################################
-
+    // ################################# UI 업데이트 #################################
+    #region 플레이어 업그레이드
     // 상태창 UI 업데이트 : 시작하고 바로 업데이트 해야하는 것들은 이곳에서 업데이트
     public void UpdatePlayerStatusUI()
     {
@@ -260,7 +294,7 @@ public class LobbyEvent : MonoBehaviour
         else
             return false;
     }
-
+    #endregion
 
     // 클리어 UI 업데이트 가져오기
     public void UpdateClearDataUI(string[] clearDataList)
@@ -405,5 +439,89 @@ public class LobbyEvent : MonoBehaviour
         }
     }
     #endregion
+
+    // ########################### 메인 디스플레이 NPC 대화 ###########################
+
+
+    // NPC 대사를 세팅하는 함수
+    public void SetNpcDialog(int id)
+    {
+        int target = BinarySearch(DialogData.logs, 0, DialogData.logs.Count-1, id);
+        // 대사 데이터에서 ID에 맞는 데이터 찾아오기
+
+        if (target != -1)
+        {
+            // 탐색 완료 시 데이터 변경
+            dialog = DialogData.logs[target];
+
+            // 대화창 업데이트 후 디큐
+            npcDialog.text = dialog.log.Peek().ToString();
+            dialog.log.Dequeue();
+        }
+        else
+            Debug.Log("대사 ID를 찾지 못했습니다.");
+    }
+
+    // 이진 탐색 트리 ID 찾아오기
+    int BinarySearch(List<NpcDialog> list, int first, int last, int target)
+    {
+        int mid;                         // 중간 값 초기화
+        if (first > last)                // 만약 첫 숫자가 마지막 숫자보다 작을 경우
+        {   
+            return -1;                   // -1을 반환 : 탐색 실패를 의미
+        }
+        mid = (first + last) / 2;        // 탐색 영역을 반으로 나누고 탐색을 진행
+        Debug.Log($"타겟 : {target}, 탐색 위치 : {list[mid].ID}");
+
+        if (list[mid].ID == target)      // 타겟과 같다면
+        {
+            return mid;                  // 타겟 값 반환
+        }
+        else if (list[mid].ID < target)  // 만약 타겟이 크면
+        {
+            // mid 또한 탐색범위에 넣기 위해, +1
+            return BinarySearch(list, mid + 1, last, target);
+        }
+        else
+            // mid 또한 탐색범위에 넣기 위해, -1
+            return BinarySearch(list, first, mid - 1, target);
+       
+    }
+
+    // NPC와 대화/보상 수락 등을 하는 디스플레이 버튼
+    public void DisplayButton()
+    {
+        if(dialog.log.Count != 0)
+        {
+            npcDialog.text = dialog.log.Peek().ToString();
+            dialog.log.Dequeue();            
+        }
+        else
+        OpenSpawnRoomDoor();
+    }
+
+
+    // NPC 대사 데이터를 가져오는 메서드
+    public void GetNPCDialog()
+    {
+        DialogData.logs = new List<NpcDialog>();
+
+        for (int i = 0; i <= 6; i++)
+        {
+            NpcDialog newDialog = new NpcDialog();
+            newDialog.ID = i + questID;
+
+            string log = Data.GetString(questID + i, "OutPutText");
+
+            log = log.Replace("\\n", "\n");      // 두줄짜리는 한줄로 치환
+            log = log.Replace("#", ",");         // "#" 은 ","
+            log = log.Replace("\\", "");         // 슬래시가 있을 경우 삭제 
+
+            newDialog._log = log.Split("\n");
+            newDialog.log = new Queue(log.Split("\n"));
+
+            DialogData.logs.Add(newDialog);
+        }
+    }
 
 }

@@ -26,15 +26,23 @@ public class BossBullet : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         damageCollider = GetComponent<DamageCollider>();
 
-        rigid.velocity = transform.forward * 10.0f;
+        //rigid.velocity = transform.forward * 10.0f;
         damageCollider.Damage = damage;
 
+        StartCoroutine(DestroyGameObject());
     }
 
     public void GetData(int smallTableID)
     {
         //6910
         damage = (float)DataManager.instance.GetData(smallTableID, "Damage", typeof(float));
+    }
+
+    IEnumerator DestroyGameObject()
+    {
+        yield return new WaitForSeconds(6.0f);
+
+        Destroy(this.gameObject);
     }
 
 

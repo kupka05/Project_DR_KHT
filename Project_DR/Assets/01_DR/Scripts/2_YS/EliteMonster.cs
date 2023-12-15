@@ -380,13 +380,13 @@ public class EliteMonster : Monster
             case 0:
                 GameObject instantBulletLeft = Instantiate(monsterBulletPrefab, bulletPortLeft.position, bulletPortLeft.rotation);
                 MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
-                bulletPortRight.transform.LookAt(playerTr);
-                instantBulletLeft.transform.LookAt(playerTr);
+                //bulletPortRight.transform.LookAt(playerTr);
+                //instantBulletLeft.transform.LookAt(playerTr);
 
-                GameObject instantBulletRight = Instantiate(monsterBulletPrefab, bulletPortRight.position, bulletPortRight.rotation);
+                GameObject instantBulletRight = Instantiate(monsterBulletPrefab, bulletPortRight.position, bulletPortLeft.rotation);
                 MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
-                bulletPortRight.transform.LookAt(playerTr);
-                instantBulletRight.transform.LookAt(playerTr);
+                //bulletPortRight.transform.LookAt(playerTr);
+                //instantBulletRight.transform.LookAt(playerTr);
                 break;
         }
     }
@@ -396,24 +396,24 @@ public class EliteMonster : Monster
         switch(index)
         {
             case 0:
-                GameObject instantBullet = Instantiate(monsterBulletPrefab, bulletPort.position, bulletPort.rotation);
+                GameObject instantBullet = Instantiate(monsterBulletPrefab, bulletPort.position, bulletPortLeft.rotation);
                 MonsterBullet bullet = instantBullet.GetComponent<MonsterBullet>();
-                bulletPort.transform.LookAt(playerTr);
-                instantBullet.transform.LookAt(playerTr);
+                //bulletPort.transform.LookAt(playerTr);
+                //instantBullet.transform.LookAt(playerTr);
                 break;
 
                 case 1:
-                GameObject instantBulletRight = Instantiate(monsterBulletPrefab, bulletPortRight.position, bulletPortRight.rotation);
+                GameObject instantBulletRight = Instantiate(monsterBulletPrefab, bulletPortRight.position, bulletPortLeft.rotation);
                 MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
-                bulletPortRight.transform.LookAt(playerTr);
-                instantBulletRight.transform.LookAt(playerTr);
+                //bulletPortRight.transform.LookAt(playerTr);
+                //instantBulletRight.transform.LookAt(playerTr);
                 break;
 
                 case 2:
                 GameObject instantBulletLeft = Instantiate(monsterBulletPrefab, bulletPortLeft.position, bulletPortLeft.rotation);
                 MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
-                bulletPortRight.transform.LookAt(playerTr);
-                instantBulletLeft.transform.LookAt(playerTr);
+                //bulletPortRight.transform.LookAt(playerTr);
+                //instantBulletLeft.transform.LookAt(playerTr);
                 break;
         }
     }

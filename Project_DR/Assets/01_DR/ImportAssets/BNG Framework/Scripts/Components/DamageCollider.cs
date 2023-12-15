@@ -17,8 +17,6 @@ namespace BNG
         /// </summary>
         public float Damage = 25f;
 
-
-
         /// <summary>
         /// 이 충돌체의 속도를 결정하는 데 사용됩니다.
         /// </summary>

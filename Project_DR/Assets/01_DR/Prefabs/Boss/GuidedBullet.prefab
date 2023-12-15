@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8809067579740100131}
   - component: {fileID: 8809067579740100124}
   - component: {fileID: 8809067579740100125}
-  - component: {fileID: 3853141284801725652}
+  - component: {fileID: 3871417052156705111}
   m_Layer: 0
   m_Name: GuidedBullet
   m_TagString: Untagged
@@ -140,7 +140,7 @@ MonoBehaviour:
   isKnockback: 0
   isBossProjectile: 0
   isEliteProjectile: 0
---- !u!114 &3853141284801725652
+--- !u!114 &3871417052156705111
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,13 +149,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8809067579740100126}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a3cf67ea68e75548b653a0b554e7c09, type: 3}
+  m_Script: {fileID: 11500000, guid: 67ac5153ab85f30458be8ed1e3870b16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageCollider: {fileID: 8809067579740100125}
-  GuidedTableId: 6911
-  target: {fileID: 0}
-  speed: 0
-  turnSpeed: 15
-  damage: 0
-  destoryTime: 0
+  target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0, type: 3}

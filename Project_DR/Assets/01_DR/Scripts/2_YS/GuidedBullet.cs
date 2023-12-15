@@ -1,86 +1,75 @@
 using BNG;
 using UnityEngine;
+using System.Collections;
 
 public class GuidedBullet : MonoBehaviour
 {
     public DamageCollider damageCollider;
-
     public int GuidedTableId;
-
     public Transform target;
 
-    private Vector3 initialDirection;
-    
     [Header("테이블 관련")]
     public float speed = default;
     public float turnSpeed = 15.0f;
     public float damage = default;
     public float destoryTime = default;
 
-    void Awake()
+    private void Awake()
     {
         GetData(GuidedTableId);
     }
 
-    void Start()
+    private void Start()
     {
-        // 플레이어를 찾아서 타겟으로 설정
-        target = GameObject.FindWithTag("Player")?.GetComponent<PlayerPosition>()?.playerPos;
+        target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
 
-        // 타겟이 없을 경우 리턴
         if (target == null)
-        {
             return;
-        }
 
-        // 초기 방향 벡터 계산
-        initialDirection = target.position - transform.position;
-
+        Vector3 initialDirection = target.position - transform.position;
         damageCollider.Damage = damage;
-
-
     }
 
-    void Update()
+    private void Update()
     {
-        Shoot();
+        
     }
 
-    public virtual void GetData(int GuidedTableId)
+    public void GetData(int GuidedTableId)
     {
-        //6911
         damage = (float)DataManager.instance.GetData(GuidedTableId, "Damage", typeof(float));
         destoryTime = (float)DataManager.instance.GetData(GuidedTableId, "DesTime", typeof(float));
         speed = (float)DataManager.instance.GetData(GuidedTableId, "Speed", typeof(float));
-
     }
 
-    void Shoot()
-    {
-        // 초기 방향 벡터의 크기가 0인 경우 리턴
-        if (initialDirection.magnitude == 0f)
-            return;
+    //public void Shoot()
+    //{
+    //    StartCoroutine(MoveTowardsTarget());
+    //}
 
-        float t = speed; // 원하는 시간 비율로 조정할 것
-        transform.position = Vector3.LerpUnclamped(transform.position, target.position, t);
+    //IEnumerator MoveTowardsTarget()
+    //{
+    //    while (target != null)
+    //    {
+    //        Vector3 direction = (target.position - transform.position).normalized;
+    //        float step = speed * Time.deltaTime;
+    //        transform.position = Vector3.MoveTowards(transform.position, target.position, step);
 
-        // Lerp를 이용하여 위치 이동
-        transform.position = Vector3.LerpUnclamped(transform.position, target.position, t);
+    //        Quaternion qua = Quaternion.LookRotation(direction);
+    //        transform.rotation = Quaternion.Slerp(transform.rotation, qua, Time.deltaTime * turnSpeed);
 
-        // 타겟 방향으로 회전
-        Vector3 directionVec = target.position - transform.position;
-        Quaternion qua = Quaternion.LookRotation(directionVec);
-        transform.rotation = Quaternion.Slerp(transform.rotation, qua, Time.deltaTime * turnSpeed);
+    //        // 일정 시간 동안 대기 (예: 0.2초)
+    //        yield return new WaitForSeconds(0.2f);
+    //    }
 
-        Destroy(this.gameObject, destoryTime);
-    }
+    //}
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.CompareTag("Player") || collision.collider.CompareTag("Wall"))
+        if (collision.collider.CompareTag("Player") || collision.collider.CompareTag("Wall"))
         {
-            Destroy(this.gameObject);
-            Debug.Log($"파괴:{this.gameObject}");
+            Destroy(gameObject);
+            Debug.Log($"파괴:{gameObject}");
         }
     }
 }

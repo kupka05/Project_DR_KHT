@@ -33,8 +33,7 @@ public class GoogleSheetLoader : MonoBehaviour
         "BattleRoomObjectCreate_Table","EventRoomObjectCreate_Table","NullRoomObjectCreate_Table",
         "LightObject_Table","EnvObject_Table","MatObject_Table",
 
-        // NPC
-        "NPC_Table", "NPC_Comunication_Table"
+
     };
 
     // 코루틴에서 데이터를 반환하고

@@ -62,18 +62,22 @@ public class LobbyEvent : MonoBehaviour
     private SphereCollider statusCollider;  // 디스플레이 트리거 콜라이더
     [Space(10f)]
 
+    // ################################## 패널 ##############################################
     [Header("Status Pannel")]
     public GameObject selectStatusDis;      // 선택창
     public GameObject playerStatusDis;      // 플레이어 상태창
     public GameObject playerAcceptPannel;   // 확인창
+    [Space(10f)]
     public GameObject weaponStatusDis;      // 무기 상태창
     public GameObject selectSkillStatusDis; // 스킬 선택창
     public GameObject skillStatusDis;       // 스킬 상태창
-
+    [Space(10f)]
     public GameObject skillUpgrade1;       // 스킬 상태창
     public GameObject skillUpgrade2;       // 스킬 상태창
     public GameObject skillUpgrade3;       // 스킬 상태창
     public GameObject skillUpgrade4;       // 스킬 상태창
+
+    // ################################## PC 업그레이드 ##############################################
 
     [Header("Player Status")]
     public TMP_Text playerLevel;
@@ -81,20 +85,16 @@ public class LobbyEvent : MonoBehaviour
     public TMP_Text playerGold;
     public TMP_Text playerExp;
 
-    [Header("Player Upgrade")]
+    [Header("Player Upgrade Button")]
     public LobbyDisplayButton hpUpBtn;      // hp 증가 버튼
     public LobbyDisplayButton goldIncreBtn; // 골드 증가 버튼
     public LobbyDisplayButton expIncreBtn;  // 경험치 증가 버튼
-
+    [Space(10f)]
     public TMP_Text curPlayerHp;
     public TMP_Text beforePlayerHp;
     public TMP_Text afterPlayerHp;
 
-    // 강화 계산용 변수
-    public int hpLv;
-    public int goldLv;
-    public int expLv;
-    public int playerSpendExp;
+    private int playerSpend;
 
     [Header("Gold Upgrade")]
     public TMP_Text curGoldIncre;
@@ -106,10 +106,46 @@ public class LobbyEvent : MonoBehaviour
     public TMP_Text beforeExpIncre;
     public TMP_Text afterExpIncre;
 
-    [Header("Spend Exp")]
-    public TMP_Text curExp;
-    public TMP_Text spendExp;
-    public TMP_Text remainExp;
+    [Header("PC Spend Exp")]
+    public TMP_Text pcCurExp;
+    public TMP_Text pcSpendExp;
+    public TMP_Text pcRemainExp;
+
+    // ################################## 무기 업그레이드 ##############################################
+
+    [Header("Weapon Upgrade")]
+    public LobbyDisplayButton atkUpBtn;         // 공격력 버튼
+    public LobbyDisplayButton critRateUpBtn;    // 치명타 확률 버튼
+    public LobbyDisplayButton critDmgBtn;       // 치명타 데미지 버튼
+    public LobbyDisplayButton atkRateBtn;       // 공격 간격 버튼
+
+
+    [Header("Attack Upgrade")]
+    public TMP_Text curAtk;
+    public TMP_Text beforeAtk;
+    public TMP_Text afterAtk;
+
+    [Header("CritRate Upgrade")]
+    public TMP_Text curCritRate;
+    public TMP_Text beforeCritRate;
+    public TMP_Text afterCritRate;
+
+    [Header("Crit Damage Upgrade")]
+    public TMP_Text curCritDamage;
+    public TMP_Text beforeCritDamage;
+    public TMP_Text afterCritDamage;
+
+    [Header("Attack Rate Upgrade")]
+    public TMP_Text curAtkRate;
+    public TMP_Text beforeAtkRate;
+    public TMP_Text afterAtkRate;
+
+    [Header("Weapon Spend Exp")]
+    public TMP_Text weaponCurExp;
+    public TMP_Text weaponSpendExp;
+    public TMP_Text weaponRemainExp;
+    private int weaponSpend;
+
 
     // ################################## START ##################################
 
@@ -121,11 +157,11 @@ public class LobbyEvent : MonoBehaviour
 
         // 메인 디스플레이 시작 시 세팅
         ChangeDisplayButton("Main");
-        GetNPCDialog();
 
-        // 상태창 시작 시 세팅
+        // PC 상태창 시작 시 세팅
         SetStatusDisplay();
-        SetNpcDialog(targetQuestID);
+
+        // 상태창 디스플레이 시작 시 세팅
         ChangeStatusDisplayButton("Main");    
 
         // 옵저버 등록
@@ -137,16 +173,23 @@ public class LobbyEvent : MonoBehaviour
     // DB에서 데이터 불러오기 완료 후 이벤트로 실행
     public void GetDataFromDB()
     {
-        GetClearData();
+
+        GetNPCDialog();              // NPC 대사 가져오고
+        SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
+        GetClearData();              // 클리어 데이터 가져오기
 
         // 메인 디스플레이의 클리어 데이터 업데이트
         UpdateClearDataUI(clearDatas);            
-
 
         // 상태창 : 플레이어 강화
         UpdatePlayerStatusUI();
         UpdatePlayerUpgradeUI();
         SetPlayerLevelBtn();
+
+        // 상태창 : 무기 강화
+        UpdateWeaponStateUI();
+        UpdateWeaponUpgradeUI();
+        SetWeaponLevelBtn();
     }
 
     // 클리어 데이터 불러오기
@@ -202,44 +245,40 @@ public class LobbyEvent : MonoBehaviour
         curExpIncre.text = UserDataManager.Instance.GainExp.ToString();
         beforeExpIncre.text = UserDataManager.Instance.GainExp.ToString();
 
-        curExp.text = UserDataManager.Instance.Exp.ToString();
-        spendExp.text = 0.ToString();
-        remainExp.text = 0.ToString();
+        pcCurExp.text = UserDataManager.Instance.Exp.ToString();
+        pcSpendExp.text = 0.ToString();
+        pcRemainExp.text = 0.ToString();
 
     }
 
     public void SetPlayerLevelBtn()
     {
-        hpUpBtn.level = UserDataManager.Instance.HPUpgrade;
-        goldIncreBtn.level = UserDataManager.Instance.GainGoldUpgrade;
-        expIncreBtn.level = UserDataManager.Instance.GainExpUpgrade;
+        hpUpBtn.level = UserDataManager.Instance.HPLv;
+        goldIncreBtn.level = UserDataManager.Instance.GainGoldLv;
+        expIncreBtn.level = UserDataManager.Instance.GainExpLv;
     }
     // 플레이어 업그레이드 상태창 UI 업데이트
     public void UpdatePlayerUpgradeUI()
     {        
-        hpLv = hpUpBtn.newLevel-1;
-        goldLv = goldIncreBtn.newLevel-1;
-        expLv = expIncreBtn.newLevel-1;
-
         // 레벨은 0이하로 될 수 없음. 삼항연산자 활용
-        afterPlayerHp.text = MinusCheck(hpLv) ? (UserDataManager.Instance.DefaultHP + UserDataManager.Instance.statData.upgradeHp[hpLv].sum).ToString() : beforePlayerHp.text;
-        afterGoldIncre.text = MinusCheck(goldLv) ? (UserDataManager.Instance.statData.upgradeGainGold[goldLv].sum).ToString() : beforeGoldIncre.text;
-        afterExpIncre.text = MinusCheck(expLv) ? (UserDataManager.Instance.statData.upgradeGainExp[expLv].sum).ToString() : beforeExpIncre.text;
+        afterPlayerHp.text = MinusCheck(hpUpBtn.newLevel - 1) ? (UserDataManager.Instance.DefaultHP + UserDataManager.Instance.statData.upgradeHp[hpUpBtn.newLevel - 1].sum).ToString() : beforePlayerHp.text;
+        afterGoldIncre.text = MinusCheck(goldIncreBtn.newLevel - 1) ? (UserDataManager.Instance.statData.upgradeGainGold[goldIncreBtn.newLevel - 1].sum).ToString() : beforeGoldIncre.text;
+        afterExpIncre.text = MinusCheck(expIncreBtn.newLevel - 1) ? (UserDataManager.Instance.statData.upgradeGainExp[expIncreBtn.newLevel - 1].sum).ToString() : beforeExpIncre.text;
 
-        playerSpendExp = PlayerCalculator();        // 사용 금액
-        spendExp.text = playerSpendExp.ToString();
-        remainExp.text = (UserDataManager.Instance.Exp - playerSpendExp).ToString();       
+        playerSpend = PlayerCalculator();        // 사용 금액
+        pcSpendExp.text = playerSpend.ToString();
+        pcRemainExp.text = (UserDataManager.Instance.Exp - playerSpend).ToString();       
     }
     // 플레이어 업그레이드
     public void PlayerUpgrade()
     {
-        if(playerSpendExp == 0)
+        if(playerSpend == 0)
         {
             return;
         }
 
         // 구매했을 떄 일어나는 이벤트
-        if (playerSpendExp <= UserDataManager.Instance.Exp)
+        if (playerSpend <= UserDataManager.Instance.Exp)
         {
             Debug.Log("구매 완료");
 
@@ -251,7 +290,7 @@ public class LobbyEvent : MonoBehaviour
 
             Debug.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
             // 경험치 소모
-            UserDataManager.Instance.Exp -= playerSpendExp;
+            UserDataManager.Instance.Exp -= playerSpend;
             // 레벨 업데이트
             UserDataManager.Instance.PlayerStatusUpgrade(hpUpBtn.level, goldIncreBtn.level, expIncreBtn.level);               
         }
@@ -266,7 +305,7 @@ public class LobbyEvent : MonoBehaviour
         UserDataManager.Instance.SavePlayerUpgrade();
     }
 
-    // 업그레이드를 위한 계산기
+    // 플레이어 업그레이드를 위한 계산기
     public int PlayerCalculator()
     {
         int result, afterHP, curHP, afterGold, curGold, afterExp, curExp;
@@ -294,6 +333,100 @@ public class LobbyEvent : MonoBehaviour
         else
             return false;
     }
+    #endregion
+
+    #region 무기 업그레이드
+    // 무기 업그레이드 상태 UI 업데이트
+    public void UpdateWeaponStateUI()
+    {
+        curAtk.text = UserDataManager.Instance.weaponAtk.ToString();
+        beforeAtk.text = UserDataManager.Instance.weaponAtk.ToString();
+
+        curCritRate.text = UserDataManager.Instance.weaponCritRate.ToString();
+        beforeCritRate.text = UserDataManager.Instance.weaponCritRate.ToString();
+
+        curCritDamage.text = UserDataManager.Instance.weaponCritDamage.ToString();
+        beforeCritDamage.text = UserDataManager.Instance.weaponCritDamage.ToString();
+
+        curAtkRate.text = UserDataManager.Instance.weaponAtkRate.ToString();
+        beforeAtkRate.text = UserDataManager.Instance.weaponAtkRate.ToString();
+
+        weaponCurExp.text = UserDataManager.Instance.Exp.ToString();
+        weaponSpendExp.text = 0.ToString();
+        weaponRemainExp.text = 0.ToString();
+    }
+
+    public void UpdateWeaponUpgradeUI()
+    {
+        // 레벨은 0이하로 될 수 없음. 삼항연산자 활용
+        afterAtk.text = MinusCheck(atkUpBtn.newLevel - 1) ? (UserDataManager.Instance.weaponAtk + UserDataManager.Instance.statData.upgradeAtk[atkUpBtn.newLevel - 1].sum1).ToString() : beforeAtk.text;
+        afterCritRate.text = MinusCheck(critRateUpBtn.newLevel - 1) ? (UserDataManager.Instance.weaponCritRate + UserDataManager.Instance.statData.upgradeCrit[critRateUpBtn.newLevel - 1].sum1).ToString() : beforeCritRate.text;
+        afterCritDamage.text = MinusCheck(critDmgBtn.newLevel - 1) ? (UserDataManager.Instance.weaponCritDamage + UserDataManager.Instance.statData.upgradeCritDmg[critDmgBtn.newLevel - 1].sum1).ToString() : beforeCritDamage.text;
+        afterAtkRate.text = MinusCheck(atkRateBtn.newLevel - 1) ? (UserDataManager.Instance.weaponAtkRate + UserDataManager.Instance.statData.upgradeAtkSpd[atkRateBtn.newLevel - 1].sum1).ToString() : beforeAtkRate.text;
+
+        weaponSpend = WeaponCalculator();        // 사용 금액
+        weaponSpendExp.text = weaponSpend.ToString();
+        weaponRemainExp.text = (UserDataManager.Instance.Exp - weaponSpend).ToString();
+    }
+    public void SetWeaponLevelBtn()
+    {
+        atkUpBtn.level = UserDataManager.Instance.WeaponAtkLv;
+        critRateUpBtn.level = UserDataManager.Instance.WeaponCriDamageLv;
+        critDmgBtn.level = UserDataManager.Instance.WeaponCriDamageLv;
+        atkRateBtn.level = UserDataManager.Instance.WeaponAtkRateLv;
+    }
+    public int WeaponCalculator()
+    {
+        int result, afterAtk, curAtk, afterCritRate, curCritRate, afterCritDmg, curCritDmg, afterAtkRate ,curAtkRate;        // 계산식 필요
+
+        afterAtk = MinusCheck(atkUpBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeAtk[atkUpBtn.newLevel - 1].totalExp : 0;
+        curAtk = MinusCheck(atkUpBtn.level - 1) ? UserDataManager.Instance.statData.upgradeAtk[atkUpBtn.level - 1].totalExp : 0;
+        afterCritRate = MinusCheck(critRateUpBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeCrit[critRateUpBtn.newLevel - 1].totalExp : 0;
+        curCritRate = MinusCheck(critRateUpBtn.level - 1) ? UserDataManager.Instance.statData.upgradeCrit[critRateUpBtn.level - 1].totalExp : 0;
+        afterCritDmg = MinusCheck(critDmgBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeCritDmg[critDmgBtn.newLevel - 1].totalExp : 0;
+        curCritDmg = MinusCheck(critDmgBtn.level - 1) ? UserDataManager.Instance.statData.upgradeCritDmg[critDmgBtn.level - 1].totalExp : 0;
+        afterAtkRate = MinusCheck(atkRateBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeAtkSpd[atkRateBtn.newLevel - 1].totalExp : 0;
+        curAtkRate = MinusCheck(atkRateBtn.level - 1) ? UserDataManager.Instance.statData.upgradeAtkSpd[atkRateBtn.level - 1].totalExp : 0;
+
+        result = (afterAtk - curAtk) + (afterCritRate - curCritRate) + (afterCritDmg - curCritDmg) + (afterAtkRate - curAtkRate);
+        return result;
+    }
+
+    public void WEaponUpgrade()
+    {
+        if (weaponSpend == 0)
+        {
+            return;
+        }
+        //ToDo 업그레이드 작성 필요
+        //// 구매했을 떄 일어나는 이벤트
+        //if (weaponSpend <= UserDataManager.Instance.Exp)
+        //{
+        //    Debug.Log("구매 완료");
+
+        //    Debug.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
+        //    // 업그레이드 레벨을 새 레벨로 적용
+        //    hpUpBtn.level = hpUpBtn.newLevel;
+        //    goldIncreBtn.level = goldIncreBtn.newLevel;
+        //    expIncreBtn.level = expIncreBtn.newLevel;
+
+        //    Debug.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
+        //    // 경험치 소모
+        //    UserDataManager.Instance.Exp -= playerSpend;
+        //    // 레벨 업데이트
+        //    UserDataManager.Instance.PlayerStatusUpgrade(hpUpBtn.level, goldIncreBtn.level, expIncreBtn.level);
+        //}
+        //else
+        //{
+        //    Debug.Log("경험치가 부족합니다.");
+        //    return;
+        //}
+        //UpdatePlayerStatusUI();
+        //UpdatePlayerUpgradeUI();
+        //ChangeStatusDisplayButton("Player");
+        //UserDataManager.Instance.SavePlayerUpgrade();
+    }
+
     #endregion
 
     // 클리어 UI 업데이트 가져오기
@@ -371,9 +504,9 @@ public class LobbyEvent : MonoBehaviour
         statusDisplay.transform.position = new Vector3(statusPos.position.x + 0.5f, statusPos.position.y + 0.6f, statusPos.position.z);
 
         // PC 업그레이드 레벨 업데이트
-        hpUpBtn.level = UserDataManager.Instance.HPUpgrade;
-        goldIncreBtn.level = UserDataManager.Instance.GainGoldUpgrade;
-        expIncreBtn.level = UserDataManager.Instance.GainExpUpgrade;
+        hpUpBtn.level = UserDataManager.Instance.HPLv;
+        goldIncreBtn.level = UserDataManager.Instance.GainGoldLv;
+        expIncreBtn.level = UserDataManager.Instance.GainExpLv;
     }
 
     // 상태창 패널 변경 버튼
@@ -459,13 +592,14 @@ public class LobbyEvent : MonoBehaviour
             dialog.log.Dequeue();
         }
         else
-            Debug.Log("대사 ID를 찾지 못했습니다.");
+            Debug.Log("대사 ID를 찾지 못했습니다." + target);
     }
 
     // 이진 탐색 트리 ID 찾아오기
     int BinarySearch(List<NpcDialog> list, int first, int last, int target)
     {
-        int mid;                         // 중간 값 초기화
+        int mid;       
+        // 중간 값 초기화
         if (first > last)                // 만약 첫 숫자가 마지막 숫자보다 작을 경우
         {   
             return -1;                   // -1을 반환 : 탐색 실패를 의미

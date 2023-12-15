@@ -10,7 +10,8 @@ public class LobbyDisplayButton : MonoBehaviour
     public enum ButtonType
     {
         Default,
-        PlayerStatus
+        PlayerStatus,
+        Weapon
     }
 
     public ButtonType type = ButtonType.Default;
@@ -54,12 +55,27 @@ public class LobbyDisplayButton : MonoBehaviour
                 afterValue.SetActive(false);
                 acceptPannel.SetActive(false);
 
+                lobbyEvent?.UpdatePlayerUpgradeUI();
+                lobbyEvent?.SetPlayerLevelBtn();
+                newLevel = level;
+                break;
+
+            case ButtonType.Weapon:
+                leftButton.SetActive(false);
+                rightButton.SetActive(false);
+                if (beforeValue)
+                    beforeValue.SetActive(true);
+                if (afterValue)
+                    afterValue.SetActive(false);
+                acceptPannel.SetActive(false);
+
+                lobbyEvent?.UpdateWeaponUpgradeUI();
+                lobbyEvent?.SetWeaponLevelBtn();
                 newLevel = level;
                 break;
 
         }
-        lobbyEvent?.UpdatePlayerUpgradeUI();
-        lobbyEvent?.SetPlayerLevelBtn();
+
         isActive = false;
 
     }

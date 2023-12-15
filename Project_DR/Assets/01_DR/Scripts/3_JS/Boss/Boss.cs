@@ -67,9 +67,9 @@ namespace BossMonster
             // 초기 상태 변경
             _currentState = _idleState;
             // 대기 상태 진입
-            _currentState.EnterState(this);
+            _currentState.EnterState();
             // 상태 업데이트
-            _currentState.UpdateState(this);
+            _currentState.UpdateState();
 
             // 보스 소환석 생성 및 Init
             CreateSummoningStone();
@@ -128,17 +128,17 @@ namespace BossMonster
             if (_currentState != null)
             {
                 // 상태 나가기
-                _currentState.ExitState(this);
+                _currentState.ExitState();
             }
 
             // 상태 변경
             _currentState = state;
 
             // 상태 진입
-            _currentState.EnterState(this);
+            _currentState.EnterState();
 
             // 상태 업데이트
-            _currentState.UpdateState(this);
+            _currentState.UpdateState();
         }
 
 

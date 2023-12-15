@@ -46,7 +46,7 @@ namespace BossMonster
         [SerializeField] private float _def;
         [SerializeField] private float _giveEXP;
         [SerializeField] private int _giveGold;
-        [SerializeField] private float _patternInterval = 2.0f;
+        [SerializeField] private float _patternInterval = 3.0f;                 // 3.0f는 오류 대비 값, 실제 값은 GetData로 가져온다.
         [SerializeField] private int _attackAnimationRange;
         [SerializeField] private Rigidbody _rigidBody;
         [SerializeField] private Damageable _damageable;
@@ -74,6 +74,7 @@ namespace BossMonster
             _giveGold = Data.GetInt(id, "GiveGold");
             _giveEXP = Data.GetFloat(id, "GiveEXP");
             _attackAnimationRange = Data.GetInt(id, "AttackAnimationRange");
+            _patternInterval = Data.GetFloat(id, "AttackPatternInterval");
             for (int i = 0; i < _phaseAttackPatternCounts.Length; i++)
             {
                 int index = i + 1;

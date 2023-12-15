@@ -4,6 +4,11 @@ using UnityEngine;
 
 public static class UserData
 {
+    public static int GetExp()
+    {
+        return UserDataManager.Instance.Exp;
+    }
+
     // 골드 관리
     public static void AddGold(int value)
     {

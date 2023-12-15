@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 203844588}
-  m_IndirectSpecularColor: {r: 0.0014926303, g: 0.001392539, b: 0.0013206189, a: 1}
+  m_IndirectSpecularColor: {r: 0.0014834992, g: 0.0013713579, b: 0.0013408005, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1933,7 +1933,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &95631384
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2105,7 +2105,7 @@ PrefabInstance:
     - target: {fileID: 7837797319980225010, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0038210165
+      value: -0.0038709145
       objectReference: {fileID: 0}
     - target: {fileID: 7837797319993773063, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -2155,7 +2155,7 @@ PrefabInstance:
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.00084836525
+      value: -0.000771271
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -6819,14 +6819,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 2
   leftButton: {fileID: 1088196350}
   rightButton: {fileID: 2018430753}
   acceptPannel: {fileID: 345851851}
   beforeValue: {fileID: 0}
   afterValue: {fileID: 0}
   index: 10
-  level: 5
+  level: 0
   newLevel: 0
   contentPos: {fileID: 1974216585}
   item: {fileID: 500682381}
@@ -8500,14 +8500,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 3
   leftButton: {fileID: 1349047063}
   rightButton: {fileID: 192045469}
   acceptPannel: {fileID: 738307430}
   beforeValue: {fileID: 0}
   afterValue: {fileID: 0}
   index: 10
-  level: 2
+  level: 0
   newLevel: 0
   contentPos: {fileID: 755431155}
   item: {fileID: 716805896}
@@ -8884,6 +8884,7 @@ GameObject:
   - component: {fileID: 345851852}
   - component: {fileID: 345851854}
   - component: {fileID: 345851853}
+  - component: {fileID: 345851855}
   m_Layer: 5
   m_Name: Upgrade Accept
   m_TagString: Untagged
@@ -8954,6 +8955,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 345851851}
   m_CullTransparentMesh: 1
+--- !u!114 &345851855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345851851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74d0759a925913419ac603b474cc4ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curExp: {fileID: 1958788131}
+  spendExp: {fileID: 989910399}
+  remainExp: {fileID: 1719455158}
+  spendExpValue: 0
 --- !u!1 &346509773
 GameObject:
   m_ObjectHideFlags: 0
@@ -12036,14 +12053,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 3
   leftButton: {fileID: 978163095}
   rightButton: {fileID: 1211658253}
   acceptPannel: {fileID: 1202036750}
   beforeValue: {fileID: 0}
   afterValue: {fileID: 0}
   index: 10
-  level: 5
+  level: 0
   newLevel: 0
   contentPos: {fileID: 1497101089}
   item: {fileID: 416788898}
@@ -12241,7 +12258,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SelectSkill
+          m_StringArgument: Skill4
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &441185838
@@ -13073,14 +13090,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 3
   leftButton: {fileID: 1634104877}
   rightButton: {fileID: 247677714}
   acceptPannel: {fileID: 1202036750}
   beforeValue: {fileID: 0}
   afterValue: {fileID: 0}
   index: 10
-  level: 2
+  level: 0
   newLevel: 0
   contentPos: {fileID: 620836685}
   item: {fileID: 1686910740}
@@ -20063,6 +20080,7 @@ GameObject:
   - component: {fileID: 738307431}
   - component: {fileID: 738307433}
   - component: {fileID: 738307432}
+  - component: {fileID: 738307434}
   m_Layer: 5
   m_Name: Upgrade Accept
   m_TagString: Untagged
@@ -20133,6 +20151,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 738307430}
   m_CullTransparentMesh: 1
+--- !u!114 &738307434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738307430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74d0759a925913419ac603b474cc4ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curExp: {fileID: 889903708}
+  spendExp: {fileID: 741029535}
+  remainExp: {fileID: 2135981139}
+  spendExpValue: 0
 --- !u!1 &738764610
 GameObject:
   m_ObjectHideFlags: 0
@@ -23817,14 +23851,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 2
   leftButton: {fileID: 1035288703}
   rightButton: {fileID: 567728548}
   acceptPannel: {fileID: 345851851}
   beforeValue: {fileID: 0}
   afterValue: {fileID: 0}
   index: 10
-  level: 2
+  level: 0
   newLevel: 0
   contentPos: {fileID: 1416341145}
   item: {fileID: 1605520975}
@@ -35230,6 +35264,7 @@ GameObject:
   - component: {fileID: 1202036751}
   - component: {fileID: 1202036753}
   - component: {fileID: 1202036752}
+  - component: {fileID: 1202036754}
   m_Layer: 5
   m_Name: Upgrade Accept
   m_TagString: Untagged
@@ -35300,6 +35335,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1202036750}
   m_CullTransparentMesh: 1
+--- !u!114 &1202036754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1202036750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74d0759a925913419ac603b474cc4ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curExp: {fileID: 1177925513}
+  spendExp: {fileID: 87381459}
+  remainExp: {fileID: 1441504468}
+  spendExpValue: 0
 --- !u!1 &1202805723
 GameObject:
   m_ObjectHideFlags: 0
@@ -40672,7 +40723,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SelectSkill
+          m_StringArgument: Skill1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &1360701702
@@ -46875,14 +46926,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 3
   leftButton: {fileID: 147551102}
   rightButton: {fileID: 1514753343}
   acceptPannel: {fileID: 1999658571}
   beforeValue: {fileID: 0}
   afterValue: {fileID: 0}
   index: 10
-  level: 2
+  level: 0
   newLevel: 0
   contentPos: {fileID: 499191357}
   item: {fileID: 805212731}
@@ -49211,14 +49262,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 3
   leftButton: {fileID: 2101281381}
   rightButton: {fileID: 964211809}
   acceptPannel: {fileID: 738307430}
   beforeValue: {fileID: 0}
   afterValue: {fileID: 0}
   index: 10
-  level: 5
+  level: 0
   newLevel: 0
   contentPos: {fileID: 491592147}
   item: {fileID: 940711349}
@@ -62291,7 +62342,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SelectSkill
+          m_StringArgument: Skill2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &1911137392
@@ -62541,6 +62592,18 @@ MonoBehaviour:
   weaponCurExp: {fileID: 1056185948}
   weaponSpendExp: {fileID: 356516135}
   weaponRemainExp: {fileID: 1818277040}
+  skill1_AtkUpBtn: {fileID: 0}
+  skill1_speedUpBtn: {fileID: 0}
+  skill1_Up: {fileID: 0}
+  skill2_AtkUpBtn: {fileID: 0}
+  skill2_speedUpBtn: {fileID: 0}
+  skill2_Up: {fileID: 0}
+  skill3_AtkUpBtn: {fileID: 0}
+  skill3_speedUpBtn: {fileID: 0}
+  skill3_Up: {fileID: 0}
+  skill4_AtkUpBtn: {fileID: 0}
+  skill4_speedUpBtn: {fileID: 0}
+  skill4_Up: {fileID: 0}
 --- !u!4 &1920788382
 Transform:
   m_ObjectHideFlags: 0
@@ -65627,6 +65690,7 @@ GameObject:
   - component: {fileID: 1999658572}
   - component: {fileID: 1999658574}
   - component: {fileID: 1999658573}
+  - component: {fileID: 1999658575}
   m_Layer: 5
   m_Name: Upgrade Accept
   m_TagString: Untagged
@@ -65697,6 +65761,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1999658571}
   m_CullTransparentMesh: 1
+--- !u!114 &1999658575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999658571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e74d0759a925913419ac603b474cc4ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curExp: {fileID: 2067394694}
+  spendExp: {fileID: 2025599018}
+  remainExp: {fileID: 2104628652}
+  spendExpValue: 0
 --- !u!1 &2004330816
 GameObject:
   m_ObjectHideFlags: 0
@@ -66460,14 +66540,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 2
   leftButton: {fileID: 964655888}
   rightButton: {fileID: 899322148}
   acceptPannel: {fileID: 345851851}
   beforeValue: {fileID: 0}
   afterValue: {fileID: 0}
   index: 10
-  level: 2
+  level: 0
   newLevel: 0
   contentPos: {fileID: 1325030095}
   item: {fileID: 1271348035}
@@ -66596,7 +66676,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SelectSkill
+          m_StringArgument: Skill3
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &2034391500
@@ -68592,14 +68672,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 3
   leftButton: {fileID: 1899051558}
   rightButton: {fileID: 1649321980}
   acceptPannel: {fileID: 1202036750}
   beforeValue: {fileID: 0}
   afterValue: {fileID: 0}
   index: 10
-  level: 2
+  level: 0
   newLevel: 0
   contentPos: {fileID: 582654351}
   item: {fileID: 1353642330}

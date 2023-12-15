@@ -11,7 +11,8 @@ public class LobbyDisplayButton : MonoBehaviour
     {
         Default,
         PlayerStatus,
-        Weapon
+        Weapon,
+        Skill
     }
 
     public ButtonType type = ButtonType.Default;
@@ -74,6 +75,13 @@ public class LobbyDisplayButton : MonoBehaviour
                 newLevel = level;
                 break;
 
+            case ButtonType.Skill:
+                leftButton.SetActive(false);
+                rightButton.SetActive(false);
+                acceptPannel.SetActive(false);
+
+                newLevel = level;
+                break;
         }
 
         isActive = false;

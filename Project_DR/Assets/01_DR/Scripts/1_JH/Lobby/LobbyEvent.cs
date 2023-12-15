@@ -112,8 +112,7 @@ public class LobbyEvent : MonoBehaviour
     public LobbyDisplayButton atkUpBtn;         // 공격력 버튼
     public LobbyDisplayButton critRateUpBtn;    // 치명타 확률 버튼
     public LobbyDisplayButton critDmgBtn;       // 치명타 데미지 버튼
-    public LobbyDisplayButton atkRateBtn;       // 공격 간격 버튼
-
+    public LobbyDisplayButton atkRateBtn;       // 공격 간격 버튼     
 
     [Header("Attack Upgrade")]
     public TMP_Text curAtk;
@@ -140,6 +139,30 @@ public class LobbyEvent : MonoBehaviour
     public TMP_Text weaponSpendExp;
     public TMP_Text weaponRemainExp;
     private int weaponSpend;
+    // ################################## 스킬 업그레이드 ##############################################
+
+    [Header("Skill1 Upgrade")]
+    public LobbyDisplayButton skill1Btn1;        
+    public LobbyDisplayButton skill1Btn2;
+    public UpgradeUI skill1_Up;
+
+    [Header("Skill2 Upgrade")]
+    public LobbyDisplayButton skill2Btn1;
+    public LobbyDisplayButton skill2Btn2;
+    public LobbyDisplayButton skill2Btn3;
+    public UpgradeUI skill2_Up;
+
+
+    [Header("Skill3 Upgrade")]
+    public LobbyDisplayButton skill3Btn;
+    public UpgradeUI skill3_Up;
+
+
+    [Header("Skill4 Upgrade")]
+    public LobbyDisplayButton skill4Btn1;
+    public LobbyDisplayButton skill4Btn2;
+    public LobbyDisplayButton skill4Btn3;
+    public UpgradeUI skill4_Up;
 
 
     private bool isClear; // 클리어 여부 확인
@@ -187,6 +210,10 @@ public class LobbyEvent : MonoBehaviour
         UpdateWeaponStateUI();
         UpdateWeaponUpgradeUI();
         SetWeaponLevelBtn();
+
+        // 상태창 : 스킬 강화
+        InitializeSkillStatusUI();  // 스킬 강화 확인 초기화
+        SetSkillLevelBtn();
 
         isClear = UserDataManager.Instance.isClear;
     }
@@ -442,6 +469,43 @@ public class LobbyEvent : MonoBehaviour
 
     #endregion
 
+
+    #region 스킬 업그레이드
+    public void InitializeSkillStatusUI()
+    {
+        // 업그레이드 확인 버튼 초기화
+        skill1_Up.Initialize();
+        skill2_Up.Initialize();
+        skill3_Up.Initialize();
+        skill4_Up.Initialize();
+    }
+
+    /// <summary> 불러온 스킬 레벨 세팅을 해주는 메서드 </summary>
+    public void SetSkillLevelBtn()
+    {
+        //ToDo . 데이터 베이스에 테이블 추가하고, 데이터 불러오기
+
+        skill1Btn1.level = 0;
+        skill1Btn2.level = 0;
+
+        skill2Btn1.level = 0;
+        skill2Btn2.level = 0;
+        skill2Btn3.level = 0;
+
+        skill3Btn.level = 0;
+
+        skill4Btn1.level = 0;
+        skill4Btn2.level = 0;
+        skill4Btn3.level = 0;
+    }
+
+    public void UpgradeSkill()
+    {
+
+    }
+
+    #endregion
+
     // 클리어 UI 업데이트 가져오기
     public void UpdateClearDataUI(string[] clearDataList)
     {
@@ -455,30 +519,6 @@ public class LobbyEvent : MonoBehaviour
             clearData.SetActive(true);
         }
     }
-
-    // 클리어 데이터 저장 테스트
-    //public void SaveTest()
-    //{
-    //    string[] mbti = { "ISTJ", "ISTP", "ISFJ", "ISFP", "INTJ", "INTP", "INFJ", "INFP", "ESTJ", "ESTP", "ESFJ", "ESFP", "ENTJ", "ENTP", "ENTJ", "ENFP" };
-    //    int rand = Random.Range(0, 16);
-    //    UserDataManager.Instance.SaveClearData(mbti[rand]);
-
-    //    GameObject clearData;
-    //    clearData = Instantiate(clearDataObj, clearDataObj.transform.position, clearDataObj.transform.rotation, contentPos);      // 클리어 데이터 추가
-    //    clearData.transform.localScale = Vector3.one;
-
-    //    string Date = UserDataManager.Instance.clearDatas.list[clearDatas.Length].Date;
-    //    string MBTI = UserDataManager.Instance.clearDatas.list[clearDatas.Length].MBTI;
-
-
-    //    //TODO : 스트링빌더로 업데이트
-    //    // 아래 형식으로 데이터 변환
-    //    // 2023/11/21 08:23 0회차 MBTI INFP 
-    //    string txt = $"{Date} | {clearDatas.Length} 회차 | MBTI {MBTI}";
-
-    //    clearData.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = txt;
-    //    clearData.SetActive(true);
-    //}
 
     // ############################### 메인 디스플레이 ###############################
     #region 메인 디스플레이

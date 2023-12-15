@@ -9,6 +9,7 @@ using UnityEngine.Events;
 using Unity.VisualScripting;
 using Rito.InventorySystem;
 using static StatusData;
+using OVR.OpenVR;
 
 [System.Serializable]
 public class ClearDatas
@@ -65,23 +66,17 @@ public class UserDataManager : MonoBehaviour
 
     [Header("User Data")]           // 유저 데이터
     public string PlayerID;
-    public float DefaultHP;         // 초기 체력
-    public float HP;                // 업그레이드 반영된 체력
-    public float GainGold;
-    public float GainExp;
-
     [SerializeField]
     private int _Level;
-    public int Level 
+    public int Level
     {
         get { return _Level; }
         set
         {
-            _Level = HPUpgrade + GainGoldUpgrade + GainExpUpgrade ;
+            _Level = value;
             OnUserDataUpdate?.Invoke();
         }
     }
-
     [SerializeField]
     private int _Exp;
     public int Exp // 플레이어 현재 경험치
@@ -93,7 +88,6 @@ public class UserDataManager : MonoBehaviour
             OnUserDataUpdate?.Invoke();
         }
     }
-
     [SerializeField]
     private int _Gold;
     public int Gold  // 플레이어 현재 골드
@@ -106,27 +100,58 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
+    [Header("PC Data")]           // PC 데이터
+    public float DefaultHP;         // 초기 체력
+    public float HP;                // 업그레이드 반영된 체력
+    public float GainGold;
+    public float GainExp;
+
     [Header("PC Status Data")]      // PC 스탯 업그레이드 데이터
     [SerializeField]
-    private int _HPUpgrade;
-    public int HPUpgrade  // 플레이어 체력
+    private int _HPLv;
+    public int HPLv  // 플레이어 체력
     {
-        get { return _HPUpgrade; }
+        get { return _HPLv; }
         set
         {
-            _HPUpgrade = value;
+            _HPLv = value;
             OnUserDataUpdate?.Invoke();
         }
     }
-    public int GainExpUpgrade;         // 플레이어 경험치 증가량
-    public int GainGoldUpgrade;        // 플레이어 골드 증가량
+    [SerializeField]
+    private int _GainGoldLv;
+    public int GainGoldLv        // 플레이어 골드 증가량
+    {
+        get { return _GainGoldLv; }
+        set
+        {
+            _GainGoldLv = value;
+            OnUserDataUpdate?.Invoke();
+        }
+    }
+    [SerializeField]
+    private int _GainExpLv;
+    public int GainExpLv         // 플레이어 경험치 증가량
+    {
+        get { return _GainExpLv; }
+        set
+        {
+            _GainExpLv = value;
+            OnUserDataUpdate?.Invoke();
+        }
+    }
 
 
     [Header("Weapon Data")]
-    public int WeaponAtk;           // 공격력
-    public int WeaponCriRate;       // 치명타 확률
-    public int WeaponCriDamage;     // 치명타 증가율
-    public int WeaponAtkRate;       // 공격 속도
+    public float weaponAtk;
+    public float weaponCritRate;
+    public float weaponCritDamage;
+    public float weaponAtkRate;
+
+    public int WeaponAtkLv;           // 공격력
+    public int WeaponCriRateLv;       // 치명타 확률
+    public int WeaponCriDamageLv;     // 치명타 증가율
+    public int WeaponAtkRateLv;       // 공격 속도
 
     [Header("Skill Data")]
     public int TeraLv;                // 테라드릴 레벨
@@ -154,6 +179,7 @@ public class UserDataManager : MonoBehaviour
             }
         }
     }
+    private string decodedString;
 
     [Header("Setting Data")]          // 환경 설정
     public float rotationAmount = 45f;
@@ -167,7 +193,8 @@ public class UserDataManager : MonoBehaviour
     public static Item[] items = new Item[Inventory.MaxCapacity];
 
     [Header("Reference Data")]
-    public StatData statData;   // 업그레이드 스탯 정보가 담긴 데이터
+    private StatusData  statusData = new StatusData();
+    public StatData statData = new StatData();   // 업그레이드 스탯 정보가 담긴 데이터
     #endregion
 
     // ####################### Awake #######################
@@ -183,19 +210,25 @@ public class UserDataManager : MonoBehaviour
         else
         { Destroy(gameObject); }
 
-        SetDebugData();
+        //SetDebugData();
         Debug.Log("데이터 요청 시간 : " + GetCurrentDate());
 
         GetReferenceData();
         PlayerDataManager.Update(true); // 데이터 요청
     }
+    public void Update()
+    {
+        if(Input.GetKeyDown("r"))
+        {
+            SetDebugData();
+        }
+    }
 
     // ####################### 데이터 로드 #######################
-    
+
     // 참조 데이터 로드
     public void GetReferenceData()
     {
-        StatusData statusData = new StatusData();
         statusData.GetData(statData);
     }
 
@@ -206,49 +239,79 @@ public class UserDataManager : MonoBehaviour
         Gold = PlayerDataManager.Gold;
         Exp = PlayerDataManager.Exp;
 
-        // 업그레이드 먼저 불러오기
-        HPUpgrade = PlayerDataManager.HP;
-        GainGoldUpgrade = PlayerDataManager.GoldIncrease;
-        GainExpUpgrade = PlayerDataManager.ExpIncrease;
+        // ######################### PC 업그레이드 #########################
+        HPLv = PlayerDataManager.HP;
+        GainGoldLv = PlayerDataManager.GoldIncrease;
+        GainExpLv = PlayerDataManager.ExpIncrease;
 
         // HP 업그레이드 세팅
-        DefaultHP = (float)DataManager.instance.GetData(1001, "Health", typeof(float));
+        DefaultHP = Data.GetFloat(1001, "Health");
         HP = DefaultHP;
-        if(HPUpgrade != 0)
+        if(HPLv != 0)
         {
-            HP = DefaultHP + statData.upgradeHp[HPUpgrade-1].sum;
+            HP = DefaultHP + statData.upgradeHp[HPLv-1].sum;
         }
         // 골드 획득량 업그레이드 세팅
-        if (GainGoldUpgrade != 0)
+        if (GainGoldLv != 0)
         {
-            GainGold += statData.upgradeGainGold[GainGoldUpgrade-1].sum;
+            GainGold = statData.upgradeGainGold[GainGoldLv-1].sum;
         }
         // 경험치 획득량 업그레이드 세팅
-        if (GainExpUpgrade != 0)
+        if (GainExpLv != 0)
         {
-            GainExp = statData.upgradeGainExp[GainExpUpgrade-1].sum;
+            GainExp = statData.upgradeGainExp[GainExpLv-1].sum;
         }
 
-        WeaponAtk = PlayerDataManager.WeaponAtk;
-        WeaponCriRate = PlayerDataManager.WeaponCriRate;
-        WeaponCriDamage = PlayerDataManager.WeaponCriDamage;
-        WeaponAtkRate = PlayerDataManager.WeaponAtkRate;
+        // 총 레벨
+        Level = (HPLv + GainGoldLv + GainExpLv);
+
+        // ######################### 무기 업그레이드 #########################
+
+        WeaponAtkLv = PlayerDataManager.WeaponAtk;
+        WeaponCriRateLv = PlayerDataManager.WeaponCriRate;
+        WeaponCriDamageLv = PlayerDataManager.WeaponCriDamage;
+        WeaponAtkRateLv = PlayerDataManager.WeaponAtkRate;
+
+        weaponAtk = Data.GetFloat(1100, "Damage");
+        weaponCritRate = Data.GetFloat(1100, "CritChance");
+        weaponCritDamage = Data.GetFloat(1100, "CritIncrease");
+        weaponAtkRate = Data.GetFloat(1100, "AttackSpeed");
+
+        if(WeaponAtkLv != 0)
+        {
+            weaponAtk = Data.GetFloat(1100, "Damage") + statData.upgradeAtk[WeaponAtkLv - 1].sum1;
+        }
+        if(WeaponCriRateLv != 0)
+        {
+            weaponCritRate = Data.GetFloat(1100, "CritChance") + statData.upgradeCrit[WeaponCriRateLv - 1].sum1;
+        }
+        if(WeaponCriDamageLv != 0)
+        {
+            weaponCritDamage = Data.GetFloat(1100, "CritIncrease") + statData.upgradeCritDmg[WeaponCriDamageLv - 1].sum1;
+        }
+        if(WeaponAtkRateLv != 0)
+        {
+            weaponAtkRate = Data.GetFloat(1100, "AttackSpeed") + statData.upgradeAtkSpd[WeaponAtkRateLv - 1].sum1;
+        }
+
+        // ######################### 스킬 업그레이드 #########################
 
         TeraLv = PlayerDataManager.SkillLevel1;
         GrinderLv = PlayerDataManager.SkillLevel2;
         CrashLv = PlayerDataManager.SkillLevel3;
         LandingLv = PlayerDataManager.SkillLevel4;
 
-        // 총 레벨
-        Level = (HPUpgrade + GainGoldUpgrade + GainExpUpgrade);
+        // ######################### ETC #########################
 
         QuestMain = PlayerDataManager.QuestMain;
         ClearCount = PlayerDataManager.ClearCount;
 
+        // ######################### 클리어 데이터 #########################
+
         JsonData = PlayerDataManager.ClearMBTIValue;
 
         // json으로 변환된 string은 .NET Framework 디코딩이 필요
-        string decodedString = System.Web.HttpUtility.UrlDecode(JsonData);
+        decodedString = System.Web.HttpUtility.UrlDecode(JsonData);
 
         clearDatas = JsonUtility.FromJson<ClearDatas>(decodedString);
 
@@ -271,6 +334,7 @@ public class UserDataManager : MonoBehaviour
     }
     IEnumerator CheckData(Action action)
     {
+        yield return new WaitForSeconds(0.1f);
         if (dataLoadSuccess)
         {
             Debug.Log(action + "데이터 로드 완료");
@@ -308,11 +372,13 @@ public class UserDataManager : MonoBehaviour
         return DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
     }
 
-    // 클리어 저장
-    // TODO : 플레이어 클리어시 저장하는 유저 데이터
-    public void SavePlayerData()
+    // 플레이어 업그레이드 세이브
+    public void SavePlayerUpgrade()
     {
-
+        PlayerDataManager.Save("exp", Exp);
+        PlayerDataManager.Save("hp", HPLv);
+        PlayerDataManager.Save("gold_increase", GainGoldLv);
+        PlayerDataManager.Save("exp_increase", GainExpLv);
     }
 
 
@@ -320,18 +386,50 @@ public class UserDataManager : MonoBehaviour
     public void SetDebugData()
     {
         PlayerDataManager.Save("hp", 0);
-        PlayerDataManager.Save("gold", 5000);
-        PlayerDataManager.Save("exp", 5000);
-        PlayerDataManager.Save("gold_increase", 3);
-        PlayerDataManager.Save("exp_increase", 9);
+        PlayerDataManager.Save("gold", 100000);
+        PlayerDataManager.Save("exp", 100000);
+        PlayerDataManager.Save("gold_increase", 0);
+        PlayerDataManager.Save("exp_increase", 0);
 
-        PlayerDataManager.Save("weapon_atk", 3);
-        PlayerDataManager.Save("weapon_cri_rate", 5);
-        PlayerDataManager.Save("weapon_cri_damage", 9);
-        PlayerDataManager.Save("weapon_atk_rate", 10);
+        PlayerDataManager.Save("weapon_atk", 0);
+        PlayerDataManager.Save("weapon_cri_rate", 0);        
+        PlayerDataManager.Save("weapon_cri_damage", 0);
+        PlayerDataManager.Save("weapon_atk_rate", 0);
+
+        PlayerDataManager.Update(true);
     }
 
     // #######################  PC 데이터 세팅  ####################### \\
+
+    public void PlayerStatusUpgrade(int hpLv, int gainGoldLv, int gainExpLv)
+    {
+        int newHpLv = hpLv;
+        int newGainGoldLv = gainGoldLv;
+        int newgainExpLv = gainExpLv;
+
+        HPLv = newHpLv;
+        GainGoldLv = newGainGoldLv;
+        GainExpLv = newgainExpLv;
+
+        Level = HPLv + GainGoldLv + GainExpLv;
+
+        HP = DefaultHP;
+        if (HPLv != 0)
+        {
+            HP = DefaultHP + statData.upgradeHp[HPLv - 1].sum;
+        }
+        // 골드 획득량 업그레이드 세팅
+        if (GainGoldLv != 0)
+        {
+            GainGold = statData.upgradeGainGold[GainGoldLv - 1].sum;
+        }
+        // 경험치 획득량 업그레이드 세팅
+        if (GainExpLv != 0)
+        {
+            GainExp = statData.upgradeGainExp[GainExpLv - 1].sum;
+        }
+    }
+
 
     public void AddGold(int num)
     {

@@ -40,6 +40,7 @@ public class UpgradeWeapon
     public float value4;
     public float sum4;
     public int exp;         // 소모 경험치
+    public int totalExp;
 }
 
 public class StatusData
@@ -107,7 +108,7 @@ public class StatusData
     public List<UpgradeWeapon> GetWeaponData(int id)
     {
         List<UpgradeWeapon> list = new List<UpgradeWeapon>();
-
+        int total = 0;
         for (int i = 0; i < 10; i++)
         {
             UpgradeWeapon newData = new UpgradeWeapon();
@@ -118,7 +119,11 @@ public class StatusData
             newData.sum1 = (float)DataManager.instance.GetData(id + i, "Value2", typeof(float));
             newData.value2 = (float)DataManager.instance.GetData(id + i, "Value3", typeof(float));
             newData.sum2 = (float)DataManager.instance.GetData(id + i, "Value4", typeof(float));
+            newData.value3 = (float)DataManager.instance.GetData(id + i, "Value5", typeof(float));
+            newData.sum3 = (float)DataManager.instance.GetData(id + i, "Value6", typeof(float));
             newData.exp = (int)DataManager.instance.GetData(id + i, "EXP", typeof(int));
+            total += newData.exp;
+            newData.totalExp = total;
 
             list.Add(newData);
         }

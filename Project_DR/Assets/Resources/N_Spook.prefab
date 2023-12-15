@@ -238,6 +238,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &2380326189613067238
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,6 +377,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &2380326190017990294
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,6 +516,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &3189692050166505887
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,14 +887,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf4b05b4c1d80b744b154824f5258e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smashImage: {fileID: 0}
   monsterHpSlider: {fileID: 3067971428516466915}
   state: 0
   monsterId: 7005
   monsterType: 5
-  bulletPortLeft: {fileID: 0}
-  bulletPortRight: {fileID: 0}
-  bulletPort: {fileID: 0}
-  monsterBullet: {fileID: 0}
+  smashCount: 0
+  smashMaxCount: 10
   hp: 0
   attack: 0
   attDelay: 0

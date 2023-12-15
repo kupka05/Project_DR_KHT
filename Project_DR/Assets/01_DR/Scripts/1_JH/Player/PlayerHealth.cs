@@ -123,6 +123,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (locomo.state == PlayerState.grounded || locomo.state == PlayerState.walking)
         {
+            Debug.Log("넉백");
             playerRigid.AddForce(transform.localPosition - targetPos * knockbackForce, ForceMode.Impulse);          
         }
 

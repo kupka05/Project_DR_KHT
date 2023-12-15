@@ -47,6 +47,7 @@ public class ChoiceImage : MonoBehaviour
         else { /*PASS*/ }
 
         canvasController.CheckOnClickChoice(this);
+        IsHit = false;
 
 
     }       // ImageHit()

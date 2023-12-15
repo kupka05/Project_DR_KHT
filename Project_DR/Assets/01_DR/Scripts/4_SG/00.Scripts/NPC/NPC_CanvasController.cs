@@ -9,8 +9,9 @@ using UnityEngine.UI;
 public class NPC_CanvasController : MonoBehaviour
 {       // NPC의 Text ,RayHit판정 Image등 관련해서 조정할수 있게 해주는 Class
 
+    private Queue<string> conversationText;      // 얘가 아니라 NPC 에 들고있으면 될듯?
 
-    private StringBuilder npcConversations;     // NPC의 대화를 출력시켜줄 StringBuilder
+    private StringBuilder stringBuilder;     // NPC의 선택지를 출력시켜줄 StringBuilder
 
     private TextMeshProUGUI npcNameText;         // Canvas상에서 출력될 이름의 TextMeshPro
     private TextMeshProUGUI npcTitleText;        // Canvas상에서 출력될 칭호의 TextMeshPro
@@ -33,7 +34,7 @@ public class NPC_CanvasController : MonoBehaviour
     private const int NPCREFMAXCAPACITY = 10;
     // TODO : Ray의 판정을 위해 Image컴포넌트를 가져와야할수도 있음
 
-
+    #region MonoBehaviour함수
     private void Awake()
     {
         AwakeInIt();
@@ -44,16 +45,18 @@ public class NPC_CanvasController : MonoBehaviour
         StartInIt();
     }
 
+    #endregion MonoBehaviour함수
+
+    #region 변수에 데이터 기입관련
     private void AwakeInIt()
     {       // 종속성이 없는 TextMeshPro의 컴포넌트를 Get해올것임
-        npcConversations = new StringBuilder();
+        stringBuilder = new StringBuilder();
+        conversationText = new Queue<string>();
         isNon = "0";
         underBar = "_";
 
         aZeroColor = new Color(1, 1, 1, 0);
         aMaxColor = new Color(1, 1, 1, 1);
-
-
 
     }       // AwakeInIt()
 
@@ -75,28 +78,52 @@ public class NPC_CanvasController : MonoBehaviour
     }       // StartInIt()
 
 
+
+    #endregion 변수에 데이터 기입관련
+
+    #region 색상관련
+    /// <summary>
+    /// 선택지의 컬러 A값 1로 변경
+    /// </summary>
+    public void ChoiceTextAColorOn(TextMeshProUGUI _outputText)
+    {
+        _outputText.color = aMaxColor;
+    }       // ChoiceTextAColorOn()
+
+    /// <summary>
+    /// 선택지의 컬러 A값 0으로 변경
+    /// </summary>
+    public void ChoiceTextAColorOff(TextMeshProUGUI _outputText)
+    {
+        _outputText.color = aZeroColor;
+    }       // ChoiceTextAColorOff()
+    #endregion 색상관련
+
+    #region 텍스트 출력관련
+
     /// <summary>
     /// NPC의 이름과 칭호를 변수에 대입해주며 이름과 칭호의 텍스트를 변수값을 출력
     /// </summary>
     /// <param name="_name">NPC의 이름</param>
     /// <param name="_title">NPC의 칭호</param>
-    public void Name_TitleUpdate(string _name,string _title)
+    public void Name_TitleUpdate(string _name, string _title)
     {
         npcNameText.text = _name;
         npcTitleText.text = _title;
     }       // Name_TitleUpdate()
 
-
     /// <summary>
-    /// NPC의 대사를 출력시켜주는 함수
+    /// 대사 출력해주는 함수
     /// </summary>
-    /// <param name="_conversationText"></param>
-    public void OutPutConversations(string _conversationText)
-    {       // 이건 매개변수 바뀔수도 있음
-        npcConversationText.text = _conversationText;
-    }       // OutPutConversations()
+    /// <param name="_outputText"></param>
+    public void OutPutConversation(string _outputText)
+    {
+        npcConversationText.text = _outputText;
+    }
 
+    #endregion 텍스트 출력관련
 
+    #region 선택지관련
     /// <summary>
     /// 선택지 출력해주는 함수
     /// </summary>
@@ -109,14 +136,14 @@ public class NPC_CanvasController : MonoBehaviour
         string choice1Event = (string)DataManager.instance.GetData(_conversationRefID, "Choice1Event", typeof(string));
 
         string choice1 = (string)DataManager.instance.GetData(_conversationRefID, "Choice1", typeof(string));
-        CheckChoiceNull(choice1, 1,choice1Text,choice1Image);
+        CheckChoiceNull(choice1, 1, choice1Text, choice1Image);
 
         string choice2 = (string)DataManager.instance.GetData(_conversationRefID, "Choice2", typeof(string));
-        CheckChoiceNull(choice2, 2, choice2Text,choice2Image);
+        CheckChoiceNull(choice2, 2, choice2Text, choice2Image);
 
         // 아래 Choice3는 존재하면 띄우는 조건이 만족하는지 한번 체크해야함 (12.13기준 퀘스트가 나와야 클리어여부를 끌어와서 체크할수있음)
         string choice3 = (string)DataManager.instance.GetData(_conversationRefID, "Choice3", typeof(string));
-        CheckChoiceNull(choice3, 3,choice3Text, choice3Image); // 임시사용 함수
+        CheckChoiceNull(choice3, 3, choice3Text, choice3Image); // 임시사용 함수
         //CheckChoice3();
 
     }       // CheckExistChoices()
@@ -150,28 +177,14 @@ public class NPC_CanvasController : MonoBehaviour
 
     }       // CheckChoice3()
 
-    /// <summary>
-    /// 선택지의 컬러 A값 1로 변경
-    /// </summary>
-    public void ChoiceTextAColorOn(TextMeshProUGUI _outputText)
-    {
-        _outputText.color = aMaxColor;
-    }       // ChoiceTextAColorOn()
 
-    /// <summary>
-    /// 선택지의 컬러 A값 0으로 변경
-    /// </summary>
-    public void ChoiceTextAColorOff(TextMeshProUGUI _outputText)
-    {
-        _outputText.color = aZeroColor;
-    }       // ChoiceTextAColorOff()
 
     /// <summary>
     /// 플레이어가 누른 선택지를 확인하는 함수
     /// </summary>
     public void CheckOnClickChoice(ChoiceImage _choiceImage)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+
         string choice = "Choice";
         string choiceNum = _choiceImage.choiceNum.ToString();
         string eventText = "Event";
@@ -181,12 +194,13 @@ public class NPC_CanvasController : MonoBehaviour
 
         string eventRefId = (string)DataManager.instance.GetData(nowConversationRefID, stringBuilder.ToString(), typeof(string));
 
-        if(eventRefId == isNon || eventRefId == underBar)
+        if (eventRefId == isNon || eventRefId == underBar)
         {
             // 이벤트가 없으므로 대화 끝
             NPC npc;
             npc = this.transform.parent.parent.GetComponent<NPC>();
             npc.InvokeEndConverationEvent();
+            stringBuilder.Clear();
             return;
         }
 
@@ -230,7 +244,7 @@ public class NPC_CanvasController : MonoBehaviour
                 ItConveration(eventRefIds[i]);
             }
         }
-        
+
 
     }       // CheckOnClickChoice()
     private void ItCompensation(int _eventRefId)
@@ -249,7 +263,15 @@ public class NPC_CanvasController : MonoBehaviour
     {
         // 대사
         // 다음 대사 출력하는 기능
+        string converationText = (string)DataManager.instance.GetData(_eventRefId, "OutPutText", typeof(string));
+
+        string[] splitConveration = GFunc.SplitConversation(converationText);
+
+
+
     }
+
+    #endregion 선택지관련
 
 
 

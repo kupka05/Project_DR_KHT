@@ -15,10 +15,9 @@ public class ShopNpc : AnnouncementNPC
 
     private void Start()
     {
-        GetCanvasObj();
+        GetCanvasScript_Obj();
         OnCanvasObj();
-
-        GetCanvasScript();
+        
         ParamsInIt(npcID);
         NpcCanvas.Name_TitleUpdate(npcName, npcTitle);
 
@@ -33,21 +32,17 @@ public class ShopNpc : AnnouncementNPC
         
     }       // AwakeInIt()
 
+    #region Base
     protected override void ParamsInIt(int _npcID)
     {
         base.ParamsInIt(_npcID);
     }       // ParamsInIt()
 
-    protected override void GetCanvasScript()
+    protected override void GetCanvasScript_Obj()
     {
-        base.GetCanvasScript();
-    }       // GetCanvasScript()
-
-    protected override void GetCanvasObj()
-    {
-        base.GetCanvasObj();
-    }       // GetCanvasObj()
-
+        base.GetCanvasScript_Obj();
+    }       // GetCanvasScript_Obj()
+    #endregion Base
 
     /// <summary>
     /// NPC 베이스 스크립트에 이벤트 구독
@@ -55,6 +50,7 @@ public class ShopNpc : AnnouncementNPC
     private void ConvertionEventInIt()
     {
         StartConverationEvent += StartConvertion;
+        NextConverationEvent += NextConveration;
         EndConverationEvent += EndConveration;
 
     }       // ConvertionEventInIt()
@@ -65,12 +61,13 @@ public class ShopNpc : AnnouncementNPC
     protected override void StartConvertion()
     {
         OnCanvasObj();
-        OutPutShopText();
+        //OutPutShopText();     : 다시제작
     }       // StartConvertion()
 
-    protected override void NextConveration()
-    {
-        // ID 주소값 받아와야함
+    protected override void NextConveration(int _nextConverationId)
+    {                
+        OutPutPickText(_nextConverationId);
+
     }
 
     protected override void EndConveration()
@@ -78,25 +75,13 @@ public class ShopNpc : AnnouncementNPC
         OffCanvasObj();
     }       // EndConveration()
 
-    private void OutPutShopText()
-    {   // 6개의 대사중 랜덤으로 대사가 출력되는 함수
-        int randIndex = UnityEngine.Random.Range(0, conversationRefIDs.Length);
 
-        string outputConversation = conversationTexts[randIndex];
-        
-
-
-        // 이아래는 대사 출력 -> 확인이미지 에서 누른것체크 -> 다음행동(다음대사 || 대화창 종료)
-        NpcCanvas.OutPutConversations(outputConversation);      // 대사출력
-
-        NpcCanvas.OutPutChoices(conversationRefIDs[randIndex]); // 선택지를 출력해주는 함수
-
-    }       // OutPutShopText()
-
-    private void OnDestroy()
+    private void OutPutPickText(int _refConverationId)
     {
+        string texts = (string)DataManager.instance.GetData(_refConverationId, "OutPutText",typeof(string));
         
-    }
+
+    }       // OutPutPickText()
 
 
 

@@ -24,7 +24,7 @@ public class GoogleSheetLoader : MonoBehaviour
         "Upgrade_Weapon_Atk_Table", "Upgrade_Weapon_CR_Table", "Upgrade_Weapon_CRD_Table", "Upgrade_Weapon_ATKSpeed_Table",
 
         //YS
-        "Monster_Table", "Boss_Table", "Boss_projectile_Table",
+        "Monster_Table", "Boss_Table",
 
         // SG
         "spawnNomalMonster_Table","spawnEliteMonster_Table","DungeonCreater_Table",
@@ -32,8 +32,7 @@ public class GoogleSheetLoader : MonoBehaviour
         "Floor3_MonsterSpawn_Table","Floor4_MonsterSpawn_Table","Floor5_MonsterSpawn_Table",
         "BattleRoomObjectCreate_Table","EventRoomObjectCreate_Table","NullRoomObjectCreate_Table",
         "LightObject_Table","EnvObject_Table","MatObject_Table",
-
-
+        "NPC_Table","NPC_Comunication_Table"
     };
 
     // 코루틴에서 데이터를 반환하고

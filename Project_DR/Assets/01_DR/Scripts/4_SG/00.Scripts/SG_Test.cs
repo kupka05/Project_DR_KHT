@@ -4,93 +4,33 @@ using UnityEngine;
 using System.Text;
 using System;
 using Newtonsoft.Json.Bson;
+using TMPro;
+using System.ComponentModel;
 
-public class SG_Test : MonoBehaviour
+public class SG_Test : SG_Test002
 {
-    #region STB_DelegateTEST
-    //StringBuilder stBuilder = new StringBuilder();
-    //string stText;
-
-    //delegate void ButtonInputD();
-    //event ButtonInputD inputEvent;
-
-    //event System.Action<int> actionEvent;
-
-    //int tempNum003 = 10;
-
-    //private void Awake()
-    //{
-    //    inputEvent += TestMethod;
-    //    actionEvent += ActionTest;
-    //}
-    //private void Start()
-    //{
-    //    stBuilder.Append("여러변 추가되나?");
-
-    //    Debug.Log($"stB -> {stBuilder}");
-    //    stBuilder.Clear();
-    //    Debug.Log($"stB -> {stBuilder}");
-
-    //    inputEvent?.Invoke();
-    //    actionEvent?.Invoke(tempNum003);
 
 
-    //}
 
-    //private void TestMethod()
-    //{
-    //    Debug.Log("ButtonEventCall");
-    //}
-
-    //private void ActionTest(int tempNum_)
-    //{
-    //    Debug.Log("ActionCall");
-    //    Debug.Log($"ActionParamiter -> {tempNum_}");
-    //}
-    #endregion STB_DelegateTEST
-    public List<GameObject> mon;
-    GameObject clone;
-    public GameObject testPrefab;
-
-    public int desSeconds = 5;
-
-    private void Awake()
+    protected override void Start()
     {
-        mon = new List<GameObject>();
-    }
-
-    private void Start()
-    {
-        TestStart();
-
-    }
-    public void CheckCount()
-    {
-        Debug.Log($"listCount : {mon.Count}");
-
-        if (mon.Count == 0)
-        {
-            Debug.Log($"실험잘됨\nListCount : {mon.Count}");
-        }
+        base.Start();
+        Debug.Log("SG_Test에서 Base호출 이후 Start내부 실행");
+        testEvent += ISINVOKE;
+        StartCoroutine(TestCoroutine());
 
     }
 
-    private void TestStart()
+    private void ISINVOKE()
     {
-        StartCoroutine(InstanceMonster());
+        Debug.Log("최상위 부모 클래스에서 INVOKE하면 잘 불러와지나?");
     }
 
-    IEnumerator InstanceMonster()
+    IEnumerator TestCoroutine()
     {
-        for (int i = 0; i < 5; i++)
-        {
-            Debug.Log("인스턴스");
-            clone = Instantiate(testPrefab, Vector3.one, Quaternion.identity, this.gameObject.transform);
-            clone.gameObject.AddComponent<SG_Test002>();
-            SG_Test002 test002 = clone.GetComponent<SG_Test002>();
-            test002.testInIt(this);
-            yield return new WaitForSeconds(3);
-        }
-
+        yield return new WaitForSeconds(5);
+        IsTest = true;
     }
+
+
 }       // SG_Test

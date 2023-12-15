@@ -75,7 +75,7 @@ public class DataManager : MonoBehaviour
 
 
         //YS
-        "Monster_Table", "Boss_Table", "Boss_projectile_Table",
+        "Monster_Table", "Boss_Table",
         
         // SG
         "spawnNomalMonster_Table","spawnEliteMonster_Table","DungeonCreater_Table",
@@ -83,7 +83,7 @@ public class DataManager : MonoBehaviour
         "Floor3_MonsterSpawn_Table","Floor4_MonsterSpawn_Table","Floor5_MonsterSpawn_Table",
         "BattleRoomObjectCreate_Table","EventRoomObjectCreate_Table","NullRoomObjectCreate_Table",
         "LightObject_Table","EnvObject_Table","MatObject_Table",
-
+        "NPC_Table","NPC_Comunication_Table"
 
     };
 
@@ -153,10 +153,6 @@ public class DataManager : MonoBehaviour
     {
         try
         {
-            // 사용자를 위해 카테고리 문자의 앞, 뒤 공백을 제거
-            // 간혹 실수로 사용자가 공백을 넣는 경우가 있어 추가함
-            category = category.Trim();
-
             // GoogleSheetLoader에서 모든 데이터를
             // 불러왔을 경우 
             if (GoogleSheetLoader.isDone)
@@ -350,7 +346,7 @@ public class DataManager : MonoBehaviour
             // data[ID_HEADER]의 길이 만큼 순회
             for (int i = 0; i < data[ID_HEADER].Count; i++)
             {
-                int id = int.Parse(data[ID_HEADER][i].RemoveUnderbar());
+                int id = int.Parse(data[ID_HEADER][i].Replace("_", ""));
                 int index2 = i;
                 // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
                 if (idTable.ContainsKey(id))
@@ -384,7 +380,7 @@ public class DataManager : MonoBehaviour
             // data[ID_HEADER]의 길이 만큼 순회
             for (int i = 0; i < data[ID_HEADER].Count; i++)
             {
-                int id = int.Parse(data[ID_HEADER][i].RemoveUnderbar());
+                int id = int.Parse(data[ID_HEADER][i].Replace("_", ""));
                 int index2 = i;
                 // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
                 if (localIDTable.ContainsKey(id))

@@ -2,39 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SG_Test002 : MonoBehaviour
+public class SG_Test002 : SG_Test003
 {
-    SG_Test test;
-
-
-    private void Start()
-    {
-        StartCoroutine(Desthis());
-    }
-
-    public void testInIt(SG_Test _test)
-    {
-        test = _test;
-        Addthis();
-    }
-
-
-    public void Addthis()
-    {
-        test.mon.Add(this.gameObject);
-    }
-
-    private void OnDestroy()
-    {
-        test.mon.Remove(this.gameObject);
-        test.CheckCount();
-    }
-
-    IEnumerator Desthis()
-    {
-        test.desSeconds++;
-        yield return new WaitForSeconds(test.desSeconds);
-        Destroy(this.gameObject);
-    }
+    //protected override void Start()
+    //{
+    //    base.Start();
+    //    Debug.Log("SG_Test002 Start함수 실행");
+    //}
 
 }

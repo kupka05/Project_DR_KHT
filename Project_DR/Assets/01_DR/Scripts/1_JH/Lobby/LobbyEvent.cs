@@ -189,6 +189,7 @@ public class LobbyEvent : MonoBehaviour
         // 상태창 : 무기 강화
         UpdateWeaponStateUI();
         UpdateWeaponUpgradeUI();
+        SetWeaponLevelBtn();
     }
 
     // 클리어 데이터 불러오기
@@ -367,23 +368,63 @@ public class LobbyEvent : MonoBehaviour
         weaponSpendExp.text = weaponSpend.ToString();
         weaponRemainExp.text = (UserDataManager.Instance.Exp - weaponSpend).ToString();
     }
-
+    public void SetWeaponLevelBtn()
+    {
+        atkUpBtn.level = UserDataManager.Instance.WeaponAtkLv;
+        critRateUpBtn.level = UserDataManager.Instance.WeaponCriDamageLv;
+        critDmgBtn.level = UserDataManager.Instance.WeaponCriDamageLv;
+        atkRateBtn.level = UserDataManager.Instance.WeaponAtkRateLv;
+    }
     public int WeaponCalculator()
     {
         int result, afterAtk, curAtk, afterCritRate, curCritRate, afterCritDmg, curCritDmg, afterAtkRate ,curAtkRate;        // 계산식 필요
 
         afterAtk = MinusCheck(atkUpBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeAtk[atkUpBtn.newLevel - 1].totalExp : 0;
+        curAtk = MinusCheck(atkUpBtn.level - 1) ? UserDataManager.Instance.statData.upgradeAtk[atkUpBtn.level - 1].totalExp : 0;
+        afterCritRate = MinusCheck(critRateUpBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeCrit[critRateUpBtn.newLevel - 1].totalExp : 0;
+        curCritRate = MinusCheck(critRateUpBtn.level - 1) ? UserDataManager.Instance.statData.upgradeCrit[critRateUpBtn.level - 1].totalExp : 0;
+        afterCritDmg = MinusCheck(critDmgBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeCritDmg[critDmgBtn.newLevel - 1].totalExp : 0;
+        curCritDmg = MinusCheck(critDmgBtn.level - 1) ? UserDataManager.Instance.statData.upgradeCritDmg[critDmgBtn.level - 1].totalExp : 0;
+        afterAtkRate = MinusCheck(atkRateBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeAtkSpd[atkRateBtn.newLevel - 1].totalExp : 0;
+        curAtkRate = MinusCheck(atkRateBtn.level - 1) ? UserDataManager.Instance.statData.upgradeAtkSpd[atkRateBtn.level - 1].totalExp : 0;
 
-        return afterAtk;
+        result = (afterAtk - curAtk) + (afterCritRate - curCritRate) + (afterCritDmg - curCritDmg) + (afterAtkRate - curAtkRate);
+        return result;
     }
 
     public void WEaponUpgrade()
     {
-        //ToDo 업그레이드 작성 필요
         if (weaponSpend == 0)
         {
             return;
         }
+        //ToDo 업그레이드 작성 필요
+        //// 구매했을 떄 일어나는 이벤트
+        //if (weaponSpend <= UserDataManager.Instance.Exp)
+        //{
+        //    Debug.Log("구매 완료");
+
+        //    Debug.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
+        //    // 업그레이드 레벨을 새 레벨로 적용
+        //    hpUpBtn.level = hpUpBtn.newLevel;
+        //    goldIncreBtn.level = goldIncreBtn.newLevel;
+        //    expIncreBtn.level = expIncreBtn.newLevel;
+
+        //    Debug.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
+        //    // 경험치 소모
+        //    UserDataManager.Instance.Exp -= playerSpend;
+        //    // 레벨 업데이트
+        //    UserDataManager.Instance.PlayerStatusUpgrade(hpUpBtn.level, goldIncreBtn.level, expIncreBtn.level);
+        //}
+        //else
+        //{
+        //    Debug.Log("경험치가 부족합니다.");
+        //    return;
+        //}
+        //UpdatePlayerStatusUI();
+        //UpdatePlayerUpgradeUI();
+        //ChangeStatusDisplayButton("Player");
+        //UserDataManager.Instance.SavePlayerUpgrade();
     }
 
     #endregion

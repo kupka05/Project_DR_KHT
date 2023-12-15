@@ -10,10 +10,19 @@ namespace BossMonster
         /*************************************************
          *                 Public Fields
          *************************************************/
+        public enum Phase
+        {
+            ONE = 0,        // 1 페이즈
+            TWO = 1,        // 2 페이즈
+            THREE = 2,      // 3 페이즈
+            FOUR = 3        // 4 페이즈
+        }
         public Boss Boss => _boss;
         public BossData BossData => _bossData;
         public BNG.Damageable Damageable => _damageable;
         public Slider BossHPSlider => _bossHPSlider;
+        public Phase CurrentPhase => _currentPhase;
+        public BossPhaseHandler BossPhaseHandler => _bossPhaseHandler;
 
 
         /*************************************************
@@ -24,6 +33,8 @@ namespace BossMonster
         [SerializeField] private Slider _bossHPSlider;           // 보스 체력바 슬라이더
         [SerializeField] private BNG.Damageable _damageable;     // 데미지 관련 처리
         private BossHPSliderHandler _bossHPSliderHandler;        // 보스 체력바 핸들러
+        private Phase _currentPhase;                             // 현재 페이즈
+        private BossPhaseHandler _bossPhaseHandler;              // 보스 페이즈 핸들러
 
 
         /*************************************************
@@ -55,16 +66,26 @@ namespace BossMonster
             CreateBossHPCanvas();
 
             // 보스 HP 슬라이더 핸들러 생성
-            _bossHPSliderHandler = new BossHPSliderHandler(boss, _bossHPSlider);
+            _bossHPSliderHandler = new BossHPSliderHandler(boss);
+
+            // 보스 페이즈 핸들러 생성
+            _bossPhaseHandler = new BossPhaseHandler(boss);
         }
 
-        // 죽음 체크
-        public void IsDie()
+        // 현재 페이즈 변경
+        public void ChangeCurrentPhase(Phase phase)
         {
-            if (_bossData.HP <= 0)
+            // 현재 페이즈와 변경 할 페이즈가 다른 경우
+            if (_currentPhase != phase)
             {
-                // 죽음 관련 처리
-                _boss.Dead();
+                Debug.Log($"페이즈를 {phase}로 변경");
+                // 페이즈 변경
+                _currentPhase = phase;
+                // 보스 데이터의 현재 패턴 갯수 변경
+                _boss.BossData.SetCurrentPatternCount((int)phase);
+                // 공격 패턴 변경
+                _bossData.ChooseRandomPattern();
+                
             }
         }
 
@@ -81,7 +102,11 @@ namespace BossMonster
 
             // 죽음 체크
             IsDie();
+
+            // 페이즈 체크
+            IsInPhase();
         }
+
 
         /*************************************************
          *               Private Methods
@@ -96,6 +121,22 @@ namespace BossMonster
             canvas.name = prefabName;
 
             _bossHPSlider = canvas.GetComponentInChildren<Slider>();
+        }
+
+        // 죽음 체크
+        private void IsDie()
+        {
+            if (_bossData.HP <= 0)
+            {
+                // 죽음 관련 처리
+                _boss.Dead();
+            }
+        }
+
+        // 페이즈 체크
+        private void IsInPhase()
+        {
+            _bossPhaseHandler.IsInPhase();
         }
     }
 }

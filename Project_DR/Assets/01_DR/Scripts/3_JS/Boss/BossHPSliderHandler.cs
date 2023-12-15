@@ -16,14 +16,14 @@ namespace BossMonster
          *                 Public Methods
          *************************************************/
         // 생성자
-        public BossHPSliderHandler(Boss boss, Slider bossHPSlider)
+        public BossHPSliderHandler(Boss boss)
         {
             // 보스 및 보스 데이터 참조
             _boss = boss;
-            _bossData = boss.BossData;
+            _bossData = _boss.BossData;
 
             // 슬라이더 연결
-            _bossHPSlider = bossHPSlider;
+            _bossHPSlider = _boss.BossSummoningStone.BossHPSlider;
 
             // Init
             Initialize();

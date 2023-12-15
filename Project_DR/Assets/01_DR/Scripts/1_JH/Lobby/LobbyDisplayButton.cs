@@ -171,7 +171,9 @@ public class LobbyDisplayButton : MonoBehaviour
                 }
             }
         }
-
-        lobbyEvent.UpdatePlayerUpgradeUI();
+        if (type == ButtonType.PlayerStatus)
+            lobbyEvent.UpdatePlayerUpgradeUI();
+        else if (type == ButtonType.Weapon)
+            lobbyEvent.UpdateWeaponUpgradeUI();
     }
 }

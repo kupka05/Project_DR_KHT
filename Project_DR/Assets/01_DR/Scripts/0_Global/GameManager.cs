@@ -249,7 +249,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("전환할 씬을 찾지 못했습니다.");
             return;
         }
-        StartCoroutine(_sceneName);
+        StartCoroutine(SceneChangeDelay(_sceneName));
     }
 
     // 플레이어의 페이드를 포함한 씬 전환 딜레이

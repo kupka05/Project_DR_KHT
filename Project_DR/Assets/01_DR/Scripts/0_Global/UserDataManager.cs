@@ -140,13 +140,19 @@ public class UserDataManager : MonoBehaviour
             OnUserDataUpdate?.Invoke();
         }
     }
-
+    [Header("Default Weapon Data")]
+    public float _weaponAtk;
+    public float _weaponCritRate;
+    public float _weaponCritDamage;
+    public float _weaponAtkRate;
 
     [Header("Weapon Data")]
     public float weaponAtk;
     public float weaponCritRate;
     public float weaponCritDamage;
     public float weaponAtkRate;
+
+    [Space(10f)]
 
     public int WeaponAtkLv;           // 공격력
     public int WeaponCriRateLv;       // 치명타 확률
@@ -272,26 +278,31 @@ public class UserDataManager : MonoBehaviour
         WeaponCriDamageLv = PlayerDataManager.WeaponCriDamage;
         WeaponAtkRateLv = PlayerDataManager.WeaponAtkRate;
 
-        weaponAtk = Data.GetFloat(1100, "Damage");
-        weaponCritRate = Data.GetFloat(1100, "CritChance");
-        weaponCritDamage = Data.GetFloat(1100, "CritIncrease");
-        weaponAtkRate = Data.GetFloat(1100, "AttackSpeed");
+        _weaponAtk = Data.GetFloat(1100, "Damage");
+        _weaponCritRate = Data.GetFloat(1100, "CritChance");
+        _weaponCritDamage = Data.GetFloat(1100, "CritIncrease");
+        _weaponAtkRate = Data.GetFloat(1100, "AttackSpeed");
 
-        if(WeaponAtkLv != 0)
+        weaponAtk = _weaponAtk;
+        weaponCritRate = _weaponCritRate;
+        weaponCritDamage = _weaponCritDamage;
+        weaponAtkRate = _weaponAtkRate;
+
+        if (WeaponAtkLv != 0)
         {
-            weaponAtk = Data.GetFloat(1100, "Damage") + statData.upgradeAtk[WeaponAtkLv - 1].sum1;
+            weaponAtk = _weaponAtk + statData.upgradeAtk[WeaponAtkLv - 1].sum1;
         }
         if(WeaponCriRateLv != 0)
         {
-            weaponCritRate = Data.GetFloat(1100, "CritChance") + statData.upgradeCrit[WeaponCriRateLv - 1].sum1;
+            weaponCritRate = _weaponCritRate + statData.upgradeCrit[WeaponCriRateLv - 1].sum1;
         }
         if(WeaponCriDamageLv != 0)
         {
-            weaponCritDamage = Data.GetFloat(1100, "CritIncrease") + statData.upgradeCritDmg[WeaponCriDamageLv - 1].sum1;
+            weaponCritDamage = _weaponCritDamage + statData.upgradeCritDmg[WeaponCriDamageLv - 1].sum1;
         }
         if(WeaponAtkRateLv != 0)
         {
-            weaponAtkRate = Data.GetFloat(1100, "AttackSpeed") + statData.upgradeAtkSpd[WeaponAtkRateLv - 1].sum1;
+            weaponAtkRate = _weaponAtkRate + statData.upgradeAtkSpd[WeaponAtkRateLv - 1].sum1;
         }
 
         // ######################### 스킬 업그레이드 #########################
@@ -380,7 +391,15 @@ public class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("gold_increase", GainGoldLv);
         PlayerDataManager.Save("exp_increase", GainExpLv);
     }
+    public void SaveWeaponUpgrade()
+    {
+        PlayerDataManager.Save("exp", Exp);
+        PlayerDataManager.Save("weapon_atk_rate", WeaponAtkLv);
+        PlayerDataManager.Save("exp", WeaponAtkRateLv);
+        PlayerDataManager.Save("weapon_cri_damage", WeaponCriDamageLv);
+        PlayerDataManager.Save("weapon_cri_rate", WeaponCriRateLv);
 
+    }
 
     // ####################### 디버그용 PC 데이터 세팅 ####################### \\
     public void SetDebugData()
@@ -429,10 +448,48 @@ public class UserDataManager : MonoBehaviour
             GainExp = statData.upgradeGainExp[GainExpLv - 1].sum;
         }
     }
+    public void WeaponUpgrade(int atkLv, int critLv, int critRateLv, int atkRateLv)
+    {
+        int _atkLv = atkLv;
+        int _critLv = critLv;
+        int _critRateLv = critRateLv;
+        int _atkRateLv = atkRateLv;
 
+        WeaponAtkLv = _atkLv;
+        WeaponCriDamageLv = _critLv;
+        WeaponCriRateLv = _critRateLv;
+        WeaponAtkRateLv = _atkRateLv;
+
+        weaponAtk = _weaponAtk;
+        weaponCritRate = _weaponCritRate;
+        weaponCritDamage = _weaponCritDamage;
+        weaponAtkRate = _weaponAtkRate;
+
+        if (WeaponAtkLv != 0)
+        {
+            weaponAtk = _weaponAtk + statData.upgradeAtk[WeaponAtkLv - 1].sum1;
+        }
+        if (WeaponCriRateLv != 0)
+        {
+            weaponCritRate = _weaponCritRate + statData.upgradeCrit[WeaponCriRateLv - 1].sum1;
+        }
+        if (WeaponCriDamageLv != 0)
+        {
+            weaponCritDamage = _weaponCritDamage + statData.upgradeCritDmg[WeaponCriDamageLv - 1].sum1;
+        }
+        if (WeaponAtkRateLv != 0)
+        {
+            weaponAtkRate = _weaponAtkRate + statData.upgradeAtkSpd[WeaponAtkRateLv - 1].sum1;
+        }
+    }
 
     public void AddGold(int num)
     {
         Gold += num;
+    }
+
+    public void SpendExp(int value)
+    {
+        Exp -= value;
     }
 }

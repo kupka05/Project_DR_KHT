@@ -622,8 +622,8 @@ public class LobbyEvent : MonoBehaviour
        
     }
 
-    // NPC와 대화/보상 수락 등을 하는 디스플레이 버튼
-    public void DisplayButton()
+        // NPC와 대화/보상 수락 등을 하는 디스플레이 버튼
+        public void DisplayButton()
     {
         if(dialog.log.Count != 0)
         {

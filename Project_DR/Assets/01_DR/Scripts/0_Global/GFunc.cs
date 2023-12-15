@@ -11,15 +11,17 @@ public static class GFunc
     /*************************************************
      *               Public Methods
      *************************************************/
-    public static string SumString(string inputA, string inputB, string inputC = "")
+    public static string SumString(string inputA, string inputB, string inputC = "", string inputD = "")
     {
         stringBuilder.Clear();
         stringBuilder.Append(inputA);
         stringBuilder.Append(inputB);
         stringBuilder.Append(inputC);
+        stringBuilder.Append(inputD);
 
         return stringBuilder.ToString();
     }
+
 
     // 언더바를 없애주는 String 확장 메서드
     public static string RemoveUnderbar(this string input)

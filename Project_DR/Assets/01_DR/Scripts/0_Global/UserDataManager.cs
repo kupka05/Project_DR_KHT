@@ -10,6 +10,7 @@ using Unity.VisualScripting;
 using Rito.InventorySystem;
 using static StatusData;
 using OVR.OpenVR;
+using System.Net.NetworkInformation;
 
 [System.Serializable]
 public class ClearDatas
@@ -20,7 +21,7 @@ public class ClearDatas
 
 public class ClearData
 {
-    public string MBTI;
+    public MBTI MBTI;
     public string Date;
 }
 
@@ -62,10 +63,18 @@ public class UserDataManager : MonoBehaviour
 
     #region 유저 데이터
     [Header("DB")]
-    public bool dataLoadSuccess;    // 데이터 불러옴 여부
+    private bool _dataLoad;
+    public bool dataLoadSuccess
+    {
+        get { return _dataLoad; }
+        set { _dataLoad = value; 
+        // TODO : 델리게이트 이벤트 추가하기
+        }
+    }    // 데이터 불러옴 여부
 
     [Header("User Data")]           // 유저 데이터
     public string PlayerID;
+
     [SerializeField]
     private int _Level;
     public int Level
@@ -99,6 +108,8 @@ public class UserDataManager : MonoBehaviour
             OnUserDataUpdate?.Invoke();
         }
     }
+    //public string mbti;
+    public MBTI mbti = new MBTI();
 
     [Header("PC Data")]           // PC 데이터
     public float DefaultHP;         // 초기 체력
@@ -198,7 +209,11 @@ public class UserDataManager : MonoBehaviour
     // 호출 순서 문제로 인해 static으로 설정
     public static Item[] items = new Item[Inventory.MaxCapacity];
 
+    [Header("Result Data")]
+    public GameResult result = new GameResult();
+
     [Header("Reference Data")]
+    public bool isClear;    // 보스를 클리어했는지 확인
     private StatusData  statusData = new StatusData();
     public StatData statData = new StatData();   // 업그레이드 스탯 정보가 담긴 데이터
     #endregion
@@ -218,7 +233,6 @@ public class UserDataManager : MonoBehaviour
 
         //SetDebugData();
         Debug.Log("데이터 요청 시간 : " + GetCurrentDate());
-
         GetReferenceData();
         PlayerDataManager.Update(true); // 데이터 요청
     }
@@ -228,6 +242,10 @@ public class UserDataManager : MonoBehaviour
         {
             SetDebugData();
         }
+        else if(Input.GetKeyDown(KeyCode.F1))
+        {
+            SaveClearData();
+        }
     }
 
     // ####################### 데이터 로드 #######################
@@ -235,7 +253,10 @@ public class UserDataManager : MonoBehaviour
     // 참조 데이터 로드
     public void GetReferenceData()
     {
-        statusData.GetData(statData);
+        statusData.GetData(statData);   // 스탯 데이터 로딩
+
+        result.Initialize(); // 결과 점수 초기화
+        InitMBTI();         // MBTI 초기화
     }
 
     // 로그인 후, DB에서 데이터 받아오기
@@ -343,6 +364,7 @@ public class UserDataManager : MonoBehaviour
     {
         StartCoroutine(CheckData(action));
     }
+    // 델리게이트에 추가로 변경하기
     IEnumerator CheckData(Action action)
     {
         yield return new WaitForSeconds(0.1f);
@@ -357,15 +379,12 @@ public class UserDataManager : MonoBehaviour
 
     // ####################### 세이브 데이터 ####################### \\
     // 클리어 데이터 신규 저장
-    public void SaveClearData(string MBTI)
+    public void SaveClearData()
     {
         // 넣을 데이터 생성
         ClearData newData = new ClearData();
         newData.Date = GetCurrentDate();             // 현재 시간
-        newData.MBTI = MBTI;                         // 매개변수 MBTI
-        Debug.Log(clearDatas);
-        Debug.Log(clearDatas.list);
-        Debug.Log(clearDatas.list.Count);
+        newData.MBTI.mbti = mbti.GetMBTI();                         // 매개변수 MBTI
 
         clearDatas.list.Add(newData);                // 리스트에 추가
         ClearCount = clearDatas.list.Count;          // 클리어 데이터 리스트의 길이가 곧 클리어 카운트
@@ -417,6 +436,20 @@ public class UserDataManager : MonoBehaviour
 
         PlayerDataManager.Update(true);
     }
+    // #######################  MBTI  ####################### \\
+    public void InitMBTI()
+    {
+        mbti.SetMBTI(50,50,50,50);
+    }
+    public MBTI GetMBTI()
+    {
+        return mbti;
+    }
+    public void SetMBTI(MBTI mbtiData)
+    {
+        mbti = mbtiData;
+    }
+
 
     // #######################  PC 데이터 세팅  ####################### \\
 
@@ -483,13 +516,4 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
-    public void AddGold(int num)
-    {
-        Gold += num;
-    }
-
-    public void SpendExp(int value)
-    {
-        Exp -= value;
-    }
 }

@@ -12,22 +12,6 @@ using static UnityEngine.ParticleSystem;
 using Random = UnityEngine.Random;
 
 
-
-// NPC 대사를 담을 클래스
-[System.Serializable]
-public class NpcDialogs
-{
-    public List<NpcDialog> logs;
-}
-[System.Serializable]
-public class NpcDialog
-{
-    public int ID;
-    public string[] _log;
-    public Queue log;
-    public int _event;
-}
-
 public class LobbyEvent : MonoBehaviour
 {
     [Header("Data")]
@@ -46,6 +30,17 @@ public class LobbyEvent : MonoBehaviour
     [Header("NPC Dialog")]
     public NpcDialogs DialogData = new NpcDialogs();    // 대사 데이터
     public NpcDialog dialog;                            // 현재 대사
+
+    [Header("MBTI Pannel")]
+    public GameObject mbtiPannel;
+    public TMP_Text mbtiResult;
+    public TMP_Text IE;
+    public TMP_Text NS;
+    public TMP_Text FT;
+    public TMP_Text PJ;
+
+    [Header("Result Pannel")]
+    public GameObject resultPannel;
 
     [Header("ClearData")]
     public string[] clearDatas;             // 디버그용 클리어 데이터
@@ -147,6 +142,8 @@ public class LobbyEvent : MonoBehaviour
     private int weaponSpend;
 
 
+    private bool isClear; // 클리어 여부 확인
+
     // ################################## START ##################################
 
     public void Start()
@@ -190,6 +187,8 @@ public class LobbyEvent : MonoBehaviour
         UpdateWeaponStateUI();
         UpdateWeaponUpgradeUI();
         SetWeaponLevelBtn();
+
+        isClear = UserDataManager.Instance.isClear;
     }
 
     // 클리어 데이터 불러오기
@@ -206,19 +205,34 @@ public class LobbyEvent : MonoBehaviour
         for (int i = 0; i < clearDatas.Length; i++)
         {
             string Date = UserDataManager.Instance.clearDatas.list[i].Date;
-            string MBTI = UserDataManager.Instance.clearDatas.list[i].MBTI;
+            string MBTI = UserDataManager.Instance.clearDatas.list[i].MBTI.mbti;
 
 
             //TODO : 스트링빌더로 업데이트
             // 아래 형식으로 데이터 변환
             // 2023/11/21 08:23 0회차 MBTI INFP 
-            string clearData = $"{Date} | {i + 1} 회차 | MBTI {MBTI}";
+            string clearData = $"{Date} | {i + 1} 회차 | MBTI : {MBTI}";
 
             // 배열에 담기
             clearDatas[i] = clearData;
         }
     }
     #endregion
+    // ################################ 결과 업데이트 ################################
+    public void SetMBTIResult()
+    {
+        string mbtiResultText = $"당신의 {clearDatas.Length}번째 MBTI";
+        mbtiResult.text = mbtiResultText;
+        IE.text = UserDataManager.Instance.mbti.GetIE();
+        NS.text = UserDataManager.Instance.mbti.GetNS();
+        FT.text = UserDataManager.Instance.mbti.GetFT();
+        PJ.text = UserDataManager.Instance.mbti.GetPJ();
+    }   
+
+    public void SetGameResult()
+    {
+
+    }
 
     // ################################# UI 업데이트 #################################
     #region 플레이어 업그레이드
@@ -290,7 +304,7 @@ public class LobbyEvent : MonoBehaviour
 
             //Debug.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
             // 경험치 소모
-            UserDataManager.Instance.SpendExp(playerSpend);
+            UserData.SpendExp(playerSpend);
             // 레벨 업데이트
             UserDataManager.Instance.PlayerStatusUpgrade(hpUpBtn.level, goldIncreBtn.level, expIncreBtn.level);               
         }
@@ -398,7 +412,6 @@ public class LobbyEvent : MonoBehaviour
         {
             return;
         }
-        //ToDo 업그레이드 작성 필요
         // 구매했을 떄 일어나는 이벤트
         if (weaponSpend <= UserDataManager.Instance.Exp)
         {
@@ -411,7 +424,7 @@ public class LobbyEvent : MonoBehaviour
             atkRateBtn.level = atkRateBtn.newLevel;
 
             // 경험치 소모
-            UserDataManager.Instance.SpendExp(weaponSpend);
+            UserData.SpendExp(weaponSpend);
 
             // 레벨 업데이트
             UserDataManager.Instance.WeaponUpgrade(atkUpBtn.level, critDmgBtn.level, critRateUpBtn.level, atkRateBtn.level);
@@ -444,28 +457,28 @@ public class LobbyEvent : MonoBehaviour
     }
 
     // 클리어 데이터 저장 테스트
-    public void SaveTest()
-    {
-        string[] mbti = { "ISTJ", "ISTP", "ISFJ", "ISFP", "INTJ", "INTP", "INFJ", "INFP", "ESTJ", "ESTP", "ESFJ", "ESFP", "ENTJ", "ENTP", "ENTJ", "ENFP" };
-        int rand = Random.Range(0, 16);
-        UserDataManager.Instance.SaveClearData(mbti[rand]);
+    //public void SaveTest()
+    //{
+    //    string[] mbti = { "ISTJ", "ISTP", "ISFJ", "ISFP", "INTJ", "INTP", "INFJ", "INFP", "ESTJ", "ESTP", "ESFJ", "ESFP", "ENTJ", "ENTP", "ENTJ", "ENFP" };
+    //    int rand = Random.Range(0, 16);
+    //    UserDataManager.Instance.SaveClearData(mbti[rand]);
 
-        GameObject clearData;
-        clearData = Instantiate(clearDataObj, clearDataObj.transform.position, clearDataObj.transform.rotation, contentPos);      // 클리어 데이터 추가
-        clearData.transform.localScale = Vector3.one;
+    //    GameObject clearData;
+    //    clearData = Instantiate(clearDataObj, clearDataObj.transform.position, clearDataObj.transform.rotation, contentPos);      // 클리어 데이터 추가
+    //    clearData.transform.localScale = Vector3.one;
 
-        string Date = UserDataManager.Instance.clearDatas.list[clearDatas.Length].Date;
-        string MBTI = UserDataManager.Instance.clearDatas.list[clearDatas.Length].MBTI;
+    //    string Date = UserDataManager.Instance.clearDatas.list[clearDatas.Length].Date;
+    //    string MBTI = UserDataManager.Instance.clearDatas.list[clearDatas.Length].MBTI;
 
 
-        //TODO : 스트링빌더로 업데이트
-        // 아래 형식으로 데이터 변환
-        // 2023/11/21 08:23 0회차 MBTI INFP 
-        string txt = $"{Date} | {clearDatas.Length} 회차 | MBTI {MBTI}";
+    //    //TODO : 스트링빌더로 업데이트
+    //    // 아래 형식으로 데이터 변환
+    //    // 2023/11/21 08:23 0회차 MBTI INFP 
+    //    string txt = $"{Date} | {clearDatas.Length} 회차 | MBTI {MBTI}";
 
-        clearData.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = txt;
-        clearData.SetActive(true);
-    }
+    //    clearData.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = txt;
+    //    clearData.SetActive(true);
+    //}
 
     // ############################### 메인 디스플레이 ###############################
     #region 메인 디스플레이
@@ -474,6 +487,8 @@ public class LobbyEvent : MonoBehaviour
     {
         mainDisplay.SetActive(false);
         mbtiDisplay.SetActive(false);
+        mbtiPannel.SetActive(false);
+        resultPannel.SetActive(false);
 
         switch (name)
         {
@@ -482,6 +497,12 @@ public class LobbyEvent : MonoBehaviour
                 break;
             case "MBTI":
                 mbtiDisplay.SetActive(true);
+                break;
+            case "Result_MBTI":
+                mbtiPannel.SetActive(true);
+                break;
+            case "Result":
+                resultPannel.SetActive(true);
                 break;
         }
     }
@@ -582,17 +603,18 @@ public class LobbyEvent : MonoBehaviour
         int target = BinarySearch(DialogData.logs, 0, DialogData.logs.Count-1, id);
         // 대사 데이터에서 ID에 맞는 데이터 찾아오기
 
-        if (target != -1)
+        if (target < 0)
         {
-            // 탐색 완료 시 데이터 변경
-            dialog = DialogData.logs[target];
-
-            // 대화창 업데이트 후 디큐
-            npcDialog.text = dialog.log.Peek().ToString();
-            dialog.log.Dequeue();
+            Debug.Log("대사 ID를 찾지 못했습니다." + target);
+            return;
         }
         else
-            Debug.Log("대사 ID를 찾지 못했습니다." + target);
+        // 탐색 완료 시 데이터 변경
+        dialog = DialogData.logs[target];
+
+        // 대화창 업데이트 후 디큐
+        npcDialog.text = dialog.log.Peek().ToString();
+        dialog.log.Dequeue();
     }
 
     // 이진 탐색 트리 ID 찾아오기
@@ -625,13 +647,22 @@ public class LobbyEvent : MonoBehaviour
     // NPC와 대화/보상 수락 등을 하는 디스플레이 버튼
     public void DisplayButton()
     {
-        if(dialog.log.Count != 0)
+        if (dialog.log.Count != 0)
         {
             npcDialog.text = dialog.log.Peek().ToString();
-            dialog.log.Dequeue();            
+            dialog.log.Dequeue();
+        }
+        else if (isClear)
+        {
+            isClear = false;
+            SetMBTIResult();
+            ChangeDisplayButton("Result_MBTI");
         }
         else
-        OpenSpawnRoomDoor();
+        {
+            ChangeDisplayButton("Main");
+            OpenSpawnRoomDoor();
+        }
     }
 
 

@@ -15,7 +15,10 @@ public class UpgradeUI : MonoBehaviour
     {
         Initialize();
     }
-
+    /// <summary>
+    /// 업그레이드 UI를 초기화 해주는 메서드
+    /// 경험치는 UserData에서 불러옴
+    /// </summary>
     public void Initialize()
     {
         spendExpValue = 0;
@@ -25,6 +28,10 @@ public class UpgradeUI : MonoBehaviour
         remainExp.text = curExp.text;
     }
 
+    /// <summary>
+    /// 소비할 EXP를 입력하면 해당 EXP와 UserData의 EXP를 계산해 UI를 업데이트 해주는 메서드
+    /// </summary>
+    /// <param name="_spendExp">소비할 EXP</param>
     public void SetSpend(int _spendExp)
     {
         spendExpValue = _spendExp;

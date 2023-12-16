@@ -170,11 +170,22 @@ public class UserDataManager : MonoBehaviour
     public int WeaponCriDamageLv;     // 치명타 증가율
     public int WeaponAtkRateLv;       // 공격 속도
 
-    [Header("Skill Data")]
-    public int TeraLv;                // 테라드릴 레벨
-    public int GrinderLv;             // 드릴연마 레벨
-    public int CrashLv;               // 드릴분쇄 레벨
-    public int LandingLv;             // 드릴랜딩 레벨
+    [Header("Skill 1 Data")]
+    public int Skill1Lv_1;                // 테라드릴 레벨
+    public int Skill1Lv_2;                // 테라드릴 레벨
+
+    [Header("Skill 2 Data")]
+    public int Skill2Lv_1;                // 드릴연마 레벨
+    public int Skill2Lv_2;                // 드릴연마 레벨
+    public int Skill2Lv_3;                // 드릴연마 레벨
+
+    [Header("Skill 3 Data")]
+    public int Skill3Lv;                  // 드릴분쇄 레벨
+
+    [Header("Skill 4 Data")]
+    public int Skill4Lv_1;                 // 드릴랜딩 레벨
+    public int Skill4Lv_2;                 // 드릴랜딩 레벨
+    public int Skill4Lv_3;                 // 드릴랜딩 레벨
 
     [Header("Quest Data")]
     public string QuestMain;          // 현재 퀘스트
@@ -201,7 +212,7 @@ public class UserDataManager : MonoBehaviour
     [Header("Setting Data")]          // 환경 설정
     public float rotationAmount = 45f;
     [Range(0, 100)]
-    public float masterSound, sfx, backgroundSound;
+    public float masterSound = 100, sfx = 100, backgroundSound = 100;
     [Range(-5, 5)]
     public float brightness = 0;
 
@@ -328,10 +339,19 @@ public class UserDataManager : MonoBehaviour
 
         // ######################### 스킬 업그레이드 #########################
 
-        TeraLv = PlayerDataManager.SkillLevel1;
-        GrinderLv = PlayerDataManager.SkillLevel2;
-        CrashLv = PlayerDataManager.SkillLevel3;
-        LandingLv = PlayerDataManager.SkillLevel4;
+        // TODO 데이터 매니저에 추가 테이블 필요
+        Skill1Lv_1 = PlayerDataManager.SkillLevel1;
+        Skill1Lv_2 = PlayerDataManager.SkillLevel1;
+
+        Skill2Lv_1 = PlayerDataManager.SkillLevel2;
+        Skill2Lv_2 = PlayerDataManager.SkillLevel2;
+        Skill2Lv_3 = PlayerDataManager.SkillLevel2;
+
+        Skill3Lv = PlayerDataManager.SkillLevel3;
+
+        Skill4Lv_1 = PlayerDataManager.SkillLevel4;
+        Skill4Lv_2 = PlayerDataManager.SkillLevel4;
+        Skill4Lv_3 = PlayerDataManager.SkillLevel4;
 
         // ######################### ETC #########################
 
@@ -410,6 +430,7 @@ public class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("gold_increase", GainGoldLv);
         PlayerDataManager.Save("exp_increase", GainExpLv);
     }
+    // 무기 업그레이드 세이브
     public void SaveWeaponUpgrade()
     {
         PlayerDataManager.Save("exp", Exp);
@@ -417,7 +438,19 @@ public class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("exp", WeaponAtkRateLv);
         PlayerDataManager.Save("weapon_cri_damage", WeaponCriDamageLv);
         PlayerDataManager.Save("weapon_cri_rate", WeaponCriRateLv);
-
+    }
+    // 스킬 업그레이드 세이브
+    public void SaveSkillUpgrade()
+    {
+        PlayerDataManager.Save("skill_level_1", Skill1Lv_1);
+        PlayerDataManager.Save("skill_level_1", Skill1Lv_2);
+        PlayerDataManager.Save("skill_level_2", Skill2Lv_1);
+        PlayerDataManager.Save("skill_level_2", Skill2Lv_2);
+        PlayerDataManager.Save("skill_level_2", Skill2Lv_3);
+        PlayerDataManager.Save("skill_level_3", Skill3Lv);
+        PlayerDataManager.Save("skill_level_4", Skill4Lv_1);
+        PlayerDataManager.Save("skill_level_4", Skill4Lv_2);
+        PlayerDataManager.Save("skill_level_4", Skill4Lv_3);
     }
 
     // ####################### 디버그용 PC 데이터 세팅 ####################### \\
@@ -433,6 +466,11 @@ public class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("weapon_cri_rate", 0);        
         PlayerDataManager.Save("weapon_cri_damage", 0);
         PlayerDataManager.Save("weapon_atk_rate", 0);
+
+        PlayerDataManager.Save("skill_level_1", 0);
+        PlayerDataManager.Save("skill_level_2", 0);
+        PlayerDataManager.Save("skill_level_3", 0);
+        PlayerDataManager.Save("skill_level_4", 0);
 
         PlayerDataManager.Update(true);
     }
@@ -514,6 +552,23 @@ public class UserDataManager : MonoBehaviour
         {
             weaponAtkRate = _weaponAtkRate + statData.upgradeAtkSpd[WeaponAtkRateLv - 1].sum1;
         }
+    }
+
+    public void SkillUpgrade(int skill1_1, int skill1_2, int skill2_1, int skill2_2, int skill2_3,
+        int skill3, int skill4_1, int skill4_2, int skill4_3)
+    {
+        Skill1Lv_1 = skill1_1;
+        Skill1Lv_2 = skill1_2;
+
+        Skill2Lv_1 = skill2_1;
+        Skill2Lv_2 = skill2_2;
+        Skill2Lv_3 = skill2_3;
+
+        Skill3Lv = skill3;
+
+        Skill4Lv_1 = skill4_1;
+        Skill4Lv_2 = skill4_2;
+        Skill4Lv_3 = skill4_3;     
     }
 
 }

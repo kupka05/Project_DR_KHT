@@ -8,6 +8,10 @@ public static class UserData
     {
         return UserDataManager.Instance.Exp;
     }
+    public static StatData GetStat()
+    {
+        return UserDataManager.Instance.statData;
+    }
 
     // 골드 관리
     public static void AddGold(int value)

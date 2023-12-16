@@ -145,24 +145,27 @@ public class LobbyEvent : MonoBehaviour
     public LobbyDisplayButton skill1Btn1;        
     public LobbyDisplayButton skill1Btn2;
     public UpgradeUI skill1_Up;
+    private int skill1Spend;
 
     [Header("Skill2 Upgrade")]
     public LobbyDisplayButton skill2Btn1;
     public LobbyDisplayButton skill2Btn2;
     public LobbyDisplayButton skill2Btn3;
     public UpgradeUI skill2_Up;
+    private int skill2Spend;
 
 
     [Header("Skill3 Upgrade")]
     public LobbyDisplayButton skill3Btn;
     public UpgradeUI skill3_Up;
-
+    private int skill3Spend;
 
     [Header("Skill4 Upgrade")]
     public LobbyDisplayButton skill4Btn1;
     public LobbyDisplayButton skill4Btn2;
     public LobbyDisplayButton skill4Btn3;
     public UpgradeUI skill4_Up;
+    private int skill4Spend;
 
 
     private bool isClear; // 클리어 여부 확인
@@ -213,6 +216,7 @@ public class LobbyEvent : MonoBehaviour
 
         // 상태창 : 스킬 강화
         InitializeSkillStatusUI();  // 스킬 강화 확인 초기화
+        UpdateSkillUpgradeUI();
         SetSkillLevelBtn();
 
         isClear = UserDataManager.Instance.isClear;
@@ -297,6 +301,10 @@ public class LobbyEvent : MonoBehaviour
         hpUpBtn.level = UserDataManager.Instance.HPLv;
         goldIncreBtn.level = UserDataManager.Instance.GainGoldLv;
         expIncreBtn.level = UserDataManager.Instance.GainExpLv;
+
+        hpUpBtn.newLevel = hpUpBtn.level;
+        goldIncreBtn.newLevel = goldIncreBtn.level;
+        expIncreBtn.newLevel = expIncreBtn.level;
     }
     // 플레이어 업그레이드 상태창 UI 업데이트
     public void UpdatePlayerUpgradeUI()
@@ -415,6 +423,11 @@ public class LobbyEvent : MonoBehaviour
         critRateUpBtn.level = UserDataManager.Instance.WeaponCriDamageLv;
         critDmgBtn.level = UserDataManager.Instance.WeaponCriDamageLv;
         atkRateBtn.level = UserDataManager.Instance.WeaponAtkRateLv;
+
+        atkUpBtn.newLevel = atkUpBtn.level;
+        critRateUpBtn.newLevel = critRateUpBtn.level;
+        critDmgBtn.newLevel = critDmgBtn.level;
+        atkRateBtn.newLevel = atkRateBtn.level;
     }
     public int WeaponCalculator()
     {
@@ -428,7 +441,7 @@ public class LobbyEvent : MonoBehaviour
         curCritDmg = MinusCheck(critDmgBtn.level - 1) ? UserDataManager.Instance.statData.upgradeCritDmg[critDmgBtn.level - 1].totalExp : 0;
         afterAtkRate = MinusCheck(atkRateBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeAtkSpd[atkRateBtn.newLevel - 1].totalExp : 0;
         curAtkRate = MinusCheck(atkRateBtn.level - 1) ? UserDataManager.Instance.statData.upgradeAtkSpd[atkRateBtn.level - 1].totalExp : 0;
-        Debug.Log($"{afterAtk} - {curAtk} + {afterCritRate} - {curCritRate} + {afterCritDmg} - {curCritDmg} + {afterAtkRate} - {curAtkRate} ");
+        //Debug.Log($"{afterAtk} - {curAtk} + {afterCritRate} - {curCritRate} + {afterCritDmg} - {curCritDmg} + {afterAtkRate} - {curAtkRate} ");
         result = (afterAtk - curAtk) + (afterCritRate - curCritRate) + (afterCritDmg - curCritDmg) + (afterAtkRate - curAtkRate);
         return result;
     }
@@ -480,30 +493,182 @@ public class LobbyEvent : MonoBehaviour
         skill4_Up.Initialize();
     }
 
+
     /// <summary> 불러온 스킬 레벨 세팅을 해주는 메서드 </summary>
     public void SetSkillLevelBtn()
     {
         //ToDo . 데이터 베이스에 테이블 추가하고, 데이터 불러오기
+        skill1Btn1.level = UserDataManager.Instance.Skill1Lv_1;
+        skill1Btn2.level = UserDataManager.Instance.Skill1Lv_2;
 
-        skill1Btn1.level = 0;
-        skill1Btn2.level = 0;
+        skill2Btn1.level = UserDataManager.Instance.Skill2Lv_1;
+        skill2Btn2.level = UserDataManager.Instance.Skill2Lv_2;
+        skill2Btn3.level = UserDataManager.Instance.Skill2Lv_3;
 
-        skill2Btn1.level = 0;
-        skill2Btn2.level = 0;
-        skill2Btn3.level = 0;
+        skill3Btn.level = UserDataManager.Instance.Skill3Lv;
 
-        skill3Btn.level = 0;
+        skill4Btn1.level = UserDataManager.Instance.Skill4Lv_1;
+        skill4Btn2.level = UserDataManager.Instance.Skill4Lv_2;
+        skill4Btn3.level = UserDataManager.Instance.Skill4Lv_3;
 
-        skill4Btn1.level = 0;
-        skill4Btn2.level = 0;
-        skill4Btn3.level = 0;
+        skill1Btn1.newLevel = skill1Btn1.level;
+        skill1Btn2.newLevel = skill1Btn2.level;
+
+        skill2Btn1.newLevel = skill2Btn1.level;
+        skill2Btn2.newLevel = skill2Btn2.level;
+        skill2Btn3.newLevel = skill2Btn3.level;
+
+        skill3Btn.newLevel = skill3Btn.level;
+
+        skill4Btn1.newLevel = skill4Btn1.level;
+        skill4Btn2.newLevel = skill4Btn2.level;
+        skill4Btn3.newLevel = skill4Btn3.level;
+
     }
-
-    public void UpgradeSkill()
+    // 스킬 업그레이드
+    public void UpgradeSkillBtn(string index)
     {
+        switch (index)
+        {
+            case "Skill1":
+                if (skill1Spend > UserData.GetExp() || skill1Spend <= 0)
+                { return; }
+                UpgradeSkill(skill1Spend);
+                break;
 
+            case "Skill2":
+                if (skill2Spend > UserData.GetExp() || skill2Spend <= 0)
+                { return; }
+                UpgradeSkill(skill2Spend);
+                break;
+
+            case "Skill3":
+                if (skill3Spend > UserData.GetExp() || skill3Spend <= 0)
+                { return; }
+                UpgradeSkill(skill3Spend);
+                break;
+
+            case "Skill4":
+                if (skill4Spend > UserData.GetExp() || skill4Spend <= 0)
+                { return; }
+                UpgradeSkill(skill4Spend);
+                break;
+        }
+
+        UpdateSkillUpgradeUI();
+        ChangeStatusDisplayButton(index);
+        UserDataManager.Instance.SaveSkillUpgrade();
+    }
+    public bool UpgradeSkill(int spend)
+    {
+        if(spend <= 0)
+        {
+            return false;
+        }
+
+        // 구매했을 떄 일어나는 이벤트
+        if (spend <= UserData.GetExp())
+        {
+            Debug.Log("구매 완료");
+
+            // 업그레이드 레벨을 새 레벨로 적용
+            skill1Btn1.level = skill1Btn1.newLevel;
+            skill1Btn2.level = skill1Btn2.newLevel;
+
+            skill2Btn1.level = skill2Btn1.newLevel;
+            skill2Btn2.level = skill2Btn2.newLevel;
+            skill2Btn3.level = skill2Btn3.newLevel;
+
+            skill3Btn.level = skill3Btn.newLevel;
+
+            skill4Btn1.level = skill4Btn1.newLevel;
+            skill4Btn2.level = skill4Btn2.newLevel;
+            skill4Btn3.level = skill4Btn3.newLevel;
+            // 경험치 소모
+            UserData.SpendExp(spend);
+
+            // 레벨 업데이트
+            UserDataManager.Instance.SkillUpgrade
+                (skill1Btn1.level, skill1Btn2.level, 
+                skill2Btn1.level, skill2Btn2.level, skill2Btn3.level, 
+                skill3Btn.level, 
+                skill4Btn1.level, skill4Btn2.level, skill4Btn3.level);
+
+            return true;
+        }
+        else
+        {
+            Debug.Log("경험치가 부족합니다.");
+            return false;
+        }
     }
 
+    public void UpdateSkillUpgradeUI()
+    {
+        skill1Spend = Skill1Calculator();
+        skill2Spend = Skill2Calculator();
+        skill3Spend = Skill3Calculator();
+        skill4Spend = Skill4Calculator();
+
+        skill1_Up.SetSpend(skill1Spend);
+        skill2_Up.SetSpend(skill2Spend);
+        skill3_Up.SetSpend(skill3Spend);
+        skill4_Up.SetSpend(skill4Spend);
+    }
+    public int Skill1Calculator()
+    {
+        int result, value1, value2, value3, value4;
+
+        value1 = MinusCheck(skill1Btn1.newLevel - 1) ? UserData.GetStat().upgradeSkill1[skill1Btn1.newLevel - 1].totalExp1 : 0;
+        value2 = MinusCheck(skill1Btn1.level - 1) ? UserData.GetStat().upgradeSkill1[skill1Btn1.level - 1].totalExp1 : 0;
+        value3 = MinusCheck(skill1Btn2.newLevel - 1) ? UserData.GetStat().upgradeSkill1[skill1Btn2.newLevel - 1].totalExp2 : 0;
+        value4 = MinusCheck(skill1Btn2.level - 1) ? UserData.GetStat().upgradeSkill1[skill1Btn2.newLevel - 1].totalExp2 : 0;
+
+        result = (value1 - value2) + (value3 - value4);
+
+        return result;
+    }
+    public int Skill2Calculator()
+    {
+        int result, value1, value2, value3, value4, value5, value6;
+
+        value1 = MinusCheck(skill2Btn1.newLevel - 1) ? UserData.GetStat().upgradeSkill2[skill2Btn1.newLevel - 1].totalExp1 : 0;
+        value2 = MinusCheck(skill2Btn1.level - 1) ? UserData.GetStat().upgradeSkill2[skill2Btn1.level - 1].totalExp1 : 0;
+        value3 = MinusCheck(skill2Btn2.newLevel - 1) ? UserData.GetStat().upgradeSkill2[skill2Btn2.newLevel - 1].totalExp2 : 0;
+        value4 = MinusCheck(skill2Btn2.level - 1) ? UserData.GetStat().upgradeSkill2[skill2Btn2.level - 1].totalExp2 : 0;
+        value5 = MinusCheck(skill2Btn3.newLevel - 1) ? UserData.GetStat().upgradeSkill2[skill2Btn3.newLevel - 1].totalExp3 : 0;
+        value6 = MinusCheck(skill2Btn3.level - 1) ? UserData.GetStat().upgradeSkill2[skill2Btn3.level - 1].totalExp3 : 0;
+
+        result = (value1 - value2) + (value3 - value4) + (value5 - value6);
+
+        return result;
+    }
+    public int Skill3Calculator()
+    {
+        int result, value1, value2, value3, value4, value5, value6;
+
+        value1 = MinusCheck(skill3Btn.newLevel - 1) ? UserData.GetStat().upgradeSkill3[skill3Btn.newLevel - 1].totalExp1 : 0;
+        value2 = MinusCheck(skill3Btn.level - 1) ? UserData.GetStat().upgradeSkill3[skill3Btn.level - 1].totalExp1 : 0;
+
+        result = (value1 - value2);
+
+        return result;
+    }
+    public int Skill4Calculator()
+    {
+        int result, value1, value2, value3, value4, value5, value6;
+
+        value1 = MinusCheck(skill4Btn1.newLevel - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn1.newLevel - 1].totalExp1 : 0;
+        value2 = MinusCheck(skill4Btn1.level - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn1.level - 1].totalExp1 : 0;
+        value3 = MinusCheck(skill4Btn2.newLevel - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn2.newLevel - 1].totalExp2 : 0;
+        value4 = MinusCheck(skill4Btn2.level - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn2.level - 1].totalExp2 : 0;
+        value5 = MinusCheck(skill4Btn3.newLevel - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn3.newLevel - 1].totalExp3 : 0;
+        value6 = MinusCheck(skill4Btn3.level - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn3.level - 1].totalExp3 : 0;
+        Debug.Log($"{value1} - {value2} + {value3} - {value4} + {value5} - {value6}");
+        result = (value1 - value2) + (value3 - value4) + (value5 - value6);
+
+        return result;
+    }
     #endregion
 
     // 클리어 UI 업데이트 가져오기
@@ -568,6 +733,8 @@ public class LobbyEvent : MonoBehaviour
         hpUpBtn.level = UserDataManager.Instance.HPLv;
         goldIncreBtn.level = UserDataManager.Instance.GainGoldLv;
         expIncreBtn.level = UserDataManager.Instance.GainExpLv;
+
+        
     }
 
     // 상태창 패널 변경 버튼

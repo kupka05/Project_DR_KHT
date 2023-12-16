@@ -2105,7 +2105,7 @@ PrefabInstance:
     - target: {fileID: 7837797319980225010, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0038709145
+      value: -0.0037846202
       objectReference: {fileID: 0}
     - target: {fileID: 7837797319993773063, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -2155,7 +2155,7 @@ PrefabInstance:
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000771271
+      value: -0.0008103778
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -6777,7 +6777,7 @@ GameObject:
   - component: {fileID: 277143374}
   - component: {fileID: 277143375}
   m_Layer: 5
-  m_Name: Attack Upgrade
+  m_Name: Upgrade 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6819,7 +6819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
+  type: 3
   leftButton: {fileID: 1088196350}
   rightButton: {fileID: 2018430753}
   acceptPannel: {fileID: 345851851}
@@ -7084,14 +7084,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1920788381}
         m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
+        m_MethodName: UpgradeSkillBtn
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SelectSkill
+          m_StringArgument: Skill4
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &282382920
@@ -8458,7 +8458,7 @@ GameObject:
   - component: {fileID: 339911983}
   - component: {fileID: 339911984}
   m_Layer: 5
-  m_Name: CritProb Upgrade  (1)
+  m_Name: Upgrade 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8967,10 +8967,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e74d0759a925913419ac603b474cc4ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spendExpValue: 0
   curExp: {fileID: 1958788131}
   spendExp: {fileID: 989910399}
   remainExp: {fileID: 1719455158}
-  spendExpValue: 0
 --- !u!1 &346509773
 GameObject:
   m_ObjectHideFlags: 0
@@ -10211,14 +10211,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1920788381}
         m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
+        m_MethodName: UpgradeSkillBtn
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SelectSkill
+          m_StringArgument: Skill3
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &378901165
@@ -12011,7 +12011,7 @@ GameObject:
   - component: {fileID: 434016111}
   - component: {fileID: 434016112}
   m_Layer: 5
-  m_Name: Attack Upgrade
+  m_Name: Upgrade 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12059,7 +12059,7 @@ MonoBehaviour:
   acceptPannel: {fileID: 1202036750}
   beforeValue: {fileID: 0}
   afterValue: {fileID: 0}
-  index: 10
+  index: 2
   level: 0
   newLevel: 0
   contentPos: {fileID: 1497101089}
@@ -13048,7 +13048,7 @@ GameObject:
   - component: {fileID: 466956520}
   - component: {fileID: 466956521}
   m_Layer: 5
-  m_Name: CritProb Upgrade  (1)
+  m_Name: Upgrade 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20163,10 +20163,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e74d0759a925913419ac603b474cc4ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spendExpValue: 0
   curExp: {fileID: 889903708}
   spendExp: {fileID: 741029535}
   remainExp: {fileID: 2135981139}
-  spendExpValue: 0
 --- !u!1 &738764610
 GameObject:
   m_ObjectHideFlags: 0
@@ -23809,7 +23809,7 @@ GameObject:
   - component: {fileID: 858442456}
   - component: {fileID: 858442457}
   m_Layer: 5
-  m_Name: 'CritProb Upgrade '
+  m_Name: Upgrade 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23851,7 +23851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
+  type: 3
   leftButton: {fileID: 1035288703}
   rightButton: {fileID: 567728548}
   acceptPannel: {fileID: 345851851}
@@ -35347,10 +35347,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e74d0759a925913419ac603b474cc4ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spendExpValue: 0
   curExp: {fileID: 1177925513}
   spendExp: {fileID: 87381459}
   remainExp: {fileID: 1441504468}
-  spendExpValue: 0
 --- !u!1 &1202805723
 GameObject:
   m_ObjectHideFlags: 0
@@ -39724,7 +39724,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1344183227
 RectTransform:
   m_ObjectHideFlags: 0
@@ -46786,14 +46786,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1920788381}
         m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
+        m_MethodName: UpgradeSkillBtn
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SelectSkill
+          m_StringArgument: Skill2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &1510656097
@@ -49220,7 +49220,7 @@ GameObject:
   - component: {fileID: 1609823865}
   - component: {fileID: 1609823866}
   m_Layer: 5
-  m_Name: Attack Upgrade
+  m_Name: Upgrade 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62592,18 +62592,19 @@ MonoBehaviour:
   weaponCurExp: {fileID: 1056185948}
   weaponSpendExp: {fileID: 356516135}
   weaponRemainExp: {fileID: 1818277040}
-  skill1_AtkUpBtn: {fileID: 0}
-  skill1_speedUpBtn: {fileID: 0}
-  skill1_Up: {fileID: 0}
-  skill2_AtkUpBtn: {fileID: 0}
-  skill2_speedUpBtn: {fileID: 0}
-  skill2_Up: {fileID: 0}
-  skill3_AtkUpBtn: {fileID: 0}
-  skill3_speedUpBtn: {fileID: 0}
-  skill3_Up: {fileID: 0}
-  skill4_AtkUpBtn: {fileID: 0}
-  skill4_speedUpBtn: {fileID: 0}
-  skill4_Up: {fileID: 0}
+  skill1Btn1: {fileID: 1609823866}
+  skill1Btn2: {fileID: 339911984}
+  skill1_Up: {fileID: 738307434}
+  skill2Btn1: {fileID: 277143375}
+  skill2Btn2: {fileID: 858442457}
+  skill2Btn3: {fileID: 2026953034}
+  skill2_Up: {fileID: 345851855}
+  skill3Btn: {fileID: 1511785697}
+  skill3_Up: {fileID: 1999658575}
+  skill4Btn1: {fileID: 434016112}
+  skill4Btn2: {fileID: 2093326161}
+  skill4Btn3: {fileID: 466956521}
+  skill4_Up: {fileID: 1202036754}
 --- !u!4 &1920788382
 Transform:
   m_ObjectHideFlags: 0
@@ -65773,10 +65774,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e74d0759a925913419ac603b474cc4ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spendExpValue: 0
   curExp: {fileID: 2067394694}
   spendExp: {fileID: 2025599018}
   remainExp: {fileID: 2104628652}
-  spendExpValue: 0
 --- !u!1 &2004330816
 GameObject:
   m_ObjectHideFlags: 0
@@ -66498,7 +66499,7 @@ GameObject:
   - component: {fileID: 2026953033}
   - component: {fileID: 2026953034}
   m_Layer: 5
-  m_Name: CritProb Upgrade  (1)
+  m_Name: Upgrade 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66540,7 +66541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e2bfab769ab2d42a7d9189246e5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
+  type: 3
   leftButton: {fileID: 964655888}
   rightButton: {fileID: 899322148}
   acceptPannel: {fileID: 345851851}
@@ -67728,14 +67729,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1920788381}
         m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: ChangeStatusDisplayButton
+        m_MethodName: UpgradeSkillBtn
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SelectSkill
+          m_StringArgument: Skill1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &2064025742
@@ -68630,7 +68631,7 @@ GameObject:
   - component: {fileID: 2093326160}
   - component: {fileID: 2093326161}
   m_Layer: 5
-  m_Name: 'CritProb Upgrade '
+  m_Name: Upgrade 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

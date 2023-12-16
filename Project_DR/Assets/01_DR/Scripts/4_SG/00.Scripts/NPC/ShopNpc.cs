@@ -19,7 +19,7 @@ public class ShopNpc : AnnouncementNPC
         OnCanvasObj();
         
         ParamsInIt(npcID);
-        NpcCanvas.Name_TitleUpdate(npcName, npcTitle);
+        NpcCanvas.NameUpdate(npcName);
 
         OffCanvasObj();
 
@@ -64,18 +64,29 @@ public class ShopNpc : AnnouncementNPC
         //OutPutShopText();     : 다시제작
     }       // StartConvertion()
 
+    /// <summary>
+    /// 다음 대사 출력할때 호출
+    /// </summary>
+    /// <param name="_nextConverationId">다음 대사의 ID</param>
     protected override void NextConveration(int _nextConverationId)
-    {                
+    {
+        base.TitleInIt(_nextConverationId);
+        NpcCanvas.TitleUpdate(npcTitle.ToString());
         OutPutPickText(_nextConverationId);
+    }       // NextConveration()
 
-    }
-
+    /// <summary>
+    /// 대사끝날때 호출
+    /// </summary>
     protected override void EndConveration()
     {
         OffCanvasObj();
     }       // EndConveration()
 
-
+    /// <summary>
+    /// 정해진 대사 출력하는 함수
+    /// </summary>
+    /// <param name="_refConverationId"></param>
     private void OutPutPickText(int _refConverationId)
     {
         string texts = (string)DataManager.instance.GetData(_refConverationId, "OutPutText",typeof(string));

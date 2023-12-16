@@ -102,15 +102,23 @@ public class NPC_CanvasController : MonoBehaviour
     #region 텍스트 출력관련
 
     /// <summary>
-    /// NPC의 이름과 칭호를 변수에 대입해주며 이름과 칭호의 텍스트를 변수값을 출력
+    /// NPC의 이름을 업데이트 하는 함수
     /// </summary>
     /// <param name="_name">NPC의 이름</param>
-    /// <param name="_title">NPC의 칭호</param>
-    public void Name_TitleUpdate(string _name, string _title)
+    public void NameUpdate(string _name)
     {
-        npcNameText.text = _name;
-        npcTitleText.text = _title;
+        npcNameText.text = _name;        
     }       // Name_TitleUpdate()
+
+
+    /// <summary>
+    /// NPC의 칭호를 업데이트 하는 함수
+    /// </summary>
+    /// <param name="_title"></param>
+    public void TitleUpdate(string _title)
+    {
+        npcTitleText.text = _title;
+    }       // TitleUpdate()
 
     /// <summary>
     /// 대사 출력해주는 함수
@@ -119,7 +127,7 @@ public class NPC_CanvasController : MonoBehaviour
     public void OutPutConversation(string _outputText)
     {
         npcConversationText.text = _outputText;
-    }
+    }       // OutPutConversation()
 
     #endregion 텍스트 출력관련
 

@@ -40,6 +40,7 @@ public class NPC : MonoBehaviour
     private Queue<string> converationText;  // NPC의 대사를 담아둘 Queue
 
     protected int npcID;                // NPC 스프레드시트 ID       -> 파생된 자식 클래스에서 결정
+    protected int inspectionInt;        // 검수 할때에 필요한 int 변수
 
     // 자식 클래스가 ParamsInIt()를 호출하면서 결정
     protected NpcType npcType;                    // NPC 타입을 시트값에 따라 지정해줄것임
@@ -235,16 +236,10 @@ public class NPC : MonoBehaviour
 
         int[] conversationIds = GFunc.SplitIds(conversation);
 
-
-        int clearQuestID = InspectionClearQuest(conversationIds);    // 해당 NPC에서 파생된 퀘스트중 클리어한 퀘스트가 존재하는지
-
-        if (clearQuestID != 0)
-        {   // 0이 아니라면 위함수에서 ID값을받아왔을거임
-            CompleateQuest();
-        }
+        Inspection(conversationIds);
 
 
-        InspectionConversationEvent(conversationIds);   // 선행 퀘스트 확인
+
 
 
 
@@ -252,74 +247,119 @@ public class NPC : MonoBehaviour
     }       // PickConverationEvent()
 
 
+    /// <summary>
+    /// 검사를 해주는 함수
+    /// </summary>
+    private void Inspection(int[] _conversationIds) // return값이 존재해야할수도 있음
+    {
+        int havingDialogueID = InspectionClearQuest(_conversationIds);    // 해당 NPC에서 파생된 퀘스트중 클리어완료가능한 퀘스트가 존재하는지
+
+        if (havingDialogueID != 0)
+        {   // 0이 아니라면 위함수에서 완료한 퀘스트에 따른 출력해야하는 대사의 ID값
+            CompleateQuest(havingDialogueID);
+            return;     // 완료한것이 있어서 위에서 대사넣고 다할것이니까 return
+        }
+        // 아니라면 다른것 진행
+        InspectionConversationEvent(_conversationIds);   // 선행 퀘스트 확인
+
+    }       // Inspection
 
 
+    /// <summary>
+    /// 클리어 가능한 퀘스트가 해당 NPC의 전조퀘스트랑 같은것이 존재하는지 체크하는함수
+    /// </summary>
+    /// <param name="_conversationIds">해당NPC의 대사ID값들이 들어있는 int배열</param>
+    /// <returns>완료한 퀘스트에 따른 출력해야하는 대사의 ID값</returns>
     private int InspectionClearQuest(int[] _conversationIds)
     {
         // 클리어조건 달성된 퀘스트가 존재하는지 확인
         // TODO
 
-        List<int> choiceQuestIdList = new List<int>();
+        //List<int> choiceQuestIdList = new List<int>();
+        List<int> antecedentQuestIdList = new List<int>();      // NPC의 대사들의 선행퀘스트들을 담아둘 List
+        List<int> conversationIdList = new List<int>();         // NPC의 선행 퀘스트 들이 존재하는 대사의 Id들을 모아둘 List
+
+        StringBuilder stringBuilder = new StringBuilder();      // 비교할때 사용할 StringBuilder
+
+        #region LEGACY 모든 선택지를 수집해서 체크
+        //for (int i = 0; i < _conversationIds.Length; i++)
+        //{
+        //    stringBuilder.Clear();
+        //    stringBuilder.Append(Data.GetString(_conversationIds[i], "Choice1Event"));
+
+        //    int[] choice001QuestId = GFunc.SplitIds(stringBuilder.ToString());
+
+        //    for (int j = 0; j < choice001QuestId.Length; j++)
+        //    {
+        //        if (choice001QuestId[j] >= (int)IdValue.Quest && choice001QuestId[j] < (int)IdValue.Dialogue)
+        //        {
+        //            choiceQuestIdList.Add(choice001QuestId[j]);
+        //        }
+        //        else { /*PASS*/ }
+        //    }
+
+        //    stringBuilder.Clear();
+        //    stringBuilder.Append(Data.GetString(_conversationIds[i], "Choice2Event"));
+
+        //    int[] choice002QuestId = GFunc.SplitIds(stringBuilder.ToString());
+
+        //    for (int j = 0; j < choice002QuestId.Length; j++)
+        //    {
+        //        if (choice002QuestId[j] >= (int)IdValue.Quest && choice002QuestId[j] < (int)IdValue.Dialogue)
+        //        {
+        //            choiceQuestIdList.Add(choice002QuestId[j]);
+        //        }
+        //        else { /*PASS*/ }
+        //    }
+
+        //    stringBuilder.Clear();
+        //    stringBuilder.Append(Data.GetString(_conversationIds[i], "Choice3Event"));
+
+        //    int[] choice003QuestId = GFunc.SplitIds(stringBuilder.ToString());
+
+        //    for(int j = 0; j < choice003QuestId.Length; j++)
+        //    {
+        //        if (choice003QuestId[j] >= (int)IdValue.Quest && choice003QuestId[j] < (int)IdValue.Dialogue)
+        //        {
+        //            choiceQuestIdList.Add(choice003QuestId[j]);
+        //        }
+        //        else { /*PASS*/ }
+        //    }
 
 
-        StringBuilder stringBuilder = new StringBuilder();
+        //}       // 모든 대사 Id 만큼순회하며 대사속 선택지 퀘스트 아이디를 List에 넣어주는 반복문
 
+        #endregion LEGACY 모든 선택지를 수집해서 체크
+        // 모든 선택지 수집해서 체크 -> 선행퀘스트가 완료가능한 퀘스트중에 중복된것이 있는지 체크
 
         for (int i = 0; i < _conversationIds.Length; i++)
         {
             stringBuilder.Clear();
-            stringBuilder.Append(Data.GetString(_conversationIds[i], "Choice1Event"));
-
-            int[] choice001QuestId = GFunc.SplitIds(stringBuilder.ToString());
-
-            for (int j = 0; j < choice001QuestId.Length; j++)
+            stringBuilder.Append(Data.GetString(_conversationIds[i], "AntecedentQuest"));
+            stringBuilder.Replace("_", "");
+            if (stringBuilder.ToString() != "0")
             {
-                if (choice001QuestId[j] >= (int)IdValue.Quest && choice001QuestId[j] < (int)IdValue.Dialogue)
-                {
-                    choiceQuestIdList.Add(choice001QuestId[j]);
-                }
-                else { /*PASS*/ }
+                conversationIdList.Add(_conversationIds[i]);
+                antecedentQuestIdList.Add(int.Parse(stringBuilder.ToString()));
             }
-
-            stringBuilder.Clear();
-            stringBuilder.Append(Data.GetString(_conversationIds[i], "Choice2Event"));
-
-            int[] choice002QuestId = GFunc.SplitIds(stringBuilder.ToString());
-
-            for (int j = 0; j < choice002QuestId.Length; j++)
-            {
-                if (choice002QuestId[j] >= (int)IdValue.Quest && choice002QuestId[j] < (int)IdValue.Dialogue)
-                {
-                    choiceQuestIdList.Add(choice002QuestId[j]);
-                }
-                else { /*PASS*/ }
-            }
-
-            stringBuilder.Clear();
-            stringBuilder.Append(Data.GetString(_conversationIds[i], "Choice3Event"));
-
-            int[] choice003QuestId = GFunc.SplitIds(stringBuilder.ToString());
-
-            for(int j = 0; j < choice003QuestId.Length; j++)
-            {
-                if (choice003QuestId[j] >= (int)IdValue.Quest && choice003QuestId[j] < (int)IdValue.Dialogue)
-                {
-                    choiceQuestIdList.Add(choice003QuestId[j]);
-                }
-                else { /*PASS*/ }
-            }
-
-
-        }       // 모든 대사 Id 만큼순회하며 대사속 선택지 퀘스트 아이디를 List에 넣어주는 반복문
-
+        }
 
         //foreach(/*완료가능한 퀘스트 List들*/)
         //{
         //    foreach(int questId in choiceQuestIdList)
         //    {
-        //        if (/*완료 가능한 퀘스트 List의 현재 foreach값과 해당 NPC 퀘스트 값이 같다면*/)
+        //        if (/*완료 가능한 퀘스트 List의 현재 완료가능한 퀘스트값과 NPC 전조 퀘스트 값이 같다면*/)
         //        {
-        //            return ID값;
+        //            foreach(int outId in conversationIdList)
+        //             {
+        //                  stringBuilder.Clear();
+        //                  stringBuilder.Append(Data.GetString(outId,"AntecedentQuest"))
+        //                  stringBuilder.Replace("_", "");
+        //                 if(questId == int.Parse(stringBuidler.ToString()));
+        //                  {
+        //                      return int.Parse(stringBuidler.ToString())
+        //                  }
+        //             }        
         //        }
         //    }
         //}
@@ -339,10 +379,16 @@ public class NPC : MonoBehaviour
 
     }       // InspectionConversationEvent()
 
-    private void CompleateQuest()
-    {
-
-    }
+    /// <summary>
+    /// 완료한 퀘스트에 대한 대사출력과 보상지급해주는 함수
+    /// </summary>
+    /// <param name="_havingToDialogueID">출력해야하는 대사의 ID값</param>
+    private void CompleateQuest(int _havingToDialogueID)
+    {       // 퀘스트 완료 대사 출력과 보상 지급해줘야함
+        EnQueueConversation(_havingToDialogueID);   // 대사 넣기
+        // 보상지급 해줘야함
+        // 대사 출력해야함
+    }       // CompleateQuest()
 
     #endregion 대사관련 함수
 

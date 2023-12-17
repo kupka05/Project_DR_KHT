@@ -118,9 +118,7 @@ public class MBTIManager : MonoBehaviour
         I = playerMBTI.I;
         N = playerMBTI.N;
         F = playerMBTI.F;
-        P = playerMBTI.P;
-        Debug.Log("데이터 불러오나?" + playerMBTI.I);
-        
+        P = playerMBTI.P;        
     }
     // 데이터 전송
     public void SetData()

@@ -12,6 +12,12 @@ public enum NPCID
     Olive = 1111201
 }
 
+public enum NpcTriggerType
+{
+    Auto = 10,
+    Trigger = 20
+}
+
 /// <summary>
 /// ID값 비교할때 사용할 값
 /// </summary>
@@ -32,11 +38,7 @@ public class NPC : MonoBehaviour
         Monster = 3
     }       // enumType
 
-    protected enum NpcTriggerType
-    {
-        Auto = 10,
-        Trigger = 20
-    }
+
 
     protected Animator animator;        // NPC 애니메이터
 
@@ -50,7 +52,7 @@ public class NPC : MonoBehaviour
 
     // 자식 클래스가 ParamsInIt()를 호출하면서 결정
     protected NpcType npcType;                    // NPC 타입을 시트값에 따라 지정해줄것임
-    protected NpcTriggerType npcTriggerType;      // NPC의 트리거 타입을 지정할 Enum 시트값에 따라서 할당될것임
+    public NpcTriggerType npcTriggerType;      // NPC의 트리거 타입을 지정할 Enum 시트값에 따라서 할당될것임
 
     protected string npcName;               // NPC 이름
     protected StringBuilder npcTitle;              // NPC 칭호 (대화에 따라서 변화 할수 있기 떄문에 StringBuidler사용)   
@@ -350,6 +352,8 @@ public class NPC : MonoBehaviour
                 antecedentQuestIdList.Add(int.Parse(stringBuilder.ToString()));
             }
         }
+
+
 
         //foreach(/*완료가능한 퀘스트 List들*/)
         //{

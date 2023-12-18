@@ -6,30 +6,20 @@ using System;
 using Newtonsoft.Json.Bson;
 using TMPro;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 
-public class SG_Test : SG_Test002
+public class SG_Test : MonoBehaviour
 {
+    SG_Test002 test002;
+    public GameObject tempObj;
 
-
-
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
-        Debug.Log("SG_Test에서 Base호출 이후 Start내부 실행");
-        testEvent += ISINVOKE;
-        StartCoroutine(TestCoroutine());
+        //Debug.Log($"GetComponent전 용량{Marshal.SizeOf(test002.num4)}");
+        test002 = tempObj.GetComponent<SG_Test002>();
 
-    }
-
-    private void ISINVOKE()
-    {
-        Debug.Log("최상위 부모 클래스에서 INVOKE하면 잘 불러와지나?");
-    }
-
-    IEnumerator TestCoroutine()
-    {
-        yield return new WaitForSeconds(5);
-        IsTest = true;
+        
+        Debug.Log($"GetComponent후 용량{Marshal.SizeOf(test002.num4)}");
     }
 
 

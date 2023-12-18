@@ -11,7 +11,8 @@ public class LobbyDisplayButton : MonoBehaviour
     {
         Default,
         PlayerStatus,
-        Weapon
+        Weapon,
+        Skill
     }
 
     public ButtonType type = ButtonType.Default;
@@ -74,6 +75,15 @@ public class LobbyDisplayButton : MonoBehaviour
                 newLevel = level;
                 break;
 
+            case ButtonType.Skill:
+                leftButton.SetActive(false);
+                rightButton.SetActive(false);
+                acceptPannel.SetActive(false);
+                lobbyEvent?.SetSkillLevelBtn();
+                lobbyEvent?.UpdateSkillUpgradeUI();
+
+                newLevel = level;
+                break;
         }
 
         isActive = false;
@@ -171,7 +181,11 @@ public class LobbyDisplayButton : MonoBehaviour
                 }
             }
         }
-
-        lobbyEvent.UpdatePlayerUpgradeUI();
+        if (type == ButtonType.PlayerStatus)
+            lobbyEvent?.UpdatePlayerUpgradeUI();
+        else if (type == ButtonType.Weapon)
+            lobbyEvent?.UpdateWeaponUpgradeUI();
+        else if (type == ButtonType.Skill)
+            lobbyEvent?.UpdateSkillUpgradeUI();
     }
 }

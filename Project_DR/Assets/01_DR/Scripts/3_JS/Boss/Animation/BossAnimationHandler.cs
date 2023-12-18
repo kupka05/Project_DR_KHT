@@ -54,14 +54,14 @@ namespace BossMonster
         // 죽음 애니메이션
         public void DieAnimation()
         {
-            Debug.Log("DieAnimation()");
+            GFunc.Log("DieAnimation()");
             _animator.SetTrigger("isDie");
         }
 
         // 주문 시전 애니메이션
         public void CastSpellAnimation()
         {
-            Debug.Log("CastSpellAnimation()");
+            GFunc.Log("CastSpellAnimation()");
             _animator.SetTrigger("isCast");
         }
 
@@ -71,7 +71,7 @@ namespace BossMonster
             int randomNum = UnityEngine.Random.Range(0, AttackAnimationRange);
             string animationType = randomNum == 0 ? "" : randomNum.ToString();
             _animator.SetTrigger(GFunc.SumString("isAttack", animationType));
-            Debug.Log($"AttackAnimation() {randomNum}");
+            GFunc.Log($"AttackAnimation() {randomNum}");
         }
 
 

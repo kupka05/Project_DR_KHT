@@ -16,12 +16,14 @@ public class GoogleSheetLoader : MonoBehaviour
     {
         // JS
         "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
-        "Item_Shop_Table", "BossMonster_Table", "AttackPattern_Table",
+        "Item_Shop_Table", "BossMonster_Table", "AttackPattern_Table", "Quest_Table", "Quest_Reward_Table",
 
         // JH
         "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",
         "Upgrade_PC_HP_Table", "Upgrade_PC_GainEXP_Table", "Upgrade_PC_GainGold_Table",
         "Upgrade_Weapon_Atk_Table", "Upgrade_Weapon_CR_Table", "Upgrade_Weapon_CRD_Table", "Upgrade_Weapon_ATKSpeed_Table",
+        "Upgrade_Skill_1","Upgrade_Skill_2","Upgrade_Skill_3","Upgrade_Skill_4",
+
 
         //YS
         "Monster_Table", "Boss_Table", "Boss_projectile_Table",
@@ -59,7 +61,7 @@ public class GoogleSheetLoader : MonoBehaviour
             // 코루틴으로 구글 시트 데이터를 불러온다.
             // isCsvConert = true를 매개변수로 할당해서
             // Csv 데이터로 변환한다.
-            int waitframe = (i + 1) * 5;
+            int waitframe = (i + 1) * 30;
             StartCoroutine(GoogleSheetsReader.GetGoogleSheetsData(
                 spreadsheetId, apiKey, sheetNames[i], true, waitframe, data =>
                 {
@@ -87,6 +89,6 @@ public class GoogleSheetLoader : MonoBehaviour
 
         // 로딩 완료 상태 변경
         isDone = true;
-        Debug.Log("isDOne");
+        GFunc.Log("isDOne");
     }
 }

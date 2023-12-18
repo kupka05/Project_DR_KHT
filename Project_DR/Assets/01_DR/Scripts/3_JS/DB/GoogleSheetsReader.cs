@@ -30,7 +30,7 @@ public class GoogleSheetsReader
     public static IEnumerator GetGoogleSheetsData(string spreadsheetId, 
         string apiKey, string sheetName, bool isCsvConvert, int waitFrame, Action<string> callBack)
     {
-        Debug.Log($"프레임대기: {waitFrame}");
+        GFunc.Log($"프레임대기: {waitFrame}");
         // waitFrame만큼 대기
         for (int i = 0; i < waitFrame; i++)
         {
@@ -50,7 +50,7 @@ public class GoogleSheetsReader
             string data = "";
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Error: " + www.error);
+                GFunc.LogError("Error: " + www.error);
             }
             else
             {

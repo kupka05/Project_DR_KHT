@@ -21,7 +21,7 @@ public class SimpleResizer
         resizable.SetNewSize(newSize);
         if (resizable == null)
         {
-            Debug.LogError("Resizable component missing.");
+            GFunc.LogError("Resizable component missing.");
             return;
         }
 

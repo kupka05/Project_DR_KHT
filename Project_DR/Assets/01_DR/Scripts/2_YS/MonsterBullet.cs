@@ -50,10 +50,11 @@ public class MonsterBullet : MonoBehaviour
                 if(hit.collider.CompareTag("Player"))
                 {
                     hit.collider.GetComponent<Damageable>().DealDamage(damage);
-                    Debug.Log($"데미지:{damage}");
+                    GFunc.Log($"데미지:{damage}");
 
                     Destroy(this.gameObject);
                 }
+
 
         }
 

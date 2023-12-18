@@ -119,7 +119,7 @@ namespace BNG {
 
             onDamaged?.Invoke(damageAmount);
 
-            //Debug.Log($"health{Health}");
+            //GFunc.Log($"health{Health}");
 
             // Invector Integration
 #if INVECTOR_BASIC || INVECTOR_AI_TEMPLATE

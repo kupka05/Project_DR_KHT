@@ -18,7 +18,7 @@ public class JsonToCsvConverter
         // 변환된 csvData가 null 값일 경우
         if (csvData == null)
         {
-            Debug.Log("ConvertJsonToCsv(): 출력 결과 NULL, json 문자열을 확인해주세요.");
+            GFunc.Log("ConvertJsonToCsv(): 출력 결과 NULL, json 문자열을 확인해주세요.");
 
             // 빈 문자열 반환
             return string.Empty;
@@ -58,7 +58,7 @@ public class JsonToCsvConverter
                 // 패턴에 일치하는 문자열을 찾았을 경우
                 if (match.Success)
                 {
-                    //Debug.Log("Match True");
+                    //GFunc.Log("Match True");
 
                     // match를 string으로 형변환
                     string text = match.ToString();
@@ -73,7 +73,7 @@ public class JsonToCsvConverter
                 // match에 실패했을 경우
                 else
                 {
-                    Debug.Log("Match False");
+                    GFunc.Log("Match False");
                 }
                 index++;
             }

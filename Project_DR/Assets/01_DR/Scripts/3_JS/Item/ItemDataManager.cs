@@ -49,14 +49,14 @@ public static class ItemDataManager
 
             // 디버그
             //string data2 = (string)DataManager.instance.GetData(50022221, "Dur222ation", typeof(string));
-            //Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
-            //Debug.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
+            //GFunc.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
+            //GFunc.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
         }
         // DB에 데이터를 저장할 수 없을 경우
         catch (Exception ex)
         {
             // 예외가 발생했을 때 실행할 코드 블록
-            Debug.LogWarning($"오류 강제 예외처리 / ItemDataManager.InitItemDB() Exception: {ex.Message}");
+            GFunc.LogWarning($"오류 강제 예외처리 / ItemDataManager.InitItemDB() Exception: {ex.Message}");
         }
     }
 
@@ -239,7 +239,7 @@ public static class ItemDataManager
     {
         if (target == null)
         {
-            //Debug.Log("Target is null");
+            //GFunc.Log("Target is null");
             return false;
         }
 
@@ -247,11 +247,11 @@ public static class ItemDataManager
 
         if (field == null)
         {
-            //Debug.Log($"{typeof(T)} Field {fieldName} not found");
+            //GFunc.Log($"{typeof(T)} Field {fieldName} not found");
             return false;
         }
 
-        //Debug.Log($"isField = {field}");
+        //GFunc.Log($"isField = {field}");
         return field.FieldType == typeof(TValue);
     }
 
@@ -287,7 +287,7 @@ public static class ItemDataManager
         catch (Exception ex)
         {
             // 예외가 발생했을 때 실행할 코드 블록
-            Debug.LogWarning($"오류 강제 예외처리 / ItemDataManager.CheckIsValidKey() Exception: {ex.Message}");
+            GFunc.LogWarning($"오류 강제 예외처리 / ItemDataManager.CheckIsValidKey() Exception: {ex.Message}");
             return false;
         }
     }

@@ -113,7 +113,7 @@ namespace BNG
                     if (isKnockback)
                     {
                         d.OnKnockBack(collision.GetContact(0).point);
-                        Debug.Log(collision.gameObject.name + "에게 " + Damage);
+                        GFunc.Log(collision.gameObject.name + "에게 " + Damage);
 
                     }
 
@@ -125,7 +125,7 @@ namespace BNG
                     {
                         damagePart.parent.OnKnockBack(collision.GetContact(0).point);
                     }
-                    Debug.Log(collision.gameObject.name + "파츠에게 " + Damage);
+                    GFunc.Log(collision.gameObject.name + "파츠에게 " + Damage);
 
                 }
             }

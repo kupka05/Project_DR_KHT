@@ -13,7 +13,7 @@ public class PlayerMouthColliderHandler : MonoBehaviour
         // 아이템이 입 안에 들어왔을 경우
         if (other.CompareTag("ItemPotion"))
         {
-        Debug.Log("PlayerMouthColliderHandler.OnTriggerEnter");
+        GFunc.Log("PlayerMouthColliderHandler.OnTriggerEnter");
             // 포션 아이템 사용
             other.GetComponent<UseItem>().Use();
         }

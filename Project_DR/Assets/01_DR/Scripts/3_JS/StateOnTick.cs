@@ -172,7 +172,7 @@ public class StateOnTick : MonoBehaviour
         }
         else
         {
-            Debug.LogError("ItemStateManager.CallStateCoroutine()" +
+            GFunc.LogError("ItemStateManager.CallStateCoroutine()" +
                 "의 재귀 호출에 문제가 발생하였습니다.");
         }
     }
@@ -236,7 +236,7 @@ public class StateOnTick : MonoBehaviour
             // 아닐 경우, 함수 실행 및 지속 시간 감소
             CallFunctionAndDecreaseDuration(id);
 
-            Debug.Log($"{id} 지속시간: {_FunctionCurrentDurations[id]}");
+            GFunc.Log($"{id} 지속시간: {_FunctionCurrentDurations[id]}");
         }
 
         // 상태 변경

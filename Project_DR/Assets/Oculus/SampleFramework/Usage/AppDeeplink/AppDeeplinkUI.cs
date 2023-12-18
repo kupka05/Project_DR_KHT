@@ -80,7 +80,7 @@ public class AppDeeplinkUI : MonoBehaviour
 
     void LaunchUnrealDeeplinkSample()
     {
-        Debug.Log(string.Format("LaunchOtherApp({0})", UNREAL_COMPANION_APP_ID));
+        GFunc.Log(string.Format("LaunchOtherApp({0})", UNREAL_COMPANION_APP_ID));
         var options = new Oculus.Platform.ApplicationOptions();
         options.SetDeeplinkMessage(deeplinkMessage.GetComponentInChildren<Text>().text);
         Oculus.Platform.Application.LaunchOtherApp(UNREAL_COMPANION_APP_ID, options);
@@ -92,7 +92,7 @@ public class AppDeeplinkUI : MonoBehaviour
         ulong appId;
         if (ulong.TryParse(Oculus.Platform.PlatformSettings.MobileAppID, out appId))
         {
-            Debug.Log(string.Format("LaunchSelf({0})", appId));
+            GFunc.Log(string.Format("LaunchSelf({0})", appId));
             var options = new Oculus.Platform.ApplicationOptions();
             options.SetDeeplinkMessage(deeplinkMessage.GetComponentInChildren<Text>().text);
             Oculus.Platform.Application.LaunchOtherApp(appId, options);
@@ -104,7 +104,7 @@ public class AppDeeplinkUI : MonoBehaviour
         ulong appId;
         if (ulong.TryParse(deeplinkAppId.GetComponentInChildren<Text>().text, out appId))
         {
-            Debug.Log(string.Format("LaunchOtherApp({0})", appId));
+            GFunc.Log(string.Format("LaunchOtherApp({0})", appId));
             var options = new Oculus.Platform.ApplicationOptions();
             options.SetDeeplinkMessage(deeplinkMessage.GetComponentInChildren<Text>().text);
             Oculus.Platform.Application.LaunchOtherApp(appId, options);

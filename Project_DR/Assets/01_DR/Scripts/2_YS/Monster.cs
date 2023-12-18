@@ -244,7 +244,7 @@ public class Monster : MonoBehaviour
         {
             // IDLE 상태 =======================================================
             case State.IDLE:
-                //Debug.Log("IDLE state");
+                //GFunc.Log("IDLE state");
                 nav.isStopped = true;
                 anim.SetBool(hashRun, false);
                 anim.SetBool(hashidle, true);
@@ -257,7 +257,7 @@ public class Monster : MonoBehaviour
 
             // TRACE 상태 =======================================================
             case State.TRACE:
-                //Debug.Log("TRACE state");
+                //GFunc.Log("TRACE state");
                 nav.isStopped = false;
                 nav.SetDestination(playerTr.position);
                 anim.SetBool(hashRun, true);
@@ -270,7 +270,7 @@ public class Monster : MonoBehaviour
             // ATTACK 상태 =======================================================
             case State.ATTACK:
                     
-                //Debug.Log("ATTACK state");
+                //GFunc.Log("ATTACK state");
 
                 switch (monsterType)
                 {
@@ -491,7 +491,7 @@ public class Monster : MonoBehaviour
             case State.DIE:
                 isDie = true;
                 nav.isStopped = true;
-                //Debug.Log("nav.isStopped: " + nav.isStopped);
+                //GFunc.Log("nav.isStopped: " + nav.isStopped);
                 anim.SetTrigger(hashDie);
 
                 //Destroy(this.gameObject, 1.3f); //damageable 쪽에서 처리
@@ -530,12 +530,13 @@ public class Monster : MonoBehaviour
                 {
                     smash.SetActive(true);
                     smashFilled.fillAmount -= 2.0f * Time.smoothDeltaTime / skillTime;
-                    Debug.Log($"감소되냐: {smashFilled.fillAmount}");
+                    GFunc.Log($"감소되냐: {smashFilled.fillAmount}");
 
                 }
+
             }
         }
-        //Debug.Log($"hp:{damageable.Health}");
+        //GFunc.Log($"hp:{damageable.Health}");
     }
     // 스턴 딜레이
     public virtual IEnumerator StunDelay()

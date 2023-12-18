@@ -109,7 +109,7 @@ public class Boss : MonoBehaviour
     }
     void InitializeBoss()
     {
-        Debug.Log($"게임시작");
+        GFunc.Log($"게임시작");
         bossState = GameObject.FindWithTag("Boss");
 
         rigid = GetComponent<Rigidbody>();
@@ -178,7 +178,7 @@ public class Boss : MonoBehaviour
 
     IEnumerator ExecutePattern()
     {
-        Debug.Log("코루틴이 한번만 실행이 되는지");
+        GFunc.Log("코루틴이 한번만 실행이 되는지");
 
         while (!isDie && !isPatternExecuting)
         {
@@ -211,10 +211,10 @@ public class Boss : MonoBehaviour
                 if (bossState && !isPushPlayer)
                 {
                     PushPlayerBackward();
-                    Debug.Log("넉백");
+                    GFunc.Log("넉백");
 
                     bossState.GetComponent<BossState>().CastSpell();
-                    Debug.Log("애니메이션 작동");
+                    GFunc.Log("애니메이션 작동");
 
                     isPushPlayer = true;
                 }
@@ -244,10 +244,10 @@ public class Boss : MonoBehaviour
                 if (bossState && !isPushPlayer)
                 {
                     PushPlayerBackward();
-                    Debug.Log("넉백");
+                    GFunc.Log("넉백");
 
                     bossState.GetComponent<BossState>().CastSpell();
-                    Debug.Log("애니메이션 작동");
+                    GFunc.Log("애니메이션 작동");
 
                     isPushPlayer = true;
                 }
@@ -271,10 +271,10 @@ public class Boss : MonoBehaviour
                 if (bossState && !isPushPlayer)
                 {
                     PushPlayerBackward();
-                    Debug.Log("넉백");
+                    GFunc.Log("넉백");
                    
                     bossState.GetComponent<BossState>().CastSpell();
-                    Debug.Log("애니메이션 작동");
+                    GFunc.Log("애니메이션 작동");
                    
                     isPushPlayer = true;
                 }
@@ -321,7 +321,7 @@ public class Boss : MonoBehaviour
     {
         if (knockBack)
         {
-            Debug.Log("넉백작동");
+            GFunc.Log("넉백작동");
 
             knockBack.OnBackDash(20);
         }
@@ -355,7 +355,8 @@ public class Boss : MonoBehaviour
 
             yield return new WaitForSeconds(2.0f);
 
-            Debug.Log($"리스트 : {bullets.Count}");
+
+            GFunc.Log($"리스트 크기 : {bullets.Count}");
 
             foreach (var bullet in bullets)
             {
@@ -374,7 +375,7 @@ public class Boss : MonoBehaviour
             bullets.Clear();
 
             isShoot = false;
-            Debug.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
+            GFunc.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
         }
     }
 
@@ -388,7 +389,7 @@ public class Boss : MonoBehaviour
         ShowRangeIndicator();
 
         Invoke("LazerDestroy", 1.0f);
-        //Debug.Log($"작동:{Invoke}");
+        //GFunc.Log($"작동:{Invoke}");
     }
 
     void ShowRangeIndicator()
@@ -451,19 +452,19 @@ public class Boss : MonoBehaviour
         instantBrick.SetActive(true);
         Rigidbody brickRigidbody = instantBrick.GetComponent<Rigidbody>();
         brickRigidbody.useGravity = false;
-        Debug.Log($"활성화:{instantBrick}");
+        GFunc.Log($"활성화:{instantBrick}");
 
         GameObject instantBrickLeft = Instantiate(bigBrick, bigBrickPortLeft.position, Quaternion.identity);
         instantBrickLeft.SetActive(true);
         Rigidbody brickRigidbodyLeft = instantBrickLeft.GetComponent<Rigidbody>();
         brickRigidbodyLeft.useGravity = false;
-        Debug.Log($"활성화:{instantBrickLeft}");
+        GFunc.Log($"활성화:{instantBrickLeft}");
 
         GameObject instantBrickRight = Instantiate(bigBrick, bigBrickPortRight.position, Quaternion.identity);
         instantBrickRight.SetActive(true);
         Rigidbody brickRigidbodyRight = instantBrickRight.GetComponent<Rigidbody>();
         brickRigidbodyRight.useGravity = false;
-        Debug.Log($"활성화:{instantBrickRight}");
+        GFunc.Log($"활성화:{instantBrickRight}");
 
         // 2초 동안 대기하면서 gravity 비활성화
         yield return StartCoroutine(BrickWait(waitTime));
@@ -471,15 +472,15 @@ public class Boss : MonoBehaviour
         // gravity 활성화 및 힘을 적용
         brickRigidbody.useGravity = true;
         brickRigidbody.AddForce(BigBrick(bigBrickPort.position), ForceMode.Impulse);
-        Debug.Log("가운데 발사");
+        GFunc.Log("가운데 발사");
 
         brickRigidbodyLeft.useGravity = true;
         brickRigidbodyLeft.AddForce(BigBrick(bigBrickPortLeft.position), ForceMode.Impulse);
-        Debug.Log("왼쪽 발사");
+        GFunc.Log("왼쪽 발사");
 
         brickRigidbodyRight.useGravity = true;
         brickRigidbodyRight.AddForce(BigBrick(bigBrickPortRight.position), ForceMode.Impulse);
-        Debug.Log("오른쪽 발사");
+        GFunc.Log("오른쪽 발사");
 
         // 나머지 대기 시간 후에 오브젝트 파괴
         yield return StartCoroutine(BrickWait(waitTime));
@@ -561,7 +562,7 @@ public class Boss : MonoBehaviour
 
             yield return new WaitForSeconds(2.0f);
 
-            Debug.Log($"리스트 크기 : {missiles.Count}");
+            GFunc.Log($"리스트 크기 : {missiles.Count}");
 
             foreach (var missile in missiles)
             {
@@ -589,7 +590,7 @@ public class Boss : MonoBehaviour
             missiles.Clear();
 
             isShoot = false;
-            Debug.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
+            GFunc.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
         }
     }
 
@@ -601,14 +602,14 @@ public class Boss : MonoBehaviour
             if (damageable.Health >= 0)
             {
                 SetHealth(damageable.Health);
-                Debug.Log($"Current HP: {damageable.Health}");
+                GFunc.Log($"Current HP: {damageable.Health}");
             }
 
             if (damageable.Health <= 0)
             {
                 SetHealth(0);
                 isDie = true;
-                Debug.Log($"isDie:{isDie}");
+                GFunc.Log($"isDie:{isDie}");
                 // 이벤트 호출
                 unityEvent?.Invoke();
 
@@ -617,7 +618,7 @@ public class Boss : MonoBehaviour
                     bossState.GetComponent<BossState>().Die();
                 }
                 StopAllCoroutines();
-                //Debug.Log("코루틴 멈춤");
+                //GFunc.Log("코루틴 멈춤");
             }
         }
 
@@ -628,7 +629,7 @@ public class Boss : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("인식되냐");
+            GFunc.Log("인식되냐");
             StartCoroutine(ExecutePattern());
         }
     }

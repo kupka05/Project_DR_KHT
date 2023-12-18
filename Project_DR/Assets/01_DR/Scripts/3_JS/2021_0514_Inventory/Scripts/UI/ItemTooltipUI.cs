@@ -141,7 +141,7 @@ namespace Rito.InventorySystem
             // 인벤토리 패널 사이즈가 변할 경우 위치가 틀어질 수 있음
             int xIndex = (index + 1) % widthSlots == 0 ? widthSlots - 1 : ((index + 1) % widthSlots) - 1;
             int yIndex = index / widthSlots;
-            //Debug.Log(yIndex);
+            //GFunc.Log(yIndex);
             float defaultWidth = -277f;
             float defaultHeight = 327f;
             float minWidth = -277f;

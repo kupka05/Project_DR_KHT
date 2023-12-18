@@ -56,12 +56,12 @@ public class VolumeAndPlaneSwitcher : MonoBehaviour
                         var volume = GetComponent<OVRSceneVolume>();
                         if (!volume)
                         {
-                            Debug.LogWarning(
+                            GFunc.LogWarning(
                                 $"Ignoring desired volume to plane switch for {pair.label} because it is not a volume.");
                             continue;
                         }
 
-                        Debug.Log($"IN Volume Position {transform.position}, Dimensions: {volume.Dimensions}");
+                        GFunc.Log($"IN Volume Position {transform.position}, Dimensions: {volume.Dimensions}");
                         // This object is a volume, but we want a plane instead.
                         GetTopPlaneFromVolume(
                             transform,
@@ -69,7 +69,7 @@ public class VolumeAndPlaneSwitcher : MonoBehaviour
                             out position,
                             out rotation,
                             out localScale);
-                        Debug.Log($"OUT Plane Position {position}, Dimensions: {localScale}");
+                        GFunc.Log($"OUT Plane Position {position}, Dimensions: {localScale}");
                         ReplaceAnchor(planePrefab, position, rotation, localScale);
                         break;
                     }
@@ -78,12 +78,12 @@ public class VolumeAndPlaneSwitcher : MonoBehaviour
                         var plane = GetComponent<OVRScenePlane>();
                         if (!plane)
                         {
-                            Debug.LogWarning(
+                            GFunc.LogWarning(
                                 $"Ignoring desired plane to volume switch for {pair.label} because it is not a plane.");
                             continue;
                         }
 
-                        Debug.Log($"IN Plane Position {transform.position}, Dimensions: {plane.Dimensions}");
+                        GFunc.Log($"IN Plane Position {transform.position}, Dimensions: {plane.Dimensions}");
                         // This object is a plane, but we want a volume instead.
                         GetVolumeFromTopPlane(
                             transform,
@@ -92,7 +92,7 @@ public class VolumeAndPlaneSwitcher : MonoBehaviour
                             out position,
                             out rotation,
                             out localScale);
-                        Debug.Log($"OUT Volume Position {position}, Dimensions: {localScale}");
+                        GFunc.Log($"OUT Volume Position {position}, Dimensions: {localScale}");
                         ReplaceAnchor(volumePrefab, position, rotation, localScale);
                         break;
                     }

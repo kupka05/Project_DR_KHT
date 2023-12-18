@@ -110,7 +110,7 @@ public class AccountManager : MonoBehaviour
 
     //        if (www.result != UnityWebRequest.Result.Success)
     //        {
-    //            Debug.Log(www.error);
+    //            GFunc.Log(www.error);
     //        }
     //        else
     //        {

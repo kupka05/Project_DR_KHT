@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System;
+using Random = UnityEngine.Random;
 
 namespace BNG
 {
@@ -155,6 +157,16 @@ namespace BNG
         // 슬라이드의 최소 거리
         float minSlideDistance = 0.001f;
 
+
+        [Header("DistanceFromGround")]
+        public float distanceFromGround;
+        public float distanceFromGroundOffset;
+        public RaycastHit groundHit;
+        public LayerMask GroundedLayers;
+        private CapsuleCollider drillCollider;
+        public Grabbable grabbable;
+
+
         [Header("Inputs : ")]
         [Tooltip("Controller Input used to eject clip")]
         public List<GrabbedControllerBinding> EjectInput = new List<GrabbedControllerBinding>() { GrabbedControllerBinding.Button2Down };
@@ -208,8 +220,6 @@ namespace BNG
 
         protected bool readyToShoot = true;
 
-
-  
         void Start()
         {
             GetData();
@@ -220,6 +230,9 @@ namespace BNG
             damageCollider = GetComponent<DamageCollider>();
             damageCollider.Damage = SetDamage();
 
+            drillCollider = GetComponent<CapsuleCollider>();
+            grabbable = GetComponent<Grabbable>();
+
             if (MuzzleFlashObject)
             {
                 MuzzleFlashObject.SetActive(false);
@@ -229,6 +242,41 @@ namespace BNG
             spinDrill = GetComponentInChildren<WeaponDrill>();
 
             updateChamberedBullet();
+        }
+
+        public void FixedUpdate()
+        {
+            GroundCheck();
+        }
+
+        public void GroundCheck()
+        {
+            if (Physics.Raycast(drillCollider.transform.position, drillCollider.transform.forward, out groundHit, 20, GroundedLayers, QueryTriggerInteraction.Ignore))
+            {
+                distanceFromGround = Vector3.Distance(drillCollider.transform.position, groundHit.point);
+                distanceFromGround += drillCollider.center.y;
+                distanceFromGround -= (drillCollider.height * 0.5f);
+
+                // Round to nearest thousandth
+                distanceFromGround = (float)Math.Round(distanceFromGround * 1000f) / 1000f;
+            }
+            else
+            {
+                distanceFromGround = float.MaxValue;
+            }
+
+
+            if (distanceFromGround != float.MaxValue)
+            {
+                distanceFromGround -= distanceFromGroundOffset;
+            }
+
+            // Smooth floating point issues from thousandths
+            if (distanceFromGround < 0.001f && distanceFromGround > -0.001f)
+            {
+                distanceFromGround = 0;
+            }
+
         }
 
         public override void OnTrigger(float triggerValue)

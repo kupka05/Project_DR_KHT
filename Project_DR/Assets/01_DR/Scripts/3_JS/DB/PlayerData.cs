@@ -13,10 +13,15 @@ public class PlayerData
     public int weapon_cri_damage;
     public int weapon_atk_rate;
     public int weapon_exp;
-    public int skill_level_1;
-    public int skill_level_2;
+    public int skill_level_1_1;
+    public int skill_level_1_2;
+    public int skill_level_2_1;
+    public int skill_level_2_2;
+    public int skill_level_2_3;
     public int skill_level_3;
-    public int skill_level_4;
+    public int skill_level_4_1;
+    public int skill_level_4_2;
+    public int skill_level_4_3;
     public string quest_main;
     public int clear_count;
     public string clear_mbti_value;

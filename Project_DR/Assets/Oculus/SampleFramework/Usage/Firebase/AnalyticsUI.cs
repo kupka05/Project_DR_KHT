@@ -156,7 +156,7 @@ public class AnalyticsUI : MonoBehaviour
 
     void LogEvent()
     {
-        Debug.Log("LogEvent");
+        GFunc.Log("LogEvent");
         List<Parameter> parameters = GetParameterList();
         string eventName = textFieldEventName.GetComponentInChildren<Text>().text;
         FirebaseAnalytics.LogEvent(eventName, parameters.ToArray());
@@ -164,13 +164,13 @@ public class AnalyticsUI : MonoBehaviour
 
     void ResetAnalyticsData()
     {
-        Debug.Log("ResetAnalyticsData");
+        GFunc.Log("ResetAnalyticsData");
         FirebaseAnalytics.ResetAnalyticsData();
     }
 
     void SetAnalyticsCollectionEnabled()
     {
-        Debug.Log(string.Format("SetAnalyticsCollectionEnabled({0})", analyticsCollectionEnabled));
+        GFunc.Log(string.Format("SetAnalyticsCollectionEnabled({0})", analyticsCollectionEnabled));
         FirebaseAnalytics.SetAnalyticsCollectionEnabled(analyticsCollectionEnabled);
     }
 
@@ -179,7 +179,7 @@ public class AnalyticsUI : MonoBehaviour
         long ms;
         if (long.TryParse(textFieldSessionTimeoutDuration.GetComponentInChildren<Text>().text, out ms))
         {
-            Debug.Log(string.Format("SetSessionTimeoutDuration({0})", ms));
+            GFunc.Log(string.Format("SetSessionTimeoutDuration({0})", ms));
             FirebaseAnalytics.SetSessionTimeoutDuration(System.TimeSpan.FromMilliseconds(ms));
         }
     }
@@ -187,7 +187,7 @@ public class AnalyticsUI : MonoBehaviour
     void SetUserId()
     {
         string userId = textFieldUserId.GetComponentInChildren<Text>().text;
-        Debug.Log(string.Format("SetUserId({0})", userId));
+        GFunc.Log(string.Format("SetUserId({0})", userId));
         FirebaseAnalytics.SetUserId(userId);
     }
 

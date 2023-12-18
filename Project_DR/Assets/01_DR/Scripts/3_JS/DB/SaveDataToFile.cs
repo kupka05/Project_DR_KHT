@@ -26,7 +26,7 @@ public class SaveDataToFile
             // JSON 데이터를 파일에 쓰기
             streamWriter.Write(jsonData);
 
-            Debug.Log($"{filePath} 경로에 JSON 데이터가 파일로 저장되었습니다.");
+            GFunc.Log($"{filePath} 경로에 JSON 데이터가 파일로 저장되었습니다.");
         }
     }
 
@@ -45,12 +45,12 @@ public class SaveDataToFile
                 // JSON 데이터를 파일에 쓰기
                 streamWriter.Write(jsonData);
 
-                Debug.Log($"{filePath} 경로에 CSV 데이터가 파일로 저장되었습니다.");
+                GFunc.Log($"{filePath} 경로에 CSV 데이터가 파일로 저장되었습니다.");
             }
         }
         catch (Exception ex)
         {
-            Debug.LogWarning($"SaveDataToFile.WriteCsvToFile() Error: {sheetName} 시트가 열려있어 수정할 수 없습니다. {ex.Message}");
+            GFunc.LogWarning($"SaveDataToFile.WriteCsvToFile() Error: {sheetName} 시트가 열려있어 수정할 수 없습니다. {ex.Message}");
            
         }
 #endif

@@ -97,5 +97,5 @@ public class SpatialAnchorLoader : MonoBehaviour
         }
     }
 
-    private static void Log(string message) => Debug.Log($"[SpatialAnchorsUnity]: {message}");
+    private static void Log(string message) => GFunc.Log($"[SpatialAnchorsUnity]: {message}");
 }

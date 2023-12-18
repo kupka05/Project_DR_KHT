@@ -60,7 +60,7 @@ namespace BossMonster
 
                 // 공격 패턴 변경
                 _boss.DOAttackPattern(_boss.BossData.AvailableAttackPatternsList[i]);
-                Debug.Log($"사용하는 패턴: {_boss.BossData.AvailableAttackPatternsList[i]}");
+                GFunc.Log($"사용하는 패턴: {_boss.BossData.AvailableAttackPatternsList[i]}");
             }
 
             // 보스가 살아있을 경우 재귀 호출

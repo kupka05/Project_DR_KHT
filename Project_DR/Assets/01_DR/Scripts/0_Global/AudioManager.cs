@@ -46,7 +46,7 @@ public class AudioManager : MonoBehaviour
 
         if (sound == null)
         {
-            Debug.Log("Sound Not Found");
+            GFunc.Log("Sound Not Found");
         }
 
         else
@@ -63,7 +63,7 @@ public class AudioManager : MonoBehaviour
 
         if (sound == null)
         {
-            Debug.Log("SFX Not Found");
+            GFunc.Log("SFX Not Found");
         }
 
         else

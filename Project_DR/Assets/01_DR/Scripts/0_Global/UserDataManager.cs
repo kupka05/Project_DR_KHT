@@ -10,6 +10,7 @@ using Unity.VisualScripting;
 using Rito.InventorySystem;
 using static StatusData;
 using OVR.OpenVR;
+using System.Net.NetworkInformation;
 
 [System.Serializable]
 public class ClearDatas
@@ -20,7 +21,7 @@ public class ClearDatas
 
 public class ClearData
 {
-    public string MBTI;
+    public MBTI MBTI;
     public string Date;
 }
 
@@ -62,10 +63,18 @@ public class UserDataManager : MonoBehaviour
 
     #region 유저 데이터
     [Header("DB")]
-    public bool dataLoadSuccess;    // 데이터 불러옴 여부
+    private bool _dataLoad;
+    public bool dataLoadSuccess
+    {
+        get { return _dataLoad; }
+        set { _dataLoad = value; 
+        // TODO : 델리게이트 이벤트 추가하기
+        }
+    }    // 데이터 불러옴 여부
 
     [Header("User Data")]           // 유저 데이터
     public string PlayerID;
+
     [SerializeField]
     private int _Level;
     public int Level
@@ -99,6 +108,8 @@ public class UserDataManager : MonoBehaviour
             OnUserDataUpdate?.Invoke();
         }
     }
+    //public string mbti;
+    public MBTI mbti = new MBTI();
 
     [Header("PC Data")]           // PC 데이터
     public float DefaultHP;         // 초기 체력
@@ -140,7 +151,11 @@ public class UserDataManager : MonoBehaviour
             OnUserDataUpdate?.Invoke();
         }
     }
-
+    [Header("Default Weapon Data")]
+    public float _weaponAtk;
+    public float _weaponCritRate;
+    public float _weaponCritDamage;
+    public float _weaponAtkRate;
 
     [Header("Weapon Data")]
     public float weaponAtk;
@@ -148,16 +163,29 @@ public class UserDataManager : MonoBehaviour
     public float weaponCritDamage;
     public float weaponAtkRate;
 
+    [Space(10f)]
+
     public int WeaponAtkLv;           // 공격력
     public int WeaponCriRateLv;       // 치명타 확률
     public int WeaponCriDamageLv;     // 치명타 증가율
     public int WeaponAtkRateLv;       // 공격 속도
 
-    [Header("Skill Data")]
-    public int TeraLv;                // 테라드릴 레벨
-    public int GrinderLv;             // 드릴연마 레벨
-    public int CrashLv;               // 드릴분쇄 레벨
-    public int LandingLv;             // 드릴랜딩 레벨
+    [Header("Skill 1 Data")]
+    public int Skill1Lv_1;                // 테라드릴 레벨
+    public int Skill1Lv_2;                // 테라드릴 레벨
+
+    [Header("Skill 2 Data")]
+    public int Skill2Lv_1;                // 드릴연마 레벨
+    public int Skill2Lv_2;                // 드릴연마 레벨
+    public int Skill2Lv_3;                // 드릴연마 레벨
+
+    [Header("Skill 3 Data")]
+    public int Skill3Lv;                  // 드릴분쇄 레벨
+
+    [Header("Skill 4 Data")]
+    public int Skill4Lv_1;                 // 드릴랜딩 레벨
+    public int Skill4Lv_2;                 // 드릴랜딩 레벨
+    public int Skill4Lv_3;                 // 드릴랜딩 레벨
 
     [Header("Quest Data")]
     public string QuestMain;          // 현재 퀘스트
@@ -174,7 +202,7 @@ public class UserDataManager : MonoBehaviour
             _clearDatas = value;
             if (value == null)
             {
-                Debug.Log("클리어 데이터 없음. 신규 데이터 생성");
+                GFunc.Log("클리어 데이터 없음. 신규 데이터 생성");
                 _clearDatas = new ClearDatas();
             }
         }
@@ -184,7 +212,7 @@ public class UserDataManager : MonoBehaviour
     [Header("Setting Data")]          // 환경 설정
     public float rotationAmount = 45f;
     [Range(0, 100)]
-    public float masterSound, sfx, backgroundSound;
+    public float masterSound = 100, sfx = 100, backgroundSound = 100;
     [Range(-5, 5)]
     public float brightness = 0;
 
@@ -192,7 +220,11 @@ public class UserDataManager : MonoBehaviour
     // 호출 순서 문제로 인해 static으로 설정
     public static Item[] items = new Item[Inventory.MaxCapacity];
 
+    [Header("Result Data")]
+    public GameResult result = new GameResult();
+
     [Header("Reference Data")]
+    public bool isClear;    // 보스를 클리어했는지 확인
     private StatusData  statusData = new StatusData();
     public StatData statData = new StatData();   // 업그레이드 스탯 정보가 담긴 데이터
     #endregion
@@ -211,8 +243,7 @@ public class UserDataManager : MonoBehaviour
         { Destroy(gameObject); }
 
         //SetDebugData();
-        Debug.Log("데이터 요청 시간 : " + GetCurrentDate());
-
+        GFunc.Log("데이터 요청 시간 : " + GetCurrentDate());
         GetReferenceData();
         PlayerDataManager.Update(true); // 데이터 요청
     }
@@ -220,7 +251,11 @@ public class UserDataManager : MonoBehaviour
     {
         if(Input.GetKeyDown("r"))
         {
-            SetDebugData();
+            StartCoroutine(SetDebugData());
+        }
+        else if(Input.GetKeyDown(KeyCode.F1))
+        {
+            SaveClearData();
         }
     }
 
@@ -229,7 +264,10 @@ public class UserDataManager : MonoBehaviour
     // 참조 데이터 로드
     public void GetReferenceData()
     {
-        statusData.GetData(statData);
+        statusData.GetData(statData);   // 스탯 데이터 로딩
+
+        result.Initialize(); // 결과 점수 초기화
+        InitMBTI();         // MBTI 초기화
     }
 
     // 로그인 후, DB에서 데이터 받아오기
@@ -272,34 +310,48 @@ public class UserDataManager : MonoBehaviour
         WeaponCriDamageLv = PlayerDataManager.WeaponCriDamage;
         WeaponAtkRateLv = PlayerDataManager.WeaponAtkRate;
 
-        weaponAtk = Data.GetFloat(1100, "Damage");
-        weaponCritRate = Data.GetFloat(1100, "CritChance");
-        weaponCritDamage = Data.GetFloat(1100, "CritIncrease");
-        weaponAtkRate = Data.GetFloat(1100, "AttackSpeed");
+        _weaponAtk = Data.GetFloat(1100, "Damage");
+        _weaponCritRate = Data.GetFloat(1100, "CritChance");
+        _weaponCritDamage = Data.GetFloat(1100, "CritIncrease");
+        _weaponAtkRate = Data.GetFloat(1100, "AttackSpeed");
 
-        if(WeaponAtkLv != 0)
+        weaponAtk = _weaponAtk;
+        weaponCritRate = _weaponCritRate;
+        weaponCritDamage = _weaponCritDamage;
+        weaponAtkRate = _weaponAtkRate;
+
+        if (WeaponAtkLv != 0)
         {
-            weaponAtk = Data.GetFloat(1100, "Damage") + statData.upgradeAtk[WeaponAtkLv - 1].sum1;
+            weaponAtk = _weaponAtk + statData.upgradeAtk[WeaponAtkLv - 1].sum1;
         }
         if(WeaponCriRateLv != 0)
         {
-            weaponCritRate = Data.GetFloat(1100, "CritChance") + statData.upgradeCrit[WeaponCriRateLv - 1].sum1;
+            weaponCritRate = _weaponCritRate + statData.upgradeCrit[WeaponCriRateLv - 1].sum1;
         }
         if(WeaponCriDamageLv != 0)
         {
-            weaponCritDamage = Data.GetFloat(1100, "CritIncrease") + statData.upgradeCritDmg[WeaponCriDamageLv - 1].sum1;
+            weaponCritDamage = _weaponCritDamage + statData.upgradeCritDmg[WeaponCriDamageLv - 1].sum1;
         }
         if(WeaponAtkRateLv != 0)
         {
-            weaponAtkRate = Data.GetFloat(1100, "AttackSpeed") + statData.upgradeAtkSpd[WeaponAtkRateLv - 1].sum1;
+            weaponAtkRate = _weaponAtkRate + statData.upgradeAtkSpd[WeaponAtkRateLv - 1].sum1;
         }
 
         // ######################### 스킬 업그레이드 #########################
 
-        TeraLv = PlayerDataManager.SkillLevel1;
-        GrinderLv = PlayerDataManager.SkillLevel2;
-        CrashLv = PlayerDataManager.SkillLevel3;
-        LandingLv = PlayerDataManager.SkillLevel4;
+        // TODO 데이터 매니저에 추가 테이블 필요
+        Skill1Lv_1 = PlayerDataManager.SkillLevel1_1;
+        Skill1Lv_2 = PlayerDataManager.SkillLevel1_2;
+
+        Skill2Lv_1 = PlayerDataManager.SkillLevel2_1;
+        Skill2Lv_2 = PlayerDataManager.SkillLevel2_2;
+        Skill2Lv_3 = PlayerDataManager.SkillLevel2_3;
+
+        Skill3Lv = PlayerDataManager.SkillLevel3;
+
+        Skill4Lv_1 = PlayerDataManager.SkillLevel4_1;
+        Skill4Lv_2 = PlayerDataManager.SkillLevel4_2;
+        Skill4Lv_3 = PlayerDataManager.SkillLevel4_3;
 
         // ######################### ETC #########################
 
@@ -323,7 +375,7 @@ public class UserDataManager : MonoBehaviour
         // 데이터를 불러오고 해야할 이벤트가 있다면 이벤트 실행
         // Ex. 플레이어 상태창, 상점의 현재 골드 등
         dataLoadSuccess = true;
-        Debug.Log("데이터 로드 시간 : " + GetCurrentDate());
+        GFunc.Log("데이터 로드 시간 : " + GetCurrentDate());
     }
 
     // DB에 데이터를 요청하기 위한 메서드
@@ -332,12 +384,13 @@ public class UserDataManager : MonoBehaviour
     {
         StartCoroutine(CheckData(action));
     }
+    // 델리게이트에 추가로 변경하기
     IEnumerator CheckData(Action action)
     {
         yield return new WaitForSeconds(0.1f);
         if (dataLoadSuccess)
         {
-            Debug.Log(action + "데이터 로드 완료");
+            GFunc.Log(action + "데이터 로드 완료");
             action();
             yield break;
         }
@@ -346,15 +399,12 @@ public class UserDataManager : MonoBehaviour
 
     // ####################### 세이브 데이터 ####################### \\
     // 클리어 데이터 신규 저장
-    public void SaveClearData(string MBTI)
+    public void SaveClearData()
     {
         // 넣을 데이터 생성
         ClearData newData = new ClearData();
         newData.Date = GetCurrentDate();             // 현재 시간
-        newData.MBTI = MBTI;                         // 매개변수 MBTI
-        Debug.Log(clearDatas);
-        Debug.Log(clearDatas.list);
-        Debug.Log(clearDatas.list.Count);
+        newData.MBTI.mbti = mbti.GetMBTI();                         // 매개변수 MBTI
 
         clearDatas.list.Add(newData);                // 리스트에 추가
         ClearCount = clearDatas.list.Count;          // 클리어 데이터 리스트의 길이가 곧 클리어 카운트
@@ -380,24 +430,107 @@ public class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("gold_increase", GainGoldLv);
         PlayerDataManager.Save("exp_increase", GainExpLv);
     }
-
+    // 무기 업그레이드 세이브
+    public void SaveWeaponUpgrade()
+    {
+        PlayerDataManager.Save("exp", Exp);
+        PlayerDataManager.Save("weapon_atk_rate", WeaponAtkLv);
+        PlayerDataManager.Save("exp", WeaponAtkRateLv);
+        PlayerDataManager.Save("weapon_cri_damage", WeaponCriDamageLv);
+        PlayerDataManager.Save("weapon_cri_rate", WeaponCriRateLv);
+    }
+    // 스킬 업그레이드 세이브
+    public void SaveSkillUpgrade()
+    {
+        PlayerDataManager.Save("skill_level_1_1", Skill1Lv_1);
+        PlayerDataManager.Save("skill_level_1_2", Skill1Lv_2);
+        PlayerDataManager.Save("skill_level_2_1", Skill2Lv_1);
+        PlayerDataManager.Save("skill_level_2_2", Skill2Lv_2);
+        PlayerDataManager.Save("skill_level_2_3", Skill2Lv_3);
+        PlayerDataManager.Save("skill_level_3", Skill3Lv);
+        PlayerDataManager.Save("skill_level_4_1", Skill4Lv_1);
+        PlayerDataManager.Save("skill_level_4_2", Skill4Lv_2);
+        PlayerDataManager.Save("skill_level_4_3", Skill4Lv_3);
+    }
 
     // ####################### 디버그용 PC 데이터 세팅 ####################### \\
-    public void SetDebugData()
+    // TODO 한번에 호출하면 저장 실패할 경우가 있음.
+    public IEnumerator SetDebugData()
     {
+        yield return null;
         PlayerDataManager.Save("hp", 0);
+        yield return null;
+
         PlayerDataManager.Save("gold", 100000);
+        yield return null;
+
         PlayerDataManager.Save("exp", 100000);
+        yield return null;
+
         PlayerDataManager.Save("gold_increase", 0);
+        yield return null;
+
         PlayerDataManager.Save("exp_increase", 0);
+        yield return null;
 
         PlayerDataManager.Save("weapon_atk", 0);
-        PlayerDataManager.Save("weapon_cri_rate", 0);        
+        yield return null;
+
+        PlayerDataManager.Save("weapon_cri_rate", 0);
+        yield return null;
+
         PlayerDataManager.Save("weapon_cri_damage", 0);
+        yield return null;
+
         PlayerDataManager.Save("weapon_atk_rate", 0);
+        yield return null;
+
+        int debugLv = 0;
+
+        PlayerDataManager.Save("skill_level_1_1", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_1_2", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_2_1", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_2_2", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_2_3", debugLv);
+        yield return null;
+
+
+        PlayerDataManager.Save("skill_level_3", debugLv);
+        yield return null;
+        PlayerDataManager.Save("skill_level_4_1", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_4_2", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_4_3", debugLv);
+        yield return null;
 
         PlayerDataManager.Update(true);
     }
+
+    // #######################  MBTI  ####################### \\
+    public void InitMBTI()
+    {
+        mbti.SetMBTI(50,50,50,50);
+    }
+    public MBTI GetMBTI()
+    {
+        return mbti;
+    }
+    public void SetMBTI(MBTI mbtiData)
+    {
+        mbti = mbtiData;
+    }
+
 
     // #######################  PC 데이터 세팅  ####################### \\
 
@@ -429,10 +562,56 @@ public class UserDataManager : MonoBehaviour
             GainExp = statData.upgradeGainExp[GainExpLv - 1].sum;
         }
     }
-
-
-    public void AddGold(int num)
+    public void WeaponUpgrade(int atkLv, int critLv, int critRateLv, int atkRateLv)
     {
-        Gold += num;
+        int _atkLv = atkLv;
+        int _critLv = critLv;
+        int _critRateLv = critRateLv;
+        int _atkRateLv = atkRateLv;
+
+        WeaponAtkLv = _atkLv;
+        WeaponCriDamageLv = _critLv;
+        WeaponCriRateLv = _critRateLv;
+        WeaponAtkRateLv = _atkRateLv;
+
+        weaponAtk = _weaponAtk;
+        weaponCritRate = _weaponCritRate;
+        weaponCritDamage = _weaponCritDamage;
+        weaponAtkRate = _weaponAtkRate;
+
+        if (WeaponAtkLv != 0)
+        {
+            weaponAtk = _weaponAtk + statData.upgradeAtk[WeaponAtkLv - 1].sum1;
+        }
+        if (WeaponCriRateLv != 0)
+        {
+            weaponCritRate = _weaponCritRate + statData.upgradeCrit[WeaponCriRateLv - 1].sum1;
+        }
+        if (WeaponCriDamageLv != 0)
+        {
+            weaponCritDamage = _weaponCritDamage + statData.upgradeCritDmg[WeaponCriDamageLv - 1].sum1;
+        }
+        if (WeaponAtkRateLv != 0)
+        {
+            weaponAtkRate = _weaponAtkRate + statData.upgradeAtkSpd[WeaponAtkRateLv - 1].sum1;
+        }
     }
+
+    public void SkillUpgrade(int skill1_1, int skill1_2, int skill2_1, int skill2_2, int skill2_3,
+        int skill3, int skill4_1, int skill4_2, int skill4_3)
+    {
+        Skill1Lv_1 = skill1_1;
+        Skill1Lv_2 = skill1_2;
+
+        Skill2Lv_1 = skill2_1;
+        Skill2Lv_2 = skill2_2;
+        Skill2Lv_3 = skill2_3;
+
+        Skill3Lv = skill3;
+
+        Skill4Lv_1 = skill4_1;
+        Skill4Lv_2 = skill4_2;
+        Skill4Lv_3 = skill4_3;     
+    }
+
 }

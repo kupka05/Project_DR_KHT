@@ -65,7 +65,7 @@ namespace BNG {
             var keyboard = GameObject.FindObjectOfType<VRKeyboard>();
             if(keyboard) {
                 AttachedKeyboard = keyboard;
-                Debug.Log("Found and attached Keyboard to " + AttachedKeyboard.transform.name);
+                GFunc.Log("Found and attached Keyboard to " + AttachedKeyboard.transform.name);
             }
         }
     }

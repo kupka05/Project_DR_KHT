@@ -66,13 +66,13 @@ public class DataManager : MonoBehaviour
     {
         // JS
         "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
-        "Item_Shop_Table", "BossMonster_Table", "AttackPattern_Table",
+        "Item_Shop_Table", "BossMonster_Table", "AttackPattern_Table", "Quest_Table", "Quest_Reward_Table",
 
         // JH
         "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",
         "Upgrade_PC_HP_Table", "Upgrade_PC_GainEXP_Table", "Upgrade_PC_GainGold_Table",
         "Upgrade_Weapon_Atk_Table", "Upgrade_Weapon_CR_Table", "Upgrade_Weapon_CRD_Table", "Upgrade_Weapon_ATKSpeed_Table",
-
+        "Upgrade_Skill_1","Upgrade_Skill_2","Upgrade_Skill_3","Upgrade_Skill_4",
 
         //YS
         "Monster_Table", "Boss_Table", "Boss_projectile_Table",
@@ -190,7 +190,7 @@ public class DataManager : MonoBehaviour
             // CSV 데이터를 가져왔을 경우
             else if (state == State.Done)
             {
-                Debug.LogWarning("GetData(): GoogleSheetLoader에서 모든 데이터가" +
+                GFunc.LogWarning("GetData(): GoogleSheetLoader에서 모든 데이터가" +
                 " 로딩되지 않았습니다. GoogleSheetLoader.isDone = false");
 
                 // dataTable을 검색하는 함수 호출
@@ -237,7 +237,7 @@ public class DataManager : MonoBehaviour
 
         catch (Exception ex)
         {
-            Debug.LogWarning($"오류 강제 예외처리 / DataManager.instance.GetData() {category} : {id} / Exception: {ex.Message}");
+            GFunc.LogWarning($"오류 강제 예외처리 / DataManager.instance.GetData() {category} : {id} / Exception: {ex.Message}");
 
             // 만약 castType이 string 일 경우
             // 참조 타입이므로 예외처리 한다.
@@ -351,7 +351,7 @@ public class DataManager : MonoBehaviour
                 // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
                 if (idTable.ContainsKey(id))
                 {
-                    Debug.LogWarning($"SetIDTable(): 등록하는 ID: [{id}]는 " +
+                    GFunc.LogWarning($"SetIDTable(): 등록하는 ID: [{id}]는 " +
                         $"기존에 있는 ID와 중복됩니다. CSV 파일의 ID 값을 변경하시거나, " +
                         $"CSV파일이 중복으로 SetData()를 호출하는지 확인해주세요.");
                 }
@@ -364,7 +364,7 @@ public class DataManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.Log($"DataManager.SetIDTable()[{fileNames[index]}] ID 테이블 오류 발생 + {ex.Message}");
+            GFunc.Log($"DataManager.SetIDTable()[{fileNames[index]}] ID 테이블 오류 발생 + {ex.Message}");
         }
 
     }
@@ -385,7 +385,7 @@ public class DataManager : MonoBehaviour
                 // idTable에 있는 기존 ID와 현재 ID가 중복되었을 경우
                 if (localIDTable.ContainsKey(id))
                 {
-                    Debug.LogWarning($"SetIDTable(): 등록하는 ID: [{id}]는 " +
+                    GFunc.LogWarning($"SetIDTable(): 등록하는 ID: [{id}]는 " +
                         $"기존에 있는 ID와 중복됩니다. CSV 파일의 ID 값을 변경하시거나, " +
                         $"CSV파일이 중복으로 SetData()를 호출하는지 확인해주세요.");
                 }
@@ -398,7 +398,7 @@ public class DataManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.Log($"DataManager.SetLocalIDTable() [{fileNames[index]}] Local ID 테이블 오류 발생 + {ex.Message}");
+            GFunc.Log($"DataManager.SetLocalIDTable() [{fileNames[index]}] Local ID 테이블 오류 발생 + {ex.Message}");
         }
     }
 
@@ -424,7 +424,7 @@ public class DataManager : MonoBehaviour
             else
             {
                 // 디버그 메세지 출력
-                Debug.LogWarning($"FindDataTable({id}, {category}): 데이터를 찾지 못했습니다. " +
+                GFunc.LogWarning($"FindDataTable({id}, {category}): 데이터를 찾지 못했습니다. " +
                     $"ID와 Category를 확인해 주세요.");
             }
         return data;
@@ -433,7 +433,7 @@ public class DataManager : MonoBehaviour
         catch (Exception ex)
         {
             // 예외가 발생했을 때 실행할 코드 블록
-            Debug.LogWarning($"오류 강제 예외처리 id:{id} category: {category} / DataManager.FindDataTable() Exception: {ex.Message}");
+            GFunc.LogWarning($"오류 강제 예외처리 id:{id} category: {category} / DataManager.FindDataTable() Exception: {ex.Message}");
 
             return new object();
         }
@@ -474,7 +474,7 @@ public class DataManager : MonoBehaviour
         // 정상적으로 접근하지 못했을 경우
         {
             // 디버그 메세지 출력
-            Debug.LogWarning($"FindDataTable({id}): 데이터를 찾지 못했습니다. " +
+            GFunc.LogWarning($"FindDataTable({id}): 데이터를 찾지 못했습니다. " +
                 $"ID를 확인해 주세요.");
         }
 

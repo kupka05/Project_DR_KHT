@@ -645,7 +645,7 @@ public class LobbyEvent : MonoBehaviour
     }
     public int Skill3Calculator()
     {
-        int result, value1, value2, value3, value4, value5, value6;
+        int result, value1, value2;
 
         value1 = MinusCheck(skill3Btn.newLevel - 1) ? UserData.GetStat().upgradeSkill3[skill3Btn.newLevel - 1].totalExp1 : 0;
         value2 = MinusCheck(skill3Btn.level - 1) ? UserData.GetStat().upgradeSkill3[skill3Btn.level - 1].totalExp1 : 0;

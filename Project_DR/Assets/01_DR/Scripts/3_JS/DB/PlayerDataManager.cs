@@ -24,10 +24,15 @@ public static class PlayerDataManager
     public static int WeaponCriDamage => _weapon_cri_damage;
     public static int WeaponAtkRate => _weapon_atk_rate;
     public static int WeaponExp => _weapon_exp;
-    public static int SkillLevel1 => _skill_level_1;
-    public static int SkillLevel2 => _skill_level_2;
+    public static int SkillLevel1_1 => _skill_level_1_1;
+    public static int SkillLevel1_2 => _skill_level_1_2;
+    public static int SkillLevel2_1 => _skill_level_2_1;
+    public static int SkillLevel2_2 => _skill_level_2_2;
+    public static int SkillLevel2_3 => _skill_level_2_3;
     public static int SkillLevel3 => _skill_level_3;
-    public static int SkillLevel4 => _skill_level_4;
+    public static int SkillLevel4_1 => _skill_level_4_1;
+    public static int SkillLevel4_2 => _skill_level_4_2;
+    public static int SkillLevel4_3 => _skill_level_4_3;
     public static string QuestMain => _quest_main;
     public static int ClearCount => _clear_count;
     public static string ClearMBTIValue => _clear_mbti_value;
@@ -54,10 +59,15 @@ public static class PlayerDataManager
     private static int _weapon_exp;           // 무기 경험치
 
     [Header("Skill")]
-    private static int _skill_level_1;        // 스킬 테라드릴 레벨
-    private static int _skill_level_2;        // 스킬 드릴연마 레벨
+    private static int _skill_level_1_1;        // 스킬 테라드릴 레벨
+    private static int _skill_level_1_2;        // 스킬 테라드릴 레벨
+    private static int _skill_level_2_1;        // 스킬 드릴연마 레벨
+    private static int _skill_level_2_2;        // 스킬 드릴연마 레벨
+    private static int _skill_level_2_3;        // 스킬 드릴연마 레벨
     private static int _skill_level_3;        // 스킬 그릴분쇄 레벨
-    private static int _skill_level_4;        // 스킬 그린랜딩 레벨
+    private static int _skill_level_4_1;        // 스킬 그린랜딩 레벨
+    private static int _skill_level_4_2;        // 스킬 그린랜딩 레벨
+    private static int _skill_level_4_3;        // 스킬 그린랜딩 레벨
 
     [Header("ClearData")]
     private static string _quest_main;        // 메인 퀘스트 진행도(직렬화 데이터)
@@ -126,7 +136,8 @@ public static class PlayerDataManager
     private static void UpdatePlayerDataManager(
         int hp, int gold, int exp, int goldIncrease, int expIncrease,
         int weaponAtk, int weaponCriRate, int weaponCriDamage, int weaponAtkRate,
-        int weaponExp, int skillLevel1, int skillLevel2, int skillLevel3, int skillLevel4,
+        int weaponExp, int skillLevel1_1, int skillLevel1_2, int skillLevel2_1, int skillLevel2_2, int skillLevel2_3, 
+        int skillLevel3, int skillLevel4_1, int skillLevel4_2, int skillLevel4_3,
         string questMain, int clearCount, string clearMBTIValue, string clearTime
         )
     {
@@ -145,10 +156,15 @@ public static class PlayerDataManager
         _weapon_exp = weaponExp;               // 무기 경험치
 
         // [Skill]
-        _skill_level_1 = skillLevel1;          // 스킬 테라드릴 레벨
-        _skill_level_2 = skillLevel2;          // 스킬 드릴연마 레벨
+        _skill_level_1_1 = skillLevel1_1;          // 스킬 테라드릴 레벨
+        _skill_level_1_2 = skillLevel1_2;          // 스킬 테라드릴 레벨
+        _skill_level_2_1 = skillLevel2_1;          // 스킬 드릴연마 레벨
+        _skill_level_2_2 = skillLevel2_2;          // 스킬 드릴연마 레벨
+        _skill_level_2_3 = skillLevel2_3;          // 스킬 드릴연마 레벨
         _skill_level_3 = skillLevel3;          // 스킬 그릴분쇄 레벨
-        _skill_level_4 = skillLevel4;          // 스킬 그린랜딩 레벨
+        _skill_level_4_1 = skillLevel4_1;          // 스킬 그린랜딩 레벨
+        _skill_level_4_2 = skillLevel4_2;          // 스킬 그린랜딩 레벨
+        _skill_level_4_3 = skillLevel4_3;          // 스킬 그린랜딩 레벨
 
         // [ClearData]
         ////// TODO: 클리어 데이터의 직렬화를 변환하는 함수를 구현 및
@@ -194,8 +210,9 @@ public static class PlayerDataManager
             UpdatePlayerDataManager(playerData.hp, playerData.gold, playerData.exp,
                 playerData.gold_increase, playerData.exp_increase, playerData.weapon_atk,
                 playerData.weapon_cri_rate, playerData.weapon_cri_damage, playerData.weapon_atk_rate,
-                playerData.weapon_exp, playerData.skill_level_1, playerData.skill_level_2, playerData.skill_level_3,
-                playerData.skill_level_4, playerData.quest_main, playerData.clear_count, playerData.clear_mbti_value,
+                playerData.weapon_exp, 
+                playerData.skill_level_1_1, playerData.skill_level_1_2, playerData.skill_level_2_1, playerData.skill_level_2_2, playerData.skill_level_2_3, playerData.skill_level_3,
+                playerData.skill_level_4_1, playerData.skill_level_4_2, playerData.skill_level_4_3, playerData.quest_main, playerData.clear_count, playerData.clear_mbti_value,
                 playerData.clear_time);
         }
     }
@@ -254,6 +271,7 @@ public static class PlayerDataManager
     private static IEnumerator SaveCoroutine(string column, string value,
         bool isUpdate)
     {
+
         // 폼 생성
         WWWForm form = MakeForm("add", PlayerID, column, value);
 
@@ -297,9 +315,12 @@ public static class PlayerDataManager
         Debug.Log($"id: {PlayerDataManager.PlayerID}, hp: {PlayerDataManager.HP}, gold: {PlayerDataManager.Gold}, " +
             $"exp: {PlayerDataManager.Exp}, gold_increase: {PlayerDataManager.GoldIncrease}, exp_increase: {PlayerDataManager.ExpIncrease}, " +
             $"weapon_atk: {PlayerDataManager.WeaponAtk}, weapon_cri_rate: {PlayerDataManager.WeaponCriRate}, weapon_cri_damage: {PlayerDataManager.WeaponCriDamage}, " +
-            $"weapon_atk_rate: {PlayerDataManager.WeaponAtkRate}, weapon_exp: {PlayerDataManager.WeaponExp}, skill_level_1: {PlayerDataManager.SkillLevel1}, skill_level_2: {PlayerDataManager.SkillLevel2}, " +
-            $"skill_level_3: {PlayerDataManager.SkillLevel3}, skill_level_4: {PlayerDataManager.SkillLevel4}, quest_main: {PlayerDataManager.QuestMain}, " +
-            $"clear_count: {PlayerDataManager.ClearCount}, clear_mbti_value: {PlayerDataManager.ClearMBTIValue}, clear_time: {PlayerDataManager.ClearTime}");
+            $"weapon_atk_rate: {PlayerDataManager.WeaponAtkRate}, weapon_exp: {PlayerDataManager.WeaponExp}, " +
+            $"skill_level_1_1: {PlayerDataManager.SkillLevel1_1},  skill_level_1_2: {PlayerDataManager.SkillLevel1_2}," +
+            $"skill_level_2_1: {PlayerDataManager.SkillLevel2_1}, skill_level_2_2: {PlayerDataManager.SkillLevel2_2},skill_level_2_3: {PlayerDataManager.SkillLevel2_3}," +
+            $"skill_level_3: {PlayerDataManager.SkillLevel3}, " +
+            $"skill_level_4_1: {PlayerDataManager.SkillLevel4_1}, skill_level_4_2: {PlayerDataManager.SkillLevel4_2}, skill_level_4_3: {PlayerDataManager.SkillLevel4_3}," +
+            $"quest_main: {PlayerDataManager.QuestMain}, " + "clear_count: {PlayerDataManager.ClearCount}, clear_mbti_value: {PlayerDataManager.ClearMBTIValue}, clear_time: {PlayerDataManager.ClearTime}");
     }
 
     #endregion

@@ -251,7 +251,7 @@ public class UserDataManager : MonoBehaviour
     {
         if(Input.GetKeyDown("r"))
         {
-            SetDebugData();
+            StartCoroutine(SetDebugData());
         }
         else if(Input.GetKeyDown(KeyCode.F1))
         {
@@ -340,18 +340,18 @@ public class UserDataManager : MonoBehaviour
         // ######################### 스킬 업그레이드 #########################
 
         // TODO 데이터 매니저에 추가 테이블 필요
-        Skill1Lv_1 = PlayerDataManager.SkillLevel1;
-        Skill1Lv_2 = PlayerDataManager.SkillLevel1;
+        Skill1Lv_1 = PlayerDataManager.SkillLevel1_1;
+        Skill1Lv_2 = PlayerDataManager.SkillLevel1_2;
 
-        Skill2Lv_1 = PlayerDataManager.SkillLevel2;
-        Skill2Lv_2 = PlayerDataManager.SkillLevel2;
-        Skill2Lv_3 = PlayerDataManager.SkillLevel2;
+        Skill2Lv_1 = PlayerDataManager.SkillLevel2_1;
+        Skill2Lv_2 = PlayerDataManager.SkillLevel2_2;
+        Skill2Lv_3 = PlayerDataManager.SkillLevel2_3;
 
         Skill3Lv = PlayerDataManager.SkillLevel3;
 
-        Skill4Lv_1 = PlayerDataManager.SkillLevel4;
-        Skill4Lv_2 = PlayerDataManager.SkillLevel4;
-        Skill4Lv_3 = PlayerDataManager.SkillLevel4;
+        Skill4Lv_1 = PlayerDataManager.SkillLevel4_1;
+        Skill4Lv_2 = PlayerDataManager.SkillLevel4_2;
+        Skill4Lv_3 = PlayerDataManager.SkillLevel4_3;
 
         // ######################### ETC #########################
 
@@ -442,38 +442,81 @@ public class UserDataManager : MonoBehaviour
     // 스킬 업그레이드 세이브
     public void SaveSkillUpgrade()
     {
-        PlayerDataManager.Save("skill_level_1", Skill1Lv_1);
-        PlayerDataManager.Save("skill_level_1", Skill1Lv_2);
-        PlayerDataManager.Save("skill_level_2", Skill2Lv_1);
-        PlayerDataManager.Save("skill_level_2", Skill2Lv_2);
-        PlayerDataManager.Save("skill_level_2", Skill2Lv_3);
+        PlayerDataManager.Save("skill_level_1_1", Skill1Lv_1);
+        PlayerDataManager.Save("skill_level_1_2", Skill1Lv_2);
+        PlayerDataManager.Save("skill_level_2_1", Skill2Lv_1);
+        PlayerDataManager.Save("skill_level_2_2", Skill2Lv_2);
+        PlayerDataManager.Save("skill_level_2_3", Skill2Lv_3);
         PlayerDataManager.Save("skill_level_3", Skill3Lv);
-        PlayerDataManager.Save("skill_level_4", Skill4Lv_1);
-        PlayerDataManager.Save("skill_level_4", Skill4Lv_2);
-        PlayerDataManager.Save("skill_level_4", Skill4Lv_3);
+        PlayerDataManager.Save("skill_level_4_1", Skill4Lv_1);
+        PlayerDataManager.Save("skill_level_4_2", Skill4Lv_2);
+        PlayerDataManager.Save("skill_level_4_3", Skill4Lv_3);
     }
 
     // ####################### 디버그용 PC 데이터 세팅 ####################### \\
-    public void SetDebugData()
+    // TODO 한번에 호출하면 저장 실패할 경우가 있음.
+    public IEnumerator SetDebugData()
     {
+        yield return null;
         PlayerDataManager.Save("hp", 0);
+        yield return null;
+
         PlayerDataManager.Save("gold", 100000);
+        yield return null;
+
         PlayerDataManager.Save("exp", 100000);
+        yield return null;
+
         PlayerDataManager.Save("gold_increase", 0);
+        yield return null;
+
         PlayerDataManager.Save("exp_increase", 0);
+        yield return null;
 
         PlayerDataManager.Save("weapon_atk", 0);
-        PlayerDataManager.Save("weapon_cri_rate", 0);        
-        PlayerDataManager.Save("weapon_cri_damage", 0);
-        PlayerDataManager.Save("weapon_atk_rate", 0);
+        yield return null;
 
-        PlayerDataManager.Save("skill_level_1", 0);
-        PlayerDataManager.Save("skill_level_2", 0);
-        PlayerDataManager.Save("skill_level_3", 0);
-        PlayerDataManager.Save("skill_level_4", 0);
+        PlayerDataManager.Save("weapon_cri_rate", 0);
+        yield return null;
+
+        PlayerDataManager.Save("weapon_cri_damage", 0);
+        yield return null;
+
+        PlayerDataManager.Save("weapon_atk_rate", 0);
+        yield return null;
+
+        int debugLv = 0;
+
+        PlayerDataManager.Save("skill_level_1_1", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_1_2", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_2_1", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_2_2", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_2_3", debugLv);
+        yield return null;
+
+
+        PlayerDataManager.Save("skill_level_3", debugLv);
+        yield return null;
+        PlayerDataManager.Save("skill_level_4_1", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_4_2", debugLv);
+        yield return null;
+
+        PlayerDataManager.Save("skill_level_4_3", debugLv);
+        yield return null;
 
         PlayerDataManager.Update(true);
     }
+
     // #######################  MBTI  ####################### \\
     public void InitMBTI()
     {

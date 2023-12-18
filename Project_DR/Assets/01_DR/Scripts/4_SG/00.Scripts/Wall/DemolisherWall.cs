@@ -14,7 +14,7 @@ public class DemolisherWall : MonoBehaviour
         if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("EventWall"))
         {
             Destroy(collision.gameObject);
-            //Debug.Log($"파괴 된건 있나? -> {collision.gameObject.name}");
+            //GFunc.Log($"파괴 된건 있나? -> {collision.gameObject.name}");
         }
     }
 

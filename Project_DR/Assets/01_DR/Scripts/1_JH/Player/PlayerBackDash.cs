@@ -76,7 +76,7 @@ public class PlayerBackDash : MonoBehaviour
 
                 if (0 > yAxisVal && Math.Abs(xAxisVal) < 0.8f)
                 {
-                    Debug.Log("대시 입력");
+                    GFunc.Log("대시 입력");
 
                     return true;
                 }              

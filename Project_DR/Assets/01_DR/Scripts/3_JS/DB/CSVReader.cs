@@ -72,12 +72,12 @@ public class CSVReader
         // 가져 왔을 경우
         if (isCSVReadSuccessful)
         {
-            Debug.Log($"ReadCSVFile(): ▶ 경로 {csvFileName} ▶ CSV 파일 로드 성공");
+            GFunc.Log($"ReadCSVFile(): ▶ 경로 {csvFileName} ▶ CSV 파일 로드 성공");
         }
         // 가져오지 못했을 경우
         else
         {
-            Debug.Log($"ReadCSVFile(): ▶ 경로 {csvFileName} ▶ CSV 파일 로드 실패 ▶ " +
+            GFunc.Log($"ReadCSVFile(): ▶ 경로 {csvFileName} ▶ CSV 파일 로드 실패 ▶ " +
                 $"일치하는 CSV 파일이 없습니다. ▶ 스크립트: CSVReader");
         }
 
@@ -137,7 +137,7 @@ public class CSVReader
         // 오류 발생시
         catch (Exception ex)
         {
-            Debug.LogWarning($"CSVReader.NewReadCSVFile(): 오류 발생! 오류 메세지: {ex} / 오류 데이터 {csvData}");
+            GFunc.LogWarning($"CSVReader.NewReadCSVFile(): 오류 발생! 오류 메세지: {ex} / 오류 데이터 {csvData}");
             return dataDictionary;
         }
     }

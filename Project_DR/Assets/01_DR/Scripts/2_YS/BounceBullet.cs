@@ -34,10 +34,10 @@ public class BounceBullet : MonoBehaviour
     {
         // 오브젝트 활성화
         gameObject.SetActive(true);
-        //Debug.Log($"활성화:{gameObject}");
+        //GFunc.Log($"활성화:{gameObject}");
         
         yield return new WaitForSeconds(4.0f);
-        //Debug.Log("대기중");
+        //GFunc.Log("대기중");
         
         Play();
     }

@@ -61,7 +61,7 @@ public class SnapshotSceneManager : MonoBehaviour
             sb.AppendLine("---- SCENE SNAPSHOT ----");
             foreach (var (anchor, change) in differences)
                 sb.AppendLine($"{change}: {AnchorInfo(anchor)}");
-            Debug.Log(sb.ToString());
+            GFunc.Log(sb.ToString());
         }
 
         // update previous snapshot

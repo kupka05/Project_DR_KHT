@@ -15,13 +15,13 @@ public class ItemBombHandler : MonoBehaviour
             collision.collider.GetComponent<ItemColliderHandler>();
         if (itemHandler != null)
         {
-            //Debug.Log(itemHandler.state);
-            //Debug.Log(collision.collider.tag);
+            //GFunc.Log(itemHandler.state);
+            //GFunc.Log(collision.collider.tag);
             if (collision.collider.CompareTag("Floor")
                 && itemHandler.state == ItemColliderHandler.State.Grabbed)
             {
                 // 아이템 사용
-                Debug.Log("USE");
+                GFunc.Log("USE");
                 GetComponent<UseItem>().Use();
 
                 itemHandler.state = ItemColliderHandler.State.Stop;
@@ -40,9 +40,9 @@ public class ItemBombHandler : MonoBehaviour
     /// </summary>
     public void DetonateBomb(float damage)
     {
-        Debug.Log("폭탄이 터진다!!!!");
-        Debug.Log("진성시치도 터진다!!!");
-        Debug.Log("프로젝트도 터진다!!!");
+        GFunc.Log("폭탄이 터진다!!!!");
+        GFunc.Log("진성시치도 터진다!!!");
+        GFunc.Log("프로젝트도 터진다!!!");
 
     }
 

@@ -329,15 +329,15 @@ public class LobbyEvent : MonoBehaviour
         // 구매했을 떄 일어나는 이벤트
         if (playerSpend <= UserDataManager.Instance.Exp)
         {
-            Debug.Log("구매 완료");
+            GFunc.Log("구매 완료");
 
-            //Debug.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
+            //GFunc.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
             // 업그레이드 레벨을 새 레벨로 적용
             hpUpBtn.level = hpUpBtn.newLevel;
             goldIncreBtn.level = goldIncreBtn.newLevel;
             expIncreBtn.level = expIncreBtn.newLevel;
 
-            //Debug.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
+            //GFunc.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
             // 경험치 소모
             UserData.SpendExp(playerSpend);
             // 레벨 업데이트
@@ -345,7 +345,7 @@ public class LobbyEvent : MonoBehaviour
         }
         else
         {
-            Debug.Log("경험치가 부족합니다.");
+            GFunc.Log("경험치가 부족합니다.");
             return;
         }
         UpdatePlayerStatusUI();
@@ -367,8 +367,8 @@ public class LobbyEvent : MonoBehaviour
         curExp = MinusCheck(expIncreBtn.level - 1) ? UserDataManager.Instance.statData.upgradeGainExp[expIncreBtn.level - 1].totalExp : 0;
 
         result = (afterHP - curHP) + (afterGold - curGold) + (afterExp - curExp);
-        //Debug.Log($"{hpUpBtn.newLevel - 1} - {hpUpBtn.level - 1} + {goldIncreBtn.newLevel - 1} - {goldIncreBtn.level - 1} + {expIncreBtn.newLevel - 1} - {expIncreBtn.level - 1}");
-        //Debug.Log($"{afterHP} - {curHP} + {afterGold} - {curGold} + {afterExp} - {curExp}");
+        //GFunc.Log($"{hpUpBtn.newLevel - 1} - {hpUpBtn.level - 1} + {goldIncreBtn.newLevel - 1} - {goldIncreBtn.level - 1} + {expIncreBtn.newLevel - 1} - {expIncreBtn.level - 1}");
+        //GFunc.Log($"{afterHP} - {curHP} + {afterGold} - {curGold} + {afterExp} - {curExp}");
         return result;
     }
 
@@ -441,7 +441,7 @@ public class LobbyEvent : MonoBehaviour
         curCritDmg = MinusCheck(critDmgBtn.level - 1) ? UserDataManager.Instance.statData.upgradeCritDmg[critDmgBtn.level - 1].totalExp : 0;
         afterAtkRate = MinusCheck(atkRateBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeAtkSpd[atkRateBtn.newLevel - 1].totalExp : 0;
         curAtkRate = MinusCheck(atkRateBtn.level - 1) ? UserDataManager.Instance.statData.upgradeAtkSpd[atkRateBtn.level - 1].totalExp : 0;
-        //Debug.Log($"{afterAtk} - {curAtk} + {afterCritRate} - {curCritRate} + {afterCritDmg} - {curCritDmg} + {afterAtkRate} - {curAtkRate} ");
+        //GFunc.Log($"{afterAtk} - {curAtk} + {afterCritRate} - {curCritRate} + {afterCritDmg} - {curCritDmg} + {afterAtkRate} - {curAtkRate} ");
         result = (afterAtk - curAtk) + (afterCritRate - curCritRate) + (afterCritDmg - curCritDmg) + (afterAtkRate - curAtkRate);
         return result;
     }
@@ -455,7 +455,7 @@ public class LobbyEvent : MonoBehaviour
         // 구매했을 떄 일어나는 이벤트
         if (weaponSpend <= UserDataManager.Instance.Exp)
         {
-            Debug.Log("구매 완료");
+            GFunc.Log("구매 완료");
 
             // 업그레이드 레벨을 새 레벨로 적용
             atkUpBtn.level = atkUpBtn.newLevel;
@@ -471,7 +471,7 @@ public class LobbyEvent : MonoBehaviour
         }
         else
         {
-            Debug.Log("경험치가 부족합니다.");
+            GFunc.Log("경험치가 부족합니다.");
             return;
         }
         UpdateWeaponStateUI();
@@ -569,7 +569,7 @@ public class LobbyEvent : MonoBehaviour
         // 구매했을 떄 일어나는 이벤트
         if (spend <= UserData.GetExp())
         {
-            Debug.Log("구매 완료");
+            GFunc.Log("구매 완료");
 
             // 업그레이드 레벨을 새 레벨로 적용
             skill1Btn1.level = skill1Btn1.newLevel;
@@ -598,7 +598,7 @@ public class LobbyEvent : MonoBehaviour
         }
         else
         {
-            Debug.Log("경험치가 부족합니다.");
+            GFunc.Log("경험치가 부족합니다.");
             return false;
         }
     }
@@ -664,7 +664,7 @@ public class LobbyEvent : MonoBehaviour
         value4 = MinusCheck(skill4Btn2.level - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn2.level - 1].totalExp2 : 0;
         value5 = MinusCheck(skill4Btn3.newLevel - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn3.newLevel - 1].totalExp3 : 0;
         value6 = MinusCheck(skill4Btn3.level - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn3.level - 1].totalExp3 : 0;
-        Debug.Log($"{value1} - {value2} + {value3} - {value4} + {value5} - {value6}");
+        GFunc.Log($"{value1} - {value2} + {value3} - {value4} + {value5} - {value6}");
         result = (value1 - value2) + (value3 - value4) + (value5 - value6);
 
         return result;
@@ -812,7 +812,7 @@ public class LobbyEvent : MonoBehaviour
 
         if (target < 0)
         {
-            Debug.Log("대사 ID를 찾지 못했습니다." + target);
+            GFunc.Log("대사 ID를 찾지 못했습니다." + target);
             return;
         }
         else
@@ -834,7 +834,7 @@ public class LobbyEvent : MonoBehaviour
             return -1;                   // -1을 반환 : 탐색 실패를 의미
         }
         mid = (first + last) / 2;        // 탐색 영역을 반으로 나누고 탐색을 진행
-        Debug.Log($"타겟 : {target}, 탐색 위치 : {list[mid].ID}");
+        GFunc.Log($"타겟 : {target}, 탐색 위치 : {list[mid].ID}");
 
         if (list[mid].ID == target)      // 타겟과 같다면
         {

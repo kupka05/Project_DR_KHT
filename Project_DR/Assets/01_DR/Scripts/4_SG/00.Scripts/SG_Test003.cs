@@ -10,7 +10,7 @@ public class SG_Test003 : MonoBehaviour
     protected virtual void Start()
     {
         isTest = false;
-        Debug.Log("SG_Test003 Start함수 실행");
+        GFunc.Log("SG_Test003 Start함수 실행");
     }
 
     private bool isTest;

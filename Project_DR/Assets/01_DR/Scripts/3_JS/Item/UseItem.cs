@@ -123,7 +123,7 @@ public class UseItem : MonoBehaviour
                 break;
 
             default:
-                Debug.LogWarning("Item의 데이터가 생성되기 전에 아이템 Use()가 발생했습니다. " +
+                GFunc.LogWarning("Item의 데이터가 생성되기 전에 아이템 Use()가 발생했습니다. " +
                     "/ 사용 오류");
                 return;
         }

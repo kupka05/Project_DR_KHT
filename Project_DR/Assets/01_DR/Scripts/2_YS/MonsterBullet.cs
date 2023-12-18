@@ -51,9 +51,9 @@ public class MonsterBullet : MonoBehaviour
     {
         if (other.tag.Equals("Player"))
         {
-            //Debug.Log("부딪힘");
+            //GFunc.Log("부딪힘");
             other.GetComponent<Damageable>().DealDamage(damage);
-            //Debug.Log($"damage:{damage}");
+            //GFunc.Log($"damage:{damage}");
             Destroy(this.gameObject);
         }
 

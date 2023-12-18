@@ -9,7 +9,7 @@ public class ShopPlayerGoldTextController : MonoBehaviour
     // 구매 됐을 경우 해당 함수를 호출하여 갱신
     public void GetDataAndSetText()
     {
-        //Debug.Log("GetDataAndSetText()");
+        //GFunc.Log("GetDataAndSetText()");
         int haveGold = UserDataManager.Instance.Gold;
         gameObject.GetTMPText(ref _text).text = "<color=#ffd400>[참고!]\n당신의 소지 골드\n" + haveGold + " 골드</color>";
     }

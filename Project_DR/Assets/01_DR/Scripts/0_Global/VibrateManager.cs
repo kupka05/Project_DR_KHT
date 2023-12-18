@@ -25,7 +25,7 @@ public class VibrateManager : MonoBehaviour
         input = GameObject.FindGameObjectWithTag("Player").GetComponentInParent<InputBridge>();
         if(!input)
         {
-            Debug.LogError("인풋을 찾을 수 없음");
+            GFunc.LogError("인풋을 찾을 수 없음");
         }
     }
     public void Vibrate(float frequency, float amplitude, float duration, ControllerHand hand)
@@ -36,7 +36,7 @@ public class VibrateManager : MonoBehaviour
     // 기본값 진동
     public void Vibrate(ControllerHand hand)
     {
-        Debug.Log("Vibrate");
+        GFunc.Log("Vibrate");
         float frequency = 0.2f;
         float amplitude = 0.1f;
         float duration = 0.2f;

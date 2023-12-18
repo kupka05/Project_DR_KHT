@@ -170,7 +170,7 @@ namespace BossMonster
                 // 없을 경우
                 else
                 {
-                    Debug.LogWarning($"BossMonster.Boss.Initialize(): {stringBuilder} 타입을 찾을 수 없습니다.");
+                    GFunc.LogWarning($"BossMonster.Boss.Initialize(): {stringBuilder} 타입을 찾을 수 없습니다.");
                 }
             }
         }

@@ -223,9 +223,9 @@ public class RandomRoomObjCreate : MonoBehaviour
     {        
         stringBuilder.Clear();
         stringBuilder.Append((string)DataManager.instance.GetData(_objId, "PrefabName", typeof(string)));
-        //Debug.Log($"들어간 Sb : {stringBuilder}\n sb에 참조된 ID : {_objId}");        
+        //GFunc.Log($"들어간 Sb : {stringBuilder}\n sb에 참조된 ID : {_objId}");        
         GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
-        //Debug.Log($"지정된 Prefab : {prefabObj}");
+        //GFunc.Log($"지정된 Prefab : {prefabObj}");
         return prefabObj;
     }       // spawnObjInIt(int)
 
@@ -238,7 +238,7 @@ public class RandomRoomObjCreate : MonoBehaviour
     {
         if (createPass == true)
         {
-            //Debug.Log($"제작 패스");
+            //GFunc.Log($"제작 패스");
             createPass = false;
             reCallCount = 0;
             return;

@@ -85,7 +85,7 @@ public class BattleRoom : RandomRoom
             obstacleSpawnCount = Random.Range((int)DataManager.instance.GetData(15003, "MinValue", typeof(int)),
                     1 + (int)DataManager.instance.GetData(15003, "MaxValue", typeof(int)));
         }
-        else { Debug.LogErrorFormat("들어오면 안되는 곳에 들어옴"); }
+        else { GFunc.LogErrorFormat("들어오면 안되는 곳에 들어옴"); }
 
         SettingSpawnMonster(nomalSpawnCount, eliteSpawnCount, obstacleSpawnCount);
 
@@ -120,7 +120,7 @@ public class BattleRoom : RandomRoom
 
             // 소환
             SpawnMonster(spawnPoint);
-            //Debug.Log($"{gameObject.name} : {stringBuilder}");
+            //GFunc.Log($"{gameObject.name} : {stringBuilder}");
         }
 
     }       // ChoiceSpawnCount()
@@ -179,7 +179,7 @@ public class BattleRoom : RandomRoom
             return;
         }
         GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
-        //Debug.Log($"GameObject : {prefabObj} , SB : {stringBuilder}");
+        //GFunc.Log($"GameObject : {prefabObj} , SB : {stringBuilder}");
         spawnMonster = Instantiate(prefabObj, _spawnPoint, Quaternion.identity, monstersParent.transform);
 
 

@@ -68,14 +68,14 @@ public static class NativeVideoPlayer
                     }
                     else
                     {
-                        Debug.LogError("Failed to find NativeVideoPlayer class");
+                        GFunc.LogError("Failed to find NativeVideoPlayer class");
                         _VideoPlayerClass = System.IntPtr.Zero;
                     }
                 }
                 catch (System.Exception ex)
                 {
-                    Debug.LogError("Failed to find NativeVideoPlayer class");
-                    Debug.LogException(ex);
+                    GFunc.LogError("Failed to find NativeVideoPlayer class");
+                    GFunc.LogException(ex);
                     _VideoPlayerClass = System.IntPtr.Zero;
                 }
             }
@@ -104,7 +104,7 @@ public static class NativeVideoPlayer
                 }
                 catch (System.Exception ex)
                 {
-                    Debug.LogException(ex);
+                    GFunc.LogException(ex);
                     _Activity = System.IntPtr.Zero;
                 }
             }

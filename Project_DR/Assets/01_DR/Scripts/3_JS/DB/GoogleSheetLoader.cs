@@ -89,6 +89,6 @@ public class GoogleSheetLoader : MonoBehaviour
 
         // 로딩 완료 상태 변경
         isDone = true;
-        Debug.Log("isDOne");
+        GFunc.Log("isDOne");
     }
 }

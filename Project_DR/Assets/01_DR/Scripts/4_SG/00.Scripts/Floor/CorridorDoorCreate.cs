@@ -81,24 +81,24 @@ public class CorridorDoorCreate : MonoBehaviour
         if (highDis == hitsDis[0])
         {
             forward = true;
-            //Debug.Log($"{this.gameObject.name} : 은 forward가 true");
+            //GFunc.Log($"{this.gameObject.name} : 은 forward가 true");
         }
         else if (highDis == hitsDis[1])
         {
             back = true;
-            //Debug.Log($"{this.gameObject.name} : 은 back이 true");
+            //GFunc.Log($"{this.gameObject.name} : 은 back이 true");
         }
         else if (highDis == hitsDis[2])
         {
             left = true;
-            //Debug.Log($"{this.gameObject.name} : 은 Left가 true");
+            //GFunc.Log($"{this.gameObject.name} : 은 Left가 true");
         }
         else if (highDis == hitsDis[3])
         {
             right = true;
-            //Debug.Log($"{this.gameObject.name} : 은 Right가 true");
+            //GFunc.Log($"{this.gameObject.name} : 은 Right가 true");
         }
-        else { Debug.Log("문이 쏜레이가 맞은 포인트가 맞지 않음"); }
+        else { GFunc.Log("문이 쏜레이가 맞은 포인트가 맞지 않음"); }
 
 
         if (forward == true) 

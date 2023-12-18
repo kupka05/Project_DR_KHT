@@ -38,17 +38,17 @@ public class DebugUISample : MonoBehaviour
 
     public void TogglePressed(Toggle t)
     {
-        Debug.Log("Toggle pressed. Is on? " + t.isOn);
+        GFunc.Log("Toggle pressed. Is on? " + t.isOn);
     }
 
     public void RadioPressed(string radioLabel, string group, Toggle t)
     {
-        Debug.Log("Radio value changed: " + radioLabel + ", from group " + group + ". New value: " + t.isOn);
+        GFunc.Log("Radio value changed: " + radioLabel + ", from group " + group + ". New value: " + t.isOn);
     }
 
     public void SliderPressed(float f)
     {
-        Debug.Log("Slider: " + f);
+        GFunc.Log("Slider: " + f);
         sliderText.text = f.ToString();
     }
 
@@ -64,6 +64,6 @@ public class DebugUISample : MonoBehaviour
 
     void LogButtonPressed()
     {
-        Debug.Log("Button pressed");
+        GFunc.Log("Button pressed");
     }
 }

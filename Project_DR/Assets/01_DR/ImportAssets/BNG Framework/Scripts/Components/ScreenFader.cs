@@ -128,7 +128,7 @@ namespace BNG {
         public virtual void SetFadeLevel(float fadeLevel) {
             if (fadeRoutine != null) {
                 StopCoroutine(fadeRoutine);
-                // Debug.Log("----- Stopped Routine");
+                // GFunc.Log("----- Stopped Routine");
             }
 
             // No Canvas available to fade

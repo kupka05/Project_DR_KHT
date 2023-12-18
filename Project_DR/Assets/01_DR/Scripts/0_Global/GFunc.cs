@@ -1,4 +1,5 @@
 using System.Text;
+using UnityEngine;
 
 public static class GFunc
 {
@@ -27,5 +28,34 @@ public static class GFunc
     public static string RemoveUnderbar(this string input)
     {
         return input.Replace("_", "");
+    }
+
+    // 디버그 로그를 찍어주는 메서드
+    public static void Log(string _input)
+    {
+        Debug.Log(_input);
+    }
+
+    // 디버그 로그를 찍어주는 메서드
+    public static void LogWarning(string _input)
+    {
+        Debug.LogWarning(_input);
+    }
+
+    // 디버그 로그를 찍어주는 메서드
+    public static void LogError(string _input)
+    {
+        Debug.LogError(_input);
+    }
+    // 디버그 로그를 찍어주는 메서드
+    public static void LogErrorFormat(string _input)
+    {
+        Debug.LogErrorFormat(_input);
+    }
+
+    // 디버그 로그를 찍어주는 메서드
+    public static void LogException(System.Exception _input)
+    {
+        Debug.LogException(_input);
     }
 }

@@ -155,7 +155,7 @@ public class AxisHandler : MonoBehaviour
     // 체크 코루틴
     IEnumerator ActiveChecking()
     {
-        Debug.Log("체크시작하나?");
+        GFunc.Log("체크시작하나?");
         yield return waitForSeconds;
         //ActiveEvent();
         state = State.Default;

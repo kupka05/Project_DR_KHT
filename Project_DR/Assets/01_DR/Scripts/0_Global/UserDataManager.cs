@@ -202,7 +202,7 @@ public class UserDataManager : MonoBehaviour
             _clearDatas = value;
             if (value == null)
             {
-                Debug.Log("클리어 데이터 없음. 신규 데이터 생성");
+                GFunc.Log("클리어 데이터 없음. 신규 데이터 생성");
                 _clearDatas = new ClearDatas();
             }
         }
@@ -243,7 +243,7 @@ public class UserDataManager : MonoBehaviour
         { Destroy(gameObject); }
 
         //SetDebugData();
-        Debug.Log("데이터 요청 시간 : " + GetCurrentDate());
+        GFunc.Log("데이터 요청 시간 : " + GetCurrentDate());
         GetReferenceData();
         PlayerDataManager.Update(true); // 데이터 요청
     }
@@ -375,7 +375,7 @@ public class UserDataManager : MonoBehaviour
         // 데이터를 불러오고 해야할 이벤트가 있다면 이벤트 실행
         // Ex. 플레이어 상태창, 상점의 현재 골드 등
         dataLoadSuccess = true;
-        Debug.Log("데이터 로드 시간 : " + GetCurrentDate());
+        GFunc.Log("데이터 로드 시간 : " + GetCurrentDate());
     }
 
     // DB에 데이터를 요청하기 위한 메서드
@@ -390,7 +390,7 @@ public class UserDataManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         if (dataLoadSuccess)
         {
-            Debug.Log(action + "데이터 로드 완료");
+            GFunc.Log(action + "데이터 로드 완료");
             action();
             yield break;
         }

@@ -292,7 +292,7 @@ public class DungeonCreator : MonoBehaviour
 
 
         DungeonInspectionManager.dungeonManagerInstance.isCreateDungeonEnd = true;
-        Debug.Log("던전 생성 끝");
+        GFunc.Log("던전 생성 끝");
     }   // CreateDungeon()
 
 
@@ -354,7 +354,7 @@ public class DungeonCreator : MonoBehaviour
         //int battleRoomCount = 2;
         //int eventRoom = 2;
         //int nullRoom = 2;
-        //Debug.Log($"RoomCount : {roomCount} NullRoom : {nullRoom}");
+        //GFunc.Log($"RoomCount : {roomCount} NullRoom : {nullRoom}");
 
         for (int i = 0; i < floorParent.transform.childCount; i++)
         {       // List에 bsp의방 Transform을 Add
@@ -362,8 +362,8 @@ public class DungeonCreator : MonoBehaviour
         }
         // clone으로 만들어서 하나씩 remove하면서 각자 방에 넣어줄 예정
         List<Transform> bspListClone = bspRoom;
-        //Debug.Log($"ListCount : {bspListClone.Count}");
-        //Debug.Log($"event -> {eventRoom} Battle -> {battleRoomCount}");
+        //GFunc.Log($"ListCount : {bspListClone.Count}");
+        //GFunc.Log($"event -> {eventRoom} Battle -> {battleRoomCount}");
         while (battleRoomCount != 0 || eventRoom != 0 || nullRoom != 0)
         {
             int randomIdx = UnityEngine.Random.Range(0, bspListClone.Count);
@@ -405,7 +405,7 @@ public class DungeonCreator : MonoBehaviour
             }
         }       // 만약 3으로 나누었을때 전부 방을 기입하고도 List속에 무언가 있다면 빈방으로 설정
 
-        //Debug.LogFormat("각방 이벤트 선정 끝");
+        //GFunc.LogFormat("각방 이벤트 선정 끝");
 
 
 
@@ -515,7 +515,7 @@ public class DungeonCreator : MonoBehaviour
         {
             CreateWall(wallParent, wallPosition, wallVertical);
         }
-        //Debug.Log("수직 수평 벽 생성 끝");
+        //GFunc.Log("수직 수평 벽 생성 끝");
 
     }       // CreateWalls()
 
@@ -922,7 +922,7 @@ public class DungeonCreator : MonoBehaviour
 
         // 처음으로 매쉬가 생성된 방의 꼭지점Pos 얻기
         FloorMeshPos firstRoomPos = floorParent.transform.GetChild(0).GetComponent<FloorMeshPos>();
-        //Debug.LogFormat("FPChildCount -> {0}", floorParent.transform.childCount);
+        //GFunc.LogFormat("FPChildCount -> {0}", floorParent.transform.childCount);
 
         // 방의 하단 중앙위치
         float bspfirstRoomBottomCenterPoint = (firstRoomPos.bottomLeftCorner.x + firstRoomPos.bottomRightCorner.x) / 2;
@@ -1450,7 +1450,7 @@ public class DungeonCreator : MonoBehaviour
 
         // 처음으로 매쉬가 생성된 방의 꼭지점Pos 얻기
         FloorMeshPos lastRoomPos = floorParent.transform.GetChild(floorParent.transform.childCount - 1).GetComponent<FloorMeshPos>();
-        //Debug.LogFormat("FPChildCount -> {0}", floorParent.transform.childCount);
+        //GFunc.LogFormat("FPChildCount -> {0}", floorParent.transform.childCount);
 
         // 방의 하단 중앙위치
         float bspLastRoomBottomCenterPoint = (lastRoomPos.bottomLeftCorner.x + lastRoomPos.bottomRightCorner.x) / 2;

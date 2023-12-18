@@ -83,7 +83,7 @@ public class Grappling : GrabbableEvents
         }
         else
         {
-            Debug.Log("플레이어 오브젝트를 찾지 못함");
+            GFunc.Log("플레이어 오브젝트를 찾지 못함");
         }
         GetData();
         line = GetComponent<LineRenderer>();
@@ -254,11 +254,11 @@ public class Grappling : GrabbableEvents
         if (Time.time - lastGrapplingTime < grapplingCd)
         {
             Invoke(nameof(Excute), grappleDelayTime);                  // 그래플링 실행
-            Debug.Log("if");
+            GFunc.Log("if");
         }
 
         else
-            Debug.Log("else");
+            GFunc.Log("else");
         Excute();
     }
     public void Excute()
@@ -380,7 +380,7 @@ public class Grappling : GrabbableEvents
         playerRigid = player.GetOrAddRigidbody();
         //if (player.GetComponent<Rigidbody>())
         //{
-        //    Debug.Log("리지드바디 생성");
+        //    GFunc.Log("리지드바디 생성");
         //    playerRigid = player.GetComponent<Rigidbody>();
         //}
     }

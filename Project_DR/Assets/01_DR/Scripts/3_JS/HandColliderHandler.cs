@@ -37,7 +37,7 @@ public class HandColliderHandler : MonoBehaviour
     ////    {
     ////        if (latestGripItem.GrabbableHaptics.CurrentGrabber == null)
     ////        {
-    ////            Debug.Log("Grip Off Item");
+    ////            GFunc.Log("Grip Off Item");
 
     ////            // 5초 후에 수납 가능 상태로 변경
     ////            latestGripItem.Coroutine(latestGripItem.ResetState, 5f);
@@ -57,20 +57,20 @@ public class HandColliderHandler : MonoBehaviour
     //        // 수납 가능한 경우에만 수납함
     //        if (itemSlot.IsStorageAvailable)
     //        {
-    //            Debug.Log("수납");
+    //            GFunc.Log("수납");
     //            // 콜라이더가 인벤토리 스크롤 패널 안에 있을 경우
     //            if (CheckColliderVisibility(
     //                other.transform.parent.parent.parent.parent.parent.parent.GetComponent<RectTransform>(),
     //                other.GetComponent<RectTransform>()) == true)
     //            {
-    //                Debug.Log($"name: {other.transform.parent.name}");
+    //                GFunc.Log($"name: {other.transform.parent.name}");
 
     //                // 상태 변경
     //                _state = State.ProcessingOne;
     //            }
     //            else
     //            {
-    //                Debug.Log("Out of range");
+    //                GFunc.Log("Out of range");
     //            }
     //        }
     //    }
@@ -88,7 +88,7 @@ public class HandColliderHandler : MonoBehaviour
     //            _state = State.ProcessingTwo;
 
     //            // 디버그
-    //            Debug.Log("Left Trigger Pressed");
+    //            GFunc.Log("Left Trigger Pressed");
 
     //            GripItem(other);
     //        }
@@ -100,7 +100,7 @@ public class HandColliderHandler : MonoBehaviour
     //            _state = State.ProcessingTwo;
 
     //            // 디버그
-    //            Debug.Log("Right Trigger Pressed");
+    //            GFunc.Log("Right Trigger Pressed");
 
     //            GripItem(other);
     //        }

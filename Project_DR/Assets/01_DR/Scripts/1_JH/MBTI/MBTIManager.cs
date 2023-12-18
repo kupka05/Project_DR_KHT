@@ -143,7 +143,7 @@ public class MBTIManager : MonoBehaviour
     // 각 값을 연산해주는 메서드
     float ResultValue(float preValue, float value)
     {
-        //UnityEngine.Debug.Log(preValue + ", " + value);
+        //UnityEngine.GFunc.Log(preValue + ", " + value);
 
         if (value == 0)
         { return preValue; }

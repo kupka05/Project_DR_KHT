@@ -69,7 +69,7 @@ public class GuidedBullet : MonoBehaviour
         if (collision.collider.CompareTag("Player") || collision.collider.CompareTag("Wall"))
         {
             Destroy(gameObject);
-            Debug.Log($"파괴:{gameObject}");
+            GFunc.Log($"파괴:{gameObject}");
         }
     }
 }

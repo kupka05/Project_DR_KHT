@@ -61,7 +61,7 @@ public class ItemColliderHandler : MonoBehaviour
     //    if (collision.collider.CompareTag("Floor") && state == State.Stop)
     //    {
     //        // 디버그
-    //        //Debug.Log("Floor");
+    //        //GFunc.Log("Floor");
 
     //        // n초 후에 상태 초기화 코루틴 실행
     //        Action func = ResetState;
@@ -116,7 +116,7 @@ public class ItemColliderHandler : MonoBehaviour
                         other.GetComponent<RectTransform>()) == false)
                     {
                         // 아닐 경우 예외처리
-                        Debug.Log("Out of range");
+                        GFunc.Log("Out of range");
                         return;
                     }
                 }
@@ -124,11 +124,11 @@ public class ItemColliderHandler : MonoBehaviour
                 state = State.Processing;
 
                 ItemDataComponent itemDataComponent = gameObject.GetComponent<ItemDataComponent>();
-                //Debug.Log($"GameObject {gameObject.GetComponent<ItemDataComponent>()}");
+                //GFunc.Log($"GameObject {gameObject.GetComponent<ItemDataComponent>()}");
                 // ItemDataComponent가 있는지 확인
                 if (itemDataComponent != null)
                 {
-                    Debug.Log(itemDataComponent.ItemData);
+                    //Debug.Log(itemDataComponent.ItemData);
                     ItemData itemData = (ItemData)itemDataComponent.ItemData;
                     int id = itemData.ID;
                     ItemManager.instance.InventoryCreateItem(other.transform.position, id);
@@ -136,7 +136,7 @@ public class ItemColliderHandler : MonoBehaviour
                 else
                 {
                     // 디버그용
-                    Debug.LogWarning("Item Error!");
+                    GFunc.LogWarning("Item Error!");
                 }
                 Destroy(gameObject);
             }

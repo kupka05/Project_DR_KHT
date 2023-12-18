@@ -52,11 +52,11 @@
 //                }
 //            }
 
-//            Debug.Log("Data saved to CSV file: " + csvFilePath);
+//            GFunc.Log("Data saved to CSV file: " + csvFilePath);
 //        }
 //        else
 //        {
-//            Debug.Log("No data to save.");
+//            GFunc.Log("No data to save.");
 //        }
 //    }
 //}

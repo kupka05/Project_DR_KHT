@@ -105,7 +105,7 @@ namespace OculusSampleFramework
 
             if (m_parentHeldObject == true)
             {
-                Debug.LogError("m_parentHeldObject incompatible with DistanceGrabber. Setting to false.");
+                GFunc.LogError("m_parentHeldObject incompatible with DistanceGrabber. Setting to false.");
                 m_parentHeldObject = false;
             }
 

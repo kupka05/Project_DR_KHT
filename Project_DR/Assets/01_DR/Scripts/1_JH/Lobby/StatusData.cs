@@ -193,7 +193,7 @@ public class StatusData
         for (int i = 0; i < 10; i++)
         {
             UpgradePC newData = new UpgradePC();
-            //Debug.Log(id+i);
+            //GFunc.Log(id+i);
 
             newData.level = i + 1;
             newData.value = (float)DataManager.instance.GetData(id + i, "Value1", typeof(float));
@@ -218,7 +218,7 @@ public class StatusData
         for (int i = 0; i < 10; i++)
         {
             UpgradeWeapon newData = new UpgradeWeapon();
-            //Debug.Log(id + i);
+            //GFunc.Log(id + i);
 
             newData.level = (int)DataManager.instance.GetData(id + i, "LV", typeof(int));
             newData.value1 = (float)DataManager.instance.GetData(id + i, "Value1", typeof(float));

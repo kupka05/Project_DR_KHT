@@ -35,7 +35,7 @@ public class ReCreateDungeon : MonoBehaviour
         {
             if (collision.gameObject.CompareTag("DungeonInspection"))
             {
-                Debug.Log($"던전 재생성예정임");
+                GFunc.Log($"던전 재생성예정임");
                 EndCoroutine();
                 DungeonInspectionManager.dungeonManagerInstance.CheckDungeonReCreating();
                 secondCheck = false;

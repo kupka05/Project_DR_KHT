@@ -9,7 +9,7 @@ namespace BossMonster
         // 상태 진입시
         public void EnterState(Boss boss)
         {
-            Debug.Log("피격상태 진입 ");
+            GFunc.Log("피격상태 진입 ");
         }
 
         // 상태 업데이트시

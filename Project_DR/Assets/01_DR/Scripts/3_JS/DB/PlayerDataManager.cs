@@ -237,7 +237,7 @@ public static class PlayerDataManager
             // 에러가 발생했을 경우
             if (www.isNetworkError || www.isHttpError)
             {
-                Debug.LogWarning(www.downloadHandler.text);
+                GFunc.LogWarning(www.downloadHandler.text);
             }
 
             // 정상일 경우
@@ -284,13 +284,13 @@ public static class PlayerDataManager
             // 에러가 발생했을 경우
             if (www.isNetworkError || www.isHttpError)
             {
-                Debug.LogWarning(www.downloadHandler.text);
+                GFunc.LogWarning(www.downloadHandler.text);
             }
 
             // 정상적으로 처리되었을 경우
             else
             {
-                Debug.Log("정상적으로 DB에 데이터가 저장되었습니다.");
+                GFunc.Log("정상적으로 DB에 데이터가 저장되었습니다.");
 
                 // 업데이트 요청을 받았을 경우
                 if (isUpdate)
@@ -312,7 +312,7 @@ public static class PlayerDataManager
     #region [+]
     public static void DebugData()
     {
-        Debug.Log($"id: {PlayerDataManager.PlayerID}, hp: {PlayerDataManager.HP}, gold: {PlayerDataManager.Gold}, " +
+        GFunc.Log($"id: {PlayerDataManager.PlayerID}, hp: {PlayerDataManager.HP}, gold: {PlayerDataManager.Gold}, " +
             $"exp: {PlayerDataManager.Exp}, gold_increase: {PlayerDataManager.GoldIncrease}, exp_increase: {PlayerDataManager.ExpIncrease}, " +
             $"weapon_atk: {PlayerDataManager.WeaponAtk}, weapon_cri_rate: {PlayerDataManager.WeaponCriRate}, weapon_cri_damage: {PlayerDataManager.WeaponCriDamage}, " +
             $"weapon_atk_rate: {PlayerDataManager.WeaponAtkRate}, weapon_exp: {PlayerDataManager.WeaponExp}, " +

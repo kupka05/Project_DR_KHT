@@ -201,7 +201,7 @@ public class SkillManager : MonoBehaviour
     {
         if(activePcDistance <= playerController.DistanceFromGround)
         {
-            Debug.Log("체크를 시작");
+            GFunc.Log("체크를 시작");
             if(checkGound != null)
             {
                 StopCoroutine(checkGound);
@@ -222,22 +222,15 @@ public class SkillManager : MonoBehaviour
             {
                 if (activeDrillDistance > drills[i].distanceFromGround && playerController.DistanceFromGround <2)
                 {
-                    Debug.Log("1번");
-
                     ActiveLandingSkill();
                     yield break;
                 }
-                //if (activeDrillDistance < drills[i].distanceFromGround)
-                //{
-                //    Debug.Log("2번");
-                //    ActiveLandingSkill();
-                //    yield break;
-                //}
-                //if (!drills[i].grabbable.enabled)
-                //{
-                //    //취소
-                //    break;
-                //}
+
+                if (!drills[i].grabbable.enabled)
+                {
+                   
+                    yield break;
+                }
             }
             yield return waitForEndOfFrame;
         }
@@ -247,7 +240,7 @@ public class SkillManager : MonoBehaviour
     public void ActiveLandingSkill()
     {
         // ToDo : 작동되고 넉백되는 부분 추가 필요
-        Debug.Log("실행한다");
+        GFunc.Log("작동");
     }
 
 

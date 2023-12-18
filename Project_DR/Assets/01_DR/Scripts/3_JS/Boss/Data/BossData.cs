@@ -138,7 +138,7 @@ namespace BossMonster
             _availableAttackPatternsList.Clear();
 
             int patternCount = _currentPatternCount;
-            Debug.Log($"patternCount = {patternCount}");
+            GFunc.Log($"patternCount = {patternCount}");
             int i = 0;
             while (i < patternCount)
             {

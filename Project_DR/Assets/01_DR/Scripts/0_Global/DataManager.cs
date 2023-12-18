@@ -161,10 +161,10 @@ public class DataManager : MonoBehaviour
                 object data = FindDataTable(id, category, dataTable, idTable);
 
                 // 데이터 타입을 가져오는 함수 호출
-                string type = GetDataType((string)data);
+                //string type = GetDataType((string)data);  //Legacy:
 
                 // 데이터 타입에 따라 형변환 하는 함수 호출
-                data = ConvertDataType(type, (string)data);
+                data = ConvertDataType(castType, (string)data);
 
                 // data가 null일 경우
                 // 예외 처리를 위해 추가
@@ -197,10 +197,10 @@ public class DataManager : MonoBehaviour
                 object data = FindDataTable(id, category, localDataTable, localIDTable);
 
                 // 데이터 타입을 가져오는 함수 호출
-                string type = GetDataType((string)data);
+                //string type = GetDataType((string)data);   //Legacy:
 
                 // 데이터 타입에 따라 형변환 하는 함수 호출
-                data = ConvertDataType(type, (string)data);
+                data = ConvertDataType(castType, (string)data);
 
                 // data가 null일 경우
                 // 예외 처리를 위해 추가
@@ -486,8 +486,8 @@ public class DataManager : MonoBehaviour
     // 조건식을 통해 찾아내는 함수
     public string GetDataType(string data)
     {
-        // 데이터 타입이 int 일 경우
-        if (int.TryParse(data, out int tempIntValue))
+        // 데이터 타입이 int 일 경우(언더바 제거)
+        if (int.TryParse(data.Replace("_", ""), out int tempIntValue))
         {
             // "int" 반환
             return "int";
@@ -512,21 +512,22 @@ public class DataManager : MonoBehaviour
     }
 
     // 데이터 타입을 형변환 해주는 함수
-    private object ConvertDataType(string type, string data)
+    private object ConvertDataType(Type type, string data)
     {
         // 받아온 type에 따라 데이터 타입을 형변환
-        switch (type)
+        switch (Type.GetTypeCode(type))
         {
             // "int"일 경우
-            case "int":
-                return int.Parse(data);
+            case TypeCode.Int32:
+                // 언더바 제거
+                return int.Parse(data.Replace("_", ""));
 
             // "float"일 경우
-            case "float":
+            case TypeCode.Single:
                 return float.Parse(data);
 
             // "bool"일 경우
-            case "bool":
+            case TypeCode.Boolean:
                 return bool.Parse(data);
 
             // "string"일 경우

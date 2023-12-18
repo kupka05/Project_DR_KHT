@@ -412,6 +412,7 @@ MonoBehaviour:
   afterValue: {fileID: 525900856}
   index: 10
   level: 0
+  newLevel: 0
   contentPos: {fileID: 1951589742}
   item: {fileID: 1990699889}
   isActive: 0
@@ -7707,6 +7708,7 @@ MonoBehaviour:
   afterValue: {fileID: 719112949}
   index: 10
   level: 5
+  newLevel: 0
   contentPos: {fileID: 584599418}
   item: {fileID: 1811617386}
   isActive: 0
@@ -14727,7 +14729,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLobby: 1
-  dungeonScene: JH_MainScene
+  sceneName: 
+  sceneDelay: 0
 --- !u!65 &1246062463
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20286,6 +20289,7 @@ MonoBehaviour:
   afterValue: {fileID: 1727678078}
   index: 10
   level: 2
+  newLevel: 0
   contentPos: {fileID: 571314227}
   item: {fileID: 1674047490}
   isActive: 0
@@ -21698,6 +21702,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1771399011}
   - component: {fileID: 1771399010}
+  - component: {fileID: 1771399012}
   m_Layer: 0
   m_Name: Test
   m_TagString: Untagged
@@ -21732,6 +21737,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1771399012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771399009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e45d3d8a750faea428d43bcdc17ff393, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1775910999
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24039,13 +24056,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b09679d73afb83459f3c062f27b8d53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnroomDoor: {fileID: 1925988123}
-  openDoorButton: {fileID: 835015863}
   mainDisplay: {fileID: 100686778}
   mbtiDisplay: {fileID: 858404010}
+  questID: 0
+  targetQuestID: 0
+  npcDialog: {fileID: 0}
+  DialogData:
+    logs: []
+  dialog:
+    ID: 0
+    _log: []
+    _event: 0
+  mbtiPannel: {fileID: 0}
+  mbtiResult: {fileID: 0}
+  IE: {fileID: 0}
+  NS: {fileID: 0}
+  FT: {fileID: 0}
+  PJ: {fileID: 0}
+  resultPannel: {fileID: 0}
   clearDatas: []
   clearDataObj: {fileID: 1143982039}
   contentPos: {fileID: 1493497087}
+  spawnroomDoor: {fileID: 1925988123}
+  openDoorButton: {fileID: 835015863}
   statusDisplay: {fileID: 719821487}
   statusPos: {fileID: 946235405}
   selectStatusDis: {fileID: 95631383}
@@ -24062,6 +24095,9 @@ MonoBehaviour:
   playerID: {fileID: 1113575024}
   playerGold: {fileID: 1626335512}
   playerExp: {fileID: 1863508066}
+  hpUpBtn: {fileID: 0}
+  goldIncreBtn: {fileID: 0}
+  expIncreBtn: {fileID: 0}
   curPlayerHp: {fileID: 945941515}
   beforePlayerHp: {fileID: 1201815964}
   afterPlayerHp: {fileID: 1409031569}
@@ -24071,9 +24107,41 @@ MonoBehaviour:
   curExpIncre: {fileID: 341057951}
   beforeExpIncre: {fileID: 1885887279}
   afterExpIncre: {fileID: 988907453}
-  curExp: {fileID: 1987543359}
-  spendExp: {fileID: 836052997}
-  remainExp: {fileID: 877444996}
+  pcCurExp: {fileID: 0}
+  pcSpendExp: {fileID: 0}
+  pcRemainExp: {fileID: 0}
+  atkUpBtn: {fileID: 0}
+  critRateUpBtn: {fileID: 0}
+  critDmgBtn: {fileID: 0}
+  atkRateBtn: {fileID: 0}
+  curAtk: {fileID: 0}
+  beforeAtk: {fileID: 0}
+  afterAtk: {fileID: 0}
+  curCritRate: {fileID: 0}
+  beforeCritRate: {fileID: 0}
+  afterCritRate: {fileID: 0}
+  curCritDamage: {fileID: 0}
+  beforeCritDamage: {fileID: 0}
+  afterCritDamage: {fileID: 0}
+  curAtkRate: {fileID: 0}
+  beforeAtkRate: {fileID: 0}
+  afterAtkRate: {fileID: 0}
+  weaponCurExp: {fileID: 0}
+  weaponSpendExp: {fileID: 0}
+  weaponRemainExp: {fileID: 0}
+  skill1Btn1: {fileID: 0}
+  skill1Btn2: {fileID: 0}
+  skill1_Up: {fileID: 0}
+  skill2Btn1: {fileID: 0}
+  skill2Btn2: {fileID: 0}
+  skill2Btn3: {fileID: 0}
+  skill2_Up: {fileID: 0}
+  skill3Btn: {fileID: 0}
+  skill3_Up: {fileID: 0}
+  skill4Btn1: {fileID: 0}
+  skill4Btn2: {fileID: 0}
+  skill4Btn3: {fileID: 0}
+  skill4_Up: {fileID: 0}
 --- !u!4 &1920788382
 Transform:
   m_ObjectHideFlags: 0
@@ -32618,6 +32686,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!114 &626979896159811243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36583,12 +36653,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7df49f39c9b30a4e9f198f7196dc5c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 0}
+  playerRigid: {fileID: 0}
   health: 100
   maxHealth: 0
   dyingAmount: 0.25
-  knockbackDistance: 1.5
-  knockbackSpeed: 0.25
-  playerController: {fileID: 0}
+  knockbackForce: 1.5
   healthUpInput: 0b000000
   playerHealthUI:
   - {fileID: 1619519455}
@@ -39768,6 +39838,7 @@ MonoBehaviour:
   force: 1.5
   input: 0
   onBackDash: 0
+  onKnockBack: 0
   coolDown: 1.5
   inputAxis: 03000000
 --- !u!4 &1224891734257089968
@@ -50575,6 +50646,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!114 &2206716100502901546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51099,6 +51172,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &2272573070731587023
 GameObject:
   m_ObjectHideFlags: 0
@@ -52345,6 +52420,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &2378075055970439346
 GameObject:
   m_ObjectHideFlags: 0
@@ -55513,19 +55590,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2718052049951285113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6566445052540097351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e0f996be68e4f041b7b7741ef1cb76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _inventory: {fileID: 1805806412}
 --- !u!1 &2720307433275323640
 GameObject:
   m_ObjectHideFlags: 0
@@ -72718,7 +72782,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLobby: 1
-  dungeonScene: SG_TestScene
+  sceneName: 
+  sceneDelay: 0
 --- !u!114 &4182611111395038973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77465,6 +77530,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!4 &4552285437470812423
 Transform:
   m_ObjectHideFlags: 0
@@ -78068,6 +78135,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!136 &4611425585098524224
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -79998,6 +80067,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &4750772212973915879
 GameObject:
   m_ObjectHideFlags: 0
@@ -80953,6 +81024,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!4 &4831857081757819102
 Transform:
   m_ObjectHideFlags: 0
@@ -82589,6 +82662,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!4 &4959388913752238951
 Transform:
   m_ObjectHideFlags: 0
@@ -90560,6 +90635,13 @@ MonoBehaviour:
   GD_addTime: 0
   GD_maxTime: 0
   GD_drillSize: 0
+  isHookShot: 0
+  activePcDistance: 5
+  activeDrillDistance: 3
+  LDskillCount: 0
+  landingRange: 0
+  critDamageIncre: 0
+  knockBackForce: 0
   grinderSlider: {fileID: 4179340105316431572}
   grinderVal: {fileID: 9017304718444851925}
 --- !u!136 &5809374652745822863
@@ -93296,6 +93378,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &6029373640940003038
 GameObject:
   m_ObjectHideFlags: 0
@@ -94366,6 +94450,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!224 &6156085507153107383
 RectTransform:
   m_ObjectHideFlags: 0
@@ -95113,6 +95199,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &6233107506362994934
 GameObject:
   m_ObjectHideFlags: 0
@@ -98676,7 +98764,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1164971405221659592}
-  - component: {fileID: 2718052049951285113}
+  - component: {fileID: 6566445052540097352}
   m_Layer: 5
   m_Name: Item Inventory
   m_TagString: Untagged
@@ -98684,6 +98772,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6566445052540097352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6566445052540097351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e0f996be68e4f041b7b7741ef1cb76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inventory: {fileID: 1805806412}
 --- !u!4 &6568025145481298794
 Transform:
   m_ObjectHideFlags: 0
@@ -99210,7 +99311,7 @@ PrefabInstance:
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.00092971016
+      value: 0.00019561814
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -99270,7 +99371,7 @@ PrefabInstance:
     - target: {fileID: 4010713276122279518, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0032522872
+      value: -0.005784699
       objectReference: {fileID: 0}
     - target: {fileID: 4010713276122279518, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -100785,6 +100886,11 @@ MonoBehaviour:
   state: 0
   axis: {x: 0, y: 0}
   isDeadZone: 0
+  deadZoneVal: 0
+  isActiveZone: 0
+  activeZoneVal: 0
+  activeTime: 0
+  isActiveTeleport: 0
   inputAxis: 03000000
   BackDashEvent:
     m_PersistentCalls:
@@ -106528,6 +106634,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 4668945887804239899}
   optionUI: {fileID: 8822906912826583757}
+  fader: {fileID: 0}
   loginSceneName: JH_LoginScene
   rotationText: {fileID: 4545225095919733790}
   volume: {fileID: 6838551177705452369}
@@ -106535,6 +106642,7 @@ MonoBehaviour:
   backgroundSlider: {fileID: 686141785122171010}
   soundEffectSlider: {fileID: 8263150200914271794}
   brightSlider: {fileID: 6829467266610763846}
+  vrEmulator: {fileID: 0}
   optionInput: 15000000
   InputAction: {fileID: 4860515764186564299, guid: e39f4b35a6db18348b41eb0262520e69,
     type: 3}
@@ -108725,6 +108833,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!114 &7291466226926471314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109487,6 +109597,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!1 &7339972249888183761
 GameObject:
   m_ObjectHideFlags: 0
@@ -126609,6 +126721,8 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
 --- !u!4 &8825497835888450044
 Transform:
   m_ObjectHideFlags: 0

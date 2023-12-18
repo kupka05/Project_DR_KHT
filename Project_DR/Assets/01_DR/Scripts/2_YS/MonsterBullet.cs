@@ -1,6 +1,7 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -8,6 +9,9 @@ public class MonsterBullet : MonoBehaviour
 {
     public Rigidbody rigid;
     public DamageCollider damageCollider;
+    public Transform target;
+
+    public float attack = 0.2f;
 
     public int ProjectileID;
 
@@ -23,44 +27,43 @@ public class MonsterBullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         damageCollider = GetComponent<DamageCollider>();
         rigid = GetComponent<Rigidbody>();
+
+        transform.LookAt(target.position);
 
         rigid.velocity = transform.forward * speed;
 
         damageCollider.Damage = damage;
     }
-    
+
+    void Update()
+    {
+        float distance = Vector3.Distance(target.position, transform.position);
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+
+        if (distance <= attack)
+        {
+                if(hit.collider.CompareTag("Player"))
+                {
+                    hit.collider.GetComponent<Damageable>().DealDamage(damage);
+                    Debug.Log($"데미지:{damage}");
+
+                    Destroy(this.gameObject);
+                }
+
+        }
+
+    }
+
     public virtual void GetData(int ProjectileID)
     {
         speed = (float)DataManager.instance.GetData(ProjectileID, "MonSpd", typeof(float));
         damage = (float)DataManager.instance.GetData(ProjectileID, "MonAtt", typeof(float));
     }
 
-    //public virtual void OnCollisionEnter(Collision collision)
-    //{
-
-    //    if (collision.collider.CompareTag("Player") || collision.collider.CompareTag("Wall"))
-    //    {
-    //        Destroy(this.gameObject);
-    //    }
-    //}
-
-    private void OnParticleCollision(GameObject other)
-    {
-        if (other.tag.Equals("Player"))
-        {
-            //Debug.Log("부딪힘");
-            other.GetComponent<Damageable>().DealDamage(damage);
-            //Debug.Log($"damage:{damage}");
-            Destroy(this.gameObject);
-        }
-
-        if(other.CompareTag("Wall"))
-        {
-            Destroy(this.gameObject);
-        }
-    }
 
 }

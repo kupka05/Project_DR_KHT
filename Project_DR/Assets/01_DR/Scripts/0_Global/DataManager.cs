@@ -75,7 +75,7 @@ public class DataManager : MonoBehaviour
 
 
         //YS
-        "Monster_Table", "Boss_Table",
+        "Monster_Table", "Boss_Table", "Boss_projectile_Table",
         
         // SG
         "spawnNomalMonster_Table","spawnEliteMonster_Table","DungeonCreater_Table",

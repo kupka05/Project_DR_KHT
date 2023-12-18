@@ -189,10 +189,10 @@ public class Boss : MonoBehaviour
             if (damageable.Health <= maxHp * 1.0f && damageable.Health > maxHp * 0.75f)
             {
                 RandomPattern();
-                if (bossState)
-                {
-                    bossState.GetComponent<BossState>().Attack();
-                }
+                //if (bossState)
+                //{
+                //    bossState.GetComponent<BossState>().Attack();
+                //}
 
                 isPatternExecuting = true;
                 yield return new WaitForSeconds(patternInterval);
@@ -203,10 +203,10 @@ public class Boss : MonoBehaviour
             {
 
                 RandomPattern();
-                if (bossState)
-                {
-                    bossState.GetComponent<BossState>().Attack();
-                }
+                //if (bossState)
+                //{
+                //    bossState.GetComponent<BossState>().Attack();
+                //}
 
                 if (bossState && !isPushPlayer)
                 {
@@ -236,10 +236,10 @@ public class Boss : MonoBehaviour
             else if (damageable.Health <= maxHp * 0.5f && damageable.Health > maxHp * 0.25f)
             {
                 RandomPattern();
-                if (bossState)
-                {
-                    bossState.GetComponent<BossState>().Attack();
-                }
+                //if (bossState)
+                //{
+                //    bossState.GetComponent<BossState>().Attack();
+                //}
 
                 if (bossState && !isPushPlayer)
                 {
@@ -263,10 +263,10 @@ public class Boss : MonoBehaviour
             {
 
                 RandomPattern();
-                if (bossState)
-                {
-                    bossState.GetComponent<BossState>().Attack();
-                }
+                //if (bossState)
+                //{
+                //    bossState.GetComponent<BossState>().Attack();
+                //}
 
                 if (bossState && !isPushPlayer)
                 {
@@ -305,8 +305,15 @@ public class Boss : MonoBehaviour
                 BigBrickShoot();
                 break;
             case 3:
-                StartCoroutine(GuidedShoot());
+                LazerShoot();
                 break;
+
+        }
+        
+        if (bossState)
+        {
+            bossState.GetComponent<BossState>().Attack();
+            Debug.Log("보스 attack 애니메이션");
         }
     }
 
@@ -348,11 +355,11 @@ public class Boss : MonoBehaviour
 
             yield return new WaitForSeconds(2.0f);
 
-            Debug.Log($"리스트 크기 : {bullets.Count}");
+            Debug.Log($"리스트 : {bullets.Count}");
 
             foreach (var bullet in bullets)
             {
-                // 총알이 이미 파괴되었는지 확인
+                
                 if (bullet != null)
                 {
                     Rigidbody rigidBullet = bullet.GetComponent<Rigidbody>();
@@ -361,7 +368,6 @@ public class Boss : MonoBehaviour
                     yield return new WaitForSeconds(0.4f);
 
                     rigidBullet.velocity = (target.position - bullet.transform.position).normalized * speed;
-                    //rigidBullet.velocity = transform.forward * speed;
                 }
             }
 
@@ -397,6 +403,7 @@ public class Boss : MonoBehaviour
     void LazerDestroy()
     {
         Destroy(instantLazer);
+        targetImage.gameObject.SetActive(false);
     }
 
     public Vector3 BigBrick(Vector3 portPosition)

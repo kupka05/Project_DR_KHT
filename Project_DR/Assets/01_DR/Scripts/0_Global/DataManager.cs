@@ -75,7 +75,7 @@ public class DataManager : MonoBehaviour
         "Upgrade_Skill_1","Upgrade_Skill_2","Upgrade_Skill_3","Upgrade_Skill_4",
 
         //YS
-        "Monster_Table", "Boss_Table",
+        "Monster_Table", "Boss_Table", "Boss_projectile_Table",
         
         // SG
         "spawnNomalMonster_Table","spawnEliteMonster_Table","DungeonCreater_Table",

@@ -9,7 +9,8 @@ using UnityEngine.UI;
 public class NPC_CanvasController : MonoBehaviour
 {       // NPC의 Text ,RayHit판정 Image등 관련해서 조정할수 있게 해주는 Class
 
-    private Queue<string> conversationText;      // 얘가 아니라 NPC 에 들고있으면 될듯?
+    private NPC npc;                        // 대화 창을 누르면 그떄에 가져올거임
+
 
     private StringBuilder stringBuilder;     // NPC의 선택지를 출력시켜줄 StringBuilder
 
@@ -18,11 +19,12 @@ public class NPC_CanvasController : MonoBehaviour
     private TextMeshProUGUI npcConversationText; // Canvas상에서 출력될 대화의 TextMeshPro
     private TextMeshProUGUI choice1Text;         // 선택지 1의 TextMeshPro
     private TextMeshProUGUI choice2Text;         // 선택지 2의 TextMeshPro
-    private TextMeshProUGUI choice3Text;         // 선택지 3의 TextMeshPro
+    private TextMeshProUGUI choice3Text;         // 선택지 3의 TextMeshPro    
 
-    private ChoiceImage choice1Image;                 // 선택지 1의 이미지
-    private ChoiceImage choice2Image;                 // 선택지 2의 이미지
-    private ChoiceImage choice3Image;                 // 선택지 3의 이미지
+    private NPCUIImage dialogueImage;                // 대화창의 이미지
+    private NPCUIImage choice1Image;                 // 선택지 1의 이미지
+    private NPCUIImage choice2Image;                 // 선택지 2의 이미지
+    private NPCUIImage choice3Image;                 // 선택지 3의 이미지
 
     private Color aZeroColor;         // 투명한 색
     private Color aMaxColor;          // 흰색
@@ -30,8 +32,7 @@ public class NPC_CanvasController : MonoBehaviour
     private string isNon;                       // 해당 선택지가 존재하지 않는지 -> 존재하지 않으면 "0"으로 표시될것
     private string underBar;                    // Underbar도 선택지가 존재하지 않는다는 의미로 사용될것임
 
-    private int nowConversationRefID;           // 현재 대화에서 참조 되고 있는 ID
-    private const int NPCREFMAXCAPACITY = 10;
+    private int nowConversationRefID;           // 현재 대화에서 참조 되고 있는 ID    
     // TODO : Ray의 판정을 위해 Image컴포넌트를 가져와야할수도 있음
 
     #region MonoBehaviour함수
@@ -43,6 +44,7 @@ public class NPC_CanvasController : MonoBehaviour
     private void Start()
     {
         StartInIt();
+        SubscriptionEvent();
     }
 
     #endregion MonoBehaviour함수
@@ -50,8 +52,7 @@ public class NPC_CanvasController : MonoBehaviour
     #region 변수에 데이터 기입관련
     private void AwakeInIt()
     {       // 종속성이 없는 TextMeshPro의 컴포넌트를 Get해올것임
-        stringBuilder = new StringBuilder();
-        conversationText = new Queue<string>();
+        stringBuilder = new StringBuilder();        
         isNon = "0";
         underBar = "_";
 
@@ -62,6 +63,9 @@ public class NPC_CanvasController : MonoBehaviour
 
     private void StartInIt()
     {
+        npc = this.transform.parent.parent.GetComponent<NPC>();
+
+
         npcNameText = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
         npcTitleText = transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>();
 
@@ -71,9 +75,11 @@ public class NPC_CanvasController : MonoBehaviour
         choice2Text = transform.GetChild(0).GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>();
         choice3Text = transform.GetChild(0).GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>();
 
-        choice1Image = transform.GetChild(0).GetChild(3).GetComponent<ChoiceImage>();
-        choice2Image = transform.GetChild(0).GetChild(4).GetComponent<ChoiceImage>();
-        choice3Image = transform.GetChild(0).GetChild(5).GetComponent<ChoiceImage>();
+        dialogueImage = transform.GetChild(0).GetChild(2).GetComponent<NPCUIImage>();
+        choice1Image = transform.GetChild(0).GetChild(3).GetComponent<NPCUIImage>();
+        choice2Image = transform.GetChild(0).GetChild(4).GetComponent<NPCUIImage>();
+        choice3Image = transform.GetChild(0).GetChild(5).GetComponent<NPCUIImage>();
+
 
     }       // StartInIt()
 
@@ -135,7 +141,7 @@ public class NPC_CanvasController : MonoBehaviour
     /// <summary>
     /// 선택지 출력해주는 함수
     /// </summary>
-    /// <param name="_converationRefID">출력해야하는 대사의 ID값</param>
+    /// <param name="_converationRefID">출력해야하는 선택지가 존재하는 대사의 ID값</param>
     public void OutPutChoices(int _conversationRefID)
     {
         nowConversationRefID = _conversationRefID;
@@ -160,7 +166,7 @@ public class NPC_CanvasController : MonoBehaviour
     /// 해당 선택지가 비어있는지 확인후 비버있지않으면 출력하는 함수
     /// </summary>    
     private void CheckChoiceNull(string _choice, int _choiceNum,
-        TextMeshProUGUI _outputText, ChoiceImage _choiceImageComponent)
+        TextMeshProUGUI _outputText, NPCUIImage _choiceImageComponent)
     {
         if (_choice == isNon || _choice == underBar)
         {
@@ -187,10 +193,64 @@ public class NPC_CanvasController : MonoBehaviour
 
 
 
+   
+    private void ItCompensation(int _compensationRefId)
+    {
+        // 보상
+        // 플레이어의 인벤토리에 보상 넣어주는 기능
+    }
+
+
+    private void ItQuest(int _questRefId)
+    {
+        // 퀘스트
+        // 플레이어에게 퀘스트를 부여하는 기능
+    }
+    private void ItConveration(int _conversationRefId)
+    {        
+        // 다음 대사 출력하는 기능        
+        //string conversationText = Data.GetString(_conversationRefId, "OutPutText");
+        npc.EnQueueConversation(_conversationRefId);
+        npc.DeQueueConversation();
+    }       // ItConveration()
+
+
+    /// <summary>
+    /// 내부에 들어있는 값들을 전부 없애주는 함수
+    /// </summary>
+    private void ResetChoice()
+    {
+        choice1Text.text = "";
+        choice2Text.text = "";
+        choice3Text.text = "";
+    }       // ResetChoice()
+
+    #endregion 선택지관련
+
+    #region 이벤트 관련
+    private void SubscriptionEvent()
+    {
+        choice1Image.onHitEvent += CheckOnClickChoice;
+        choice2Image.onHitEvent += CheckOnClickChoice;
+        choice3Image.onHitEvent += CheckOnClickChoice;
+
+        dialogueImage.onHitEvent += OnClickDialogueImage;
+    }       // SubscriptionEvent()
+
+    private void OnClickDialogueImage(NPCUIImage _npcUiImage)
+    {
+        if(npc == null || npc == default)
+        {
+            npc = this.transform.parent.parent.GetComponent<NPC>();
+        }
+
+        npc.DeQueueConversation();
+    }       // OnClickDialogueImage()
+
     /// <summary>
     /// 플레이어가 누른 선택지를 확인하는 함수
     /// </summary>
-    public void CheckOnClickChoice(ChoiceImage _choiceImage)
+    public void CheckOnClickChoice(NPCUIImage _choiceImage)
     {
 
         string choice = "Choice";
@@ -207,30 +267,17 @@ public class NPC_CanvasController : MonoBehaviour
             // 이벤트가 없으므로 대화 끝
             NPC npc;
             npc = this.transform.parent.parent.GetComponent<NPC>();
-            npc.InvokeEndConverationEvent();
             stringBuilder.Clear();
+            ResetChoice();
+            npc.InvokeEndConverationEvent();
             return;
         }
 
         // 이벤트가 존재한다면
         // 해당 이벤트 시트에서 가져오기 -> 참조의 ID 확인
         // -> 그 ID 값이 퀘스트인지 보상인지 구별하기 -> 퀘스트,보상 실행
-        eventRefId = eventRefId.Replace("#", ",");
-        eventRefId = eventRefId.Replace("\\n", "\n");
-        eventRefId = eventRefId.Replace("\\", "");
 
-        string[] splitEventRefId = new string[NPCREFMAXCAPACITY];
-
-        splitEventRefId = eventRefId.Split("\n");
-
-        int[] eventRefIds = new int[NPCREFMAXCAPACITY];
-
-        // 참조하는 ID값을 Int데이터타입 배열에 넣어주는 for문
-        for (int i = 0; i < splitEventRefId.Length; i++)
-        {
-            splitEventRefId[i].Replace("_", "");
-            eventRefIds[i] = int.Parse(splitEventRefId[i]);
-        }
+        int[] eventRefIds = GFunc.SplitIds(eventRefId);
 
         int defaultCompensation = 320000;
         int defaultQuest = 3100000;
@@ -255,33 +302,8 @@ public class NPC_CanvasController : MonoBehaviour
 
 
     }       // CheckOnClickChoice()
-    private void ItCompensation(int _eventRefId)
-    {
-        // 보상
-        // 플레이어의 인벤토리에 보상 넣어주는 기능
-    }
 
-
-    private void ItQuest(int _eventRefId)
-    {
-        // 퀘스트
-        // 플레이어에게 퀘스트를 부여하는 기능
-    }
-    private void ItConveration(int _eventRefId)
-    {
-        // 대사
-        // 다음 대사 출력하는 기능
-        string converationText = (string)DataManager.instance.GetData(_eventRefId, "OutPutText", typeof(string));
-
-        string[] splitConveration = GFunc.SplitConversation(converationText);
-
-
-
-    }
-
-    #endregion 선택지관련
-
-
+    #endregion 이벤트 관련
 
 
 }       // ClassEnd

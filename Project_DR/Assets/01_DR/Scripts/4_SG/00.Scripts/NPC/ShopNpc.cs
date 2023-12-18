@@ -61,7 +61,7 @@ public class ShopNpc : AnnouncementNPC
     protected override void StartConvertion()
     {
         OnCanvasObj();
-        //OutPutShopText();     : 다시제작
+        base.PickConversationEvent(npcID);
     }       // StartConvertion()
 
     /// <summary>
@@ -72,7 +72,8 @@ public class ShopNpc : AnnouncementNPC
     {
         base.TitleInIt(_nextConverationId);
         NpcCanvas.TitleUpdate(npcTitle.ToString());
-        OutPutPickText(_nextConverationId);
+        DeQueueConversation();
+        //OutPutPickText(_nextConverationId);
     }       // NextConveration()
 
     /// <summary>
@@ -82,17 +83,6 @@ public class ShopNpc : AnnouncementNPC
     {
         OffCanvasObj();
     }       // EndConveration()
-
-    /// <summary>
-    /// 정해진 대사 출력하는 함수
-    /// </summary>
-    /// <param name="_refConverationId"></param>
-    private void OutPutPickText(int _refConverationId)
-    {
-        string texts = (string)DataManager.instance.GetData(_refConverationId, "OutPutText",typeof(string));
-        
-
-    }       // OutPutPickText()
 
 
 

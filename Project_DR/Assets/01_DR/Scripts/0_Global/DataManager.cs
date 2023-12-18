@@ -73,7 +73,6 @@ public class DataManager : MonoBehaviour
         "Upgrade_PC_HP_Table", "Upgrade_PC_GainEXP_Table", "Upgrade_PC_GainGold_Table",
         "Upgrade_Weapon_Atk_Table", "Upgrade_Weapon_CR_Table", "Upgrade_Weapon_CRD_Table", "Upgrade_Weapon_ATKSpeed_Table",
 
-
         //YS
         "Monster_Table", "Boss_Table",
         

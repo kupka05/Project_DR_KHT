@@ -1,7 +1,9 @@
 
+using UnityEngine;
+
 namespace Js.Quest
 {
-    public class QuestData
+    public class QuestData : ScriptableObject
     {
         /*************************************************
          *                 Public Fields
@@ -28,17 +30,20 @@ namespace Js.Quest
         /*************************************************
          *                 Private Fields
          *************************************************/
-        private int _id;
-        private int _requiredQuestID;
-        private int _condition;
-        private int _keyID;
-        private int _clearValue;
-        private int _currentValue;
-        private string _desc;
-        private QuestType _type;
-        private QuestReward _clearReward;
-        private QuestReward _failReward;
-
+        [SerializeField] private int _id;
+        [SerializeField] private int _requiredQuestID;
+        [SerializeField] private int _condition;
+        [SerializeField] private int _keyID;
+        [SerializeField] private int _clearValue;
+        [SerializeField] private int _currentValue;
+        [SerializeField] private string _desc;
+        [SerializeField] private QuestType _type;
+        [SerializeField] private QuestReward _clearReward;
+        [SerializeField] private QuestReward _failReward;
+        // 디버그
+        [SerializeField] private QuestRewardData _clearRewardData;
+        [SerializeField] private QuestRewardData _failRewardData;
+        // 디버그
 
         /*************************************************
          *                 Public Methods
@@ -55,6 +60,11 @@ namespace Js.Quest
             _type = (QuestType)Data.GetInt(id, "Type");
             _clearReward = new QuestReward(Data.GetInt(id, "ClearRewardKeyID"));
             _failReward = new QuestReward(Data.GetInt(id, "FailRewardKeyID"));
+
+            // 디버그
+            _clearRewardData = ClearReward.QuestRewardData;
+            _failRewardData = _failReward.QuestRewardData;
+            // 디버그
         }
 
         // 현재 퀘스트 달성 값 추가

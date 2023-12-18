@@ -11,6 +11,7 @@ using Rito.InventorySystem;
 using static StatusData;
 using OVR.OpenVR;
 using System.Net.NetworkInformation;
+using Js.Quest;
 
 [System.Serializable]
 public class ClearDatas
@@ -219,6 +220,10 @@ public class UserDataManager : MonoBehaviour
     [Header("Inventory Data")]
     // 호출 순서 문제로 인해 static으로 설정
     public static Item[] items = new Item[Inventory.MaxCapacity];
+
+    [Header("Quest Data")]
+    public List<Quest> mainQuests = new List<Quest>();
+    public List<Quest> subQuests = new List<Quest>();
 
     [Header("Result Data")]
     public GameResult result = new GameResult();

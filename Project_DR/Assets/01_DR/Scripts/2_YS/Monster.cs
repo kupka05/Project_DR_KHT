@@ -1,9 +1,11 @@
 using BNG;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.UI.GridLayoutGroup;
 
@@ -122,6 +124,18 @@ public class Monster : MonoBehaviour
     [Header("Debug")]
     public float distanceDebug;
 
+    [Header("DistanceFromGround")]
+    public float distanceFromGround;            // 지면과의 거리
+    public float distanceFromGroundOffset;      // 지면과의 거리 보정치 (크기 및 공중)
+    public LayerMask GroundedLayers;            // 허용할 바닥 레이어
+
+    private RaycastHit groundHit;
+    IEnumerator knockbackRoutine;   // 넉백 루틴
+
+    WaitForSeconds waitForSecond = new WaitForSeconds(0.1f);
+    WaitForSeconds waitForSeconds = new WaitForSeconds(1);
+    WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+
     void Awake()
     {
         GetData(monsterId);
@@ -179,6 +193,8 @@ public class Monster : MonoBehaviour
 
         if (playerTr == null)
             return;
+
+        GroundCheck();  // 바닥과의 거리 체크
     }
 
     public virtual void GetData(int id)
@@ -242,7 +258,7 @@ public class Monster : MonoBehaviour
                     state = State.IDLE;
                 }
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return waitForSecond;
         }
     }
 
@@ -269,8 +285,14 @@ public class Monster : MonoBehaviour
             // TRACE 상태 =======================================================
             case State.TRACE:
                 //GFunc.Log("TRACE state");
-                nav.isStopped = false;
-                nav.SetDestination(playerTr.position);
+                if (nav.isOnNavMesh)
+                {
+                    nav.isStopped = false;
+                    nav.SetDestination(playerTr.position);
+                }
+                else
+                    GFunc.Log("Missing NavMesh");
+
                 anim.SetBool(hashRun, true);
                 anim.SetBool(hashWalkingAttack, false);
                 anim.SetBool(hashAttackRuning, true);
@@ -509,7 +531,7 @@ public class Monster : MonoBehaviour
                 yield break;
             }
 
-        yield return new WaitForSeconds(0.1f);
+        yield return waitForSecond;
         }
         
 
@@ -593,6 +615,84 @@ public class Monster : MonoBehaviour
     }
 
 
+    // 플레이어에게 드릴 랜딩을 받을 시 몬스터 넉백 
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.tag.Equals("PlayerSkill"))
+        {
+            if (knockbackRoutine == null)
+            {
+                knockbackRoutine = KnockBackRoutine(other);
+                StartCoroutine(knockbackRoutine);
+            }
+        }
+    }
+    /// <summary>
+    /// 넉백 실행시 진행되는 코루틴
+    /// </summary>
+    /// <param name="other">플레이어 스킬 포지션</param>
+    /// <returns></returns>
+    IEnumerator KnockBackRoutine(Collider other)
+    {
+        // 스턴 실행 및 navMesh 꺼주기
+        isStun = true;
+        nav.enabled = false;
+
+        // 스킬에서 해당 몬스터 넉백 실행
+        other.GetComponent<SkillEvent>().ActiveDrillLanding(this.gameObject);
+        //GFunc.Log(gameObject.name+" nav 해제");
+
+        // 바로 스턴이 꺼지는 것을 방지하여 딜레이
+        yield return waitForSeconds;
+        while(true)
+        {
+            // 땅에 닿을 경우 스턴 해제 및 navMesh 켜주기
+            if (distanceFromGround <= 0.1f)
+            {
+                //GFunc.Log(gameObject.name + " nav 재 실행");
+
+                nav.enabled = true;
+                yield return waitForSeconds;
+
+                isStun = false;
+                knockbackRoutine = null;
+                yield break;
+            }
+            yield return waitForFixedUpdate;
+        }       
+    }
+    /// <summary>
+    /// 넉백 시 몬스터가 띄워졌을 경우 바닥을 체크하는 메서드
+    /// 바닥에 띄워지면 NavMesh가 꺼지고, 바닥에 다시 닿으면 NavMesh가 켜진다.
+    /// </summary>
+    public void GroundCheck()
+    {
+        if (Physics.Raycast(transform.position, -transform.up, out groundHit, 20, GroundedLayers, QueryTriggerInteraction.Ignore))
+        {
+            distanceFromGround = Vector3.Distance(transform.position, groundHit.point);
+
+
+            // Round to nearest thousandth
+            distanceFromGround = (float)Math.Round(distanceFromGround * 1000f) / 1000f;
+        }
+        else
+        {
+            //distanceFromGround = float.MaxValue;
+        }
+
+
+        if (distanceFromGround != float.MaxValue)
+        {
+            distanceFromGround -= distanceFromGroundOffset;
+        }
+
+        // Smooth floating point issues from thousandths
+        if (distanceFromGround < 0.001f && distanceFromGround > -0.001f)
+        {
+            distanceFromGround = 0;
+        }
+
+    }
 
 }
 

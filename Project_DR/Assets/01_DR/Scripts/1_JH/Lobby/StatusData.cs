@@ -280,7 +280,7 @@ public class StatusData
     public List<UpgradeSkill1> GetSkill1Data(int id)
     {
         List<UpgradeSkill1> list = new List<UpgradeSkill1>();
-        int totalExp1 = 0, totalExp2 = 0, totalExp3 = 0;
+        int totalExp1 = 0, totalExp2 = 0;
 
         for (int i = 0; i < 10; i++)
         {
@@ -353,7 +353,7 @@ public class StatusData
     public List<UpgradeSkill3> GetSkill3Data(int id)
     {
         List<UpgradeSkill3> list = new List<UpgradeSkill3>();
-        int totalExp1 = 0, totalExp2 = 0, totalExp3 = 0;
+        int totalExp1 = 0;
 
         for (int i = 0; i < 10; i++)
         {

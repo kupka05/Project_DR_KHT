@@ -30,6 +30,12 @@ public static class GFunc
         return input.Replace("_", "");
     }
 
+
+
+    /*************************************************
+     *                    Debug
+     *************************************************/
+    #region Debug
     // 디버그 로그를 찍어주는 메서드
     public static void Log(string _input)
     {
@@ -58,4 +64,5 @@ public static class GFunc
     {
         Debug.LogException(_input);
     }
+    #endregion
 }

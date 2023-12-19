@@ -67,7 +67,6 @@ public partial class UserDataManager : MonoBehaviour
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.5f);
 
-
     // ####################### Awake #######################
 
     private void Awake()
@@ -216,6 +215,9 @@ public partial class UserDataManager : MonoBehaviour
         // Ex. 플레이어 상태창, 상점의 현재 골드 등
         dataLoadSuccess = true;
         GFunc.Log("데이터 로드 시간 : " + GetCurrentDate());
+
+        // 퀘스트 콜백 호출
+        QuestCallback.OnQuestDataCallback();
     }
 
     // DB에 데이터를 요청하기 위한 메서드
@@ -459,4 +461,12 @@ public partial class UserDataManager : MonoBehaviour
         Skill4Lv_3 = skill4_3;     
     }
 
+
+    // ######################### 퀘스트 #########################
+
+    // 보유한 퀘스트를 삭제
+    public static void RemoveQuest(int index)
+    {
+        quests.RemoveAt(index);
+    }
 }

@@ -151,6 +151,7 @@ public partial class UserDataManager
 
     [Header("Quest Data")]
     public string QuestMain;          // 현재 퀘스트
+    public static List<Quest> quests = new List<Quest>();
 
     [Header("Clear Data")]
     public int ClearCount;            // 클리어 횟수

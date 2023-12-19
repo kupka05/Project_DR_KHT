@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-
+using Js.Quest;
 
 //! [DataManager의 사용법]
 //! 0. CSVFile을 가져온다.
@@ -127,6 +127,12 @@ public class DataManager : MonoBehaviour
 
         // 로컬용 CSV 파일을 테이블에 Init
         InitLocalDataTable();
+    }
+
+    private void Start()
+    {
+        // Quest Manager 트리거 호출로 생성
+        QuestManager.Instance.Trigger();
     }
 
     /*************************************************

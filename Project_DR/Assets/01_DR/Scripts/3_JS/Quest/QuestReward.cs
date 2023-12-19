@@ -30,6 +30,8 @@ namespace Js.Quest
         // 퀘스트 보상(1 ~ 4)을 획득한다
         public void GetReward()
         {
+            // 골드, EXP 보상 지급
+            UserData.AddQuestScore(_questRewardData.GiveGold, _questRewardData.GiveEXP);
             // 보상(1 ~ 4) 획득
             for (int i = 0; i < _questRewardData.RewardKeyIDs.Length; i++)
             {

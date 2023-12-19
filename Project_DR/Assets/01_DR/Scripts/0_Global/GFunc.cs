@@ -73,9 +73,6 @@ public static class GFunc
         return splitIds;
     }       // SplitIds()
 
-}       // ClassEnd
-
-
     /*************************************************
      *                    Debug
      *************************************************/
@@ -107,6 +104,6 @@ public static class GFunc
     public static void LogException(System.Exception _input)
     {
         Debug.LogException(_input);
-    }
-    #endregion
 }
+    #endregion
+}   // ClassEnd

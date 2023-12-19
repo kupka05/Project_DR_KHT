@@ -64,18 +64,6 @@ namespace Js.Quest
         /*************************************************
          *                  Unity Events
          *************************************************/
-        private void Awake()
-        {
-            // 싱글톤 패턴
-            if (m_Instance == null)
-            {
-                m_Instance = this;
-                DontDestroyOnLoad(this.gameObject);
-            }
-            else
-            { Destroy(gameObject); }
-        }
-
         void Start()
         {
             // QuestCallback에 메서드 등록

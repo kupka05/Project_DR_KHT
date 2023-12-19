@@ -528,6 +528,12 @@ public class Monster : MonoBehaviour
 
     public virtual void OnDeal()
     {
+        // 죽지 않은 상태면 HP 바 업데이트
+        if (damageable.Health >= 0)
+        {
+            SetHealth(damageable.Health);
+        }
+
         if (isStun)
             return;
 

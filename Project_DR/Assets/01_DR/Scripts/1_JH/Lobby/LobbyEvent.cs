@@ -281,8 +281,8 @@ public class LobbyEvent : MonoBehaviour
         playerGold.text = UserDataManager.Instance.Gold.ToString();         // 골드
         playerExp.text = UserDataManager.Instance.Exp.ToString();           // 경험치
 
-        curPlayerHp.text = UserDataManager.Instance.HP.ToString();
-        beforePlayerHp.text = UserDataManager.Instance.HP.ToString();
+        curPlayerHp.text = UserDataManager.Instance.MaxHP.ToString();
+        beforePlayerHp.text = UserDataManager.Instance.MaxHP.ToString();
 
         curGoldIncre.text = UserDataManager.Instance.GainGold.ToString();
         beforeGoldIncre.text = UserDataManager.Instance.GainGold.ToString();
@@ -872,6 +872,10 @@ public class LobbyEvent : MonoBehaviour
         }
     }
 
+    public void ResetData()
+    {
+        UserDataManager.Instance.ResetData();
+    }
 
     // NPC 대사 데이터를 가져오는 메서드
     public void GetNPCDialog()

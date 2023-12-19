@@ -107,6 +107,7 @@ namespace BNG {
 
         public virtual void DealDamage(float damageAmount) {
             DealDamage(damageAmount, transform.position);
+
         }
 
         //public virtual void DealDamage(float damageAmount, Vector3? hitPosition = null, Vector3? hitNormal = null, bool reactToHit = true, GameObject sender = null, GameObject receiver = null) {

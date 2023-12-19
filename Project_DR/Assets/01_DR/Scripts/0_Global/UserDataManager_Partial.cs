@@ -149,10 +149,6 @@ public partial class UserDataManager
     public int Skill4Lv_2;                 // 드릴랜딩 레벨
     public int Skill4Lv_3;                 // 드릴랜딩 레벨
 
-    [Header("Quest Data")]
-    public string QuestMain;          // 현재 퀘스트
-    public static List<Quest> quests = new List<Quest>();
-
     [Header("Clear Data")]
     public int ClearCount;            // 클리어 횟수
     private string JsonData;          // Json을 담을 직렬화된 클리어 데이터
@@ -184,8 +180,8 @@ public partial class UserDataManager
     public static Item[] items = new Item[Inventory.MaxCapacity];
 
     [Header("Quest Data")]
-    public List<Quest> mainQuests = new List<Quest>();
-    public List<Quest> subQuests = new List<Quest>();
+    public string QuestMain;          // 현재 퀘스트
+    public static List<Quest> quests = new List<Quest>();
 
     [Header("Result Data")]
     public GameResult result = new GameResult();

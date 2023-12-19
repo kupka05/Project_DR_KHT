@@ -42,9 +42,8 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     void Start()
     {
-        GetData();
-        playerDamage.Health = health; // 체력 세팅해주기
-        SetMaxHealthUIUpdate();
+        UserData.GetData(GetData);
+
 
         playerController = GetComponent<PlayerController>();
         playerRigid = gameObject.GetOrAddRigidbody();
@@ -88,8 +87,11 @@ public class PlayerHealth : MonoBehaviour
 
     private void GetData()
     {
-        health = (float)DataManager.instance.GetData(1001, "Health", typeof(float));
-        maxHealth = health;
+        maxHealth = UserData.GetMaxHP();
+        health = UserData.GetHP();
+
+        playerDamage.Health = health; // 체력 세팅해주기
+        SetMaxHealthUIUpdate();
     }
     // 데미지를 입을 때 체력 업데이트
     public void SetHealth()

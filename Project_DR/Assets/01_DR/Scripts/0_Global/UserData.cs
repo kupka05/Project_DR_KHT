@@ -1,60 +1,338 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditorInternal.ReorderableList;
 
 public static class UserData
 {
-    public static int GetExp()
-    {
-        return UserDataManager.Instance.Exp;
-    }
+    #region #######################_GET_#######################
+
     public static StatData GetStat()
     {
         return UserDataManager.Instance.statData;
     }
+    #endregion
 
-    // 골드 관리
+    #region #######################_골드_#######################
+
+    /// <summary>골드를 획득하는 메서드 </summary>
     public static void AddGold(int value)
     {
         UserDataManager.Instance.Gold += value;
     }
+    /// <summary>골드를 소모하는 메서드 </summary>
     public static void SpendGold(int value)
     {
         UserDataManager.Instance.Gold -= value;
     }
+    #endregion
 
-    // 경험치 관리
+    #region #######################_EXP_#######################
+    /// <summary>현재 경험치를 반환 </summary>
+    public static int GetExp()
+    {
+        return UserDataManager.Instance.Exp;
+    }
+    /// <summary>경험치를 더해주는 메서드 </summary>
     public static void AddExp(int value)
     {
         UserDataManager.Instance.Exp += value;
     }
+    /// <summary>경험치를 소모하는 메서드 </summary>
     public static void SpendExp(int value)
     {
         UserDataManager.Instance.Exp -= value;
     }
+    #endregion
 
-    // 몬스터 처치시
+    #region #######################_몬스터_######################
 
+    /// <summary>일반 몬스터 처치 시 획득하는 경험치와 EXP </summary>
     public static void KillMonster(int gold, int exp)
     {
         UserDataManager.Instance.result.AddMonsterNormal(gold, exp);
     }
+    /// <summary>엘리트 몬스터 처치 시 획득하는 경험치와 EXP </summary>
     public static void KillElite(int gold, int exp)
     {
         UserDataManager.Instance.result.AddMonsterElite(gold, exp);
     }
+    /// <summary>보스 몬스터 처치 시 획득하는 경험치와 EXP </summary>
     public static void KillBoss(int gold, int exp)
     {
         UserDataManager.Instance.result.AddMonsterBoss(gold, exp);
     }
+    #endregion
 
-    // 퀘스트 보상
+    #region ######################_결과보상_#####################
+
+    /// <summary>퀘스트 보상을 결과에 추가하는 메서드 </summary>
     public static void AddQuestScore(int gold, int exp)
     {
         UserDataManager.Instance.result.AddQuestScore(gold, exp);
     }
+    /// <summary>획득한 아이템을 결과에 추가하는 메서드 </summary>
     public static void AddItemScore(int gold, int exp)
     {
         UserDataManager.Instance.result.AddItemScore(gold, exp);
+    }
+    #endregion
+
+    #region ####################_UserData_#####################
+
+    /// <summary>업그레이드가 반영된 플레이어의 체력을 반환</summary>
+    public static float GetMaxHP()
+    {
+        UserDataManager.Instance.MaxHP = UserDataManager.Instance.DefaultHP;
+        if (UserDataManager.Instance.HPLv != 0)
+        {
+            UserDataManager.Instance.MaxHP = UserDataManager.Instance.DefaultHP + UserDataManager.Instance.statData.upgradeHp[UserDataManager.Instance.HPLv - 1].sum;
+        }
+        return UserDataManager.Instance.MaxHP;
+    }
+    /// <summary>현재 플레이어의 체력을 반환</summary>
+    public static float GetHP()
+    {        
+        return UserDataManager.Instance.CurHP;
+    }
+    #endregion
+
+    #region ####################_DrillData_#####################
+
+
+    /// <summary>업그레이드가 반영된 드릴의 기본 데미지를 반환</summary>
+    public static float GetDrillDamage()
+    {
+        float damage = Data.GetFloat(1100, "Damage");
+        if(UserDataManager.Instance.WeaponAtkLv != 0)
+        {
+            damage = damage + UserDataManager.Instance.statData.upgradeAtk[UserDataManager.Instance.WeaponAtkLv - 1].sum1;
+        }
+
+        return damage;  
+    }
+    /// <summary>업그레이드가 반영된 드릴의 회전 데미지를 반환</summary>
+    public static float GetDrillSpinDamage()
+    {
+        float spinDamage = Data.GetFloat(1100, "DotDamage");
+        if (UserDataManager.Instance.WeaponAtkLv != 0)
+        {
+            spinDamage = spinDamage + UserDataManager.Instance.statData.upgradeAtk[UserDataManager.Instance.WeaponAtkLv - 1].sum2;
+        }
+        return spinDamage;
+    }
+    /// <summary>업그레이드가 반영된 치명타 확률을 반환</summary>
+    public static float GetCritChance()
+    {
+        float critChance = Data.GetFloat(1100, "CritChance");
+        if (UserDataManager.Instance.WeaponCriRateLv != 0)
+        {
+            critChance = critChance + UserDataManager.Instance.statData.upgradeCrit[UserDataManager.Instance.WeaponCriRateLv - 1].sum1;
+        }
+        return critChance;
+    }
+    /// <summary>업그레이드가 반영된 치명타 배율을 반환</summary>
+    public static float GetCritIncrease()
+    {
+        float critIncrease = Data.GetFloat(1100, "CritIncrease");
+        if (UserDataManager.Instance.WeaponCriDamageLv != 0) 
+        { 
+            critIncrease = critIncrease + UserDataManager.Instance.statData.upgradeCritDmg[UserDataManager.Instance.WeaponCriDamageLv - 1].sum1;
+        }
+        return critIncrease;
+    }
+    /// <summary>업그레이드가 반영된 공격 속도를 반환</summary>
+    public static float GetAttackSpeed()
+    {
+        float attackSpeed = Data.GetFloat(1100, "AttackSpeed");
+        if (UserDataManager.Instance.WeaponAtkRateLv != 0)
+        {
+            attackSpeed = attackSpeed - UserDataManager.Instance.statData.upgradeAtkSpd[UserDataManager.Instance.WeaponAtkRateLv - 1].sum1;
+        }
+        return attackSpeed;
+    }
+    /// <summary>업그레이드가 반영된 최대 드릴 회전 속도를 반환</summary>
+    public static float GetMaxSpin()
+    {
+        float maxSpin = Data.GetFloat(1100, "MaxSpiralSpeed");
+        if (UserDataManager.Instance.WeaponAtkRateLv != 0)
+        {
+            maxSpin = maxSpin + UserDataManager.Instance.statData.upgradeAtkSpd[UserDataManager.Instance.WeaponAtkRateLv - 1].sum2;
+        }
+        return maxSpin;
+    }
+    /// <summary>업그레이드가 반영된 최대 드릴 회전 속도를 반환</summary>
+    public static float GetSpinForce()
+    {
+        float spinForce = Data.GetFloat(1100, "SpiralForce");
+        if (UserDataManager.Instance.WeaponAtkRateLv != 0)
+        {
+            spinForce = spinForce + UserDataManager.Instance.statData.upgradeAtkSpd[UserDataManager.Instance.WeaponAtkRateLv - 1].sum3;
+        }
+        return spinForce;
+    }
+    #endregion
+
+    #region ####################_Skill_1_Data_#####################
+
+    /// <summary>업그레이드가 반영된 테라드릴의 데미지를 반환</summary>
+    public static float GetTeraIncrease()
+    {
+        float teraIncrease = Data.GetFloat(721100, "Value1");
+        if (UserDataManager.Instance.Skill1Lv_1 != 0)
+        {
+            teraIncrease = teraIncrease + UserDataManager.Instance.statData.upgradeSkill1[UserDataManager.Instance.Skill1Lv_1 - 1].sum1;
+        }
+        return teraIncrease;
+    }
+    /// <summary>업그레이드가 반영된 테라드릴의 사이즈를 반환</summary>
+    public static float GetTeraDrillSize()
+    {
+        float teraSize = Data.GetFloat(721101, "Value1");
+        if (UserDataManager.Instance.Skill1Lv_1 != 0)
+        {
+            teraSize = teraSize + UserDataManager.Instance.statData.upgradeSkill1[UserDataManager.Instance.Skill1Lv_1 - 1].sum2;
+        }
+        return teraSize;
+    }
+    /// <summary>업그레이드가 반영된 테라드릴의 지속시간를 반환</summary>
+    public static float GetTeraCoolDown()
+    {
+        float coolDown = Data.GetFloat(721100, "Value2");
+        if (UserDataManager.Instance.Skill1Lv_2 != 0)
+        {
+            coolDown = coolDown + UserDataManager.Instance.statData.upgradeSkill1[UserDataManager.Instance.Skill1Lv_2 - 1].sum3;
+        }
+        return coolDown;
+    }
+    #endregion
+
+    #region ####################_Skill_2_Data_#####################
+    /// <summary>업그레이드가 반영된 드릴연마의 치명타 데미지를 반환</summary>
+    public static float GetGinderIncrease()
+    {
+        float grinderIncre = Data.GetFloat(721115, "Value1");
+        if (UserDataManager.Instance.Skill2Lv_1 != 0)
+        {
+            grinderIncre = grinderIncre + UserDataManager.Instance.statData.upgradeSkill2[UserDataManager.Instance.Skill2Lv_1 - 1].sum1;
+        }
+        return grinderIncre;
+    }  
+    /// <summary>업그레이드가 반영된 드릴연마의 치명타 확률 반환</summary>
+    public static float GetGrinderCritChance()
+    {
+        float grinderCrit = Data.GetFloat(721114, "Value1");
+        if (UserDataManager.Instance.Skill2Lv_2 != 0)
+        {
+            grinderCrit = grinderCrit + UserDataManager.Instance.statData.upgradeSkill2[UserDataManager.Instance.Skill2Lv_2 - 1].sum2;
+        }
+        return grinderCrit;
+    }
+    /// <summary>업그레이드가 반영된 드릴연마의 지속시간 반환</summary>
+    public static float GetGrinderMaxTime()
+    {
+        float grinderMaxTime = Data.GetFloat(721114, "Value3");
+        if (UserDataManager.Instance.Skill2Lv_3 != 0)
+        {
+            grinderMaxTime = grinderMaxTime + UserDataManager.Instance.statData.upgradeSkill2[UserDataManager.Instance.Skill2Lv_3 - 1].sum3;
+        }
+        return grinderMaxTime;
+    }
+    #endregion
+
+    #region ####################_Skill_3_Data_#####################
+
+    /// <summary>업그레이드가 반영된 드릴 분쇄의 1단계 증가값 반환</summary>
+    public static float GetSmashDamage_Stack1()
+    {
+        float smashDamage1 = Data.GetFloat(722216, "Value1");
+        if (UserDataManager.Instance.Skill3Lv != 0)
+        {
+            smashDamage1 = smashDamage1 + UserDataManager.Instance.statData.upgradeSkill3[UserDataManager.Instance.Skill3Lv - 1].sum1;
+        }
+        return smashDamage1;
+    }
+
+    /// <summary>업그레이드가 반영된 드릴 분쇄의 2단계 증가값 반환</summary>
+    public static float GetSmashDamage_Stack2()
+    {
+        float smashDamage2 = Data.GetFloat(722216, "Value2");
+        if (UserDataManager.Instance.Skill3Lv != 0)
+        {
+            smashDamage2 = smashDamage2 + UserDataManager.Instance.statData.upgradeSkill3[UserDataManager.Instance.Skill3Lv - 1].sum2;
+        }
+        return smashDamage2;
+    }
+
+    /// <summary>업그레이드가 반영된 드릴 분쇄의 3단계 증가값 반환</summary>
+    public static float GetSmashDamage_Stack3()
+    {
+        float smashDamage3 = Data.GetFloat(722216, "Value3");
+        if (UserDataManager.Instance.Skill3Lv != 0)
+        {
+            smashDamage3 = smashDamage3 + UserDataManager.Instance.statData.upgradeSkill3[UserDataManager.Instance.Skill3Lv - 1].sum3;
+        }
+        return smashDamage3;
+    }
+    #endregion
+
+    #region ####################_Skill_4_Data_#####################
+
+    /// <summary>업그레이드가 반영된 드릴 랜딩의 카운트</summary>
+    public static int SetDrillLandingCount()
+    {
+        int landingCount = Data.GetInt(720217, "Value4");
+        if (UserDataManager.Instance.Skill4Lv_1 != 0)
+        {
+            landingCount = Mathf.RoundToInt(landingCount + UserDataManager.Instance.statData.upgradeSkill4[UserDataManager.Instance.Skill4Lv_1 - 1].sum1);
+        }
+        return landingCount;
+    }
+    /// <summary>업그레이드가 반영된 드릴 랜딩의 치명타 데미지</summary>
+    public static float GetLandingCritIncrease()
+    {
+        float landingIncrease = Data.GetInt(720217, "Value2");
+        if (UserDataManager.Instance.Skill4Lv_2 != 0)
+        {
+            landingIncrease = landingIncrease + UserDataManager.Instance.statData.upgradeSkill4[UserDataManager.Instance.Skill4Lv_2 - 1].sum2;
+        }
+        return landingIncrease;
+    }
+    /// <summary>업그레이드가 반영된 드릴 랜딩의 넉백 힘</summary>
+    public static float GetLandingForce()
+    {
+        float landingForce = Data.GetInt(720217, "Value3");
+        if (UserDataManager.Instance.Skill4Lv_3 != 0)
+        {
+            landingForce = landingForce + UserDataManager.Instance.statData.upgradeSkill4[UserDataManager.Instance.Skill4Lv_3 - 1].sum3;
+        }
+        return landingForce;
+    }
+
+
+
+    /// <summary>현재 드릴 랜딩 스킬 사용 가능 횟수 요청 </summary>
+    public static int GetDrillLandingCount() 
+    {
+        return UserDataManager.Instance.drillLandingCount;
+    }
+    /// <summary>랜딩 스킬 사용시 카운트 -1</summary>
+    public static void SetLandingSkillCount()
+    {
+        UserDataManager.Instance.drillLandingCount--;
+        if(UserDataManager.Instance.drillLandingCount < 0)
+        {
+            UserDataManager.Instance.drillLandingCount = 0;
+        }
+    }
+
+    #endregion
+
+    /// <summary>유저 데이터를 요청하는 메서드. 데이터 요청 시, DB에서 데이터를 가져왔을 경우 Action을 실행시켜준다. </summary>
+    /// <param name="action">데이터를 불러왔을 때 실행할 Action</param>
+    public static void GetData(Action action)
+    {
+        UserDataManager.Instance.DBRequst(action);
     }
 }

@@ -222,7 +222,7 @@ namespace BNG
 
         void Start()
         {
-            GetData();
+            UserData.GetData(GetData);
 
             weaponRigid = GetComponent<Rigidbody>();
             grappling = GetComponent<Grappling>();
@@ -889,9 +889,13 @@ namespace BNG
 
         private void GetData()
         {
-            damage = (float)DataManager.instance.GetData(1100, "Damage", typeof(float)) ;
-            dotDamage = (float)DataManager.instance.GetData(1100, "DotDamage", typeof(float)) ;
-            FiringRate = (float)DataManager.instance.GetData(1100, "AttackSpeed", typeof(float));
+            damage = UserData.GetDrillDamage();
+            dotDamage = UserData.GetDrillSpinDamage();
+            FiringRate = UserData.GetAttackSpeed();
+
+            //damage = (float)DataManager.instance.GetData(1100, "Damage", typeof(float)) ;
+            //dotDamage = (float)DataManager.instance.GetData(1100, "DotDamage", typeof(float)) ;
+            //FiringRate = (float)DataManager.instance.GetData(1100, "AttackSpeed", typeof(float));
         }
     }
 

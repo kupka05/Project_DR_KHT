@@ -19,7 +19,7 @@ public class WeaponDrill : MonoBehaviour
 
     void Start()
     {
-        GetData();
+       UserData.GetData(GetData);
     }
     private void Update()
     {
@@ -81,10 +81,13 @@ public class WeaponDrill : MonoBehaviour
     }
     private void GetData()
     {
+        addSpeed = UserData.GetSpinForce();
+        maxSpeed = UserData.GetMaxSpin();
+
         //IDatabase data = new Database();
         //addSpeed = data.GetData(1100, "SpiralForce", addSpeed);
         //maxSpeed = data.GetData(1100, "MaxSpiralSpeed", maxSpeed);
-        addSpeed = (float)DataManager.instance.GetData(1100, "SpiralForce", typeof(float));
-        maxSpeed = (float)DataManager.instance.GetData(1100, "MaxSpiralSpeed", typeof(float));
+        //addSpeed = (float)DataManager.instance.GetData(1100, "SpiralForce", typeof(float));
+        //maxSpeed = (float)DataManager.instance.GetData(1100, "MaxSpiralSpeed", typeof(float));
     }
 }

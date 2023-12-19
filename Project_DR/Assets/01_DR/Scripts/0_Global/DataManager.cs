@@ -109,6 +109,7 @@ public class DataManager : MonoBehaviour
     };
     private static State state = State.Default;
 
+
     /*************************************************
      *                 Unity Events
      *************************************************/
@@ -129,11 +130,6 @@ public class DataManager : MonoBehaviour
         InitLocalDataTable();
     }
 
-    private void Start()
-    {
-        // Quest Manager 트리거 호출로 생성
-        QuestManager.Instance.Trigger();
-    }
 
     /*************************************************
      *                 Public Methods

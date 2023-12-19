@@ -537,6 +537,18 @@ public class Monster : MonoBehaviour
     }
 
     public virtual void OnDeal()
+    {
+        // 죽지 않은 상태면 HP 바 업데이트
+        if (damageable.Health >= 0)
+        {
+            SetHealth(damageable.Health);
+        }
+
+        if (isStun)
+            return;
+
+        if (state != State.DIE && state != State.STUN)
+
         {
             SetHealth(damageable.Health);
             Debug.Log($"체력:{damageable.Health}");
@@ -548,7 +560,7 @@ public class Monster : MonoBehaviour
             {
                 if (damageable.Health >= 0)
                 {
-               
+
                     // 만약에 스턴루틴에 이미 다른 코루틴이 실행중인 경우
                     if (stunRoutine != null)
                     {
@@ -584,9 +596,9 @@ public class Monster : MonoBehaviour
                             smashCountNum.text = countNum.ToString();
                             Debug.Log($"숫자:{countNum}");
                         }
-                        else if(countNum == 5)
+                        else if (countNum == 5)
                         {
-                            
+
                         }
 
                         GFunc.Log($"숫자:{countNum}");
@@ -598,7 +610,7 @@ public class Monster : MonoBehaviour
                     }
                 }
             }
-
+        }
     }
 
     private void ApplyStackDamage()

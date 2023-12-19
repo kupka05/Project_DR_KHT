@@ -80,30 +80,41 @@ public static class GFunc
     // 디버그 로그를 찍어주는 메서드
     public static void Log(string _input)
     {
+#if UNITY_EDITOR
         Debug.Log(_input);
+#endif
     }
 
     // 디버그 로그를 찍어주는 메서드
     public static void LogWarning(string _input)
     {
+#if UNITY_EDITOR
+
         Debug.LogWarning(_input);
+#endif
     }
 
     // 디버그 로그를 찍어주는 메서드
     public static void LogError(string _input)
     {
+#if UNITY_EDITOR
         Debug.LogError(_input);
+#endif
     }
     // 디버그 로그를 찍어주는 메서드
     public static void LogErrorFormat(string _input)
     {
+#if UNITY_EDITOR
         Debug.LogErrorFormat(_input);
+#endif
     }
 
     // 디버그 로그를 찍어주는 메서드
     public static void LogException(System.Exception _input)
     {
+#if UNITY_EDITOR
         Debug.LogException(_input);
-}
+#endif
+    }
     #endregion
 }   // ClassEnd

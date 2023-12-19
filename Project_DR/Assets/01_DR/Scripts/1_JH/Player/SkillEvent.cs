@@ -18,9 +18,8 @@ public class SkillEvent : MonoBehaviour
     [Header("Landing")]
     private SphereCollider sphereCollider;
 
-    public float landingForce = 5;              // 넉백 힘
-    public float knockbackRange = 2.5f;     // 넉백 사거리
-    public float Damage = 25f;              // 넉백 데미지
+    public float landingForce;              // 넉백 힘
+    public float knockbackRange;     // 넉백 사거리
 
     [Header("Debug")]
     public float TDcheckerHeight;
@@ -36,13 +35,8 @@ public class SkillEvent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-            sphereCollider = GetComponent<SphereCollider>();
-       
-        GetData();
-        //if (skill == Skill.TeraDrill)
-        //{
-        //    transform.position = new Vector3(transform.position.x, TDcheckerHeight, transform.position.z);
-        //}
+        sphereCollider = GetComponent<SphereCollider>();       
+        UserData.GetData(GetData);      
     }
 
 
@@ -173,17 +167,26 @@ public class SkillEvent : MonoBehaviour
         Vector3 force = targetPos - skillPos * landingForce;
         targetRB.AddForce(force, ForceMode.Impulse);
 
-        target.GetComponent<Damageable>().DealDamage(Damage);
+        Damageable damage = target.GetComponent<Damageable>();
+        if(damage)
+        {
+            damage.DealDamage(Damage.instance.DamageCalculate(UserData.GetDrillDamage()));
+        }
     }
     void GetData()
     {
-        TDcheckerHeight = (float)DataManager.instance.GetData(1010, "Value1", typeof(float));
-        TDcheckerTiming = (float)DataManager.instance.GetData(1010, "Value2", typeof(float));
-        GDcheckerTiming = (float)DataManager.instance.GetData(20015, "Value3", typeof(float));
+        TDcheckerHeight = Data.GetFloat(1010, "Value1");
+        TDcheckerTiming = Data.GetFloat(1010, "Value2");
+        GDcheckerTiming = Data.GetFloat(20015, "Value3");
+        //TDcheckerHeight = (float)DataManager.instance.GetData(1010, "Value1", typeof(float));
+        //TDcheckerTiming = (float)DataManager.instance.GetData(1010, "Value2", typeof(float));
+        //GDcheckerTiming = (float)DataManager.instance.GetData(20015, "Value3", typeof(float));
 
-        //landingForce = 5;
+        landingForce = UserData.GetLandingForce();
+
         if (skill == Skill.Landing)
         {
+            knockbackRange = Data.GetFloat(720217, "Value1") / 2;
             sphereCollider.radius = knockbackRange;
             sphereCollider.enabled = false;
         }

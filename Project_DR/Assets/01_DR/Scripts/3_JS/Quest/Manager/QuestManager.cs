@@ -5,6 +5,14 @@ using Rito.InventorySystem;
 
 namespace Js.Quest
 {
+    [System.Serializable]
+    public class QuestSaveData
+    {
+        public int id;
+        public int clearValue;
+        public int currentState;
+    }
+
     public class QuestManager : MonoBehaviour
     {
         /*************************************************
@@ -32,13 +40,14 @@ namespace Js.Quest
 
         public Item[] InventoryItems => UserDataManager.items;              // 보유 인벤토리 아이템
         public List<Quest> QuestList => UserDataManager.quests;             // 보유 퀘스트 리스트
+        public const int QUEST_FIRST_ID = 1_000_000_1;                      // 퀘스트 테이블 시작 ID
 
 
         /*************************************************
          *                 Private Fields
          *************************************************/
-        private const int QUEST_FIRST_ID = 1_000_000_1;
         [SerializeField] private List<Quest> _debugQuestList;               // 디버그용 퀘스트 리스트 
+
 
         /*************************************************
          *                  Unity Events
@@ -59,24 +68,12 @@ namespace Js.Quest
         {
             // QuestCallback에 메서드 등록
             AddQuestCallbacks();
-
-            // 데이터 테이블에 있는 퀘스트를 가져와서 생성
-            CreateQuestFromDataTable();
         }
 
 
         /*************************************************
          *                Public Methods
          *************************************************/
-        // 생성용 트리거
-        public void Trigger()
-        {
-            GFunc.Log("Create Quest Manager");
-
-            // 디버그
-            _debugQuestList = QuestList;
-        }
-
         // 데이터 테이블에 있는 퀘스트를 가져와서 생성
         public void CreateQuestFromDataTable()
         {
@@ -92,6 +89,8 @@ namespace Js.Quest
 
             // 디버그
             _debugQuestList = QuestList;
+
+            // TODO: DB에 있는 퀘스트 정보 가져와서 상태변경
         }
 
         // 퀘스트를 생성한다
@@ -148,7 +147,8 @@ namespace Js.Quest
         {
             // 조건에 해당하는 퀘스트를 보유했는지 검사
             // 해당하는 퀘스트가 없을 경우
-            if (IsQuestConditionFulfilled(condition).Equals(false)) { GFunc.Log($"해당하는 퀘스트{condition}가 없습니다."); return; }
+            if (IsQuestConditionFulfilled(condition).Equals(false)) 
+            { GFunc.Log($"조건[{condition}]에 해당하는 진행중인 퀘스트가 없습니다."); return; }
 
             int itemCount = default;
             // condition이 [7] 증정일 경우

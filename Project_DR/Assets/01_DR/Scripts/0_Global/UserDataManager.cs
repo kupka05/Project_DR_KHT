@@ -13,22 +13,9 @@ using OVR.OpenVR;
 using System.Net.NetworkInformation;
 using Js.Quest;
 
-[System.Serializable]
-public class ClearDatas
-{
-    public List<ClearData> list;
-}
-[System.Serializable]
-
-public class ClearData
-{
-    public MBTI MBTI;
-    public string Date;
-}
-
 // DB에서 가져온 유저의 데이터를 관리하는 클래스
 
-public class UserDataManager : MonoBehaviour
+public partial class UserDataManager : MonoBehaviour
 {
     #region 싱글톤 패턴
 
@@ -41,7 +28,7 @@ public class UserDataManager : MonoBehaviour
         {
             if (m_Instance == null)
                 m_Instance = FindObjectOfType<UserDataManager>();
-            if(m_Instance == null)
+            if (m_Instance == null)
             {
                 GameObject obj = new GameObject("UserDataManager");
                 m_Instance = obj.AddComponent<UserDataManager>();
@@ -55,183 +42,30 @@ public class UserDataManager : MonoBehaviour
     #region 옵저버 패턴
     public delegate void UserDataUpdateDelegate();
     public event UserDataUpdateDelegate OnUserDataUpdate;
+    public event UserDataUpdateDelegate OnWeaponDataUpdate;
+    public event UserDataUpdateDelegate OnSkillDataUpdate;
+
+    // 유저 데이터 업데이트
     public void UpdateUserData()
     {
         // 데이터가 변경될 때마다 호출
         OnUserDataUpdate?.Invoke();
     }
+    // 무기 데이터 업데이트
+    public void UpdateWeaponData()
+    {
+        // 데이터가 변경될 때마다 호출
+        OnWeaponDataUpdate?.Invoke();
+    }
+    // 스킬 데이터 업데이트
+    public void UpdateSkillData()
+    {
+        // 데이터가 변경될 때마다 호출
+        OnSkillDataUpdate?.Invoke();
+    }
     #endregion
 
-    #region 유저 데이터
-    [Header("DB")]
-    private bool _dataLoad;
-    public bool dataLoadSuccess
-    {
-        get { return _dataLoad; }
-        set { _dataLoad = value; 
-        // TODO : 델리게이트 이벤트 추가하기
-        }
-    }    // 데이터 불러옴 여부
-
-    [Header("User Data")]           // 유저 데이터
-    public string PlayerID;
-
-    [SerializeField]
-    private int _Level;
-    public int Level
-    {
-        get { return _Level; }
-        set
-        {
-            _Level = value;
-            OnUserDataUpdate?.Invoke();
-        }
-    }
-    [SerializeField]
-    private int _Exp;
-    public int Exp // 플레이어 현재 경험치
-    {
-        get { return _Exp; }
-        set
-        {
-            _Exp = value;
-            OnUserDataUpdate?.Invoke();
-        }
-    }
-    [SerializeField]
-    private int _Gold;
-    public int Gold  // 플레이어 현재 골드
-    {
-        get { return _Gold; }
-        set
-        {
-            _Gold = value;
-            OnUserDataUpdate?.Invoke();
-        }
-    }
-    //public string mbti;
-    public MBTI mbti = new MBTI();
-
-    [Header("PC Data")]           // PC 데이터
-    public float DefaultHP;         // 초기 체력
-    public float HP;                // 업그레이드 반영된 체력
-    public float GainGold;
-    public float GainExp;
-
-    [Header("PC Status Data")]      // PC 스탯 업그레이드 데이터
-    [SerializeField]
-    private int _HPLv;
-    public int HPLv  // 플레이어 체력
-    {
-        get { return _HPLv; }
-        set
-        {
-            _HPLv = value;
-            OnUserDataUpdate?.Invoke();
-        }
-    }
-    [SerializeField]
-    private int _GainGoldLv;
-    public int GainGoldLv        // 플레이어 골드 증가량
-    {
-        get { return _GainGoldLv; }
-        set
-        {
-            _GainGoldLv = value;
-            OnUserDataUpdate?.Invoke();
-        }
-    }
-    [SerializeField]
-    private int _GainExpLv;
-    public int GainExpLv         // 플레이어 경험치 증가량
-    {
-        get { return _GainExpLv; }
-        set
-        {
-            _GainExpLv = value;
-            OnUserDataUpdate?.Invoke();
-        }
-    }
-    [Header("Default Weapon Data")]
-    public float _weaponAtk;
-    public float _weaponCritRate;
-    public float _weaponCritDamage;
-    public float _weaponAtkRate;
-
-    [Header("Weapon Data")]
-    public float weaponAtk;
-    public float weaponCritRate;
-    public float weaponCritDamage;
-    public float weaponAtkRate;
-
-    [Space(10f)]
-
-    public int WeaponAtkLv;           // 공격력
-    public int WeaponCriRateLv;       // 치명타 확률
-    public int WeaponCriDamageLv;     // 치명타 증가율
-    public int WeaponAtkRateLv;       // 공격 속도
-
-    [Header("Skill 1 Data")]
-    public int Skill1Lv_1;                // 테라드릴 레벨
-    public int Skill1Lv_2;                // 테라드릴 레벨
-
-    [Header("Skill 2 Data")]
-    public int Skill2Lv_1;                // 드릴연마 레벨
-    public int Skill2Lv_2;                // 드릴연마 레벨
-    public int Skill2Lv_3;                // 드릴연마 레벨
-
-    [Header("Skill 3 Data")]
-    public int Skill3Lv;                  // 드릴분쇄 레벨
-
-    [Header("Skill 4 Data")]
-    public int Skill4Lv_1;                 // 드릴랜딩 레벨
-    public int Skill4Lv_2;                 // 드릴랜딩 레벨
-    public int Skill4Lv_3;                 // 드릴랜딩 레벨
-
-    [Header("Quest Data")]
-    public string QuestMain;          // 현재 퀘스트
-
-    [Header("Clear Data")]
-    public int ClearCount;            // 클리어 횟수
-    private string JsonData;          // Json을 담을 직렬화된 클리어 데이터
-    private ClearDatas _clearDatas;
-    public ClearDatas clearDatas      // 클리어 데이터 리스트
-    {
-        get { return _clearDatas; }
-        set
-        {
-            _clearDatas = value;
-            if (value == null)
-            {
-                GFunc.Log("클리어 데이터 없음. 신규 데이터 생성");
-                _clearDatas = new ClearDatas();
-            }
-        }
-    }
-    private string decodedString;
-
-    [Header("Setting Data")]          // 환경 설정
-    public float rotationAmount = 45f;
-    [Range(0, 100)]
-    public float masterSound = 100, sfx = 100, backgroundSound = 100;
-    [Range(-5, 5)]
-    public float brightness = 0;
-
-    [Header("Inventory Data")]
-    // 호출 순서 문제로 인해 static으로 설정
-    public static Item[] items = new Item[Inventory.MaxCapacity];
-
-    [Header("Quest Data")]
-    public static List<Quest> quests = new List<Quest>();
-
-    [Header("Result Data")]
-    public GameResult result = new GameResult();
-
-    [Header("Reference Data")]
-    public bool isClear;    // 보스를 클리어했는지 확인
-    private StatusData  statusData = new StatusData();
-    public StatData statData = new StatData();   // 업그레이드 스탯 정보가 담긴 데이터
-    #endregion
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.5f);
 
     // ####################### Awake #######################
 
@@ -241,7 +75,7 @@ public class UserDataManager : MonoBehaviour
         if (m_Instance == null)
         {
             m_Instance = this;
-            DontDestroyOnLoad(this.gameObject);            
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         { Destroy(gameObject); }
@@ -253,11 +87,11 @@ public class UserDataManager : MonoBehaviour
     }
     public void Update()
     {
-        if(Input.GetKeyDown("r"))
+        if (Input.GetKeyDown("r"))
         {
             StartCoroutine(SetDebugData());
         }
-        else if(Input.GetKeyDown(KeyCode.F1))
+        else if (Input.GetKeyDown(KeyCode.F1))
         {
             SaveClearData();
         }
@@ -288,20 +122,18 @@ public class UserDataManager : MonoBehaviour
 
         // HP 업그레이드 세팅
         DefaultHP = Data.GetFloat(1001, "Health");
-        HP = DefaultHP;
-        if(HPLv != 0)
-        {
-            HP = DefaultHP + statData.upgradeHp[HPLv-1].sum;
-        }
+        MaxHP = UserData.GetHP();
+        CurHP = MaxHP;
+
         // 골드 획득량 업그레이드 세팅
         if (GainGoldLv != 0)
         {
-            GainGold = statData.upgradeGainGold[GainGoldLv-1].sum;
+            GainGold = statData.upgradeGainGold[GainGoldLv - 1].sum;
         }
         // 경험치 획득량 업그레이드 세팅
         if (GainExpLv != 0)
         {
-            GainExp = statData.upgradeGainExp[GainExpLv-1].sum;
+            GainExp = statData.upgradeGainExp[GainExpLv - 1].sum;
         }
 
         // 총 레벨
@@ -328,15 +160,15 @@ public class UserDataManager : MonoBehaviour
         {
             weaponAtk = _weaponAtk + statData.upgradeAtk[WeaponAtkLv - 1].sum1;
         }
-        if(WeaponCriRateLv != 0)
+        if (WeaponCriRateLv != 0)
         {
             weaponCritRate = _weaponCritRate + statData.upgradeCrit[WeaponCriRateLv - 1].sum1;
         }
-        if(WeaponCriDamageLv != 0)
+        if (WeaponCriDamageLv != 0)
         {
             weaponCritDamage = _weaponCritDamage + statData.upgradeCritDmg[WeaponCriDamageLv - 1].sum1;
         }
-        if(WeaponAtkRateLv != 0)
+        if (WeaponAtkRateLv != 0)
         {
             weaponAtkRate = _weaponAtkRate + statData.upgradeAtkSpd[WeaponAtkRateLv - 1].sum1;
         }
@@ -357,6 +189,9 @@ public class UserDataManager : MonoBehaviour
         Skill4Lv_2 = PlayerDataManager.SkillLevel4_2;
         Skill4Lv_3 = PlayerDataManager.SkillLevel4_3;
 
+        // 랜딩 스킬 사용횟수 갱신
+        drillLandingCount = UserData.SetDrillLandingCount();
+
         // ######################### ETC #########################
 
         QuestMain = PlayerDataManager.QuestMain;
@@ -371,7 +206,7 @@ public class UserDataManager : MonoBehaviour
 
         clearDatas = JsonUtility.FromJson<ClearDatas>(decodedString);
 
-        if(clearDatas.list == null) // 리스트가 없으면 새로 만들기
+        if (clearDatas.list == null) // 리스트가 없으면 새로 만들기
         {
             clearDatas.list = new List<ClearData>();
         }
@@ -381,8 +216,9 @@ public class UserDataManager : MonoBehaviour
         dataLoadSuccess = true;
         GFunc.Log("데이터 로드 시간 : " + GetCurrentDate());
 
-        // 퀘스트 콜백 호출
-        QuestCallback.OnQuestDataCallback();
+        // 데이터 테이블에 있는 퀘스트를 가져와서 생성
+        // && 가져온 퀘스트 데이터에 따라 상태 변경
+        QuestManager.Instance.CreateQuestFromDataTable();
     }
 
     // DB에 데이터를 요청하기 위한 메서드
@@ -394,7 +230,7 @@ public class UserDataManager : MonoBehaviour
     // 델리게이트에 추가로 변경하기
     IEnumerator CheckData(Action action)
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return waitForSeconds;
         if (dataLoadSuccess)
         {
             GFunc.Log(action + "데이터 로드 완료");
@@ -441,7 +277,7 @@ public class UserDataManager : MonoBehaviour
     public void SaveWeaponUpgrade()
     {
         PlayerDataManager.Save("exp", Exp);
-        PlayerDataManager.Save("weapon_atk_rate", WeaponAtkLv);
+        PlayerDataManager.Save("weapon_atk", WeaponAtkLv);
         PlayerDataManager.Save("exp", WeaponAtkRateLv);
         PlayerDataManager.Save("weapon_cri_damage", WeaponCriDamageLv);
         PlayerDataManager.Save("weapon_cri_rate", WeaponCriRateLv);
@@ -462,16 +298,20 @@ public class UserDataManager : MonoBehaviour
 
     // ####################### 디버그용 PC 데이터 세팅 ####################### \\
     // TODO 한번에 호출하면 저장 실패할 경우가 있음.
+    public void ResetData()
+    {
+        StartCoroutine(SetDebugData());
+    }
     public IEnumerator SetDebugData()
     {
         yield return null;
         PlayerDataManager.Save("hp", 0);
         yield return null;
 
-        PlayerDataManager.Save("gold", 100000);
+        PlayerDataManager.Save("gold", 200000);
         yield return null;
 
-        PlayerDataManager.Save("exp", 100000);
+        PlayerDataManager.Save("exp", 200000);
         yield return null;
 
         PlayerDataManager.Save("gold_increase", 0);
@@ -522,6 +362,7 @@ public class UserDataManager : MonoBehaviour
         yield return null;
 
         PlayerDataManager.Update(true);
+        yield break;
     }
 
     // #######################  MBTI  ####################### \\
@@ -553,10 +394,10 @@ public class UserDataManager : MonoBehaviour
 
         Level = HPLv + GainGoldLv + GainExpLv;
 
-        HP = DefaultHP;
+        MaxHP = DefaultHP;
         if (HPLv != 0)
         {
-            HP = DefaultHP + statData.upgradeHp[HPLv - 1].sum;
+            MaxHP = DefaultHP + statData.upgradeHp[HPLv - 1].sum;
         }
         // 골드 획득량 업그레이드 세팅
         if (GainGoldLv != 0)

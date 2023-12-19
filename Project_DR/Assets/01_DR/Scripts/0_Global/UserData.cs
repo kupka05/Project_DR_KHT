@@ -243,6 +243,28 @@ public static class UserData
 
     #region ####################_Skill_3_Data_#####################
 
+    /// <summary>인덱스 입력 시 업그레이드가 반영된 드릴 분쇄 증가값 반환</summary>
+    public static float GetSmashDamage(int index)
+    {
+        float smashDebuff = 0;
+        switch (index)
+        {
+            case 1:
+                smashDebuff = GetSmashDamage_Stack1();
+                break;
+            case 2:
+                smashDebuff = GetSmashDamage_Stack2();
+                break;
+            case 3:
+                smashDebuff = GetSmashDamage_Stack3();
+                break;
+        }
+
+
+        return smashDebuff; 
+    }
+
+
     /// <summary>업그레이드가 반영된 드릴 분쇄의 1단계 증가값 반환</summary>
     public static float GetSmashDamage_Stack1()
     {

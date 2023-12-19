@@ -179,7 +179,7 @@ namespace OculusSampleFramework
             cameraRenderOverlay.enabled = false;
             renderingLabelOverlay.enabled = true;
             renderingLabelOverlay.textures[0] = applicationLabelTexture;
-            Debug.Log("Switched to ActivateWorldGeo");
+            GFunc.Log("Switched to ActivateWorldGeo");
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace OculusSampleFramework
             uiGeoParent.SetActive(true);
             renderingLabelOverlay.enabled = true;
             renderingLabelOverlay.textures[0] = compositorLabelTexture;
-            Debug.Log("Switched to ActivateOVROVerlay");
+            GFunc.Log("Switched to ActivateOVROVerlay");
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace OculusSampleFramework
             cameraRenderOverlay.enabled = false;
             uiGeoParent.SetActive(false);
             renderingLabelOverlay.enabled = false;
-            Debug.Log("Switched to ActivateNone");
+            GFunc.Log("Switched to ActivateNone");
         }
 
 
@@ -304,7 +304,7 @@ namespace OculusSampleFramework
                 0,
                 RenderTextureFormat.ARGB32,
                 RenderTextureReadWrite.sRGB);
-            Debug.Log("Created RT of resolution w: " + renderTargetWidth + " and h: " + renderTargetHeight);
+            GFunc.Log("Created RT of resolution w: " + renderTargetWidth + " and h: " + renderTargetHeight);
 
             overlayRT.hideFlags = HideFlags.DontSave;
             overlayRT.useMipMap = true;
@@ -332,7 +332,7 @@ namespace OculusSampleFramework
                 numToPrint++;
             }
 
-            Debug.Log("Finished " + numToPrint + " Loops");
+            GFunc.Log("Finished " + numToPrint + " Loops");
             Vector3 playerPos = mainCamera.transform.position;
             playerPos.y = 0.5f;
             // Generate a bunch of blocks, "blocking" the mainthread ;)

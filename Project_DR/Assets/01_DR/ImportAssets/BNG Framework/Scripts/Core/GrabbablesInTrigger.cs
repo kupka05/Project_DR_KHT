@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,21 +18,26 @@ namespace BNG {
         /// All nearby Grabbables that are considered valid. I.e. Not being held, within range, etc.
         /// </summary>
         public Dictionary<Collider, Grabbable> ValidGrabbables;
+        public Dictionary<Collider, NPC> ValidNPCs;
 
         /// <summary>
         /// The closest valid grabbable. If grab button is pressed this is the object that will be grabbed.
         /// </summary>
         public Grabbable ClosestGrabbable;
+        public NPC ClosestNPC;
 
         /// <summary>
         /// All grabbables in trigger that are considered valid
         /// </summary>
         public Dictionary<Collider, Grabbable> ValidRemoteGrabbables;
+        public Dictionary<Collider, NPC> ValidRemoteNPCs;
 
         /// <summary>
         /// Closest Valid Remote Grabbable may be highlighted
         /// </summary>
         public Grabbable ClosestRemoteGrabbable;
+        public NPC ClosestRemoteNPC;
+
 
         /// <summary>
         /// Should we call events on grabbables
@@ -62,9 +67,11 @@ namespace BNG {
 
         // Cache these variables for GC
         private Grabbable _closest;
+        private NPC _closestNPC;
         private float _lastDistance;
         private float _thisDistance;
         private Dictionary<Collider, Grabbable> _valids;
+        private Dictionary<Collider, NPC> _validsNPC;
         private Dictionary<Collider, Grabbable> _filtered;
         private Transform _eyeTransform;
 
@@ -84,6 +91,21 @@ namespace BNG {
             // Sort Grabbales by Distance so we can use that information later if we need it
             updateClosestGrabbable();
             updateClosestRemoteGrabbables();
+            updateClosestNPC();
+            updateClosestRemoteNPC();
+
+
+            if(Input.GetKeyDown(KeyCode.O))
+            {
+                foreach (var item in ValidNPCs)
+                {
+                    GFunc.Log("Valid " +item.Value.name);
+                }                
+                foreach (var item in ValidRemoteNPCs)
+                {
+                    GFunc.Log("Remote " +item.Value.name);
+                }
+            }
         }
 
         void updateClosestGrabbable() {
@@ -109,7 +131,28 @@ namespace BNG {
                 ClosestRemoteGrabbable = null;
             }
         }
+        void updateClosestNPC()
+        {
+            ClosestNPC = GetClosestNPC(ValidRemoteNPCs);
+            if(ValidNPCs == null)
+            {
+                ClosestNPC = null; 
+            }
+        }
+        void updateClosestRemoteNPC()
+        {
 
+            // Assign closest remote grabbable
+            ClosestRemoteNPC = GetClosestNPC(ValidRemoteNPCs, true, RaycastRemoteGrabbables);
+
+            // We can't have a closest remote grabbable if we are over a grabbable.
+            // The closestGrabbable always takes precedent of the closestRemoteGrabbable
+            if(ClosestNPC != null)
+            {
+                ClosestRemoteNPC = null;
+            }
+            
+        }
         public virtual Grabbable GetClosestGrabbable(Dictionary<Collider, Grabbable> grabbables, bool remoteOnly = false, bool raycastCheck = false) {
             _closest = null;
             _lastDistance = 9999f;
@@ -137,15 +180,19 @@ namespace BNG {
                         continue;
                     }
 
-                    // Do raycast check last to save a physics check
-                    if(raycastCheck && !kvp.Value.RemoteGrabbing) {
-                        if(CheckObjectBetweenGrabbable(transform.position, kvp.Value)) {
+                    //// Do raycast check last to save a physics check
+                    if (raycastCheck && !kvp.Value.RemoteGrabbing)
+                    {
+                        if (CheckObjectBetweenGrabbable(transform.position, kvp.Value))
+                        {
                             continue;
                         }
 
                         // So far no obstructions. Check if an object is between the camera
-                        if(RemoteGrabbablesMustBeVisible && _eyeTransform != null) {
-                            if (CheckObjectBetweenGrabbable(_eyeTransform.position, kvp.Value)) {
+                        if (RemoteGrabbablesMustBeVisible && _eyeTransform != null)
+                        {
+                            if (CheckObjectBetweenGrabbable(_eyeTransform.position, kvp.Value))
+                            {
                                 continue;
                             }
                         }
@@ -158,6 +205,52 @@ namespace BNG {
             }
 
             return _closest;
+        }
+
+        public virtual NPC GetClosestNPC(Dictionary<Collider, NPC> npc, bool remoteOnly = false, bool raycastCheck = false)
+        {
+            _closest = null;
+            _lastDistance = 9999f;
+
+            if (npc == null)
+            {
+                
+                return null;
+            }
+
+            foreach (var kvp in npc)
+            {
+
+                //if (kvp.Value == null || !kvp.Value.IsGrabbable())
+                //{
+                //    continue;
+                //}
+
+                // Use Collider transform as position
+                _thisDistance = Vector3.Distance(kvp.Value.transform.position, transform.position);
+                if (_thisDistance < _lastDistance && kvp.Value.isActiveAndEnabled)
+                {
+                    // 대화 가능 여부
+                    //if (remoteOnly && !kvp.Value.RemoteGrabbable)
+                    //{
+                    //    continue;
+                    //}
+
+                    //// 대화 가능 범위
+                    //if (remoteOnly && _thisDistance > kvp.Value.RemoteGrabDistance)
+                    //{
+                    //    continue;
+                    //}
+
+              
+                    // This is now our closest grabbable
+                    _lastDistance = _thisDistance;
+                    _closestNPC = kvp.Value;
+
+                }
+            }
+
+            return _closestNPC;
         }
 
 
@@ -173,11 +266,11 @@ namespace BNG {
                 float hitDistance = Vector3.Distance(startingPosition, hit.point);
                 if (hit.collider.gameObject != theGrabbable.gameObject) {
                     if(hitDistance > 0.09f) {
-                        // Debug.Log("Something in-between : " + hit.collider.gameObject.name + " At Distance : " + hitDistance);
+                        // GFunc.Log("Something in-between : " + hit.collider.gameObject.name + " At Distance : " + hitDistance);
                         return true;
                     }
                     else {
-                        // Debug.Log("Something in between but very close : " + hit.collider.gameObject.name);
+                        // GFunc.Log("Something in between but very close : " + hit.collider.gameObject.name);
                     }
                 }
             }
@@ -220,6 +313,58 @@ namespace BNG {
             // No longer possible for it to be the closestGrabbable
             else if (grab == ClosestGrabbable) {
                 if (grab.BreakDistance > 0 && Vector3.Distance(grab.transform.position, transform.position) > grab.BreakDistance) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public Dictionary<Collider, NPC> GetValidNPC(Dictionary<Collider, NPC> npc)
+        {
+            _validsNPC = new Dictionary<Collider, NPC>();
+
+            if (npc == null)
+            {
+                return _validsNPC;
+            }
+
+            // Check for objects that need to be removed from RemoteGrabbables
+            foreach (var kvp in npc)
+            {
+                if (isValidNPC(kvp.Key, kvp.Value) && !_validsNPC.ContainsKey(kvp.Key))
+                {
+                    _validsNPC.Add(kvp.Key, kvp.Value);
+                }
+            }
+
+            return _validsNPC;
+        }
+
+        protected virtual bool isValidNPC(Collider col, NPC npc)
+        {
+
+            // Object has been deactivated. Remove it
+            if (col == null || npc == null || !npc.isActiveAndEnabled || !npc.enabled)
+            {
+                return false;
+            }
+            //// Not considered grabbable any longer. May have been picked up, marked, etc.
+            //else if (!npc.IsGrabbable())
+            //{
+            //    return false;
+            //}
+            //// Snap Zone without an item isn't a valid grab. Want to skip this unless something is inside
+            //else if (grab.GetComponent<SnapZone>() != null && grab.GetComponent<SnapZone>().HeldItem == null)
+            //{
+            //    return false;
+            //}
+            // Position was manually set outside of break distance
+            // No longer possible for it to be the closestGrabbable
+            else if (npc == ClosestGrabbable)
+            {
+                if (1 > 0 && Vector3.Distance(npc.transform.position, transform.position) > 1)
+                {
                     return false;
                 }
             }
@@ -298,13 +443,49 @@ namespace BNG {
                 }
             }
             catch(System.Exception e) {
-                Debug.Log("Could not add Collider " + col.transform.name + " " + e.Message);
+                GFunc.Log("Could not add Collider " + col.transform.name + " " + e.Message);
+            }
+        }
+
+        public virtual void AddValidRemoteNPC(Collider col, NPC npcObj)
+        {
+
+            // Sanity check
+            if (col == null || npcObj == null)
+            {
+                return;
+            }
+
+            // Ensure our collection has been initialized
+            if (ValidRemoteNPCs == null)
+            {
+                ValidRemoteNPCs = new Dictionary<Collider, NPC>();
+            }
+
+            try
+            {
+                if (npcObj != null && npcObj && col != null && !ValidRemoteNPCs.ContainsKey(col))
+                {
+
+                    ValidRemoteNPCs.Add(col, npcObj);
+                }
+            }
+            catch (System.Exception e)
+            {
+                GFunc.Log("Could not add Collider " + col.transform.name + " " + e.Message);
             }
         }
 
         public virtual void RemoveValidRemoteGrabbable(Collider col, Grabbable grabObject) {
             if (grabObject != null && ValidRemoteGrabbables != null && ValidRemoteGrabbables.ContainsKey(col)) {
                 ValidRemoteGrabbables.Remove(col);
+            }
+        }
+        public virtual void RemoveValidRemoteNPC(Collider col, NPC npc)
+        {
+            if (npc != null && ValidRemoteNPCs != null && ValidRemoteNPCs.ContainsKey(col))
+            {
+                ValidRemoteNPCs.Remove(col);
             }
         }
 

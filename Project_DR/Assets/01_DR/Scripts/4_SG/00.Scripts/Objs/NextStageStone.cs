@@ -13,7 +13,7 @@ public class NextStageStone : MonoBehaviour
             minusScale = this.transform.localScale;
             minusScale.y -= 0.01f;
             this.transform.localScale = minusScale;
-            Debug.Log($"nowY : {minusScale.y}");
+            GFunc.Log($"nowY : {minusScale.y}");
             if (minusScale.y < 0.05)
             {
                 Destroy(this.gameObject);
@@ -25,7 +25,7 @@ public class NextStageStone : MonoBehaviour
         //    minusScale = this.transform.localScale;
         //    minusScale.y -= 0.01f;
         //    this.transform.localScale = minusScale;
-        //    Debug.Log($"nowY : {minusScale.y}");
+        //    GFunc.Log($"nowY : {minusScale.y}");
         //    if (minusScale.y < 0.05)
         //    {
         //        Destroy(this.gameObject);

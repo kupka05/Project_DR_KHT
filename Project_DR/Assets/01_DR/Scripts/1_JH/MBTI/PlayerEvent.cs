@@ -136,7 +136,7 @@ public class PlayerEvent : MonoBehaviour
             // 아이템 구매 처리(골드 차감)
             if (shopItemPurchaseHandler.CheckAndDeductGoldForItemPurchase(shopItemID))
             {
-                Debug.Log("구매했슴당");
+                GFunc.Log("구매했슴당");
                 // 아이템일 경우
                 if (shopItem.IsItem)
                 {
@@ -165,7 +165,7 @@ public class PlayerEvent : MonoBehaviour
             // 구매 실패시
             else
             {
-                Debug.Log("돈이 업슴당");
+                GFunc.Log("돈이 업슴당");
             }
         }
     }

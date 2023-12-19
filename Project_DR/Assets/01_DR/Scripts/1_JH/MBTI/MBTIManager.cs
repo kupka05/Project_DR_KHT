@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+[System.Serializable]
 public struct MBTI
 {
     public float I;
     public float N;
     public float F;
     public float P;
+    public string mbti;
     public MBTI SetMBTI(float i, float n, float f, float p)
     {
         I = i;
@@ -15,6 +17,47 @@ public struct MBTI
         F = f;
         P = p;
         return this;
+    }
+    public string GetIE()
+    {
+        string i;
+        if (I <= 50)
+            i = "I";
+        else
+            i = "E";
+        return i;
+    }
+    public string GetNS()
+    {
+        string n;
+        if (N <= 50)
+            n = "N";
+        else
+            n = "S";
+        return n;
+    }
+    public string GetFT()
+    {
+        string f;
+        if (F <= 50)
+            f = "F";
+        else
+            f = "T";
+        return f;
+    }
+    public string GetPJ()
+    {
+        string p;
+        if (P <= 50)
+            p = "P";
+        else
+            p = "J";
+        return p;
+    }
+
+    public string GetMBTI()
+    {         
+        return GFunc.SumString(GetIE(), GetNS(), GetFT(), GetPJ()); ;
     }
 }
 
@@ -41,6 +84,8 @@ public class MBTIManager : MonoBehaviour
     private MBTI playerMBTI;
 
     [Header("PlayerMBTI")]
+    public string mbti;
+
     public float I;
     public float N;
     public float F;
@@ -51,16 +96,10 @@ public class MBTIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetData();
+        UserDataManager.Instance.DBRequst(GetData);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Debug();
-    }
-
-    public void Debug()
+    public void MbtiDebug()
     {
         if (debugTxt)
         {
@@ -68,22 +107,23 @@ public class MBTIManager : MonoBehaviour
             N = playerMBTI.N;
             F = playerMBTI.F;
             P = playerMBTI.P;
-
+            mbti = playerMBTI.GetMBTI();
             debugTxt.text = string.Format("I : " + I + ", N : " + N + ", F : " + F + ", P : " + P);
         }
     }
 
     public void GetData()
     {
-        playerMBTI.I = 50f;
-        playerMBTI.N = 50f;
-        playerMBTI.F = 50f;
-        playerMBTI.P = 50f;
+        playerMBTI = UserDataManager.Instance.GetMBTI();
+        I = playerMBTI.I;
+        N = playerMBTI.N;
+        F = playerMBTI.F;
+        P = playerMBTI.P;        
     }
-    // 데이터를 서버에 업로드하는 부분
+    // 데이터 전송
     public void SetData()
     {
-
+        UserDataManager.Instance.SetMBTI(playerMBTI);
     }
     // MBTI를 계산하고 반환하는 메서드
     public void ResultMBTI(MBTI value)
@@ -94,12 +134,16 @@ public class MBTIManager : MonoBehaviour
         ResultValue(F, value.F),
         ResultValue(P, value.P)
         );
+
+        // 계산 이후 데이터 업데이트
+        MbtiDebug();
+        SetData();
     }
 
     // 각 값을 연산해주는 메서드
     float ResultValue(float preValue, float value)
     {
-        //UnityEngine.Debug.Log(preValue + ", " + value);
+        //UnityEngine.GFunc.Log(preValue + ", " + value);
 
         if (value == 0)
         { return preValue; }

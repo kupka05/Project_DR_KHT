@@ -118,7 +118,7 @@ public class TeleportDestination : MonoBehaviour
     public virtual void UpdateTeleportDestination(bool isValidDestination, Vector3? position, Quaternion? rotation,
         Quaternion? landingRotation)
     {
-        //Debug.Log("Teleport Destination: "+ position + " " + rotation);
+        //GFunc.Log("Teleport Destination: "+ position + " " + rotation);
 
         IsValidDestination = isValidDestination;
 

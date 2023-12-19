@@ -80,7 +80,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Debug
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
@@ -269,6 +269,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skill: 1
   trigger: 0
+  landingForce: 5
+  knockbackRange: 2.5
+  Damage: 25
+  TDcheckerHeight: 0
+  TDcheckerTiming: 0
+  GDcheckerTiming: 0
   skillEvent:
     m_PersistentCalls:
       m_Calls:
@@ -290,9 +296,6 @@ MonoBehaviour:
   shootDisableEvent:
     m_PersistentCalls:
       m_Calls: []
-  TDcheckerHeight: 0
-  TDcheckerTiming: 0
-  GDcheckerTiming: 0
 --- !u!65 &1983118996
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6722,6 +6725,7 @@ Transform:
   - {fileID: 1439882840843366088}
   - {fileID: 1164971405187592492}
   - {fileID: 1983118995}
+  - {fileID: 160419925767396150}
   m_Father: {fileID: 8717664012075506622}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -13908,7 +13912,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 0
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -14024,6 +14030,7 @@ GameObject:
   - component: {fileID: 1429957480570083589}
   - component: {fileID: 1429957480570083586}
   - component: {fileID: 1429957480570083588}
+  - component: {fileID: 224984280}
   m_Layer: 2
   m_Name: RemoteGrabber
   m_TagString: Untagged
@@ -14110,6 +14117,28 @@ CapsuleCollider:
   m_Height: 20
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 16.025}
+--- !u!114 &224984280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429957480740553153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3314b115f21dac24db10e76e61ec0c8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RemoteCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 3207697
+  closestNPC: {fileID: 0}
+  minDistance: 0
+  maxDistance: 10
+  triggerInput: 10
+  triggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1429957480841195026
 GameObject:
   m_ObjectHideFlags: 0
@@ -32968,6 +32997,7 @@ GameObject:
   - component: {fileID: 3163790247495208490}
   - component: {fileID: 3163790247495208493}
   - component: {fileID: 3163790247495208491}
+  - component: {fileID: 6757648436143502868}
   m_Layer: 2
   m_Name: RemoteGrabber
   m_TagString: Untagged
@@ -33054,6 +33084,28 @@ CapsuleCollider:
   m_Height: 20
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 16.025}
+--- !u!114 &6757648436143502868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3163790246860216046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3314b115f21dac24db10e76e61ec0c8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RemoteCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 3174931
+  closestNPC: {fileID: 0}
+  minDistance: 0
+  maxDistance: 10
+  triggerInput: 16
+  triggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3163790248078183624
 GameObject:
   m_ObjectHideFlags: 0
@@ -33426,7 +33478,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 1
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 1
@@ -33531,7 +33585,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 0
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -48455,7 +48511,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 1
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 1
@@ -58726,7 +58784,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 0
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -60225,7 +60285,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 1
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -70930,6 +70992,81 @@ CapsuleCollider:
   m_Height: 0.025
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &6520800924024451620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 160419925767396150}
+  - component: {fileID: 405701112806601113}
+  - component: {fileID: 1523373499}
+  m_Layer: 0
+  m_Name: LandingSkill
+  m_TagString: PlayerSkill
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &160419925767396150
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6520800924024451620}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1924189273972723850}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &405701112806601113
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6520800924024451620}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1523373499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6520800924024451620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a8d068aa413e1944a03a3f4ebdb79b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skill: 3
+  trigger: 0
+  landingForce: 20
+  knockbackRange: 5
+  Damage: 25
+  TDcheckerHeight: 0
+  TDcheckerTiming: 0
+  GDcheckerTiming: 0
+  skillEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  shootEnableEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  shootDisableEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6526271330640050065
 GameObject:
   m_ObjectHideFlags: 0
@@ -74278,8 +74415,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drills:
-  - {fileID: 1753638152282928469}
-  - {fileID: 1974920245642944459}
+  - {fileID: 4866910750261756361}
+  - {fileID: 4662565295574149975}
   TD_collDown: 0
   TD_drillSize: 0
   TD_drillDistance: 0
@@ -74287,6 +74424,14 @@ MonoBehaviour:
   GD_addTime: 0
   GD_maxTime: 0
   GD_drillSize: 0
+  landingSkill: {fileID: 1523373499}
+  isHookShot: 0
+  activePcDistance: 5
+  activeDrillDistance: 3
+  LDskillCount: 0
+  landingRange: 0
+  critDamageIncre: 0
+  knockBackForce: 0
   grinderSlider: {fileID: 4179340105282339888}
   grinderVal: {fileID: 9017304718343651377}
 --- !u!114 &5751810932310615319
@@ -91810,7 +91955,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 1
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -102594,7 +102741,7 @@ PrefabInstance:
     - target: {fileID: 3216023249193137484, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.9999972
+      value: 0.99999684
       objectReference: {fileID: 0}
     - target: {fileID: 3216023249193137484, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102654,12 +102801,12 @@ PrefabInstance:
     - target: {fileID: 3216023250103863860, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.3797169
+      value: 0.37971672
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250103863860, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Value
-      value: 0.999993
+      value: 0.9999927
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250103863867, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102699,7 +102846,7 @@ PrefabInstance:
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0008010308
+      value: -0.0007991156
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102729,7 +102876,7 @@ PrefabInstance:
     - target: {fileID: 4010713275993210068, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.9999999
+      value: 0.9999996
       objectReference: {fileID: 0}
     - target: {fileID: 4010713275993210068, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102759,7 +102906,7 @@ PrefabInstance:
     - target: {fileID: 4010713276122279518, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0038158235
+      value: 0.0005051396
       objectReference: {fileID: 0}
     - target: {fileID: 4010713276122279518, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102784,7 +102931,7 @@ PrefabInstance:
     - target: {fileID: 4010713277854409151, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.999998
+      value: 0.99999875
       objectReference: {fileID: 0}
     - target: {fileID: 4010713277854409151, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102941,7 +103088,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7054529971473146253}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1753638152282928469}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b4e4494b8e8a7d7479774644b7d6cd68, type: 3}
@@ -102953,22 +103100,28 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7054529971473146253}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1753638152282928469 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8768672552246940888, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
-    type: 3}
-  m_PrefabInstance: {fileID: 7054529971473146253}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1753638152282928479 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8768672552246940882, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
     type: 3}
   m_PrefabInstance: {fileID: 7054529971473146253}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1753638152282928469}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5cdea428d48e2bb488d33d5f75c39bb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4866910750261756361 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2480362079549202500, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 7054529971473146253}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f07e3d41e2ca7147b6df5a656fe33cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &7122660813044960019
@@ -103182,7 +103335,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7122660813044960019}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1974920245642944459}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b4e4494b8e8a7d7479774644b7d6cd68, type: 3}
@@ -103194,21 +103347,27 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 7122660813044960019}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1974920245642944459}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5cdea428d48e2bb488d33d5f75c39bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1974920245642944459 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8768672552246940888, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
-    type: 3}
-  m_PrefabInstance: {fileID: 7122660813044960019}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1974920245642944460 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8768672552246940895, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
     type: 3}
   m_PrefabInstance: {fileID: 7122660813044960019}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4662565295574149975 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2480362079549202500, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
+    type: 3}
+  m_PrefabInstance: {fileID: 7122660813044960019}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f07e3d41e2ca7147b6df5a656fe33cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

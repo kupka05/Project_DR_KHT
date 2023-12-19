@@ -96,7 +96,7 @@ public class ItemManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogWarning($"오류 발생! / ItemManager.InventoryCreateItem() {ex.Message}");
+            GFunc.LogWarning($"오류 발생! / ItemManager.InventoryCreateItem() {ex.Message}");
         }
     }
 
@@ -202,7 +202,7 @@ public class ItemManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogWarning($"오류 발생! / ItemManager.CreateItem() {ex.Message}");
+            GFunc.LogWarning($"오류 발생! / ItemManager.CreateItem() {ex.Message}");
             return new GameObject();
         }
     }

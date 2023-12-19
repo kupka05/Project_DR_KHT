@@ -44,7 +44,7 @@ public class ButtonHighlightDetection : MonoBehaviour
     // 호버에 진입했을 경우
     void OnHoverEnter()
     {
-        //Debug.Log("Hover Enter");
+        //GFunc.Log("Hover Enter");
         if (isPlayerInventory == false)
         {
             _inventoryUI.ShowTooltip(_itemSlotUI.Index);
@@ -59,7 +59,7 @@ public class ButtonHighlightDetection : MonoBehaviour
     // 호버에서 나갔을 경우
     void OnHoverExit()
     {
-        //Debug.Log("Hover Exit");
+        //GFunc.Log("Hover Exit");
         if (isPlayerInventory == false)
         {
             _inventoryUI.HideTooltip();

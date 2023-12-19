@@ -61,7 +61,7 @@ public class EliteMonster : Monster
             {
                 // IDLE 상태 =======================================================
                 case State.IDLE:
-                    //Debug.Log("IDLE state");
+                    //GFunc.Log("IDLE state");
                     nav.isStopped = true;
                     anim.SetBool(hashRun, false);
                     anim.SetBool(hashidle, true);
@@ -74,7 +74,7 @@ public class EliteMonster : Monster
 
                 // TRACE 상태 =======================================================
                 case State.TRACE:
-                    //Debug.Log("TRACE state");
+                    //GFunc.Log("TRACE state");
                     nav.isStopped = false;
                     nav.SetDestination(playerTr.position);
                     anim.SetBool(hashRun, true);
@@ -87,7 +87,7 @@ public class EliteMonster : Monster
                 // ATTACK 상태 =======================================================
                 case State.ATTACK:
 
-                    //Debug.Log("ATTACK state");
+                    //GFunc.Log("ATTACK state");
 
                     switch (monsterType)
                     {
@@ -309,7 +309,7 @@ public class EliteMonster : Monster
                 case State.DIE:
                     isDie = true;
                     nav.isStopped = true;
-                    //Debug.Log("nav.isStopped: " + nav.isStopped);
+                    //GFunc.Log("nav.isStopped: " + nav.isStopped);
                     anim.SetTrigger(hashDie);
 
                     //Destroy(this.gameObject, 1.3f); //damageable 쪽에서 처리
@@ -341,7 +341,7 @@ public class EliteMonster : Monster
                 stunRoutine = StunDelay();
                 StartCoroutine(stunRoutine);
 
-                Debug.Log($"state:{state}");
+                GFunc.Log($"state:{state}");
 
                 count++;
                
@@ -357,7 +357,7 @@ public class EliteMonster : Monster
                 }
             }
         }
-        Debug.Log($"hp:{damageable.Health}");
+        GFunc.Log($"hp:{damageable.Health}");
     }
     // 스턴 딜레이
     public override IEnumerator StunDelay()

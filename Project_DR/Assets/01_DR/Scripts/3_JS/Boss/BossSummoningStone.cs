@@ -78,7 +78,7 @@ namespace BossMonster
             // 현재 페이즈와 변경 할 페이즈가 다른 경우
             if (_currentPhase != phase)
             {
-                Debug.Log($"페이즈를 {phase}로 변경");
+                GFunc.Log($"페이즈를 {phase}로 변경");
                 // 페이즈 변경
                 _currentPhase = phase;
                 // 보스 데이터의 현재 패턴 갯수 변경
@@ -92,7 +92,7 @@ namespace BossMonster
         // 데미지 처리
         public void OnDamage(float damage)
         {
-            Debug.Log($"데미지 {damage}");
+            GFunc.Log($"데미지 {damage}");
 
             // 보스 데이터에 데미지 반영
             _bossData.OnDamage(damage);

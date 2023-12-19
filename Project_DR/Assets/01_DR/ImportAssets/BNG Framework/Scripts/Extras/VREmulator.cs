@@ -151,10 +151,10 @@ namespace BNG {
                 }
 
                 if (smoothLocomotion == null) {
-                    Debug.Log("No Smooth Locomotion component found. Will not be able to use SmoothLocomotion without calling it manually.");
+                    GFunc.Log("No Smooth Locomotion component found. Will not be able to use SmoothLocomotion without calling it manually.");
                 }
                 else if (smoothLocomotion.MoveAction == null) {
-                    Debug.Log("Smooth Locomotion Move Action has not been assigned. Make sure to assign this in the inspector if you want to be able to move around using the VR Emulator.");
+                    GFunc.Log("Smooth Locomotion Move Action has not been assigned. Make sure to assign this in the inspector if you want to be able to move around using the VR Emulator.");
                 }
             }
         }

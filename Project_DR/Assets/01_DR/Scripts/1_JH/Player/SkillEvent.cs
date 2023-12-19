@@ -1,4 +1,5 @@
 using BNG;
+using Oculus.Interaction;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,11 +9,23 @@ using UnityEngine.Windows;
 
 public class SkillEvent : MonoBehaviour
 {
-    public enum Skill { Default, TeraDrill, Grinding }
+    public enum Skill { Default, TeraDrill, Grinding, Landing }
 
     [Header("Skill")]
     public Skill skill = Skill.Default;
     public bool trigger;
+
+    [Header("Landing")]
+    private SphereCollider sphereCollider;
+
+    public float landingForce = 5;              // 넉백 힘
+    public float knockbackRange = 2.5f;     // 넉백 사거리
+    public float Damage = 25f;              // 넉백 데미지
+
+    [Header("Debug")]
+    public float TDcheckerHeight;
+    public float TDcheckerTiming;
+    public float GDcheckerTiming;
 
     [Header("Event")]
     public UnityEvent skillEvent;
@@ -20,15 +33,11 @@ public class SkillEvent : MonoBehaviour
     public UnityEvent shootDisableEvent;
     IEnumerator skillRoutine;
 
-    [Header("Debug")]
-    public float TDcheckerHeight;
-    public float TDcheckerTiming;
-    public float GDcheckerTiming;
-
-
     // Start is called before the first frame update
     void Start()
     {
+            sphereCollider = GetComponent<SphereCollider>();
+       
         GetData();
         //if (skill == Skill.TeraDrill)
         //{
@@ -53,7 +62,7 @@ public class SkillEvent : MonoBehaviour
                 InitRoutine(skillRoutine);
 
 
-                skillRoutine = ITeraDrill();
+                skillRoutine = TeraDrill();
                 StartCoroutine(skillRoutine);
             }
             else
@@ -74,7 +83,7 @@ public class SkillEvent : MonoBehaviour
                 if (trigger)
                 { return; }
                 InitRoutine(skillRoutine);
-                skillRoutine = IGrinderDrill();
+                skillRoutine = GrinderDrill();
                 StartCoroutine(skillRoutine);
             }
             else if(!other.gameObject.GetComponentInParent<RaycastWeaponDrill>().isSpining || !GetComponentInParent<RaycastWeaponDrill>().isSpining)
@@ -84,11 +93,7 @@ public class SkillEvent : MonoBehaviour
                     StopCoroutine(skillRoutine);
                 }
             }
-
-
-        }
-
-
+        }       
     }
     private void OnTriggerExit(Collider other)
     {
@@ -105,7 +110,6 @@ public class SkillEvent : MonoBehaviour
             InitRoutine(skillRoutine);
             shootEnableEvent.Invoke();
         }
-
     }
     private void InitRoutine(IEnumerator routine)
     {
@@ -117,13 +121,13 @@ public class SkillEvent : MonoBehaviour
         }
     }
 
-    IEnumerator ITeraDrill()
+    IEnumerator TeraDrill()
     {
         trigger = true;   
         yield return new WaitForSeconds(TDcheckerTiming);
         skillEvent.Invoke();
     }
-    IEnumerator IGrinderDrill()
+    IEnumerator GrinderDrill()
     {
             trigger = true;
         shootDisableEvent.Invoke();
@@ -134,11 +138,54 @@ public class SkillEvent : MonoBehaviour
         }
     }
 
+    // 스킬 발동 조건을 만족하면 일어나는 이벤트
+    public void OnCollisionEvent()
+    {
+        if(skillRoutine != null)
+        {
+            StopCoroutine (skillRoutine);
+            skillRoutine = null;
+        }
 
+        skillRoutine = DrillLanding();
+        StartCoroutine(skillRoutine);
+    }
+    // 넉백 범위의 콜라이더 껐다 켜주기
+    IEnumerator DrillLanding()
+    {
+        GFunc.Log("On");
+        sphereCollider.enabled = true;
+        yield return new WaitForSeconds(0.1f);
+
+        GFunc.Log("Off");
+        sphereCollider.enabled = false;
+
+    }
+    // 범위에 닿은 몬스터들의 넉백 실행부분
+    public void ActiveDrillLanding(GameObject target)
+    {
+        Rigidbody targetRB = target.GetComponent<Rigidbody>();
+        Vector3 skillPos = transform.localPosition;
+        Vector3 targetPos = targetRB.transform.localPosition;
+        skillPos.y -= 0.7f;
+        //targetPos.y += 0.5f;
+
+        Vector3 force = targetPos - skillPos * landingForce;
+        targetRB.AddForce(force, ForceMode.Impulse);
+
+        target.GetComponent<Damageable>().DealDamage(Damage);
+    }
     void GetData()
     {
         TDcheckerHeight = (float)DataManager.instance.GetData(1010, "Value1", typeof(float));
         TDcheckerTiming = (float)DataManager.instance.GetData(1010, "Value2", typeof(float));
         GDcheckerTiming = (float)DataManager.instance.GetData(20015, "Value3", typeof(float));
+
+        //landingForce = 5;
+        if (skill == Skill.Landing)
+        {
+            sphereCollider.radius = knockbackRange;
+            sphereCollider.enabled = false;
+        }
     }
 }

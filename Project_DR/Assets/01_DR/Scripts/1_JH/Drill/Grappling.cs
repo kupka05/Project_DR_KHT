@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Windows;
@@ -59,6 +60,8 @@ public class Grappling : GrabbableEvents
 
     private Vector3 smallScale;
 
+    IEnumerator checkExcute;
+
     public void OnEnable()
     {
         drill.SetActive(true);
@@ -80,7 +83,7 @@ public class Grappling : GrabbableEvents
         }
         else
         {
-            Debug.Log("플레이어 오브젝트를 찾지 못함");
+            GFunc.Log("플레이어 오브젝트를 찾지 못함");
         }
         GetData();
         line = GetComponent<LineRenderer>();
@@ -149,6 +152,36 @@ public class Grappling : GrabbableEvents
         else
         return;
     }
+    public void CheckExcute()
+    {
+        if(checkExcute != null)
+        {
+            StopCoroutine(checkExcute);
+            checkExcute = null;
+        }
+        checkExcute = CheckingButton1();
+        StartCoroutine(checkExcute);
+    }
+
+    private WaitForFixedUpdate fixedUpdate = new WaitForFixedUpdate();
+    IEnumerator CheckingButton1()
+    {
+        while (true)
+        {
+            if (Time.time - lastGrapplingTime < grapplingCd)
+                yield return fixedUpdate;
+
+            if(!input.AButton && state == State.Shooting) 
+            {
+                Invoke(nameof(ExecuteGrapple), grappleDelayTime);
+                break;
+            }
+
+            yield return fixedUpdate;
+        }
+        yield break;
+    }
+
 
     // 그래플링 시작
     public void StartGrapple()
@@ -170,15 +203,11 @@ public class Grappling : GrabbableEvents
             // 만약  damageable 오브젝트와 충돌 시
             if (hit.collider.GetComponent<Damageable>())
             {
-                Debug.Log("충돌");
-
                 isDamageCheck = true;                             // 데미지 체크 켜고
                 target = hit.collider.GetComponent<Damageable>(); // 타겟 세팅
             }
             else if (hit.collider.GetComponent<DamageablePart>())
             {
-                Debug.Log("충돌");
-
                 isDamageCheck = true;
                 target = hit.collider.GetComponent<DamageablePart>().parent;
             }
@@ -196,6 +225,12 @@ public class Grappling : GrabbableEvents
         //drill.SetActive(false);                               // 달려있는 드릴 잠깐 꺼주고
         drill.transform.localScale = smallScale;
         ShootDrill();                                         // 그래플링용 드릴 발사
+
+
+#if UNITY_EDITOR
+        // 에디터일 경우 체크 따로 하기 : 버튼 UP이 작동하지 않는 이유를 찾지 못함
+        CheckExcute();
+#endif
     }
 
 
@@ -219,11 +254,11 @@ public class Grappling : GrabbableEvents
         if (Time.time - lastGrapplingTime < grapplingCd)
         {
             Invoke(nameof(Excute), grappleDelayTime);                  // 그래플링 실행
-            Debug.Log("if");
+            //GFunc.Log("if");
         }
 
-        else
-            Debug.Log("else");
+        //else
+        //    GFunc.Log("else");
         Excute();
     }
     public void Excute()
@@ -293,6 +328,8 @@ public class Grappling : GrabbableEvents
         if (currentGrappleDistance < 1.3f && state == State.Grappling)
         {
             StopGrapple();
+
+            SkillManager.instance.CheckLandingHeight(); // 그래플링을 사용하고 스킬을 사용할 수 있는지 체크
         }
     }
 
@@ -343,7 +380,7 @@ public class Grappling : GrabbableEvents
         playerRigid = player.GetOrAddRigidbody();
         //if (player.GetComponent<Rigidbody>())
         //{
-        //    Debug.Log("리지드바디 생성");
+        //    GFunc.Log("리지드바디 생성");
         //    playerRigid = player.GetComponent<Rigidbody>();
         //}
     }

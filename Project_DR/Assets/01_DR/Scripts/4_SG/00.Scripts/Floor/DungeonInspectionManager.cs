@@ -21,7 +21,7 @@ public class DungeonInspectionManager : MonoBehaviour
         {
             dungeonManagerInstance = this;
         }
-        else { /*Debug.Log("DungeonInspectionManager : else 들어옴");*/ }
+        else { /*GFunc.Log("DungeonInspectionManager : else 들어옴");*/ }
     }
 
 
@@ -34,7 +34,7 @@ public class DungeonInspectionManager : MonoBehaviour
         else
         {
             StartCoroutine(ReCheckCheckDungeonReCreating());
-            //Debug.Log($"재생성 else로 재귀함수 실행");
+            //GFunc.Log($"재생성 else로 재귀함수 실행");
         }
         
     }       // CheckDungeonReCreating()
@@ -63,7 +63,7 @@ public class DungeonInspectionManager : MonoBehaviour
         yield return null;
 
         creator.CreateDungeon();
-        //Debug.Log($"던전 재생성");
+        //GFunc.Log($"던전 재생성");
         isTryDungeonCreate = false;
         isCreateDungeonEnd = false;
         StopAllCoroutines();

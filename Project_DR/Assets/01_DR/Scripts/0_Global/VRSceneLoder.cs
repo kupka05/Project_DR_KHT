@@ -20,7 +20,7 @@ public class VRSceneLoder : MonoBehaviour
         fader = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ScreenFader>();
         if(!fader)
         {
-            Debug.Log("페이더를 찾지 못했습니다.");
+            GFunc.Log("페이더를 찾지 못했습니다.");
         }
 
         // 자동으로 씬 전환
@@ -35,7 +35,7 @@ public class VRSceneLoder : MonoBehaviour
     {
         if (string.IsNullOrEmpty(sceneName))
         {
-            Debug.Log("전환할 씬을 찾지 못했습니다.");
+            GFunc.Log("전환할 씬을 찾지 못했습니다.");
             return;
         }
         StartCoroutine(LoadDelay(sceneName));
@@ -47,7 +47,7 @@ public class VRSceneLoder : MonoBehaviour
     {
         if(string.IsNullOrEmpty(_SceneName))
         {
-            Debug.Log("전환할 씬을 찾지 못했습니다.");
+            GFunc.Log("전환할 씬을 찾지 못했습니다.");
             return;
         }
         StartCoroutine(LoadDelay(_SceneName));

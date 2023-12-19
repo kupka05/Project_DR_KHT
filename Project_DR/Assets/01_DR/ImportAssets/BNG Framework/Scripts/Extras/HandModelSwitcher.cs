@@ -16,7 +16,7 @@ namespace BNG {
             }
 
             if(hms == null) {
-                Debug.Log("No Hand Model Selector Found in Scene. Will not be able to switch hand models");
+                GFunc.Log("No Hand Model Selector Found in Scene. Will not be able to switch hand models");
             }
         }
 

@@ -150,9 +150,9 @@ namespace Rito.InventorySystem
             //_ped.position = Input.mousePosition;
             //OnPointerEnterAndExit();
             //if(_showTooltip) ShowOrHideItemTooltip();
-            //Debug.Log($"0: Mouse Pos: {Input.mousePosition}");
-            //Debug.Log($"0: Controller Pos: {_ped.position}");
-            //Debug.Log($"0: Converted Pos: {convertedPos}");
+            //GFunc.Log($"0: Mouse Pos: {Input.mousePosition}");
+            //GFunc.Log($"0: Controller Pos: {_ped.position}");
+            //GFunc.Log($"0: Converted Pos: {convertedPos}");
             //OnPointerDown();
             //OnPointerDrag();
             //OnPointerUp();
@@ -298,7 +298,7 @@ namespace Rito.InventorySystem
                 //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red, 0.1f);
 
                 // 충돌 지점 출력
-                //Debug.Log($"Ray Hit Point: {hit.point}");
+                //GFunc.Log($"Ray Hit Point: {hit.point}");
 
                 // 충돌한 객체에서 원하는 컴포넌트 가져오기
                 T component = hit.collider.GetComponent<T>();
@@ -306,7 +306,7 @@ namespace Rito.InventorySystem
                 if (component != null)
                 {
                     // 가져온 컴포넌트를 사용하여 원하는 작업 수행
-                    //Debug.Log("Detected Component: " + component.name);
+                    //GFunc.Log("Detected Component: " + component.name);
                     return component;
                 }
             }
@@ -324,7 +324,7 @@ namespace Rito.InventorySystem
 
             // 현재 프레임의 슬롯
             var curSlot = _pointerOverSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
-            //Debug.Log($"curSlot: {curSlot}");
+            //GFunc.Log($"curSlot: {curSlot}");
 
             if (prevSlot == null)
             {
@@ -353,7 +353,7 @@ namespace Rito.InventorySystem
             // ===================== Local Methods ===============================
             void OnCurrentEnter()
             {
-                //Debug.Log("OnCurrentEnter");
+                //GFunc.Log("OnCurrentEnter");
                 if(_showHighlight)
                     curSlot.Highlight(true);
             }
@@ -390,7 +390,7 @@ namespace Rito.InventorySystem
 ///////////////////////////////////
                 // 데이터매니저 불러오기 예외처리 관련
                 // 디버그 일시작업 중단
-                //Debug.Log($"GetData: {(float)DataManager.instance.GetData(1001, "Health")}");
+                //GFunc.Log($"GetData: {(float)DataManager.instance.GetData(1001, "Health")}");
             }
         }
 
@@ -417,7 +417,7 @@ namespace Rito.InventorySystem
             //        _beginDragIconPoint = _beginDragIconTransform.position;
             //        Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
             //        _beginDragCursorPoint = rightControllerPos;
-            //        //Debug.Log($"rightControlPos: {_beginDragCursorPoint}");
+            //        //GFunc.Log($"rightControlPos: {_beginDragCursorPoint}");
 
             //        // 맨 위에 보이기
             //        _beginDragSlotSiblingIndex = _beginDragSlot.transform.GetSiblingIndex();
@@ -451,13 +451,13 @@ namespace Rito.InventorySystem
             // 라이트 트리거를 누르고 있는 경우 (1 == true)
             if (global::BNG.InputBridge.Instance.RightTrigger == 1)
             {
-                //Debug.Log("1: TRUE");
+                //GFunc.Log("1: TRUE");
                 // 위치 이동
                 //Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
-                //Debug.Log($"Cursor Pos: {rightControllerPos}");
+                //GFunc.Log($"Cursor Pos: {rightControllerPos}");
                 //_beginDragIconTransform.position = (_beginDragIconPoint + rightControllerPos - _beginDragCursorPoint);
-                //Debug.Log($"Current Pos: {rightControllerPos}");
-                //Debug.Log($"Dragged Pos: {_beginDragIconTransform.position}");
+                //GFunc.Log($"Current Pos: {rightControllerPos}");
+                //GFunc.Log($"Dragged Pos: {_beginDragIconTransform.position}");
             }
         }
         /// <summary> 클릭을 뗄 경우 </summary>
@@ -614,7 +614,7 @@ namespace Rito.InventorySystem
             if(!slot.IsAccessible || !slot.HasItem)
                 return;
 
-            //Debug.Log("UpdateTooltupUI");
+            //GFunc.Log("UpdateTooltupUI");
             // 툴팁 정보 갱신
             _itemTooltip.SetItemInfo(_inventory.GetItemData(slot.Index));
 
@@ -745,7 +745,7 @@ namespace Rito.InventorySystem
 //        private void EditorLog(object message)
 //        {
 //            if (!_showDebug) return;
-//            UnityEngine.Debug.Log($"[InventoryUI] {message}");
+//            UnityEngine.GFunc.Log($"[InventoryUI] {message}");
 //        }
 
         //#endregion

@@ -50,7 +50,7 @@ public class ItemSlotController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision Enter");
+        GFunc.Log("Collision Enter");
     }
 
     #endregion

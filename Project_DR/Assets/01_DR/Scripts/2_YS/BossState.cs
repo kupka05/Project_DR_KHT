@@ -41,7 +41,7 @@ public class BossState : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("애니메이션 작동");
+        GFunc.Log("애니메이션 작동");
         anim.SetTrigger("isDie");
 
     }

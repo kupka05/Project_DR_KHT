@@ -52,7 +52,7 @@ public class MoviePlayerSample : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        Debug.Log("MovieSample Awake");
+        GFunc.Log("MovieSample Awake");
 
         mediaRenderer = GetComponent<Renderer>();
 
@@ -174,7 +174,7 @@ public class MoviePlayerSample : MonoBehaviour
     {
         if (mediaRenderer.material == null)
         {
-            Debug.LogError("No material for movie surface");
+            GFunc.LogError("No material for movie surface");
             yield break;
         }
 
@@ -210,12 +210,12 @@ public class MoviePlayerSample : MonoBehaviour
     {
         if (moviePath != string.Empty)
         {
-            Debug.Log("Playing Video: " + moviePath);
+            GFunc.Log("Playing Video: " + moviePath);
             if (overlay.isExternalSurface)
             {
                 OVROverlay.ExternalSurfaceObjectCreated surfaceCreatedCallback = () =>
                 {
-                    Debug.Log("Playing ExoPlayer with SurfaceObject");
+                    GFunc.Log("Playing ExoPlayer with SurfaceObject");
                     NativeVideoPlayer.PlayVideo(moviePath, drmLicencesUrl, overlay.externalSurfaceObject);
                     NativeVideoPlayer.SetLooping(LoopVideo);
                 };
@@ -231,18 +231,18 @@ public class MoviePlayerSample : MonoBehaviour
             }
             else
             {
-                Debug.Log("Playing Unity VideoPlayer");
+                GFunc.Log("Playing Unity VideoPlayer");
                 videoPlayer.url = moviePath;
                 videoPlayer.Prepare();
                 videoPlayer.Play();
             }
 
-            Debug.Log("MovieSample Start");
+            GFunc.Log("MovieSample Start");
             IsPlaying = true;
         }
         else
         {
-            Debug.LogError("No media file name provided");
+            GFunc.LogError("No media file name provided");
         }
     }
 
@@ -369,7 +369,7 @@ public class MoviePlayerSample : MonoBehaviour
     /// </summary>
     void OnApplicationPause(bool appWasPaused)
     {
-        Debug.Log("OnApplicationPause: " + appWasPaused);
+        GFunc.Log("OnApplicationPause: " + appWasPaused);
         if (appWasPaused)
         {
             videoPausedBeforeAppPause = !IsPlaying;

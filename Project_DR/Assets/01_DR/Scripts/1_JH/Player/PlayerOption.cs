@@ -53,7 +53,7 @@ public class PlayerOption : MonoBehaviour
         fader = player.GetComponentInChildren<ScreenFader>();
         volume.profile.TryGet<ColorAdjustments>(out brightness);
         if (brightness == null)
-            Debug.LogError("볼륨을 찾을 수 없음");
+            GFunc.LogError("볼륨을 찾을 수 없음");
 
         // 세팅 값 가져오기
         GetSettingValue();
@@ -182,7 +182,7 @@ public class PlayerOption : MonoBehaviour
     {
         if(!UserDataManager.Instance)
         {
-            Debug.LogError("User Data Manager를 찾지 못했습니다.");
+            GFunc.LogError("User Data Manager를 찾지 못했습니다.");
             return;
         }
 

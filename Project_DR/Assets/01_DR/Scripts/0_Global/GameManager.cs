@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("플레이어를 찾지 못했습니다.");
+            GFunc.Log("플레이어를 찾지 못했습니다.");
         }
         // 스크린 페이더 가져오기
         if (Camera.main)
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelWasLoaded()
     {
-       // Debug.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
+       // GFunc.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
         // 데이터 가져오기
         GetData();
 
@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("플레이어를 찾지 못했습니다.");
+            GFunc.Log("플레이어를 찾지 못했습니다.");
         }
 
     }
@@ -246,10 +246,10 @@ public class GameManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(_sceneName))
         {
-            Debug.Log("전환할 씬을 찾지 못했습니다.");
+            GFunc.Log("전환할 씬을 찾지 못했습니다.");
             return;
         }
-        StartCoroutine(_sceneName);
+        StartCoroutine(SceneChangeDelay(_sceneName));
     }
 
     // 플레이어의 페이드를 포함한 씬 전환 딜레이

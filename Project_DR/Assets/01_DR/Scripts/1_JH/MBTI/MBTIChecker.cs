@@ -50,9 +50,7 @@ public class MBTIChecker : MonoBehaviour
     public void ActiveMBTI()
     {
         // MBTI 계산
-        MBTIManager.Instance.ResultMBTI(checkerMBTI);
-
-        
+        MBTIManager.Instance.ResultMBTI(checkerMBTI);        
     }
 
 

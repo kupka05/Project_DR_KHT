@@ -68,7 +68,7 @@ public class PlayerHealth : MonoBehaviour
         if (health > maxHealth * dyingAmount)
         { fader.OnRestore(); }
 
-        Debug.Log($"플레이어 현재 체력:{health} / 증가량:{newHealth}");
+        GFunc.Log($"플레이어 현재 체력:{health} / 증가량:{newHealth}");
     }
 
     public void OnDamage()
@@ -123,7 +123,6 @@ public class PlayerHealth : MonoBehaviour
     {
         if (locomo.state == PlayerState.grounded || locomo.state == PlayerState.walking)
         {
-            Debug.Log("넉백");
             playerRigid.AddForce(transform.localPosition - targetPos * knockbackForce, ForceMode.Impulse);          
         }
 

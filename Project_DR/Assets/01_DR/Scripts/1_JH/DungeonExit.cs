@@ -21,7 +21,7 @@ public class DungeonExit : MonoBehaviour
         fader = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ScreenFader>();
         if (!fader)
         {
-            Debug.Log("페이더를 찾지 못했습니다.");
+            GFunc.Log("페이더를 찾지 못했습니다.");
         }
     }
 
@@ -44,7 +44,7 @@ public class DungeonExit : MonoBehaviour
     {
         if (string.IsNullOrEmpty(_sceneName))
         {
-            Debug.Log("전환할 씬을 찾지 못했습니다.");
+            GFunc.Log("전환할 씬을 찾지 못했습니다.");
             return;
         }
         StartCoroutine(SceneChange(_sceneName));

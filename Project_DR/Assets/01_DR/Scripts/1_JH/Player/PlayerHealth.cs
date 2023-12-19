@@ -90,6 +90,11 @@ public class PlayerHealth : MonoBehaviour
         maxHealth = UserData.GetMaxHP();
         health = UserData.GetHP();
 
+        if(health < 0)
+        {
+            health = maxHealth;
+        }
+
         playerDamage.Health = health; // 체력 세팅해주기
         SetMaxHealthUIUpdate();
     }

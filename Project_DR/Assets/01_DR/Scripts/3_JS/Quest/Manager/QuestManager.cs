@@ -2,15 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Rito.InventorySystem;
+using System.Linq;
 
 namespace Js.Quest
 {
+    /*************************************************
+     *                    Classes
+     *************************************************/
     [System.Serializable]
     public class QuestSaveData
     {
-        public int id;
-        public int clearValue;
-        public int currentState;
+        public int id;              // 퀘스트 ID
+        public int type;            // 퀘스트 Type
+        public int currentValue;    // 현재 퀘스트 달성 값
+        public int currentState;    // 현재 퀘스트 상태{[시작불가] -> [시작가능] -> [진행중] -> [완료가능] -> [완료] | [실패]}
+    }
+
+    [System.Serializable]
+    public class QuestSaveDatas
+    {
+        public List<QuestSaveData> list = new List<QuestSaveData>();
     }
 
     public class QuestManager : MonoBehaviour
@@ -38,16 +49,17 @@ namespace Js.Quest
         }
         #endregion
 
-        public Item[] InventoryItems => UserDataManager.items;              // 보유 인벤토리 아이템
-        public List<Quest> QuestList => UserDataManager.quests;             // 보유 퀘스트 리스트
-        public const int QUEST_FIRST_ID = 1_000_000_1;                      // 퀘스트 테이블 시작 ID
+        public Item[] InventoryItems => UserDataManager.items;                               // 보유 인벤토리 아이템
+        public List<Quest> QuestList => UserDataManager.quests;                              // 보유 퀘스트 리스트
+        public const int QUEST_FIRST_ID = 1_000_000_1;                                       // 퀘스트 테이블 시작 ID
 
 
         /*************************************************
          *                 Private Fields
          *************************************************/
-        [SerializeField] private List<Quest> _debugQuestList;               // 디버그용 퀘스트 리스트 
-
+        [SerializeField] private List<Quest> _debugQuestList;                                // 디버그용 퀘스트 리스트 
+        [SerializeField] private QuestSaveDatas _mainQuestSaveDatas = new QuestSaveDatas();  // 저장용 퀘스트 데이터 리스트
+                                                                                             // 클래스 통째로 직렬화 해야된다.
 
         /*************************************************
          *                  Unity Events
@@ -70,6 +82,23 @@ namespace Js.Quest
             AddQuestCallbacks();
         }
 
+        // 디버그
+        //private void Update()
+        //{
+        //    // DB 저장 테스트
+        //    if (Input.GetKey(KeyCode.Q))
+        //    {
+        //        SaveQuestDataToDB();
+        //    }
+
+        //    // DB 호출 테스트
+        //    if (Input.GetKey(KeyCode.W))
+        //    {
+        //        LoadUserQuestDataFromDB();
+        //    }
+        //}
+        // 디버그
+
 
         /*************************************************
          *                Public Methods
@@ -89,8 +118,6 @@ namespace Js.Quest
 
             // 디버그
             _debugQuestList = QuestList;
-
-            // TODO: DB에 있는 퀘스트 정보 가져와서 상태변경
         }
 
         // 퀘스트를 생성한다
@@ -104,6 +131,32 @@ namespace Js.Quest
         public void RemoveQuest(int index)
         {
             UserDataManager.RemoveQuest(index);
+        }
+
+        // 퀘스트 데이터를 DB에 저장한다
+        public void SaveQuestDataToDB()
+        {
+            // 보유한 퀘스트의 데이터를 _mainQuestSaveDatas에 추가
+            SerializeQuestDatas();
+
+            // _mainQuestSaveDatas에 있는 데이터를 직렬화
+            // && 직렬화된 데이터를 DB에 저장
+            UserDataManager.Instance.SaveQuestDatasToDB(SerializeQuestSaveDataList());
+        }
+
+        // DB에서 가져온 퀘스트 데이터를 UserDataManager에 업데이트
+        public void LoadUserQuestDataFromDB()
+        {
+            // json으로 변환된 string은 .NET Framework 디코딩이 필요
+            string json = System.Web.HttpUtility.UrlDecode(UserDataManager.Instance.QuestMain);
+
+            GFunc.Log($"구조화된 데이터: {json}");
+
+            QuestSaveDatas questSaveDatas = JsonUtility.FromJson<QuestSaveDatas>(json);
+
+            // QuestSaveDatas에 있는 데이터를 UserDataManager로 전달
+            // 보유한 퀘스트의 상태 와 진행 값을 변경한다.
+            UpdateUserDataFromQuestSaveDatas(questSaveDatas);
         }
 
 
@@ -124,6 +177,56 @@ namespace Js.Quest
             QuestCallback.InventoryCallback += UpdateQuests;        // 인벤토리(증정): 디버깅 완료
             QuestCallback.DialogueCallback += UpdateQuests;         // NPC와 대화
         ////TODO: 해당하는 클래스들의 메서드에서 온콜백 호출되게 해야함
+        }
+
+        // 보유한 퀘스트의 데이터를 QuestSaveData에 저장하고
+        // _questSaveDatas에 추가한다.
+        private void SerializeQuestDatas()
+        {
+            foreach (var item in QuestList)
+            {
+                // 퀘스트 타입이 [메인퀘스트]일 경우
+                if (item.QuestData.Type.Equals(QuestData.QuestType.MAIN))
+                {
+                    // QuestSaveData 생성 및 _mainQuestSaveDatas에 추가
+                    QuestSaveData questSaveData = new QuestSaveData();
+                    questSaveData.id = item.QuestData.ID;
+                    questSaveData.type = (int)item.QuestData.Type;
+                    questSaveData.currentValue = item.QuestData.CurrentValue;
+                    questSaveData.currentState = (int)item.QuestState.State;
+                    _mainQuestSaveDatas.list.Add(questSaveData);
+                }
+            }
+        }
+
+        // _questSaveDatas에 있는 데이터를 직렬화
+        private string SerializeQuestSaveDataList()
+        {
+            string json = JsonUtility.ToJson(_mainQuestSaveDatas);
+            GFunc.Log($"직렬화된 _mainQuestSaveDatas: {json}");
+
+            return json;
+        }
+
+        // QuestSaveDatas에 있는 데이터를 UserDataManager로 전달
+        // 보유한 퀘스트의 상태 와 진행 값을 변경한다.
+        private void UpdateUserDataFromQuestSaveDatas(QuestSaveDatas questSaveDatas)
+        {
+            // Dictionary를 사용하여 ID를 Key로 하는 퀘스트 맵을 생성
+            Dictionary<int, Quest> questMap = QuestList.ToDictionary(
+                quest => quest.QuestData.ID, quest => quest);
+
+            // QuestSaveData 리스트 순회
+            foreach (var item in questSaveDatas.list)
+            {
+                // questSaveDatas에 있는 ID와 questMap(QuestList)의 ID가 일치할 경우
+                if (questMap.TryGetValue(item.id, out var quest))
+                {
+                    // 상태 및 현재 진행 값 변경
+                    quest.QuestState.ChangeState((QuestState.StateQuest)item.currentState);
+                    quest.ChangeCurrentValue(item.currentValue);
+                }
+            }
         }
 
         // 퀘스트 상태 변경[시작불가] -> [시작가능]

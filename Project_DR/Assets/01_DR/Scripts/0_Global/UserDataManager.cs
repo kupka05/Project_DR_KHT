@@ -219,6 +219,7 @@ public partial class UserDataManager : MonoBehaviour
         // 데이터 테이블에 있는 퀘스트를 가져와서 생성
         // && 가져온 퀘스트 데이터에 따라 상태 변경
         QuestManager.Instance.CreateQuestFromDataTable();
+        QuestManager.Instance.LoadUserQuestDataFromDB();
     }
 
     // DB에 데이터를 요청하기 위한 메서드
@@ -469,5 +470,11 @@ public partial class UserDataManager : MonoBehaviour
     public static void RemoveQuest(int index)
     {
         quests.RemoveAt(index);
+    }
+
+    // 퀘스트 정보(json)를 DB에 저장
+    public void SaveQuestDatasToDB(string json)
+    {
+        PlayerDataManager.Save("quest_main", json);
     }
 }

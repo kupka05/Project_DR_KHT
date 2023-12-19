@@ -402,7 +402,9 @@ public class DungeonCreator : MonoBehaviour
             foreach (var bsp in bspListClone)
             {
                 bsp.AddComponent<NullRoom>();
+
             }
+            bspListClone.Clear();
         }       // 만약 3으로 나누었을때 전부 방을 기입하고도 List속에 무언가 있다면 빈방으로 설정
 
         //GFunc.LogFormat("각방 이벤트 선정 끝");

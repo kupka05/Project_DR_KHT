@@ -19,7 +19,7 @@ namespace Js.Quest
             FAILED = 5              // 실패
         }
         public StateQuest State => _state;
-        public IState[] States => _states;                // 퀘스트 상태([0]=시작불가, [1]=시작가능, [2]=진행중, [3]=완료가능, [4]=완료, [5]=실패)
+        public IState[] States => _states;                // 퀘스트 상태{[0]=시작불가, [1]=시작가능, [2]=진행중, [3]=완료가능, [4]=완료, [5]=실패}
         public IState CurrentState => _currentState;      // 현재 상태
         public QuestData QuestData => _quest.QuestData;   // 퀘스트 데이터
 
@@ -48,33 +48,24 @@ namespace Js.Quest
             _states[5] = new Failed();          // [실패]
 
             // 현재 상태를 [시작불가] 상태로 변경
-            _state = StateQuest.NOT_STARTABLE;
-            _currentState = _states[0];
+            ChangeState(StateQuest.NOT_STARTABLE);
 
-            // 현재 퀘스트가 메인 퀘스트일 경우
-            if (QuestData.Type.Equals(QuestData.QuestType.MAIN))
-            {
-                // TODO: 메인 퀘스트의 경우 플레이어의 퀘스트 데이터를 불러와서
-                // 해당 상태로 변경해야 함
+            // 선행 퀘스트를 다음 상태인 [시작가능]으로 진행
+            // 조건 미충족(선행퀘스트 미완료)시 전환 불가
+            ChangeToNextState();
 
-            }
-
-            // 아닐 경우(서브 퀘스트일 경우)
-            else
-            {
-                // 현재 상태를 다음 단계인 [시작가능]으로 변경
-                // 단 시작가능 조건에 해당해야 한다.
-                ChangeToNextState();
-            }
+            // TODO: 
+            // 1. DB에서 퀘스트 데이터를 가져온 후 호출 -> 콜백 연동해야 됨
+            // [완료] 2. 퀘스트가 완료 될 때마다 한번씩 호출하게 한다. -> 퀘스트가 완료될 떄 콜백 연동
 
             // 현재 상태 출력
-            _currentState.PrintCurrentState();
+            //_currentState.PrintCurrentState();
         }
 
         // 현재 상태를 다음 상태로 변경
         public void ChangeToNextState()
         {
-            _currentState.ChangeToNextState(_quest);
+            _currentState.ChangeToNextState(_quest, this);
         }
 
         // 현재 상태를 변경
@@ -89,12 +80,6 @@ namespace Js.Quest
         {
             _currentState.PrintCurrentState();
         }
-
-
-        /*************************************************
-         *                Private Methods
-         *************************************************/
-
     }
 }
 

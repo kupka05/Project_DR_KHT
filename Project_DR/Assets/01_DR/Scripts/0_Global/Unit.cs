@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 플레이어에게 특정한 명령을 실행하는 클래스
 public static class Unit
 {
     /*************************************************

@@ -10,6 +10,6 @@ namespace Js.Quest
         void PrintCurrentState();
 
         // 다음 상태로 변경(시작불가 -> 시작가능 -> 진행중 -> 완료 가능 -> 완료)
-        void ChangeToNextState(Quest quest);
+        void ChangeToNextState(Quest quest, QuestState questState);
     }
 }

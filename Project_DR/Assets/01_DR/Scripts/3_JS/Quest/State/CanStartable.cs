@@ -16,14 +16,14 @@ namespace Js.Quest
             GFunc.Log("현재 상태: [시작가능]");
         }
 
-        // 다음 상태로 변경(시작불가 -> 시작가능 -> 진행중 -> 완료 가능 -> 완료)
-        public void ChangeToNextState(Quest quest)
+        // 다음 상태로 변경 {[시작불가] -> [시작가능] -> [진행중] -> [완료가능] -> [완료]}
+        public void ChangeToNextState(Quest quest, QuestState questState)
         {
             // 현재 상태가 [시작가능]일 경우
-            if (quest.QuestState.State.Equals(QuestState.StateQuest.CAN_STARTABLE))
+            if (questState.State.Equals(QuestState.StateQuest.CAN_STARTABLE))
             {
                 // [진행중]으로 상태 변경
-                quest.QuestState.ChangeState(QuestState.StateQuest.IN_PROGRESS);
+                questState.ChangeState(QuestState.StateQuest.IN_PROGRESS);
             }
         }
     }

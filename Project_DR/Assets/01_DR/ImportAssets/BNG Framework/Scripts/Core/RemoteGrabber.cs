@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -132,6 +132,13 @@ namespace BNG {
                 ParentGrabber.AddValidRemoteGrabbable(other, gc.ParentGrabbable);
                 return;
             }
+
+            NPC npc = other.GetComponent<NPC>();
+            if(npc != null && ParentGrabber != null)
+            {
+                ParentGrabber.AddValidRemoteNPC(other, npc);
+                return;
+            }
         }
 
         void OnTriggerExit(Collider other) {
@@ -151,6 +158,13 @@ namespace BNG {
             GrabbableChild gc = other.GetComponent<GrabbableChild>();
             if (gc != null && ParentGrabber != null) {
                 ParentGrabber.RemoveValidRemoteGrabbable(other, gc.ParentGrabbable);
+                return;
+            }
+
+            NPC npc = other.GetComponent<NPC>();
+            if (npc != null && ParentGrabber != null)
+            {
+                ParentGrabber.RemoveValidRemoteNPC(other, npc);
                 return;
             }
         }

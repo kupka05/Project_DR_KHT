@@ -43,11 +43,14 @@ public class SkillManager : MonoBehaviour
     IEnumerator grinderDrillRoutine;
 
     [Header("DrillLanding")]
+    public SkillEvent landingSkill;
+
     public bool isHookShot;             // 훅샷 사용여부
     public float activePcDistance = 5;    // 일정 높이
     public float activeDrillDistance = 3f;    // 일정 높이
     private int _LDskillCount;
     public int LDskillCount;            // 남은 스킬 횟수
+
     IEnumerator checkGound;
     private WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
 
@@ -201,7 +204,6 @@ public class SkillManager : MonoBehaviour
     {
         if(activePcDistance <= playerController.DistanceFromGround)
         {
-            GFunc.Log("체크를 시작");
             if(checkGound != null)
             {
                 StopCoroutine(checkGound);
@@ -211,7 +213,10 @@ public class SkillManager : MonoBehaviour
             StartCoroutine(checkGound);
         }
     }
-
+    /// <summary>
+    /// 드릴 랜딩 스킬 발동 조건을 체크하는 코루틴
+    /// </summary>
+    /// <returns></returns>
     IEnumerator CheckingGound()
     {
         while(smoothLocomotion.state == PlayerState.air)
@@ -222,26 +227,20 @@ public class SkillManager : MonoBehaviour
             {
                 if (activeDrillDistance > drills[i].distanceFromGround && playerController.DistanceFromGround <2)
                 {
-                    ActiveLandingSkill();
+                    landingSkill.OnCollisionEvent();
                     yield break;
                 }
 
-                if (!drills[i].grabbable.enabled)
-                {
-                   
-                    yield break;
-                }
+                //if (!drills[i].grabbable.enabled)
+                //{                   
+                //    yield break;
+                //}
             }
             yield return waitForEndOfFrame;
         }
         yield break;
     }
 
-    public void ActiveLandingSkill()
-    {
-        // ToDo : 작동되고 넉백되는 부분 추가 필요
-        GFunc.Log("작동");
-    }
 
 
     private void GetData()

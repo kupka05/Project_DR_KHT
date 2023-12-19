@@ -254,11 +254,11 @@ public class Grappling : GrabbableEvents
         if (Time.time - lastGrapplingTime < grapplingCd)
         {
             Invoke(nameof(Excute), grappleDelayTime);                  // 그래플링 실행
-            GFunc.Log("if");
+            //GFunc.Log("if");
         }
 
-        else
-            GFunc.Log("else");
+        //else
+        //    GFunc.Log("else");
         Excute();
     }
     public void Excute()

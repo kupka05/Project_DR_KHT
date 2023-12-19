@@ -3,6 +3,7 @@ using UnityEngine;
 using Rito.InventorySystem;
 using System;
 using System.Collections;
+using Js.Quest;
 
 public class ItemManager : MonoBehaviour
 {
@@ -114,6 +115,9 @@ public class ItemManager : MonoBehaviour
             // 초과분 만큼 아이템 생성
             CreateOverItem(handPos, id, overCount);
         }
+
+        // 퀘스트 콜백 호출
+        QuestCallback.OnInventoryCallback(id);
     }
 
     // 폭탄 아이템 생성
@@ -123,12 +127,16 @@ public class ItemManager : MonoBehaviour
 
         // 인벤토리에 아이템 추가 & 초과 수량 저장
         int overCount = _inventory.Add(data, amount);
+
         // 인벤토리가 가득 찼을 경우
         if (CheckOverInventorySlot(overCount))
         {
             // 초과분 만큼 아이템 생성
             CreateOverItem(handPos, id, overCount);
         }
+
+        // 퀘스트 콜백 호출
+        QuestCallback.OnInventoryCallback(id);
     }
 
     // 재료 아이템 생성
@@ -138,12 +146,16 @@ public class ItemManager : MonoBehaviour
 
         // 인벤토리에 아이템 추가 & 초과 수량 저장
         int overCount = _inventory.Add(data, amount);
+
         // 인벤토리가 가득 찼을 경우
         if (CheckOverInventorySlot(overCount))
         {
             // 초과분 만큼 아이템 생성
             CreateOverItem(handPos, id, overCount);
         }
+
+        // 퀘스트 콜백 호출
+        QuestCallback.OnInventoryCallback(id);
     }
 
     // 퀘스트 아이템 생성
@@ -153,12 +165,16 @@ public class ItemManager : MonoBehaviour
 
         // 인벤토리에 아이템 추가 & 초과 수량 저장
         int overCount = _inventory.Add(data, amount);
+
         // 인벤토리가 가득 찼을 경우
         if (CheckOverInventorySlot(overCount))
         {
             // 초과분 만큼 아이템 생성
             CreateOverItem(handPos, id, overCount);
         }
+
+        // 퀘스트 콜백 호출
+        QuestCallback.OnInventoryCallback(id);
     }
 
     // 자동으로 타입을 찾아서 아이템을 생성

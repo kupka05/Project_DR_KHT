@@ -115,6 +115,7 @@ public static class PlayerDataManager
         _id = id;
     }
     #endregion
+
     /*************************************************
      *                 Private Methods
      *************************************************/

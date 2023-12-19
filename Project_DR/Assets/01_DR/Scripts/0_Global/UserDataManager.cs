@@ -381,8 +381,9 @@ public class UserDataManager : MonoBehaviour
         dataLoadSuccess = true;
         GFunc.Log("데이터 로드 시간 : " + GetCurrentDate());
 
-        // 퀘스트 콜백 호출
-        QuestCallback.OnQuestDataCallback();
+        // 데이터 테이블에 있는 퀘스트를 가져와서 생성
+        // && 가져온 퀘스트 데이터에 따라 상태 변경
+        QuestManager.Instance.CreateQuestFromDataTable();
     }
 
     // DB에 데이터를 요청하기 위한 메서드

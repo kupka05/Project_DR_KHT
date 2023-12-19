@@ -23,7 +23,6 @@ public class Damage : MonoBehaviour
     // 스킬 액티브 여부
     public bool isTeradrill = false;    // 테라 드릴
     public bool isGrinder = false;      // 드릴 연마 
-    public bool isLanding = false;      // 랜딩 스킬
     public bool isSmash = false;        // 분쇄 디버프
 
     public float critChance;           // 치명타 확률
@@ -41,18 +40,19 @@ public class Damage : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetData();
+        UserData.GetData(GetData);
     }
 
     // 데미지 계산기
-    public float DamageCalculate(float _damage)
+    public float DamageCalculate(float _damage, bool isLanding = false)
     {
         float _teraIncrease = isTeradrill ? teraIncrease : 0;
         float _grinderCritChance = isGrinder ? grinderCritChance : 0;
         float _grinderIncrease = isGrinder ? grinderIncrease : 0;
         float _landingIncrease = isLanding ? landingIncrease : 0;
 
-        float val = Random.Range(0f, 100f);
+        float val = isLanding ? -1 : Random.Range(0f, 100f);
+       
         //GFunc.Log("치명타 확률" + critChance +"+"+ grinderCritChance + "이번 확률 :" + val);
         float _critIncrease = critChance + _grinderCritChance <= val ? 0 : critIncrease ;
 
@@ -66,11 +66,23 @@ public class Damage : MonoBehaviour
 
     void GetData()
     {
-        critChance = (float)DataManager.instance.GetData(1100, "CritChance", typeof(float));      // 치명타 확률
-        critIncrease = (float)DataManager.instance.GetData(1100, "CritIncrease", typeof(float));  // 치명타 증가율
-        teraIncrease = (float)DataManager.instance.GetData(721100, "Value1", typeof(float));      // 테라드릴 증가율
-        grinderCritChance = (float)DataManager.instance.GetData(721114, "Value1", typeof(float)); // 드릴연마 치확
-        grinderIncrease = (float)DataManager.instance.GetData(721115, "Value1", typeof(float));    // 드릴연마 증가
-        landingIncrease = (float)DataManager.instance.GetData(720217, "Value2", typeof(float));
+        critChance = UserData.GetCritChance();
+
+        critIncrease = UserData.GetCritIncrease();
+        teraIncrease = UserData.GetTeraIncrease();
+
+        grinderIncrease = UserData.GetGinderIncrease();
+        grinderCritChance = UserData.GetGrinderCritChance();
+
+        landingIncrease = UserData.GetLandingCritIncrease();
+
+
+        //critChance = (float)DataManager.instance.GetData(1100, "CritChance", typeof(float));      // 치명타 확률
+        //critIncrease = (float)DataManager.instance.GetData(1100, "CritIncrease", typeof(float));  // 치명타 증가율
+
+        //teraIncrease = (float)DataManager.instance.GetData(721100, "Value1", typeof(float));      // 테라드릴 증가율
+        //grinderCritChance = (float)DataManager.instance.GetData(721114, "Value1", typeof(float)); // 드릴연마 치확
+        //grinderIncrease = (float)DataManager.instance.GetData(721115, "Value1", typeof(float));    // 드릴연마 증가
+        //landingIncrease = (float)DataManager.instance.GetData(720217, "Value2", typeof(float));
     }
 }

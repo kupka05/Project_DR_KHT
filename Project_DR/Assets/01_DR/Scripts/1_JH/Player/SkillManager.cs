@@ -67,8 +67,7 @@ public class SkillManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetData();
-        SetGrinderSlider();
+        UserData.GetData(GetData);
 
         playerController = this.transform.GetChild(0).GetChild(0).GetComponent<PlayerController>();
         smoothLocomotion = playerController.GetComponent<SmoothLocomotion>();   
@@ -202,6 +201,12 @@ public class SkillManager : MonoBehaviour
 
     public void CheckLandingHeight()
     {
+        if(LDskillCount <= 0)
+        {
+            GFunc.Log("드릴랜딩 사용 불가 : " + LDskillCount);
+            return;
+        }
+
         if(activePcDistance <= playerController.DistanceFromGround)
         {
             if(checkGound != null)
@@ -228,6 +233,7 @@ public class SkillManager : MonoBehaviour
                 if (activeDrillDistance > drills[i].distanceFromGround && playerController.DistanceFromGround <2)
                 {
                     landingSkill.OnCollisionEvent();
+                    UserData.SetLandingSkillCount();
                     yield break;
                 }
 
@@ -245,11 +251,20 @@ public class SkillManager : MonoBehaviour
 
     private void GetData()
     {
-        TD_collDown = Data.GetFloat(721100, "Value2");
-        TD_drillSize = Data.GetFloat(721100, "Value1");
-        GD_addTime = Data.GetFloat(721114, "Value2");
-        GD_maxTime = Data.GetFloat(721114, "Value4");
+        TD_drillSize = UserData.GetTeraDrillSize();
+        TD_collDown = UserData.GetTeraCoolDown();
 
-     
+        GD_addTime = Data.GetFloat(721114, "Value2");
+        GD_maxTime = UserData.GetGrinderMaxTime();
+
+        LDskillCount = UserData.GetDrillLandingCount();
+
+        SetGrinderSlider();
+
+        //TD_collDown = Data.GetFloat(721100, "Value2");
+        //TD_drillSize = Data.GetFloat(721100, "Value1");
+
+        //GD_addTime = Data.GetFloat(721114, "Value2");
+        //GD_maxTime = Data.GetFloat(721114, "Value4");
     }
 }

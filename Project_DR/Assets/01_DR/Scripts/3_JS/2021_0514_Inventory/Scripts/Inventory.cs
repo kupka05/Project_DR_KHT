@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Js.Quest;
 
 /*
     [Item의 상속구조]
@@ -420,8 +421,12 @@ namespace Rito.InventorySystem
         {
             if (!IsValidIndex(index)) return;
 
+            int itemID = _items[index].Data.ID;
             _items[index] = null;
             _inventoryUI.RemoveItem(index);
+
+            // 퀘스트 콜백 호출
+            QuestCallback.OnInventoryCallback(itemID);
         }
 
         /// <summary> 두 인덱스의 아이템 위치를 서로 교체 </summary>

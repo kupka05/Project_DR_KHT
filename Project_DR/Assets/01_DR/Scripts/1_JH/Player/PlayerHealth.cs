@@ -70,9 +70,8 @@ public class PlayerHealth : MonoBehaviour
         GFunc.Log($"플레이어 현재 체력:{health} / 증가량:{newHealth}");
     }
 
-    public void OnDamage()
+    public void OnDamage(float damage)
     {
-
         SetHealth();
         fader.OnDamage();
         if (health <= maxHealth * dyingAmount)
@@ -83,6 +82,7 @@ public class PlayerHealth : MonoBehaviour
         {
             Die();
         }
+        UserData.OnDamage(damage);
     }
 
     private void GetData()
@@ -90,13 +90,9 @@ public class PlayerHealth : MonoBehaviour
         maxHealth = UserData.GetMaxHP();
         health = UserData.GetHP();
 
-        if(health < 0)
-        {
-            health = maxHealth;
-        }
-
         playerDamage.Health = health; // 체력 세팅해주기
         SetMaxHealthUIUpdate();
+        SetHealthUIUpdate() ;
     }
     // 데미지를 입을 때 체력 업데이트
     public void SetHealth()
@@ -109,7 +105,7 @@ public class PlayerHealth : MonoBehaviour
     {
         for (int i = 0; i < playerHealthUI.Length; i++)
         {
-            playerHealthUI[i].SetMaxHealth(health);
+            playerHealthUI[i].SetMaxHealth(maxHealth);
         }
     }
 

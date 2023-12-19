@@ -190,7 +190,7 @@ public class StatusData
     {
         List<UpgradePC> list = new List<UpgradePC>();
         int total = 0;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < Data.GetCount(id); i++)
         {
             UpgradePC newData = new UpgradePC();
             //GFunc.Log(id+i);
@@ -215,7 +215,7 @@ public class StatusData
     {
         List<UpgradeWeapon> list = new List<UpgradeWeapon>();
         int total = 0;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < Data.GetCount(id); i++)
         {
             UpgradeWeapon newData = new UpgradeWeapon();
             //GFunc.Log(id + i);
@@ -244,7 +244,7 @@ public class StatusData
         List<UpgradeSkill> list = new List<UpgradeSkill>();
         int totalExp1 = 0, totalExp2 = 0, totalExp3 = 0;
 
-        for(int i=0; i<10; i++)
+        for(int i=0; i < Data.GetCount(id); i++)
         {
             UpgradeSkill newData = new UpgradeSkill();
 
@@ -282,7 +282,7 @@ public class StatusData
         List<UpgradeSkill1> list = new List<UpgradeSkill1>();
         int totalExp1 = 0, totalExp2 = 0;
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < Data.GetCount(id); i++)
         {
             UpgradeSkill1 newData = new UpgradeSkill1();
 
@@ -317,7 +317,7 @@ public class StatusData
         List<UpgradeSkill2> list = new List<UpgradeSkill2>();
         int totalExp1 = 0, totalExp2 = 0, totalExp3 = 0;
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < Data.GetCount(id) ; i++)
         {
             UpgradeSkill2 newData = new UpgradeSkill2();
 
@@ -355,7 +355,7 @@ public class StatusData
         List<UpgradeSkill3> list = new List<UpgradeSkill3>();
         int totalExp1 = 0;
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < Data.GetCount(id); i++)
         {
             UpgradeSkill3 newData = new UpgradeSkill3();
 
@@ -387,7 +387,7 @@ public class StatusData
         List<UpgradeSkill2> list = new List<UpgradeSkill2>();
         int totalExp1 = 0, totalExp2 = 0, totalExp3 = 0;
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < Data.GetCount(id); i++)
         {
             UpgradeSkill2 newData = new UpgradeSkill2();
 

@@ -122,7 +122,7 @@ public partial class UserDataManager : MonoBehaviour
 
         // HP 업그레이드 세팅
         DefaultHP = Data.GetFloat(1001, "Health");
-        MaxHP = UserData.GetHP();
+        MaxHP = UserData.GetMaxHP();
         CurHP = MaxHP;
 
         // 골드 획득량 업그레이드 세팅
@@ -234,7 +234,7 @@ public partial class UserDataManager : MonoBehaviour
         yield return waitForSeconds;
         if (dataLoadSuccess)
         {
-            GFunc.Log(action + "데이터 로드 완료");
+            //GFunc.Log(action + "데이터 로드 완료");
             action();
             yield break;
         }
@@ -297,7 +297,7 @@ public partial class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("skill_level_4_3", Skill4Lv_3);
     }
 
-    // ####################### 디버그용 PC 데이터 세팅 ####################### \\
+    // ####################### 디버그용 PC 데이터 리셋 ####################### \\
     // TODO 한번에 호출하면 저장 실패할 경우가 있음.
     public void ResetData()
     {

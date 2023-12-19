@@ -36,7 +36,7 @@ public class SkillManager : MonoBehaviour
     IEnumerator teradrillRoutine;
 
     [Header("GrinderDrill")]
-    public float GD_collDown;       // 스킬 쿨다운
+    public float GD_coolDown;       // 스킬 쿨다운
     public float GD_addTime;        // 증가 시간
     public float GD_maxTime;        // 최대 시간
     public float GD_drillSize;      // 드릴 크기 증가
@@ -76,7 +76,7 @@ public class SkillManager : MonoBehaviour
     {
         grinderSlider.maxValue = GD_maxTime;
         grinderSlider.value = 0;
-        grinderVal.text = string.Format("" + GD_collDown);
+        grinderVal.text = string.Format("" + GD_coolDown);
 
     }
 
@@ -133,10 +133,10 @@ public class SkillManager : MonoBehaviour
     #region 드릴 연마
     public void StartGrinderDrill()
     {
-        GD_collDown += GD_addTime;          // 남은시간에 시간 추가                                             
-        if (GD_collDown >= GD_maxTime)       // 시간 초과 불가하게
+        GD_coolDown += GD_addTime;          // 남은시간에 시간 추가                                             
+        if (GD_coolDown >= GD_maxTime)       // 시간 초과 불가하게
         {
-            GD_collDown = GD_maxTime;
+            GD_coolDown = GD_maxTime;
         }
 
         ActiveGrinderDrill();
@@ -153,18 +153,18 @@ public class SkillManager : MonoBehaviour
     // 드릴연마 실행
     IEnumerator IActiveGrinderDrill()
     {
-        while (0 <= GD_collDown)
+        while (0 <= GD_coolDown)
         {
-            GD_collDown -= 1f * Time.deltaTime;
+            GD_coolDown -= 1f * Time.deltaTime;
             
-            if (GD_collDown <= 0)
-            { 
-                GD_collDown = 0;
+            if (GD_coolDown <= 0)
+            {
+                GD_coolDown = 0;
                 DeActiveGrinderDrill();
             }
             
-            grinderSlider.value = GD_collDown;
-            grinderVal.text = GD_collDown.ToString();
+            grinderSlider.value = GD_coolDown;
+            grinderVal.text = GD_coolDown.ToString();
 
             yield return null;
         }
@@ -177,7 +177,7 @@ public class SkillManager : MonoBehaviour
     // 드릴 연마 스킬 해제
     private void DeActiveGrinderDrill()
     {
-        GD_collDown = 0;                    // 남은시간 0으로 변경
+        GD_coolDown = 0;                    // 남은시간 0으로 변경
         Damage.instance.isGrinder = false;
     }
 

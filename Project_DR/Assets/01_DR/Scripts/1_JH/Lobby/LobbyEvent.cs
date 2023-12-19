@@ -664,7 +664,7 @@ public class LobbyEvent : MonoBehaviour
         value4 = MinusCheck(skill4Btn2.level - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn2.level - 1].totalExp2 : 0;
         value5 = MinusCheck(skill4Btn3.newLevel - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn3.newLevel - 1].totalExp3 : 0;
         value6 = MinusCheck(skill4Btn3.level - 1) ? UserData.GetStat().upgradeSkill4[skill4Btn3.level - 1].totalExp3 : 0;
-        GFunc.Log($"{value1} - {value2} + {value3} - {value4} + {value5} - {value6}");
+        //GFunc.Log($"{value1} - {value2} + {value3} - {value4} + {value5} - {value6}");
         result = (value1 - value2) + (value3 - value4) + (value5 - value6);
 
         return result;
@@ -834,7 +834,7 @@ public class LobbyEvent : MonoBehaviour
             return -1;                   // -1을 반환 : 탐색 실패를 의미
         }
         mid = (first + last) / 2;        // 탐색 영역을 반으로 나누고 탐색을 진행
-        GFunc.Log($"타겟 : {target}, 탐색 위치 : {list[mid].ID}");
+        //GFunc.Log($"타겟 : {target}, 탐색 위치 : {list[mid].ID}");
 
         if (list[mid].ID == target)      // 타겟과 같다면
         {
@@ -882,7 +882,7 @@ public class LobbyEvent : MonoBehaviour
     {
         DialogData.logs = new List<NpcDialog>();
 
-        for (int i = 0; i <= 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             NpcDialog newDialog = new NpcDialog();
             newDialog.ID = i + questID;

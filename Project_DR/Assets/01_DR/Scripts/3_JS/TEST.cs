@@ -2,16 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Js.Quest;
+using System;
 
 public class TEST : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    [SerializeField] private Quest _quest;
+    [SerializeField] private List<Quest> _questList;
     void Start()
     {
-        _quest = new Quest(1_000_000_1);
-        Unit.AddInventoryItem(5001);
+        QuestManager.Instance.CreateQuest(1_000_000_1);
+        _questList = UserDataManager.quests;
     }
 
     int index = 0;
@@ -20,18 +21,23 @@ public class TEST : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            _quest.QuestState.ChangeToNextState();
-            _quest.QuestState.PrintCurrentState();
+            _questList[0].QuestState.ChangeToNextState();
+            _questList[0].QuestState.PrintCurrentState();
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            _quest.QuestData.AddCurrentValue();
+            Unit.AddInventoryItem(5001);
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            _quest.GiveQuestReward();
+            _questList[0].GiveQuestReward();
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            QuestCallback.OnCallbackInventory(5001);
         }
     }
 }

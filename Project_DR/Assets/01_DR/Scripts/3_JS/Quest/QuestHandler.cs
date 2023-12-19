@@ -34,7 +34,7 @@ namespace Js.Quest
         public void GiveQuestReward()
         {
             // 퀘스트가 [완료가능] 상태일 경우
-            if (IsQuestSuccess())
+            if (_quest.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE))
             {
                 // [완료] 상태 변경 & 클리어 보상 지급
                 QuestState.ChangeToNextState();
@@ -63,21 +63,16 @@ namespace Js.Quest
             QuestState.PrintCurrentState();
         }
 
-
-        /*************************************************
-         *               Private Methods
-         *************************************************/
-        // 퀘스트 클리어 여부[완료가능] 체크
-        private bool IsQuestSuccess()
+        // 현재 퀘스트 달성 값 추가
+        public void AddCurrentValue(int value = 1)
         {
-            // 퀘스트 상태가 [완료가능]일 경우
-            if (_quest.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE))
-            {
-                return true;
-            }
+            QuestData.AddCurrentValue(value);
+        }
 
-            // 아닐 경우
-            return false;
+        // 현재 퀘스트 달성 값 변경
+        public void ChangeCurrentValue(int value)
+        {
+            QuestData.ChangeCurrentValue(value);
         }
     }
 }

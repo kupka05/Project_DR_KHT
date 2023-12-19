@@ -222,8 +222,7 @@ public class UserDataManager : MonoBehaviour
     public static Item[] items = new Item[Inventory.MaxCapacity];
 
     [Header("Quest Data")]
-    public List<Quest> mainQuests = new List<Quest>();
-    public List<Quest> subQuests = new List<Quest>();
+    public static List<Quest> quests = new List<Quest>();
 
     [Header("Result Data")]
     public GameResult result = new GameResult();
@@ -619,4 +618,12 @@ public class UserDataManager : MonoBehaviour
         Skill4Lv_3 = skill4_3;     
     }
 
+
+    // ######################### 퀘스트 #########################
+
+    // 보유한 퀘스트를 삭제
+    public static void RemoveQuest(int index)
+    {
+        quests.RemoveAt(index);
+    }
 }

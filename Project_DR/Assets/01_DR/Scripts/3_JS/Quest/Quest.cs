@@ -40,5 +40,17 @@ namespace Js.Quest
         {
             QuestHandler.GiveQuestReward();
         }
+
+        // 퀘스트 현재 값 증가
+        public void AddCurrentValue(int value = 1)
+        {
+            QuestHandler.AddCurrentValue(value);
+        }
+
+        // 현재 퀘스트 달성 값 변경
+        public void ChangeCurrentValue(int value)
+        {
+            QuestHandler.ChangeCurrentValue(value);
+        }
     }
 }

@@ -36,7 +36,7 @@ public class ItemManager : MonoBehaviour
     *                 Public Fields
     *************************************************/
     #region [+]
-    public Inventory inventory => _inventory;
+    public Inventory Inventory => _inventory;
 
     #endregion
     /*************************************************
@@ -107,6 +107,7 @@ public class ItemManager : MonoBehaviour
 
         // 인벤토리에 아이템 추가 & 초과 수량 저장
         int overCount = _inventory.Add(data, amount);
+
         // 인벤토리가 가득 찼을 경우
         if (CheckOverInventorySlot(overCount))
         {

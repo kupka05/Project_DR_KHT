@@ -12,7 +12,7 @@ using static UnityEngine.UI.GridLayoutGroup;
 
 public class Monster : MonoBehaviour
 {
-    public UnityEngine.UI.Image smashImage;
+    public GameObject smash;
 
     public UnityEngine.UI.Slider monsterHpSlider;
 
@@ -27,12 +27,6 @@ public class Monster : MonoBehaviour
     }
 
     public State state = State.IDLE;
-
-    //public enum MonsterGroup
-    //{
-    //    NORMAL,
-    //    ELITE
-    //}
 
     public enum Type
     {
@@ -51,22 +45,17 @@ public class Monster : MonoBehaviour
         SIMPLE_PHANTOM
     }
 
-    //[System.Serializable]
-    //public class MonsterData
-    //{
-    //    public Type MonsterType { get; set; }
-    //    public MonsterGroup MonsterGroup { get; set; }
-    //}
-
-    //public MonsterData monsterData = new MonsterData();
-
     public int monsterId;
 
     public Type monsterType = Type.HUMAN_ROBOT;
 
     [Header("분쇄")]
+    public UnityEngine.UI.Image smashFilled;
+    public float skillTime = 10.0f;
+
+    [Header("분쇄 카운트")]
     public int smashCount = 0;      //깍아냄
-    public int smashMaxCount = 10;  //깍아냄 횟수 충족
+    public int smashMaxCount = 3;  //깍아냄 횟수 충족
 
     [Header("몬스터 테이블")]
     public float hp = default;       //체력이랑 damageble 보내준다
@@ -142,11 +131,11 @@ public class Monster : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    public virtual void Start()
+    void Start()
     {
 
         monsterTr = GetComponent<Transform>();
-        playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
+        playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().transform; //playerpos
 
         damageable = GetComponent<Damageable>();
         anim = GetComponent<Animator>();
@@ -541,6 +530,7 @@ public class Monster : MonoBehaviour
     {
         if (isStun)
             return;
+
         if (state != State.DIE && state != State.STUN)
         {
             if (damageable.Health >= 0)
@@ -556,7 +546,16 @@ public class Monster : MonoBehaviour
                 stunRoutine = StunDelay();
                 StartCoroutine(stunRoutine);
 
-                //GFunc.Log($"state:{state}");
+                smashCount++;
+
+                if(smashCount >= smashMaxCount)
+                {
+                    smash.SetActive(true);
+                    smashFilled.fillAmount -= 2.0f * Time.smoothDeltaTime / skillTime;
+                    GFunc.Log($"감소되냐: {smashFilled.fillAmount}");
+
+                }
+
             }
         }
         //GFunc.Log($"hp:{damageable.Health}");
@@ -564,16 +563,6 @@ public class Monster : MonoBehaviour
     // 스턴 딜레이
     public virtual IEnumerator StunDelay()
     {
-        ////분쇄 카운터
-        //if (smashCount >= smashMaxCount)
-        //{
-        //    //TODO:데미지 받아서 카운트 충족시 디버프
-
-
-        //    //smashImage.enabled = true;
-
-        //}
-
         isStun = true;
         anim.SetTrigger(hashHit);
         damageable.stun = true;

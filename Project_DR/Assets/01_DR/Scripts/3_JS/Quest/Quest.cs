@@ -29,7 +29,7 @@ namespace Js.Quest
             _questData = new QuestData(id);
         }
 
-        // 퀘스트가 목표 수치에 달성했는지 체크
+        // 퀘스트가 목표 수치를 달성했는지 체크
         // [true = 달성] / [false = 비달성]
         public bool IsQuestCompleted()
         {

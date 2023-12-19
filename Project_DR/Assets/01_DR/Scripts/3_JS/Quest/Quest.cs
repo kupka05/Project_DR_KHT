@@ -41,6 +41,13 @@ namespace Js.Quest
             QuestHandler.GiveQuestReward();
         }
 
+        // 퀘스트를 다음 상태로 변경
+        // [시작불가] -> [시작가능] -> [진행중] -> [완료가능] -> [완료]
+        public void ChangeToNextState()
+        {
+            QuestHandler.ChangeToNextState();
+        }
+
         // 퀘스트 현재 값 증가
         public void AddCurrentValue(int value = 1)
         {

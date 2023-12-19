@@ -10,66 +10,72 @@ namespace Js.Quest
         /*************************************************
          *                Public Fields
          *************************************************/
-        public static event Action<int, int> CallbackBossMeet;      // [1] 보스 조우
-        public static event Action<int, int> CallbackBossKill;      // [2] 보스 킬
-        public static event Action<int, int> CallbackUseItem;       // [3] 아이템 사용
-        public static event Action<int, int> CallbackMonsterKill;   // [4] 몬스터 처치
-        public static event Action<int, int> CallbackCrafting;      // [5] 크래프팅
-        public static event Action<int, int> CallbackObject;        // [6] 오브젝트
-        public static event Action<int, int> CallbackInventory;     // [7] 인벤토리(증정)
-        public static event Action<int, int> CallbackDialogue;      // [8] NPC와 대화
+        public static event Action QuestDataCallback;               // DB에서 퀘스트 정보를 가져왔을 때 or 퀘스트가 완료되었을 때
+        public static event Action<int, int> BossMeetCallback;      // [1] 보스 조우
+        public static event Action<int, int> BossKillCallback;      // [2] 보스 킬
+        public static event Action<int, int> UseItemCallback;       // [3] 아이템 사용
+        public static event Action<int, int> MonsterKillCallback;   // [4] 몬스터 처치
+        public static event Action<int, int> CraftingCallback;      // [5] 크래프팅
+        public static event Action<int, int> ObjectCallback;        // [6] 오브젝트
+        public static event Action<int, int> InventoryCallback;     // [7] 인벤토리(증정)
+        public static event Action<int, int> DialogueCallback;      // [8] NPC와 대화
 
 
         /*************************************************
          *                Public Methods
          *************************************************/
-        // [1] 보스 조우 Callback
-        public static void OnCallbackBossMeet(int id, int condition = 1)
+        // DB에서 퀘스트 정보를 가져왔을 때 or 퀘스트가 완료되었을 때
+        public static void OnQuestDataCallback()
         {
-            CallbackBossMeet?.Invoke(id, condition);
+            QuestDataCallback?.Invoke();
+        }
+
+        // [1] 보스 조우 Callback
+        public static void OnBossMeetCallback(int id, int condition = 1)
+        {
+            BossMeetCallback?.Invoke(id, condition);
         }
 
         // [2] 보스 킬 Callback
-        public static void OnCallbackBossKill(int id, int condition = 2)
+        public static void OnBossKillCallback(int id, int condition = 2)
         {
-            CallbackBossKill?.Invoke(id, condition);
+            BossKillCallback?.Invoke(id, condition);
         }
 
         // [3] 아이템 사용 Callback
-        public static void OnCallbackUseItem(int id, int condition = 3)
+        public static void OnUseItemCallback(int id, int condition = 3)
         {
-            CallbackUseItem?.Invoke(id, condition);
+            UseItemCallback?.Invoke(id, condition);
         }
 
         // [4] 몬스터 처치 Callback
-        public static void OnCallbackMonsterKill(int id, int condition = 4)
+        public static void OnMonsterKillCallback(int id, int condition = 4)
         {
-            CallbackMonsterKill?.Invoke(id, condition);
+            MonsterKillCallback?.Invoke(id, condition);
         }
 
         // [5] 크래프팅 Callback
-        public static void OnCallbackCrafting(int id, int condition = 5)
+        public static void OnCraftingCallback(int id, int condition = 5)
         {
-            CallbackCrafting?.Invoke(id, condition);
+            CraftingCallback?.Invoke(id, condition);
         }
 
         // [6] 오브젝트 Callback
-        public static void OnCallbackObject(int id, int condition = 6)
+        public static void OnObjectCallback(int id, int condition = 6)
         {
-            CallbackObject?.Invoke(id, condition);
+            ObjectCallback?.Invoke(id, condition);
         }
 
-
-        // [8] 인벤토리 Callback
-        public static void OnCallbackInventory(int id, int condition = 7)
+        // [7] 인벤토리 Callback
+        public static void OnInventoryCallback(int id, int condition = 7)
         {
-            CallbackInventory?.Invoke(id, condition);
+            InventoryCallback?.Invoke(id, condition);
         }
 
-        // [7] NPC 대화 Callback
-        public static void OnCallbackDialogue(int id, int condition = 8)
+        // [8] NPC 대화 Callback
+        public static void OnDialogueCallback(int id, int condition = 8)
         {
-            CallbackDialogue?.Invoke(id, condition);
+            DialogueCallback?.Invoke(id, condition);
         }
     }
 }

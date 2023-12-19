@@ -35,6 +35,12 @@ namespace Js.Quest
 
 
         /*************************************************
+         *                 Private Fields
+         *************************************************/
+        private const int QUEST_FIRST_ID = 1_000_000_1;
+        [SerializeField] private List<Quest> _debugQuestList;               // 디버그용 퀘스트 리스트 
+
+        /*************************************************
          *                  Unity Events
          *************************************************/
         private void Awake()
@@ -49,17 +55,45 @@ namespace Js.Quest
             { Destroy(gameObject); }
         }
 
-
         void Start()
         {
             // QuestCallback에 메서드 등록
             AddQuestCallbacks();
+
+            // 데이터 테이블에 있는 퀘스트를 가져와서 생성
+            CreateQuestFromDataTable();
         }
 
 
         /*************************************************
          *                Public Methods
          *************************************************/
+        // 생성용 트리거
+        public void Trigger()
+        {
+            GFunc.Log("Create Quest Manager");
+
+            // 디버그
+            _debugQuestList = QuestList;
+        }
+
+        // 데이터 테이블에 있는 퀘스트를 가져와서 생성
+        public void CreateQuestFromDataTable()
+        {
+            int count = Data.GetCount(QUEST_FIRST_ID);
+            for (int i = 0; i < count; i++)
+            {
+                // 퀘스트 생성 및 저장
+                Quest quest = new Quest(QUEST_FIRST_ID + i);
+                UserDataManager.quests.Add(quest);
+
+                GFunc.Log($"퀘스트 [{QUEST_FIRST_ID + i}] 생성 완료");
+            }
+
+            // 디버그
+            _debugQuestList = QuestList;
+        }
+
         // 퀘스트를 생성한다
         public void CreateQuest(int id)
         {
@@ -80,16 +114,33 @@ namespace Js.Quest
         // QuestCallback에 메서드 등록
         private void AddQuestCallbacks()
         {
+            ////TODO: 해당하는 클래스들의 메서드에서 온콜백 호출되게 해야함
+            QuestCallback.QuestDataCallback += ChangeQuestStates;   // DB에서 퀘스트 정보를 가져왔을 때 or 퀘스트가 완료되었을 때
+            QuestCallback.BossMeetCallback += UpdateQuests;         // 보스 조우
+            QuestCallback.BossKillCallback += UpdateQuests;         // 보스 킬
+            QuestCallback.UseItemCallback += UpdateQuests;          // 아이템 사용
+            QuestCallback.MonsterKillCallback += UpdateQuests;      // 몬스터 처치
+            QuestCallback.CraftingCallback += UpdateQuests;         // 크래프팅
+            QuestCallback.ObjectCallback += UpdateQuests;           // 오브젝트
+            QuestCallback.InventoryCallback += UpdateQuests;        // 인벤토리(증정): 디버깅 완료
+            QuestCallback.DialogueCallback += UpdateQuests;         // NPC와 대화
         ////TODO: 해당하는 클래스들의 메서드에서 온콜백 호출되게 해야함
-            QuestCallback.CallbackBossMeet += UpdateQuests;     // 보스 조우
-            QuestCallback.CallbackBossKill += UpdateQuests;     // 보스 킬
-            QuestCallback.CallbackUseItem += UpdateQuests;      // 아이템 사용
-            QuestCallback.CallbackMonsterKill += UpdateQuests;  // 몬스터 처치
-            QuestCallback.CallbackCrafting += UpdateQuests;     // 크래프팅
-            QuestCallback.CallbackObject += UpdateQuests;       // 오브젝트
-            QuestCallback.CallbackInventory += UpdateQuests;    // 인벤토리(증정): 디버깅 완료
-            QuestCallback.CallbackDialogue += UpdateQuests;     // NPC와 대화
-        ////TODO: 해당하는 클래스들의 메서드에서 온콜백 호출되게 해야함
+        }
+
+        // 퀘스트 상태 변경[시작불가] -> [시작가능]
+        // 단 선행퀘스트 조건을 충족해야 변경된다.
+        private void ChangeQuestStates()
+        {
+            GFunc.Log("OnQuestDataCallback()");
+            foreach (var item in QuestList)
+            {
+                // 상태가 [시작불가]일 경우
+                if (item.QuestState.State.Equals(QuestState.StateQuest.NOT_STARTABLE))
+                {
+                    // [시작가능]으로 상태 변경 시도
+                    item.ChangeToNextState();
+                }    
+            }
         }
 
         // 퀘스트 업데이트
@@ -108,7 +159,7 @@ namespace Js.Quest
             }
 
             // 보유한 퀘스트 리스트를 순회해서 값 변경
-            foreach (Quest item in QuestList)
+            foreach (var item in QuestList)
             {
                 // 퀘스트의 condition(조건)이 일치할 경우
                 // {[1]=보스조우, [2]=보스처치, [3]=소비, [4]=처치, [5]=크래프팅, [6]=오브젝트, [7]=증정, [8]대화}
@@ -141,7 +192,7 @@ namespace Js.Quest
         private bool IsQuestConditionFulfilled(int condition)
         {
             // 퀘스트 
-            foreach (Quest item in QuestList)
+            foreach (var item in QuestList)
             {
                 // 퀘스트의 condition(조건)에 해당하는 퀘스트가 있을 경우
                 // && 해당 퀘스트의 상태가 '진행중'일 경우

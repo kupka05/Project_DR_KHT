@@ -380,6 +380,9 @@ public class UserDataManager : MonoBehaviour
         // Ex. 플레이어 상태창, 상점의 현재 골드 등
         dataLoadSuccess = true;
         GFunc.Log("데이터 로드 시간 : " + GetCurrentDate());
+
+        // 퀘스트 콜백 호출
+        QuestCallback.OnQuestDataCallback();
     }
 
     // DB에 데이터를 요청하기 위한 메서드

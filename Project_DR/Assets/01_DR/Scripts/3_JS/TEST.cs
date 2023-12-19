@@ -11,8 +11,6 @@ public class TEST : MonoBehaviour
     [SerializeField] private List<Quest> _questList;
     void Start()
     {
-        QuestManager.Instance.CreateQuest(1_000_000_1);
-        _questList = UserDataManager.quests;
     }
 
     int index = 0;
@@ -21,23 +19,25 @@ public class TEST : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            _questList[0].QuestState.ChangeToNextState();
-            _questList[0].QuestState.PrintCurrentState();
+            UserDataManager.quests[0].QuestState.PrintCurrentState();
+            _questList = UserDataManager.quests;
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
             Unit.AddInventoryItem(5001);
+            UserDataManager.quests[0].ChangeToNextState();
+            UserDataManager.quests[0].QuestState.PrintCurrentState();
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            _questList[0].GiveQuestReward();
+            UserDataManager.quests[0].GiveQuestReward();
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            QuestCallback.OnCallbackInventory(5001);
+            QuestCallback.OnInventoryCallback(5001);
         }
     }
 }

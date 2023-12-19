@@ -16,7 +16,7 @@ namespace Js.Quest
             GFunc.Log("현재 상태: [실패]");
         }
 
-        // 다음 상태로 변경(시작불가 -> 시작가능 -> 진행중 -> 완료 가능 -> 완료)
-        public void ChangeToNextState(Quest quest) { }
+        // 다음 상태로 변경 {[시작불가] -> [시작가능] -> [진행중] -> [완료가능] -> [완료]}
+        public void ChangeToNextState(Quest quest, QuestState questState) { }
     }
 }

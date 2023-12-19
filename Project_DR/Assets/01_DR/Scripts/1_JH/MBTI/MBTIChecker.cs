@@ -40,12 +40,6 @@ public class MBTIChecker : MonoBehaviour
       checkerMBTI.SetMBTI(I, N, F, P);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // MBTI 이벤트를 호출하는 메서드
     public void ActiveMBTI()
     {

@@ -322,7 +322,7 @@ public class EliteMonster : Monster
 
     }
 
-    public override void OnDeal()
+    public override void OnDeal(float damage)
     {
         if (isStun)
             return;

@@ -536,122 +536,122 @@ public class Monster : MonoBehaviour
 
     }
 
-    public virtual void OnDeal()
+    public virtual void OnDeal(float damage)
     {
         // 죽지 않은 상태면 HP 바 업데이트
         if (damageable.Health >= 0)
         {
             SetHealth(damageable.Health);
         }
-
-        if (isStun)
+        else
             return;
 
-        if (state != State.DIE && state != State.STUN)
+        Debug.Log($"체력:{damageable.Health}");
 
+        // 스턴 상태 또는 죽음 상태일 경우 리턴
+        if (state == State.STUN || state == State.DIE)
+            return;
+
+        MonsterStun();  // 몬스터 스턴
+
+        smashCount++;   // 분쇄 카운트 추가
+
+        if (smashCount >= smashMaxCount)
         {
-            SetHealth(damageable.Health);
-            Debug.Log($"체력:{damageable.Health}");
+            smash.SetActive(true);
+            GFunc.Log("분쇄카운트 충족");
 
-            if (isStun)
-                return;
+            //float smashTakeDamage = damageable.Health * smashOne;
+            //SetHealth(damageable.Health - smashTakeDamage);
+            //Debug.Log($"받는 데미지:{damageable.Health - smashTakeDamage}");
 
-            if (state != State.DIE && state != State.STUN)
+            smashCount = 0;
+            //GFunc.Log($"분쇄 카운트:{smashCount}");
+
+            smashFilled.fillAmount = 1;
+            //GFunc.Log($"분쇄FillAmount:{smashFilled.fillAmount}");
+
+            StartCoroutine(SmashTime());
+
+            if (countNum <= 3)
             {
-                if (damageable.Health >= 0)
-                {
-
-                    // 만약에 스턴루틴에 이미 다른 코루틴이 실행중인 경우
-                    if (stunRoutine != null)
-                    {
-                        StopCoroutine(stunRoutine);
-                        stunRoutine = null;
-                    }
-
-                    stunRoutine = StunDelay();
-                    StartCoroutine(stunRoutine);
-
-                    smashCount++;
-
-                    if (smashCount >= smashMaxCount)
-                    {
-                        smash.SetActive(true);
-                        GFunc.Log("분쇄카운트 충족");
-
-                        //float smashTakeDamage = damageable.Health * smashOne;
-                        //SetHealth(damageable.Health - smashTakeDamage);
-                        //Debug.Log($"받는 데미지:{damageable.Health - smashTakeDamage}");
-
-                        smashCount = 0;
-                        //GFunc.Log($"분쇄 카운트:{smashCount}");
-
-                        smashFilled.fillAmount = 1;
-                        //GFunc.Log($"분쇄FillAmount:{smashFilled.fillAmount}");
-
-                        StartCoroutine(SmashTime());
-
-                        if (countNum <= 3)
-                        {
-                            countNum++;
-                            smashCountNum.text = countNum.ToString();
-                            Debug.Log($"숫자:{countNum}");
-                        }
-                        else if (countNum == 5)
-                        {
-
-                        }
-
-                        GFunc.Log($"숫자:{countNum}");
-
-                        ApplyStackDamage();
-                        //GFunc.Log("스택 별 데미지 진입");
-
-                        //GFunc.Log("중첩 숫자 증가");
-                    }
-                }
+                countNum++;
+                smashCountNum.text = countNum.ToString();
+                Debug.Log($"숫자:{countNum}");
             }
-        }
+            else if (countNum == 5)
+            {
+
+            }
+
+            GFunc.Log($"숫자:{countNum}");
+
+            ApplyStackDamage(damage);
+            //GFunc.Log("스택 별 데미지 진입");
+
+            //GFunc.Log("중첩 숫자 증가");
+        }           
     }
 
-    private void ApplyStackDamage()
+    // 몬스터 스턴
+    private void MonsterStun()
+    {
+          // 만약에 스턴루틴에 이미 다른 코루틴이 실행중인 경우
+        if (stunRoutine != null)
+        {
+            StopCoroutine(stunRoutine);
+            stunRoutine = null;
+        }
+
+        stunRoutine = StunDelay();
+        StartCoroutine(stunRoutine);
+    }
+
+    private void ApplyStackDamage(float damage)
     {
         Debug.Log($"countNum = {countNum}");
 
         if (countNum == 2)
         {
-            GFunc.Log("스택 1 진입");
-
+            damageable.Health -= SmashDamageCalculate(damage, 1);
             // 갱신된 체력 값을 적용
             SetHealth(damageable.Health);
 
             // 남은 체력을 로그로 출력
-            Debug.Log($"남은체력:{damageable.Health}");
+            Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
             
         }
         else if (countNum == 3)
         {
-            GFunc.Log("스택 2 진입");
-
+            damageable.Health -= SmashDamageCalculate(damage, 2);
             SetHealth(damageable.Health);
 
-            Debug.Log($"남은체력:{damageable.Health}");
-            
+            Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
+
         }
         else if (countNum == 4)
         {
-            GFunc.Log("스택 3 진입");
-
+            damageable.Health -= SmashDamageCalculate(damage, 3);
             SetHealth(damageable.Health);
 
             Debug.Log($"남은체력:{damageable.Health}");
-          
-            
-        }
-       
-        
-        
-    }
 
+            Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
+
+        }
+
+
+
+    }
+    /// <summary> 분쇄 데미지를 계산하는 메서드 </summary>
+    /// <param name="damage">플레이어의 최종 데미지</param>
+    /// <param name="index">분쇄 단계</param>
+    /// <returns></returns>
+    public float SmashDamageCalculate(float damage, int index)
+    {
+        float _debuff = UserData.GetSmashDamage(index); ;
+        return (damage * (1 + _debuff)) - damage;;
+    }
 
     IEnumerator SmashTime()
     {

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -283,6 +283,8 @@ namespace BNG {
         public virtual void SetPressingObject(GameObject pressing) {
             EventData.pointerPress = pressing;
             PressingObject = pressing;
+            if(pressing!=null)
+            GFunc.Log(pressing.name);
         }
 
         public virtual void SetDraggingObject(GameObject dragging) {

@@ -10,7 +10,13 @@ using UnityEngine;
 public enum NPCID
 {
     Olive = 1111201,
-    Ghost_I_E = 1111202
+    Ghost_I_E = 1111202,
+    Ghost_N_S = 1111203,
+    Ghost_P_J = 1111204,
+    Ghost_F_T = 1111205,
+    Ghost_IE_FT = 1111206
+
+
 }
 
 public enum NpcTriggerType

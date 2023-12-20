@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class GhostNPC_IE : HumanTypeNPC
 {       // I 와 E를 체크하기 위한 NPC의 스크립트
+
+    private void AwakeInIt()
+    {
+        npcID = (int)NPCID.Ghost_I_E;
+
+    }       // AwakeInIt()
+
     protected override void Awake()
     {
         base.Awake();
@@ -24,12 +31,6 @@ public class GhostNPC_IE : HumanTypeNPC
 
     }       // Start()
 
-
-    private void AwakeInIt()
-    {
-        npcID = (int)NPCID.Ghost_I_E;
-
-    }       // AwakeInIt()
 
     #region Base
     protected override void ParamsInIt(int _npcID)

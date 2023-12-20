@@ -158,6 +158,11 @@ public class PlayerOption : MonoBehaviour
     // 마스터 사운드 조정
     public void SetMasterSlider(float value)
     {
+        if (!AudioManager.Instance)
+        {
+            GFunc.Log("오디오 매니저를 찾을 수 없습니다.");
+            return;
+        }
         //ToDo: 마스터 사운드 연동 필요
         masterSlider.value = value;
         UserDataManager.Instance.masterSound = value; // 유저 데이터에 저장
@@ -165,6 +170,11 @@ public class PlayerOption : MonoBehaviour
     // 배경음 조정
     public void SetBackGroundSlider(float value)
     {
+        if(!AudioManager.Instance)
+        {
+            GFunc.Log("오디오 매니저를 찾을 수 없습니다.");
+            return;
+        }
         AudioManager.Instance.MusicVolume(value);
         backgroundSlider.value = value;
         UserDataManager.Instance.backgroundSound = value; // 유저 데이터에 저장
@@ -173,6 +183,11 @@ public class PlayerOption : MonoBehaviour
     // 효과음 조정 
     public void SetSoundEffectSlider(float value)
     {
+        if (!AudioManager.Instance)
+        {
+            GFunc.Log("오디오 매니저를 찾을 수 없습니다.");
+            return;
+        }
         AudioManager.Instance.SFXVolume(value);
         soundEffectSlider.value = value;
         UserDataManager.Instance.sfx = value; // 유저 데이터에 저장

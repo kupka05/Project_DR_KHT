@@ -11,22 +11,44 @@ public class VRSceneLoder : MonoBehaviour
     public string sceneName;    // 전환할 씬의 이름
     public float sceneDelay = 3f;    // 씬 전환 시 딜레이
     public bool autoLoad;       // 체크 시 자동으로 씬 전환 
-
+    public bool isWaitForGoogleSheetLoad;   // 체크 시 구글 시트가 불러졌을 때 로드
+    private bool _isLoadScene = false;           // 씬 로드중인지 확인
     private ScreenFader fader;  // 플레이어 페이더
 
     void Start()
     {
-        // 플레이어의 페이더 찾아오기
-        fader = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ScreenFader>();
-        if(!fader)
+        // isWaitForGoogleSheetLoad == false
+        if (isWaitForGoogleSheetLoad.Equals(false))
         {
-            GFunc.Log("페이더를 찾지 못했습니다.");
-        }
+            // 플레이어의 페이더 찾아오기
+            fader = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ScreenFader>();
+            if(!fader)
+            {
+                GFunc.Log("페이더를 찾지 못했습니다.");
+            }
 
-        // 자동으로 씬 전환
-        if (autoLoad) 
+            // 자동으로 씬 전환
+            if (autoLoad) 
+            {
+                LoadScene(sceneName);
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        // isWaitForGoogleSheetLoad == true
+        if (isWaitForGoogleSheetLoad.Equals(true) && _isLoadScene.Equals(false))
         {
-            LoadScene(sceneName);
+            GFunc.Log("isWaitForGoogleSheetLoad.Equals(true)");
+            // 데이터 매니저에 테이블이 전부 추가되었을 경우
+            GFunc.Log($"GoogleSheetLoader.isDone.Equals(true) == {GoogleSheetLoader.isDone.Equals(true)}");
+            // 데이터 매니저에 데이터가 전부 로드되었을 경우
+            if (DataManager.Instance.IsDataLoaded())
+            {
+                _isLoadScene = true;
+                LoadScene(sceneName);
+            }
         }
     }
 
@@ -61,7 +83,9 @@ public class VRSceneLoder : MonoBehaviour
             fader.DoFadeIn();                           // 페이더를 켜고
         }
 
-        yield return new WaitForSeconds (sceneDelay);   // 딜레이 이후
+
+            yield return new WaitForSeconds (sceneDelay);   // 딜레이 이후
+
         
         SceneManager.LoadScene(_SceneName);             // 지정된 이름의 씬을 로딩
     }

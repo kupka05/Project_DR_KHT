@@ -37,9 +37,9 @@ public class GuidedBullet : MonoBehaviour
 
     public void GetData(int GuidedTableId)
     {
-        damage = (float)DataManager.instance.GetData(GuidedTableId, "Damage", typeof(float));
-        destoryTime = (float)DataManager.instance.GetData(GuidedTableId, "DesTime", typeof(float));
-        speed = (float)DataManager.instance.GetData(GuidedTableId, "Speed", typeof(float));
+        damage = (float)DataManager.Instance.GetData(GuidedTableId, "Damage", typeof(float));
+        destoryTime = (float)DataManager.Instance.GetData(GuidedTableId, "DesTime", typeof(float));
+        speed = (float)DataManager.Instance.GetData(GuidedTableId, "Speed", typeof(float));
     }
 
     //public void Shoot()

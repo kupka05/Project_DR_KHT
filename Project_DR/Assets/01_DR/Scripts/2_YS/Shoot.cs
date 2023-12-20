@@ -38,11 +38,11 @@ public class Shoot : MonoBehaviour
     public void GetData(int tableID)
     {
         //6913
-        speed = (float)DataManager.instance.GetData(tableID, "Speed", typeof(float));
-        bulletCount = (float)DataManager.instance.GetData(tableID, "Duration", typeof(float));
-        destoryTime = (float)DataManager.instance.GetData(tableID, "DesTime", typeof(float));
-        delayTime = (float)DataManager.instance.GetData(tableID, "DelTime", typeof(float));
-        delay = (float)DataManager.instance.GetData(tableID, "Delay", typeof(float));
+        speed = (float)DataManager.Instance.GetData(tableID, "Speed", typeof(float));
+        bulletCount = (float)DataManager.Instance.GetData(tableID, "Duration", typeof(float));
+        destoryTime = (float)DataManager.Instance.GetData(tableID, "DesTime", typeof(float));
+        delayTime = (float)DataManager.Instance.GetData(tableID, "DelTime", typeof(float));
+        delay = (float)DataManager.Instance.GetData(tableID, "Delay", typeof(float));
 
     }
 

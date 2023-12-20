@@ -10,7 +10,7 @@ namespace Js.Quest
         /*************************************************
          *                 Public Fields
          *************************************************/
-        public List<Quest> QuestList => UserDataManager.quests;     // 보유한 퀘스트 리스트
+        public List<Quest> QuestList => UserDataManager.QuestList;      // 플레이어가 보유한 퀘스트 리스트
 
 
         /*************************************************

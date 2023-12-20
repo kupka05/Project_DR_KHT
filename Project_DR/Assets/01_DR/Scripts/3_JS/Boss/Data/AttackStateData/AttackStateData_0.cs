@@ -33,13 +33,13 @@ namespace BossMonster
         // 생성자 & 부모 생성자
         public AttackStateData_0(int id, BossData bossData)
         {
-            int patternID = (int)DataManager.instance.GetData(id, "AttackPatternKeyID", typeof(int));
+            int patternID = (int)DataManager.Instance.GetData(id, "AttackPatternKeyID", typeof(int));
             _bossData = bossData;
-            _areaSpeed = (float)DataManager.instance.GetData(patternID, "AreaSpeed", typeof(float));
-            _areaRange = (float)DataManager.instance.GetData(patternID, "AreaRange", typeof(float));
-            _areaSpawnTime = (float)DataManager.instance.GetData(patternID, "AreaSpawnTime", typeof(float));
-            _areaDamage = (float)DataManager.instance.GetData(patternID, "AreaDamage", typeof(float));
-            _outputInterval = (float)DataManager.instance.GetData(patternID, "OutputInterval", typeof(float));
+            _areaSpeed = (float)DataManager.Instance.GetData(patternID, "AreaSpeed", typeof(float));
+            _areaRange = (float)DataManager.Instance.GetData(patternID, "AreaRange", typeof(float));
+            _areaSpawnTime = (float)DataManager.Instance.GetData(patternID, "AreaSpawnTime", typeof(float));
+            _areaDamage = (float)DataManager.Instance.GetData(patternID, "AreaDamage", typeof(float));
+            _outputInterval = (float)DataManager.Instance.GetData(patternID, "OutputInterval", typeof(float));
         }
     }
 }

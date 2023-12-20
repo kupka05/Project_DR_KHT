@@ -48,7 +48,7 @@ public static class ItemDataManager
             InitTable(QUEST_TYPE_ID, "Quest");
 
             // 디버그
-            //string data2 = (string)DataManager.instance.GetData(50022221, "Dur222ation", typeof(string));
+            //string data2 = (string)DataManager.Instance.GetData(50022221, "Dur222ation", typeof(string));
             //GFunc.Log($"TEST: {SearchItemDB<MaterialItemData>(5201).Desc}");
             //GFunc.Log($"TEST: {SearchItemDB<MaterialItemData>(5206).Desc}");
         }
@@ -154,7 +154,7 @@ public static class ItemDataManager
     #region [+]
     private static void InitTable(int typeID, string category)
     {
-        int size = DataManager.instance.GetCount(typeID);
+        int size = DataManager.Instance.GetCount(typeID);
         for (int i = 0; i < size; i++)
         {
             int id = typeID + i;
@@ -186,36 +186,36 @@ public static class ItemDataManager
     private static T InitData<T>(int id, T data) where T : ItemData
     {
         // itemData가 가지고 있는 기본 프로퍼티
-        data._id = (int)DataManager.instance.GetData(id, "ID", typeof(int));
-        data._name = (string)DataManager.instance.GetData(id, "Name", typeof(string));
-        data._desc = (string)DataManager.instance.GetData(id, "Desc", typeof(string));
-        data._iconSprite = Resources.Load<Sprite>((string)DataManager.instance.GetData(id, "IconSprite", typeof(string)));
-        data._prefab = Resources.Load<GameObject>((string)DataManager.instance.GetData(id, "PrefabName", typeof(string)));
+        data._id = (int)DataManager.Instance.GetData(id, "ID", typeof(int));
+        data._name = (string)DataManager.Instance.GetData(id, "Name", typeof(string));
+        data._desc = (string)DataManager.Instance.GetData(id, "Desc", typeof(string));
+        data._iconSprite = Resources.Load<Sprite>((string)DataManager.Instance.GetData(id, "IconSprite", typeof(string)));
+        data._prefab = Resources.Load<GameObject>((string)DataManager.Instance.GetData(id, "PrefabName", typeof(string)));
 
         // 자식 클래스에 해당 프로퍼티가 있는지 확인 후 데이터 추가
         if (CheckField<T, int>(data, "_maxAmount"))
         {
-            SetFieldIfExists(data, "_maxAmount", (int)DataManager.instance.GetData(id, "MaxCount", typeof(int)));
+            SetFieldIfExists(data, "_maxAmount", (int)DataManager.Instance.GetData(id, "MaxCount", typeof(int)));
         }
         if (CheckField<T, float>(data, "_effectAmount"))
         {
-            SetFieldIfExists(data, "_effectAmount", (float)DataManager.instance.GetData(id, "EffectAmount", typeof(float)));
+            SetFieldIfExists(data, "_effectAmount", (float)DataManager.Instance.GetData(id, "EffectAmount", typeof(float)));
         }
         if (CheckField<T, float>(data, "_radius"))
         {
-            SetFieldIfExists(data, "_radius", (float)DataManager.instance.GetData(id, "Radius", typeof(float)));
+            SetFieldIfExists(data, "_radius", (float)DataManager.Instance.GetData(id, "Radius", typeof(float)));
         }
         if (CheckField<T, float>(data, "_duration"))
         {
-            SetFieldIfExists(data, "_duration", (float)DataManager.instance.GetData(id, "Duration", typeof(float)));
+            SetFieldIfExists(data, "_duration", (float)DataManager.Instance.GetData(id, "Duration", typeof(float)));
         }
         if (CheckField<T, float>(data, "_maxDuration"))
         {
-            SetFieldIfExists(data, "_maxDuration", (float)DataManager.instance.GetData(id, "MaxDuration", typeof(float)));
+            SetFieldIfExists(data, "_maxDuration", (float)DataManager.Instance.GetData(id, "MaxDuration", typeof(float)));
         }
         if (CheckField<T, float>(data, "_effectDuration"))
         {
-            SetFieldIfExists(data, "_effectDuration", (float)DataManager.instance.GetData(id, "EffectDuration", typeof(float)));
+            SetFieldIfExists(data, "_effectDuration", (float)DataManager.Instance.GetData(id, "EffectDuration", typeof(float)));
         }
 
         return data;

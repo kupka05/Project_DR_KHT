@@ -19,39 +19,47 @@ using Js.Quest;
 //!
 //! 2. DataManager에 저장된 데이터를 불러온다.
 //! 2-1. 하나의 데이터 값만 가져올 때
-//! DataManager.instance.GetData(아이디, 카테고리);
-//! 값을 받을 때 int num = (int)DataManager.instance.GetData();
+//! DataManager.Instance.GetData(아이디, 카테고리);
+//! 값을 받을 때 int num = (int)DataManager.Instance.GetData();
 //! 위와 같은 형태로 맞는 데이터 타입으로 형변환 해야 한다.
 //! *what? 아이디 = CSV파일 참조
 //! *what? 카테고리 = CSV파일의 행 참조
 //!
 //! 2-2. 아이디에 해당하는 줄의 모든 데이터를 가져올 떄
-//! DataManager.instance.GetData(아이디);
+//! DataManager.Instance.GetData(아이디);
 //! *what? 반환타입 = Dictionary<string, string> 이며,
 //! 가져올 변수를 같은 타입으로 선언해야 한다.
-//!
+//!SetIDTable
 //! 아이디가 들어있는 CSV파일의 카운트를 가져온다.
 //! DataManager.GetCount(아이디);
 public class DataManager : MonoBehaviour
 {
-    // 싱글톤
-    private static DataManager _instance;
-    public static DataManager instance
+    #region 싱글톤 패턴
+
+
+    private static DataManager m_Instance = null; // 싱글톤이 할당될 static 변수    
+
+    public static DataManager Instance
     {
         get
         {
-            if (_instance == null)
+            if (m_Instance == null)
+                m_Instance = FindObjectOfType<DataManager>();
+            if (m_Instance == null)
             {
                 GameObject obj = new GameObject("DataManager");
-                _instance = obj.AddComponent<DataManager>();
+                m_Instance = obj.AddComponent<DataManager>();
+                DontDestroyOnLoad(obj);
             }
-            return _instance;
+            return m_Instance;
         }
     }
+    #endregion
 
     [Header("Choi")]
     // 데이터를 보관하는 변수
-    private Dictionary<int, Dictionary<string, List<string>>>
+    
+    public Dictionary<int, Dictionary<string, List<string>>>
         dataTable = new Dictionary<int, Dictionary<string, List<string>>>();
 
     private Dictionary<int, Dictionary<string, List<string>>>
@@ -117,17 +125,6 @@ public class DataManager : MonoBehaviour
      *************************************************/
     private void Awake()
     {
-        // 싱글톤 인스턴스 초기화
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
         // 로컬용 CSV 파일을 테이블에 Init
         InitLocalDataTable();
     }
@@ -137,18 +134,33 @@ public class DataManager : MonoBehaviour
      *                 Public Methods
      *************************************************/
     #region [+]
+    // 데이터 매니저에 데이터가 전부 불러와졌는지 확인
+    public bool IsDataLoaded()
+    {
+        // 시트에 있는 테이블을 전부 가져왔을 경우
+        if (dataTable.Count.Equals(fileNames.Length))
+        {
+            return true;
+        }
+
+        // 아닐 경우
+        return false;
+    }
+
     // CSV Reader로 불러온 Dictionary<string, List<string>를
     // dataTable에 데이터를 저장하는 함수
-
-    int num = 0;
     public void SetData(Dictionary<string, List<string>> data)
     {
+        // data 카운트가 0 또는 1일 경우 예외처리
+        if (data.Count.Equals(0) || data.Count.Equals(1)) { GFunc.LogWarning($"DataManager.SetData(): 가져온 데이터에 문제가 있어 저장할 수 없습니다."); return; }
+
+        // ID 값을 idTable에 저장하는 함수 호출
+        // 실패(false)시 예외처리
+        if (SetIDTable(data).Equals(false)) { GFunc.LogWarning($"DataManager.SetData(): IDTable을 저장하는데 오류가 발생했습니다. 예외처리"); return; };
+
         // dataTable에 값 추가
         int index = dataTable.Count;
         dataTable.Add(index, data);
-
-        // ID 값을 idTable에 저장하는 함수 호출
-        SetIDTable(data);
     }
 
     // dataTable에 저장된 데이터를 가져오는 함수
@@ -241,7 +253,7 @@ public class DataManager : MonoBehaviour
 
         catch (Exception ex)
         {
-            GFunc.LogWarning($"오류 강제 예외처리 / DataManager.instance.GetData() {category} : {id} / Exception: {ex.Message}");
+            GFunc.LogWarning($"오류 강제 예외처리 / DataManager.Instance.GetData() {category} : {id} / Exception: {ex.Message}");
 
             // 만약 castType이 string 일 경우
             // 참조 타입이므로 예외처리 한다.
@@ -340,11 +352,16 @@ public class DataManager : MonoBehaviour
     }
 
     // ID 값을 idTable에 저장하는 함수
-    private void SetIDTable(Dictionary<string, List<string>> data)
+    // 성공시 true 반환
+    private bool SetIDTable(Dictionary<string, List<string>> data)
     {
 
-        // dataTable의 길이 - 1 를 딕셔너리 접근 인덱스로 설정
-        int index = dataTable.Count - 1;
+        // dataTable의 길이를 딕셔너리 접근 인덱스로 설정
+        // SetIDTable의 경우 IDTable을 설정한 후 dataTable을
+        // 추가하도록 변경했음
+        // index = dataTable.Count -1 에서 dataTable.Count로
+        // 최종 수정 [2023-12-20]
+        int index = dataTable.Count ;
         try
         {
             // data[ID_HEADER]의 길이 만큼 순회
@@ -358,6 +375,9 @@ public class DataManager : MonoBehaviour
                     GFunc.LogWarning($"SetIDTable(): 등록하는 ID: [{id}]는 " +
                         $"기존에 있는 ID와 중복됩니다. CSV 파일의 ID 값을 변경하시거나, " +
                         $"CSV파일이 중복으로 SetData()를 호출하는지 확인해주세요.");
+
+                    // 예외처리
+                    return false;
                 }
                 // 딕셔너리의 키값으로 ID를 설정하고, 내부 List에 실제 인덱스를 저장한다.
                 // index는 딕셔너리의 위치, index2는 실제 데이터 열이 저장된 위치
@@ -365,10 +385,16 @@ public class DataManager : MonoBehaviour
                 idTable[id].Add(index); // [0] 딕셔너리의 위치
                 idTable[id].Add(index2); // [1] 실제 데이터 열이 저장된 위치
             }
+
+            return true;
         }
+
         catch (Exception ex)
         {
+            GFunc.LogWarning($"ID테이블 오류 발생 {data}, index:{index}");
             GFunc.Log($"DataManager.SetIDTable()[{fileNames[index]}] ID 테이블 오류 발생 + {ex.Message}");
+
+            return false;
         }
 
     }

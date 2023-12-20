@@ -194,8 +194,8 @@ public class DamageScreenFader : MonoBehaviour
     }
     private void GetData()
     {
-        FadeInSpeed = (float)DataManager.instance.GetData(1001, "FadeSpeed", typeof(float));
-        FadeOutSpeed = (float)DataManager.instance.GetData(1001, "FadeSpeed", typeof(float));
+        FadeInSpeed = (float)DataManager.Instance.GetData(1001, "FadeSpeed", typeof(float));
+        FadeOutSpeed = (float)DataManager.Instance.GetData(1001, "FadeSpeed", typeof(float));
 
     }
 }

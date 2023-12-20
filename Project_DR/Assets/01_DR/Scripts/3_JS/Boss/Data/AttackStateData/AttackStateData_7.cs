@@ -37,15 +37,15 @@ namespace BossMonster
         // 생성자 & 부모 생성자
         public AttackStateData_7(int id, BossData bossData)
         {
-            int patternID = (int)DataManager.instance.GetData(id, "AttackPatternKeyID", typeof(int));
+            int patternID = (int)DataManager.Instance.GetData(id, "AttackPatternKeyID", typeof(int));
             _bossData = bossData;
-            _projectileType = (int)DataManager.instance.GetData(patternID, "ProjectileType", typeof(int));
-            _projectileCount = (int)DataManager.instance.GetData(patternID, "ProjectileCount", typeof(int));
-            _projectileHP = (float)DataManager.instance.GetData(patternID, "ProjectileHP", typeof(float));
-            _projectileSpeed = (float)DataManager.instance.GetData(patternID, "ProjectileSpeed", typeof(float));
-            _projectileDuration = (float)DataManager.instance.GetData(patternID, "ProjectileDuration", typeof(float));
-            _projectileDamage = (float)DataManager.instance.GetData(patternID, "ProjectileDamage", typeof(float));
-            _outputInterval = (float)DataManager.instance.GetData(patternID, "OutputInterval", typeof(float));
+            _projectileType = (int)DataManager.Instance.GetData(patternID, "ProjectileType", typeof(int));
+            _projectileCount = (int)DataManager.Instance.GetData(patternID, "ProjectileCount", typeof(int));
+            _projectileHP = (float)DataManager.Instance.GetData(patternID, "ProjectileHP", typeof(float));
+            _projectileSpeed = (float)DataManager.Instance.GetData(patternID, "ProjectileSpeed", typeof(float));
+            _projectileDuration = (float)DataManager.Instance.GetData(patternID, "ProjectileDuration", typeof(float));
+            _projectileDamage = (float)DataManager.Instance.GetData(patternID, "ProjectileDamage", typeof(float));
+            _outputInterval = (float)DataManager.Instance.GetData(patternID, "OutputInterval", typeof(float));
         }
     }
 }

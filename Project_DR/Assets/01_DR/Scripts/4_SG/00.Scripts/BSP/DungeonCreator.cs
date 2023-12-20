@@ -192,10 +192,10 @@ public class DungeonCreator : MonoBehaviour
     // 바닥에 깔아둘 ObjPrefabs
     public GameObject[] floorPrefabs;
     // 가능한 문 및 벽 위치 목록
-    private List<Vector3Int> possibleDoorVerticalPosition;
-    private List<Vector3Int> possibleDoorHorizontalPosition;
-    private List<Vector3Int> possibleWallHorizontalPosition;
-    private List<Vector3Int> possibleWallVerticalPosition;
+    private List<Vector3> possibleDoorVerticalPosition;
+    private List<Vector3> possibleDoorHorizontalPosition;
+    private List<Vector3> possibleWallHorizontalPosition;
+    private List<Vector3> possibleWallVerticalPosition;
 
     public float floorYPos = -0.5f;   // 바닥 콜라이더 y포지션
     public float floorSize = 1f;     // 바닥 콜라이더 크기
@@ -231,10 +231,10 @@ public class DungeonCreator : MonoBehaviour
         // 벽 부모 오브젝트 생성
         GameObject wallParent = new GameObject("WallParent");
         wallParent.transform.parent = transform;
-        possibleDoorVerticalPosition = new List<Vector3Int>();
-        possibleDoorHorizontalPosition = new List<Vector3Int>();
-        possibleWallHorizontalPosition = new List<Vector3Int>();
-        possibleWallVerticalPosition = new List<Vector3Int>();
+        possibleDoorVerticalPosition = new List<Vector3>();
+        possibleDoorHorizontalPosition = new List<Vector3>();
+        possibleWallHorizontalPosition = new List<Vector3>();
+        possibleWallVerticalPosition = new List<Vector3>();
 
         // 바닥의 부모 오브젝트 생성
         GameObject floorParent = new GameObject("FloorMeshParent");
@@ -304,30 +304,30 @@ public class DungeonCreator : MonoBehaviour
     private void DungeonValueInIt()
     {
         
-        dungeonWidth = (int)DataManager.instance.GetData((int)DungeonTableID.DungeonWidth, "DungeonWidth", typeof(int));
-        dungeonHeight = (int)DataManager.instance.GetData((int)DungeonTableID.DungeonHeight, "DungeonHeight", typeof(int));
-        roomWidthMin = (int)DataManager.instance.GetData((int)DungeonTableID.RoomWidthMin, "RoomWidthMin", typeof(int));
-        roomLengthMin = (int)DataManager.instance.GetData((int)DungeonTableID.RoomLengthMin, "RoomLengthMin", typeof(int));        
-        maxIterations = (int)DataManager.instance.GetData((int)DungeonTableID.MaxIterations, "MaxIterations", typeof(int));
-        corridorWidth = (int)DataManager.instance.GetData((int)DungeonTableID.CorridorWidth, "CorridorWidth", typeof(int));
-        roomBottomCornerModifier = (float)DataManager.instance.GetData((int)DungeonTableID.RoomBottomCornerModifier, "RoomBottomCornerModifier", typeof(float));
-        roomTopCornerModifier = (float)DataManager.instance.GetData((int)DungeonTableID.RoomTopCornerModifier, "RoomTopCornerModifier", typeof(float));        
-        roomOffset = (int)DataManager.instance.GetData((int)DungeonTableID.RoomOffset, "RoomOffset", typeof(int));
-        roopYpos = new Vector3(1f, (float)DataManager.instance.GetData((int)DungeonTableID.RoopYpos, "RoopYpos",typeof(float)), 1f);
+        dungeonWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.DungeonWidth, "DungeonWidth", typeof(int));
+        dungeonHeight = (int)DataManager.Instance.GetData((int)DungeonTableID.DungeonHeight, "DungeonHeight", typeof(int));
+        roomWidthMin = (int)DataManager.Instance.GetData((int)DungeonTableID.RoomWidthMin, "RoomWidthMin", typeof(int));
+        roomLengthMin = (int)DataManager.Instance.GetData((int)DungeonTableID.RoomLengthMin, "RoomLengthMin", typeof(int));        
+        maxIterations = (int)DataManager.Instance.GetData((int)DungeonTableID.MaxIterations, "MaxIterations", typeof(int));
+        corridorWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.CorridorWidth, "CorridorWidth", typeof(int));
+        roomBottomCornerModifier = (float)DataManager.Instance.GetData((int)DungeonTableID.RoomBottomCornerModifier, "RoomBottomCornerModifier", typeof(float));
+        roomTopCornerModifier = (float)DataManager.Instance.GetData((int)DungeonTableID.RoomTopCornerModifier, "RoomTopCornerModifier", typeof(float));        
+        roomOffset = (int)DataManager.Instance.GetData((int)DungeonTableID.RoomOffset, "RoomOffset", typeof(int));
+        roopYpos = new Vector3(1f, (float)DataManager.Instance.GetData((int)DungeonTableID.RoopYpos, "RoopYpos",typeof(float)), 1f);
 
         // CustomRoom
-        pcRoomDistance = (float)DataManager.instance.GetData((int)DungeonTableID.PcRoomDistance, "PcRoomDistance", typeof(float));
-        pcRoomWidth = (int)DataManager.instance.GetData((int)DungeonTableID.PcRoomWidth, "PcRoomWidth", typeof(int));
-        pcRoomHeight = (int)DataManager.instance.GetData((int)DungeonTableID.PcRoomHeight, "PcRoomHeight", typeof(int));
+        pcRoomDistance = (float)DataManager.Instance.GetData((int)DungeonTableID.PcRoomDistance, "PcRoomDistance", typeof(float));
+        pcRoomWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.PcRoomWidth, "PcRoomWidth", typeof(int));
+        pcRoomHeight = (int)DataManager.Instance.GetData((int)DungeonTableID.PcRoomHeight, "PcRoomHeight", typeof(int));
 
-        bossRoomDistance = (float)DataManager.instance.GetData((int)DungeonTableID.BossRoomDistance, "BossRoomDistance", typeof(float));
-        bossRoomWidth = (int)DataManager.instance.GetData((int)DungeonTableID.BossRoomWidth, "BossRoomWidth", typeof(int));
-        bossRoomHeight = (int)DataManager.instance.GetData((int)DungeonTableID.BossRoomHeight, "BossRoomHeight", typeof(int));
+        bossRoomDistance = (float)DataManager.Instance.GetData((int)DungeonTableID.BossRoomDistance, "BossRoomDistance", typeof(float));
+        bossRoomWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.BossRoomWidth, "BossRoomWidth", typeof(int));
+        bossRoomHeight = (int)DataManager.Instance.GetData((int)DungeonTableID.BossRoomHeight, "BossRoomHeight", typeof(int));
 
-        nextStageRoomDistance = (float)DataManager.instance.GetData((int)DungeonTableID.NextStageRoomDistance, "NextStageRoomDistance", typeof(float));
-        nextStageRoomWidth = (int)DataManager.instance.GetData((int)DungeonTableID.NextStageRoomWidth, "NextStageRoomWidth", typeof(int));
-        nextStageRoomHeight = (int)DataManager.instance.GetData((int)DungeonTableID.NextStageRoomHeight, "NextStageRoomHeight", typeof(int));
-        wallBreakDownPercentage = (float)DataManager.instance.GetData((int)DungeonTableID.WallBreakDownPercentage, "WallBreakDownPercentage", typeof(float));
+        nextStageRoomDistance = (float)DataManager.Instance.GetData((int)DungeonTableID.NextStageRoomDistance, "NextStageRoomDistance", typeof(float));
+        nextStageRoomWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.NextStageRoomWidth, "NextStageRoomWidth", typeof(int));
+        nextStageRoomHeight = (int)DataManager.Instance.GetData((int)DungeonTableID.NextStageRoomHeight, "NextStageRoomHeight", typeof(int));
+        wallBreakDownPercentage = (float)DataManager.Instance.GetData((int)DungeonTableID.WallBreakDownPercentage, "WallBreakDownPercentage", typeof(float));
 
 
         
@@ -474,13 +474,13 @@ public class DungeonCreator : MonoBehaviour
 
         // 메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         // Center
-        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, roopYpos.y, (topLeftV.z + bottomLeftV.z) / 2);
         BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         floorCol.center = colCenter;
         // Size
         float colSizeX, colSizeY, colSizeZ;
         colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = floorSize;
+        colSizeY = roopYpos.y;
         colSizeZ = bottomLeftV.z - topLeftV.z;
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }
@@ -526,7 +526,7 @@ public class DungeonCreator : MonoBehaviour
     /// <summary>
     /// 벽 오브젝트 생성 함수
     /// </summary>    
-    private void CreateWall(GameObject wallParent, Vector3Int wallPosition, GameObject wallPrefab)
+    private void CreateWall(GameObject wallParent, Vector3 wallPosition, GameObject wallPrefab)
     {
         #region 벽생성만
         //Instantiate(wallPrefab, wallPosition, Quaternion.identity, wallParent.transform);
@@ -559,6 +559,7 @@ public class DungeonCreator : MonoBehaviour
 
         Vector3 wallPos = wallObjClone.transform.position;
         wallPos.y = wallObjClone.transform.localScale.y / 2;
+
         wallObjClone.transform.position = wallPos;
 
         // 2번째 벽 생성 
@@ -690,24 +691,29 @@ public class DungeonCreator : MonoBehaviour
         #endregion temp //
 
         // 벽 및 문 위치 추가
+
+        // 가로 하단
         for (int row = (int)bottomLeftV.x; row < (int)bottomRightV.x; row++)
         {
-            var wallPosition = new Vector3(row, 0, bottomLeftV.z);
+            var wallPosition = new Vector3(row + 0.5f , 0, bottomLeftV.z);
             AddWallPositionToList(wallPosition, possibleWallHorizontalPosition, possibleDoorHorizontalPosition);
         }
+        // 가로 상단
         for (int row = (int)topLeftV.x; row < (int)topRightCorner.x; row++)
         {
-            var wallPosition = new Vector3(row, 0, topRightV.z);
+            var wallPosition = new Vector3(row + 0.5f, 0, topRightV.z);
             AddWallPositionToList(wallPosition, possibleWallHorizontalPosition, possibleDoorHorizontalPosition);
         }
+        // 세로 좌측
         for (int col = (int)bottomLeftV.z; col < (int)topLeftV.z; col++)
         {
-            var wallPosition = new Vector3(bottomLeftV.x, 0, col);
+            var wallPosition = new Vector3(bottomLeftV.x, 0, col + 0.5f);
             AddWallPositionToList(wallPosition, possibleWallVerticalPosition, possibleDoorVerticalPosition);
         }
+        // 세로 우측
         for (int col = (int)bottomRightV.z; col < (int)topRightV.z; col++)
         {
-            var wallPosition = new Vector3(bottomRightV.x, 0, col);
+            var wallPosition = new Vector3(bottomRightV.x, 0, col + 0.5f);
             AddWallPositionToList(wallPosition, possibleWallVerticalPosition, possibleDoorVerticalPosition);
         }
 
@@ -888,17 +894,17 @@ public class DungeonCreator : MonoBehaviour
 
 
     // 벽 위치 목록에 벽 또는 문 위치 추가
-    private void AddWallPositionToList(Vector3 wallPosition, List<Vector3Int> wallList, List<Vector3Int> doorList)
+    private void AddWallPositionToList(Vector3 wallPosition, List<Vector3> wallList, List<Vector3> doorList)
     {
-        Vector3Int point = Vector3Int.CeilToInt(wallPosition);
-        if (wallList.Contains(point))
+        //Vector3Int point = Vector3Int.CeilToInt(wallPosition);    // JH : INT 모두 Vector3 로 변경
+        if (wallList.Contains(wallPosition))
         {
-            doorList.Add(point);
-            wallList.Remove(point);
+            doorList.Add(wallPosition);
+            wallList.Remove(wallPosition);
         }
         else
         {
-            wallList.Add(point);
+            wallList.Add(wallPosition);
         }
     }       // AddWallPositionToList()
 

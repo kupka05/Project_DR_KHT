@@ -66,12 +66,7 @@ public class Monster : MonoBehaviour
 
 
     [Header("몬스터 테이블")]
-    //public float hp = default;       //체력이랑 damageble 보내준다
-    private float _hp;
-    public float hp
-    {
-        get { return _hp; } set { _hp = value; GFunc.Log(this.gameObject.name + "의 HP 바뀌는것을 시도한다. " + _hp); }
-    }
+    public float hp = default;       //체력이랑 damageble 보내준다
     public float attack = default;
     public float attDelay = default;   //몬스터 공격간격 
     public int exp = default;
@@ -580,8 +575,8 @@ public class Monster : MonoBehaviour
 
             if (countNum <= 3)
             {
-                countNum++;
                 smashCountNum.text = countNum.ToString();
+                countNum++;
                 Debug.Log($"숫자:{countNum}");
             }
             else if (countNum == 5)

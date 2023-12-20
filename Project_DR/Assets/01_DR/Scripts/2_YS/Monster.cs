@@ -69,7 +69,7 @@ public class Monster : MonoBehaviour
     public float hp = default;       //체력이랑 damageble 보내준다
     public float attack = default;
     public float attDelay = default;   //몬스터 공격간격 
-    public float exp = default;
+    public int exp = default;
     public float speed = default;      //몬스터 이동속도
     public float recRange = 30.0f;   //pc 인식범위
     public float attRange = 2.0f;   //pc 공격범위
@@ -199,7 +199,7 @@ public class Monster : MonoBehaviour
     public virtual void GetData(int id)
     {
         hp = (float)DataManager.instance.GetData(id, "MonHP", typeof(float));  
-        exp = (float)DataManager.instance.GetData(id, "MonExp", typeof(float));
+        exp = (int)DataManager.instance.GetData(id, "MonExp", typeof(float));
         attack = (float)DataManager.instance.GetData(id, "MonAtt", typeof(float));
         attDelay = (float)DataManager.instance.GetData(id, "MonDel", typeof(float));
         speed = (float)DataManager.instance.GetData(id, "MonSpd", typeof(float));
@@ -525,8 +525,8 @@ public class Monster : MonoBehaviour
                 nav.isStopped = true;
                 //GFunc.Log("nav.isStopped: " + nav.isStopped);
                 anim.SetTrigger(hashDie);
+                UserDataManager.Instance.result.AddMonsterNormal(0, exp);
 
-                //Destroy(this.gameObject, 1.3f); //damageable 쪽에서 처리
                 yield break;
             }
 
@@ -594,7 +594,7 @@ public class Monster : MonoBehaviour
     }
 
     // 몬스터 스턴
-    private void MonsterStun()
+    public void MonsterStun()
     {
           // 만약에 스턴루틴에 이미 다른 코루틴이 실행중인 경우
         if (stunRoutine != null)
@@ -607,13 +607,13 @@ public class Monster : MonoBehaviour
         StartCoroutine(stunRoutine);
     }
 
-    private void ApplyStackDamage(float damage)
+    public void ApplyStackDamage(float damage)
     {
         Debug.Log($"countNum = {countNum}");
 
         if (countNum == 2)
         {
-            damageable.Health -= SmashDamageCalculate(damage, 1);
+            damageable.Health -= SmashDamageCalculate(damage, 1);  //여기에 smashone넣어도 되는가?
             // 갱신된 체력 값을 적용
             SetHealth(damageable.Health);
 
@@ -653,7 +653,7 @@ public class Monster : MonoBehaviour
         return (damage * (1 + _debuff)) - damage;;
     }
 
-    IEnumerator SmashTime()
+    public IEnumerator SmashTime()
     {
         while (smashFilled.fillAmount > 0)
         {

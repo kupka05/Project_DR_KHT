@@ -363,4 +363,16 @@ public static class UserData
     {
         UserDataManager.Instance.DBRequst(action);
     }
+    #region ####################_Quest_#####################
+
+    public static string GetQuest()
+    {
+        return UserDataManager.Instance.QuestMain;
+    }
+    // 퀘스트 유무 확인
+    public static bool QuestCheck()
+    {
+        return String.IsNullOrEmpty(UserDataManager.Instance.QuestMain);
+    }
+    #endregion
 }

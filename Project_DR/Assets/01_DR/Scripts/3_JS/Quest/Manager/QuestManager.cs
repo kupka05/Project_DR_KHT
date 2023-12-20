@@ -52,7 +52,7 @@ namespace Js.Quest
         public List<Quest> QuestList => UserDataManager.QuestList;                           // 보유 퀘스트 리스트
         public Dictionary<int, Quest> QuestDictionary => UserDataManager.QuestDictionary;    // 보유 퀘스트 딕셔너리
 
-        public const int QUEST_FIRST_ID = 1_000_000_1;                                       // 퀘스트 테이블 시작 ID
+        public const int QUEST_FIRST_ID = 31_1_1_001;                                        // 퀘스트 테이블 시작 ID
 
 
         /*************************************************
@@ -153,7 +153,7 @@ namespace Js.Quest
         }
 
         // 특정 타입의 퀘스트를 List<Quest>로 반환한다 
-        public List<Quest> GetQuestsOfType(int type)
+        public List<Quest> GetQuestsOfType(int type, int state = 0)
         {
             List<Quest> questList = new List<Quest>();
 
@@ -170,6 +170,46 @@ namespace Js.Quest
             }
 
             return questList;
+        }
+
+        // 특정한 상태에 해당하는 모든 퀘스트를 리스트로 가져온다
+        public List<Quest> GetQuestsByStatus(int state)
+        {
+            List<Quest> questList = new List<Quest>();
+
+            // QuestList 순회
+            QuestState.StateQuest questState = (QuestState.StateQuest)state;
+            foreach (var item in QuestList)
+            {
+                // 상태가 일치할 경우
+                if (item.QuestState.State.Equals(questState))
+                {
+                    // questList에 퀘스트 추가
+                    questList.Add(item);
+                }
+            }
+
+            return questList;
+        }
+
+        // 받은 Quest List에서 특정한 상태를 가진 퀘스트만 따로 추출한다
+        public List<Quest> GetQuestsByStatusFromQuestList(List<Quest> questList, int state)
+        {
+            List<Quest> tempQuestList = new List<Quest>();
+
+            // questList 순회
+            QuestState.StateQuest questState = (QuestState.StateQuest)state;
+            foreach (var item in questList)
+            {
+                // 상태가 일치할 경우
+                if (item.QuestState.State.Equals(questState))
+                {
+                    // tempQuestList에 퀘스트 추가
+                    tempQuestList.Add(item);
+                }
+            }
+
+            return tempQuestList;
         }
 
         // 특정 타입 퀘스트의 전체 Count를 반환한다

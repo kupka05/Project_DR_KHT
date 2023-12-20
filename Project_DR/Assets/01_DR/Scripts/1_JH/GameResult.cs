@@ -136,9 +136,9 @@ public class GameResult
 [System.Serializable]
 public class MonsterResult
 {
-    public MonsterScore normal;
-    public MonsterScore elite;
-    public MonsterScore boss;
+    public MonsterScore normal = new MonsterScore();
+    public MonsterScore elite = new MonsterScore();
+    public MonsterScore boss = new MonsterScore();
 
     public void AddMonsterScore(MonsterScore score, int _gold, int _exp)
     {

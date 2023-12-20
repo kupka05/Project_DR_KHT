@@ -35,7 +35,7 @@ public class BossBullet : MonoBehaviour
     public void GetData(int smallTableID)
     {
         //6910
-        damage = (float)DataManager.instance.GetData(smallTableID, "Damage", typeof(float));
+        damage = (float)DataManager.Instance.GetData(smallTableID, "Damage", typeof(float));
     }
 
     IEnumerator DestroyGameObject()

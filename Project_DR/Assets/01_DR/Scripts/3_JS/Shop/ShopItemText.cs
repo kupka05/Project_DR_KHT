@@ -15,8 +15,8 @@ public class ShopItemText : MonoBehaviour
     public void Initialize(int id)
     {
         _id = id;
-        _name = (string)DataManager.instance.GetData(_id, "Name", typeof(string));
-        _price = (int)DataManager.instance.GetData(_id, "Price", typeof(int));
+        _name = (string)DataManager.Instance.GetData(_id, "Name", typeof(string));
+        _price = (int)DataManager.Instance.GetData(_id, "Price", typeof(int));
     }
 
     // 데이터 호출 및 텍스트 갱신

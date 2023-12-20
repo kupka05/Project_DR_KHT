@@ -51,6 +51,10 @@ public class GoogleSheetsReader
             if (www.result != UnityWebRequest.Result.Success)
             {
                 GFunc.LogError("Error: " + www.error);
+
+                // 리퀘스트 오류 발생시 다시 로드 한다.
+                GoogleSheetLoader.instance.ReLoadGoogleSheetsData(
+                    spreadsheetId, apiKey, sheetName, isCsvConvert, waitFrame, callBack);
             }
             else
             {

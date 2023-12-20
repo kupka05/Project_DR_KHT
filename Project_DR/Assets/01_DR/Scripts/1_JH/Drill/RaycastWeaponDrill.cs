@@ -893,9 +893,9 @@ namespace BNG
             dotDamage = UserData.GetDrillSpinDamage();
             FiringRate = UserData.GetAttackSpeed();
 
-            //damage = (float)DataManager.instance.GetData(1100, "Damage", typeof(float)) ;
-            //dotDamage = (float)DataManager.instance.GetData(1100, "DotDamage", typeof(float)) ;
-            //FiringRate = (float)DataManager.instance.GetData(1100, "AttackSpeed", typeof(float));
+            //damage = (float)DataManager.Instance.GetData(1100, "Damage", typeof(float)) ;
+            //dotDamage = (float)DataManager.Instance.GetData(1100, "DotDamage", typeof(float)) ;
+            //FiringRate = (float)DataManager.Instance.GetData(1100, "AttackSpeed", typeof(float));
         }
     }
 

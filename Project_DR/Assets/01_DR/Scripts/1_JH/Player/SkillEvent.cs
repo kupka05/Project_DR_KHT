@@ -178,9 +178,9 @@ public class SkillEvent : MonoBehaviour
         TDcheckerHeight = Data.GetFloat(1010, "Value1");
         TDcheckerTiming = Data.GetFloat(1010, "Value2");
         GDcheckerTiming = Data.GetFloat(20015, "Value3");
-        //TDcheckerHeight = (float)DataManager.instance.GetData(1010, "Value1", typeof(float));
-        //TDcheckerTiming = (float)DataManager.instance.GetData(1010, "Value2", typeof(float));
-        //GDcheckerTiming = (float)DataManager.instance.GetData(20015, "Value3", typeof(float));
+        //TDcheckerHeight = (float)DataManager.Instance.GetData(1010, "Value1", typeof(float));
+        //TDcheckerTiming = (float)DataManager.Instance.GetData(1010, "Value2", typeof(float));
+        //GDcheckerTiming = (float)DataManager.Instance.GetData(20015, "Value3", typeof(float));
 
         landingForce = UserData.GetLandingForce();
 

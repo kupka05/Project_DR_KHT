@@ -47,16 +47,24 @@ public class GoogleSheetLoader : MonoBehaviour
     // 상태를 알려주는 변수
     public static bool isDone = false;
 
+    // 리로드를 위한 인스턴스
+    public static GoogleSheetLoader instance;
+
     private void Start()
     {
         // 데이터 매니저를 설정하는 함수 호출
-        SetDataManager();
+        StartCoroutine(SetDataManager());
+
+        // Init
+        instance = this;
     }
 
     // 데이터 매니저에 GoogleSheet 문서 데이터를
     // 저장하는 함수
-    private void SetDataManager()
+    private IEnumerator SetDataManager()
     {
+        yield return null;
+
         // sheetNames의 길이 만큼 순회
         for (int i = 0; i < sheetNames.Length; i++)
         {
@@ -67,13 +75,22 @@ public class GoogleSheetLoader : MonoBehaviour
             StartCoroutine(GoogleSheetsReader.GetGoogleSheetsData(
                 spreadsheetId, apiKey, sheetNames[i], true, waitframe, data =>
                 {
-                    // callBack 변수에서 받은 data를
-                    // CSVReader.NewReadCSVFile()에
-                    // 매개변수로 보내 데이터 타입을 변경
-                    Dictionary<string, List<string>> dataDictionary =
-                    CSVReader.NewReadCSVFile(data);
-                    // dataDictionary를 데이터 매니저에 추가
-                    DataManager.instance.SetData(dataDictionary);
+                    // 데이터를 가져왔을 경우 값 저장
+                    if (data.Equals("").Equals(false))
+                    {
+                        // callBack 변수에서 받은 data를
+                        // CSVReader.NewReadCSVFile()에
+                        // 매개변수로 보내 데이터 타입을 변경
+                        Dictionary<string, List<string>> dataDictionary =
+                        CSVReader.NewReadCSVFile(data);
+                        // dataDictionary를 데이터 매니저에 추가
+                        DataManager.Instance.SetData(dataDictionary);
+                    }
+                    else
+                    {
+                        GFunc.LogWarning($"GoogleSheetLoader.SetDataManager(): 가져온 데이터: [{data}] " +
+                            $"데이터를 가져오지 못해 데이터를 저장하지 않았습니다.");
+                    }
                 }));
         }
 
@@ -92,5 +109,32 @@ public class GoogleSheetLoader : MonoBehaviour
         // 로딩 완료 상태 변경
         isDone = true;
         GFunc.Log("isDOne");
+    }
+
+    // GoogleSheetLoader에서 데이터를 못 불러왔을 경우
+    // 다시 로드한다.
+    public void ReLoadGoogleSheetsData(string spreadsheetId, string apiKey, string sheetName, 
+        bool isCsvConvert, int waitFrame, Action<string> callBack)
+    {
+        GFunc.LogWarning($"GoogleSheetLoader.ReLoadGoogleSheetsData(): [{sheetName}] 시트를 가져오지 못해서 다시 로드합니다.");
+        waitFrame = 200;
+        StartCoroutine(GoogleSheetsReader.GetGoogleSheetsData(
+         spreadsheetId, apiKey, sheetName, true, waitFrame, data =>
+         {
+             GFunc.LogWarning($"GoogleSheetLoader.ReLoadGoogleSheetsData(): 시트 이름: [{sheetName}] 가져온 데이터: [{data}]");
+             // 콜백 받은 데이터가 ""일 경우 재호출
+             if (data.Equals(""))
+             {
+                 ReLoadGoogleSheetsData(spreadsheetId, apiKey, sheetName, true, waitFrame, callBack);
+                 GFunc.LogWarning($"GoogleSheetLoader.ReLoadGoogleSheetsData(): 콜백받은 데이터가 [{data}]이므로 다시 로드합니다.");
+                 return;
+             }
+             // callBack 변수에서 받은 data를
+             // CSVReader.NewReadCSVFile()에
+             // 매개변수로 보내 데이터 타입을 변경
+             Dictionary<string, List<string>> dataDictionary = CSVReader.NewReadCSVFile(data);
+             // dataDictionary를 데이터 매니저에 추가
+             DataManager.Instance.SetData(dataDictionary);
+         }));
     }
 }

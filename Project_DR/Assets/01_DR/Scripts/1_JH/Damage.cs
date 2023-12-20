@@ -77,12 +77,12 @@ public class Damage : MonoBehaviour
         landingIncrease = UserData.GetLandingCritIncrease();
 
 
-        //critChance = (float)DataManager.instance.GetData(1100, "CritChance", typeof(float));      // 치명타 확률
-        //critIncrease = (float)DataManager.instance.GetData(1100, "CritIncrease", typeof(float));  // 치명타 증가율
+        //critChance = (float)DataManager.Instance.GetData(1100, "CritChance", typeof(float));      // 치명타 확률
+        //critIncrease = (float)DataManager.Instance.GetData(1100, "CritIncrease", typeof(float));  // 치명타 증가율
 
-        //teraIncrease = (float)DataManager.instance.GetData(721100, "Value1", typeof(float));      // 테라드릴 증가율
-        //grinderCritChance = (float)DataManager.instance.GetData(721114, "Value1", typeof(float)); // 드릴연마 치확
-        //grinderIncrease = (float)DataManager.instance.GetData(721115, "Value1", typeof(float));    // 드릴연마 증가
-        //landingIncrease = (float)DataManager.instance.GetData(720217, "Value2", typeof(float));
+        //teraIncrease = (float)DataManager.Instance.GetData(721100, "Value1", typeof(float));      // 테라드릴 증가율
+        //grinderCritChance = (float)DataManager.Instance.GetData(721114, "Value1", typeof(float)); // 드릴연마 치확
+        //grinderIncrease = (float)DataManager.Instance.GetData(721115, "Value1", typeof(float));    // 드릴연마 증가
+        //landingIncrease = (float)DataManager.Instance.GetData(720217, "Value2", typeof(float));
     }
 }

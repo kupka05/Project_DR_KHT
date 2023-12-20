@@ -140,8 +140,8 @@ public class PlayerBackDash : MonoBehaviour
 
     public void Getdata()
     {
-        force = (float)DataManager.instance.GetData(1001, "BackDash", typeof(float))*1000f;
-        coolDown = (float)DataManager.instance.GetData(1001, "BackDashCD", typeof(float));
+        force = (float)DataManager.Instance.GetData(1001, "BackDash", typeof(float))*1000f;
+        coolDown = (float)DataManager.Instance.GetData(1001, "BackDashCD", typeof(float));
     }
 
 }

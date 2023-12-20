@@ -147,16 +147,16 @@ public class NPC_CanvasController : MonoBehaviour
         nowConversationRefID = _conversationRefID;
 
         // Choice1Event가 존재한다면 그것의 ID를 풀어내서 참조해야함(플레이어퀘스트 || 이후 영향이 줄것)
-        string choice1Event = (string)DataManager.instance.GetData(_conversationRefID, "Choice1Event", typeof(string));
+        string choice1Event = (string)DataManager.Instance.GetData(_conversationRefID, "Choice1Event", typeof(string));
 
-        string choice1 = (string)DataManager.instance.GetData(_conversationRefID, "Choice1", typeof(string));
+        string choice1 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice1", typeof(string));
         CheckChoiceNull(choice1, 1, choice1Text, choice1Image);
 
-        string choice2 = (string)DataManager.instance.GetData(_conversationRefID, "Choice2", typeof(string));
+        string choice2 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice2", typeof(string));
         CheckChoiceNull(choice2, 2, choice2Text, choice2Image);
 
         // 아래 Choice3는 존재하면 띄우는 조건이 만족하는지 한번 체크해야함 (12.13기준 퀘스트가 나와야 클리어여부를 끌어와서 체크할수있음)
-        string choice3 = (string)DataManager.instance.GetData(_conversationRefID, "Choice3", typeof(string));
+        string choice3 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice3", typeof(string));
         CheckChoiceNull(choice3, 3, choice3Text, choice3Image); // 임시사용 함수
         //CheckChoice3();
 
@@ -260,7 +260,7 @@ public class NPC_CanvasController : MonoBehaviour
         stringBuilder.Append(choiceNum);
         stringBuilder.Append(eventText);
 
-        string eventRefId = (string)DataManager.instance.GetData(nowConversationRefID, stringBuilder.ToString(), typeof(string));
+        string eventRefId = (string)DataManager.Instance.GetData(nowConversationRefID, stringBuilder.ToString(), typeof(string));
 
         if (eventRefId == isNon || eventRefId == underBar)
         {

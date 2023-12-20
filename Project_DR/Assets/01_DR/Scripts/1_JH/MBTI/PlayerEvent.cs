@@ -130,7 +130,7 @@ public class PlayerEvent : MonoBehaviour
 
             ShopItem shopItem = shopItemCollider.GetShopItem();
             int shopItemID = shopItem.ID;
-            int itemID = (int)DataManager.instance.GetData(shopItem.ID, "KeyID", typeof(int));
+            int itemID = (int)DataManager.Instance.GetData(shopItem.ID, "KeyID", typeof(int));
             ShopItemPurchaseHandler shopItemPurchaseHandler = shopItem.Shop.ShopItemPurchaseHandler;
 
             // 아이템 구매 처리(골드 차감)

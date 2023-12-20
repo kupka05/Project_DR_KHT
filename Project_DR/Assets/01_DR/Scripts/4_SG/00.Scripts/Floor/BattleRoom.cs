@@ -42,48 +42,48 @@ public class BattleRoom : RandomRoom
 
         if (GameManager.instance.nowFloor == 1)
         {
-            nomalSpawnCount = Random.Range((int)DataManager.instance.GetData(11001, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(11001, "MaxValue", typeof(int)));
-            eliteSpawnCount = Random.Range((int)DataManager.instance.GetData(11002, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(11002, "MaxValue", typeof(int)));
-            obstacleSpawnCount = Random.Range((int)DataManager.instance.GetData(11003, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(11003, "MaxValue", typeof(int)));
+            nomalSpawnCount = Random.Range((int)DataManager.Instance.GetData(11001, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(11001, "MaxValue", typeof(int)));
+            eliteSpawnCount = Random.Range((int)DataManager.Instance.GetData(11002, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(11002, "MaxValue", typeof(int)));
+            obstacleSpawnCount = Random.Range((int)DataManager.Instance.GetData(11003, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(11003, "MaxValue", typeof(int)));
         }
         else if (GameManager.instance.nowFloor == 2)
         {
-            nomalSpawnCount = Random.Range((int)DataManager.instance.GetData(12001, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(12001, "MaxValue", typeof(int)));
-            eliteSpawnCount = Random.Range((int)DataManager.instance.GetData(12002, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(12002, "MaxValue", typeof(int)));
-            obstacleSpawnCount = Random.Range((int)DataManager.instance.GetData(12003, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(12003, "MaxValue", typeof(int)));
+            nomalSpawnCount = Random.Range((int)DataManager.Instance.GetData(12001, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(12001, "MaxValue", typeof(int)));
+            eliteSpawnCount = Random.Range((int)DataManager.Instance.GetData(12002, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(12002, "MaxValue", typeof(int)));
+            obstacleSpawnCount = Random.Range((int)DataManager.Instance.GetData(12003, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(12003, "MaxValue", typeof(int)));
         }
         else if (GameManager.instance.nowFloor == 3)
         {
-            nomalSpawnCount = Random.Range((int)DataManager.instance.GetData(13001, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(13001, "MaxValue", typeof(int)));
-            eliteSpawnCount = Random.Range((int)DataManager.instance.GetData(13002, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(13002, "MaxValue", typeof(int)));
-            obstacleSpawnCount = Random.Range((int)DataManager.instance.GetData(13003, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(13003, "MaxValue", typeof(int)));
+            nomalSpawnCount = Random.Range((int)DataManager.Instance.GetData(13001, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(13001, "MaxValue", typeof(int)));
+            eliteSpawnCount = Random.Range((int)DataManager.Instance.GetData(13002, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(13002, "MaxValue", typeof(int)));
+            obstacleSpawnCount = Random.Range((int)DataManager.Instance.GetData(13003, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(13003, "MaxValue", typeof(int)));
         }
         else if (GameManager.instance.nowFloor == 4)
         {
-            nomalSpawnCount = Random.Range((int)DataManager.instance.GetData(14001, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(14001, "MaxValue", typeof(int)));
-            eliteSpawnCount = Random.Range((int)DataManager.instance.GetData(14002, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(14002, "MaxValue", typeof(int)));
-            obstacleSpawnCount = Random.Range((int)DataManager.instance.GetData(14003, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(14003, "MaxValue", typeof(int)));
+            nomalSpawnCount = Random.Range((int)DataManager.Instance.GetData(14001, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(14001, "MaxValue", typeof(int)));
+            eliteSpawnCount = Random.Range((int)DataManager.Instance.GetData(14002, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(14002, "MaxValue", typeof(int)));
+            obstacleSpawnCount = Random.Range((int)DataManager.Instance.GetData(14003, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(14003, "MaxValue", typeof(int)));
         }
         else if (GameManager.instance.nowFloor == 5)
         {
-            nomalSpawnCount = Random.Range((int)DataManager.instance.GetData(15001, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(15001, "MaxValue", typeof(int)));
-            eliteSpawnCount = Random.Range((int)DataManager.instance.GetData(15002, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(15002, "MaxValue", typeof(int)));
-            obstacleSpawnCount = Random.Range((int)DataManager.instance.GetData(15003, "MinValue", typeof(int)),
-                    1 + (int)DataManager.instance.GetData(15003, "MaxValue", typeof(int)));
+            nomalSpawnCount = Random.Range((int)DataManager.Instance.GetData(15001, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(15001, "MaxValue", typeof(int)));
+            eliteSpawnCount = Random.Range((int)DataManager.Instance.GetData(15002, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(15002, "MaxValue", typeof(int)));
+            obstacleSpawnCount = Random.Range((int)DataManager.Instance.GetData(15003, "MinValue", typeof(int)),
+                    1 + (int)DataManager.Instance.GetData(15003, "MaxValue", typeof(int)));
         }
         else { GFunc.LogErrorFormat("들어오면 안되는 곳에 들어옴"); }
 
@@ -107,12 +107,12 @@ public class BattleRoom : RandomRoom
         {       // 노말 몬스터 
 
             // 어떤 몬스터할지
-            objectVariety = DataManager.instance.GetCount(10001);
+            objectVariety = DataManager.Instance.GetCount(10001);
             int randomNum = Random.Range(1, objectVariety + 1);
             int reslutNum = randomNum + defaultObjectVariety;
             stringBuilder.Clear();
             //stringBuilder.Append(GameManager.instance.nomalMonsterSpawnPath);
-            stringBuilder.Append((string)DataManager.instance.GetData(reslutNum, "ResourceName", typeof(string)));
+            stringBuilder.Append((string)DataManager.Instance.GetData(reslutNum, "ResourceName", typeof(string)));
 
             // 어느 위치에 소환할지
             Vector3 spawnPoint = SettingSpawnPoint();

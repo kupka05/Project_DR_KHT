@@ -11,22 +11,40 @@ public class VRSceneLoder : MonoBehaviour
     public string sceneName;    // 전환할 씬의 이름
     public float sceneDelay = 3f;    // 씬 전환 시 딜레이
     public bool autoLoad;       // 체크 시 자동으로 씬 전환 
+    public bool isWaitForGoogleSheetLoad;   // 체크 시 구글 시트가 불러졌을 때 로드
 
     private ScreenFader fader;  // 플레이어 페이더
 
     void Start()
     {
-        // 플레이어의 페이더 찾아오기
-        fader = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ScreenFader>();
-        if(!fader)
+        // isWaitForGoogleSheetLoad == false
+        if (isWaitForGoogleSheetLoad.Equals(false))
         {
-            GFunc.Log("페이더를 찾지 못했습니다.");
-        }
+            // 플레이어의 페이더 찾아오기
+            fader = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<ScreenFader>();
+            if(!fader)
+            {
+                GFunc.Log("페이더를 찾지 못했습니다.");
+            }
 
-        // 자동으로 씬 전환
-        if (autoLoad) 
+            // 자동으로 씬 전환
+            if (autoLoad) 
+            {
+                LoadScene(sceneName);
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        // isWaitForGoogleSheetLoad == true
+        if (isWaitForGoogleSheetLoad.Equals(true))
         {
-            LoadScene(sceneName);
+            // 구글 시트 로드가 완료되었을 경우
+            if (GoogleSheetLoader.isDone.Equals(true))
+            {
+                LoadScene();
+            }
         }
     }
 

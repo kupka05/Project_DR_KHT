@@ -62,8 +62,8 @@ public class MonsterBullet : MonoBehaviour
 
     public virtual void GetData(int ProjectileID)
     {
-        speed = (float)DataManager.instance.GetData(ProjectileID, "MonSpd", typeof(float));
-        damage = (float)DataManager.instance.GetData(ProjectileID, "MonAtt", typeof(float));
+        speed = (float)DataManager.Instance.GetData(ProjectileID, "MonSpd", typeof(float));
+        damage = (float)DataManager.Instance.GetData(ProjectileID, "MonAtt", typeof(float));
     }
 
 

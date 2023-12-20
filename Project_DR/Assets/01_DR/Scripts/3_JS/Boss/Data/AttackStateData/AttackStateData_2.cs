@@ -42,16 +42,16 @@ namespace BossMonster
         // 생성자 & 부모 생성자
         public AttackStateData_2(int id, BossData bossData)
         {
-            int patternID = (int)DataManager.instance.GetData(id, "AttackPatternKeyID", typeof(int));
+            int patternID = (int)DataManager.Instance.GetData(id, "AttackPatternKeyID", typeof(int));
             _bossData = bossData;
-            _areaCount = (int)DataManager.instance.GetData(patternID, "AreaCount", typeof(int));
-            _areaRange = (float)DataManager.instance.GetData(patternID, "AreaRange", typeof(float));
-            _areaSpeed = (float)DataManager.instance.GetData(patternID, "AreaSpeed", typeof(float));
-            _areaSpawnTime = (float)DataManager.instance.GetData(patternID, "AreaSpawnTime", typeof(float));
-            _objectDuration = (float)DataManager.instance.GetData(patternID, "ObjectDuration", typeof(float));
-            _objectReflectionDistance = (float)DataManager.instance.GetData(patternID, "ObjectReflectionDistance", typeof(float));
-            _objectDamage = (float)DataManager.instance.GetData(patternID, "ObjectDamage", typeof(float));
-            _outputInterval = (float)DataManager.instance.GetData(patternID, "OutputInterval", typeof(float));
+            _areaCount = (int)DataManager.Instance.GetData(patternID, "AreaCount", typeof(int));
+            _areaRange = (float)DataManager.Instance.GetData(patternID, "AreaRange", typeof(float));
+            _areaSpeed = (float)DataManager.Instance.GetData(patternID, "AreaSpeed", typeof(float));
+            _areaSpawnTime = (float)DataManager.Instance.GetData(patternID, "AreaSpawnTime", typeof(float));
+            _objectDuration = (float)DataManager.Instance.GetData(patternID, "ObjectDuration", typeof(float));
+            _objectReflectionDistance = (float)DataManager.Instance.GetData(patternID, "ObjectReflectionDistance", typeof(float));
+            _objectDamage = (float)DataManager.Instance.GetData(patternID, "ObjectDamage", typeof(float));
+            _outputInterval = (float)DataManager.Instance.GetData(patternID, "OutputInterval", typeof(float));
         }
     }
 }

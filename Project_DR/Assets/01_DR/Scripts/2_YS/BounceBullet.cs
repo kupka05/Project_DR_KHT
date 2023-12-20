@@ -52,9 +52,9 @@ public class BounceBullet : MonoBehaviour
     public virtual void GetData(int BounceTableId)
     {
         //6912
-        speed = (float)DataManager.instance.GetData(BounceTableId, "Speed", typeof(float));
-        damage = (float)DataManager.instance.GetData(BounceTableId, "Damage", typeof(float));
-        destoryTime = (float)DataManager.instance.GetData(BounceTableId, "DesTime", typeof(float));
+        speed = (float)DataManager.Instance.GetData(BounceTableId, "Speed", typeof(float));
+        damage = (float)DataManager.Instance.GetData(BounceTableId, "Damage", typeof(float));
+        destoryTime = (float)DataManager.Instance.GetData(BounceTableId, "DesTime", typeof(float));
     }
 
 }

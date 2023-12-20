@@ -153,16 +153,16 @@ public class NPC : MonoBehaviour
     protected virtual void ParamsInIt(int _npcID)
     {
         GFunc.Log($"시트값 가져오기위한 곳에 받아온 ID : {_npcID}");
-        npcName = (string)DataManager.instance.GetData(_npcID, "Name", typeof(string));
-        //npcTitle = (string)DataManager.instance.GetData(_npcID, "Title", typeof(string)); // 대사 출력시 해당 대화의 칭호를 가져와서 출력하는식으로 변경
-        npcWaitMotion = (string)DataManager.instance.GetData(_npcID, "WaitMotion", typeof(string));
-        npcConversationMotion = (string)DataManager.instance.GetData(_npcID, "ConversationMotion", typeof(string));
-        npcMoveMotion = (string)DataManager.instance.GetData(_npcID, "MoveMotion", typeof(string));
+        npcName = (string)DataManager.Instance.GetData(_npcID, "Name", typeof(string));
+        //npcTitle = (string)DataManager.Instance.GetData(_npcID, "Title", typeof(string)); // 대사 출력시 해당 대화의 칭호를 가져와서 출력하는식으로 변경
+        npcWaitMotion = (string)DataManager.Instance.GetData(_npcID, "WaitMotion", typeof(string));
+        npcConversationMotion = (string)DataManager.Instance.GetData(_npcID, "ConversationMotion", typeof(string));
+        npcMoveMotion = (string)DataManager.Instance.GetData(_npcID, "MoveMotion", typeof(string));
 
-        npcHP = (float)DataManager.instance.GetData(_npcID, "HP", typeof(float));
-        npcMoveSpeed = (float)DataManager.instance.GetData(_npcID, "MoveSpeed", typeof(float));
-        npcConversationScope = (float)DataManager.instance.GetData(_npcID, "ConversationScope", typeof(float));
-        npcRecognitionRange = (float)DataManager.instance.GetData(_npcID, "RecognitionRange", typeof(float));
+        npcHP = (float)DataManager.Instance.GetData(_npcID, "HP", typeof(float));
+        npcMoveSpeed = (float)DataManager.Instance.GetData(_npcID, "MoveSpeed", typeof(float));
+        npcConversationScope = (float)DataManager.Instance.GetData(_npcID, "ConversationScope", typeof(float));
+        npcRecognitionRange = (float)DataManager.Instance.GetData(_npcID, "RecognitionRange", typeof(float));
 
 
 
@@ -201,7 +201,7 @@ public class NPC : MonoBehaviour
     private void ConvertionRefIdInIt(int _npcID)
     {
 
-        string tableIDs = (string)DataManager.instance.GetData(_npcID, "ConversationTableID", typeof(string));
+        string tableIDs = (string)DataManager.Instance.GetData(_npcID, "ConversationTableID", typeof(string));
 
         //GFunc.Log($"오류의 아이디 : {tableIDs}");
         conversationRefIDs = GFunc.SplitIds(tableIDs);
@@ -295,7 +295,7 @@ public class NPC : MonoBehaviour
     public virtual void EnQueueConversation(int _comunicationTableId)
     {
         nowDialogueId = _comunicationTableId;
-        string converationText = (string)DataManager.instance.GetData(_comunicationTableId, "OutPutText", typeof(string));
+        string converationText = (string)DataManager.Instance.GetData(_comunicationTableId, "OutPutText", typeof(string));
 
         string[] splitTexts = GFunc.SplitConversation(converationText);
 

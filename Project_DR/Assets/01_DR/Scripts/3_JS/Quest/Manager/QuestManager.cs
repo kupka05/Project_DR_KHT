@@ -147,6 +147,17 @@ namespace Js.Quest
             UpdateUserDataFromQuestSaveDatas(questSaveDatas);
         }
 
+        // 진행중인 메인 퀘스트를 리스트로 가져온다
+        // TODO: 지환이형이랑 상의 후에 만들기
+        public List<Quest> GetActiveMainQuests()
+        {
+            List<Quest> activeMainQuests = new List<Quest>();
+            
+
+
+            return activeMainQuests;
+        }
+
 
         /*************************************************
          *                Private Methods

@@ -77,22 +77,22 @@ public class RandomRoomObjCreate : MonoBehaviour
     {
         List<int> lightSpawnIdList = new List<int>();       // 중복처리에 사용될 List        
 
-        int lightCategoryID = (int)DataManager.instance.GetData(_lightCreateTableId, "CategoryID", typeof(int));
+        int lightCategoryID = (int)DataManager.Instance.GetData(_lightCreateTableId, "CategoryID", typeof(int));
 
         int lightSpawnCount = UnityEngine.Random.Range
-           ((int)DataManager.instance.GetData(_lightCreateTableId, "MinValue", typeof(int)),
-           (int)DataManager.instance.GetData(_lightCreateTableId, "MaxValue", typeof(int)) + 1);
+           ((int)DataManager.Instance.GetData(_lightCreateTableId, "MinValue", typeof(int)),
+           (int)DataManager.Instance.GetData(_lightCreateTableId, "MaxValue", typeof(int)) + 1);
 
 
         for (int i = 0; i < lightSpawnCount; i++)
         {
 
-            int pickObjID = UnityEngine.Random.Range(0, DataManager.instance.GetCount(lightCategoryID)) + lightCategoryID;
+            int pickObjID = UnityEngine.Random.Range(0, DataManager.Instance.GetCount(lightCategoryID)) + lightCategoryID;
             if (lightSpawnIdList.Contains(pickObjID))
             {
                 while (!lightSpawnIdList.Contains(pickObjID))
                 {       // 랜덤하게 나온 값이 중복으로나오지 않을때까지 랜덤을 돌림
-                    pickObjID = UnityEngine.Random.Range(0, DataManager.instance.GetCount(lightCategoryID)) + lightCategoryID;
+                    pickObjID = UnityEngine.Random.Range(0, DataManager.Instance.GetCount(lightCategoryID)) + lightCategoryID;
                 }
             }
             else { /*PASS*/ }
@@ -110,16 +110,16 @@ public class RandomRoomObjCreate : MonoBehaviour
     /// <param name="_envCreateTableID">각방의 ObjectCreate_Table ID</param>
     protected void SpawnEnvObj(int _envCreateTableID)
     {
-        int envCategoryID = (int)DataManager.instance.GetData(_envCreateTableID, "CategoryID", typeof(int));
+        int envCategoryID = (int)DataManager.Instance.GetData(_envCreateTableID, "CategoryID", typeof(int));
 
         int envSpawnCount = UnityEngine.Random.Range
-            ((int)DataManager.instance.GetData(_envCreateTableID, "MinValue", typeof(int)),
-            (int)DataManager.instance.GetData(_envCreateTableID, "MaxValue", typeof(int)) + 1);
+            ((int)DataManager.Instance.GetData(_envCreateTableID, "MinValue", typeof(int)),
+            (int)DataManager.Instance.GetData(_envCreateTableID, "MaxValue", typeof(int)) + 1);
 
         for (int i = 0; i < envSpawnCount; i++)
         {
 
-            int pickObjID = UnityEngine.Random.Range(0, DataManager.instance.GetCount(envCategoryID)) + envCategoryID;
+            int pickObjID = UnityEngine.Random.Range(0, DataManager.Instance.GetCount(envCategoryID)) + envCategoryID;
 
             CreateObj(pickObjID);
         }
@@ -131,16 +131,16 @@ public class RandomRoomObjCreate : MonoBehaviour
     /// <param name="_matCreateID">각방의 ObjectCreate_Table ID</param>
     protected void SpawnMatObj(int _matCreateID)
     {
-        int matCateforyID = (int)DataManager.instance.GetData(_matCreateID, "CategoryID", typeof(int));
+        int matCateforyID = (int)DataManager.Instance.GetData(_matCreateID, "CategoryID", typeof(int));
 
         int envSpawnCount = UnityEngine.Random.Range
-          ((int)DataManager.instance.GetData(_matCreateID, "MinValue", typeof(int)),
-          (int)DataManager.instance.GetData(_matCreateID, "MaxValue", typeof(int)) + 1);
+          ((int)DataManager.Instance.GetData(_matCreateID, "MinValue", typeof(int)),
+          (int)DataManager.Instance.GetData(_matCreateID, "MaxValue", typeof(int)) + 1);
 
         for (int i = 0; i < envSpawnCount; i++)
         {
 
-            int pickObjID = UnityEngine.Random.Range(0, DataManager.instance.GetCount(matCateforyID)) + matCateforyID;
+            int pickObjID = UnityEngine.Random.Range(0, DataManager.Instance.GetCount(matCateforyID)) + matCateforyID;
 
             CreateObj(pickObjID);
         }
@@ -167,7 +167,7 @@ public class RandomRoomObjCreate : MonoBehaviour
     /// <returns>중복 검사이후 중복이 없는 Vector3값</returns>
     private Vector3 PickSpwanPos(int _CreateObjId)
     {
-        int isFixPos = (int)DataManager.instance.GetData(_CreateObjId, "IsFixPosition", typeof(int));
+        int isFixPos = (int)DataManager.Instance.GetData(_CreateObjId, "IsFixPosition", typeof(int));
         Vector3 tempPos;
         if(reCallCount >= 15)
         {
@@ -186,7 +186,7 @@ public class RandomRoomObjCreate : MonoBehaviour
         else
         {
             float xPos = (cornerPos.bottomLeftCorner.x + cornerPos.bottomRightCorner.x) * 0.5f;
-            float yPos = (float)DataManager.instance.GetData(_CreateObjId, "PosY", typeof(float)); // 대충 지붕 위치
+            float yPos = (float)DataManager.Instance.GetData(_CreateObjId, "PosY", typeof(float)); // 대충 지붕 위치
             float zPos = (cornerPos.bottomLeftCorner.z + cornerPos.topLeftCorner.z) * 0.5f;
             tempPos = new Vector3(xPos, yPos, zPos);
         }
@@ -222,7 +222,7 @@ public class RandomRoomObjCreate : MonoBehaviour
     private GameObject spawnObjInIt(int _objId)
     {        
         stringBuilder.Clear();
-        stringBuilder.Append((string)DataManager.instance.GetData(_objId, "PrefabName", typeof(string)));
+        stringBuilder.Append((string)DataManager.Instance.GetData(_objId, "PrefabName", typeof(string)));
         //GFunc.Log($"들어간 Sb : {stringBuilder}\n sb에 참조된 ID : {_objId}");        
         GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
         //GFunc.Log($"지정된 Prefab : {prefabObj}");

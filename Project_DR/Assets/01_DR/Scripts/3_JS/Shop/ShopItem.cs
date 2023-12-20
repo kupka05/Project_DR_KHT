@@ -103,7 +103,7 @@ public class ShopItem : MonoBehaviour
     // 실제 아이템인지 확인
     public bool CheckIsItem(int id)
     {
-        id = (int)DataManager.instance.GetData(id, "KeyID", typeof(int));
+        id = (int)DataManager.Instance.GetData(id, "KeyID", typeof(int));
         if (id < ITEM_ID_MAX_RANGE)
         {
             return true;

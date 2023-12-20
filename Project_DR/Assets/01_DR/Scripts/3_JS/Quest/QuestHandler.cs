@@ -30,24 +30,27 @@ namespace Js.Quest
             _quest = quest;
         }
 
-        // 퀘스트 리워드 지급
-        public void GiveQuestReward()
+        // 퀘스트 클리어
+        public int[] ClearQuest()
         {
-            // 퀘스트가 [완료가능] 상태일 경우
-            if (_quest.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE))
+            switch(GiveQuestReward())
             {
-                // [완료] 상태 변경 & 클리어 보상 지급
-                QuestState.ChangeToNextState();
-                ClearReward.GetReward();
-            }
+                // 퀘스트를 클리어 했을 경우
+                case 1:
+                    int[] clearEventIDs = _quest.QuestData.ClearEventIDs;
+                    GFunc.Log($"Quest.ClearQuest(): ID[{_quest.QuestData.ID}] 퀘스트를 클리어 완료");
+                    return clearEventIDs;
 
-            // 아닐 경우
-            // 퀘스트가 [진행중] 상태일 경우
-            else if (_quest.QuestState.State.Equals(QuestState.StateQuest.IN_PROGRESS))
-            {
-                // [실패] 상태 변경 & 실패 보상 지급
-                QuestState.ChangeState(QuestState.StateQuest.FAILED);
-                FailReward.GetReward();
+                // 퀘스트를 실패 했을 경우
+                case 2:
+                    int[] failEventIDs = _quest.QuestData.FailEventIDs;
+                    GFunc.Log($"Quest.ClearQuest(): ID[{_quest.QuestData.ID}] 퀘스트를 클리어 실패");
+                    return failEventIDs;
+
+                // 퀘스트를 클리어 할 수 없을 경우
+                default:
+                    GFunc.Log($"Quest.ClearQuest(): ID[{_quest.QuestData.ID}] 퀘스트를 클리어 할 수 없습니다.");
+                    return default;
             }
         }
 
@@ -74,6 +77,36 @@ namespace Js.Quest
         public void ChangeCurrentValue(int value)
         {
             QuestData.ChangeCurrentValue(value);
+        }
+
+
+        /*************************************************
+         *               Private Methods
+         *************************************************/
+        // 퀘스트 리워드 지급
+        private int GiveQuestReward()
+        {
+            // 퀘스트가 [완료가능] 상태일 경우
+            if (_quest.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE))
+            {
+                // [완료] 상태 변경 & 클리어 보상 지급
+                QuestState.ChangeToNextState();
+                ClearReward.GetReward();
+                return 1;
+            }
+
+            // 아닐 경우
+            // 퀘스트가 [진행중] 상태일 경우
+            else if (_quest.QuestState.State.Equals(QuestState.StateQuest.IN_PROGRESS))
+            {
+                // [실패] 상태 변경 & 실패 보상 지급
+                QuestState.ChangeState(QuestState.StateQuest.FAILED);
+                FailReward.GetReward();
+                return 2;
+            }
+
+            // 아닐 경우 예외 처리용 0 반환
+            return 0;
         }
     }
 }

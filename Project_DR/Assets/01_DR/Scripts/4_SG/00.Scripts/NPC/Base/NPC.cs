@@ -156,7 +156,7 @@ public class NPC : MonoBehaviour
     {
         //GFunc.Log($"시트값 가져오기위한 곳에 받아온 ID : {_npcID}");
         npcName = (string)DataManager.Instance.GetData(_npcID, "Name", typeof(string));
-        //npcTitle = (string)DataManager.instance.GetData(_npcID, "Title", typeof(string)); // 대사 출력시 해당 대화의 칭호를 가져와서 출력하는식으로 변경
+        //npcTitle = (string)DataManager.Instance.GetData(_npcID, "Title", typeof(string)); // 대사 출력시 해당 대화의 칭호를 가져와서 출력하는식으로 변경
         npcWaitMotion = (string)DataManager.Instance.GetData(_npcID, "WaitMotion", typeof(string));
         npcConversationMotion = (string)DataManager.Instance.GetData(_npcID, "ConversationMotion", typeof(string));
         npcMoveMotion = (string)DataManager.Instance.GetData(_npcID, "MoveMotion", typeof(string));

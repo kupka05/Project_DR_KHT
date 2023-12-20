@@ -370,6 +370,8 @@ namespace Js.Quest
                         {
                             // 보유한 아이템의 갯수로 값 변경
                             item.ChangeCurrentValue(itemCount);
+                            // 조건 충족시 [완료 가능]으로 상태 변경
+                            item.ChangeToNextState();
                         }
 
                         // condition이 [7]이 아니라면
@@ -377,6 +379,8 @@ namespace Js.Quest
                         {
                             // 값 증가 += 1
                             item.AddCurrentValue();
+                            // 조건 충족시 [완료 가능]으로 상태 변경
+                            item.ChangeToNextState();
                         }
                     }
                 }

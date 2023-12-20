@@ -201,7 +201,7 @@ public class SkillManager : MonoBehaviour
 
     public void CheckLandingHeight()
     {
-        if(LDskillCount <= 0)
+        if(UserData.GetDrillLandingCount() <= 0)
         {
             GFunc.Log("드릴랜딩 사용 불가 : " + LDskillCount);
             return;

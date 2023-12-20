@@ -17,7 +17,7 @@ public class AccountManager : MonoBehaviour
     [SerializeField] TMP_Text description;
 
     [SerializeField] string sceneName;
-
+    public VRSceneLoder sceneLoader;
     public void LoginClick() => StartCoroutine(AccountCo("login"));
 
     public void RegisterClick() => StartCoroutine(AccountCo("register"));
@@ -73,7 +73,8 @@ public class AccountManager : MonoBehaviour
                 case "Login Complete":
                     description.text = string.Format("로그인 성공");
                     PlayerDataManager.SetID(id);
-                    SceneManager.LoadScene(sceneName);
+                    //SceneManager.LoadScene(sceneName);
+                    sceneLoader.LoadScene();
                     break;
                 case "Fail to login":
                     description.text = string.Format("로그인 실패");

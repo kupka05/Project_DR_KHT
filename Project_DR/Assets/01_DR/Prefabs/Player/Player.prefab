@@ -271,7 +271,6 @@ MonoBehaviour:
   trigger: 0
   landingForce: 5
   knockbackRange: 2.5
-  Damage: 25
   TDcheckerHeight: 0
   TDcheckerTiming: 0
   GDcheckerTiming: 0
@@ -51380,7 +51379,7 @@ MonoBehaviour:
       - m_Target: {fileID: 942874828167954386}
         m_TargetAssemblyTypeName: PlayerHealth, Assembly-CSharp
         m_MethodName: OnDamage
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -71054,7 +71053,6 @@ MonoBehaviour:
   trigger: 0
   landingForce: 20
   knockbackRange: 5
-  Damage: 25
   TDcheckerHeight: 0
   TDcheckerTiming: 0
   GDcheckerTiming: 0
@@ -74393,7 +74391,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isTeradrill: 0
   isGrinder: 0
-  isLanding: 0
   isSmash: 0
   critChance: 0
   critIncrease: 0
@@ -74420,7 +74417,7 @@ MonoBehaviour:
   TD_collDown: 0
   TD_drillSize: 0
   TD_drillDistance: 0
-  GD_collDown: 0
+  GD_coolDown: 0
   GD_addTime: 0
   GD_maxTime: 0
   GD_drillSize: 0
@@ -102741,7 +102738,7 @@ PrefabInstance:
     - target: {fileID: 3216023249193137484, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.99999684
+      value: 0.99999774
       objectReference: {fileID: 0}
     - target: {fileID: 3216023249193137484, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102801,12 +102798,12 @@ PrefabInstance:
     - target: {fileID: 3216023250103863860, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.37971672
+      value: 0.379717
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250103863860, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Value
-      value: 0.9999927
+      value: 0.9999929
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250103863867, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102846,7 +102843,7 @@ PrefabInstance:
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0007991156
+      value: 0.0017311014
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102876,7 +102873,7 @@ PrefabInstance:
     - target: {fileID: 4010713275993210068, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.9999996
+      value: 0.9999999
       objectReference: {fileID: 0}
     - target: {fileID: 4010713275993210068, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102906,7 +102903,7 @@ PrefabInstance:
     - target: {fileID: 4010713276122279518, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0005051396
+      value: 0.00048606016
       objectReference: {fileID: 0}
     - target: {fileID: 4010713276122279518, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -102931,12 +102928,12 @@ PrefabInstance:
     - target: {fileID: 4010713277854409151, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.99999875
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4010713277854409151, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3798920512113092196, guid: dd2e04b3e4bde3249b11fd18421ad6ae, type: 3}

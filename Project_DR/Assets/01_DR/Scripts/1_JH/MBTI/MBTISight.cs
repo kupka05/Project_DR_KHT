@@ -6,7 +6,6 @@ using UnityEngine;
 public class MBTISight : MonoBehaviour
 {
 
-    private Collider _lastColliderHit = null;
     private IEnumerator checkRoutine;
     private MBTIChecker lastChecker;
 

@@ -72,5 +72,11 @@ namespace Js.Quest
         {
             _currentValue += value;
         }
+
+        // 현재 퀘스트 달성 값 변경
+        public void ChangeCurrentValue(int value)
+        {
+            _currentValue = value;
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace Js.Quest
          *                 Private Fields
          *************************************************/
         private QuestRewardData _questRewardData;
-
+        
 
         /*************************************************
          *                 Public Methods
@@ -30,38 +30,82 @@ namespace Js.Quest
         // 퀘스트 보상(1 ~ 4)을 획득한다
         public void GetReward()
         {
-            // 보상(1 ~ 4) 획득
-            for (int i = 0; i < _questRewardData.RewardKeyIDs.Length; i++)
-            {
-                int keyID = _questRewardData.RewardKeyIDs[i];
-                int amount = _questRewardData.RewardAmounts[i];
-                int probability = _questRewardData.RewardProbabilitys[i];
-                // 퀘스트 보상 획득
-                GetReward(keyID, probability, amount);
-            }
+            // 골드, EXP 보상 지급
+            UserData.AddQuestScore(_questRewardData.GiveGold, _questRewardData.GiveEXP);
+
+            // 퀘스트 타입에 따른 보상 획득
+            GetQuestRewardByType();
         }
 
 
         /*************************************************
          *                Private Methods
          *************************************************/
-        // 퀘스트 보상 획득
-        private void GetReward(int keyID, int probability, int amount = 1)
+        // 퀘스트 타입에 따른 보상 획득
+        private void GetQuestRewardByType()
+        {
+            // 퀘스트 보상 타입
+            switch (_questRewardData.Type)
+            {
+                // "아이템" 일 경우
+                case QuestRewardData.TypeReward.ITEM:
+                    // 퀘스트 보상 아이템(1 ~ 4) 획득
+                    GetRewardItem();
+                    break;
+
+                // "아이템" 일 경우
+                case QuestRewardData.TypeReward.MBTI:
+                    // 퀘스트 보상 MBTI 획득
+                    GetRewardMBTI();
+                    break;
+
+                // "스텟" 일 경우
+                case QuestRewardData.TypeReward.EFFECT:
+                    // 퀘스트 보상 스텟획득
+                    GetRewardEffect();
+                    break;
+            }
+        }
+
+        // 퀘스트 보상 아이템(1 ~ 4) 획득
+        private void GetRewardItem()
+        {
+            // 보상 아이템(1 ~ 4) 지급
+            for (int i = 0; i < _questRewardData.RewardKeyIDs.Length; i++)
+            {
+                int keyID = _questRewardData.RewardKeyIDs[i];
+                int amount = _questRewardData.RewardAmounts[i];
+                int probability = _questRewardData.RewardProbabilitys[i];
+                // 보상 아이템(1 ~ 4) 획득
+                GetRewardItem(keyID, probability, amount);
+            }
+        }
+
+        // 퀘스트 보상 아이템 획득
+        private void GetRewardItem(int keyID, int probability, int amount = 1)
         {
             GFunc.Log($"KeyID: {keyID}, probability: {probability}, amount: {amount}");
             // 키 ID가 0이 아닐 경우 && 지정 확률 성공시
             if (! keyID.Equals(0) && GetRandomProbability(probability))
             {
-                // 퀘스트 보상 타입
-                switch(_questRewardData.Type)
-                {
-                    // "아이템" 일 경우
-                    case QuestRewardData.TypeReward.ITEM:
-                        // 인벤토리에 아이템 지급
-                        Unit.AddInventoryItem(keyID, amount);
-                        break;
-                }
+                Unit.AddInventoryItem(keyID, amount);
             }
+        }
+
+        // 퀘스트 보상 MBTI 획득
+        private void GetRewardMBTI()
+        {
+            // MBTI 보상 지급
+            MBTI mbti = new MBTI();
+            float[] values = _questRewardData.MBTIValues;
+            mbti.SetMBTI(values[0], values[1], values[2], values[3]);
+            MBTIManager.Instance.ResultMBTI(mbti);
+        }
+
+        // 퀘스트 보상 스텟 획득
+        private void GetRewardEffect()
+        {
+            // TODO: 퀘스트 스텟 보상 구현하기;
         }
 
         // 랜덤 확률 돌리기

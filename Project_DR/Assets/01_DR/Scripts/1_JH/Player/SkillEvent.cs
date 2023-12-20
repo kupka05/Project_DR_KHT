@@ -15,12 +15,12 @@ public class SkillEvent : MonoBehaviour
     public Skill skill = Skill.Default;
     public bool trigger;
 
-    [Header("Landing")]
+    [Header("Collider")]
+    private BoxCollider boxCollider;
     private SphereCollider sphereCollider;
 
-    public float landingForce = 5;              // 넉백 힘
-    public float knockbackRange = 2.5f;     // 넉백 사거리
-    public float Damage = 25f;              // 넉백 데미지
+    public float landingForce;              // 넉백 힘
+    public float knockbackRange;     // 넉백 사거리
 
     [Header("Debug")]
     public float TDcheckerHeight;
@@ -33,16 +33,14 @@ public class SkillEvent : MonoBehaviour
     public UnityEvent shootDisableEvent;
     IEnumerator skillRoutine;
 
+    WaitForSeconds TDWaitForSeconds;
+    WaitForSeconds GDWaitForSeconds;
+    WaitForSeconds WaitForSeconds = new WaitForSeconds(0.1f);
+
     // Start is called before the first frame update
     void Start()
     {
-            sphereCollider = GetComponent<SphereCollider>();
-       
-        GetData();
-        //if (skill == Skill.TeraDrill)
-        //{
-        //    transform.position = new Vector3(transform.position.x, TDcheckerHeight, transform.position.z);
-        //}
+        UserData.GetData(GetData);        
     }
 
 
@@ -124,16 +122,16 @@ public class SkillEvent : MonoBehaviour
     IEnumerator TeraDrill()
     {
         trigger = true;   
-        yield return new WaitForSeconds(TDcheckerTiming);
+        yield return TDWaitForSeconds;
         skillEvent.Invoke();
     }
     IEnumerator GrinderDrill()
     {
-            trigger = true;
+        trigger = true;
         shootDisableEvent.Invoke();
         while (true)
         {
-            yield return new WaitForSeconds(GDcheckerTiming); ;
+            yield return GDWaitForSeconds;
             skillEvent.Invoke();
         }
     }
@@ -155,7 +153,7 @@ public class SkillEvent : MonoBehaviour
     {
         GFunc.Log("On");
         sphereCollider.enabled = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return WaitForSeconds;
 
         GFunc.Log("Off");
         sphereCollider.enabled = false;
@@ -173,19 +171,35 @@ public class SkillEvent : MonoBehaviour
         Vector3 force = targetPos - skillPos * landingForce;
         targetRB.AddForce(force, ForceMode.Impulse);
 
-        target.GetComponent<Damageable>().DealDamage(Damage);
+        Damageable damage = target.GetComponent<Damageable>();
+        if(damage)
+        {
+            damage.DealDamage(Damage.instance.DamageCalculate(UserData.GetDrillDamage()));
+        }
     }
     void GetData()
     {
-        TDcheckerHeight = (float)DataManager.instance.GetData(1010, "Value1", typeof(float));
-        TDcheckerTiming = (float)DataManager.instance.GetData(1010, "Value2", typeof(float));
-        GDcheckerTiming = (float)DataManager.instance.GetData(20015, "Value3", typeof(float));
+        TDcheckerHeight = Data.GetFloat(999, "TDcheckerHeight");
+        TDcheckerTiming = Data.GetFloat(999, "TDcheckerTiming");
+        GDcheckerTiming = Data.GetFloat(999, "GDcheckerTiming");
 
-        //landingForce = 5;
+        TDWaitForSeconds = new WaitForSeconds(TDcheckerTiming);
+        GDWaitForSeconds = new WaitForSeconds(GDcheckerTiming);
+
+        landingForce = UserData.GetLandingForce();
         if (skill == Skill.Landing)
         {
+            sphereCollider = GetComponent<SphereCollider>();
+
+            knockbackRange = Data.GetFloat(720217, "Value1") / 2;
             sphereCollider.radius = knockbackRange;
             sphereCollider.enabled = false;
+        }
+
+        if (skill == Skill.TeraDrill)
+        {
+            boxCollider = GetComponent<BoxCollider>();
+            boxCollider.center = new Vector3(0, TDcheckerHeight, 0);
         }
     }
 }

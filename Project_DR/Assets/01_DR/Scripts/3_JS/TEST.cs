@@ -19,20 +19,20 @@ public class TEST : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            UserDataManager.quests[0].QuestState.PrintCurrentState();
-            _questList = UserDataManager.quests;
+            UserDataManager.QuestList[0].QuestState.PrintCurrentState();
+            _questList = UserDataManager.QuestList;
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
             Unit.AddInventoryItem(5001);
-            UserDataManager.quests[0].ChangeToNextState();
-            UserDataManager.quests[0].QuestState.PrintCurrentState();
+            UserDataManager.QuestList[0].ChangeToNextState();
+            UserDataManager.QuestList[0].QuestState.PrintCurrentState();
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            UserDataManager.quests[0].GiveQuestReward();
+            UserDataManager.QuestList[0].GiveQuestReward();
         }
 
         if (Input.GetKeyDown(KeyCode.A))

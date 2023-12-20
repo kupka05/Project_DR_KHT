@@ -85,7 +85,7 @@ public class PlayerHealth : MonoBehaviour
         UserData.OnDamage(damage);
     }
 
-    private void GetData()
+    public void GetData()
     {
         maxHealth = UserData.GetMaxHP();
         health = UserData.GetHP();

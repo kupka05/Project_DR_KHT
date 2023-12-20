@@ -32,6 +32,13 @@ public static class Unit
         QuestManager.Instance.CreateQuestFromDataTable();
     }
 
+    // ID와 일치하는 퀘스트를 클리어한다.
+    // 성공 / 실패 이벤트 id를 반환한다.
+    public static int[] ClearQuestByID(int id)
+    {
+        return QuestManager.Instance.GetQuestByID(id).ClearQuest();
+    }
+
     // [진행중] 상태의 메인 퀘스트를 가져온다
     public static List<Quest> GetInProgressMainQuest()
     {
@@ -81,6 +88,12 @@ public static class Unit
     // 인덱스의 아이디를 가져온다. 매개변수 미입력시 [0] 가져옴
     public static int GetQuestClearEventID(Quest quest, int index = 0)
     {
+        int id = quest.QuestData.ClearEventIDs[index];
+        // id가 0일 경우 디버그 메세지 표시
+        if (id.Equals(0))
+        {
+            GFunc.Log($"Unit.GetQuestClearEventID(): 가져온 클리어 이벤트 ID가 0입니다. 확인해주세요");
+        }
         return quest.QuestData.ClearEventIDs[index];
     }
 
@@ -88,7 +101,13 @@ public static class Unit
     // 인덱스의 아이디를 가져온다. 매개변수 미입력시 [0] 가져옴
     public static int GetQuestFailEventID(Quest quest, int index = 0)
     {
-        return quest.QuestData.FailEventIDs[index];
+        int id = quest.QuestData.FailEventIDs[index];
+        // id가 0일 경우 디버그 메세지 표시
+        if (id.Equals(0))
+        {
+            GFunc.Log($"Unit.GetQuestFailEventID(): 가져온 실패 이벤트 ID가 0입니다. 확인해주세요");
+        }
+        return id;
     }
 
     // 퀘스트가 가지고 있는 클리어 이벤트 ID를 int[]로 가져온다.

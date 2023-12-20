@@ -34,11 +34,17 @@ namespace Js.Quest
             _questHandler = new QuestHandler(this);
         }
 
-        // 퀘스트 리워드 지급
-        // [클리어 보상] / [실패 보상]
-        public void GiveQuestReward()
+        // 퀘스트 클리어
+        // 보상 지급: [클리어 보상] / [실패 보상]
+        // 해당하는 이벤트 ID 반환
+        public int[] ClearQuest()
         {
-            QuestHandler.GiveQuestReward();
+            // 퀘스트 클리어 후 클리어 / 실패 이벤트 ID 반환
+            int[] eventIDs = QuestHandler.ClearQuest();
+            // 오류 발생시 디버그 메세지 출력
+            if (eventIDs.Length.Equals(0)) { GFunc.Log($"Quest.ClearQuest(): ID[{QuestData.ID}] 퀘스트의 클리어가 실패했습니다. " +
+                $"진행중인 상태의 퀘스트만 클리어할 수 있습니다."); }
+            return eventIDs;
         }
 
         // 퀘스트를 다음 상태로 변경

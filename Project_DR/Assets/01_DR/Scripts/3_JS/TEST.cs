@@ -32,7 +32,7 @@ public class TEST : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            UserDataManager.QuestList[0].GiveQuestReward();
+            UserDataManager.QuestList[0].ClearQuest();
         }
 
         if (Input.GetKeyDown(KeyCode.A))

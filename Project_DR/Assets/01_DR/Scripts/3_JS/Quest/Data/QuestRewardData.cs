@@ -48,6 +48,8 @@ namespace Js.Quest
         {
             // Init
             _id = id;
+            // id가 0일 경우 예외 처리
+            if (id.Equals(0)) { return; }
             _type = (TypeReward)Data.GetInt(id, "Type");
             _name = Data.GetString(id, "Name");
             _giveGold = Data.GetInt(id, "GiveGold");

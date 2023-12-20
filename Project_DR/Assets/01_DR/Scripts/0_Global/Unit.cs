@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Js.Quest;
 
 // 플레이어에게 특정한 명령을 실행하는 클래스
 public static class Unit
 {
     /*************************************************
-     *                 Public Methods
+     *         Public Inventory & Item Methods
      *************************************************/
     // 인벤토리에 아이템을 추가
     public static void AddInventoryItem(int id, int amount = 1)
@@ -18,5 +19,103 @@ public static class Unit
     public static void AddFieldItem(Vector3 pos, int id, int amount = 1)
     {
         ItemManager.instance.CreateItem(pos, id, amount);
+    }
+
+
+    /*************************************************
+     *             Public Quest Methods
+     *************************************************/
+    // 데이터 테이블에 있는 퀘스트를 가져와서 생성한다
+    // 기존에 가지고 있는 퀘스트가 전부 초기화된다.
+    public static void CreateQuestFromDataTable()
+    {
+        QuestManager.Instance.CreateQuestFromDataTable();
+    }
+
+    // [진행중] 상태의 메인 퀘스트를 가져온다
+    public static List<Quest> GetInProgressMainQuest()
+    {
+        // 메인 퀘스트 타입을 리스트로 가져옴
+        List<Quest> questList = GetQuestsOfType(1);
+        // 가져온 퀘스트 리스트 중에서 [진행중] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 2);
+        return questList; 
+    }
+
+    // 퀘스트 ID로 퀘스트를 검색하고 반환
+    public static Quest GetQuestByID(int id)
+    {
+        return QuestManager.Instance.GetQuestByID(id);
+    }
+
+    // 인덱스로 퀘스트를 검색하고 반환
+    public static Quest GetQuestByIndex(int index)
+    {
+        return QuestManager.Instance.GetQuestByIndex(index);
+    }
+
+    // 특정 타입의 퀘스트를 리스트로 가져온다
+    // [1]=메인퀘스트, [2]=서브퀘스트, [3]=특수퀘스트
+    public static List<Quest> GetQuestsOfType(int type)
+    {
+        return QuestManager.Instance.GetQuestsOfType(type);
+    }
+
+    // 특정한 상태에 해당하는 모든 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetQuestsByStatus(int state)
+    {
+        return QuestManager.Instance.GetQuestsByStatus(state);
+    }
+
+    // 특정 타입 퀘스트의 전체 Count를 가져온다.
+    public static int GetQuestCountOfType(int type)
+    {
+        return QuestManager.Instance.GetQuestCountOfType(type);
+    }
+
+
+    /*************************************************
+     *             Public QuestData Methods
+     *************************************************/
+    // 퀘스트가 가지고 있는 클리어 이벤트 ID중에서 특정한
+    // 인덱스의 아이디를 가져온다. 매개변수 미입력시 [0] 가져옴
+    public static int GetQuestClearEventID(Quest quest, int index = 0)
+    {
+        return quest.QuestData.ClearEventIDs[index];
+    }
+
+    // 퀘스트가 가지고 있는 클리어 이벤트 ID중에서 특정한
+    // 인덱스의 아이디를 가져온다. 매개변수 미입력시 [0] 가져옴
+    public static int GetQuestFailEventID(Quest quest, int index = 0)
+    {
+        return quest.QuestData.FailEventIDs[index];
+    }
+
+    // 퀘스트가 가지고 있는 클리어 이벤트 ID를 int[]로 가져온다.
+    public static int[] GetQuestClearEventIDs(Quest quest)
+    {
+        return quest.QuestData.ClearEventIDs;
+    }
+
+    // 퀘스트가 가지고 있는 실패 이벤트 ID를 int[]로 가져온다.
+    public static int[] GetQuestFailEventIDs(Quest quest)
+    {
+        return quest.QuestData.FailEventIDs;
+    }
+
+
+    /*************************************************
+     *            Public DB Quest Methods
+     *************************************************/
+    // 퀘스트 데이터를 DB에 저장한다
+    public static void SaveQuestDataToDB()
+    {
+        QuestManager.Instance.SaveQuestDataToDB();
+    }
+
+    // DB에서 퀘스트 정보를 가져와서 UserDataManagr를 업데이트한다
+    public static void LoadUserQuestDataFromDB()
+    {
+        QuestManager.Instance.LoadUserQuestDataFromDB();
     }
 }

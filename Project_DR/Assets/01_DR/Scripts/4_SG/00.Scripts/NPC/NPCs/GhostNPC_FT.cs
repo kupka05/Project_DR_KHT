@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class GhostNPC_FT : HumanTypeNPC
 {
-
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+    }
     private void AwakeInIt()
     {
         npcID = (int)NPCID.Ghost_F_T;
@@ -87,7 +90,10 @@ public class GhostNPC_FT : HumanTypeNPC
     protected override void EndConveration()
     {
         ChangeAnimationString(npcWaitMotion);
+        base.EndConveration();
         OffCanvasObj();
     }       // EndConveration()
+
+
 
 }       // ClassEnd

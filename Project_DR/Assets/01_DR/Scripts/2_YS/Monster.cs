@@ -70,7 +70,7 @@ public class Monster : MonoBehaviour
     private float _hp;
     public float hp
     {
-        get { return _hp; } set { _hp = value; GFunc.Log(this.gameObject.name + "의 HP 바뀌는것을 시도한다. " + _hp); }
+        get { return _hp; } set { _hp = value; /*GFunc.Log(this.gameObject.name + "의 HP 바뀌는것을 시도한다. " + _hp);*/ }
     }
     public float attack = default;
     public float attDelay = default;   //몬스터 공격간격 

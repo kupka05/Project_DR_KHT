@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
         }
     }
     private static GameManager m_instance; // 싱글톤이 할당될 static 변수    
-    
-    
+
+
     [Header("Player Object")]
     public GameObject player;
     private ScreenFader fader;
@@ -78,15 +78,18 @@ public class GameManager : MonoBehaviour
     public bool IsClear
     {
         get { return isClear; }
-        set 
+        set
         {
-            if(isClear != value)
+            if (isClear != value)
             {
                 isClear = value;
                 DoorControll(IsClear);
             }
         }
     }
+
+    public List<GameObject> ghostObjList;       // 유령을 담아둘 리스트
+    public bool isInItGhost = false;
 
     public event System.Action DoorOnEvent;
     public event System.Action DoorOffEvent;
@@ -136,7 +139,7 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelWasLoaded()
     {
-       // GFunc.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
+        // GFunc.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
         // 데이터 가져오기
         GetData();
 
@@ -159,22 +162,22 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void AwakeInIt()
     {
-        if(isClearRoomList == null || isClearRoomList == default)
+        if (isClearRoomList == null || isClearRoomList == default)
         {
             isClearRoomList = new List<bool>();
         }
-        
+
     }       // AwakeInIt()
 
     private void StartInIt()
     {
         // TODO : 프로토타입 이후 수정 예정
-        if(IsProtoType == true)
+        if (IsProtoType == true)
         {
             isPlayerMaxFloor = PROTOTYPE;
             return;
         }
-        if(UserDataManager.Instance.ClearCount <= 1)
+        if (UserDataManager.Instance.ClearCount <= 1)
         {
             isPlayerMaxFloor = FIRSTAFTER;
         }
@@ -191,11 +194,11 @@ public class GameManager : MonoBehaviour
     /// <param name="_isDoorOn">문을 열지 닫을지 bool값</param>
     private void DoorControll(bool _isDoorOn)
     {
-        if(_isDoorOn == true)
+        if (_isDoorOn == true)
         {
             DoorOn();
         }
-        else if(_isDoorOn == false)
+        else if (_isDoorOn == false)
         {
             DoorOff();
         }
@@ -226,7 +229,7 @@ public class GameManager : MonoBehaviour
 
     // 현재 씬 리셋
     public void ResetScene()
-    {        
+    {
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneLoad(currentSceneName);
     }
@@ -240,7 +243,7 @@ public class GameManager : MonoBehaviour
         SceneLoad(lobbySceneName);
     }       // ClearDungeon()
 
- 
+
     // 씬 전환 함수
     public void SceneLoad(string _sceneName)
     {
@@ -276,4 +279,37 @@ public class GameManager : MonoBehaviour
     {
         _playerID = id;
     }
+
+    /// <summary>
+    /// 유령 오브젝트를 List에 Add해주는 함수
+    /// </summary>
+    public void AllocatedGhostObj()
+    {        
+        if (UserDataManager.Instance.ClearCount < 1)
+        {
+            if (isInItGhost == false)
+            {       // 문제 X
+                isInItGhost = true;
+                ghostObjList = new List<GameObject>();
+                GameObject ghostObj;                
+                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_FT");
+                ghostObjList.Add(ghostObj);
+                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_IE");
+                ghostObjList.Add(ghostObj);
+                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_IEFT");
+                ghostObjList.Add(ghostObj);
+                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_NS");
+                ghostObjList.Add(ghostObj);
+                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_PJ");
+                ghostObjList.Add(ghostObj);
+                
+            }
+            else { /*PASS*/ }
+        }
+        else { /*PASS*/ }
+
+        
+
+    }       // AllocatedGhostObj()
+
 }       // ClassEnd

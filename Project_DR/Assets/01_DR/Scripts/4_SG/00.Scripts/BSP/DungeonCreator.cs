@@ -203,10 +203,12 @@ public class DungeonCreator : MonoBehaviour
     // 커스텀 방 이후 제작된 bsp방을 관리할 List
     List<Transform> bspRoom = new List<Transform>();
 
+    private int playerClearCount;
 
 
     void Start()
     {
+        playerClearCount = UserDataManager.Instance.ClearCount;
         DungeonValueInIt();
         // 던전 생성 시작
         CreateDungeon();

@@ -65,28 +65,27 @@ public class VRSceneLoder : MonoBehaviour
 
     // 씬을 불러오는 메서드
     // _SceneName string을 매개변수로 불러올 수 있음
-    public void LoadScene(string _SceneName, bool isWait = true)
+    public void LoadScene(string _SceneName)
     {
         if(string.IsNullOrEmpty(_SceneName))
         {
             GFunc.Log("전환할 씬을 찾지 못했습니다.");
             return;
         }
-        StartCoroutine(LoadDelay(_SceneName, isWait));
+        StartCoroutine(LoadDelay(_SceneName));
     }
 
     // 딜레이가 있을 시 코루틴
-    IEnumerator LoadDelay(string _SceneName, bool isWait = true)
+    IEnumerator LoadDelay(string _SceneName)
     {
         if (fader)
         {
             fader.DoFadeIn();                           // 페이더를 켜고
         }
 
-        if (isWait.Equals(true))
-        {
+
             yield return new WaitForSeconds (sceneDelay);   // 딜레이 이후
-        }
+
         
         SceneManager.LoadScene(_SceneName);             // 지정된 이름의 씬을 로딩
     }

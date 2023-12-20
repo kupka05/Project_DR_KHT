@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class GhostNPC_NS : HumanTypeNPC
 {       // N 와 S를 체크하기 위한 NPC의 스크립트
-
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+    }
     private void AwakeInIt()
     {
         npcID = (int)NPCID.Ghost_N_S;
@@ -87,6 +90,7 @@ public class GhostNPC_NS : HumanTypeNPC
     protected override void EndConveration()
     {
         ChangeAnimationString(npcWaitMotion);
+        base.EndConveration();
         OffCanvasObj();
     }       // EndConveration()
 

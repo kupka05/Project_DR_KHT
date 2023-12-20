@@ -288,7 +288,6 @@ GameObject:
   - component: {fileID: 2062575312111420737}
   - component: {fileID: 1285584348674525060}
   - component: {fileID: 2091994276606668623}
-  - component: {fileID: 2091994276606668608}
   m_Layer: 0
   m_Name: NPC_12_Ghost(IE)
   m_TagString: Untagged
@@ -344,7 +343,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2384963917680125141}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.5, y: 1.5, z: 0.5}
@@ -364,18 +363,6 @@ MonoBehaviour:
   npcTriggerType: 0
   isComunity: 0
   isReadyToAutoComunication: 0
---- !u!114 &2091994276606668608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2384963917680125141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c63770dfc0565e34694fffcf79c6d599, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2384963917764154116
 GameObject:
   m_ObjectHideFlags: 0

@@ -268,7 +268,7 @@ public class GameManager : MonoBehaviour
     // 데이터 가져오기
     public void GetData()
     {
-        gameoverText = (string)DataManager.instance.GetData(1001, "GameOverText", typeof(string));
+        gameoverText = (string)DataManager.Instance.GetData(1001, "GameOverText", typeof(string));
     }
 
     // 아이디 가져오기

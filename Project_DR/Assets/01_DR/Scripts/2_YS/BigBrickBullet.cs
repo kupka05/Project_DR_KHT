@@ -52,7 +52,7 @@ public class BigBrickBullet : MonoBehaviour
     public void GetData(int brickTableId)
     {
         //6914
-        damage = (float)DataManager.instance.GetData(brickTableId, "Damage", typeof(float));
+        damage = (float)DataManager.Instance.GetData(brickTableId, "Damage", typeof(float));
       
 
     }

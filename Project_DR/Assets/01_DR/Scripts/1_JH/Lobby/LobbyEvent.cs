@@ -198,6 +198,10 @@ public class LobbyEvent : MonoBehaviour
     {
 
         GetNPCDialog();              // NPC 대사 가져오고
+        if(UserData.QuestCheck())
+        {
+            //targetQuestID = ()UserData.GetQuest();
+        }
         SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
         GetClearData();              // 클리어 데이터 가져오기
 

@@ -1,4 +1,5 @@
 using BNG;
+using Js.Quest;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
-    public UnityEvent unityEvent;
+    public UnityEvent bossMeet;
 
     public UnityEngine.UI.Slider bossHPSlider;
 
@@ -169,17 +170,17 @@ public class Boss : MonoBehaviour
     public void GetData(int bossId, int bossProjectileId, int bossProjectileID)
     {
         //보스
-        maxHp = (float)DataManager.instance.GetData(bossId, "BossHP", typeof(float));
+        maxHp = (float)DataManager.Instance.GetData(bossId, "BossHP", typeof(float));
 
         //소형 투사체 6910
-        bulletCount = (float)DataManager.instance.GetData(bossProjectileId, "Duration", typeof(float));
-        delayTime = (float)DataManager.instance.GetData(bossProjectileId, "Delay", typeof(float));
-        patternInterval = (float)DataManager.instance.GetData(bossProjectileId, "DelTime", typeof(float)); //이건 하나만
-        destoryTime = (float)DataManager.instance.GetData(bossProjectileId, "DesTime", typeof(float));
-        speed = (float)DataManager.instance.GetData(bossProjectileId, "Speed", typeof(float));
+        bulletCount = (float)DataManager.Instance.GetData(bossProjectileId, "Duration", typeof(float));
+        delayTime = (float)DataManager.Instance.GetData(bossProjectileId, "Delay", typeof(float));
+        patternInterval = (float)DataManager.Instance.GetData(bossProjectileId, "DelTime", typeof(float)); //이건 하나만
+        destoryTime = (float)DataManager.Instance.GetData(bossProjectileId, "DesTime", typeof(float));
+        speed = (float)DataManager.Instance.GetData(bossProjectileId, "Speed", typeof(float));
 
         //6914
-        destroy = (float)DataManager.instance.GetData(bossProjectileID, "DesTime", typeof(float));
+        destroy = (float)DataManager.Instance.GetData(bossProjectileID, "DesTime", typeof(float));
 
     }
 
@@ -696,7 +697,10 @@ public class Boss : MonoBehaviour
                 isDie = true;
                 GFunc.Log($"isDie:{isDie}");
                 // 이벤트 호출
-                unityEvent?.Invoke();
+                //unityEvent?.Invoke();
+
+                // 보스 죽음 퀘스트
+                QuestCallback.OnBossKillCallback(bossId);
 
                 if (bossState)
                 {
@@ -785,6 +789,11 @@ public class Boss : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isStart)
         {
+            bossMeet?.Invoke();
+
+            // 보스 퀘스트 콜백
+            QuestCallback.OnBossMeetCallback(bossId);
+
             isStart = true;
             GFunc.Log("인식되냐");
             StartCoroutine(ExecutePattern());

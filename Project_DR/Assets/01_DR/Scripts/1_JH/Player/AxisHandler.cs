@@ -190,8 +190,8 @@ public class AxisHandler : MonoBehaviour
 
     public void GetData()
     {
-        deadZoneVal = (float)DataManager.instance.GetData(1001, "DeadZone", typeof(float));
-        activeZoneVal = (float)DataManager.instance.GetData(1001, "ActiveZone", typeof(float));
-        activeTime = (float)DataManager.instance.GetData(1001, "ActiveTime", typeof(float));
+        deadZoneVal = (float)DataManager.Instance.GetData(1001, "DeadZone", typeof(float));
+        activeZoneVal = (float)DataManager.Instance.GetData(1001, "ActiveZone", typeof(float));
+        activeTime = (float)DataManager.Instance.GetData(1001, "ActiveTime", typeof(float));
     }
 }

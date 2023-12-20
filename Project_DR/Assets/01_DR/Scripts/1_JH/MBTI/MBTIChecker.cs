@@ -124,11 +124,11 @@ public class MBTIChecker : MonoBehaviour
     // 데이터를 가져오는 함수
     private void GetData(int ID)
     {
-       checkCount = (int)DataManager.instance.GetData(ID, "CheckCount", typeof(int));
-       checkTime = (float)DataManager.instance.GetData(ID, "CheckTime", typeof(float));
-       isDestroy = (bool)DataManager.instance.GetData(ID, "Destroy", typeof(bool));
+       checkCount = (int)DataManager.Instance.GetData(ID, "CheckCount", typeof(int));
+       checkTime = (float)DataManager.Instance.GetData(ID, "CheckTime", typeof(float));
+       isDestroy = (bool)DataManager.Instance.GetData(ID, "Destroy", typeof(bool));
 
-        switch ((string)DataManager.instance.GetData(ID, "Type", typeof(string)))
+        switch ((string)DataManager.Instance.GetData(ID, "Type", typeof(string)))
         {
             case "Grab":
                 type = CheckType.Grab; break;
@@ -140,10 +140,10 @@ public class MBTIChecker : MonoBehaviour
                 type = CheckType.Choice; break;
         }
 
-        I = (float)DataManager.instance.GetData(ID, "I", typeof(float));
-        N = (float)DataManager.instance.GetData(ID, "N", typeof(float));
-        F = (float)DataManager.instance.GetData(ID, "F", typeof(float));
-        P = (float)DataManager.instance.GetData(ID, "P", typeof(float));
+        I = (float)DataManager.Instance.GetData(ID, "I", typeof(float));
+        N = (float)DataManager.Instance.GetData(ID, "N", typeof(float));
+        F = (float)DataManager.Instance.GetData(ID, "F", typeof(float));
+        P = (float)DataManager.Instance.GetData(ID, "P", typeof(float));
 
     }
 }

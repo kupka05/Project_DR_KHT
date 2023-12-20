@@ -45,11 +45,10 @@ public class SkillManager : MonoBehaviour
     [Header("DrillLanding")]
     public SkillEvent landingSkill;
 
-    public bool isHookShot;             // 훅샷 사용여부
-    public float activePcDistance = 5;    // 일정 높이
-    public float activeDrillDistance = 3f;    // 일정 높이
-    private int _LDskillCount;
     public int LDskillCount;            // 남은 스킬 횟수
+    public bool isHookShot;             // 훅샷 사용여부
+    public float activePcDistance;    // 일정 높이
+    public float activeDrillDistance = 3f;    // 일정 높이
 
     IEnumerator checkGound;
     private WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
@@ -203,7 +202,6 @@ public class SkillManager : MonoBehaviour
     {
         if(UserData.GetDrillLandingCount() <= 0)
         {
-            GFunc.Log("드릴랜딩 사용 불가 : " + LDskillCount);
             return;
         }
 
@@ -258,7 +256,7 @@ public class SkillManager : MonoBehaviour
         GD_maxTime = UserData.GetGrinderMaxTime();
 
         LDskillCount = UserData.GetDrillLandingCount();
-
+        activePcDistance = Data.GetFloat(999, "DLActiveHeight");
         SetGrinderSlider();
 
         //TD_collDown = Data.GetFloat(721100, "Value2");

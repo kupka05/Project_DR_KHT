@@ -311,7 +311,7 @@ public class EliteMonster : Monster
                     nav.isStopped = true;
                     //GFunc.Log("nav.isStopped: " + nav.isStopped);
                     anim.SetTrigger(hashDie);
-
+                    UserData.KillElite(0, exp);
                     //Destroy(this.gameObject, 1.3f); //damageable 쪽에서 처리
                     yield break;
             }

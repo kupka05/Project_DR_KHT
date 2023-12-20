@@ -42,8 +42,8 @@ public class DrillHead : MonoBehaviour
     }
     private void GetData()
     {
-        damage = (float)DataManager.instance.GetData(1100, "ProjectileDamage", typeof(float));
-        speed = (float)DataManager.instance.GetData(1100, "ProjectileSpeed", typeof(float));
+        damage = (float)DataManager.Instance.GetData(1100, "ProjectileDamage", typeof(float));
+        speed = (float)DataManager.Instance.GetData(1100, "ProjectileSpeed", typeof(float));
      
     }
 

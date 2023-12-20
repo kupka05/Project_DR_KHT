@@ -198,16 +198,16 @@ public class Monster : MonoBehaviour
 
     public virtual void GetData(int id)
     {
-        hp = (float)DataManager.instance.GetData(id, "MonHP", typeof(float));
-        exp = (int)DataManager.instance.GetData(id, "MonHP", typeof(int));
-        attack = (float)DataManager.instance.GetData(id, "MonAtt", typeof(float));
-        attDelay = (float)DataManager.instance.GetData(id, "MonDel", typeof(float));
-        speed = (float)DataManager.instance.GetData(id, "MonSpd", typeof(float));
-        attRange = (float)DataManager.instance.GetData(id, "MonAtr", typeof(float));
-        recRange = (float)DataManager.instance.GetData(id, "MonRer", typeof(float));
-        stunDelay = (float)DataManager.instance.GetData(id, "MonSTFDel", typeof(float));
+        hp = Data.GetFloat(id, "MonHP");
+        exp = Data.GetInt(id, "MonExp");
+        attack = (float)DataManager.Instance.GetData(id, "MonAtt", typeof(float));
+        attDelay = (float)DataManager.Instance.GetData(id, "MonDel", typeof(float));
+        speed = (float)DataManager.Instance.GetData(id, "MonSpd", typeof(float));
+        attRange = (float)DataManager.Instance.GetData(id, "MonAtr", typeof(float));
+        recRange = (float)DataManager.Instance.GetData(id, "MonRer", typeof(float));
+        stunDelay = (float)DataManager.Instance.GetData(id, "MonSTFDel", typeof(float));
 
-        stopDistance = (float)DataManager.instance.GetData(id, "MonStd", typeof(float));
+        stopDistance = (float)DataManager.Instance.GetData(id, "MonStd", typeof(float));
     }
 
     public void SetMaxHealth(float newHealth)
@@ -525,7 +525,7 @@ public class Monster : MonoBehaviour
                 nav.isStopped = true;
                 //GFunc.Log("nav.isStopped: " + nav.isStopped);
                 anim.SetTrigger(hashDie);
-                    UserData.KillMonster(0, exp);
+                UserData.KillMonster(0, exp);
 
                 yield break;
             }
@@ -538,13 +538,13 @@ public class Monster : MonoBehaviour
 
     public virtual void OnDeal(float damage)
     {
-        //// 죽지 않은 상태면 HP 바 업데이트
-        //if (damageable.Health >= 0)
-        //{
+        // 죽지 않은 상태면 HP 바 업데이트
+        if (damageable.Health >= 0)
+        {
             SetHealth(damageable.Health);
-        //}
-        //else
-        //    return;
+        }
+        else
+            return;
 
         Debug.Log($"체력:{damageable.Health}");
 
@@ -613,7 +613,7 @@ public class Monster : MonoBehaviour
 
         if (countNum == 2)
         {
-            damageable.Health -= SmashDamageCalculate(damage, 1);  //1단계
+            damageable.Health -= SmashDamageCalculate(damage, 1);  //여기에 smashone넣어도 되는가?
             // 갱신된 체력 값을 적용
             SetHealth(damageable.Health);
 

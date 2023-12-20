@@ -1,4 +1,5 @@
 using BNG;
+using Js.Quest;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
-    public UnityEvent unityEvent;
+    public UnityEvent bossMeet;
 
     public UnityEngine.UI.Slider bossHPSlider;
 
@@ -614,7 +615,10 @@ public class Boss : MonoBehaviour
                 isDie = true;
                 GFunc.Log($"isDie:{isDie}");
                 // 이벤트 호출
-                unityEvent?.Invoke();
+                //unityEvent?.Invoke();
+
+                // 보스 죽음 퀘스트
+                QuestCallback.OnBossKillCallback(bossId);
 
                 if (bossState)
                 {
@@ -632,6 +636,11 @@ public class Boss : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isStart)
         {
+            bossMeet?.Invoke();
+
+            // 보스 퀘스트 콜백
+            QuestCallback.OnBossMeetCallback(bossId);
+
             isStart = true;
             GFunc.Log("인식되냐");
             StartCoroutine(ExecutePattern());

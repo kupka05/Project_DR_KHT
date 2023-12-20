@@ -55,7 +55,7 @@ public class EliteMonster : Monster
 
     public override IEnumerator MonsterAction()
     {
-        while (true)
+        while (!isDie)
         {
             switch (state)
             {
@@ -361,8 +361,8 @@ public class EliteMonster : Monster
 
             if (countNum <= 3)
             {
-                countNum++;
                 smashCountNum.text = countNum.ToString();
+                countNum++;
                 Debug.Log($"숫자:{countNum}");
             }
             else if (countNum == 5)

@@ -24,10 +24,28 @@ public class Boss : MonoBehaviour
     public UnityEngine.UI.Image targetImage;
 
     GameObject instantLazer;
+    GameObject instantLazerFire;
 
     public float turnSpeed = 15.0f;
 
     public float missileCount = 6.0f;
+
+    [Header("분쇄")]
+    public GameObject smash;
+    public UnityEngine.UI.Image smashFilled;
+    public TMP_Text smashCountNum;
+    public float skillTime = 10.0f;
+    public int countNum = 1;
+
+    [Header("분쇄 데미지 퍼센트")]
+    public float smashOne = 0.03f;
+    public float smashSecond = 0.15f;
+    public float smashThird = 0.6f;
+
+    [Header("분쇄 발동 카운트")]
+    public int smashCount = 0;      //깍아냄
+    public int smashMaxCount = 3;  //깍아냄 횟수 충족
+
 
     [Header("보스 및 투사체 테이블 관련")]
     public int bossId;  //보스 테이블
@@ -46,6 +64,7 @@ public class Boss : MonoBehaviour
     [Header("레이저 관련")]
     public Transform lazerPort;
     public GameObject lazer;
+    public GameObject lazerFire;
 
     [Header("원거리 공격 소형 투사체")]
     public float bulletCount = default;
@@ -85,11 +104,11 @@ public class Boss : MonoBehaviour
     [Header("패턴 간격")]
     public float patternInterval = default;
 
-    [Header("포물선 터지는 오브젝트")]
-    public GameObject explosionPrefab;
-    public Transform explosionPort;
-    public Transform explosionPortLeft;
-    public Transform explosionPortRight;
+    //[Header("포물선 터지는 오브젝트")]
+    //public GameObject explosionPrefab;
+    //public Transform explosionPort;
+    //public Transform explosionPortLeft;
+    //public Transform explosionPortRight;
 
     [Header("포물선 안 터지는 오브젝트")]
     public Transform bigBrickPort;
@@ -98,9 +117,9 @@ public class Boss : MonoBehaviour
     public GameObject bigBrick;
     public float destroy = default;
 
-    [Header("유도 미사일 테스트")]
-    public Transform testPort;
-    public GameObject testBullet;
+    //[Header("유도 미사일 테스트")]
+    //public Transform testPort;
+    //public GameObject testBullet;
 
     
     void Awake()
@@ -342,6 +361,13 @@ public class Boss : MonoBehaviour
                 Vector3 offset = Vector3.zero;
 
                 offset = UnityEngine.Random.insideUnitSphere * 2.0f;
+                
+                //Vector3 bossForward = transform.forward;
+
+                //// 전방 방향으로만 랜덤 오프셋을 생성합니다.
+                //offset = UnityEngine.Random.insideUnitCircle * 2.0f;
+                //offset = new Vector3(offset.x, offset.y, Mathf.Abs(offset.x)); // 전방 방향으로 조정
+
 
                 GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
                 bullets.Add(instantBullet);
@@ -359,11 +385,12 @@ public class Boss : MonoBehaviour
                 if (bullet != null)
                 {
                     Rigidbody rigidBullet = bullet.GetComponent<Rigidbody>();
-                    rigidBullet.transform.LookAt(target);
+                    rigidBullet.transform.LookAt(target.position);
 
                     yield return new WaitForSeconds(0.4f);
 
                     rigidBullet.velocity = (target.position - bullet.transform.position).normalized * speed;
+                    rigidBullet.transform.LookAt(target.position);
                 }
             }
 
@@ -388,28 +415,47 @@ public class Boss : MonoBehaviour
 
             yield return new WaitForSeconds(3.0f);
 
-            // After waiting for 3 seconds, shoot the laser
-            ShootLazer();
+            // 3초 대기 후, targetImage의 위치에서 레이저 발사
+            ShootLazer(targetImage.transform.position);
+
+            // 추가: 레이저가 발사된 후 1초 대기 후 레이저 파이어 생성
+            yield return new WaitForSeconds(0.2f);
+            LazerFire(targetImage.transform.position);
+
+            // 1초 후, targetImage의 위치에서 레이저 발사
+            ShootLazer(targetImage.transform.position);
         }
     }
 
-    void ShootLazer()
+    void LazerFire(Vector3 firePosition)
     {
-        // Instantiate the laser and set its direction
-        instantLazer = Instantiate(lazer, lazerPort.position, lazerPort.rotation);
-        instantLazer.transform.LookAt(target.position);
-        lazerPort.transform.LookAt(target.position);
+        instantLazerFire = Instantiate(lazerFire, firePosition, Quaternion.identity);
+        Invoke("LazerFireDestroy", 1.0f);
+    }
 
-        // Schedule the destruction of the laser after 1 second
+    void LazerFireDestroy()
+    {
+        Destroy(instantLazerFire);
+    }
+
+    void ShootLazer(Vector3 shootPosition)
+    {
+        // 레이저를 생성하고 shootPosition을 기준으로 방향을 설정합니다.
+        instantLazer = Instantiate(lazer, lazerPort.position, lazerPort.rotation);
+        instantLazer.transform.LookAt(shootPosition); // target.position 대신에 shootPosition을 사용합니다.
+        lazerPort.transform.LookAt(shootPosition);
+
+        // 1초 후에 레이저를 파괴하도록 예약합니다.
         Invoke("LazerDestroy", 1.0f);
     }
 
     void LazerDestroy()
     {
-        // Destroy the laser and hide the target image
+        // 레이저를 파괴하고 targetImage를 숨깁니다.
         Destroy(instantLazer);
         targetImage.gameObject.SetActive(false);
     }
+
     public Vector3 BigBrick(Vector3 portPosition)
     {
         int randomBrick = UnityEngine.Random.Range(0, 10);
@@ -492,46 +538,46 @@ public class Boss : MonoBehaviour
         Destroy(instantBrickRight, destroy);
     }
 
-    public Vector3 ExplosionBox(Vector3 portPosition)
-    {
-        int randomBox = UnityEngine.Random.Range(0, 10);
-        // 해당 위치에 따라 초기 속도 설정
-        Vector3 initialVelocity = transform.forward * randomBox;  //10.0f;
+    //public Vector3 ExplosionBox(Vector3 portPosition)
+    //{
+    //    int randomBox = UnityEngine.Random.Range(0, 10);
+    //    // 해당 위치에 따라 초기 속도 설정
+    //    Vector3 initialVelocity = transform.forward * randomBox;  //10.0f;
 
-        Vector3 target = transform.forward * randomBox;   //5.0f;
+    //    Vector3 target = transform.forward * randomBox;   //5.0f;
 
-        // 각 포트 위치에 따라 Y축 오프셋 값 조절
-        if (portPosition == explosionPort.position)
-        {
-            target.y += randomBox;
-        }
-        else if (portPosition == explosionPortLeft.position)
-        {
-            target.y += randomBox;
-        }
-        else if (portPosition == explosionPortRight.position)
-        {
-            target.y += randomBox;
-        }
+    //    // 각 포트 위치에 따라 Y축 오프셋 값 조절
+    //    if (portPosition == explosionPort.position)
+    //    {
+    //        target.y += randomBox;
+    //    }
+    //    else if (portPosition == explosionPortLeft.position)
+    //    {
+    //        target.y += randomBox;
+    //    }
+    //    else if (portPosition == explosionPortRight.position)
+    //    {
+    //        target.y += randomBox;
+    //    }
 
-        // 초기 속도와 목표 위치를 결합
-        Vector3 combinedVector = initialVelocity + target;
+    //    // 초기 속도와 목표 위치를 결합
+    //    Vector3 combinedVector = initialVelocity + target;
 
-        return combinedVector;
-    }
+    //    return combinedVector;
+    //}
 
 
-    void ExplosionShoot()
-    {
-        GameObject instantExplosion = Instantiate(explosionPrefab, explosionPort.position, Quaternion.identity);
-        instantExplosion.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPort.position), ForceMode.Impulse);
+    //void ExplosionShoot()
+    //{
+    //    GameObject instantExplosion = Instantiate(explosionPrefab, explosionPort.position, Quaternion.identity);
+    //    instantExplosion.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPort.position), ForceMode.Impulse);
 
-        GameObject instantExplosionLeft = Instantiate(explosionPrefab, explosionPortLeft.position, Quaternion.identity);
-        instantExplosionLeft.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortLeft.position), ForceMode.Impulse);
+    //    GameObject instantExplosionLeft = Instantiate(explosionPrefab, explosionPortLeft.position, Quaternion.identity);
+    //    instantExplosionLeft.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortLeft.position), ForceMode.Impulse);
 
-        GameObject instantExplosionRight = Instantiate(explosionPrefab, explosionPortRight.position, Quaternion.identity);
-        instantExplosionRight.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortRight.position), ForceMode.Impulse);
-    }
+    //    GameObject instantExplosionRight = Instantiate(explosionPrefab, explosionPortRight.position, Quaternion.identity);
+    //    instantExplosionRight.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortRight.position), ForceMode.Impulse);
+    //}
 
     
     void BounceShoot()
@@ -540,9 +586,7 @@ public class Boss : MonoBehaviour
         GameObject bounceLeft = Instantiate(bounce, bouncePortLeft.position, bouncePortLeft.rotation);
         GameObject bounceRight = Instantiate(bounce, bouncePortRight.position, bouncePortRight.rotation);
 
-        Destroy(instantBounce, 8.0f);
-        Destroy(bounceLeft, 8.0f);
-        Destroy(bounceRight, 8.0f);
+        
     }
 
     ////유도미사일 테스트
@@ -598,7 +642,7 @@ public class Boss : MonoBehaviour
     //}
 
 
-    public void OnDeal()
+    public void OnDeal(float damage)
     {
         if (!isDie)
         {
@@ -606,6 +650,44 @@ public class Boss : MonoBehaviour
             {
                 SetHealth(damageable.Health);
                 GFunc.Log($"Current HP: {damageable.Health}");
+            }
+
+            smashCount++;   // 분쇄 카운트 추가
+
+            if (smashCount >= smashMaxCount)
+            {
+                smash.SetActive(true);
+                GFunc.Log("분쇄카운트 충족");
+
+                //float smashTakeDamage = damageable.Health * smashOne;
+                //SetHealth(damageable.Health - smashTakeDamage);
+                //Debug.Log($"받는 데미지:{damageable.Health - smashTakeDamage}");
+
+                smashCount = 0;
+                //GFunc.Log($"분쇄 카운트:{smashCount}");
+
+                smashFilled.fillAmount = 1;
+                //GFunc.Log($"분쇄FillAmount:{smashFilled.fillAmount}");
+
+                StartCoroutine(SmashTime());
+
+                if (countNum <= 3)
+                {
+                    smashCountNum.text = countNum.ToString();
+                    countNum++;
+                    Debug.Log($"숫자:{countNum}");
+                }
+                else if (countNum == 5)
+                {
+
+                }
+
+                GFunc.Log($"숫자:{countNum}");
+
+                ApplyStackDamage(damage);
+                //GFunc.Log("스택 별 데미지 진입");
+
+                //GFunc.Log("중첩 숫자 증가");
             }
 
             if (damageable.Health <= 0)
@@ -623,9 +705,80 @@ public class Boss : MonoBehaviour
                 StopAllCoroutines();
                 //GFunc.Log("코루틴 멈춤");
             }
+
+
         }
 
     }
+
+
+    public void ApplyStackDamage(float damage)
+    {
+        Debug.Log($"countNum = {countNum}");
+
+        if (countNum == 2)
+        {
+            damageable.Health -= SmashDamageCalculate(damage, 1);  //1단계
+            // 갱신된 체력 값을 적용
+            SetHealth(damageable.Health);
+
+            // 남은 체력을 로그로 출력
+            Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
+
+        }
+        else if (countNum == 3)
+        {
+            damageable.Health -= SmashDamageCalculate(damage, 2);
+            SetHealth(damageable.Health);
+
+            Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
+
+        }
+        else if (countNum == 4)
+        {
+            damageable.Health -= SmashDamageCalculate(damage, 3);
+            SetHealth(damageable.Health);
+
+            Debug.Log($"남은체력:{damageable.Health}");
+
+            Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
+
+        }
+
+
+
+    }
+    /// <summary> 분쇄 데미지를 계산하는 메서드 </summary>
+    /// <param name="damage">플레이어의 최종 데미지</param>
+    /// <param name="index">분쇄 단계</param>
+    /// <returns></returns>
+    public float SmashDamageCalculate(float damage, int index)
+    {
+        float _debuff = UserData.GetSmashDamage(index); ;
+        return (damage * (1 + _debuff)) - damage; ;
+    }
+
+    public IEnumerator SmashTime()
+    {
+        while (smashFilled.fillAmount > 0)
+        {
+            //GFunc.Log($"남은 시간:{smashFilled.fillAmount * skillTime}");
+            //GFunc.Log("분쇄 fill");
+            smashFilled.fillAmount -= 1 * Time.smoothDeltaTime / skillTime;
+
+            if (smashFilled.fillAmount <= 0)
+            {
+                smash.SetActive(false);
+                smashCount = 0;
+                countNum = 1;
+                //GFunc.Log("사라지나");
+            }
+            yield return null;
+        }
+
+
+    }
+
 
 
     void OnTriggerEnter(Collider other)

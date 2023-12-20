@@ -248,12 +248,12 @@ GameObject:
   - component: {fileID: 7452217167237889458}
   - component: {fileID: 2409476937102674312}
   m_Layer: 0
-  m_Name: Image
+  m_Name: targetImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6888702405755674660
 RectTransform:
   m_ObjectHideFlags: 0
@@ -611,15 +611,18 @@ MonoBehaviour:
   rigid: {fileID: 7755644396602740824}
   damageable: {fileID: 7755644396602740818}
   targetImage: {fileID: 2409476937102674312}
+  turnSpeed: 15
+  missileCount: 6
   bossId: 6872
   bossProjectileId: 6910
   bossProjectileID: 0
   power: 15
   lazerPort: {fileID: 7755644396448856065}
   lazer: {fileID: 7801054870893074991, guid: 9de885b41bc52fe488e338a87491f2a7, type: 3}
-  lineRenderer: {fileID: 0}
+  lazerFire: {fileID: 2981110298664549651, guid: 3727415ae6fdff740af6dbabe736138b,
+    type: 3}
   bulletCount: 6
-  smallBulletPrefab: {fileID: 8809067579740100126, guid: 9233dfce7002c8d43952b057b6e7d540,
+  smallBulletPrefab: {fileID: 3016696864302411366, guid: 9c76011e52345e24293d9f04f36837d9,
     type: 3}
   delayTime: 0
   destoryTime: 0
@@ -627,8 +630,10 @@ MonoBehaviour:
   bouncePort: {fileID: 7755644397337211218}
   bouncePortLeft: {fileID: 7755644396883977092}
   bouncePortRight: {fileID: 7755644397253788465}
-  bounce: {fileID: 3926116842542408542, guid: be6bf16cc4deef94abb2efb0c9ca8b11, type: 3}
+  bounce: {fileID: 5257095985092105904, guid: a32f12ea1d46c754d9f0ef44246a3413, type: 3}
   target: {fileID: 0}
+  player: {fileID: 0}
+  knockBack: {fileID: 0}
   hp: 0
   maxHp: 0
   isLazer: 0
@@ -637,6 +642,10 @@ MonoBehaviour:
   isPatternExecuting: 0
   isShoot: 0
   isPushPlayer: 0
+  isKnockBack: 0
+  isKnockBackSecond: 0
+  isKnockBackThird: 0
+  isStart: 0
   patternInterval: 5
   explosionPrefab: {fileID: 8809067579740100126, guid: 53f8846c709b18a4697c72a66e5d61ab,
     type: 3}
@@ -646,7 +655,7 @@ MonoBehaviour:
   bigBrickPort: {fileID: 7755644396663243578}
   bigBrickPortLeft: {fileID: 7755644397060307647}
   bigBrickPortRight: {fileID: 7755644396949010825}
-  bigBrick: {fileID: 8809067579740100126, guid: 79e0e19e7e8373843acea6cb7f7a8966,
+  bigBrick: {fileID: 3897857004858841225, guid: 0b94544d942dff44ca71ef87a9910456,
     type: 3}
   destroy: 0
   testPort: {fileID: 7755644395759680802}

@@ -2,6 +2,7 @@ using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class BounceBullet : MonoBehaviour
 {
@@ -9,6 +10,11 @@ public class BounceBullet : MonoBehaviour
     public DamageCollider damageCollider;
 
     public int BounceTableId;
+
+    public GameObject bounceEffect;
+
+    public Transform target;
+    public float attack = 0.2f;
 
     [Header("테이블 관련")]
     public float speed = default;
@@ -23,11 +29,37 @@ public class BounceBullet : MonoBehaviour
     {
         GetData(BounceTableId);
 
+        target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         rigid = GetComponent<Rigidbody>();
 
         damageCollider.Damage = damage;
 
         StartCoroutine(Activate());
+    }
+
+    void Update()
+    {
+        float distance = Vector3.Distance(target.position, transform.position);
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+
+            if (distance <= attack)
+            {
+                if (hit.collider.CompareTag("Player"))
+                {
+                    hit.collider.GetComponent<Damageable>().DealDamage(damage);
+                    GFunc.Log($"데미지:{damage}");
+
+                    GameObject instanceEffect = Instantiate(bounceEffect, transform.position, Quaternion.identity);
+
+                }
+
+            }
+
+        Destroy(this.gameObject, 8.0f);
+        GameObject instanceEffectDestroy = Instantiate(bounceEffect, transform.position, Quaternion.identity);
+
     }
 
     IEnumerator Activate()
@@ -36,7 +68,7 @@ public class BounceBullet : MonoBehaviour
         gameObject.SetActive(true);
         //GFunc.Log($"활성화:{gameObject}");
         
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(2.0f);
         //GFunc.Log("대기중");
         
         Play();

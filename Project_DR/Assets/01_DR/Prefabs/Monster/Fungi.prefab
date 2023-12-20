@@ -758,7 +758,7 @@ MonoBehaviour:
       - m_Target: {fileID: 7303317273201650267}
         m_TargetAssemblyTypeName: Monster, Assembly-CSharp
         m_MethodName: OnDeal
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1477,6 +1477,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Smash
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888119028517727779, guid: 9a15104235e74c44ebb3c27099a3334d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a15104235e74c44ebb3c27099a3334d, type: 3}

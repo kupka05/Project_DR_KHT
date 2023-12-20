@@ -7,11 +7,14 @@ using UnityEngine;
 public class Shoot : MonoBehaviour
 {
     public GameObject smallBulletPrefab;
+    //public DamageCollider damageCollider;
 
     public bool isShoot = false;
     public bool isThink = false;
 
     public int tableID;
+
+    public float attack = 0.2f;
 
     [Header("테이블 관련")]
     public float bulletCount = default;
@@ -19,7 +22,8 @@ public class Shoot : MonoBehaviour
     public float destoryTime = default;
     public float delayTime = default;
     public float delay = default;
-
+    
+    
     public Transform target;
 
     void Awake()
@@ -31,9 +35,11 @@ public class Shoot : MonoBehaviour
     void Start()
     {
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
-        
+       
         StartCoroutine(Think());
     }
+
+    
 
     public void GetData(int tableID)
     {
@@ -43,6 +49,7 @@ public class Shoot : MonoBehaviour
         destoryTime = (float)DataManager.instance.GetData(tableID, "DesTime", typeof(float));
         delayTime = (float)DataManager.instance.GetData(tableID, "DelTime", typeof(float));
         delay = (float)DataManager.instance.GetData(tableID, "Delay", typeof(float));
+        
 
     }
 

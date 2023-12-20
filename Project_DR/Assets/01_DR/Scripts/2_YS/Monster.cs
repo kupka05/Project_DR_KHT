@@ -198,8 +198,8 @@ public class Monster : MonoBehaviour
 
     public virtual void GetData(int id)
     {
-        hp = (float)DataManager.instance.GetData(id, "MonHP", typeof(float));  
-        exp = (int)DataManager.instance.GetData(id, "MonExp", typeof(float));
+        hp = (float)DataManager.instance.GetData(id, "MonHP", typeof(float));
+        exp = (int)DataManager.instance.GetData(id, "MonHP", typeof(int));
         attack = (float)DataManager.instance.GetData(id, "MonAtt", typeof(float));
         attDelay = (float)DataManager.instance.GetData(id, "MonDel", typeof(float));
         speed = (float)DataManager.instance.GetData(id, "MonSpd", typeof(float));
@@ -226,7 +226,7 @@ public class Monster : MonoBehaviour
     // 역할 : 스테이트를 변환만 해준다. 다른건 없음.
     IEnumerator MonsterState()
     {
-        while (true)
+        while (!isDie)
         {
             // 체력이 0 이하면 죽은 상태로 전이
             if (damageable.Health <= 0)
@@ -264,7 +264,7 @@ public class Monster : MonoBehaviour
     // 몬스터의 상태에 따라 전이되는 액션
     public virtual IEnumerator MonsterAction()
     {
-        while(true)
+        while(!isDie)
         { 
         switch (state)
         {
@@ -525,7 +525,7 @@ public class Monster : MonoBehaviour
                 nav.isStopped = true;
                 //GFunc.Log("nav.isStopped: " + nav.isStopped);
                 anim.SetTrigger(hashDie);
-                UserDataManager.Instance.result.AddMonsterNormal(0, exp);
+                    UserData.KillMonster(0, exp);
 
                 yield break;
             }
@@ -538,13 +538,13 @@ public class Monster : MonoBehaviour
 
     public virtual void OnDeal(float damage)
     {
-        // 죽지 않은 상태면 HP 바 업데이트
-        if (damageable.Health >= 0)
-        {
+        //// 죽지 않은 상태면 HP 바 업데이트
+        //if (damageable.Health >= 0)
+        //{
             SetHealth(damageable.Health);
-        }
-        else
-            return;
+        //}
+        //else
+        //    return;
 
         Debug.Log($"체력:{damageable.Health}");
 
@@ -575,8 +575,8 @@ public class Monster : MonoBehaviour
 
             if (countNum <= 3)
             {
-                countNum++;
                 smashCountNum.text = countNum.ToString();
+                countNum++;
                 Debug.Log($"숫자:{countNum}");
             }
             else if (countNum == 5)
@@ -613,7 +613,7 @@ public class Monster : MonoBehaviour
 
         if (countNum == 2)
         {
-            damageable.Health -= SmashDamageCalculate(damage, 1);  //여기에 smashone넣어도 되는가?
+            damageable.Health -= SmashDamageCalculate(damage, 1);  //1단계
             // 갱신된 체력 값을 적용
             SetHealth(damageable.Health);
 

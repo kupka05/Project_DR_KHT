@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GhostNPC_IE_FT : HumanTypeNPC
 {
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+    }
 
     private void AwakeInIt()
     {
@@ -87,6 +91,7 @@ public class GhostNPC_IE_FT : HumanTypeNPC
     protected override void EndConveration()
     {
         ChangeAnimationString(npcWaitMotion);
+        base.EndConveration();
         OffCanvasObj();
     }       // EndConveration()
 

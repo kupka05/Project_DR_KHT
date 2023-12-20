@@ -87,6 +87,7 @@ public class ShopNpc : AnnouncementNPC
     protected override void EndConveration()
     {
         ChangeAnimationString(npcWaitMotion);
+        base.EndConveration();
         OffCanvasObj();
     }       // EndConveration()
 

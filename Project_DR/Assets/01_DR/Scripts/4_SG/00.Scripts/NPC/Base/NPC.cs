@@ -116,6 +116,8 @@ public class NPC : MonoBehaviour
     protected delegate void EndConverationDelegate();             // NPC와 대화가 끝나면 호출될 델리게이트
     protected event EndConverationDelegate EndConverationEvent;   // StopConversationDelegate의 이벤트
 
+    // EventRoom의 SubscribeToNpcClearEvent함수 호출함
+    public event System.Action isCommunityCompleateAction;     // NPC와의 대화가 끝나면 이 이벤트를 호출해서 문을 열도록 할것임
 
 
 
@@ -152,17 +154,17 @@ public class NPC : MonoBehaviour
     /// <param name="_npcID">해당 NPC의 ID</param>
     protected virtual void ParamsInIt(int _npcID)
     {
-        GFunc.Log($"시트값 가져오기위한 곳에 받아온 ID : {_npcID}");
-        npcName = (string)DataManager.Instance.GetData(_npcID, "Name", typeof(string));
-        //npcTitle = (string)DataManager.Instance.GetData(_npcID, "Title", typeof(string)); // 대사 출력시 해당 대화의 칭호를 가져와서 출력하는식으로 변경
-        npcWaitMotion = (string)DataManager.Instance.GetData(_npcID, "WaitMotion", typeof(string));
-        npcConversationMotion = (string)DataManager.Instance.GetData(_npcID, "ConversationMotion", typeof(string));
-        npcMoveMotion = (string)DataManager.Instance.GetData(_npcID, "MoveMotion", typeof(string));
+        //GFunc.Log($"시트값 가져오기위한 곳에 받아온 ID : {_npcID}");
+        npcName = (string)DataManager.instance.GetData(_npcID, "Name", typeof(string));
+        //npcTitle = (string)DataManager.instance.GetData(_npcID, "Title", typeof(string)); // 대사 출력시 해당 대화의 칭호를 가져와서 출력하는식으로 변경
+        npcWaitMotion = (string)DataManager.instance.GetData(_npcID, "WaitMotion", typeof(string));
+        npcConversationMotion = (string)DataManager.instance.GetData(_npcID, "ConversationMotion", typeof(string));
+        npcMoveMotion = (string)DataManager.instance.GetData(_npcID, "MoveMotion", typeof(string));
 
-        npcHP = (float)DataManager.Instance.GetData(_npcID, "HP", typeof(float));
-        npcMoveSpeed = (float)DataManager.Instance.GetData(_npcID, "MoveSpeed", typeof(float));
-        npcConversationScope = (float)DataManager.Instance.GetData(_npcID, "ConversationScope", typeof(float));
-        npcRecognitionRange = (float)DataManager.Instance.GetData(_npcID, "RecognitionRange", typeof(float));
+        npcHP = (float)DataManager.instance.GetData(_npcID, "HP", typeof(float));
+        npcMoveSpeed = (float)DataManager.instance.GetData(_npcID, "MoveSpeed", typeof(float));
+        npcConversationScope = (float)DataManager.instance.GetData(_npcID, "ConversationScope", typeof(float));
+        npcRecognitionRange = (float)DataManager.instance.GetData(_npcID, "RecognitionRange", typeof(float));
 
 
 
@@ -201,7 +203,7 @@ public class NPC : MonoBehaviour
     private void ConvertionRefIdInIt(int _npcID)
     {
 
-        string tableIDs = (string)DataManager.Instance.GetData(_npcID, "ConversationTableID", typeof(string));
+        string tableIDs = (string)DataManager.instance.GetData(_npcID, "ConversationTableID", typeof(string));
 
         //GFunc.Log($"오류의 아이디 : {tableIDs}");
         conversationRefIDs = GFunc.SplitIds(tableIDs);
@@ -281,6 +283,7 @@ public class NPC : MonoBehaviour
     protected virtual void EndConveration()
     {
         // NPC들의 Canvas를 SetActive = false 해야할듯
+        isCommunityCompleateAction?.Invoke();
 
     }       // EndConveration()
 
@@ -295,7 +298,7 @@ public class NPC : MonoBehaviour
     public virtual void EnQueueConversation(int _comunicationTableId)
     {
         nowDialogueId = _comunicationTableId;
-        string converationText = (string)DataManager.Instance.GetData(_comunicationTableId, "OutPutText", typeof(string));
+        string converationText = (string)DataManager.instance.GetData(_comunicationTableId, "OutPutText", typeof(string));
 
         string[] splitTexts = GFunc.SplitConversation(converationText);
 
@@ -616,6 +619,10 @@ public class NPC : MonoBehaviour
         }
     }
 
+    protected virtual void OnDestroy()
+    {
+       // Debug.Log($"NPC 파괴됨 : {npcID}");
 
+    }
 
 }           // ClassEnd

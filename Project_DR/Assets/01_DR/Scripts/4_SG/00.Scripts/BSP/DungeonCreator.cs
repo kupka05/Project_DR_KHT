@@ -192,10 +192,10 @@ public class DungeonCreator : MonoBehaviour
     // 바닥에 깔아둘 ObjPrefabs
     public GameObject[] floorPrefabs;
     // 가능한 문 및 벽 위치 목록
-    private List<Vector3Int> possibleDoorVerticalPosition;
-    private List<Vector3Int> possibleDoorHorizontalPosition;
-    private List<Vector3Int> possibleWallHorizontalPosition;
-    private List<Vector3Int> possibleWallVerticalPosition;
+    private List<Vector3> possibleDoorVerticalPosition;
+    private List<Vector3> possibleDoorHorizontalPosition;
+    private List<Vector3> possibleWallHorizontalPosition;
+    private List<Vector3> possibleWallVerticalPosition;
 
     public float floorYPos = -0.5f;   // 바닥 콜라이더 y포지션
     public float floorSize = 1f;     // 바닥 콜라이더 크기
@@ -229,10 +229,10 @@ public class DungeonCreator : MonoBehaviour
         // 벽 부모 오브젝트 생성
         GameObject wallParent = new GameObject("WallParent");
         wallParent.transform.parent = transform;
-        possibleDoorVerticalPosition = new List<Vector3Int>();
-        possibleDoorHorizontalPosition = new List<Vector3Int>();
-        possibleWallHorizontalPosition = new List<Vector3Int>();
-        possibleWallVerticalPosition = new List<Vector3Int>();
+        possibleDoorVerticalPosition = new List<Vector3>();
+        possibleDoorHorizontalPosition = new List<Vector3>();
+        possibleWallHorizontalPosition = new List<Vector3>();
+        possibleWallVerticalPosition = new List<Vector3>();
 
         // 바닥의 부모 오브젝트 생성
         GameObject floorParent = new GameObject("FloorMeshParent");
@@ -524,7 +524,7 @@ public class DungeonCreator : MonoBehaviour
     /// <summary>
     /// 벽 오브젝트 생성 함수
     /// </summary>    
-    private void CreateWall(GameObject wallParent, Vector3Int wallPosition, GameObject wallPrefab)
+    private void CreateWall(GameObject wallParent, Vector3 wallPosition, GameObject wallPrefab)
     {
         #region 벽생성만
         //Instantiate(wallPrefab, wallPosition, Quaternion.identity, wallParent.transform);
@@ -557,6 +557,7 @@ public class DungeonCreator : MonoBehaviour
 
         Vector3 wallPos = wallObjClone.transform.position;
         wallPos.y = wallObjClone.transform.localScale.y / 2;
+
         wallObjClone.transform.position = wallPos;
 
         // 2번째 벽 생성 
@@ -688,24 +689,29 @@ public class DungeonCreator : MonoBehaviour
         #endregion temp //
 
         // 벽 및 문 위치 추가
+
+        // 가로 하단
         for (int row = (int)bottomLeftV.x; row < (int)bottomRightV.x; row++)
         {
-            var wallPosition = new Vector3(row, 0, bottomLeftV.z);
+            var wallPosition = new Vector3(row + 0.5f , 0, bottomLeftV.z);
             AddWallPositionToList(wallPosition, possibleWallHorizontalPosition, possibleDoorHorizontalPosition);
         }
+        // 가로 상단
         for (int row = (int)topLeftV.x; row < (int)topRightCorner.x; row++)
         {
-            var wallPosition = new Vector3(row, 0, topRightV.z);
+            var wallPosition = new Vector3(row + 0.5f, 0, topRightV.z);
             AddWallPositionToList(wallPosition, possibleWallHorizontalPosition, possibleDoorHorizontalPosition);
         }
+        // 세로 좌측
         for (int col = (int)bottomLeftV.z; col < (int)topLeftV.z; col++)
         {
-            var wallPosition = new Vector3(bottomLeftV.x, 0, col);
+            var wallPosition = new Vector3(bottomLeftV.x, 0, col + 0.5f);
             AddWallPositionToList(wallPosition, possibleWallVerticalPosition, possibleDoorVerticalPosition);
         }
+        // 세로 우측
         for (int col = (int)bottomRightV.z; col < (int)topRightV.z; col++)
         {
-            var wallPosition = new Vector3(bottomRightV.x, 0, col);
+            var wallPosition = new Vector3(bottomRightV.x, 0, col + 0.5f);
             AddWallPositionToList(wallPosition, possibleWallVerticalPosition, possibleDoorVerticalPosition);
         }
 
@@ -886,17 +892,17 @@ public class DungeonCreator : MonoBehaviour
 
 
     // 벽 위치 목록에 벽 또는 문 위치 추가
-    private void AddWallPositionToList(Vector3 wallPosition, List<Vector3Int> wallList, List<Vector3Int> doorList)
+    private void AddWallPositionToList(Vector3 wallPosition, List<Vector3> wallList, List<Vector3> doorList)
     {
-        Vector3Int point = Vector3Int.CeilToInt(wallPosition);
-        if (wallList.Contains(point))
+        //Vector3Int point = Vector3Int.CeilToInt(wallPosition);    // JH : INT 모두 Vector3 로 변경
+        if (wallList.Contains(wallPosition))
         {
-            doorList.Add(point);
-            wallList.Remove(point);
+            doorList.Add(wallPosition);
+            wallList.Remove(wallPosition);
         }
         else
         {
-            wallList.Add(point);
+            wallList.Add(wallPosition);
         }
     }       // AddWallPositionToList()
 

@@ -472,13 +472,13 @@ public class DungeonCreator : MonoBehaviour
 
         // 메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         // Center
-        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, roopYpos.y, (topLeftV.z + bottomLeftV.z) / 2);
         BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         floorCol.center = colCenter;
         // Size
         float colSizeX, colSizeY, colSizeZ;
         colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = floorSize;
+        colSizeY = roopYpos.y;
         colSizeZ = bottomLeftV.z - topLeftV.z;
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }

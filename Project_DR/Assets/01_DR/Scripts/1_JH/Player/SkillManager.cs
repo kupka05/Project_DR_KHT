@@ -231,7 +231,7 @@ public class SkillManager : MonoBehaviour
                 if (activeDrillDistance > drills[i].distanceFromGround && playerController.DistanceFromGround <2)
                 {
                     landingSkill.OnCollisionEvent();
-                    UserData.SetLandingSkillCount();
+                    UserData.ActiveLandingSkill();
                     yield break;
                 }
 

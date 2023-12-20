@@ -101,6 +101,14 @@ public static class UserData
     {
         UserDataManager.Instance.CurHP -= damage;
     }
+    /// <summary>플레이어 데이터를 초기화 메서드</summary>
+    public static void ResetPlayer()
+    {
+        UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
+        UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
+
+    }
+
 
     #endregion
 
@@ -346,7 +354,7 @@ public static class UserData
         return UserDataManager.Instance.drillLandingCount;
     }
     /// <summary>랜딩 스킬 사용시 카운트 -1</summary>
-    public static void SetLandingSkillCount()
+    public static void ActiveLandingSkill()
     {
         UserDataManager.Instance.drillLandingCount--;
         if(UserDataManager.Instance.drillLandingCount < 0)
@@ -357,12 +365,6 @@ public static class UserData
 
     #endregion
 
-    /// <summary>유저 데이터를 요청하는 메서드. 데이터 요청 시, DB에서 데이터를 가져왔을 경우 Action을 실행시켜준다. </summary>
-    /// <param name="action">데이터를 불러왔을 때 실행할 Action</param>
-    public static void GetData(Action action)
-    {
-        UserDataManager.Instance.DBRequst(action);
-    }
     #region ####################_Quest_#####################
 
     public static string GetQuest()
@@ -375,4 +377,13 @@ public static class UserData
         return String.IsNullOrEmpty(UserDataManager.Instance.QuestMain);
     }
     #endregion
+
+
+
+    /// <summary>유저 데이터를 요청하는 메서드. 데이터 요청 시, DB에서 데이터를 가져왔을 경우 Action을 실행시켜준다. </summary>
+    /// <param name="action">데이터를 불러왔을 때 실행할 Action</param>
+    public static void GetData(Action action)
+    {
+        UserDataManager.Instance.DBRequst(action);
+    }
 }

@@ -167,14 +167,14 @@ public class LobbyEvent : MonoBehaviour
     public UpgradeUI skill4_Up;
     private int skill4Spend;
 
-
+    private GameObject player;
     private bool isClear; // 클리어 여부 확인
 
     // ################################## START ##################################
 
     public void Start()
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player");
         dbRequest += GetDataFromDB;                     // DB 데이터 요청 성공 시 액션 추가
         UserDataManager.Instance.DBRequst(dbRequest);   // DB 데이터 요청
 
@@ -356,6 +356,9 @@ public class LobbyEvent : MonoBehaviour
         UpdatePlayerUpgradeUI();
         ChangeStatusDisplayButton("Player");
         UserDataManager.Instance.SavePlayerUpgrade();
+
+        UserData.ResetPlayer();
+        player.GetComponent<PlayerHealth>().GetData();
     }
 
     // 플레이어 업그레이드를 위한 계산기

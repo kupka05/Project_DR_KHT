@@ -134,6 +134,19 @@ public class DataManager : MonoBehaviour
      *                 Public Methods
      *************************************************/
     #region [+]
+    // 데이터 매니저에 데이터가 전부 불러와졌는지 확인
+    public bool IsDataLoaded()
+    {
+        // 시트에 있는 테이블을 전부 가져왔을 경우
+        if (dataTable.Count.Equals(fileNames.Length))
+        {
+            return true;
+        }
+
+        // 아닐 경우
+        return false;
+    }
+
     // CSV Reader로 불러온 Dictionary<string, List<string>를
     // dataTable에 데이터를 저장하는 함수
     public void SetData(Dictionary<string, List<string>> data)

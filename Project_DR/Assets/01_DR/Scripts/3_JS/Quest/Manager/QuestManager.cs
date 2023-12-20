@@ -201,6 +201,9 @@ namespace Js.Quest
 
             GFunc.Log($"구조화된 데이터: {json}");
 
+            // 데이터가 비어있을 경우 예외처리
+            if (json.Equals("")) { return; }
+
             QuestSaveDatas questSaveDatas = JsonUtility.FromJson<QuestSaveDatas>(json);
 
             // QuestSaveDatas에 있는 데이터를 UserDataManager로 전달

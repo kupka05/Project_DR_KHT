@@ -41,12 +41,13 @@ public class VRSceneLoder : MonoBehaviour
         if (isWaitForGoogleSheetLoad.Equals(true) && _isLoadScene.Equals(false))
         {
             GFunc.Log("isWaitForGoogleSheetLoad.Equals(true)");
-            // 구글 시트 로드가 완료되었을 경우
+            // 데이터 매니저에 테이블이 전부 추가되었을 경우
             GFunc.Log($"GoogleSheetLoader.isDone.Equals(true) == {GoogleSheetLoader.isDone.Equals(true)}");
-            if (GoogleSheetLoader.isDone.Equals(true))
+            // 데이터 매니저에 데이터가 전부 로드되었을 경우
+            if (DataManager.Instance.IsDataLoaded())
             {
                 _isLoadScene = true;
-                LoadScene(sceneName, false);
+                LoadScene(sceneName);
             }
         }
     }

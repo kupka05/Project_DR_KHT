@@ -19,7 +19,7 @@ public class testdebug : MonoBehaviour
 
     public IEnumerator TestCoroutine()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
         GFunc.Log($"testdebug.GetQuestByID(): {QuestManager.Instance.GetQuestByID(1_000_000_1).QuestData.ID}");
         GFunc.Log($"testdebug.GetQuestByIndex(): {QuestManager.Instance.GetQuestByIndex(0).QuestData.ID}");
         List<Quest> questList = QuestManager.Instance.GetQuestsOfType(1);

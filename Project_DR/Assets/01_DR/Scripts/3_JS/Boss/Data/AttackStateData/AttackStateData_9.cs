@@ -33,13 +33,13 @@ namespace BossMonster
         // 생성자 & 부모 생성자
         public AttackStateData_9(int id, BossData bossData)
         {
-            int patternID = (int)DataManager.instance.GetData(id, "AttackPatternKeyID", typeof(int));
+            int patternID = (int)DataManager.Instance.GetData(id, "AttackPatternKeyID", typeof(int));
             _bossData = bossData;
-            _projectileType = (int)DataManager.instance.GetData(patternID, "ProjectileType", typeof(int));
-            _laserCount = (int)DataManager.instance.GetData(patternID, "LaserCount", typeof(int));
-            _projectileDamage = (float)DataManager.instance.GetData(patternID, "ProjectileDamage", typeof(float));
-            _groundSpacing = (float)DataManager.instance.GetData(patternID, "GroundSpacing", typeof(float));
-            _outputInterval = (float)DataManager.instance.GetData(patternID, "OutputInterval", typeof(float));
+            _projectileType = (int)DataManager.Instance.GetData(patternID, "ProjectileType", typeof(int));
+            _laserCount = (int)DataManager.Instance.GetData(patternID, "LaserCount", typeof(int));
+            _projectileDamage = (float)DataManager.Instance.GetData(patternID, "ProjectileDamage", typeof(float));
+            _groundSpacing = (float)DataManager.Instance.GetData(patternID, "GroundSpacing", typeof(float));
+            _outputInterval = (float)DataManager.Instance.GetData(patternID, "OutputInterval", typeof(float));
         }
     }
 }

@@ -42,7 +42,8 @@ namespace Js.Quest
             }
 
             // 아닐 경우
-            else
+            // 퀘스트가 [진행중] 상태일 경우
+            else if (_quest.QuestState.State.Equals(QuestState.StateQuest.IN_PROGRESS))
             {
                 // [실패] 상태 변경 & 실패 보상 지급
                 QuestState.ChangeState(QuestState.StateQuest.FAILED);

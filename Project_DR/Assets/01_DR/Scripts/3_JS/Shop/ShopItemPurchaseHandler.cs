@@ -13,7 +13,7 @@ public class ShopItemPurchaseHandler
     public bool CheckAndDeductGoldForItemPurchase(int id)
     {
         int playerGold = UserDataManager.Instance.Gold;
-        int price = (int)DataManager.instance.GetData(id, "Price", typeof(int));
+        int price = (int)DataManager.Instance.GetData(id, "Price", typeof(int));
         // 플레이어가 아이템 구매에 적합한 골드를 소지했을 경우
         if (playerGold >= price)
         {

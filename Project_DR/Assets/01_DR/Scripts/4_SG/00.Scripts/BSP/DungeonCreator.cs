@@ -302,30 +302,30 @@ public class DungeonCreator : MonoBehaviour
     private void DungeonValueInIt()
     {
         
-        dungeonWidth = (int)DataManager.instance.GetData((int)DungeonTableID.DungeonWidth, "DungeonWidth", typeof(int));
-        dungeonHeight = (int)DataManager.instance.GetData((int)DungeonTableID.DungeonHeight, "DungeonHeight", typeof(int));
-        roomWidthMin = (int)DataManager.instance.GetData((int)DungeonTableID.RoomWidthMin, "RoomWidthMin", typeof(int));
-        roomLengthMin = (int)DataManager.instance.GetData((int)DungeonTableID.RoomLengthMin, "RoomLengthMin", typeof(int));        
-        maxIterations = (int)DataManager.instance.GetData((int)DungeonTableID.MaxIterations, "MaxIterations", typeof(int));
-        corridorWidth = (int)DataManager.instance.GetData((int)DungeonTableID.CorridorWidth, "CorridorWidth", typeof(int));
-        roomBottomCornerModifier = (float)DataManager.instance.GetData((int)DungeonTableID.RoomBottomCornerModifier, "RoomBottomCornerModifier", typeof(float));
-        roomTopCornerModifier = (float)DataManager.instance.GetData((int)DungeonTableID.RoomTopCornerModifier, "RoomTopCornerModifier", typeof(float));        
-        roomOffset = (int)DataManager.instance.GetData((int)DungeonTableID.RoomOffset, "RoomOffset", typeof(int));
-        roopYpos = new Vector3(1f, (float)DataManager.instance.GetData((int)DungeonTableID.RoopYpos, "RoopYpos",typeof(float)), 1f);
+        dungeonWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.DungeonWidth, "DungeonWidth", typeof(int));
+        dungeonHeight = (int)DataManager.Instance.GetData((int)DungeonTableID.DungeonHeight, "DungeonHeight", typeof(int));
+        roomWidthMin = (int)DataManager.Instance.GetData((int)DungeonTableID.RoomWidthMin, "RoomWidthMin", typeof(int));
+        roomLengthMin = (int)DataManager.Instance.GetData((int)DungeonTableID.RoomLengthMin, "RoomLengthMin", typeof(int));        
+        maxIterations = (int)DataManager.Instance.GetData((int)DungeonTableID.MaxIterations, "MaxIterations", typeof(int));
+        corridorWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.CorridorWidth, "CorridorWidth", typeof(int));
+        roomBottomCornerModifier = (float)DataManager.Instance.GetData((int)DungeonTableID.RoomBottomCornerModifier, "RoomBottomCornerModifier", typeof(float));
+        roomTopCornerModifier = (float)DataManager.Instance.GetData((int)DungeonTableID.RoomTopCornerModifier, "RoomTopCornerModifier", typeof(float));        
+        roomOffset = (int)DataManager.Instance.GetData((int)DungeonTableID.RoomOffset, "RoomOffset", typeof(int));
+        roopYpos = new Vector3(1f, (float)DataManager.Instance.GetData((int)DungeonTableID.RoopYpos, "RoopYpos",typeof(float)), 1f);
 
         // CustomRoom
-        pcRoomDistance = (float)DataManager.instance.GetData((int)DungeonTableID.PcRoomDistance, "PcRoomDistance", typeof(float));
-        pcRoomWidth = (int)DataManager.instance.GetData((int)DungeonTableID.PcRoomWidth, "PcRoomWidth", typeof(int));
-        pcRoomHeight = (int)DataManager.instance.GetData((int)DungeonTableID.PcRoomHeight, "PcRoomHeight", typeof(int));
+        pcRoomDistance = (float)DataManager.Instance.GetData((int)DungeonTableID.PcRoomDistance, "PcRoomDistance", typeof(float));
+        pcRoomWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.PcRoomWidth, "PcRoomWidth", typeof(int));
+        pcRoomHeight = (int)DataManager.Instance.GetData((int)DungeonTableID.PcRoomHeight, "PcRoomHeight", typeof(int));
 
-        bossRoomDistance = (float)DataManager.instance.GetData((int)DungeonTableID.BossRoomDistance, "BossRoomDistance", typeof(float));
-        bossRoomWidth = (int)DataManager.instance.GetData((int)DungeonTableID.BossRoomWidth, "BossRoomWidth", typeof(int));
-        bossRoomHeight = (int)DataManager.instance.GetData((int)DungeonTableID.BossRoomHeight, "BossRoomHeight", typeof(int));
+        bossRoomDistance = (float)DataManager.Instance.GetData((int)DungeonTableID.BossRoomDistance, "BossRoomDistance", typeof(float));
+        bossRoomWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.BossRoomWidth, "BossRoomWidth", typeof(int));
+        bossRoomHeight = (int)DataManager.Instance.GetData((int)DungeonTableID.BossRoomHeight, "BossRoomHeight", typeof(int));
 
-        nextStageRoomDistance = (float)DataManager.instance.GetData((int)DungeonTableID.NextStageRoomDistance, "NextStageRoomDistance", typeof(float));
-        nextStageRoomWidth = (int)DataManager.instance.GetData((int)DungeonTableID.NextStageRoomWidth, "NextStageRoomWidth", typeof(int));
-        nextStageRoomHeight = (int)DataManager.instance.GetData((int)DungeonTableID.NextStageRoomHeight, "NextStageRoomHeight", typeof(int));
-        wallBreakDownPercentage = (float)DataManager.instance.GetData((int)DungeonTableID.WallBreakDownPercentage, "WallBreakDownPercentage", typeof(float));
+        nextStageRoomDistance = (float)DataManager.Instance.GetData((int)DungeonTableID.NextStageRoomDistance, "NextStageRoomDistance", typeof(float));
+        nextStageRoomWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.NextStageRoomWidth, "NextStageRoomWidth", typeof(int));
+        nextStageRoomHeight = (int)DataManager.Instance.GetData((int)DungeonTableID.NextStageRoomHeight, "NextStageRoomHeight", typeof(int));
+        wallBreakDownPercentage = (float)DataManager.Instance.GetData((int)DungeonTableID.WallBreakDownPercentage, "WallBreakDownPercentage", typeof(float));
 
 
         

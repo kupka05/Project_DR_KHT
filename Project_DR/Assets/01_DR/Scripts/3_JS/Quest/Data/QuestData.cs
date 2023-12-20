@@ -23,6 +23,8 @@ namespace Js.Quest
         public int CurrentValue => _currentValue;           // 현재 퀘스트 달성 값(초기: 0)
         public string Desc => _desc;                        // 퀘스트 설명
         public QuestType Type => _type;                     // 퀘스트 분류
+        public int ClearEventID => _clearEventID;           // 클리어 이벤트 ID
+        public int FailEventID => _failEventID;             // 실패 이벤트 ID
         public QuestReward ClearReward => _clearReward;     // 클리어 보상
         public QuestReward FailReward => _failReward;       // 실패 보상
 
@@ -38,8 +40,10 @@ namespace Js.Quest
         [SerializeField] private int _currentValue;
         [SerializeField] private string _desc;
         [SerializeField] private QuestType _type;
-        [SerializeField] private QuestReward _clearReward;
+        [SerializeField] private int _clearEventID;
+        [SerializeField] private int _failEventID;
         [SerializeField] private QuestReward _failReward;
+        [SerializeField] private QuestReward _clearReward;
         // 디버그
         [SerializeField] private QuestRewardData _clearRewardData;
         [SerializeField] private QuestRewardData _failRewardData;
@@ -58,6 +62,8 @@ namespace Js.Quest
             _clearValue = Data.GetInt(id, "ClearValue");
             _desc = Data.GetString(id, "Desc");
             _type = (QuestType)Data.GetInt(id, "Type");
+            _clearEventID = Data.GetInt(id, "ClearEventID");
+            _failEventID = Data.GetInt(id, "FailEventID");
             _clearReward = new QuestReward(Data.GetInt(id, "ClearRewardKeyID"));
             _failReward = new QuestReward(Data.GetInt(id, "FailRewardKeyID"));
 

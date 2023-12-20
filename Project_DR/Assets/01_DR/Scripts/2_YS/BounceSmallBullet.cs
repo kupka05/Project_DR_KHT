@@ -30,7 +30,7 @@ public class BounceSmallBullet : MonoBehaviour
     public virtual void GetData(int BounceSmallTableID)
     {
         //6913
-        damage = (float)DataManager.instance.GetData(BounceSmallTableID, "Damage", typeof(float));
+        damage = (float)DataManager.Instance.GetData(BounceSmallTableID, "Damage", typeof(float));
     }
 
     public virtual void OnCollisionEnter(Collision collision)

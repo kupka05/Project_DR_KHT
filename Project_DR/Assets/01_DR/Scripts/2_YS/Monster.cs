@@ -200,14 +200,14 @@ public class Monster : MonoBehaviour
     {
         hp = Data.GetFloat(id, "MonHP");
         exp = Data.GetInt(id, "MonExp");
-        attack = (float)DataManager.instance.GetData(id, "MonAtt", typeof(float));
-        attDelay = (float)DataManager.instance.GetData(id, "MonDel", typeof(float));
-        speed = (float)DataManager.instance.GetData(id, "MonSpd", typeof(float));
-        attRange = (float)DataManager.instance.GetData(id, "MonAtr", typeof(float));
-        recRange = (float)DataManager.instance.GetData(id, "MonRer", typeof(float));
-        stunDelay = (float)DataManager.instance.GetData(id, "MonSTFDel", typeof(float));
+        attack = (float)DataManager.Instance.GetData(id, "MonAtt", typeof(float));
+        attDelay = (float)DataManager.Instance.GetData(id, "MonDel", typeof(float));
+        speed = (float)DataManager.Instance.GetData(id, "MonSpd", typeof(float));
+        attRange = (float)DataManager.Instance.GetData(id, "MonAtr", typeof(float));
+        recRange = (float)DataManager.Instance.GetData(id, "MonRer", typeof(float));
+        stunDelay = (float)DataManager.Instance.GetData(id, "MonSTFDel", typeof(float));
 
-        stopDistance = (float)DataManager.instance.GetData(id, "MonStd", typeof(float));
+        stopDistance = (float)DataManager.Instance.GetData(id, "MonStd", typeof(float));
     }
 
     public void SetMaxHealth(float newHealth)

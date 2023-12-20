@@ -12,6 +12,7 @@ using static StatusData;
 using OVR.OpenVR;
 using System.Net.NetworkInformation;
 using Js.Quest;
+using System.Linq;
 
 // DB에서 가져온 유저의 데이터를 관리하는 클래스
 
@@ -465,11 +466,24 @@ public partial class UserDataManager : MonoBehaviour
 
 
     // ######################### 퀘스트 #########################
-
     // 보유한 퀘스트를 삭제
     public static void RemoveQuest(int index)
     {
-        quests.RemoveAt(index);
+        _questList.RemoveAt(index);
+    }
+
+    // _questList 리스트에 퀘스트 추가
+    public static void AddQuestToQuestList(Quest quest)
+    {
+        _questList.Add(quest);
+    }
+
+    // _questList 리스트를 딕셔너리로 변경 및 _questDictionary에 할당
+    public static void AddQuestDictionary()
+    {
+        // 퀘스트 ID를 키 값으로 하는 <int, Quest> 딕셔너리 할당
+        _questDictionary = _questList.ToDictionary(
+            quest => quest.QuestData.ID, quest => quest);
     }
 
     // 퀘스트 정보(json)를 DB에 저장

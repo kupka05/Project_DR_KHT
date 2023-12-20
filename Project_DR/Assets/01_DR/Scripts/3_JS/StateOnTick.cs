@@ -100,7 +100,7 @@ public class StateOnTick : MonoBehaviour
     {
         // 아이템의 기본 지속시간 가져옴
         float effectDuration =
-            (float)DataManager.instance.GetData(id, CATEGORY_DURATION, typeof(float));
+            (float)DataManager.Instance.GetData(id, CATEGORY_DURATION, typeof(float));
 
         // 함수가 이미 등록되어 있는 경우
         if (ContainsKeyInDictionary(_functions, id))
@@ -193,7 +193,7 @@ public class StateOnTick : MonoBehaviour
         if (ContainsKeyInDictionary(_FunctionMaxDurations, id) == false)
         {
             maxDuration = 
-                (float)DataManager.instance.GetData(id, CATEGORY_MAX_DURATION, typeof(float));
+                (float)DataManager.Instance.GetData(id, CATEGORY_MAX_DURATION, typeof(float));
         }
 
         // 있을 경우

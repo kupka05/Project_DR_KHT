@@ -11,8 +11,8 @@ namespace Js.Quest
          *                Public Fields
          *************************************************/
         public static event Action QuestDataCallback;               // [완료] -> DB에서 퀘스트 정보를 가져왔을 때 or 퀘스트가 완료되었을 때
-        public static event Action<int, int> BossMeetCallback;      // [1] 보스 조우
-        public static event Action<int, int> BossKillCallback;      // [2] 보스 킬
+        public static event Action<int, int> BossMeetCallback;      // [완료] -> [1] 보스 조우
+        public static event Action<int, int> BossKillCallback;      // [완료] -> [2] 보스 킬
         public static event Action<int, int> UseItemCallback;       // [3] 아이템 사용
         public static event Action<int, int> MonsterKillCallback;   // [4] 몬스터 처치
         public static event Action<int, int> CraftingCallback;      // [5] 크래프팅

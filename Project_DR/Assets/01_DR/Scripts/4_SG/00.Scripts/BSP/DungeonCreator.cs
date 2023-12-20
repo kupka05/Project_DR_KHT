@@ -480,7 +480,7 @@ public class DungeonCreator : MonoBehaviour
         // Size
         float colSizeX, colSizeY, colSizeZ;
         colSizeX = bottomLeftV.x - bottomRightV.x;
-        colSizeY = roopYpos.y;
+        colSizeY = 0.5f;
         colSizeZ = bottomLeftV.z - topLeftV.z;
         // 음수값이 나오면 양수로 치환
         if (colSizeX < 0) { colSizeX = -colSizeX; }

@@ -1,140 +1,449 @@
+using BNG;
 using Newtonsoft.Json.Bson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class EventWall : MonoBehaviour
 {
-    public bool isLeft, isRight, isUp, isDown = false;
+    public enum Dir { None, Left, Right, Up, Down}
+    public Dir direction = Dir.None;
+    [Header("GameObject")]
+    public GameObject walll;
+    public GameObject floor;
+    public GameObject roof;
+
+    [Header("Secret")]
+    public bool isSecrecItem;
+    public GameObject scerecObj;
+
+    [Header("Option")]
+    public LayerMask layerMask;
+    public float range;
+    //public bool isLeft, isRight, isUp, isDown = false;
     private FloorMeshPos floorMesh = null;
+    private GameObject leftWall, rightWall;
 
-    private void OnCollisionEnter(Collision collision)
+    private void Start()
     {
-        if (collision.gameObject.CompareTag("Floor"))
+        Invoke(nameof(SetEventWall), 1f) ;
+
+       
+    }
+    private void SetEventWall()
+    {
+        FloorCheck();
+        if (direction == Dir.None)
         {
-            if (floorMesh == null)
-            {
-                floorMesh = collision.gameObject.GetComponent<FloorMeshPos>();
-                EventWallPosExamine();
-            }
+            walll.GetComponent<Damageable>().DestroyOnDeath = false;
         }
+    }
 
-
-    }       // OnCollisioinEnter()
-
-
-    // ¿Ã∫•∆Æ∫Æ ¿ßƒ° ∞Àºˆ
-    private void EventWallPosExamine()
+    // Î†àÏù¥Î•º ÌôúÏö© Î∞îÎã• Ï≤¥ÌÅ¨
+    private void FloorCheck()
     {
-        // ¿Ã∫•∆Æ ∫Æ¿Ã øﬁ¬ ¿Œ¡ˆ ø¿∏•¬ ¿Œ¡ˆ ∞Àºˆ
-        if (this.transform.position.x == floorMesh.bottomLeftCorner.x)
-        {       // øﬁ¬  «œ¥‹ ≤¿¡ˆ¡°∞˙ ∆˜¡ˆº«¿Ã ∞∞¿ª∞ÊøÏ
-            isLeft = true;
+        Vector3 pos = transform.position,
+                leftPos = pos,
+                rightPos = pos, 
+                upPos = pos, 
+                downPos = pos;
+
+        leftPos.x += 0.25f;
+        rightPos.x -= 0.25f;
+        upPos.z += 0.25f;
+        downPos.z -= 0.25f;
+
+        RaycastHit hit;
+        if (Physics.Raycast(leftPos, -transform.up, out hit, range, layerMask))
+        {
+            direction = Dir.Left;
+            GFunc.Log("ÏôºÏ™Ω");
         }
-        else if (this.transform.position.x == floorMesh.bottomRightCorner.x)
-        {       // ø¿∏•¬  «œ¥‹ ≤¿¡ˆ¡°∞˙ ∆˜¡ˆº«¿Ã ∞∞¿ª∞ÊøÏ
-            isRight = true;
+        else if (Physics.Raycast(rightPos, -transform.up, out hit, range, layerMask))
+        {
+            direction = Dir.Right;
+            GFunc.Log("Ïò§Î•∏Ï™Ω");
         }
-        if (this.transform.position.z == floorMesh.topLeftCorner.z)
-        {       // ªÛ¥‹¿« ≥Ù¿ÃøÕ ∞∞¿ª∞ÊøÏ
-            isUp = true;
+        else if (Physics.Raycast(rightPos, -transform.up, out hit, range, layerMask))
+        {
+            direction = Dir.Up;
+            GFunc.Log("ÏúÑ");
         }
-        else if (this.transform.position.z == floorMesh.bottomLeftCorner.z)
-        {       // «œ¥‹¿« ≥Ù¿ÃøÕ ∞∞¿ª∞ÊøÏ
-            isDown = true;
+        else if (Physics.Raycast(rightPos, -transform.up, out hit, range, layerMask))
+        {
+            direction = Dir.Down;
+            GFunc.Log("ÏïÑÎûò");
+        }
+        else
+        {
+
+            if (Physics.Raycast(pos, -transform.up, out hit, 1, layerMask))
+            {
+                GFunc.Log("Ï§ëÏïôÏóêÏÑúÎäî Î∞úÍ≤¨");
+            }
+            else
+            {
+                GFunc.Log("ÏïÑÎ¨¥Í≤ÉÎèÑ Ï≤¥ÌÅ¨ Î™ªÌï®");
+                direction = Dir.None;
+            }
+            return;
+        }
+
+        if (!hit.collider.gameObject.CompareTag("Floor"))
+        {
+            GFunc.Log("Î∞îÎã•Ïù¥ ÏïÑÎãò");
+            return;
         }
         EventWallPosSet();
-
-    }       // EventWallPosExamine()
+    }
 
     private void EventWallPosSet()
     {
-        Vector3 setPos;
+        // ÏΩîÎÑà Ï≤¥ÌÅ¨ ÏÑ±Í≥µÌïòÎ©¥ Ïù¥Î≤§Ìä∏ Î≤Ω Ïä§ÏºÄÏùº ÏÖã
+        if (!CornerCheck())
+        {
+            direction = Dir.None;
+            return;
+        }
+        Vector3 setPos, clonePos, secretObjPos;
         setPos = this.transform.position;
-        if (isLeft == true)
+        clonePos = this.transform.position;
+        secretObjPos = this.transform.position;
+
+        if (direction == Dir.Left)
         {
-            setPos.x += 0.5f;
+            //setPos.x = 0.5f;
             this.transform.position = setPos;
+            clonePos.x -= (index + 1);
+            secretObjPos.x -= index;
         }
-        if (isRight == true)
+        if (direction == Dir.Right)
         {
-            setPos.x -= 0.5f;
+            //setPos.x -= 0.5f;
             this.transform.position = setPos;
+            clonePos.x += (index + 1);
+            secretObjPos.x += index;
+
         }
-        if (isUp == true)
+        if (direction == Dir.Up)
         {
-            setPos.z -= 0.5f;
+            //setPos.z -= 0.5f;
             this.transform.position = setPos;
+            clonePos.z += (index + 1);
+            secretObjPos.z += index;
+
         }
-        if (isDown == true)
+        if (direction == Dir.Down)
         {
-            setPos.z += 0.5f;
+            //setPos.z += 0.5f;
             this.transform.position = setPos;
-        }        
-        EventWallScaleSet();
+            clonePos.z -= (index + 1);
+            secretObjPos.z -= index;
+        }
+
+        Instantiate(walll, clonePos, this.transform.rotation, this.transform);
+
+        // ÎπÑÎ∞Ä ÏïÑÏù¥ÌÖú ÏÉùÏÑ±
+        if(isSecrecItem && scerecObj)
+        {
+            GameObject Item = Instantiate(scerecObj, secretObjPos, this.transform.rotation, this.transform);
+            Item.transform.localScale = Vector3.one;
+        }
+
+        SetFloorAndRoof();
+        leftWall.transform.parent = this.transform;
+        rightWall.transform.parent = this.transform;
+        CreateSecretRoom();
+
+
     }       // EventWallPosSet()
 
-
-    // ¿⁄Ω≈¿« ¿ßƒ°ø° µ˚∂Ûº≠ Sclae¿ª πŸ≤„¡÷¥¬ «‘ºˆ
+    // ÏûêÏã†Ïùò ÏúÑÏπòÏóê Îî∞ÎùºÏÑú SclaeÏùÑ Î∞îÍøîÏ£ºÎäî Ìï®Ïàò
     private void EventWallScaleSet()
     {
         Vector3 setSclae;
-        if (isLeft == true)
+        if (direction == Dir.Left || direction == Dir.Right)
         {
             setSclae = this.transform.localScale;
             setSclae.z = 3f;
             this.transform.localScale = setSclae;
         }
-        if (isRight == true)
-        {
-            setSclae = this.transform.localScale;
-            setSclae.z = 3f;
-            this.transform.localScale = setSclae;
-        }
-        if (isUp == true)
-        {
-            setSclae = this.transform.localScale;
-            setSclae.x = 3f;
-            this.transform.localScale = setSclae;
-        }
-        if (isDown == true)
-        {
-            setSclae = this.transform.localScale;
-            setSclae.x = 3f;
-            this.transform.localScale = setSclae;
-        }
-        MakeChildrenObjects();
 
+        if (direction == Dir.Up || direction == Dir.Down)
+        {
+            setSclae = this.transform.localScale;
+            setSclae.x = 3f;
+            this.transform.localScale = setSclae;
+        }     
     }       // EventWallScaleSet()
 
-    // æÁ¬  ∫Æ obj∏¶ ¿⁄Ω≈¿« ¿⁄Ωƒø¿∫Í¡ß∆Æ∑Œ ∏∏µÂ¥¬ «‘ºˆ
-    private void MakeChildrenObjects()
+    // ÏñëÏ™Ω Î≤Ω Ï≤¥ÌÅ¨ÌïòÏó¨ Î™®ÏÑúÎ¶¨ Ï≤¥ÌÅ¨
+    private bool CornerCheck()
     {
         RaycastHit hit;
         float maxDis = 1f;
-        if (isLeft == true || isRight == true)
-        {       // ¿Ã∫•∆Æ∫Æ¿Ã øﬁ¬  »§¿∫ ø¿∏•¬ ø° ¿÷¥Ÿ∏È -> ¿¸πÊ,»ƒπÊ ∑π¿Ã∏¶ ΩÙ
-            if (Physics.Raycast(this.transform.position,Vector3.forward,out hit, maxDis))
-            {             
-                hit.collider.transform.parent = this.transform;
+        if (direction == Dir.Left || direction == Dir.Right)
+        {       // Ïù¥Î≤§Ìä∏Î≤ΩÏù¥ ÏôºÏ™Ω ÌòπÏùÄ Ïò§Î•∏Ï™ΩÏóê ÏûàÎã§Î©¥ -> Ï†ÑÎ∞©,ÌõÑÎ∞© Î†àÏù¥Î•º Ïè®
+            if (Physics.Raycast(this.transform.position, Vector3.forward, out hit, maxDis))
+            {
+                leftWall = hit.collider.gameObject;
             }
             if (Physics.Raycast(this.transform.position, Vector3.back, out hit, maxDis))
-            {             
-                hit.collider.transform.parent = this.transform;
-            }            
+            {
+                rightWall = hit.collider.gameObject;
+            }
         }
-        else if(isUp == true || isDown == true)
-        {       // ¿Ã∫•∆Æ∫Æ¿Ã ¿ß¬  »§¿∫ æ∆∑°¬ ø° ¿÷¥Ÿ∏È -> ¡¬,øÏ ∑π¿Ã∏¶ΩÙ
+        else if (direction == Dir.Up || direction == Dir.Down)
+        {       // Ïù¥Î≤§Ìä∏Î≤ΩÏù¥ ÏúÑÏ™Ω ÌòπÏùÄ ÏïÑÎûòÏ™ΩÏóê ÏûàÎã§Î©¥ -> Ï¢å,Ïö∞ Î†àÏù¥Î•ºÏè®
             if (Physics.Raycast(this.transform.position, Vector3.left, out hit, maxDis))
-            {             
-                hit.collider.transform.parent = this.transform;
+            {
+                leftWall = hit.collider.gameObject;
             }
             if (Physics.Raycast(this.transform.position, Vector3.right, out hit, maxDis))
-            {                
-                hit.collider.transform.parent = this.transform;
+            {
+                rightWall = hit.collider.gameObject;
+             }
+        }
+        if(leftWall == null || rightWall == null)
+        {
+            GFunc.Log("Ï¢åÏö∞ Î≤ΩÏùÑ Ï∞æÏùÑ Ïàò ÏóÜÏäµÎãàÎã§.");
+            return false;
+        }
+        return true;
+
+    }       // CornerCheck()
+
+
+
+    private void CreateSecretRoom()
+    {
+        switch (direction)
+        {
+            case Dir.Left:
+
+                CreateHorizontalWall(-1f);
+             break;
+            case Dir.Right:
+                CreateHorizontalWall(1f);
+            break;
+            case Dir.Up:
+                CreateVerticalWall(1f);
+                break;
+            case Dir.Down:
+                CreateVerticalWall(1f);
+                break;
+        }
+    }
+
+    public int index = 3;
+    private void CreateVerticalWall(float distance)
+    {
+        Vector3 leftWallPos = leftWall.transform.position,
+                rightWallPos = rightWall.transform.position;
+
+        for (int i = 0; i < index; i++)
+        {
+            leftWallPos.z += distance;
+            rightWallPos.z += distance;
+            Instantiate(leftWall, leftWallPos, leftWall.transform.rotation, this.transform);
+            Instantiate(rightWall, rightWallPos, rightWall.transform.rotation, this.transform);           
+        }
+
+        Vector3 _wallPos = this.transform.position;
+        _wallPos.z = rightWallPos.z;
+        Instantiate(leftWall, _wallPos, leftWall.transform.rotation, this.transform);
+    }
+    private void CreateHorizontalWall(float distance)
+    {
+        Vector3 leftWallPos = leftWall.transform.position,
+                rightWallPos = rightWall.transform.position;
+
+        for (int i = 0; i < index; i++)
+        {
+            leftWallPos.x += distance;
+            rightWallPos.x += distance;
+            Instantiate(leftWall, leftWallPos, leftWall.transform.rotation, this.transform);
+            Instantiate(rightWall, rightWallPos, rightWall.transform.rotation, this.transform);
+        }
+
+        Vector3 _wallPos = this.transform.position;
+        _wallPos.x = rightWallPos.x;
+        Instantiate(leftWall, _wallPos, leftWall.transform.rotation, this.transform);
+    }
+    private void SetFloorAndRoof()
+    {
+        Vector3 scale = floor.transform.localScale;
+        Vector3 newFloorPos = floor.transform.position;
+        Vector3 newRoofPos = roof.transform.position;
+        scale.x = index+1;
+
+        if (direction == Dir.Left || direction == Dir.Right)
+        {
+            if (direction == Dir.Left)
+            {
+                newFloorPos.x -= 2;
+                newRoofPos.x -= 2;
+            }
+            else
+            {
+                newFloorPos.x += 2;
+                newRoofPos.x += 2;
+            }
+        }
+        else if (direction == Dir.Up || direction == Dir.Down)
+        {
+            if (direction == Dir.Up)
+            {
+                newFloorPos.z += 2;
+                newRoofPos.z += 2;
+            }
+            else
+            {
+                newFloorPos.z -= 2;
+                newRoofPos.z -= 2;
             }
         }
 
-    }       // MakeChildrenObjects()
+        floor.gameObject.SetActive(true);
+        roof.gameObject.SetActive(true);
+        floor.transform.localScale = scale;
+        roof.transform.localScale = scale;
+        floor.transform.position = newFloorPos;
+        roof.transform.position = newRoofPos;
+
+    }
+
+
+    #region [+] REGACY
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Floor"))
+    //    {
+    //        if (floorMesh == null)
+    //        {
+    //            floorMesh = collision.gameObject.GetComponent<FloorMeshPos>();
+    //            EventWallPosExamine();
+    //        }
+    //    }
+
+
+    //}       // OnCollisioinEnter()
+
+
+    //// Ïù¥Î≤§Ìä∏Î≤Ω ÏúÑÏπò Í≤ÄÏàò
+    //private void EventWallPosExamine()
+    //{
+    //    // Ïù¥Î≤§Ìä∏ Î≤ΩÏù¥ ÏôºÏ™ΩÏù∏ÏßÄ Ïò§Î•∏Ï™ΩÏù∏ÏßÄ Í≤ÄÏàò
+    //    if (this.transform.position.x == floorMesh.bottomLeftCorner.x)
+    //    {       // ÏôºÏ™Ω ÌïòÎã® Íº≠ÏßÄÏ†êÍ≥º Ìè¨ÏßÄÏÖòÏù¥ Í∞ôÏùÑÍ≤ΩÏö∞
+    //        isLeft = true;
+    //    }
+    //    else if (this.transform.position.x == floorMesh.bottomRightCorner.x)
+    //    {       // Ïò§Î•∏Ï™Ω ÌïòÎã® Íº≠ÏßÄÏ†êÍ≥º Ìè¨ÏßÄÏÖòÏù¥ Í∞ôÏùÑÍ≤ΩÏö∞
+    //        isRight = true;
+    //    }
+    //    if (this.transform.position.z == floorMesh.topLeftCorner.z)
+    //    {       // ÏÉÅÎã®Ïùò ÎÜíÏù¥ÏôÄ Í∞ôÏùÑÍ≤ΩÏö∞
+    //        isUp = true;
+    //    }
+    //    else if (this.transform.position.z == floorMesh.bottomLeftCorner.z)
+    //    {       // ÌïòÎã®Ïùò ÎÜíÏù¥ÏôÄ Í∞ôÏùÑÍ≤ΩÏö∞
+    //        isDown = true;
+    //    }
+    //    EventWallPosSet();
+
+    //}       // EventWallPosExamine()
+
+    //private void EventWallPosSet()
+    //{
+    //    Vector3 setPos;
+    //    setPos = this.transform.position;
+    //    if (isLeft == true)
+    //    {
+    //        setPos.x += 0.5f;
+    //        this.transform.position = setPos;
+    //    }
+    //    if (isRight == true)
+    //    {
+    //        setPos.x -= 0.5f;
+    //        this.transform.position = setPos;
+    //    }
+    //    if (isUp == true)
+    //    {
+    //        setPos.z -= 0.5f;
+    //        this.transform.position = setPos;
+    //    }
+    //    if (isDown == true)
+    //    {
+    //        setPos.z += 0.5f;
+    //        this.transform.position = setPos;
+    //    }
+    //    EventWallScaleSet();
+    //}       // EventWallPosSet()
+
+
+    //// ÏûêÏã†Ïùò ÏúÑÏπòÏóê Îî∞ÎùºÏÑú SclaeÏùÑ Î∞îÍøîÏ£ºÎäî Ìï®Ïàò
+    //private void EventWallScaleSet()
+    //{
+    //    Vector3 setSclae;
+    //    if (isLeft == true)
+    //    {
+    //        setSclae = this.transform.localScale;
+    //        setSclae.z = 3f;
+    //        this.transform.localScale = setSclae;
+    //    }
+    //    if (isRight == true)
+    //    {
+    //        setSclae = this.transform.localScale;
+    //        setSclae.z = 3f;
+    //        this.transform.localScale = setSclae;
+    //    }
+    //    if (isUp == true)
+    //    {
+    //        setSclae = this.transform.localScale;
+    //        setSclae.x = 3f;
+    //        this.transform.localScale = setSclae;
+    //    }
+    //    if (isDown == true)
+    //    {
+    //        setSclae = this.transform.localScale;
+    //        setSclae.x = 3f;
+    //        this.transform.localScale = setSclae;
+    //    }
+    //    MakeChildrenObjects();
+
+    //}       // EventWallScaleSet()
+
+    //// ÏñëÏ™Ω Î≤Ω objÎ•º ÏûêÏã†Ïùò ÏûêÏãùÏò§Î∏åÏ†ùÌä∏Î°ú ÎßåÎìúÎäî Ìï®Ïàò
+    //private void MakeChildrenObjects()
+    //{
+    //    RaycastHit hit;
+    //    float maxDis = 1f;
+    //    if (isLeft == true || isRight == true)
+    //    {       // Ïù¥Î≤§Ìä∏Î≤ΩÏù¥ ÏôºÏ™Ω ÌòπÏùÄ Ïò§Î•∏Ï™ΩÏóê ÏûàÎã§Î©¥ -> Ï†ÑÎ∞©,ÌõÑÎ∞© Î†àÏù¥Î•º Ïè®
+    //        if (Physics.Raycast(this.transform.position, Vector3.forward, out hit, maxDis))
+    //        {
+    //            hit.collider.transform.parent = this.transform;
+    //        }
+    //        if (Physics.Raycast(this.transform.position, Vector3.back, out hit, maxDis))
+    //        {
+    //            hit.collider.transform.parent = this.transform;
+    //        }
+    //    }
+    //    else if (isUp == true || isDown == true)
+    //    {       // Ïù¥Î≤§Ìä∏Î≤ΩÏù¥ ÏúÑÏ™Ω ÌòπÏùÄ ÏïÑÎûòÏ™ΩÏóê ÏûàÎã§Î©¥ -> Ï¢å,Ïö∞ Î†àÏù¥Î•ºÏè®
+    //        if (Physics.Raycast(this.transform.position, Vector3.left, out hit, maxDis))
+    //        {
+    //            hit.collider.transform.parent = this.transform;
+    //        }
+    //        if (Physics.Raycast(this.transform.position, Vector3.right, out hit, maxDis))
+    //        {
+    //            hit.collider.transform.parent = this.transform;
+    //        }
+    //    }
+    #endregion
 }       // ClassEnd

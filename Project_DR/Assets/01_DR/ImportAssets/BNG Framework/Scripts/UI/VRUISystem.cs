@@ -283,8 +283,6 @@ namespace BNG {
         public virtual void SetPressingObject(GameObject pressing) {
             EventData.pointerPress = pressing;
             PressingObject = pressing;
-            if(pressing!=null)
-            GFunc.Log(pressing.name);
         }
 
         public virtual void SetDraggingObject(GameObject dragging) {

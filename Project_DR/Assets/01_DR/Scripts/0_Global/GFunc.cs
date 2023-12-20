@@ -39,6 +39,7 @@ public static class GFunc
     /// <returns></returns>
     public static string[] SplitConversation(string _placeString)
     {
+        _placeString = _placeString.Replace("\\n", "\n");
         _placeString = _placeString.Replace("#", ",");
         _placeString = _placeString.Replace("\\", "");
         _placeString = _placeString.Replace("_", "");         
@@ -59,9 +60,10 @@ public static class GFunc
     /// <returns>int[] 반환</returns>
     public static int[] SplitIds(string _parsString)
     {
-        _parsString.Replace("\\n", "\n");
-        _parsString.Replace("\\", "");
-        _parsString.Replace("_", "");         
+        _parsString = _parsString.Replace("\\n", "\n");
+        _parsString = _parsString.Replace("#", ",");
+        _parsString = _parsString.Replace("\\", "");
+        _parsString = _parsString.Replace("_", "");         
         string[] splitParams = _parsString.Split("\n");
 
         int[] splitIds = new int[splitParams.Length];

@@ -180,9 +180,12 @@ public partial class UserDataManager
     public static Item[] items = new Item[Inventory.MaxCapacity];
 
     [Header("Quest Data")]
-    public string QuestMain;          // 현재 퀘스트
+    public string QuestMain;                                                             
     public string DebugQuest;
-    public static List<Quest> quests = new List<Quest>();
+    public static List<Quest> QuestList => _questList;                                       // 보유 퀘스트 리스트
+    public static Dictionary<int, Quest> QuestDictionary => _questDictionary;                // 보유 퀘스트 딕셔너리화
+    private static List<Quest> _questList = new List<Quest>();                               
+    private static Dictionary<int, Quest> _questDictionary = new Dictionary<int, Quest>();    
 
     [Header("Result Data")]
     public GameResult result = new GameResult();

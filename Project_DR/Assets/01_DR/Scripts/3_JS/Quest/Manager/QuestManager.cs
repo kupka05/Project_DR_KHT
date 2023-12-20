@@ -48,9 +48,10 @@ namespace Js.Quest
             }
         }
         #endregion
-
         public Item[] InventoryItems => UserDataManager.items;                               // 보유 인벤토리 아이템
-        public List<Quest> QuestList => UserDataManager.quests;                              // 보유 퀘스트 리스트
+        public List<Quest> QuestList => UserDataManager.QuestList;                           // 보유 퀘스트 리스트
+        public Dictionary<int, Quest> QuestDictionary => UserDataManager.QuestDictionary;    // 보유 퀘스트 딕셔너리
+
         public const int QUEST_FIRST_ID = 1_000_000_1;                                       // 퀘스트 테이블 시작 ID
 
 
@@ -89,7 +90,7 @@ namespace Js.Quest
 
 
         /*************************************************
-         *                Public Methods
+         *             Init Public Methods
          *************************************************/
         // 데이터 테이블에 있는 퀘스트를 가져와서 생성
         public void CreateQuestFromDataTable()
@@ -99,20 +100,28 @@ namespace Js.Quest
             {
                 // 퀘스트 생성 및 저장
                 Quest quest = new Quest(QUEST_FIRST_ID + i);
-                UserDataManager.quests.Add(quest);
+                UserDataManager.AddQuestToQuestList(quest);
 
                 GFunc.Log($"퀘스트 [{QUEST_FIRST_ID + i}] 생성 완료");
             }
 
             // 디버그
             _debugQuestList = QuestList;
+
+            // UserDataManager.questDictionary 할당
+            UserDataManager.AddQuestDictionary();
         }
 
+
+        /*************************************************
+         *             Public Quest Methods
+         *************************************************/
         // 퀘스트를 생성한다
+        // 같은 ID의 퀘스트 중복 조심
         public void CreateQuest(int id)
         {
             Quest quest = new Quest(id);
-            UserDataManager.quests.Add(quest);
+            UserDataManager.AddQuestToQuestList(quest);
         }
 
         // 퀘스트를 삭제한다
@@ -121,6 +130,58 @@ namespace Js.Quest
             UserDataManager.RemoveQuest(index);
         }
 
+        // 퀘스트 ID로 퀘스트를 검색하고 반환
+        public Quest GetQuestByID(int id)
+        {
+            // 딕셔너리가 비어있을 경우 / 예외 처리
+            if (QuestDictionary.Count.Equals(0))
+            {
+                GFunc.LogWarning("QuestManager.GetQuestByID(): 퀘스트 ID 검색 및 호출 실패! / " +
+                    "퀘스트가 생성되기 전에 딕셔너리를 호출한 것 같습니다.");
+                return default; 
+            }
+
+            Quest quest = QuestDictionary[id];
+            return quest;
+        }
+
+        // 인덱스로 퀘스트를 검색하고 반환
+        public Quest GetQuestByIndex(int index)
+        {
+            Quest quest = QuestList[index];
+            return quest;
+        }
+
+        // 특정 타입의 퀘스트를 List<Quest>로 반환한다 
+        public List<Quest> GetQuestsOfType(int type)
+        {
+            List<Quest> questList = new List<Quest>();
+
+            // QuestList 순회
+            QuestData.QuestType questType = (QuestData.QuestType)type;
+            foreach (var item in QuestList)
+            {
+                // type이 일치할 경우
+                if (item.QuestData.Type.Equals(questType))
+                {
+                    // questList에 퀘스트 추가
+                    questList.Add(item);
+                }
+            }
+
+            return questList;
+        }
+
+        // 특정 타입 퀘스트의 전체 Count를 반환한다
+        public int GetQuestCountOfType(int type)
+        {
+            int count = GetQuestsOfType(type).Count;
+            return count;
+        }
+
+        /*************************************************
+         *               Public DB Methods
+         *************************************************/
         // 퀘스트 데이터를 DB에 저장한다
         public void SaveQuestDataToDB()
         {
@@ -140,22 +201,14 @@ namespace Js.Quest
 
             GFunc.Log($"구조화된 데이터: {json}");
 
+            // 데이터가 비어있을 경우 예외처리
+            if (json.Equals("")) { return; }
+
             QuestSaveDatas questSaveDatas = JsonUtility.FromJson<QuestSaveDatas>(json);
 
             // QuestSaveDatas에 있는 데이터를 UserDataManager로 전달
             // 보유한 퀘스트의 상태 와 진행 값을 변경한다.
             UpdateUserDataFromQuestSaveDatas(questSaveDatas);
-        }
-
-        // 진행중인 메인 퀘스트를 리스트로 가져온다
-        // TODO: 지환이형이랑 상의 후에 만들기
-        public List<Quest> GetActiveMainQuests()
-        {
-            List<Quest> activeMainQuests = new List<Quest>();
-            
-
-
-            return activeMainQuests;
         }
 
 

@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopNpc : AnnouncementNPC
-{       // 상점 NPC의 Class
-    
+public class GhostNPC_IE_FT : HumanTypeNPC
+{
+
+    private void AwakeInIt()
+    {
+        npcID = (int)NPCID.Ghost_IE_FT;
+
+    }       // AwakeInIt()
+
     protected override void Awake()
     {
         base.Awake();
@@ -17,20 +23,14 @@ public class ShopNpc : AnnouncementNPC
     {
         GetCanvasScript_Obj();
         OnCanvasObj();
-        
+
         ParamsInIt(npcID);
         NpcCanvas.NameUpdate(npcName);
-
+        ChangeAnimationString(npcWaitMotion);
         OffCanvasObj();
 
     }       // Start()
 
-
-    private void AwakeInIt()
-    {
-        npcID = (int)NPCID.Olive;
-        
-    }       // AwakeInIt()
 
     #region Base
     protected override void ParamsInIt(int _npcID)
@@ -61,6 +61,7 @@ public class ShopNpc : AnnouncementNPC
     protected override void StartConvertion()
     {
         OnCanvasObj();
+        ChangeAnimationString(npcConversationMotion);
         base.PickConversationEvent(npcID);
     }       // StartConvertion()
 
@@ -70,9 +71,13 @@ public class ShopNpc : AnnouncementNPC
     /// <param name="_nextConverationId">다음 대사의 ID</param>
     protected override void NextConveration(int _nextConverationId)
     {
-        base.TitleInIt(_nextConverationId);
-        NpcCanvas.TitleUpdate(npcTitle.ToString());
-        DeQueueConversation();
+        if (isCommunityDelray == false)
+        {
+            base.TitleInIt(_nextConverationId);
+            NpcCanvas.TitleUpdate(npcTitle.ToString());
+            DeQueueConversation();
+        }
+        else { /* PASS */ }
         //OutPutPickText(_nextConverationId);
     }       // NextConveration()
 
@@ -81,10 +86,8 @@ public class ShopNpc : AnnouncementNPC
     /// </summary>
     protected override void EndConveration()
     {
+        ChangeAnimationString(npcWaitMotion);
         OffCanvasObj();
     }       // EndConveration()
-
-
-
 
 }       // ClassEnd

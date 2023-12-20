@@ -96,6 +96,12 @@ public static class UserData
     {        
         return UserDataManager.Instance.CurHP;
     }
+    
+    public static void OnDamage(float damage)
+    {
+        UserDataManager.Instance.CurHP -= damage;
+    }
+
     #endregion
 
     #region ####################_DrillData_#####################
@@ -314,7 +320,7 @@ public static class UserData
     /// <summary>업그레이드가 반영된 드릴 랜딩의 치명타 데미지</summary>
     public static float GetLandingCritIncrease()
     {
-        float landingIncrease = Data.GetInt(720217, "Value2");
+        float landingIncrease = Data.GetFloat(720217, "Value2");
         if (UserDataManager.Instance.Skill4Lv_2 != 0)
         {
             landingIncrease = landingIncrease + UserDataManager.Instance.statData.upgradeSkill4[UserDataManager.Instance.Skill4Lv_2 - 1].sum2;
@@ -324,7 +330,7 @@ public static class UserData
     /// <summary>업그레이드가 반영된 드릴 랜딩의 넉백 힘</summary>
     public static float GetLandingForce()
     {
-        float landingForce = Data.GetInt(720217, "Value3");
+        float landingForce = Data.GetFloat(720217, "Value3");
         if (UserDataManager.Instance.Skill4Lv_3 != 0)
         {
             landingForce = landingForce + UserDataManager.Instance.statData.upgradeSkill4[UserDataManager.Instance.Skill4Lv_3 - 1].sum3;

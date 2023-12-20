@@ -9,13 +9,42 @@ using UnityEngine;
 
 public enum NPCID
 {
-    Olive = 1111201
+    Olive = 1111201,
+    Ghost_I_E = 1111202,
+    Ghost_N_S = 1111203,
+    Ghost_P_J = 1111204,
+    Ghost_F_T = 1111205,
+    Ghost_IE_FT = 1111206
+
+
 }
 
 public enum NpcTriggerType
 {
     Auto = 10,
     Trigger = 20
+}
+
+public enum NPCAnimationType
+{
+    Idle,
+    Hi_1,
+    Hi_2,
+    Talk_1,
+    Talk_2,
+    Walk,
+    Sleeping_1,
+    Sleeping_2,
+    Crying,
+    Clap,
+    Sneezing,
+    Dance_2,
+    Kill,
+    HappyWalk,
+    Bored,
+    Loudly,
+    Secretly,
+    LALA
 }
 
 /// <summary>
@@ -47,6 +76,9 @@ public class NPC : MonoBehaviour
     protected NPC_CanvasController NpcCanvas;       // NPC의 텍스트들을 관리해주는 스크립트
     public Queue<string> converationText;  // NPC의 대사를 담아둘 Queue
 
+    private Coroutine delayCoroutine;       // 코루틴 캐싱
+    private WaitForSeconds delayTime;       // 딜레이 캐싱
+
     protected int npcID;                // NPC 스프레드시트 ID    -> 파생된 자식 클래스에서 결정
     protected int nowDialogueId;        // 현재 대화의 Id
 
@@ -66,7 +98,11 @@ public class NPC : MonoBehaviour
     protected float npcConversationScope;   // NPC 대화범위
     protected float npcRecognitionRange;    // NPC 인식범위
 
+    protected bool isTryCommunity;       // 대화를 한적 있는지?
+    public bool isComunity;                 // 대화중인지 체크할 변수
+    protected bool isCommunityDelray;       // 대화의 딜레이를 줄 함수 대화창 클릭이벤트에 관련있음
     public bool isReadyToAutoComunication;  // 자동으로 다가가서 일정거리 안에 있다면 true가 될것임
+
 
 
 
@@ -97,8 +133,16 @@ public class NPC : MonoBehaviour
 
     private void AwakeInIt()
     {
-        animator = GetComponent<Animator>();
+        animator = this.transform.GetComponent<Animator>();
         npcStringBuilder = new StringBuilder();
+        npcTitle = new StringBuilder();
+        converationText = new Queue<string>();
+        delayTime = new WaitForSeconds(0.5f);
+
+        isTryCommunity = false;
+        isReadyToAutoComunication = false;
+        isCommunityDelray = false;
+
     }       // AwakeInIt()
 
 
@@ -108,6 +152,7 @@ public class NPC : MonoBehaviour
     /// <param name="_npcID">해당 NPC의 ID</param>
     protected virtual void ParamsInIt(int _npcID)
     {
+        GFunc.Log($"시트값 가져오기위한 곳에 받아온 ID : {_npcID}");
         npcName = (string)DataManager.Instance.GetData(_npcID, "Name", typeof(string));
         //npcTitle = (string)DataManager.Instance.GetData(_npcID, "Title", typeof(string)); // 대사 출력시 해당 대화의 칭호를 가져와서 출력하는식으로 변경
         npcWaitMotion = (string)DataManager.Instance.GetData(_npcID, "WaitMotion", typeof(string));
@@ -119,7 +164,7 @@ public class NPC : MonoBehaviour
         npcConversationScope = (float)DataManager.Instance.GetData(_npcID, "ConversationScope", typeof(float));
         npcRecognitionRange = (float)DataManager.Instance.GetData(_npcID, "RecognitionRange", typeof(float));
 
-        isReadyToAutoComunication = false;
+
 
         NPCTriggerTypeInIt(_npcID);
         ConvertionRefIdInIt(_npcID);
@@ -158,6 +203,7 @@ public class NPC : MonoBehaviour
 
         string tableIDs = (string)DataManager.Instance.GetData(_npcID, "ConversationTableID", typeof(string));
 
+        //GFunc.Log($"오류의 아이디 : {tableIDs}");
         conversationRefIDs = GFunc.SplitIds(tableIDs);
 
     }       // ConvertionRefIDInIt()
@@ -183,13 +229,20 @@ public class NPC : MonoBehaviour
     {
         if (npcTriggerType == NpcTriggerType.Trigger)
         {
-            StartConverationEvent?.Invoke();
+            if (isTryCommunity == false)
+            {
+                isTryCommunity = true;
+                //delayCoroutine = StartCoroutine(CommunicationDelay());
+                StartConverationEvent?.Invoke();
+            }
+            else { /*PASS*/ }
         }
 
         else if (npcTriggerType == NpcTriggerType.Auto)
         {
-            if (isReadyToAutoComunication == true)
+            if (isReadyToAutoComunication == true && isComunity == false)
             {
+                isComunity = true;
                 StartConverationEvent?.Invoke();
             }
         }
@@ -293,7 +346,7 @@ public class NPC : MonoBehaviour
         //{---------------------------- 정해진 대사 이벤트 ------------------------------
         bool isPass = Inspection(conversationIds);
 
-        if (isPass == false) { return; }
+        if (isPass == false) { /*PASS*/ }
 
         //---------------------------- 정해진 대사 이벤트 ------------------------------ }
 
@@ -403,7 +456,7 @@ public class NPC : MonoBehaviour
 
         List<int> passDialogueIdList = InspectionNoAntecedentQuest(dialogueIds);    // 전조퀘스트가 0인 대화들만 List에 반환
 
-        int randIndex = UnityEngine.Random.Range(0, passDialogueIdList.Count + 1);
+        int randIndex = UnityEngine.Random.Range(0, passDialogueIdList.Count);
 
         EnQueueConversation(passDialogueIdList[randIndex]);
         DeQueueConversation();
@@ -453,6 +506,115 @@ public class NPC : MonoBehaviour
     }       // OffCanvasObj()
 
     #endregion Canvas.SetActive 관련
+
+    IEnumerator CommunicationDelay()
+    {
+        isCommunityDelray = true;
+        yield return delayTime;
+        isCommunityDelray = false;
+
+    }       // CommunicationDelay()
+    /// <summary>
+    /// 매개변수 값에 따라서 애니메이터에 존재하는 애니메이션 실행해주는 함수
+    /// </summary>
+    /// <param name="_playAnimationName">실행시킬 애니메이션 이름</param>
+    protected void ChangeAnimationString(string _playAnimationName)
+    {
+        animator.Play(_playAnimationName);
+        //Debug.Log($"NPC의 애니메이션 변경 함수 진입\n매개변수값 : {_playAnimationName}");
+    }       // ChangeAnimationString()
+
+    /// <summary>
+    /// 애니메이션이 NPCAnimationType값에 따라 실행되는 함수 (사용 안함)
+    /// </summary>
+    /// <param name="_aniType">현재 NPC의 NPCAnimationType</param>
+    protected void ChangeAnimationEnum(NPCAnimationType _aniType)
+    {
+        string aniname;     // 애니메이션 이름
+        switch (_aniType)
+        {
+            case NPCAnimationType.Idle:
+                aniname = "Ani_Motion_Idle";        // 아직 이름모름
+                animator.Play(aniname);
+                break;
+
+            case NPCAnimationType.Walk:
+                aniname = "Ani_Motion_Walking";
+                animator.Play(aniname);
+                break;
+
+            case NPCAnimationType.Talk_1:
+                aniname = "Ani_Motion_Talk_1";
+                animator.Play(aniname);
+                break;
+
+            case NPCAnimationType.Talk_2:
+                aniname = "Ani_Motion_Talk_2";
+                animator.Play(aniname);
+                break;
+
+            case NPCAnimationType.Hi_1:
+                aniname = "Ani_Motion_HI_1";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.Hi_2:
+                aniname = "Ani_Motion_HI_2";
+                animator.Play(aniname);
+                break;
+
+            case NPCAnimationType.Sleeping_1:
+                aniname = "Ani_Motion_Sleeping_1";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.Sleeping_2:
+                aniname = "Ani_Motion_Sleeping_2";
+                animator.Play(aniname);
+                break;
+
+            case NPCAnimationType.Clap:
+                aniname = "Ani_Motion_Clap";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.Sneezing:
+                aniname = "Ani_Motion_Sneezing";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.Loudly:
+                aniname = "Ani_Motion_Talk_Loudly";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.Dance_2:
+                aniname = "Ani_Motion_DANCE_2";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.Kill:
+                aniname = "Ani_Motion_Kill";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.Secretly:
+                aniname = "Ani_Motion_Talk_Secretly";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.Bored:
+                aniname = "Ani_Motion_Bored";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.HappyWalk:
+                aniname = "Ani_Motion_Happy Walk";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.LALA:
+                aniname = "Ani_Motion_LALA";
+                animator.Play(aniname);
+                break;
+            case NPCAnimationType.Crying:
+                aniname = "Ani_Motion_Crying";
+                animator.Play(aniname);
+                break;
+
+
+        }
+    }
 
 
 

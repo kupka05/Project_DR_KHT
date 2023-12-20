@@ -181,6 +181,7 @@ public partial class UserDataManager
 
     [Header("Quest Data")]
     public string QuestMain;          // 현재 퀘스트
+    public string DebugQuest;
     public static List<Quest> quests = new List<Quest>();
 
     [Header("Result Data")]

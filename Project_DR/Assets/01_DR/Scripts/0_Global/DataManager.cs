@@ -134,6 +134,36 @@ public class DataManager : MonoBehaviour
      *                 Public Methods
      *************************************************/
     #region [+]
+    // 데이터 테이블에 있는 ID들을 리스트로 받아옴
+    // 가져올 테이블에 있는 ID중 하나를 매개변수로 받아야 한다
+    public List<int> GetDataTableIDs(int id)
+    {
+        List<int> idList = default;
+        // dataTable이 비어있지 않을 경우
+        if (dataTable.Count != 0)
+        {
+            // 키 값을 사용해 아이디 리스트를 가져옴
+            int key = GetDataKey(id);
+
+            // List<string>을 List<int>로 변환함
+            idList = ConvertStringListToIntList(dataTable[key][ID_HEADER]);
+
+            return idList;
+        }
+
+        // 비어 있을 경우 로컬로 대체
+        else
+        {
+            // 키 값을 사용해 아이디 리스트를 가져옴
+            int key = GetDataKey(id);
+
+            // List<string>을 List<int>로 변환함
+            idList = ConvertStringListToIntList(localDataTable[key][ID_HEADER]);
+
+            return idList;
+        }
+    }
+
     // 데이터 매니저에 데이터가 전부 불러와졌는지 확인
     public bool IsDataLoaded()
     {
@@ -319,6 +349,21 @@ public class DataManager : MonoBehaviour
      *                 Private Methods
      *************************************************/
     #region [+]
+    // 리스트를 순회해서 string인 데이터를 int로 변경
+    private List<int> ConvertStringListToIntList(List<string> stringList)
+    {
+        List<int> intList = new List<int>();
+
+        for (int i = 0; i < stringList.Count; i++)
+        {
+            // string 값을 int로 변환 후 리스트에 추가
+            string strValue = stringList[i].RemoveUnderbar();
+            int intValue = int.Parse(strValue);
+            intList.Add(intValue);
+        }
+
+        return intList;
+    }
 
     // 로컬 데이터 테이블을 설정하는 함수
     public void SetLocalData(Dictionary<string, List<string>> data)

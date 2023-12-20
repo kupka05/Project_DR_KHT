@@ -594,7 +594,7 @@ public class Monster : MonoBehaviour
     }
 
     // 몬스터 스턴
-    private void MonsterStun()
+    public void MonsterStun()
     {
           // 만약에 스턴루틴에 이미 다른 코루틴이 실행중인 경우
         if (stunRoutine != null)
@@ -607,13 +607,13 @@ public class Monster : MonoBehaviour
         StartCoroutine(stunRoutine);
     }
 
-    private void ApplyStackDamage(float damage)
+    public void ApplyStackDamage(float damage)
     {
         Debug.Log($"countNum = {countNum}");
 
         if (countNum == 2)
         {
-            damageable.Health -= SmashDamageCalculate(damage, 1);
+            damageable.Health -= SmashDamageCalculate(damage, 1);  //여기에 smashone넣어도 되는가?
             // 갱신된 체력 값을 적용
             SetHealth(damageable.Health);
 
@@ -653,7 +653,7 @@ public class Monster : MonoBehaviour
         return (damage * (1 + _debuff)) - damage;;
     }
 
-    IEnumerator SmashTime()
+    public IEnumerator SmashTime()
     {
         while (smashFilled.fillAmount > 0)
         {

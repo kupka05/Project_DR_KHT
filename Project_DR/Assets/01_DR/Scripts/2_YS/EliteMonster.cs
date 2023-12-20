@@ -324,40 +324,69 @@ public class EliteMonster : Monster
 
     public override void OnDeal(float damage)
     {
-        if (isStun)
-            return;
-        if (state != State.DIE && state != State.STUN)
+        // 죽지 않은 상태면 HP 바 업데이트
+        if (damageable.Health >= 0)
         {
-            if (damageable.Health >= 0)
+            SetHealth(damageable.Health);
+        }
+        else
+            return;
+
+        Debug.Log($"체력:{damageable.Health}");
+
+        // 스턴 상태 또는 죽음 상태일 경우 리턴
+        if (state == State.STUN || state == State.DIE)
+            return;
+
+        MonsterStun();  // 몬스터 스턴
+
+        smashCount++;   // 분쇄 카운트 추가
+
+        if (smashCount >= smashMaxCount)
+        {
+            smash.SetActive(true);
+            GFunc.Log("분쇄카운트 충족");
+
+            //float smashTakeDamage = damageable.Health * smashOne;
+            //SetHealth(damageable.Health - smashTakeDamage);
+            //Debug.Log($"받는 데미지:{damageable.Health - smashTakeDamage}");
+
+            smashCount = 0;
+            //GFunc.Log($"분쇄 카운트:{smashCount}");
+
+            smashFilled.fillAmount = 1;
+            //GFunc.Log($"분쇄FillAmount:{smashFilled.fillAmount}");
+
+            StartCoroutine(SmashTime());
+
+            if (countNum <= 3)
             {
-                SetHealth(damageable.Health);
-                // 만약에 스턴루틴에 이미 다른 코루틴이 실행중인 경우
-                if (stunRoutine != null)
-                {
-                    StopCoroutine(stunRoutine);
-                    stunRoutine = null;
-                }
+                countNum++;
+                smashCountNum.text = countNum.ToString();
+                Debug.Log($"숫자:{countNum}");
+            }
+            else if (countNum == 5)
+            {
 
-                stunRoutine = StunDelay();
-                StartCoroutine(stunRoutine);
+            }
 
-                GFunc.Log($"state:{state}");
+            GFunc.Log($"숫자:{countNum}");
 
-                count++;
-               
-                if (count >= maxCount)
-                {
-                    count = 0;
-                    anim.SetTrigger(hashStun);
-                   
-                    Vector3 targetPosition = transform.position - transform.forward * 4.0f;
-                    //transform.position = targetPosition;
+            ApplyStackDamage(damage);
 
-                    MoveWithSmoothTransition(targetPosition);
-                }
+            //넉백
+            count++;
+
+            if (count >= maxCount)
+            {
+                count = 0;
+                anim.SetTrigger(hashStun);
+
+                Vector3 targetPosition = transform.position - transform.forward * 4.0f;
+
+                MoveWithSmoothTransition(targetPosition);
             }
         }
-        GFunc.Log($"hp:{damageable.Health}");
     }
     // 스턴 딜레이
     public override IEnumerator StunDelay()

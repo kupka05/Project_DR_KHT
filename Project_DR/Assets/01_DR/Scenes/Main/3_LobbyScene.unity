@@ -2102,10 +2102,15 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7837797319836468090, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7837797319980225010, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.003822716
+      value: -0.0037240933
       objectReference: {fileID: 0}
     - target: {fileID: 7837797319993773063, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -2155,7 +2160,12 @@ PrefabInstance:
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.00081139675
+      value: -0.0007969292
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632280359747570398, guid: 9af8996cf7742564d86ec55ab5e912c0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -70802,7 +70812,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8700103330830029937}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}

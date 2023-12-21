@@ -32,33 +32,32 @@ public class ExitFloor : MonoBehaviour
 
     }
 
-    private void OnCollisionStay(Collision other)
+    private void OnTriggerStay(Collider other)
     {
 
         if (other.gameObject.CompareTag("Weapon"))
         {
 
+            GFunc.Log("드릴 감지");
             if (digRoutine != null)
             {
                 return;
             }
 
-            if(!other.gameObject.GetComponent<RaycastWeaponDrill>().isSpining)
-            {
+            RaycastWeaponDrill drill = other.gameObject.GetComponent<RaycastWeaponDrill>();
+
+            if (drill?.isSpining == true)
+            {                
                 return;
             }
-
-
-
-
             digRoutine = Digging();
             StartCoroutine(digRoutine);
         }
     }
 
-    private void OnCollisionExit(Collision other)
+    private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.CompareTag("Weapon"))
+        if (other.gameObject.CompareTag("Weapon"))
         {
 
             if (digRoutine != null)
@@ -67,6 +66,45 @@ public class ExitFloor : MonoBehaviour
                 digRoutine = null;
             }
         }
+
     }
+
+    //private void OnCollisionStay(Collision other)
+    //{
+
+        //if (other.gameObject.CompareTag("Weapon"))
+        //{
+
+        //    GFunc.Log("드릴 감지");
+        //    if (digRoutine != null)
+        //    {
+        //        return;
+        //    }
+
+        //    if(!other.gameObject.GetComponent<RaycastWeaponDrill>().isSpining)
+        //    {
+        //        return;
+        //    }
+
+
+
+
+        //    digRoutine = Digging();
+        //    StartCoroutine(digRoutine);
+        //}
+    //}
+
+    //private void OnCollisionExit(Collision other)
+    //{
+    //    if(other.gameObject.CompareTag("Weapon"))
+    //    {
+
+    //        if (digRoutine != null)
+    //        {
+    //            StopCoroutine(digRoutine);
+    //            digRoutine = null;
+    //        }
+    //    }
+    //}
 
 }

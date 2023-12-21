@@ -15,7 +15,9 @@ public class BossBullet : MonoBehaviour
 
     public Transform target;
 
-    public float attack = 0.2f;
+    public float attack = 0.3f;
+
+    public float damageRadius = 5.0f;
 
     [Header("이펙트")]
     public GameObject bulletEffect;
@@ -42,31 +44,54 @@ public class BossBullet : MonoBehaviour
         StartCoroutine(DestroyGameObject());
     }
 
+    //void Update()
+    //{
+
+
+    //    float distance = Vector3.Distance(target.position, transform.position);
+
+    //    RaycastHit hit;
+
+    //    if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+
+    //        if (distance <= attack)
+    //        {
+    //            if (hit.collider.CompareTag("Player"))
+    //            {
+    //                hit.collider.GetComponent<Damageable>().DealDamage(damage);
+    //                GFunc.Log($"데미지:{damage}");
+
+    //                Destroy(this.gameObject);
+    //                GameObject instanceEffect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
+    //            }
+
+    //            if (hit.collider.CompareTag("Wall"))
+    //            {
+    //                Destroy(this.gameObject);
+    //                GameObject instanceEffect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
+    //            }
+    //        }
+
+    //}
+
     void Update()
     {
-        float distance = Vector3.Distance(target.position, transform.position);
+        // 주기적으로 주변의 오브젝트를 확인하여 데미지를 적용
+        DealDamageToNearbyObjects();
+    }
 
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+    void DealDamageToNearbyObjects()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
-            if (distance <= attack)
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag("Player"))
             {
-                if (hit.collider.CompareTag("Player"))
-                {
-                    hit.collider.GetComponent<Damageable>().DealDamage(damage);
-                    GFunc.Log($"데미지:{damage}");
-
-                    Destroy(this.gameObject);
-                    GameObject instanceEffect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
-                }
-
-                if(hit.collider.CompareTag("Wall"))
-                {
-                    Destroy(this.gameObject);
-                    GameObject instanceEffect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
-                }
+                // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
+                collider.GetComponent<Damageable>().DealDamage(damage);
             }
-
+        }
     }
 
     public void GetData(int smallTableID)

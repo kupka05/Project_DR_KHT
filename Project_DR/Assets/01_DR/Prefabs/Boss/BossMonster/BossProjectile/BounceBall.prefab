@@ -14305,8 +14305,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smallBulletPrefab: {fileID: 3016696864302411366, guid: eeef79759e30ad94590ede2d8bc70f79,
     type: 3}
-  damageCollider: {fileID: 2642343742919176161, guid: eeef79759e30ad94590ede2d8bc70f79,
-    type: 3}
   isShoot: 0
   isThink: 0
   tableID: 6913
@@ -14355,7 +14353,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!135 &8695335840143153715
 SphereCollider:
   m_ObjectHideFlags: 0

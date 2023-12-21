@@ -191,7 +191,7 @@ namespace Js.Quest
         }
 
         // 특정 타입의 퀘스트를 List<Quest>로 반환한다 
-        public List<Quest> GetQuestsOfType(int type, int state = 0)
+        public List<Quest> GetQuestsOfType(int type)
         {
             List<Quest> questList = new List<Quest>();
 

@@ -73,13 +73,13 @@ namespace Js.Quest
             // 디버그
         }
 
-        // 현재 퀘스트 달성 값 추가
+        // 현재 퀘스트 진행 값 추가
         public void AddCurrentValue(int value = 1)
         {
             _currentValue += value;
         }
 
-        // 현재 퀘스트 달성 값 변경
+        // 현재 퀘스트 진행 값 변경
         public void ChangeCurrentValue(int value)
         {
             _currentValue = value;

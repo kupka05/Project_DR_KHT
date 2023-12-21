@@ -32,7 +32,7 @@ public class NullRoom : RandomRoom
 
     IEnumerator NullRoomClear()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
         ClearRoomBoolSetTrue();
 
     }

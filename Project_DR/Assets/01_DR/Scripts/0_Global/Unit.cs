@@ -32,6 +32,29 @@ public static class Unit
         QuestManager.Instance.CreateQuestFromDataTable();
     }
 
+    // ID로 퀘스트를 찾아 초기 상태로 리셋한다.
+    // 현재 진행 값도 초기화 된다.
+    public static void ResetQuest(int id)
+    {
+        QuestManager.Instance.ResetQuest(id);
+    }
+
+    // ID와 일치하는 퀘스트의 상태를 [진행중]으로 변경한다.
+    public static void ChangeQuestStateToInProgress(int id)
+    {
+        Quest quest = UserDataManager.QuestDictionary[id];
+        // 퀘스트가 [시작가능] 상태일 경우
+        if (quest.QuestState.State.Equals(QuestState.StateQuest.CAN_STARTABLE))
+        {
+            // 퀘스트를 [진행중] 상태로 변경
+            quest.ChangeToNextState();
+        }
+
+        // 아닐 경우
+        GFunc.Log("Unit.ChangeQuestStateToInProgress(): 해당 퀘스트의 상태가 [시작가능]이 아니므로, " +
+            "[진행중] 상태로 변경할 수 없습니다.");
+    }
+
     // ID와 일치하는 퀘스트를 클리어한다.
     // 성공 / 실패 이벤트 id를 반환한다.
     public static int[] ClearQuestByID(int id)

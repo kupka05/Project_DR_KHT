@@ -11,7 +11,7 @@ namespace Js.Quest
          *************************************************/
         public enum TypeReward
         {
-            ERROR = 0,      // 오류(예외처리)
+            NONE = 0,      // 비어있음
             ITEM = 1,       // 아이템
             EFFECT = 2,     // 이펙트
             MBTI = 3        // MBTI

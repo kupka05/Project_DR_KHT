@@ -124,10 +124,28 @@ namespace Js.Quest
             UserDataManager.AddQuestToQuestList(quest);
         }
 
-        // 퀘스트를 삭제한다
-        public void RemoveQuest(int index)
+        // ID로 퀘스트를 찾아 초기 상태로 리셋한다.
+        // 현재 진행 값도 초기화 된다.
+        public void ResetQuest(int id)
         {
-            UserDataManager.RemoveQuest(index);
+            GetQuestByID(id).ResetQuest();
+        }
+
+        // 퀘스트 상태 변경[시작가능] -> [시작불가]
+        // 선행 퀘스트 초기화로 [시작불가]로 변경해야 할 경우 변경한다.
+        public void UpdateQuestStatesToNotStartable()
+        {
+            foreach (var item in QuestList)
+            {
+                // 상태가 [시작가능]일 경우
+                // && [시작가능] 조건을 충족하지 못할 경우
+                if (item.QuestState.State.Equals(QuestState.StateQuest.CAN_STARTABLE)
+                    && item.QuestHandler.CheckStateForCanStartable().Equals(false))
+                {
+                    // 상태를 [시작불가]로 변경
+                    item.ChangeState(0);
+                }
+            }
         }
 
         // 퀘스트 ID로 퀘스트를 검색하고 반환
@@ -219,6 +237,7 @@ namespace Js.Quest
             return count;
         }
 
+
         /*************************************************
          *               Public DB Methods
          *************************************************/
@@ -242,7 +261,13 @@ namespace Js.Quest
             GFunc.Log($"구조화된 데이터: {json}");
 
             // 데이터가 비어있을 경우 예외처리
-            if (json.Equals("")) { return; }
+            // 퀘스트 전체 상태만 업데이트 [시작불가] -> [시작가능]
+            if (json.Equals(""))
+            {
+                // 조건 충족시 [시작가능]으로 상태 변경
+                UpdateQuestStatesToCanStartable();
+                return; 
+            }
 
             QuestSaveDatas questSaveDatas = JsonUtility.FromJson<QuestSaveDatas>(json);
 
@@ -259,15 +284,15 @@ namespace Js.Quest
         private void AddQuestCallbacks()
         {
             ////TODO: 해당하는 클래스들의 메서드에서 온콜백 호출되게 해야함
-            QuestCallback.QuestDataCallback += ChangeQuestStates;   // DB에서 퀘스트 정보를 가져왔을 때 or 퀘스트가 완료되었을 때
-            QuestCallback.BossMeetCallback += UpdateQuests;         // 보스 조우
-            QuestCallback.BossKillCallback += UpdateQuests;         // 보스 킬
-            QuestCallback.UseItemCallback += UpdateQuests;          // 아이템 사용
-            QuestCallback.MonsterKillCallback += UpdateQuests;      // 몬스터 처치
-            QuestCallback.CraftingCallback += UpdateQuests;         // 크래프팅
-            QuestCallback.ObjectCallback += UpdateQuests;           // 오브젝트
-            QuestCallback.InventoryCallback += UpdateQuests;        // 인벤토리(증정): 디버깅 완료
-            QuestCallback.DialogueCallback += UpdateQuests;         // NPC와 대화
+            QuestCallback.QuestDataCallback += UpdateQuestStatesToCanStartable;   // DB에서 퀘스트 정보를 가져왔을 때 or 퀘스트가 완료되었을 때
+            QuestCallback.BossMeetCallback += UpdateQuests;                       // 보스 조우
+            QuestCallback.BossKillCallback += UpdateQuests;                       // 보스 킬
+            QuestCallback.UseItemCallback += UpdateQuests;                        // 아이템 사용
+            QuestCallback.MonsterKillCallback += UpdateQuests;                    // 몬스터 처치
+            QuestCallback.CraftingCallback += UpdateQuests;                       // 크래프팅
+            QuestCallback.ObjectCallback += UpdateQuests;                         // 오브젝트
+            QuestCallback.InventoryCallback += UpdateQuests;                      // 인벤토리(증정): 디버깅 완료
+            QuestCallback.DialogueCallback += UpdateQuests;                       // NPC와 대화
         ////TODO: 해당하는 클래스들의 메서드에서 온콜백 호출되게 해야함
         }
 
@@ -323,7 +348,7 @@ namespace Js.Quest
 
         // 퀘스트 상태 변경[시작불가] -> [시작가능]
         // 단 선행퀘스트 조건을 충족해야 변경된다.
-        private void ChangeQuestStates()
+        private void UpdateQuestStatesToCanStartable()
         {
             GFunc.Log("OnQuestDataCallback()");
             foreach (var item in QuestList)
@@ -370,7 +395,7 @@ namespace Js.Quest
                         {
                             // 보유한 아이템의 갯수로 값 변경
                             item.ChangeCurrentValue(itemCount);
-                            // 조건 충족시 [완료 가능]으로 상태 변경
+                            // 조건 충족시 [3][완료 가능]으로 상태 변경
                             item.ChangeToNextState();
                         }
 
@@ -379,10 +404,22 @@ namespace Js.Quest
                         {
                             // 값 증가 += 1
                             item.AddCurrentValue();
-                            // 조건 충족시 [완료 가능]으로 상태 변경
+                            // 조건 충족시 [3][완료 가능]으로 상태 변경
                             item.ChangeToNextState();
                         }
                     }
+                }
+
+                // [7] 증정 예외처리
+                // [완료가능] 상태에서 보유 갯수가 줄어들어 현재 값이 목표 값 보다
+                // 낮아질 경우 [진행중]으로 변경한다.
+                if (itemCount.Equals(default).Equals(false)
+                    && item.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE)
+                    && item.QuestData.CurrentValue < item.QuestData.ClearValue)
+                {
+                    // 현재 값과 상태를 [2][진행중]으로 변경
+                    item.ChangeCurrentValue(itemCount);
+                    item.ChangeState(2);
                 }
             }
         }

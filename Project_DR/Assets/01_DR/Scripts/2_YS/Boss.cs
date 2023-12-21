@@ -79,6 +79,7 @@ public class Boss : MonoBehaviour
     public Transform bouncePortLeft;
     public Transform bouncePortRight;
     public GameObject bounce;
+    public int bounceCount = 3;
 
     [Header("타겟")]
     public Transform target;
@@ -292,17 +293,15 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                StartCoroutine(PlayShoot());
+                StartCoroutine(LazerCoroutine());
                 Debug.Log("패턴 1 선택");
                 break;
             case 1:
-                StartCoroutine(PlayShoot());
-                //BounceShoot();
+                StartCoroutine(LazerCoroutine());
                 Debug.Log("패턴 2 선택");
                 break;
             case 2:
                 StartCoroutine(PlayShoot());
-                //StartCoroutine(BigBrickShoot());
                 Debug.Log("패턴 3 선택");
                 break;
             case 3:
@@ -590,9 +589,33 @@ public class Boss : MonoBehaviour
     
     void BounceShoot()
     {
-        GameObject instantBounce = Instantiate(bounce, bouncePort.position, bouncePort.rotation);
-        GameObject bounceLeft = Instantiate(bounce, bouncePortLeft.position, bouncePortLeft.rotation);
-        GameObject bounceRight = Instantiate(bounce, bouncePortRight.position, bouncePortRight.rotation);
+         
+        if(target != null)
+        {
+            List<GameObject> bounceBall = new List<GameObject>();
+
+            for (int i = 0; i < bounceCount; i++)
+            {
+                Vector3 offset = UnityEngine.Random.insideUnitSphere * 2.0f;
+
+                // transform.TransformPoint을 사용하여 로컬 좌표를 월드 좌표로 변환
+                Vector3 spawnPosition = transform.TransformPoint(offset);
+
+
+                GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
+                bounceBall.Add(instantBounce);
+                instantBounce.transform.LookAt(target.position);
+
+            }
+        }
+      
+
+        //Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
+
+        //GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
+
+        ////GameObject bounceLeft = Instantiate(bounce, bouncePortLeft.position, bouncePortLeft.rotation);
+        ////GameObject bounceRight = Instantiate(bounce, bouncePortRight.position, bouncePortRight.rotation);
 
     }
 

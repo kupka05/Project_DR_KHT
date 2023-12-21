@@ -76,8 +76,7 @@ public class GameManager : MonoBehaviour
     private bool allRoomClear = false;              // 모든 방이 클리어 됬다면 true가 될 변수
 
     private bool isClear = false;                   // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
-
-    private bool isClear = false;       // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
+    
     public bool isGameOver;
 
 
@@ -325,7 +324,6 @@ public class GameManager : MonoBehaviour
     *                 Dungeon Object
     *************************************************/
     #region Dungeon
->>>>>>> Upstream/develop
     /// <summary>
     /// 문을 열고 닫는 함수를 하나로 묶은것
     /// </summary>
@@ -370,69 +368,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    // 게임오버
-    public void GameOver()
-    {
-        fader.DoFadeIn();
-        screenText = player.GetComponent<ScreenText>();
-        screenText.OnScreenText(gameoverText);
-        input.enabled = false;
-
-        SceneLoad(gameoverScene); // 게임오버 씬 전환
-    }
-
-    // 현재 씬 리셋
-    public void ResetScene()
-    {
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneLoad(currentSceneName);
-    }
-
-    /// <summary>
-    /// 던전 클리어후 로비로 보내줄 함수
-    /// </summary>
-    public void ClearDungeon()
-    {
-        string lobbySceneName = "3_LobbyScene";
-        SceneLoad(lobbySceneName);
-    }       // ClearDungeon()
-
-
-    // 씬 전환 함수
-    public void SceneLoad(string _sceneName)
-    {
-        if (string.IsNullOrEmpty(_sceneName))
-        {
-            GFunc.Log("전환할 씬을 찾지 못했습니다.");
-            return;
-        }
-        StartCoroutine(SceneChangeDelay(_sceneName));
-    }
-
-    // 플레이어의 페이드를 포함한 씬 전환 딜레이
-    IEnumerator SceneChangeDelay(string _sceneName)
-    {
-        if (fader)
-        {
-            fader.DoFadeIn();
-        }
-
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(_sceneName);
-    }
-
-
-    // 데이터 가져오기
-    public void GetData()
-    {
-        gameoverText = (string)DataManager.Instance.GetData(1001, "GameOverText", typeof(string));
-    }
-
-    // 아이디 가져오기
-    public void SetPlayerID(string id)
-    {
-        _playerID = id;
-    }
+  
 
     /// <summary>
     /// 유령 오브젝트를 List에 Add해주는 함수

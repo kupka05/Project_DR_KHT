@@ -11,7 +11,7 @@ namespace Js.Quest
          *************************************************/
         public enum TypeReward
         {
-            ERROR = 0,      // 오류(예외처리)
+            NONE = 0,      // 비어있음
             ITEM = 1,       // 아이템
             EFFECT = 2,     // 이펙트
             MBTI = 3        // MBTI
@@ -24,6 +24,9 @@ namespace Js.Quest
         public int[] RewardKeyIDs => _rewardKeyIDs;                 // 퀘스트 보상 (1 ~ 4) 키 ID
         public int[] RewardAmounts => _rewardAmounts;               // 퀘스트 보상 (1 ~ 4) 지급 갯수
         public int[] RewardProbabilitys => _rewardProbabilitys;     // 퀘스트 보상 (1 ~ 4) 확률
+        public int[] StatKeyIDs => _statKeyIDs;                     // 스텟 보상 (1 ~ 2) 키 ID
+        public float[] StatAmounts => _statAmounts;                 // 스텟 보상 (1 ~ 2) 지급 수치
+        public int[] StatProbabilitys => _statProbabilitys;         // 스텟 보상 (1 ~ 2) 확률
         public float[] MBTIValues => _mbtiValues;                   // MBTI(I, N, F, P) 보상
 
 
@@ -38,6 +41,9 @@ namespace Js.Quest
         [SerializeField] private int[] _rewardKeyIDs = new int[4];
         [SerializeField] private int[] _rewardAmounts = new int[4];
         [SerializeField] private int[] _rewardProbabilitys = new int[4];
+        [SerializeField] private int[] _statKeyIDs = new int[2];
+        [SerializeField] private float[] _statAmounts = new float[2];
+        [SerializeField] private int[] _statProbabilitys = new int[2];
         [SerializeField] private float[] _mbtiValues = new float[4];
 
 
@@ -54,18 +60,27 @@ namespace Js.Quest
             _name = Data.GetString(id, "Name");
             _giveGold = Data.GetInt(id, "GiveGold");
             _giveEXP = Data.GetInt(id, "GiveEXP");
-
             string[] mbtiNames = { "I", "N", "F", "P" };
             for (int i = 0; i < _rewardKeyIDs.Length; i ++)
             {
+                // 보상 데이터 Init
                 int index = i + 1;
-                string keyID = GFunc.SumString("Reward_", index.ToString(), "_KeyID");
-                string amount = GFunc.SumString("Reward_", index.ToString(), "_Amount");
-                string probability = GFunc.SumString("Reward_", index.ToString(), "_Probability");
-                _rewardKeyIDs[i] = Data.GetInt(id, keyID);
-                _rewardAmounts[i] = Data.GetInt(id, amount);
-                _rewardProbabilitys[i] = Data.GetInt(id, probability);
+                string rewardKeyID = GFunc.SumString("Reward_", index.ToString(), "_KeyID");
+                string rewardAmount = GFunc.SumString("Reward_", index.ToString(), "_Amount");
+                string rewardProbability = GFunc.SumString("Reward_", index.ToString(), "_Probability");
+                _rewardKeyIDs[i] = Data.GetInt(id, rewardKeyID);
+                _rewardAmounts[i] = Data.GetInt(id, rewardAmount);
+                _rewardProbabilitys[i] = Data.GetInt(id, rewardProbability);
                 _mbtiValues[i] = Data.GetFloat(id, GFunc.SumString("MBTI_VALUE_", mbtiNames[i]));
+                if (i < _statKeyIDs.Length)
+                {
+                    string statKeyID = GFunc.SumString("Stat_", index.ToString(), "_KeyID");
+                    string statAmount = GFunc.SumString("Stat_", index.ToString(), "_Amount");
+                    string statProbability = GFunc.SumString("Stat_", index.ToString(), "_Probability");
+                    _statKeyIDs[i] = Data.GetInt(id, statKeyID);
+                    _statAmounts[i] = Data.GetFloat(id, statAmount);
+                    _statProbabilitys[i] = Data.GetInt(id, statProbability);
+                }
             }
         }
     }

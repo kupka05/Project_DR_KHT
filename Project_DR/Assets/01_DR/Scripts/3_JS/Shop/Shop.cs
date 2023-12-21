@@ -63,6 +63,10 @@ public class Shop : MonoBehaviour
     // 플레이어 골드 안내 텍스트 갱신
     public void UpdatePlayerGoldText()
     {
+        // null일경우 예외처리
+        // 재시작 할 때마다, 기존에 등록된 이벤트가 null인
+        // 텍스트를 호출해서 오류가 발생해 추가하였음
+        if (_playerGoldText.Equals(null)) { return; }
         _playerGoldText.GetDataAndSetText();
     }
 

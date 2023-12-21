@@ -51,14 +51,12 @@ public class BounceBullet : MonoBehaviour
                     hit.collider.GetComponent<Damageable>().DealDamage(damage);
                     GFunc.Log($"데미지:{damage}");
 
-                    GameObject instanceEffect = Instantiate(bounceEffect, transform.position, Quaternion.identity);
-
+                    //GameObject instanceEffect = Instantiate(bounceEffect, transform.position, Quaternion.identity);
                 }
-
             }
 
         Destroy(this.gameObject, 8.0f);
-        GameObject instanceEffectDestroy = Instantiate(bounceEffect, transform.position, Quaternion.identity);
+        //GameObject instanceEffectDestroy = Instantiate(bounceEffect, transform.position, Quaternion.identity);
 
     }
 
@@ -67,7 +65,8 @@ public class BounceBullet : MonoBehaviour
         // 오브젝트 활성화
         gameObject.SetActive(true);
         //GFunc.Log($"활성화:{gameObject}");
-        
+
+        GFunc.Log($"포지션:{gameObject.transform.position}");
         yield return new WaitForSeconds(2.0f);
         //GFunc.Log("대기중");
         

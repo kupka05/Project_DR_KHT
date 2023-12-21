@@ -77,6 +77,10 @@ public class GameManager : MonoBehaviour
 
     private bool isClear = false;                   // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
 
+    private bool isClear = false;       // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
+    public bool isGameOver;
+
+
     public bool IsClear
     {
         get { return isClear; }
@@ -217,7 +221,106 @@ public class GameManager : MonoBehaviour
         }
     }       // StartInIt()
 
-    #region 문관련 함수
+
+
+    /*************************************************
+     *            Game Over & Game Clear
+    *************************************************/
+    #region GameManager
+    // 게임오버
+    public void GameOver()
+    {
+        fader.DoFadeIn();
+        screenText = player.GetComponent<ScreenText>();
+        screenText.OnScreenText(gameoverText);
+        input.enabled = false;
+
+        isGameOver = true;
+        UserData.GameOver();
+        UserData.ResetPlayer();
+
+        SceneLoad(gameoverScene); // 게임오버 씬 전환
+    }
+
+    // 현재 씬 리셋
+    public void ResetScene()
+    {
+        isGameOver = true;
+        UserData.GameOver();
+        UserData.ResetPlayer();
+
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneLoad(currentSceneName);
+    }
+
+    /// <summary>  던전 클리어후 로비로 보내줄 함수 </summary>
+    public void ClearDungeon()
+    {
+        // 출구 층이면 로비로 보내주기
+        if (nowFloor == isPlayerMaxFloor)
+        {
+            isGameOver = true;
+
+            UserData.ClearDungeon();
+            UserData.ResetPlayer();
+
+            string lobbySceneName = "3_LobbyScene";
+            SceneLoad(lobbySceneName);
+        }
+        // 출구 층이 아니라면, 다시 던전씬 돌리기
+        else if (nowFloor < isPlayerMaxFloor)
+        {
+            // 층 높이고
+            nowFloor++;
+            string dungeonSceneName = "SG_TestScene";
+            SceneLoad(dungeonSceneName);
+        }
+        else
+            GFunc.Log("클리어 실패, 현재 층 : " + nowFloor);
+     
+    }       // ClearDungeon()
+
+    #endregion
+
+
+    /*************************************************
+     *                Scene Manager
+    *************************************************/
+    #region Scene Manager
+    // 씬 전환 함수
+    public void SceneLoad(string _sceneName)
+    {
+        if (string.IsNullOrEmpty(_sceneName))
+        {
+            GFunc.Log("전환할 씬을 찾지 못했습니다.");
+            return;
+        }
+        StartCoroutine(SceneChangeDelay(_sceneName));
+    }
+
+    // 플레이어의 페이드를 포함한 씬 전환 딜레이
+    IEnumerator SceneChangeDelay(string _sceneName)
+    {
+        if (fader)
+        {
+            fader.DoFadeIn();
+        }
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(_sceneName);
+
+        if (isGameOver)
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
+    /*************************************************
+    *                 Dungeon Object
+    *************************************************/
+    #region Dungeon
+>>>>>>> Upstream/develop
     /// <summary>
     /// 문을 열고 닫는 함수를 하나로 묶은것
     /// </summary>
@@ -256,14 +359,11 @@ public class GameManager : MonoBehaviour
                 return false;
             }
         }
-
         return true;
     }       // CheckAllRoomClear()
 
 
 
-
-    #endregion 문관련 함수
 
     // 게임오버
     public void GameOver()
@@ -360,7 +460,22 @@ public class GameManager : MonoBehaviour
 
 
     }       // AllocatedGhostObj()
+    #endregion
 
+    /*************************************************
+    *                        Data
+    *************************************************/
+    #region Data
+    // 데이터 가져오기
+    public void GetData()
+    {
+        gameoverText = (string)DataManager.Instance.GetData(1001, "GameOverText", typeof(string));
+    }
 
-
+    // 아이디 가져오기
+    public void SetPlayerID(string id)
+    {
+        _playerID = id;
+    }
+    #endregion
 }       // ClassEnd

@@ -18,6 +18,10 @@ public class BounceSmallBullet : MonoBehaviour
 
     public Transform target;
 
+    public float damageRadius = 1.0f;
+
+    public bool isHit = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,33 +35,48 @@ public class BounceSmallBullet : MonoBehaviour
 
     void Update()
     {
-        float distance = Vector3.Distance(target.position, transform.position);
-
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
-
-            if (distance <= attack)
-            {
-                if (hit.collider.CompareTag("Player"))
-                {
-                    hit.collider.GetComponent<Damageable>().DealDamage(damage);
-                    GFunc.Log($"데미지:{damage}");
-
-                    Destroy(this.gameObject);
-                }
-
-                if (hit.collider.CompareTag("Wall"))
-                {
-                    Destroy(this.gameObject);
-                }
-            }
-
+        DealDamageToNearbyObjects();
     }
 
     public virtual void GetData(int BounceSmallTableID)
     {
         //6913
         damage = (float)DataManager.Instance.GetData(BounceSmallTableID, "Damage", typeof(float));
+    }
+
+    void DealDamageToNearbyObjects()
+    {
+        float distance = Vector3.Distance(target.position, transform.position);
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
+
+        if (distance <= attack)
+        {
+            foreach (Collider collider in colliders)
+            {
+                if (collider.CompareTag("Player"))
+                {
+                    // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
+                    collider.GetComponent<Damageable>().DealDamage(damage);
+                    GFunc.Log($"데미지:{damage}");
+
+                    isHit = true;
+                    Destroy(this.gameObject);
+                    break;
+                }
+            }
+        }
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag("Wall"))
+            {
+                Destroy(this.gameObject);
+                GFunc.Log("벽이나 바닥 만났을 때 파괴되는가");
+            }
+        }
+
+
     }
 
     //public virtual void OnCollisionEnter(Collision collision)

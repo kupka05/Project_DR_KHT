@@ -261,7 +261,6 @@ public class GameManager : MonoBehaviour
             isGameOver = true;
 
             UserData.ClearDungeon();
-            UserData.ResetPlayer();
 
             string lobbySceneName = "3_LobbyScene";
             SceneLoad(lobbySceneName);
@@ -374,8 +373,8 @@ public class GameManager : MonoBehaviour
     /// 유령 오브젝트를 List에 Add해주는 함수
     /// </summary>
     public void AllocatedGhostObj()
-    {
-        if (UserDataManager.Instance.ClearCount < 1)
+    {        
+        if (UserDataManager.Instance.ClearCount < 100)
         {
             if (isInItGhost == false)
             {       // 문제 X

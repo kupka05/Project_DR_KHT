@@ -140,7 +140,6 @@ namespace Js.Quest
         // 단 선행퀘스트 조건을 충족해야 변경된다.
         public void UpdateQuestStatesToCanStartable()
         {
-            GFunc.Log("OnQuestDataCallback()");
             foreach (var item in QuestList)
             {
                 // 상태가 [시작불가]일 경우
@@ -192,7 +191,7 @@ namespace Js.Quest
         }
 
         // 특정 타입의 퀘스트를 List<Quest>로 반환한다 
-        public List<Quest> GetQuestsOfType(int type, int state = 0)
+        public List<Quest> GetQuestsOfType(int type)
         {
             List<Quest> questList = new List<Quest>();
 

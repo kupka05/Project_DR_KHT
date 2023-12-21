@@ -117,13 +117,16 @@ public class Boss : MonoBehaviour
     public Transform bigBrickPortLeft;
     public Transform bigBrickPortRight;
     public GameObject bigBrick;
+    new private ParticleSystem particleSystem;
     public float destroy = default;
+    public float damageRadius = 1.0f;
+
 
     //[Header("유도 미사일 테스트")]
     //public Transform testPort;
     //public GameObject testBullet;
 
-    
+
     void Awake()
     {
         GetData(bossId, bossProjectileId, bossProjectileID);
@@ -142,6 +145,8 @@ public class Boss : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         target = player.GetComponent<PlayerPosition>().playerPos;
         knockBack = player.GetComponent<PlayerBackDash>();
+
+        particleSystem = GetComponent<ParticleSystem>();
 
         damageable.Health = maxHp;
 
@@ -199,8 +204,6 @@ public class Boss : MonoBehaviour
     {
         bossHPSlider.value = newHealth;
     }
-
-
 
     IEnumerator ExecutePattern()
     {
@@ -385,7 +388,6 @@ public class Boss : MonoBehaviour
 
             foreach (var bullet in bullets)
             {
-                
                 if (bullet != null)
                 {
                     Rigidbody rigidBullet = bullet.GetComponent<Rigidbody>();
@@ -394,7 +396,6 @@ public class Boss : MonoBehaviour
                     yield return new WaitForSeconds(0.4f);
 
                     rigidBullet.velocity = (target.position - bullet.transform.position).normalized * speed;
-                    
                 }
             }
 
@@ -504,27 +505,32 @@ public class Boss : MonoBehaviour
 
         // 가운데, 왼쪽, 오른쪽 위치에 대해 동시에 오브젝트를 생성하고 힘을 적용
         GameObject instantBrick = Instantiate(bigBrick, bigBrickPort.position, Quaternion.identity);
+        particleSystem = instantBrick.GetComponent<ParticleSystem>();
         instantBrick.SetActive(true);
         Rigidbody brickRigidbody = instantBrick.GetComponent<Rigidbody>();
         brickRigidbody.useGravity = false;
         //GFunc.Log($"활성화:{instantBrick}");
 
         GameObject instantBrickLeft = Instantiate(bigBrick, bigBrickPortLeft.position, Quaternion.identity);
+        particleSystem = instantBrickLeft.GetComponent<ParticleSystem>();
         instantBrickLeft.SetActive(true);
         Rigidbody brickRigidbodyLeft = instantBrickLeft.GetComponent<Rigidbody>();
         brickRigidbodyLeft.useGravity = false;
         //GFunc.Log($"활성화:{instantBrickLeft}");
 
         GameObject instantBrickRight = Instantiate(bigBrick, bigBrickPortRight.position, Quaternion.identity);
+        particleSystem = instantBrickRight.GetComponent<ParticleSystem>();
         instantBrickRight.SetActive(true);
         Rigidbody brickRigidbodyRight = instantBrickRight.GetComponent<Rigidbody>();
         brickRigidbodyRight.useGravity = false;
         //GFunc.Log($"활성화:{instantBrickRight}");
 
-        // 2초 동안 대기하면서 gravity 비활성화
+        particleSystem.Stop();
+        // n초 동안 대기하면서 gravity 비활성화
         yield return StartCoroutine(BrickWait(waitTime));
 
 
+        particleSystem.Play();
         // gravity 활성화 및 힘을 적용
         brickRigidbody.useGravity = true;
         brickRigidbody.AddForce(BigBrick(bigBrickPort.position), ForceMode.Impulse);
@@ -543,6 +549,16 @@ public class Boss : MonoBehaviour
         Destroy(instantBrick, destroy);
         Destroy(instantBrickLeft, destroy);
         Destroy(instantBrickRight, destroy);
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
+
+        foreach (Collider collider in colliders)
+        {
+            if(collider.CompareTag("Floor"))
+            {
+                particleSystem.Stop();
+            }
+        }
     }
 
     //public Vector3 ExplosionBox(Vector3 portPosition)
@@ -589,7 +605,6 @@ public class Boss : MonoBehaviour
     
     void BounceShoot()
     {
-         
         if(target != null)
         {
             List<GameObject> bounceBall = new List<GameObject>();

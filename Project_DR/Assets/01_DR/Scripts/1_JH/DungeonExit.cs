@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using BNG;
+using System.Threading.Tasks;
 
 public class DungeonExit : MonoBehaviour
 {
@@ -25,15 +26,16 @@ public class DungeonExit : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private async void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Player"))
         {
             if (isLobby)
             {
-                SceneLoad(sceneName);
+                //SceneLoad(sceneName);
+                await LoadSceneAsync(sceneName);
             }
-            // ToDo : 
+
             else if(GameManager.instance.isPlayerMaxFloor <= GameManager.instance.nowFloor )
             {
                 GameManager.instance.ClearDungeon();
@@ -51,6 +53,26 @@ public class DungeonExit : MonoBehaviour
         StartCoroutine(SceneChange(_sceneName));
     }
 
+    private async Task LoadSceneAsync(string _sceneName)
+    {
+        if (string.IsNullOrEmpty(_sceneName))
+        {
+            GFunc.Log("전환할 씬을 찾지 못했습니다.");
+            return;
+        }
+
+        Debug.Log("Loading scene asynchronously...");
+        var asyncOperation = SceneManager.LoadSceneAsync(_sceneName);
+
+        while (!asyncOperation.isDone)
+        {
+            float progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
+            Debug.Log("Loading progress: " + (progress * 100) + "%");
+            await Task.Delay(100);
+        }
+
+        Debug.Log("Scene loaded.");
+    }
 
     // 씬 전환
     IEnumerator SceneChange(string _sceneName)

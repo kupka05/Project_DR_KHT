@@ -7,7 +7,7 @@ public class NullRoom : RandomRoom
 
     void Start()
     {
-        GameManager.isClearRoomList.Add(isClearRoom);
+        GameManager.isClearRoomList.Add(this);
         GetFloorPos();      // 꼭지점 가져와주는 Class
     }       // Start()
 
@@ -16,7 +16,7 @@ public class NullRoom : RandomRoom
 
     private void OnDestroy()
     {
-        GameManager.isClearRoomList.Remove(isClearRoom);
+        GameManager.isClearRoomList.Remove(this);
         StopAllCoroutines();        // 예의치 못한 코루틴 으로 인한 이슈 방지
     }       // OnDestroy()
 
@@ -32,7 +32,7 @@ public class NullRoom : RandomRoom
 
     IEnumerator NullRoomClear()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2f);        
         ClearRoomBoolSetTrue();
 
     }

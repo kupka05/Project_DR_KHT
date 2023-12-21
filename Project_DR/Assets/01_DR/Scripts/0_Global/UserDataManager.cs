@@ -220,13 +220,10 @@ public partial class UserDataManager : MonoBehaviour
         dataLoadSuccess = true;
         GFunc.Log("데이터 로드 시간 : " + GetCurrentDate());
 
-        // 퀘스트가 생성안된 경우 데이터 테이블에 있는 퀘스트를 가져와서 생성
-        // && 가져온 퀘스트 데이터에 따라 상태 변경
-        if (_questList.Count.Equals(0))
-        {
-            QuestManager.Instance.CreateQuestFromDataTable();
-        }
-        QuestManager.Instance.LoadUserQuestDataFromDB();
+        //// 데이터 테이블에 있는 퀘스트를 가져와서 생성
+        //// && 가져온 퀘스트 데이터에 따라 상태 변경
+        Unit.CreateQuestFromDataTable();
+        Unit.LoadUserQuestDataFromDB();
     }
 
     // DB에 데이터를 요청하기 위한 메서드
@@ -470,6 +467,12 @@ public partial class UserDataManager : MonoBehaviour
         Skill4Lv_3 = skill4_3;     
     }
 
+    // ######################### 인벤토리 #########################
+    // 인벤토리의 모든 아이템을 초기화
+    public static void ResetInventory()
+    {
+        items = new Item[Inventory.MaxCapacity];
+    }
 
     // ######################### 퀘스트 #########################
     // 보유한 퀘스트를 삭제
@@ -482,6 +485,12 @@ public partial class UserDataManager : MonoBehaviour
     public static void AddQuestToQuestList(Quest quest)
     {
         _questList.Add(quest);
+    }
+
+    // _questList 초기화
+    public static void ResetQuestList()
+    {
+        _questList.Clear();
     }
 
     // _questList 리스트를 딕셔너리로 변경 및 _questDictionary에 할당

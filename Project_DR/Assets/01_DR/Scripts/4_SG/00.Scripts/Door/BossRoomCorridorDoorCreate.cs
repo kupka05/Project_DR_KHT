@@ -1,12 +1,10 @@
-using Meta.WitAi.Attributes;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CorridorDoorCreate : MonoBehaviour
+public class BossRoomCorridorDoorCreate : MonoBehaviour
 {
-    public GameObject doorPrefab;
+public GameObject doorPrefab;
 
     private void Awake()
     {
@@ -32,7 +30,7 @@ public class CorridorDoorCreate : MonoBehaviour
 
         GameObject doorClone = Instantiate(doorPrefab,centerPos,Quaternion.identity,this.transform);
 
-        doorClone.AddComponent<DoorOnOff>();
+        doorClone.AddComponent<BossRoomDoorOnOff>();
 
         SetRotation(doorClone);
 
@@ -119,6 +117,4 @@ public class CorridorDoorCreate : MonoBehaviour
         }
 
     }   // SetRotation()
-
-
-}       // ClassEnd
+}

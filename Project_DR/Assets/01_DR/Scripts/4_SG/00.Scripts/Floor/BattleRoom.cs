@@ -18,7 +18,7 @@ public class BattleRoom : RandomRoom
 
     void Start()
     {
-        GameManager.isClearRoomList.Add(isClearRoom);
+        GameManager.isClearRoomList.Add(this);
 
         StartCoroutine(StartMethodDelay());
 
@@ -26,7 +26,7 @@ public class BattleRoom : RandomRoom
 
     private void OnDestroy()
     {
-        GameManager.isClearRoomList.Remove(isClearRoom);
+        GameManager.isClearRoomList.Remove(this);
         StopAllCoroutines();        // 예의치 못한 코루틴 으로 인한 이슈 방지
     }       // OnDestroy()
 
@@ -246,7 +246,7 @@ public class BattleRoom : RandomRoom
     {
         if(monsterList.Count == 0)
         {
-            ClearRoomBoolSetTrue();
+            ClearRoomBoolSetTrue();            
         }
 
     }       // CheckClearRoom()

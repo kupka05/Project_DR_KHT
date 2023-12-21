@@ -191,9 +191,13 @@ public partial class UserDataManager
     public GameResult result = new GameResult();
 
     [Header("Reference Data")]
-    public bool isClear;    // 보스를 클리어했는지 확인
     private StatusData statusData = new StatusData();
     public StatData statData = new StatData();   // 업그레이드 스탯 정보가 담긴 데이터
+
+    [Header("State")]
+    public bool isClear;        // 보스를 클리어했는지 확인
+    public bool isGameOver;     // 게임 오버 상태인지 확인
+
     #endregion
 
 }

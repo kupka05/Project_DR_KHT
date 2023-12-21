@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0014902266, g: 0.00139016, b: 0.0013183705, a: 1}
+  m_IndirectSpecularColor: {r: 0.0014785795, g: 0.0013591028, b: 0.0012890887, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -543,6 +543,7 @@ MonoBehaviour:
   sceneName: 
   sceneDelay: 3
   autoLoad: 0
+  isWaitForGoogleSheetLoad: 0
 --- !u!4 &317296949
 Transform:
   m_ObjectHideFlags: 0
@@ -5756,7 +5757,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 0
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -21435,7 +21438,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 0
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -38457,7 +38462,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 1
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -38602,7 +38609,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 0
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -38655,7 +38664,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 0
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -62185,7 +62196,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 0
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -74415,7 +74428,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 1
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 1
@@ -78124,7 +78139,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 1
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 0
@@ -89140,7 +89157,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosestGrabbable: {fileID: 0}
+  ClosestNPC: {fileID: 0}
   ClosestRemoteGrabbable: {fileID: 0}
+  ClosestRemoteNPC: {fileID: 0}
   FireGrabbableEvents: 1
   RaycastRemoteGrabbables: 0
   RemoteGrabbablesMustBeVisible: 1

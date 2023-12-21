@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoorOnOff : MonoBehaviour
+public class NextRoomDoorOnOff : MonoBehaviour
 {
-
 
     public Vector3 defaultV3;
     public Vector3 targetV3;
@@ -38,13 +37,13 @@ public class DoorOnOff : MonoBehaviour
         doorOnTime = 5f;
         doorOffTime = 8f;
 
-        boxCollider = this.GetComponent<BoxCollider>(); 
+        boxCollider = this.GetComponent<BoxCollider>();
     }       // AwakeInIt()
 
     private void StartInIt()
     {
-        GameManager.instance.DoorOnEvent += OnDoor;
-        GameManager.instance.DoorOffEvent += OffDoor;
+        GameManager.instance.NextRoomDoorOnEvent += OnDoor;
+
     }       // StartInIt()
 
     public void OnDoor()
@@ -60,14 +59,11 @@ public class DoorOnOff : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameManager.instance.DoorOnEvent -= OnDoor;
-        GameManager.instance.DoorOffEvent -= OffDoor;
+        GameManager.instance.NextRoomDoorOnEvent -= OnDoor;
     }
 
     IEnumerator OnDoorCoroutine()
     {
-        GFunc.Log($"문 열기 호출");
-        StopCoroutine(OffDoorCoroutine());
         boxCollider.isTrigger = true;
         while (!compleateDoorOn)
         {
@@ -84,13 +80,11 @@ public class DoorOnOff : MonoBehaviour
 
     IEnumerator OffDoorCoroutine()
     {
-        GFunc.Log($"문닫기 호출");
-        StopCoroutine(OnDoorCoroutine());
         boxCollider.isTrigger = true;
         while (!compleateDoorOff)
         {
             transform.position = Vector3.Lerp(transform.position, defaultV3, doorOffTime * Time.deltaTime);
-            if(transform.position == defaultV3)
+            if (transform.position == defaultV3)
             {
                 compleateDoorOff = true;
             }
@@ -100,4 +94,4 @@ public class DoorOnOff : MonoBehaviour
         compleateDoorOff = false;
     }       //  OffDoorCoroutine()
 
-}
+}       // ClassEnd

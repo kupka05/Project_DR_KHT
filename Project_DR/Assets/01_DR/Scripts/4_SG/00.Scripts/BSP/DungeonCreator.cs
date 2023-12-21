@@ -284,7 +284,7 @@ public class DungeonCreator : MonoBehaviour
         // 각 복도에 문을 생성해주는 함수
         for (int i = 0; i < corridorParnet.transform.childCount; i++)
         {
-            CreateCorridorDoor(corridorParnet.transform.GetChild(i));
+            CreateCorridorDoor(corridorParnet.transform.GetChild(i),true,false,false);
         }
 
         // BSP 각 방 셋팅        
@@ -303,17 +303,17 @@ public class DungeonCreator : MonoBehaviour
     /// </summary>
     private void DungeonValueInIt()
     {
-        
+
         dungeonWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.DungeonWidth, "DungeonWidth", typeof(int));
         dungeonHeight = (int)DataManager.Instance.GetData((int)DungeonTableID.DungeonHeight, "DungeonHeight", typeof(int));
         roomWidthMin = (int)DataManager.Instance.GetData((int)DungeonTableID.RoomWidthMin, "RoomWidthMin", typeof(int));
-        roomLengthMin = (int)DataManager.Instance.GetData((int)DungeonTableID.RoomLengthMin, "RoomLengthMin", typeof(int));        
+        roomLengthMin = (int)DataManager.Instance.GetData((int)DungeonTableID.RoomLengthMin, "RoomLengthMin", typeof(int));
         maxIterations = (int)DataManager.Instance.GetData((int)DungeonTableID.MaxIterations, "MaxIterations", typeof(int));
         corridorWidth = (int)DataManager.Instance.GetData((int)DungeonTableID.CorridorWidth, "CorridorWidth", typeof(int));
         roomBottomCornerModifier = (float)DataManager.Instance.GetData((int)DungeonTableID.RoomBottomCornerModifier, "RoomBottomCornerModifier", typeof(float));
-        roomTopCornerModifier = (float)DataManager.Instance.GetData((int)DungeonTableID.RoomTopCornerModifier, "RoomTopCornerModifier", typeof(float));        
+        roomTopCornerModifier = (float)DataManager.Instance.GetData((int)DungeonTableID.RoomTopCornerModifier, "RoomTopCornerModifier", typeof(float));
         roomOffset = (int)DataManager.Instance.GetData((int)DungeonTableID.RoomOffset, "RoomOffset", typeof(int));
-        roopYpos = new Vector3(1f, (float)DataManager.Instance.GetData((int)DungeonTableID.RoopYpos, "RoopYpos",typeof(float)), 1f);
+        roopYpos = new Vector3(1f, (float)DataManager.Instance.GetData((int)DungeonTableID.RoopYpos, "RoopYpos", typeof(float)), 1f);
 
         // CustomRoom
         pcRoomDistance = (float)DataManager.Instance.GetData((int)DungeonTableID.PcRoomDistance, "PcRoomDistance", typeof(float));
@@ -330,7 +330,7 @@ public class DungeonCreator : MonoBehaviour
         wallBreakDownPercentage = (float)DataManager.Instance.GetData((int)DungeonTableID.WallBreakDownPercentage, "WallBreakDownPercentage", typeof(float));
 
 
-        
+
 
     }       // DungeonValueInIt()
 
@@ -338,10 +338,23 @@ public class DungeonCreator : MonoBehaviour
     /// 복도 Mesh에 문을 설치해주는 컴포넌트 추가해주는 함수
     /// </summary>
     /// <param name="transform">복도의 parent가 가지고 있는 자식Trasform</param>
-    private void CreateCorridorDoor(Transform _corridor)
+    private void CreateCorridorDoor(Transform _corridor, bool _isBspRoom,
+        bool _isBossRoom, bool _isNextRoom)
     {
-        _corridor.gameObject.AddComponent<CorridorDoorCreate>();
+        if (_isBspRoom == true)
+        {
+            _corridor.gameObject.AddComponent<CorridorDoorCreate>();
+        }
+        else if (_isBossRoom == true)
+        {
+            _corridor.gameObject.AddComponent<BossRoomCorridorDoorCreate>();
+        }
+        else if(_isNextRoom == true)
+        {
+            _corridor.gameObject.AddComponent<NextStageRoomCorridorDoorCreate>();
+        }
     }       // CreateCorridorDoor()
+
 
     /// <summary>
     /// 각방에 이벤트 : 전투 or 이벤트 무작위로 넣어줌
@@ -695,7 +708,7 @@ public class DungeonCreator : MonoBehaviour
         // 가로 하단
         for (int row = (int)bottomLeftV.x; row < (int)bottomRightV.x; row++)
         {
-            var wallPosition = new Vector3(row + 0.5f , 0, bottomLeftV.z);
+            var wallPosition = new Vector3(row + 0.5f, 0, bottomLeftV.z);
             AddWallPositionToList(wallPosition, possibleWallHorizontalPosition, possibleDoorHorizontalPosition);
         }
         // 가로 상단
@@ -1026,7 +1039,7 @@ public class DungeonCreator : MonoBehaviour
         playerRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
         #region PlayerStart CustomRoom
         CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
-        CustomRoomCorridorMeshCreate(false, bspfirstRoomBottomCenterPoint, bspFirstRoomTopCenterPoint, firstRoomPos, dungeonFloor);
+        CustomRoomCorridorMeshCreate(false, bspfirstRoomBottomCenterPoint, bspFirstRoomTopCenterPoint, firstRoomPos, dungeonFloor,false,false,false);
         CreatePlayerRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateEntrance(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
@@ -1113,7 +1126,8 @@ public class DungeonCreator : MonoBehaviour
     /// </summary>
     /// isPositive : PC = flase ,Boss : true, NextStage : ture
     private void CustomRoomCorridorMeshCreate(bool isPositive_, float bspRoomBottomCenterPoint_,
-        float bspRoomTopCenterPoint_, FloorMeshPos bspRoomPos_, GameObject parentRoom_)
+        float bspRoomTopCenterPoint_, FloorMeshPos bspRoomPos_, GameObject parentRoom_,
+        bool _isBspRoom, bool _isBossRoom,bool _isNextRoom)
     {
         Vector3 topLeftV;
         Vector3 topRightV;
@@ -1236,6 +1250,7 @@ public class DungeonCreator : MonoBehaviour
         topLeftV.y = roopYpos.y;
         topRightV.y = roopYpos.y;
         CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, parentRoom_);
+        CreateCorridorDoor(dungeonFloor.transform, _isBspRoom, _isBossRoom, _isNextRoom);
 
     }       // PlayerStartRoomCorridorCreate()
 
@@ -1552,36 +1567,37 @@ public class DungeonCreator : MonoBehaviour
 
         CustomRoomCorridorCreatePlusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
         //CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
-        CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, lastRoomPos, dungeonFloor);
+        CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, lastRoomPos, dungeonFloor,false,true,false);
         CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
-        CreateBossMonster(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
+        BossRoomAddComponent(bossRoomCornerPos, dungeonFloor,colCenter);
     }       // BossRoomCreate()
 
 
     /// <summary>
-    /// 보스몬스터를 인스턴트하는 함수        // TODO : 추후 스테이지에 따라 다르게 생성하도록 변경해야함
+    /// 보스방 바닥에 보스 스폰과 사망 처리 해주는 컴포넌트 Add해주는 함수
     /// </summary>    
-    private void CreateBossMonster(Vector3 centerPos, Vector3 bottomLeftV, Vector3 bottomRightV,
-        Vector3 topLeftV, GameObject dungeonFloor)
+    private void BossRoomAddComponent(FloorMeshPos _floorMeshPos,GameObject _dungeonFloor,Vector3 _centerPos)
     {
-        GameObject monsterParent = new GameObject("BossMonster");
-        monsterParent.transform.parent = dungeonFloor.transform;
+        #region LEGACY
+        //GameObject monsterParent = new GameObject("BossMonster");
+        //monsterParent.transform.parent = _dungeonFloor.transform;
 
-        GameObject bossClone;
-        Vector3 bossPos = centerPos;
-        bossPos.y = bossPos.y + 3f;
+        //GameObject bossClone;
+        //Vector3 bossPos = _centerPos;
+        //bossPos.y = bossPos.y + 3f;
 
-        bossClone = Instantiate(bossMonsterSkin, bossPos, Quaternion.Euler(0f, 180f, 0f), monsterParent.transform);
-        //bossClone.transform.localRotation = Quaternion.EulerRotation
-        bossPos = centerPos;
-        bossPos.z = bossPos.z - 3f;
-        bossPos.y = 1f;
-
-
-        bossClone = Instantiate(bossMonsterCapsule, bossPos, Quaternion.identity, monsterParent.transform);
+        //bossClone = Instantiate(bossMonsterSkin, bossPos, Quaternion.Euler(0f, 180f, 0f), monsterParent.transform);
+        ////bossClone.transform.localRotation = Quaternion.EulerRotation
+        //bossPos = _centerPos;
+        //bossPos.z = bossPos.z - 3f;
+        //bossPos.y = 1f;
 
 
+        //bossClone = Instantiate(bossMonsterCapsule, bossPos, Quaternion.identity, monsterParent.transform);
+        #endregion LEGACY
+
+        _dungeonFloor.AddComponent<BossRoom>().VariablesInIt(_floorMeshPos, bossMonsterSkin, bossMonsterCapsule,_dungeonFloor.transform,_centerPos);
 
     }       // CreateBossMonster()
 
@@ -1672,7 +1688,7 @@ public class DungeonCreator : MonoBehaviour
             bottomLeftV,
             bottomRightV
         };
-
+        #region LEGACY
         //// UV 매핑을 위한 배열 생성
         //Vector2[] uvs = new Vector2[vertices.Length];
         //for (int i = 0; i < uvs.Length; i++)
@@ -1697,6 +1713,7 @@ public class DungeonCreator : MonoBehaviour
         //mesh.uv = uvs;
         //mesh.triangles = triangles;
 
+        #endregion LEGACY
 
         GameObject dungeonFloor = new GameObject("NextStageRoomMesh" + InItNum + bottomLeftV);
         //GameObject dungeonFloor = new GameObject("NextStageRoomMesh" + InItNum + bottomLeftV,
@@ -1716,6 +1733,8 @@ public class DungeonCreator : MonoBehaviour
         ////메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         ////Center
         Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0f, (topLeftV.z + bottomLeftV.z) / 2);
+
+        #region LEGACY
         //BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         //floorCol.center = colCenter;
         //// Size
@@ -1747,10 +1766,11 @@ public class DungeonCreator : MonoBehaviour
         //dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
         //nextStageRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
 
+        #endregion LEGACY
 
 
         CustomRoomCorridorCreatePlusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
-        CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, bossRoomCornerPos_, dungeonFloor);
+        CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, bossRoomCornerPos_, dungeonFloor,false,false,true);
         CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateExitObj(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);

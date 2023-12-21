@@ -115,6 +115,7 @@ public static class UserData
 
     public static void ClearDungeon()
     {
+        UserDataManager.Instance.SaveClearData();
         UserDataManager.Instance.isClear = true;
     }
 

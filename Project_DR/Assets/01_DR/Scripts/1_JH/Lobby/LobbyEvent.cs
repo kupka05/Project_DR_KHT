@@ -1,3 +1,4 @@
+using Js.Quest;
 using Meta.WitAi.Data;
 using System;
 using System.Collections;
@@ -198,9 +199,13 @@ public class LobbyEvent : MonoBehaviour
     {
 
         GetNPCDialog();              // NPC 대사 가져오고
-        if(UserData.QuestCheck())
+
+        // 퀘스트가 널이 아니면 새운 퀘스트 가져오기
+        if(!UserData.QuestCheck())
         {
-            //targetQuestID = ()UserData.GetQuest();
+            GFunc.Log("비어있지 않음");
+            Quest curQuest = Unit.GetInProgressMainQuest();
+            targetQuestID = curQuest.QuestData.ID;
         }
         SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
         GetClearData();              // 클리어 데이터 가져오기

@@ -33,7 +33,7 @@ public class DungeonExit : MonoBehaviour
             {
                 SceneLoad(sceneName);
             }
-            // ToDo : 
+
             else if(GameManager.instance.isPlayerMaxFloor <= GameManager.instance.nowFloor )
             {
                 GameManager.instance.ClearDungeon();

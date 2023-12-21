@@ -21,6 +21,11 @@ public static class Unit
         ItemManager.instance.CreateItem(pos, id, amount);
     }
 
+    // 인벤토리의 모든 아이템을 초기화
+    public static void ResetInventory()
+    {
+        UserDataManager.ResetInventory();
+    }
 
     /*************************************************
      *             Public Quest Methods
@@ -51,8 +56,11 @@ public static class Unit
         }
 
         // 아닐 경우
-        GFunc.Log("Unit.ChangeQuestStateToInProgress(): 해당 퀘스트의 상태가 [시작가능]이 아니므로, " +
-            "[진행중] 상태로 변경할 수 없습니다.");
+        else
+        {
+            GFunc.Log($"Unit.ChangeQuestStateToInProgress(): 해당 퀘스트 ID:[{id}]의 상태가 [시작가능]이 아니므로, " +
+                "[진행중] 상태로 변경할 수 없습니다.");
+        }
     }
 
     // ID와 일치하는 퀘스트를 클리어한다.
@@ -196,6 +204,11 @@ public static class Unit
     // DB에서 퀘스트 정보를 가져와서 UserDataManagr를 업데이트한다
     public static void LoadUserQuestDataFromDB()
     {
+        GFunc.Log("LoadUserQuestDataFromDB()");
         QuestManager.Instance.LoadUserQuestDataFromDB();
+
+        // 퀘스트의 상태를 업데이트 한다
+        // 조건 충족시 [시작불가] -> [시작가능]으로 변경
+        QuestManager.Instance.UpdateQuestStatesToCanStartable();
     }
 }

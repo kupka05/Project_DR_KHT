@@ -103,6 +103,12 @@ public static class UserData
     /// <summary>플레이어 데이터를 초기화 메서드</summary>
     public static void ResetPlayer()
     {
+        GFunc.Log("ResetPlayer()");
+        // 퀘스트 재생성 & DB에서 정보 불러오기 & 아이템 초기화
+        Unit.CreateQuestFromDataTable();
+        Unit.LoadUserQuestDataFromDB();
+        Unit.ResetInventory();
+
         ClearDungeon();
         UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
         UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();

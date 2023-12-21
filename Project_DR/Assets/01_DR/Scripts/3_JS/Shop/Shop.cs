@@ -63,6 +63,7 @@ public class Shop : MonoBehaviour
     // 플레이어 골드 안내 텍스트 갱신
     public void UpdatePlayerGoldText()
     {
+        GFunc.Log(_playerGoldText);
         _playerGoldText.GetDataAndSetText();
     }
 

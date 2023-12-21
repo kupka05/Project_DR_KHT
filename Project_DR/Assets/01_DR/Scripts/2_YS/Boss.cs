@@ -296,15 +296,17 @@ public class Boss : MonoBehaviour
                 Debug.Log("패턴 1 선택");
                 break;
             case 1:
-                BounceShoot();
+                StartCoroutine(PlayShoot());
+                //BounceShoot();
                 Debug.Log("패턴 2 선택");
                 break;
             case 2:
-                StartCoroutine(BigBrickShoot());
+                StartCoroutine(PlayShoot());
+                //StartCoroutine(BigBrickShoot());
                 Debug.Log("패턴 3 선택");
                 break;
             case 3:
-                LazerShoot();
+                StartCoroutine(PlayShoot());
                 Debug.Log("패턴 4 선택");
                 break;
 
@@ -361,8 +363,9 @@ public class Boss : MonoBehaviour
             {
                 Vector3 offset = Vector3.zero;
 
-                offset = UnityEngine.Random.insideUnitSphere * 2.0f;
-                
+                offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
+                //y값 2.0f
+
                 //Vector3 bossForward = transform.forward;
 
                 //// 전방 방향으로만 랜덤 오프셋을 생성합니다.
@@ -372,7 +375,8 @@ public class Boss : MonoBehaviour
 
                 GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
                 bullets.Add(instantBullet);
-                instantBullet.transform.LookAt(target);
+                instantBullet.transform.LookAt(target.position);
+                
             }
 
             yield return new WaitForSeconds(2.0f);
@@ -391,7 +395,7 @@ public class Boss : MonoBehaviour
                     yield return new WaitForSeconds(0.4f);
 
                     rigidBullet.velocity = (target.position - bullet.transform.position).normalized * speed;
-                    rigidBullet.transform.LookAt(target.position);
+                    
                 }
             }
 
@@ -402,12 +406,13 @@ public class Boss : MonoBehaviour
         }
     }
 
-    void LazerShoot()
-    {
-        StartCoroutine(ShowRangeIndicatorCoroutine());
-    }
+    //void LazerShot()
+    //{
+    //    StartCoroutine(LazerCoroutine());
+    //}
 
-    IEnumerator ShowRangeIndicatorCoroutine()
+
+    IEnumerator LazerCoroutine()
     {
         if (targetImage != null)
         {
@@ -419,12 +424,9 @@ public class Boss : MonoBehaviour
             // 3초 대기 후, targetImage의 위치에서 레이저 발사
             ShootLazer(targetImage.transform.position);
 
-            // 추가: 레이저가 발사된 후 1초 대기 후 레이저 파이어 생성
-            yield return new WaitForSeconds(0.2f);
+            // 추가: 레이저가 발사된 후 n초 대기 후 레이저 파이어 생성
+            yield return new WaitForSeconds(0.1f);
             LazerFire(targetImage.transform.position);
-
-            // 1초 후, targetImage의 위치에서 레이저 발사
-            ShootLazer(targetImage.transform.position);
         }
     }
 
@@ -488,7 +490,10 @@ public class Boss : MonoBehaviour
 
     IEnumerator BrickWait(float waitTime)
     {
+        transform.position = Vector3.zero;
+        Debug.Log("정지");
         yield return new WaitForSeconds(waitTime);
+        
     }
 
 
@@ -496,6 +501,7 @@ public class Boss : MonoBehaviour
     {
         // 대기 시간 설정 (여기서는 2초로 설정)
         float waitTime = 2.0f;
+        
 
         // 가운데, 왼쪽, 오른쪽 위치에 대해 동시에 오브젝트를 생성하고 힘을 적용
         GameObject instantBrick = Instantiate(bigBrick, bigBrickPort.position, Quaternion.identity);
@@ -518,6 +524,7 @@ public class Boss : MonoBehaviour
 
         // 2초 동안 대기하면서 gravity 비활성화
         yield return StartCoroutine(BrickWait(waitTime));
+
 
         // gravity 활성화 및 힘을 적용
         brickRigidbody.useGravity = true;
@@ -587,7 +594,6 @@ public class Boss : MonoBehaviour
         GameObject bounceLeft = Instantiate(bounce, bouncePortLeft.position, bouncePortLeft.rotation);
         GameObject bounceRight = Instantiate(bounce, bouncePortRight.position, bouncePortRight.rotation);
 
-        
     }
 
     ////유도미사일 테스트
@@ -653,6 +659,25 @@ public class Boss : MonoBehaviour
                 GFunc.Log($"Current HP: {damageable.Health}");
             }
 
+            if (damageable.Health <= 0)
+            {
+                SetHealth(0);
+                isDie = true;
+                GFunc.Log($"isDie:{isDie}");
+                // 이벤트 호출
+                //unityEvent?.Invoke();
+
+                // 보스 죽음 퀘스트
+                QuestCallback.OnBossKillCallback(bossId);
+
+                if (bossState)
+                {
+                    bossState.GetComponent<BossState>().Die();
+                }
+                StopAllCoroutines();
+                //GFunc.Log("코루틴 멈춤");
+            }
+
             smashCount++;   // 분쇄 카운트 추가
 
             if (smashCount >= smashMaxCount)
@@ -690,26 +715,6 @@ public class Boss : MonoBehaviour
 
                 //GFunc.Log("중첩 숫자 증가");
             }
-
-            if (damageable.Health <= 0)
-            {
-                SetHealth(0);
-                isDie = true;
-                GFunc.Log($"isDie:{isDie}");
-                // 이벤트 호출
-                //unityEvent?.Invoke();
-
-                // 보스 죽음 퀘스트
-                QuestCallback.OnBossKillCallback(bossId);
-
-                if (bossState)
-                {
-                    bossState.GetComponent<BossState>().Die();
-                }
-                StopAllCoroutines();
-                //GFunc.Log("코루틴 멈춤");
-            }
-
 
         }
 
@@ -779,11 +784,7 @@ public class Boss : MonoBehaviour
             }
             yield return null;
         }
-
-
     }
-
-
 
     void OnTriggerEnter(Collider other)
     {

@@ -15,6 +15,7 @@ public class DoorOnOff : MonoBehaviour
     private float doorOnTime;
     private float doorOffTime;
 
+    BoxCollider boxCollider;
 
     private void Awake()
     {
@@ -36,6 +37,8 @@ public class DoorOnOff : MonoBehaviour
         compleateDoorOff = false;
         doorOnTime = 5f;
         doorOffTime = 8f;
+
+        boxCollider = this.GetComponent<BoxCollider>(); 
     }       // AwakeInIt()
 
     private void StartInIt()
@@ -63,6 +66,7 @@ public class DoorOnOff : MonoBehaviour
 
     IEnumerator OnDoorCoroutine()
     {
+        boxCollider.isTrigger = true;
         while (!compleateDoorOn)
         {
             transform.position = Vector3.Lerp(transform.position, targetV3, doorOnTime * Time.deltaTime);
@@ -72,11 +76,13 @@ public class DoorOnOff : MonoBehaviour
             }
             yield return null;
         }
+        boxCollider.isTrigger = false;
         compleateDoorOn = false;
     }       // OnDoorCoroutine()
 
     IEnumerator OffDoorCoroutine()
     {
+        boxCollider.isTrigger = true;
         while (!compleateDoorOff)
         {
             transform.position = Vector3.Lerp(transform.position, defaultV3, doorOffTime * Time.deltaTime);
@@ -86,6 +92,7 @@ public class DoorOnOff : MonoBehaviour
             }
             yield return null;
         }
+        boxCollider.isTrigger = false;
         compleateDoorOff = false;
     }       //  OffDoorCoroutine()
 

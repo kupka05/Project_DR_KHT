@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DungeonInspectionManager : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class DungeonInspectionManager : MonoBehaviour
     public static DungeonInspectionManager dungeonManagerInstance;
 
     private int returnCount = 0;        // 몇번 재귀했는지 확인할 변수
+    private const int MAXRECREATCOUNT = 30;
+    private bool isReLoadScene;
+
+    private int reCreacteCount = 0;         // 던전 재생성한 횟수
     private void Awake()
     {
         if(dungeonManagerInstance == null)
@@ -22,6 +27,8 @@ public class DungeonInspectionManager : MonoBehaviour
             dungeonManagerInstance = this;
         }
         else { /*GFunc.Log("DungeonInspectionManager : else 들어옴");*/ }
+
+        isReLoadScene = false;
     }
 
 
@@ -43,7 +50,7 @@ public class DungeonInspectionManager : MonoBehaviour
     IEnumerator ReCheckCheckDungeonReCreating()
     {
         
-        if(returnCount >= 30)
+        if(returnCount >= 50)
         {
             StartCoroutine(TryDungeonReCreate());
             returnCount = 0;
@@ -61,12 +68,27 @@ public class DungeonInspectionManager : MonoBehaviour
         isTryDungeonCreate = true;
 
         yield return null;
-
+        reCreacteCount++;
+        if(reCreacteCount < MAXRECREATCOUNT && isReLoadScene == false)
+        {
+            isReLoadScene = true;
+            ReLoadDungeonScene();
+        }
         creator.CreateDungeon();
         //GFunc.Log($"던전 재생성");
         isTryDungeonCreate = false;
         isCreateDungeonEnd = false;
         StopAllCoroutines();
     }       // TryDungeonReCreate()
+
+    /// <summary>
+    /// 던전 씬을 다시 로드하는 함수
+    /// </summary>
+    private void ReLoadDungeonScene()
+    {
+        string nowSceneName = SceneManager.GetActiveScene().name;
+
+        GameManager.instance.SceneLoad(nowSceneName);
+    }
 
 }       // Class

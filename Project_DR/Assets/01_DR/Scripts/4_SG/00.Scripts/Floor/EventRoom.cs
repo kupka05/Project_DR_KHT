@@ -31,7 +31,7 @@ public class EventRoom : RandomRoom
 
     private void OnDestroy()
     {
-        GameManager.isClearRoomList.Remove(isClearRoom);
+        GameManager.isClearRoomList.Remove(this);
         StopAllCoroutines();        // 예의치 못한 코루틴 으로 인한 이슈 방지
     }       // OnDestroy()
 
@@ -100,7 +100,7 @@ public class EventRoom : RandomRoom
     /// </summary>
     public void IsCompleateCommunication()
     {
-        ClearRoomBoolSetTrue();     // 문열기
+        ClearRoomBoolSetTrue();     // 문열기        
     }       // IsCompleateCommunication()
 
 
@@ -128,7 +128,7 @@ public class EventRoom : RandomRoom
         yield return new WaitForSeconds(5f);
 
         CheckFirstInIt();
-        GameManager.isClearRoomList.Add(isClearRoom);
+        GameManager.isClearRoomList.Add(this);
         TryNpcSpawn();
     }       // EventRoomStart()
 

@@ -71,9 +71,11 @@ public class GameManager : MonoBehaviour
     public const int FIRSTTIME = 3;
     public const int FIRSTAFTER = 5;
 
-    public static List<bool> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
+    public static List<RandomRoom> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
 
-    private bool isClear = false;       // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
+    private bool allRoomClear = false;              // 모든 방이 클리어 됬다면 true가 될 변수
+
+    private bool isClear = false;                   // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
 
     public bool IsClear
     {
@@ -84,6 +86,32 @@ public class GameManager : MonoBehaviour
             {
                 isClear = value;
                 DoorControll(IsClear);
+                if (isClear == true)
+                {
+                    allRoomClear = CheckAllRoomClear();          
+                }
+                if(allRoomClear == true)
+                {
+                    BossRoomDoorOnEvent?.Invoke();
+                }
+            }
+
+        }
+    }
+
+    private bool isBossRoomClear = false;
+    public bool IsBossRoomClear
+    {
+        get { return isBossRoomClear; }
+        set
+        {
+            if (isBossRoomClear != value)
+            {
+                isBossRoomClear = value;
+            }
+            if (isBossRoomClear == true)
+            {
+                NextRoomDoorOnEvent?.Invoke();
             }
         }
     }
@@ -93,6 +121,8 @@ public class GameManager : MonoBehaviour
 
     public event System.Action DoorOnEvent;
     public event System.Action DoorOffEvent;
+    public event System.Action BossRoomDoorOnEvent;
+    public event System.Action NextRoomDoorOnEvent;
 
 
 
@@ -164,7 +194,7 @@ public class GameManager : MonoBehaviour
     {
         if (isClearRoomList == null || isClearRoomList == default)
         {
-            isClearRoomList = new List<bool>();
+            isClearRoomList = new List<RandomRoom>();
         }
 
     }       // AwakeInIt()
@@ -187,7 +217,7 @@ public class GameManager : MonoBehaviour
         }
     }       // StartInIt()
 
-
+    #region 문관련 함수
     /// <summary>
     /// 문을 열고 닫는 함수를 하나로 묶은것
     /// </summary>
@@ -214,7 +244,26 @@ public class GameManager : MonoBehaviour
         DoorOffEvent?.Invoke();
     }       // DoorOff()
 
+    /// <summary>
+    /// 모든 방이 클리어 됬는지 체크해줄 함수
+    /// </summary>
+    public bool CheckAllRoomClear()
+    {
+        foreach(RandomRoom temp in isClearRoomList)
+        {
+            if(temp.isClearRoom == false)
+            {
+                return false;
+            }
+        }
 
+        return true;
+    }       // CheckAllRoomClear()
+
+
+
+
+    #endregion 문관련 함수
 
     // 게임오버
     public void GameOver()
@@ -284,14 +333,14 @@ public class GameManager : MonoBehaviour
     /// 유령 오브젝트를 List에 Add해주는 함수
     /// </summary>
     public void AllocatedGhostObj()
-    {        
+    {
         if (UserDataManager.Instance.ClearCount < 1)
         {
             if (isInItGhost == false)
             {       // 문제 X
                 isInItGhost = true;
                 ghostObjList = new List<GameObject>();
-                GameObject ghostObj;                
+                GameObject ghostObj;
                 ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_FT");
                 ghostObjList.Add(ghostObj);
                 ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_IE");
@@ -302,14 +351,16 @@ public class GameManager : MonoBehaviour
                 ghostObjList.Add(ghostObj);
                 ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_PJ");
                 ghostObjList.Add(ghostObj);
-                
+
             }
             else { /*PASS*/ }
         }
         else { /*PASS*/ }
 
-        
+
 
     }       // AllocatedGhostObj()
+
+
 
 }       // ClassEnd

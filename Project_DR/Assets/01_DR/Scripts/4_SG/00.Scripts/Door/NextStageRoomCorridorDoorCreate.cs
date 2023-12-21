@@ -1,10 +1,8 @@
-using Meta.WitAi.Attributes;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CorridorDoorCreate : MonoBehaviour
+public class NextStageRoomCorridorDoorCreate : MonoBehaviour
 {
     public GameObject doorPrefab;
 
@@ -14,7 +12,7 @@ public class CorridorDoorCreate : MonoBehaviour
     }
     void Start()
     {
-    
+
         InstantiateDoor();
     }
 
@@ -30,9 +28,9 @@ public class CorridorDoorCreate : MonoBehaviour
             doorPrefab.transform.localScale.y * 0.5f,
             (cornerPos.bottomLeftCorner.z + cornerPos.topLeftCorner.z) * 0.5f);
 
-        GameObject doorClone = Instantiate(doorPrefab,centerPos,Quaternion.identity,this.transform);
+        GameObject doorClone = Instantiate(doorPrefab, centerPos, Quaternion.identity, this.transform);
 
-        doorClone.AddComponent<DoorOnOff>();
+        doorClone.AddComponent<NextRoomDoorOnOff>();
 
         SetRotation(doorClone);
 
@@ -43,36 +41,36 @@ public class CorridorDoorCreate : MonoBehaviour
     private void SetRotation(GameObject _doorClone)
     {
         float[] hitsDis = new float[4];
-        
+
         RaycastHit hit;     // 레이를 맞은것
         // 아래 상,하,좌,우 레이를 쏘아서 먼곳을 바라보게 만들면 문의 역활을 할수 있을거같음
-        if(Physics.Raycast(_doorClone.transform.position,Vector3.forward ,out hit,Mathf.Infinity))
+        if (Physics.Raycast(_doorClone.transform.position, Vector3.forward, out hit, Mathf.Infinity))
         {       // 전방
             hitsDis[0] = hit.distance;
         }
-        if(Physics.Raycast(_doorClone.transform.position,Vector3.back, out hit,Mathf.Infinity))
+        if (Physics.Raycast(_doorClone.transform.position, Vector3.back, out hit, Mathf.Infinity))
         {       // 후방
             hitsDis[1] = hit.distance;
         }
-        if(Physics.Raycast(_doorClone.transform.position,Vector3.left, out hit,Mathf.Infinity))
+        if (Physics.Raycast(_doorClone.transform.position, Vector3.left, out hit, Mathf.Infinity))
         {       // 좌
             hitsDis[2] = hit.distance;
         }
-        if(Physics.Raycast(_doorClone.transform.position,Vector3.right,out hit,Mathf.Infinity))
+        if (Physics.Raycast(_doorClone.transform.position, Vector3.right, out hit, Mathf.Infinity))
         {       // 우
             hitsDis[3] = hit.distance;
         }
 
         float highDis = 0;
 
-        foreach(float dis in hitsDis)
+        foreach (float dis in hitsDis)
         {
             if (highDis < dis)
             {
                 highDis = dis;
             }
         }
-        
+
         bool forward = false;
         bool back = false;
         bool left = false;
@@ -101,9 +99,9 @@ public class CorridorDoorCreate : MonoBehaviour
         else { GFunc.Log("문이 쏜레이가 맞은 포인트가 맞지 않음"); }
 
 
-        if (forward == true) 
+        if (forward == true)
         {
-            _doorClone.transform.rotation = Quaternion.Euler(0f, 0f, 0f);                
+            _doorClone.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
         else if (back == true)
         {
@@ -113,12 +111,10 @@ public class CorridorDoorCreate : MonoBehaviour
         {
             _doorClone.transform.rotation = Quaternion.Euler(0f, -90f, 0f);
         }
-        else if(right == true)
+        else if (right == true)
         {
             _doorClone.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
         }
 
     }   // SetRotation()
-
-
-}       // ClassEnd
+}

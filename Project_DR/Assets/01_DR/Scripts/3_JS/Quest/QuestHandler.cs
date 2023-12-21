@@ -30,6 +30,22 @@ namespace Js.Quest
             _quest = quest;
         }
 
+        // 퀘스트를 초기 상태로 변경한다.
+        // 보유하고 있는 진행 값도 초기화한다.
+        public void ResetQuest()
+        {
+            // 퀘스트를 [시작불가] 상태로 변경
+            ChangeState(0);
+            // 보유한 모든 퀘스트의 상태를 업데이트
+            QuestManager.Instance.UpdateQuestStatesToNotStartable();
+        }
+
+        // 퀘스트가 [시작가능] 상태 조건을 충족하는지 체크
+        public bool CheckStateForCanStartable()
+        {
+            return QuestState.CheckStateForCanStartable();
+        }
+
         // 퀘스트 클리어
         public int[] ClearQuest()
         {
@@ -59,6 +75,13 @@ namespace Js.Quest
         public void ChangeToNextState()
         {
             QuestState.ChangeToNextState();
+        }
+
+        // 퀘스트를 특정 상태로 변경
+        public void ChangeState(int state)
+        {
+            QuestState.StateQuest changeState = (QuestState.StateQuest)state;
+            QuestState.ChangeState(changeState);
         }
 
         // 퀘스트 상태를 출력

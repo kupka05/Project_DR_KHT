@@ -80,6 +80,32 @@ namespace Js.Quest
         {
             _currentState.PrintCurrentState();
         }
+
+        // 퀘스트가 [시작가능] 상태 조건을 충족하는지 체크
+        public bool CheckStateForCanStartable()
+        {
+            // [시작가능] 상태 조건을 충족할 경우
+            // 선행 퀘스트가 있을 경우
+            int requiredQuestID = _quest.QuestData.RequiredQuestID;
+            if (requiredQuestID.Equals(0).Equals(false))
+            {
+                // 선행 퀘스트의 상태가 [완료]일 경우
+                if (UserDataManager.QuestDictionary[requiredQuestID].
+                    QuestState.State.Equals(StateQuest.COMPLETED))
+                {
+                    return true;
+                }
+            }
+
+            // 선행 퀘스트가 없을 경우
+            else
+            {
+                return true;
+            }
+
+            // [시작가능] 상태 조건을 충족하지 못할 경우
+            return false;
+        }
     }
 }
 

@@ -34,6 +34,13 @@ namespace Js.Quest
             _questHandler = new QuestHandler(this);
         }
 
+        // 퀘스트를 초기 상태로 변경한다.
+        // 보유하고 있는 진행 값도 초기화한다.
+        public void ResetQuest()
+        {
+            QuestHandler.ResetQuest();
+        }
+
         // 퀘스트 클리어
         // 보상 지급: [클리어 보상] / [실패 보상]
         // 해당하는 이벤트 ID 반환
@@ -52,6 +59,18 @@ namespace Js.Quest
         public void ChangeToNextState()
         {
             QuestHandler.ChangeToNextState();
+        }
+
+        /// <summary>
+        /// 퀘스트를 특정 상태로 변경
+        /// [0](시작불가) - [1](시작가능) - [2](진행중) - [3](완료가능) - [4](완료) - [5](실패)
+        /// </summary>
+        /// <param name="state">
+        /// [0](시작불가) - [1](시작가능) - [2](진행중) - [3](완료가능) - [4](완료) - [5](실패)
+        /// </param>
+        public void ChangeState(int state)
+        {
+            _questHandler.ChangeState(state);
         }
 
         // 퀘스트 현재 값 증가

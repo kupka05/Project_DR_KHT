@@ -377,6 +377,12 @@ public static class UserData
     /// <summary>플레이어 데이터를 초기화 메서드. 다시 로비에 돌아올 때 실행됨</summary>
     public static void ResetPlayer()
     {
+        // 리셋하면 게임 매니저 삭제
+        if(GameManager.instance)
+        {
+            GameManager.instance.DestroyGameManager();
+        }
+
         UserDataManager.Instance.isClear = false;
         UserDataManager.Instance.isGameOver = false;
 

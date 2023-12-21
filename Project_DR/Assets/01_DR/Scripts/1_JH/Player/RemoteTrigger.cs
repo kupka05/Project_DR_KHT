@@ -207,7 +207,7 @@ public class RemoteTrigger : MonoBehaviour
     {
         if(closestNPC)
         {
-            GFunc.Log("NPC 이벤트 호출");
+            //GFunc.Log("NPC 이벤트 호출");
             // NPC 대화 이벤트 호출
             closestNPC.InvokeStartConverationEvent();
         }

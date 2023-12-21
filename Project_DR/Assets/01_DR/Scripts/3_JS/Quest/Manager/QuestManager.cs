@@ -95,14 +95,14 @@ namespace Js.Quest
         // 데이터 테이블에 있는 퀘스트를 가져와서 생성
         public void CreateQuestFromDataTable()
         {
-            int count = Data.GetCount(QUEST_FIRST_ID);
-            for (int i = 0; i < count; i++)
+            List<int> idTable = DataManager.Instance.GetDataTableIDs(QUEST_FIRST_ID);
+            for (int i = 0; i < idTable.Count; i++)
             {
                 // 퀘스트 생성 및 저장
-                Quest quest = new Quest(QUEST_FIRST_ID + i);
+                Quest quest = new Quest(idTable[i]);
                 UserDataManager.AddQuestToQuestList(quest);
 
-                GFunc.Log($"퀘스트 [{QUEST_FIRST_ID + i}] 생성 완료");
+                GFunc.Log($"퀘스트 [{idTable[i]}] 생성 완료");
             }
 
             // 디버그

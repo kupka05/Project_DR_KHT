@@ -16,6 +16,9 @@ public class BigBrickBullet : MonoBehaviour
 
     public int brickTableId;
 
+    public bool isCheck = false;
+    public float damageRadius = 1.0f;
+
     void Awake()
     {
         GetData(brickTableId); 
@@ -32,20 +35,33 @@ public class BigBrickBullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 주기적으로 주변의 오브젝트를 확인하여 데미지를 적용
+        DealDamageToNearbyObjects();
+    }
+
+    void DealDamageToNearbyObjects()
+    {
         float distance = Vector3.Distance(target.position, transform.position);
 
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+        Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
-            if (distance <= attack)
+        if (distance <= attack)
+        {
+            foreach (Collider collider in colliders)
             {
-                if (hit.collider.CompareTag("Player"))
+                if (collider.CompareTag("Player"))
                 {
-                    hit.collider.GetComponent<Damageable>().DealDamage(damage);
+                    // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
+                    collider.GetComponent<Damageable>().DealDamage(damage);
                     GFunc.Log($"데미지:{damage}");
+
+                    isCheck = true;
+                    Destroy(this.gameObject);
+                    break;
                 }
 
             }
+        }
 
     }
 

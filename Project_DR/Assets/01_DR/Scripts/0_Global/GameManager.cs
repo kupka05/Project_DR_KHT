@@ -189,45 +189,21 @@ public class GameManager : MonoBehaviour
     }       // StartInIt()
 
 
-    /// <summary>
-    /// 문을 열고 닫는 함수를 하나로 묶은것
-    /// </summary>
-    /// <param name="_isDoorOn">문을 열지 닫을지 bool값</param>
-    private void DoorControll(bool _isDoorOn)
-    {
-        if (_isDoorOn == true)
-        {
-            DoorOn();
-        }
-        else if (_isDoorOn == false)
-        {
-            DoorOff();
-        }
-    }       // DoorControll()
-
-    private void DoorOn()
-    {
-        DoorOnEvent?.Invoke();
-    }       // DoorOn()
-
-    private void DoorOff()
-    {
-        DoorOffEvent?.Invoke();
-    }       // DoorOff()
-
-
-
+    /*************************************************
+     *            Game Over & Game Clear
+    *************************************************/
+    #region GameManager
     // 게임오버
     public void GameOver()
     {
-        isGameOver = true;
-
-        UserData.ResetPlayer();
-
         fader.DoFadeIn();
         screenText = player.GetComponent<ScreenText>();
         screenText.OnScreenText(gameoverText);
         input.enabled = false;
+
+        isGameOver = true;
+        UserData.GameOver();
+        UserData.ResetPlayer();
 
         SceneLoad(gameoverScene); // 게임오버 씬 전환
     }
@@ -236,20 +212,17 @@ public class GameManager : MonoBehaviour
     public void ResetScene()
     {
         isGameOver = true;
+        UserData.GameOver();
         UserData.ResetPlayer();
-
 
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneLoad(currentSceneName);
     }
 
-
-    /// <summary>
-    /// 던전 클리어후 로비로 보내줄 함수
-    /// </summary>
+    /// <summary>  던전 클리어후 로비로 보내줄 함수 </summary>
     public void ClearDungeon()
     {
-        // 출구 층이면
+        // 출구 층이면 로비로 보내주기
         if (nowFloor == isPlayerMaxFloor)
         {
             isGameOver = true;
@@ -260,20 +233,26 @@ public class GameManager : MonoBehaviour
             string lobbySceneName = "3_LobbyScene";
             SceneLoad(lobbySceneName);
         }
+        // 출구 층이 아니라면, 다시 던전씬 돌리기
         else if (nowFloor < isPlayerMaxFloor)
         {
+            // 층 높이고
             nowFloor++;
             string dungeonSceneName = "SG_TestScene";
             SceneLoad(dungeonSceneName);
         }
         else
             GFunc.Log("클리어 실패, 현재 층 : " + nowFloor);
-
-
      
     }       // ClearDungeon()
 
+    #endregion
 
+
+    /*************************************************
+     *                Scene Manager
+    *************************************************/
+    #region Scene Manager
     // 씬 전환 함수
     public void SceneLoad(string _sceneName)
     {
@@ -301,19 +280,38 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    #endregion
 
-
-    // 데이터 가져오기
-    public void GetData()
+    /*************************************************
+    *                 Dungeon Object
+    *************************************************/
+    #region Dungeon
+    /// <summary>
+    /// 문을 열고 닫는 함수를 하나로 묶은것
+    /// </summary>
+    /// <param name="_isDoorOn">문을 열지 닫을지 bool값</param>
+    private void DoorControll(bool _isDoorOn)
     {
-        gameoverText = (string)DataManager.Instance.GetData(1001, "GameOverText", typeof(string));
-    }
+        if (_isDoorOn == true)
+        {
+            DoorOn();
+        }
+        else if (_isDoorOn == false)
+        {
+            DoorOff();
+        }
+    }       // DoorControll()
 
-    // 아이디 가져오기
-    public void SetPlayerID(string id)
+    private void DoorOn()
     {
-        _playerID = id;
-    }
+        DoorOnEvent?.Invoke();
+    }       // DoorOn()
+
+    private void DoorOff()
+    {
+        DoorOffEvent?.Invoke();
+    }       // DoorOff()
+
 
     /// <summary>
     /// 유령 오브젝트를 List에 Add해주는 함수
@@ -346,5 +344,22 @@ public class GameManager : MonoBehaviour
         
 
     }       // AllocatedGhostObj()
+    #endregion
 
+    /*************************************************
+    *                        Data
+    *************************************************/
+    #region Data
+    // 데이터 가져오기
+    public void GetData()
+    {
+        gameoverText = (string)DataManager.Instance.GetData(1001, "GameOverText", typeof(string));
+    }
+
+    // 아이디 가져오기
+    public void SetPlayerID(string id)
+    {
+        _playerID = id;
+    }
+    #endregion
 }       // ClassEnd

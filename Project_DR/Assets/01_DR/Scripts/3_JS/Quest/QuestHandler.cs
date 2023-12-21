@@ -36,6 +36,10 @@ namespace Js.Quest
         {
             // 퀘스트를 [시작불가] 상태로 변경
             ChangeState(0);
+
+            // 퀘스트의 현재 진행 값을 초기화
+            ChangeCurrentValue(0);
+
             // 보유한 모든 퀘스트의 상태를 업데이트
             QuestManager.Instance.UpdateQuestStatesToNotStartable();
         }

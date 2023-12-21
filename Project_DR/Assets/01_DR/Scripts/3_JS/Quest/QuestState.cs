@@ -52,7 +52,7 @@ namespace Js.Quest
 
             // 선행 퀘스트를 다음 상태인 [시작가능]으로 진행
             // 조건 미충족(선행퀘스트 미완료)시 전환 불가
-            ChangeToNextState();
+            //ChangeToNextState();
 
             // TODO: 
             // 1. DB에서 퀘스트 데이터를 가져온 후 호출 -> 콜백 연동해야 됨

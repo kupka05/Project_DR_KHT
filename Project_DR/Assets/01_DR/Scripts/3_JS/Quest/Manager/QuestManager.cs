@@ -124,6 +124,13 @@ namespace Js.Quest
             UserDataManager.AddQuestToQuestList(quest);
         }
 
+        // ID로 퀘스트를 찾아 초기 상태로 리셋한다.
+        // 현재 진행 값도 초기화 된다.
+        public void ResetQuest(int id)
+        {
+            GetQuestByID(id).ResetQuest();
+        }
+
         // 퀘스트 상태 변경[시작가능] -> [시작불가]
         // 선행 퀘스트 초기화로 [시작불가]로 변경해야 할 경우 변경한다.
         public void UpdateQuestStatesToNotStartable()
@@ -254,7 +261,13 @@ namespace Js.Quest
             GFunc.Log($"구조화된 데이터: {json}");
 
             // 데이터가 비어있을 경우 예외처리
-            if (json.Equals("")) { return; }
+            // 퀘스트 전체 상태만 업데이트 [시작불가] -> [시작가능]
+            if (json.Equals(""))
+            {
+                // 조건 충족시 [시작가능]으로 상태 변경
+                UpdateQuestStatesToCanStartable();
+                return; 
+            }
 
             QuestSaveDatas questSaveDatas = JsonUtility.FromJson<QuestSaveDatas>(json);
 

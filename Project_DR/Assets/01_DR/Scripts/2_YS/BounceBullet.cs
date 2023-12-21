@@ -68,7 +68,6 @@ public class BounceBullet : MonoBehaviour
         gameObject.SetActive(true);
         //GFunc.Log($"활성화:{gameObject}");
 
-        
         GFunc.Log($"포지션:{gameObject.transform.position}");
         yield return new WaitForSeconds(2.0f);
         //GFunc.Log("대기중");

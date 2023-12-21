@@ -293,7 +293,7 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                StartCoroutine(LazerCoroutine());
+                StartCoroutine(PlayShoot());
                 Debug.Log("패턴 1 선택");
                 break;
             case 1:
@@ -301,7 +301,7 @@ public class Boss : MonoBehaviour
                 Debug.Log("패턴 2 선택");
                 break;
             case 2:
-                StartCoroutine(PlayShoot());
+                BounceShoot();
                 Debug.Log("패턴 3 선택");
                 break;
             case 3:
@@ -596,11 +596,8 @@ public class Boss : MonoBehaviour
 
             for (int i = 0; i < bounceCount; i++)
             {
-                Vector3 offset = UnityEngine.Random.insideUnitSphere * 2.0f;
-
-                // transform.TransformPoint을 사용하여 로컬 좌표를 월드 좌표로 변환
-                Vector3 spawnPosition = transform.TransformPoint(offset);
-
+                //Vector3 offset = UnityEngine.Random.insideUnitSphere * 2.0f;
+                Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
                 GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
                 bounceBall.Add(instantBounce);

@@ -4735,6 +4735,7 @@ GameObject:
   - component: {fileID: 3847006286516508095}
   - component: {fileID: 8119525795852271401}
   - component: {fileID: 1252694536677347387}
+  - component: {fileID: 5304765741451573336}
   m_Layer: 0
   m_Name: FX_Portal_Sphere_01
   m_TagString: Untagged
@@ -9532,6 +9533,30 @@ MonoBehaviour:
   damage: 0
   destoryTime: 0
   isShoot: 0
+--- !u!114 &5304765741451573336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548648308873678835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28efc4beb690a4d45addef78345c995c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallBulletPrefab: {fileID: 3016696864302411366, guid: eeef79759e30ad94590ede2d8bc70f79,
+    type: 3}
+  isShoot: 0
+  isThink: 0
+  tableID: 6913
+  attack: 0.2
+  bulletCount: 0
+  speed: 0
+  destoryTime: 0
+  delayTime: 0
+  delay: 0
+  target: {fileID: 0}
 --- !u!1 &548729743913798831
 GameObject:
   m_ObjectHideFlags: 0

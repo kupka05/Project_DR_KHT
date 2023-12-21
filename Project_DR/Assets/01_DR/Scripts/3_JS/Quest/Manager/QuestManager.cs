@@ -140,7 +140,6 @@ namespace Js.Quest
         // 단 선행퀘스트 조건을 충족해야 변경된다.
         public void UpdateQuestStatesToCanStartable()
         {
-            GFunc.Log("OnQuestDataCallback()");
             foreach (var item in QuestList)
             {
                 // 상태가 [시작불가]일 경우

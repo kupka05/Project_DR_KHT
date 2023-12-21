@@ -228,7 +228,6 @@ public class GameManager : MonoBehaviour
             isGameOver = true;
 
             UserData.ClearDungeon();
-            UserData.ResetPlayer();
 
             string lobbySceneName = "3_LobbyScene";
             SceneLoad(lobbySceneName);
@@ -323,7 +322,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void AllocatedGhostObj()
     {        
-        if (UserDataManager.Instance.ClearCount < 1)
+        if (UserDataManager.Instance.ClearCount < 100)
         {
             if (isInItGhost == false)
             {       // 문제 X

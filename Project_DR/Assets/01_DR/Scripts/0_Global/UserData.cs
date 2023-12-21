@@ -383,6 +383,11 @@ public static class UserData
             GameManager.instance.DestroyGameManager();
         }
 
+        // 퀘스트 재생성 & DB에서 정보 불러오기 & 아이템 초기화
+        Unit.CreateQuestFromDataTable();
+        Unit.LoadUserQuestDataFromDB();
+        Unit.ResetInventory();
+
         UserDataManager.Instance.isClear = false;
         UserDataManager.Instance.isGameOver = false;
 

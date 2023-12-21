@@ -95,6 +95,11 @@ namespace Js.Quest
         // 데이터 테이블에 있는 퀘스트를 가져와서 생성
         public void CreateQuestFromDataTable()
         {
+            GFunc.Log("CreateQuestFromDataTable()");
+
+            // 퀘스트 리스트를 초기화
+            UserDataManager.ResetQuestList();
+
             List<int> idTable = DataManager.Instance.GetDataTableIDs(QUEST_FIRST_ID);
             for (int i = 0; i < idTable.Count; i++)
             {
@@ -129,6 +134,22 @@ namespace Js.Quest
         public void ResetQuest(int id)
         {
             GetQuestByID(id).ResetQuest();
+        }
+
+        // 퀘스트 상태 변경[시작불가] -> [시작가능]
+        // 단 선행퀘스트 조건을 충족해야 변경된다.
+        public void UpdateQuestStatesToCanStartable()
+        {
+            GFunc.Log("OnQuestDataCallback()");
+            foreach (var item in QuestList)
+            {
+                // 상태가 [시작불가]일 경우
+                if (item.QuestState.State.Equals(QuestState.StateQuest.NOT_STARTABLE))
+                {
+                    // [시작가능]으로 상태 변경 시도
+                    item.ChangeToNextState();
+                }
+            }
         }
 
         // 퀘스트 상태 변경[시작가능] -> [시작불가]
@@ -343,22 +364,6 @@ namespace Js.Quest
                     quest.QuestState.ChangeState((QuestState.StateQuest)item.currentState);
                     quest.ChangeCurrentValue(item.currentValue);
                 }
-            }
-        }
-
-        // 퀘스트 상태 변경[시작불가] -> [시작가능]
-        // 단 선행퀘스트 조건을 충족해야 변경된다.
-        private void UpdateQuestStatesToCanStartable()
-        {
-            GFunc.Log("OnQuestDataCallback()");
-            foreach (var item in QuestList)
-            {
-                // 상태가 [시작불가]일 경우
-                if (item.QuestState.State.Equals(QuestState.StateQuest.NOT_STARTABLE))
-                {
-                    // [시작가능]으로 상태 변경 시도
-                    item.ChangeToNextState();
-                }    
             }
         }
 

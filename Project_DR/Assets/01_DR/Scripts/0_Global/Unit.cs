@@ -62,12 +62,50 @@ public static class Unit
         return QuestManager.Instance.GetQuestByID(id).ClearQuest();
     }
 
-    // [진행중] 상태의 메인 퀘스트를 가져온다
-    public static List<Quest> GetInProgressMainQuest()
+    // id를 받아서 해당 퀘스트가 [완료가능] 상태일 경우
+    // true / 아닐경우 false를 반환한다.
+    public static bool CheckCanCompleteQuest(int id)
     {
-        // 메인 퀘스트 타입을 리스트로 가져옴
+        // 퀘스트가 [완료가능] 상태일 경우 완료시킨다.
+        // 보상도 같이 지급한다.
+        Quest quest = UserDataManager.QuestDictionary[id];
+        if (quest.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE))
+        {
+            return true;
+        }
+
+        // 아닐 경우
+        return false;
+    }
+
+    // [시작가능] 상태의 메인 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetCanStartMainQuest()
+    {
+        return GetCanStartMainQuestForList()[0];
+    }
+
+    // [진행중] 상태의 메인 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetInProgressMainQuest()
+    {
+        return GetInProgressMainQuestForList()[0];
+    }
+
+    // [시작가능] 상태의 메인 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetCanStartMainQuestForList()
+    {
+        // [진행중] 메인 퀘스트 타입를 리스트로 가져옴
         List<Quest> questList = GetQuestsOfType(1);
-        // 가져온 퀘스트 리스트 중에서 [진행중] 상태인 퀘스트만 추출 및 반환
+        // 가져온 퀘스트 리스트 중에서 [1][시작가능] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 1);
+        return questList;
+    }
+
+    // [진행중] 상태의 메인 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetInProgressMainQuestForList()
+    {
+        // [진행중] 메인 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestsOfType(1);
+        // 가져온 퀘스트 리스트 중에서 [2][진행중] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 2);
         return questList; 
     }

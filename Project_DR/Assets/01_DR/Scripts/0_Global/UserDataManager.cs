@@ -217,9 +217,12 @@ public partial class UserDataManager : MonoBehaviour
         dataLoadSuccess = true;
         GFunc.Log("데이터 로드 시간 : " + GetCurrentDate());
 
-        // 데이터 테이블에 있는 퀘스트를 가져와서 생성
+        // 퀘스트가 생성안된 경우 데이터 테이블에 있는 퀘스트를 가져와서 생성
         // && 가져온 퀘스트 데이터에 따라 상태 변경
-        QuestManager.Instance.CreateQuestFromDataTable();
+        if (_questList.Count.Equals(0))
+        {
+            QuestManager.Instance.CreateQuestFromDataTable();
+        }
         QuestManager.Instance.LoadUserQuestDataFromDB();
     }
 

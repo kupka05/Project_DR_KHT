@@ -52,7 +52,7 @@ namespace Js.Quest
 
             // 선행 퀘스트를 다음 상태인 [시작가능]으로 진행
             // 조건 미충족(선행퀘스트 미완료)시 전환 불가
-            ChangeToNextState();
+            //ChangeToNextState();
 
             // TODO: 
             // 1. DB에서 퀘스트 데이터를 가져온 후 호출 -> 콜백 연동해야 됨
@@ -79,6 +79,32 @@ namespace Js.Quest
         public void PrintCurrentState()
         {
             _currentState.PrintCurrentState();
+        }
+
+        // 퀘스트가 [시작가능] 상태 조건을 충족하는지 체크
+        public bool CheckStateForCanStartable()
+        {
+            // [시작가능] 상태 조건을 충족할 경우
+            // 선행 퀘스트가 있을 경우
+            int requiredQuestID = _quest.QuestData.RequiredQuestID;
+            if (requiredQuestID.Equals(0).Equals(false))
+            {
+                // 선행 퀘스트의 상태가 [완료]일 경우
+                if (UserDataManager.QuestDictionary[requiredQuestID].
+                    QuestState.State.Equals(StateQuest.COMPLETED))
+                {
+                    return true;
+                }
+            }
+
+            // 선행 퀘스트가 없을 경우
+            else
+            {
+                return true;
+            }
+
+            // [시작가능] 상태 조건을 충족하지 못할 경우
+            return false;
         }
     }
 }

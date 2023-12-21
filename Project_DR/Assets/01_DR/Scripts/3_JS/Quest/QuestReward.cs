@@ -27,9 +27,12 @@ namespace Js.Quest
             _questRewardData = new QuestRewardData(id);
         }
 
-        // 퀘스트 보상(1 ~ 4)을 획득한다
+        // 퀘스트 보상을 획득한다
         public void GetReward()
         {
+            // 퀘스트 보상 ID가 0일 경우 예외처리
+            if (QuestRewardData.ID.Equals(0)) { return; }
+
             // 골드, EXP 보상 지급
             UserData.AddQuestScore(_questRewardData.GiveGold, _questRewardData.GiveEXP);
 

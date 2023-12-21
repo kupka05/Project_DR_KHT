@@ -866,14 +866,22 @@ public class LobbyEvent : MonoBehaviour
             npcDialog.text = dialog.log.Peek().ToString();
             dialog.log.Dequeue();
         }
-        else if (isClear)
+
+        // 클리어 했으면 디스플레이 띄워주고 isClear 꺼주기
+        else if (UserData.ClearCheck())
         {
-            isClear = false;
             SetMBTIResult();
             ChangeDisplayButton("Result_MBTI");
+            UserDataManager.Instance.isClear = false;
         }
+        // 문 열림
         else
         {
+            // 이벤트 추가
+            Unit.ChangeQuestStateToInProgress(31_1_1_001);
+            Unit.ChangeQuestStateToInProgress(31_1_1_002);
+            Unit.ChangeQuestStateToInProgress(31_1_1_003);
+
             ChangeDisplayButton("Main");
             OpenSpawnRoomDoor();
         }

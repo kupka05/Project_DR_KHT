@@ -104,9 +104,18 @@ public static class UserData
     /// <summary>플레이어 데이터를 초기화 메서드</summary>
     public static void ResetPlayer()
     {
+        ClearDungeon();
         UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
         UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
+    }
+    public static bool ClearCheck()
+    {
+        return UserDataManager.Instance.isClear;
+    }
 
+    public static void ClearDungeon()
+    {
+        UserDataManager.Instance.isClear = true;
     }
 
 

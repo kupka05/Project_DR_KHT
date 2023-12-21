@@ -52,9 +52,7 @@ public class BounceBullet : MonoBehaviour
                     GFunc.Log($"데미지:{damage}");
 
                     //GameObject instanceEffect = Instantiate(bounceEffect, transform.position, Quaternion.identity);
-
                 }
-
             }
 
         Destroy(this.gameObject, 8.0f);

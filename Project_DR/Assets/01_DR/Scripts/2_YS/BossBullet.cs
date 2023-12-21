@@ -39,7 +39,6 @@ public class BossBullet : MonoBehaviour
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         damageCollider = GetComponent<DamageCollider>();
 
-        transform.LookAt(target.position);
         //rigid.velocity = transform.forward * 10.0f;
         damageCollider.Damage = damage;
 
@@ -102,6 +101,16 @@ public class BossBullet : MonoBehaviour
                     Destroy(this.gameObject);
                     break;
                 }
+
+            }
+        }
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag("Wall"))
+            {
+                Destroy(this.gameObject);
+                GFunc.Log("벽이나 바닥 만났을 때 파괴되는가");
             }
         }
 

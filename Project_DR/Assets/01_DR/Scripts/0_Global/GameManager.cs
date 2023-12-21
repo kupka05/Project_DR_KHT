@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
     public static List<bool> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
 
     private bool isClear = false;       // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
+    public bool isGameOver;
 
     public bool IsClear
     {
@@ -219,6 +220,10 @@ public class GameManager : MonoBehaviour
     // 게임오버
     public void GameOver()
     {
+        isGameOver = true;
+
+        UserData.ResetPlayer();
+
         fader.DoFadeIn();
         screenText = player.GetComponent<ScreenText>();
         screenText.OnScreenText(gameoverText);
@@ -230,17 +235,42 @@ public class GameManager : MonoBehaviour
     // 현재 씬 리셋
     public void ResetScene()
     {
+        isGameOver = true;
+        UserData.ResetPlayer();
+
+
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneLoad(currentSceneName);
     }
+
 
     /// <summary>
     /// 던전 클리어후 로비로 보내줄 함수
     /// </summary>
     public void ClearDungeon()
     {
-        string lobbySceneName = "3_LobbyScene";
-        SceneLoad(lobbySceneName);
+        // 출구 층이면
+        if (nowFloor == isPlayerMaxFloor)
+        {
+            isGameOver = true;
+
+            UserData.ClearDungeon();
+            UserData.ResetPlayer();
+
+            string lobbySceneName = "3_LobbyScene";
+            SceneLoad(lobbySceneName);
+        }
+        else if (nowFloor < isPlayerMaxFloor)
+        {
+            nowFloor++;
+            string dungeonSceneName = "SG_TestScene";
+            SceneLoad(dungeonSceneName);
+        }
+        else
+            GFunc.Log("클리어 실패, 현재 층 : " + nowFloor);
+
+
+     
     }       // ClearDungeon()
 
 
@@ -265,6 +295,11 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
         SceneManager.LoadScene(_sceneName);
+
+        if (isGameOver)
+        {
+            Destroy(gameObject);
+        }
     }
 
 

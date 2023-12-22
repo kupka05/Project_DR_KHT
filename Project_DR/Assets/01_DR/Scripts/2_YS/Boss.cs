@@ -829,10 +829,10 @@ public class Boss : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isStart)
         {
+            isStart = true;            
             // 보스 조우 퀘스트 콜백
             QuestCallback.OnBossMeetCallback(bossId);
             npc.BossMeet();
-            isStart = true;            
         }
     }
 

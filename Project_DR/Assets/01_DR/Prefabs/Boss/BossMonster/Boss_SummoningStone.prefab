@@ -1007,6 +1007,7 @@ GameObject:
   - component: {fileID: 9081362816534483886}
   - component: {fileID: 61653384450438780}
   - component: {fileID: 7693904467710096460}
+  - component: {fileID: 545630668}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -1108,6 +1109,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7cac795bb9b3e240956efd951c7b772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &545630668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127096268029813889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ab72ebc1fe54e7418b9f51d70845b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1884085003108557245}
+        m_TargetAssemblyTypeName: NPCUIImage, Assembly-CSharp
+        m_MethodName: set_IsHit
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  input1:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7505248479546132657}
+        m_TargetAssemblyTypeName: NPCUIImage, Assembly-CSharp
+        m_MethodName: set_IsHit
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  input2:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 682988740631223006}
+        m_TargetAssemblyTypeName: NPCUIImage, Assembly-CSharp
+        m_MethodName: set_IsHit
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  input3:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8862001075633923545}
+        m_TargetAssemblyTypeName: NPCUIImage, Assembly-CSharp
+        m_MethodName: set_IsHit
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &2143519145989368516
 GameObject:
   m_ObjectHideFlags: 0

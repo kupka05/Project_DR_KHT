@@ -131,6 +131,16 @@ public class ItemColliderHandler : MonoBehaviour
                     //Debug.Log(itemDataComponent.ItemData);
                     ItemData itemData = (ItemData)itemDataComponent.ItemData;
                     int id = itemData.ID;
+
+                    // 만약 퀘스트 아이템일 경우, 경험치 또는 골드를 올려줌
+                    if (itemData is QuestItemData qi)
+                    {
+                        UserData.AddItemScore(id);
+
+                        Destroy(gameObject);
+                        return;
+                    }
+
                     ItemManager.instance.InventoryCreateItem(other.transform.position, id);
                 }
                 else
@@ -138,6 +148,9 @@ public class ItemColliderHandler : MonoBehaviour
                     // 디버그용
                     GFunc.LogWarning("Item Error!");
                 }
+
+     
+
                 Destroy(gameObject);
             }
         }

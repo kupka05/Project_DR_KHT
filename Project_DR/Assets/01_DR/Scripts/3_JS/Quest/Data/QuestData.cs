@@ -52,7 +52,7 @@ namespace Js.Quest
         /*************************************************
          *                 Public Methods
          *************************************************/
-        public QuestData(int id)
+        public QuestData(Quest quest, int id)
         {
             // Init
             _id = id;
@@ -64,8 +64,8 @@ namespace Js.Quest
             _type = (QuestType)Data.GetInt(id, "Type");
             _clearEventIDs = GFunc.SplitIds(Data.GetString(id, "ClearEventID"));
             _failEventIDs = GFunc.SplitIds(Data.GetString(id, "FailEventID"));
-            _clearReward = new QuestReward(Data.GetInt(id, "ClearRewardKeyID"));
-            _failReward = new QuestReward(Data.GetInt(id, "FailRewardKeyID"));
+            _clearReward = new QuestReward(quest, Data.GetInt(id, "ClearRewardKeyID"));
+            _failReward = new QuestReward(quest, Data.GetInt(id, "FailRewardKeyID"));
 
             // 디버그
             _clearRewardData = ClearReward.QuestRewardData;

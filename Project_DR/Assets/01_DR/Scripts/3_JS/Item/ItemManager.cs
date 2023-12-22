@@ -58,6 +58,12 @@ public class ItemManager : MonoBehaviour
         _inventory = inventory;
     }
 
+    // ID로 인벤토리에 있는 아이템을 삭제
+    public bool RemoveInventoryItemForID(int id, int amount)
+    {
+        return _inventory.RemoveInventoryItemForID(id, amount);
+    }
+
     // 자동으로 타입을 찾아서 인벤토리에 아이템을 생성
     public void InventoryCreateItem(Vector3 handPos, int id, int amount = 1)
     {

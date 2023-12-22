@@ -386,7 +386,6 @@ namespace Js.Quest
 {
                 // 일치하는 아이템의 갯수를 가져옴
                 itemCount = GetItemCountByID(id);
-                GFunc.Log($"itemCount = {itemCount}");
             }
 
             // 보유한 퀘스트 리스트를 순회해서 값 변경

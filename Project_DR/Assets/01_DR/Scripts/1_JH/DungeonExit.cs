@@ -26,14 +26,14 @@ public class DungeonExit : MonoBehaviour
         }
     }
 
-    private async void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Player"))
         {
             if (isLobby)
             {
-                //SceneLoad(sceneName);
-                await LoadSceneAsync(sceneName);
+                SceneLoad(sceneName);
+                //await LoadSceneAsync(sceneName);
             }
 
             else if(GameManager.instance.isPlayerMaxFloor <= GameManager.instance.nowFloor )

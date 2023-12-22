@@ -116,6 +116,18 @@ namespace Js.Quest
             // 퀘스트가 [완료가능] 상태일 경우
             if (_quest.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE))
             {
+                // 조건이 [7]증정일 경우
+                // && 아이템 차감시도 하고 실패할 경우
+                if (QuestData.Condition.Equals(7))
+                {
+                    if (! Unit.RemoveInventoryItemForID(QuestData.KeyID, QuestData.ClearValue))
+                    {
+                        // [2]'진행중'으로 상태 변경 & 처리 종료
+                        QuestState.ChangeState(QuestState.StateQuest.IN_PROGRESS);
+                        return 0;
+                    }
+                }
+
                 // [완료] 상태 변경 & 클리어 보상 지급
                 QuestState.ChangeToNextState();
                 ClearReward.GetReward();

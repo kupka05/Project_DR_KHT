@@ -36,6 +36,8 @@ public class NPC_CanvasController : MonoBehaviour
     private int nowConversationRefID;           // 현재 대화에서 참조 되고 있는 ID    
     // TODO : Ray의 판정을 위해 Image컴포넌트를 가져와야할수도 있음
 
+    public event System.Action<int> RewardEvent;        // 보상 지급하라고 NPC에게 알려주는 이벤트
+
     #region MonoBehaviour함수
     private void Awake()
     {
@@ -221,7 +223,9 @@ public class NPC_CanvasController : MonoBehaviour
     {
         // 보상
         // 플레이어의 인벤토리에 보상 넣어주는 기능
-        GFunc.Log($"보상 ID : {_compensationRefId} 가져왔음");
+        //GFunc.Log($"보상 ID : {_compensationRefId} 가져왔음");
+
+        RewardEvent?.Invoke(_compensationRefId);
     }
 
 
@@ -236,7 +240,7 @@ public class NPC_CanvasController : MonoBehaviour
     {
         // 다음 대사 출력하는 기능        
         //string conversationText = Data.GetString(_conversationRefId, "OutPutText");
-        GFunc.Log($"나 다음대사 추가후 출력함\n참조ID : {_conversationRefId}");
+        //GFunc.Log($"나 다음대사 추가후 출력함\n참조ID : {_conversationRefId}");
         npc.EnQueueConversation(_conversationRefId);
         npc.DeQueueConversation();
     }       // ItConveration()

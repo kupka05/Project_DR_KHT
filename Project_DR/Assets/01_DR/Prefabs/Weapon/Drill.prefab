@@ -1308,6 +1308,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skill: 2
   trigger: 0
+  landingForce: 0
+  knockbackRange: 0
+  TDcheckerHeight: 0
+  TDcheckerTiming: 0
+  GDcheckerTiming: 0
   skillEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -1317,9 +1322,6 @@ MonoBehaviour:
   shootDisableEvent:
     m_PersistentCalls:
       m_Calls: []
-  TDcheckerHeight: 0
-  TDcheckerTiming: 0
-  GDcheckerTiming: 0
 --- !u!1 &5403557061095980771
 GameObject:
   m_ObjectHideFlags: 0
@@ -3181,6 +3183,7 @@ MonoBehaviour:
   GroundedLayers:
     serializedVersion: 2
     m_Bits: 2097153
+  grabbable: {fileID: 0}
   EjectInput: 00000000
   ReleaseSlideInput: 00000000
   ReloadInput: 00000000
@@ -3250,7 +3253,7 @@ MonoBehaviour:
   BeingHeld: 0
   GrabButton: 0
   Grabtype: 0
-  GrabPhysics: 0
+  GrabPhysics: 1
   GrabMechanic: 0
   GrabSpeed: 20
   RemoteGrabbable: 1

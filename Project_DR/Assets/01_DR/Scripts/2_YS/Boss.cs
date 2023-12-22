@@ -12,7 +12,6 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
-    public UnityEvent bossMeet;
 
     public UnityEngine.UI.Slider bossHPSlider;
 
@@ -122,6 +121,10 @@ public class Boss : MonoBehaviour
     public float damageRadius = 1.0f;
 
 
+    [Header("Conversation")]
+    public BossNPC npc;
+    public UnityEvent bossMeet;
+
     //[Header("유도 미사일 테스트")]
     //public Transform testPort;
     //public GameObject testBullet;
@@ -157,6 +160,7 @@ public class Boss : MonoBehaviour
             bossState.GetComponent<BossState>().CastSpell();
         }
 
+        npc = GetComponent<BossNPC>();
     }
 
     void FixedUpdate()
@@ -825,16 +829,17 @@ public class Boss : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isStart)
         {
-            bossMeet?.Invoke();
-
-            // 보스 퀘스트 콜백
+            // 보스 조우 퀘스트 콜백
             QuestCallback.OnBossMeetCallback(bossId);
-
-            isStart = true;
-            GFunc.Log("인식되냐");
-            StartCoroutine(ExecutePattern());
-            
+            npc.BossMeet();
+            isStart = true;            
         }
+    }
+
+    // 전투 시작
+    public void StartAttack()
+    {
+        StartCoroutine(ExecutePattern());
     }
 
 }

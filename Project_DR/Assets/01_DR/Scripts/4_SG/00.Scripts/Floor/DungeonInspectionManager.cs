@@ -16,7 +16,7 @@ public class DungeonInspectionManager : MonoBehaviour
     public static DungeonInspectionManager dungeonManagerInstance;
 
     private int returnCount = 0;        // 몇번 재귀했는지 확인할 변수
-    private const int MAXRECREATCOUNT = 30;
+    private const int MAXRECREATCOUNT = 100;
     private bool isReLoadScene;
 
     private int reCreacteCount = 0;         // 던전 재생성한 횟수
@@ -69,11 +69,11 @@ public class DungeonInspectionManager : MonoBehaviour
 
         yield return null;
         reCreacteCount++;
-        if(reCreacteCount < MAXRECREATCOUNT && isReLoadScene == false)
-        {
-            isReLoadScene = true;
-            ReLoadDungeonScene();
-        }
+        //if(reCreacteCount < MAXRECREATCOUNT && isReLoadScene == false)
+        //{
+        //    isReLoadScene = true;
+        //    ReLoadDungeonScene();
+        //}
         creator.CreateDungeon();
         //GFunc.Log($"던전 재생성");
         isTryDungeonCreate = false;

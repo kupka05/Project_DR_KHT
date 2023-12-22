@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Js.Quest;
+using System.Text;
+
 
 public class BossNPC : NPC
 {
@@ -11,7 +14,7 @@ public class BossNPC : NPC
     }
     private void AwakeInIt()
     {
-        npcID = 30_3_1_001;
+        npcID = 6872;
 
     }       // AwakeInIt()
 
@@ -25,14 +28,12 @@ public class BossNPC : NPC
 
     private void Start()
     {      
-
-
         GetCanvasScript_Obj();
         OnCanvasObj();
 
         ParamsInIt(npcID);
         NpcCanvas.NameUpdate(npcName);
-        ChangeAnimationString(npcWaitMotion);
+        //ChangeAnimationString(npcWaitMotion);
         OffCanvasObj();
 
     }       // Start()
@@ -69,12 +70,13 @@ public class BossNPC : NPC
         if (Camera.main)
         {
             canvasObj.transform.parent = Camera.main.transform;
-            canvasObj.transform.localPosition = new Vector3(0,-0.2f,0.5f);
+            canvasObj.transform.localPosition = new Vector3(0.2f,-0.35f,1.2f);
             canvasObj.transform.localRotation = Quaternion.identity;
         }
 
         OnCanvasObj();
-        base.PickConversationEvent(npcID);
+        PickConversation(npcID);
+        //base.PickConversationEvent(npcID);
     }       // StartConvertion()
 
     /// <summary>
@@ -113,6 +115,55 @@ public class BossNPC : NPC
         GFunc.Log("대화를 시작한다.");
         StartConvertion();
     }
+
+
+    public void PickConversation(int _npcId)
+    {
+        // 테이블의 해당 conversationID를 가져와 분리
+        string conversation = Data.GetString(_npcId, "ConversationTableID");
+        int[] conversationIds = GFunc.SplitIds(conversation);
+
+        // 디버그용
+        //Unit.ChangeQuestStateToInProgress(31_1_1_001);
+
+        int conversationId = FindQuestConversationID(conversationIds);
+
+        if (conversationId == -1)
+        {
+            GFunc.Log("찾으려는 현재 진행중인 퀘스트 ID가 없습니다.");
+            return;
+        }
+        GFunc.Log(conversationId);
+
+        EnQueueConversation(conversationId);
+        DeQueueConversation();
+    }
+
+    /// <summary>
+    /// 현재 진행중인 퀘스트의 ID 를 찾는 함수
+    /// </summary>
+    /// <param name="_conversationIds">찾고자 하는 ID 배열</param>
+    /// <returns></returns>
+    public int FindQuestConversationID(int[] _conversationIds)
+    {
+        Quest curQuest = Unit.GetInProgressMainQuest();
+        StringBuilder stringBuilder = new StringBuilder();      // 비교할때 사용할 StringBuilder
+
+        for (int i = 0; i < _conversationIds.Length; i++)
+        {
+            stringBuilder.Clear();
+            stringBuilder.Append(Data.GetString(_conversationIds[i], "AntecedentQuest"));
+            stringBuilder.Replace("_", "");
+
+            if (curQuest.QuestData.ID == int.Parse(stringBuilder.ToString()))
+            {
+                GFunc.Log("ID 발견 : " + curQuest.QuestData.ID);
+                return _conversationIds[i];
+            }
+        }
+        return -1;
+    }
+
 
 
 }       // ClassEnd

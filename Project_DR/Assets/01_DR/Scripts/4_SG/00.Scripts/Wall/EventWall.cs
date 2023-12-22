@@ -59,33 +59,33 @@ public class EventWall : MonoBehaviour
         if (Physics.Raycast(leftPos, -transform.up, out hit, range, layerMask))
         {
             direction = Dir.Left;
-            GFunc.Log("왼쪽");
+            //GFunc.Log("왼쪽");
         }
         else if (Physics.Raycast(rightPos, -transform.up, out hit, range, layerMask))
         {
             direction = Dir.Right;
-            GFunc.Log("오른쪽");
+            //GFunc.Log("오른쪽");
         }
         else if (Physics.Raycast(rightPos, -transform.up, out hit, range, layerMask))
         {
             direction = Dir.Up;
-            GFunc.Log("위");
+            //GFunc.Log("위");
         }
         else if (Physics.Raycast(rightPos, -transform.up, out hit, range, layerMask))
         {
             direction = Dir.Down;
-            GFunc.Log("아래");
+            //GFunc.Log("아래");
         }
         else
         {
 
             if (Physics.Raycast(pos, -transform.up, out hit, 1, layerMask))
             {
-                GFunc.Log("중앙에서는 발견");
+                //GFunc.Log("중앙에서는 발견");
             }
             else
             {
-                GFunc.Log("아무것도 체크 못함");
+                //GFunc.Log("아무것도 체크 못함");
                 direction = Dir.None;
             }
             return;
@@ -93,7 +93,7 @@ public class EventWall : MonoBehaviour
 
         if (!hit.collider.gameObject.CompareTag("Floor"))
         {
-            GFunc.Log("바닥이 아님");
+            //GFunc.Log("바닥이 아님");
             return;
         }
         EventWallPosSet();

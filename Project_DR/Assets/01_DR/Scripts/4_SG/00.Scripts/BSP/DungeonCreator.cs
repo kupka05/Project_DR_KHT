@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -152,16 +153,20 @@ public class DungeonCreator : MonoBehaviour
     private int pcRoomWidth;       // 플레이어방 넓이
     private int pcRoomHeight;      // 플레이어방 높이
     private FloorMeshPos playerRoomCornerPos;       // 플레이어방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
+    private GameObject pcRoomFloorObj;
     [Space]
     private float bossRoomDistance;      // 마지막 방과 보스방의 거리
     private int bossRoomWidth;           // 보스방 넓이
     private int bossRoomHeight;          // 보스방 높이
     private FloorMeshPos bossRoomCornerPos;         // 보스방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
+    private GameObject bossRoomFloorObj;
     [Space]
     private float nextStageRoomDistance; // 보스방과 다음스테이지의 거리
     private int nextStageRoomWidth;      // 다음스테이지방 넓이
     private int nextStageRoomHeight;     // 다음스테이지방 높이    
     private FloorMeshPos nextStageRoomCornerPos;   // 다음스테이지방 좌표를 넣어주어서 방의 좌표를 알수 있게할것임
+    private GameObject nextStageFloorObj;
+
     [Header("WallObj")]
     // 벽 오브젝트 설정
     public GameObject wallVertical;
@@ -203,7 +208,19 @@ public class DungeonCreator : MonoBehaviour
     // 커스텀 방 이후 제작된 bsp방을 관리할 List
     List<Transform> bspRoom = new List<Transform>();
 
+    List<GameObject> bspMeshList = new List<GameObject>();
+
+    List<Node> listOfRoom = new List<Node>();
+
+    private GameObject wallParent;
+    private GameObject floorParent;
+    private GameObject corridorParent;
+    private GameObject roopParent;
+
+
     private int playerClearCount;
+
+    private bool isReCreate = false;
 
 
     void Start()
@@ -217,7 +234,13 @@ public class DungeonCreator : MonoBehaviour
     // 던전 생성 함수
     public void CreateDungeon()
     {
+        isReCreate = false;
+        DungeonInspectionManager.dungeonManagerInstance.FloorCollision = false;
+        DungeonInspectionManager.dungeonManagerInstance.isEndCreateFloor = false;
+
+        bspMeshList.Clear();
         bspRoom.Clear();
+        listOfRoom.Clear();
         // 기존 자식 객체 삭제
         DestroyAllChildren();
 
@@ -225,66 +248,150 @@ public class DungeonCreator : MonoBehaviour
         DungeonGenerator generator = new DungeonGenerator(dungeonWidth, dungeonHeight);
 
         // 방 목록 계산
-        var listOfRooms = generator.CalculateRooms(maxIterations, roomWidthMin, roomLengthMin,
+        listOfRoom = generator.CalculateRooms(maxIterations, roomWidthMin, roomLengthMin,
             roomBottomCornerModifier, roomTopCornerModifier, roomOffset, corridorWidth);
 
         // 벽 부모 오브젝트 생성
         GameObject wallParent = new GameObject("WallParent");
-        wallParent.transform.parent = transform;
+        wallParent.transform.parent = transform;        
         possibleDoorVerticalPosition = new List<Vector3>();
         possibleDoorHorizontalPosition = new List<Vector3>();
         possibleWallHorizontalPosition = new List<Vector3>();
         possibleWallVerticalPosition = new List<Vector3>();
+        this.wallParent = wallParent;
 
         // 바닥의 부모 오브젝트 생성
         GameObject floorParent = new GameObject("FloorMeshParent");
         floorParent.transform.parent = transform;
+        this.floorParent = floorParent;
+
         // 지붕의 부모 오브젝트 생성
         GameObject roopParent = new GameObject("RoopMeshParent");
         roopParent.transform.parent = transform;
+        this.roopParent = roopParent;
 
         // 복도의 부모 오브젝트 생성
-        GameObject corridorParnet = new GameObject("CorridorMeshParent");
-        corridorParnet.transform.parent = transform;
+        GameObject corridorParent = new GameObject("CorridorMeshParent");
+        corridorParent.transform.parent = transform;
+        this.corridorParent = corridorParent;
 
 
         // 각 방에 대한 메시 생성
-        for (int i = 0; i < listOfRooms.Count; i++)
+        for (int i = 0; i < listOfRoom.Count; i++)
         {
-            CreateMesh(listOfRooms[i].BottomLeftAreaCorner,
-                listOfRooms[i].TopRightAreaCorner, listOfRooms[i].isFloor, floorParent, corridorParnet);
+            CreateMesh(listOfRoom[i].BottomLeftAreaCorner,
+                listOfRoom[i].TopRightAreaCorner, listOfRoom[i].isFloor, floorParent, corridorParent);
         }
 
+        // 1.플레이어방 바닥 생성
+        PlayerStartRoomCreate(floorParent);
+
+        // 2.보스방 바닥 생성
+        BossRoomCreate(floorParent);
+        // 3.다음스테이지방 바닥 생성
+        NextStageRoomCreate();
+
+        DungeonInspectionManager.dungeonManagerInstance.isEndCreateFloor = true;
+        /* 4.곂치는지 체크
+         *  곂친다면 이 아래로 가지 않고 DungeonCreate 다시 호출         
+         */
+        //CheckRecreate();
+
+        //GFunc.Log($"바닥생성이후 isReCreate값 :{isReCreate}");
+        //if(isReCreate == true)
+        //{
+        //    GFunc.Log($"던전 재생성 호출");
+        //    CreateDungeon();
+        //    return;
+        //}
+        //else { /*PASS*/ }
+         
+
+        StartCoroutine(BuildDelay());
+
+        //====================================== 이 아래부터는 바닥 생성 이후 ===================================
+        #region 잠시 Retion
+        //PlayerStartRoomBuild(bspMeshList[0]);      // LEGACYPAram : floorParent
+        //BossRoomBuild(bspMeshList[^1]);
+        //NextStageRoomBuild();
+
         #region 땅바닥 OBj 생성
-        //각 방에 대한 땅바닥Obj 생성
+        ////각 방에 대한 땅바닥Obj 생성
+        ////for (int i = 0; i < listOfRooms.Count; i++)
+        ////{
+        ////    CreateMeshInFloor(listOfRooms[i].BottomLeftAreaCorner,
+        ////        listOfRooms[i].TopRightAreaCorner, listOfRooms[i].isFloor, floorParent, corridorParnet);
+        ////}
+        #endregion 땅바닥 OBj 생성
+
+        //// 벽 생성
+        //CreateWalls(wallParent);
+
+        //// 각 방마다 지붕 생성
         //for (int i = 0; i < listOfRooms.Count; i++)
         //{
-        //    CreateMeshInFloor(listOfRooms[i].BottomLeftAreaCorner,
-        //        listOfRooms[i].TopRightAreaCorner, listOfRooms[i].isFloor, floorParent, corridorParnet);
+        //    CreateRoof(listOfRooms[i].BottomLeftAreaCorner,
+        //            listOfRooms[i].TopRightAreaCorner, roopParent);
         //}
-        #endregion 땅바닥 OBj 생성
+
+        //// 커스텀 방
+        ////PlayerStartRoomCreate(floorParent);   //  -> 원래 대로 사용하려면 내부에서 주석 수정해야함 (2023.12.22 (15 : 48))
+
+        ////BossRoomCreate(floorParent);          //  -> 원래 대로 사용하려면 내부에서 주석 수정해야함 (2023.12.22 (16 : 08))
+
+        ////NextStageRoomCreate(); //  -> 원래 대로 사용하려면 내부에서 주석 수정해야함 (2023.12.22 (16 : 20))
+
+        //// 각 복도에 문을 생성해주는 함수
+        //for (int i = 0; i < corridorParnet.transform.childCount; i++)
+        //{
+        //    CreateCorridorDoor(corridorParnet.transform.GetChild(i),true,false,false);
+        //}
+
+        //// BSP 각 방 셋팅        
+        //InItRoomsEvent(floorParent);
+
+
+
+
+        ////DungeonInspectionManager.dungeonManagerInstance.isCreateDungeonEnd = true;
+        //GFunc.Log("던전 생성 끝");
+        #endregion 잠시 Retion
+
+    }   // CreateDungeon()
+
+
+    /// <summary>
+    /// 바닥 이후 검사 통과시 구조물 생성해주는 함수
+    /// </summary>
+    private void CreateDungeonBuildTime()
+    {
+        PlayerStartRoomBuild(bspMeshList[0]);      // LEGACYPAram : floorParent
+        //GFunc.Log($"List 마지막에 들어온얘가 뭐지? -> {bspMeshList[^1].name}");
+        int tempBossChildIdx = this.transform.GetChild(1).childCount;
+        BossRoomBuild(this.transform.GetChild(1).GetChild(tempBossChildIdx -1).gameObject);
+        NextStageRoomBuild();
 
         // 벽 생성
         CreateWalls(wallParent);
 
         // 각 방마다 지붕 생성
-        for (int i = 0; i < listOfRooms.Count; i++)
+        for (int i = 0; i < listOfRoom.Count; i++)
         {
-            CreateRoof(listOfRooms[i].BottomLeftAreaCorner,
-                    listOfRooms[i].TopRightAreaCorner, roopParent);
+            CreateRoof(listOfRoom[i].BottomLeftAreaCorner,
+                    listOfRoom[i].TopRightAreaCorner, roopParent);
         }
 
         // 커스텀 방
-        PlayerStartRoomCreate(floorParent);
+        //PlayerStartRoomCreate(floorParent);   //  -> 원래 대로 사용하려면 내부에서 주석 수정해야함 (2023.12.22 (15 : 48))
 
-        BossRoomCreate(floorParent);
+        //BossRoomCreate(floorParent);          //  -> 원래 대로 사용하려면 내부에서 주석 수정해야함 (2023.12.22 (16 : 08))
 
-        NextStageRoomCreate(bossRoomCornerPos);
+        //NextStageRoomCreate(); //  -> 원래 대로 사용하려면 내부에서 주석 수정해야함 (2023.12.22 (16 : 20))
 
         // 각 복도에 문을 생성해주는 함수
-        for (int i = 0; i < corridorParnet.transform.childCount; i++)
+        for (int i = 0; i < corridorParent.transform.childCount; i++)
         {
-            CreateCorridorDoor(corridorParnet.transform.GetChild(i),true,false,false);
+            CreateCorridorDoor(corridorParent.transform.GetChild(i), true, false, false);
         }
 
         // BSP 각 방 셋팅        
@@ -293,9 +400,10 @@ public class DungeonCreator : MonoBehaviour
 
 
 
-        DungeonInspectionManager.dungeonManagerInstance.isCreateDungeonEnd = true;
+        //DungeonInspectionManager.dungeonManagerInstance.isCreateDungeonEnd = true;
         GFunc.Log("던전 생성 끝");
-    }   // CreateDungeon()
+
+    }       // CreateDungeonBuildTime()
 
 
     /// <summary>
@@ -651,6 +759,10 @@ public class DungeonCreator : MonoBehaviour
         GameObject dungeonFloor = new GameObject("Mesh" + InItNum + bottomLeftCorner,
             typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
 
+
+        bspMeshList.Add(dungeonFloor);  // -> 이부분이 좀 의심됨
+
+
         dungeonFloor.gameObject.tag = "Floor";
 
         InItNum++;
@@ -997,9 +1109,12 @@ public class DungeonCreator : MonoBehaviour
         GameObject dungeonFloor = new GameObject("PCRoomMesh" + InItNum + bottomLeftV,
             typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
 
-        GameObject wallParnet = new GameObject("CustomRoomWallParent");
+        pcRoomFloorObj = dungeonFloor;
+        //pcRoomFloorObj.transform.parent = this.transform;
+        /* 던전 1 차수정 주석 처리 _ 2023.12.22_ 15:35 */
+        //GameObject wallParnet = new GameObject("CustomRoomWallParent");
         dungeonFloor.transform.parent = this.transform;
-        wallParnet.transform.parent = dungeonFloor.transform;
+        //wallParnet.transform.parent = dungeonFloor.transform;
 
         dungeonFloor.gameObject.tag = "Floor";
 
@@ -1037,14 +1152,52 @@ public class DungeonCreator : MonoBehaviour
         // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
         playerRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
-        #region PlayerStart CustomRoom
-        CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
-        CustomRoomCorridorMeshCreate(false, bspfirstRoomBottomCenterPoint, bspFirstRoomTopCenterPoint, firstRoomPos, dungeonFloor,false,false,false);
-        CreatePlayerRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
-        CreateEntrance(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
+
+
+        // 필요 필드 변수
+        // GameObject ,Vector3 -> FloorMeshPos로 대체
+        // 이 위에 까지가 바닥 생성
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
+
+        #region PlayerStart CustomRoom
+        //CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
+        //CustomRoomCorridorMeshCreate(false, bspfirstRoomBottomCenterPoint, bspFirstRoomTopCenterPoint, firstRoomPos, dungeonFloor, false, false, false);
+        //CreatePlayerRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
+        //CreateEntrance(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         #endregion PlayerStart CustomRoom
     }       // PlayerStartRoomCreate()
+
+    /// <summary>
+    /// 플레이어 바닥 이외의것을 추가적으로 생성하는 함수
+    /// </summary>
+    private void PlayerStartRoomBuild(GameObject _bspFloorParent)
+    {
+        GameObject wallParnet = new GameObject("CustomRoomWallParent");        
+        wallParnet.transform.parent = pcRoomFloorObj.transform;
+
+        // 처음으로 매쉬가 생성된 방의 꼭지점Pos 얻기
+        //FloorMeshPos firstRoomPos = _bspFloorParent.transform.GetChild(0).GetComponent<FloorMeshPos>();
+        FloorMeshPos firstRoomPos = _bspFloorParent.transform.GetComponent<FloorMeshPos>();
+        GFunc.Log($"FloorMeshPos == null? : {firstRoomPos == null}");
+        // 방의 하단 중앙위치
+        float bspfirstRoomBottomCenterPoint = (firstRoomPos.bottomLeftCorner.x + firstRoomPos.bottomRightCorner.x) / 2;
+        // 방의 상단 중앙위치
+        float bspFirstRoomTopCenterPoint = (firstRoomPos.topLeftCorner.x + firstRoomPos.topRightCorner.x) / 2;
+
+
+        CustomRoomCorridorCreateMinusPos(wallParnet, playerRoomCornerPos.bottomLeftCorner, playerRoomCornerPos.bottomRightCorner
+            , playerRoomCornerPos.topLeftCorner, playerRoomCornerPos.topRightCorner, false);
+
+        CustomRoomCorridorMeshCreate(false, bspfirstRoomBottomCenterPoint, bspFirstRoomTopCenterPoint, 
+            firstRoomPos, _bspFloorParent, false, false, false);
+
+        CreatePlayerRoomRoof(playerRoomCornerPos.bottomLeftCorner, playerRoomCornerPos.bottomRightCorner,
+            playerRoomCornerPos.topLeftCorner, playerRoomCornerPos.topRightCorner, _bspFloorParent);
+
+        CreateEntrance(playerRoomCornerPos.bottomLeftCorner, playerRoomCornerPos.bottomRightCorner,
+            playerRoomCornerPos.topLeftCorner, playerRoomCornerPos.topRightCorner, _bspFloorParent);
+
+    }       // PlayerStartRoomBuild()
 
     /// <summary>
     /// 플레이어 리스폰 지역 생성하는 함수
@@ -1527,9 +1680,13 @@ public class DungeonCreator : MonoBehaviour
         GameObject dungeonFloor = new GameObject("BossRoomMesh" + InItNum + bottomLeftV,
             typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
 
-        GameObject wallParnet = new GameObject("CustomRoomWallParent");
+        // 던전 1차 수정 2023.12.22 (15 : 53)
+        //GameObject wallParnet = new GameObject("CustomRoomWallParent");
+        //dungeonFloor.transform.parent = this.transform;
+        //wallParnet.transform.parent = dungeonFloor.transform;
+
+        bossRoomFloorObj = dungeonFloor;
         dungeonFloor.transform.parent = this.transform;
-        wallParnet.transform.parent = dungeonFloor.transform;
 
         dungeonFloor.gameObject.tag = "Floor";
 
@@ -1565,14 +1722,45 @@ public class DungeonCreator : MonoBehaviour
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
         bossRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
 
-        CustomRoomCorridorCreatePlusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
-        //CustomRoomCorridorCreateMinusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
-        CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, lastRoomPos, dungeonFloor,false,true,false);
-        CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
-        BossRoomAddComponent(bossRoomCornerPos, dungeonFloor,colCenter);
+
+       // CustomRoomCorridorCreatePlusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);        
+        //CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, lastRoomPos, dungeonFloor,false,true,false);
+        //CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
+        //CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
+        //BossRoomAddComponent(bossRoomCornerPos, dungeonFloor,colCenter);
     }       // BossRoomCreate()
 
+
+    private void BossRoomBuild(GameObject _bspRoomParent)
+    {
+        // 맨 마지막에 생성된 방의 좌표 얻기
+        //FloorMeshPos lastRoomPos = _bspRoomParent.transform.GetChild(_bspRoomParent.transform.childCount - 1).GetComponent<FloorMeshPos>();
+        FloorMeshPos lastRoomPos = _bspRoomParent.transform.GetComponent<FloorMeshPos>();
+
+        Vector3 roomCenter = new Vector3((bossRoomCornerPos.bottomLeftCorner.x + bossRoomCornerPos.bottomRightCorner.x) * 0.5f,
+            floorYPos,
+            (bossRoomCornerPos.topLeftCorner.z + bossRoomCornerPos.bottomLeftCorner.z) * 0.5f);
+
+        // 방의 하단 중앙위치
+        float bspLastRoomBottomCenterPoint = (lastRoomPos.bottomLeftCorner.x + lastRoomPos.bottomRightCorner.x) / 2;
+        // 방의 상단 중앙위치
+        float bspLastRoomTopCenterPoint = (lastRoomPos.topLeftCorner.x + lastRoomPos.topRightCorner.x) / 2;
+
+        GameObject wallParnet = new GameObject("CustomRoomWallParent");
+        wallParnet.transform.parent = bossRoomFloorObj.transform;
+
+        CustomRoomCorridorCreatePlusPos(wallParnet, bossRoomCornerPos.bottomLeftCorner, bossRoomCornerPos.bottomRightCorner,
+            bossRoomCornerPos.topLeftCorner, bossRoomCornerPos.topRightCorner, false);
+
+        CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint,
+            lastRoomPos, bossRoomFloorObj, false, true, false);
+
+        CreateCustomRoomRoof(bossRoomCornerPos.bottomLeftCorner, bossRoomCornerPos.bottomRightCorner,
+            bossRoomCornerPos.topLeftCorner, bossRoomCornerPos.topRightCorner, _bspRoomParent);
+
+        BossRoomAddComponent(bossRoomCornerPos, _bspRoomParent, roomCenter);
+    }
 
     /// <summary>
     /// 보스방 바닥에 보스 스폰과 사망 처리 해주는 컴포넌트 Add해주는 함수
@@ -1664,19 +1852,19 @@ public class DungeonCreator : MonoBehaviour
     /// <summary>
     /// 다음 스테이지로 이동하기위한방 생성
     /// </summary>    
-    private void NextStageRoomCreate(FloorMeshPos bossRoomCornerPos_)
+    private void NextStageRoomCreate()
     {
 
         // 방의 하단 중앙위치
-        float bspLastRoomBottomCenterPoint = (bossRoomCornerPos_.bottomLeftCorner.x + bossRoomCornerPos_.bottomRightCorner.x) / 2;
+        float bspLastRoomBottomCenterPoint = (bossRoomCornerPos.bottomLeftCorner.x + bossRoomCornerPos.bottomRightCorner.x) / 2;
         // 방의 상단 중앙위치
-        float bspLastRoomTopCenterPoint = (bossRoomCornerPos_.topLeftCorner.x + bossRoomCornerPos_.topRightCorner.x) / 2;
+        float bspLastRoomTopCenterPoint = (bossRoomCornerPos.topLeftCorner.x + bossRoomCornerPos.topRightCorner.x) / 2;
 
         //// 바닥 메시 생성을 위한 꼭지점 좌표 설정
         Vector3 bottomLeftV = new Vector3
-            (bspLastRoomTopCenterPoint - (bossRoomWidth / 2), 0f, bossRoomCornerPos_.topLeftCorner.z + bossRoomDistance);
+            (bspLastRoomTopCenterPoint - (bossRoomWidth / 2), 0f, bossRoomCornerPos.topLeftCorner.z + bossRoomDistance);
         Vector3 bottomRightV = new Vector3
-            (bspLastRoomTopCenterPoint + (bossRoomWidth / 2), 0f, bossRoomCornerPos_.topRightCorner.z + bossRoomDistance);
+            (bspLastRoomTopCenterPoint + (bossRoomWidth / 2), 0f, bossRoomCornerPos.topRightCorner.z + bossRoomDistance);
         Vector3 topLeftV = new Vector3(bottomLeftV.x, 0f, bottomLeftV.z + bossRoomHeight);
         Vector3 topRightV = new Vector3(bottomRightV.x, 0f, bottomRightV.z + bossRoomHeight);
 
@@ -1719,10 +1907,15 @@ public class DungeonCreator : MonoBehaviour
         //GameObject dungeonFloor = new GameObject("NextStageRoomMesh" + InItNum + bottomLeftV,
         //    typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
 
-        GameObject wallParnet = new GameObject("CustomRoomWallParent");
-        //dungeonFloor.transform.parent = this.transform;
-        wallParnet.transform.parent = dungeonFloor.transform;
+        //GameObject wallParnet = new GameObject("CustomRoomWallParent");
+        ////dungeonFloor.transform.parent = this.transform;
+        //wallParnet.transform.parent = dungeonFloor.transform;
         dungeonFloor.transform.parent = this.transform;
+
+        dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
+        nextStageRoomCornerPos = dungeonFloor.GetComponent<FloorMeshPos>();
+
+        nextStageFloorObj = dungeonFloor;
 
         //dungeonFloor.gameObject.tag = "Floor";
 
@@ -1769,15 +1962,43 @@ public class DungeonCreator : MonoBehaviour
         #endregion LEGACY
 
 
-        CustomRoomCorridorCreatePlusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
-        CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, bossRoomCornerPos_, dungeonFloor,false,false,true);
-        CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
-        CreateExitObj(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
+        //CustomRoomCorridorCreatePlusPos(wallParnet, bottomLeftV, bottomRightV, topLeftV, topRightV, false);
+        //CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, bossRoomCornerPos_, dungeonFloor,false,false,true);
+        //CreateCustomRoomRoof(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
+        //CreateExitObj(bottomLeftV, bottomRightV, topLeftV, topRightV, dungeonFloor);
         CreateDungeonInspection(colCenter, bottomLeftV, bottomRightV, topLeftV, dungeonFloor);
 
         //CreateNextStageStoneObj(colCenter, dungeonFloor);
 
     }       // NextStageRoomCreate()
+
+    private void NextStageRoomBuild()
+    {
+        GameObject wallParnet = new GameObject("CustomRoomWallParent");
+        wallParnet.transform.parent = nextStageFloorObj.transform;
+
+        // 방의 하단 중앙위치
+        float bspLastRoomBottomCenterPoint = (bossRoomCornerPos.bottomLeftCorner.x + bossRoomCornerPos.bottomRightCorner.x) * 0.5f;
+        // 방의 상단 중앙위치
+        float bspLastRoomTopCenterPoint = (bossRoomCornerPos.topLeftCorner.x + bossRoomCornerPos.topRightCorner.x) * 0.5f;
+
+
+
+        CustomRoomCorridorCreatePlusPos(wallParnet, nextStageRoomCornerPos.bottomLeftCorner, nextStageRoomCornerPos.bottomRightCorner,
+            nextStageRoomCornerPos.topLeftCorner, nextStageRoomCornerPos.topRightCorner, false);
+
+        CustomRoomCorridorMeshCreate(true, bspLastRoomBottomCenterPoint, bspLastRoomTopCenterPoint, bossRoomCornerPos,
+            nextStageFloorObj, false, false, true);
+
+        CreateCustomRoomRoof(nextStageRoomCornerPos.bottomLeftCorner, nextStageRoomCornerPos.bottomRightCorner,
+            nextStageRoomCornerPos.topLeftCorner, nextStageRoomCornerPos.topRightCorner, nextStageFloorObj);
+
+        CreateExitObj(nextStageRoomCornerPos.bottomLeftCorner, nextStageRoomCornerPos.bottomRightCorner,
+            nextStageRoomCornerPos.topLeftCorner, nextStageRoomCornerPos.topRightCorner, nextStageFloorObj);
+        
+    }       // NextStageRoomBuild()
+
+
 
     /// <summary>
     /// 다음방 이동 오브젝트 생성
@@ -1792,7 +2013,7 @@ public class DungeonCreator : MonoBehaviour
         prefabClone = Instantiate(exitObjPrefab, roomUnderCenter, Quaternion.identity, dungeonFloor.transform);
 
     }       // CreateExitObj()
-
+    #region LEGACY
     ///// <summary>
     ///// 다음 던전이동 하기위한 뚫리는 돌 오브젝트 생성
     ///// </summary>
@@ -1920,9 +2141,40 @@ public class DungeonCreator : MonoBehaviour
 
     //}       // CreateNextStagePotal()
 
+    #endregion LEGACY
 
 
     #endregion CustomRoomCreate
+
+
+    private void CheckRecreate()
+    {
+        if(DungeonInspectionManager.dungeonManagerInstance.FloorCollision == true)
+        {
+            isReCreate = true;
+        }
+        else { /*Pass*/ }
+    }
+
+    IEnumerator BuildDelay()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            yield return null;
+        }
+
+        CheckRecreate();
+
+        if(isReCreate == false)
+        {
+            CreateDungeonBuildTime();
+        }
+        else
+        {
+            CreateDungeon();
+        }
+
+    }
 
 }   // ClassEnd
 

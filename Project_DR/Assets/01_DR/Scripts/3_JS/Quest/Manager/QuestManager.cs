@@ -115,6 +115,9 @@ namespace Js.Quest
 
             // UserDataManager.questDictionary 할당
             UserDataManager.AddQuestDictionary();
+
+            // 디버그 퀘스트 리스트 생성
+            CreateQuestListDebug();
         }
 
 
@@ -323,7 +326,9 @@ namespace Js.Quest
             foreach (var item in QuestList)
             {
                 // 퀘스트 타입이 [메인퀘스트]일 경우
-                if (item.QuestData.Type.Equals(QuestData.QuestType.MAIN))
+                // && '실패' 상태가 아닐 경우
+                if (item.QuestData.Type.Equals(QuestData.QuestType.MAIN)
+                    && (! item.QuestState.State.Equals(QuestState.StateQuest.FAILED)))
                 {
                     // QuestSaveData 생성 및 _mainQuestSaveDatas에 추가
                     QuestSaveData questSaveData = new QuestSaveData();
@@ -399,8 +404,6 @@ namespace Js.Quest
                         {
                             // 보유한 아이템의 갯수로 값 변경
                             item.ChangeCurrentValue(itemCount);
-                            // 조건 충족시 [3][완료 가능]으로 상태 변경
-                            item.ChangeToNextState();
                         }
 
                         // condition이 [7]이 아니라면
@@ -408,9 +411,10 @@ namespace Js.Quest
                         {
                             // 값 증가 += 1
                             item.AddCurrentValue();
-                            // 조건 충족시 [3][완료 가능]으로 상태 변경
-                            item.ChangeToNextState();
                         }
+
+                        // 조건 충족시 [3][완료 가능]으로 상태 변경
+                        item.ChangeToNextState();
                     }
                 }
 
@@ -421,6 +425,7 @@ namespace Js.Quest
                     && item.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE)
                     && item.QuestData.CurrentValue < item.QuestData.ClearValue)
                 {
+                    GFunc.Log("item");
                     // 현재 값과 상태를 [2][진행중]으로 변경
                     item.ChangeCurrentValue(itemCount);
                     item.ChangeState(2);
@@ -487,6 +492,22 @@ namespace Js.Quest
 
             // 아닐 경우
             return false;
+        }
+
+        // 디버그용 퀘스트 리스트 생성
+        // type은 표시할 퀘스트 타입이다.
+        private void CreateQuestListDebug()
+        {
+            // 이미 생성되 있을 경우 삭제 후 재생성한다.
+            int childCount = transform.childCount;
+            for (int i = 0; i < childCount; i++)
+            {
+                Transform child = transform.GetChild(i);
+                Destroy(child.gameObject);
+            }
+            GameObject obj = new GameObject("QuestListDebug");
+            obj.transform.SetParent(transform);
+            obj.AddComponent<QuestListDebug>().Initialize();
         }
     }
 }

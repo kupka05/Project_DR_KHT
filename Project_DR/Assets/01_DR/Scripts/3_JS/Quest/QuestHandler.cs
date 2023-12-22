@@ -118,7 +118,7 @@ namespace Js.Quest
             {
                 // 조건이 [7]증정일 경우
                 // && 아이템 차감시도 하고 실패할 경우
-                if (QuestData.Condition.Equals(7))
+                if (QuestData.Condition.Equals(QuestData.ConditionType.GIVE_ITEM))
                 {
                     if (! Unit.RemoveInventoryItemForID(QuestData.KeyID, QuestData.ClearValue))
                     {

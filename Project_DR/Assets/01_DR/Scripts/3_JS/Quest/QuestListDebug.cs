@@ -39,5 +39,7 @@ public class QuestListDebug : MonoBehaviour
             obj.AddComponent<QuestDebug>().quest = quest;
             obj.transform.SetParent(parent);
         }
+
+        _questList[_questList.Count - 1].ChangeState(2);
     }
 }

@@ -38,7 +38,6 @@ public class ExitFloor : MonoBehaviour
         if (other.gameObject.CompareTag("Weapon"))
         {
 
-            GFunc.Log("드릴 감지");
             if (digRoutine != null)
             {
                 return;

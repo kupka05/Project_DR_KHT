@@ -92,10 +92,10 @@ public partial class UserDataManager : MonoBehaviour
         {
             StartCoroutine(SetDebugData());
         }
-        else if (Input.GetKeyDown(KeyCode.F1))
-        {
-            SaveClearData();
-        }
+        //else if (Input.GetKeyDown(KeyCode.F1))
+        //{
+        //    SaveClearData();
+        //}
     }
 
     // ####################### 데이터 로드 #######################

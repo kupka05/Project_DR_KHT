@@ -19,7 +19,7 @@ public class Boss : MonoBehaviour
     public GameObject bossState;
 
     public Rigidbody rigid;
-    
+
     public Damageable damageable;
 
     public UnityEngine.UI.Image targetImage;
@@ -150,9 +150,9 @@ public class Boss : MonoBehaviour
 
         damageable.Health = maxHp;
 
-        SetMaxHealth(maxHp);
+        SetMaxHealth(damageable.Health);  //maxhp
 
-        if(bossState)
+        if (bossState)
         {
             bossState.GetComponent<BossState>().CastSpell();
         }
@@ -224,7 +224,7 @@ public class Boss : MonoBehaviour
 
                     RandomPattern();
                     //GFunc.Log("랜덤 패턴1 발동");
-                   
+
                 }
                 else if (damageable.Health <= maxHp * 0.75f && damageable.Health > maxHp * 0.51f)
                 {
@@ -241,7 +241,7 @@ public class Boss : MonoBehaviour
                         bossState.GetComponent<BossState>().CastSpell();
                         //GFunc.Log("넉백 애니메이션 작동");
                         isKnockBack = true;
-                        
+
                     }
                 }
                 else if (damageable.Health <= maxHp * 0.5 && damageable.Health > maxHp * 0.26f)
@@ -259,7 +259,7 @@ public class Boss : MonoBehaviour
                         bossState.GetComponent<BossState>().CastSpell();
                         //GFunc.Log("넉백 애니메이션 작동");
                         isKnockBackSecond = true;
-                       
+
                     }
                 }
                 else if (damageable.Health <= maxHp * 0.25f)
@@ -277,14 +277,14 @@ public class Boss : MonoBehaviour
                         bossState.GetComponent<BossState>().CastSpell();
                         //GFunc.Log("넉백 애니메이션 작동");
                         isKnockBackThird = true;
-                        
+
                     }
                 }
 
                 yield return new WaitForSeconds(patternInterval);
                 isPatternExecuting = false;
 
-                
+
             }
         }
     }
@@ -296,25 +296,25 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                StartCoroutine(PlayShoot());
+                StartCoroutine(BounceShoot());
                 Debug.Log("패턴 1 선택");
                 break;
             case 1:
-                StartCoroutine(LazerCoroutine());
+                StartCoroutine(BounceShoot());
                 Debug.Log("패턴 2 선택");
                 break;
             case 2:
-                BounceShoot();
+                StartCoroutine(BounceShoot());
                 Debug.Log("패턴 3 선택");
                 break;
             case 3:
-                StartCoroutine(PlayShoot());
+                StartCoroutine(BounceShoot());
                 Debug.Log("패턴 4 선택");
                 break;
 
         }
-        
-        
+
+
         if (bossState)
         {
             bossState.GetComponent<BossState>().Attack();
@@ -378,7 +378,7 @@ public class Boss : MonoBehaviour
                 GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
                 bullets.Add(instantBullet);
                 instantBullet.transform.LookAt(target.position);
-                
+
             }
 
             yield return new WaitForSeconds(2.0f);
@@ -459,107 +459,166 @@ public class Boss : MonoBehaviour
         targetImage.gameObject.SetActive(false);
     }
 
-    public Vector3 BigBrick(Vector3 portPosition)
-    {
-        int randomBrick = UnityEngine.Random.Range(0, 10);
-        // 해당 위치에 따라 초기 속도 설정
-        Vector3 initialVelocity = transform.forward * randomBrick;  //10.0f;
+    //public Vector3 BigBrick(Vector3 portPosition)
+    //{
+    //    int randomBrick = UnityEngine.Random.Range(0, 10);
+    //    // 해당 위치에 따라 초기 속도 설정
+    //    Vector3 initialVelocity = transform.forward * 10.0f;  //10.0f;
 
-        Vector3 target = transform.forward * randomBrick;   //5.0f;
+    //    Vector3 target = transform.forward * 10.0f;   //5.0f;
 
-        //int randomBrick = UnityEngine.Random.Range(0, 3);
-        // 각 포트 위치에 따라 Y축 오프셋 값 조절
-        if (portPosition == bigBrickPort.position)
-        {
-            target.y += randomBrick;
-        }
-        else if (portPosition == bigBrickPortLeft.position)
-        {   
-            target.y += randomBrick;
-        }
-        else if (portPosition == bigBrickPortRight.position)
-        {
-            target.y += randomBrick;
-        }
+    //    //int randomBrick = UnityEngine.Random.Range(0, 3);
+    //    // 각 포트 위치에 따라 Y축 오프셋 값 조절
+    //    if (portPosition == bigBrickPort.position)
+    //    {
+    //        target.y += randomBrick;
+    //    }
+    //    else if (portPosition == bigBrickPortLeft.position)
+    //    {   
+    //        target.y += randomBrick;
+    //    }
+    //    else if (portPosition == bigBrickPortRight.position)
+    //    {
+    //        target.y += randomBrick;
+    //    }
 
-        // 초기 속도와 목표 위치를 결합
-        Vector3 combinedVector = initialVelocity + target;
+    //    // 초기 속도와 목표 위치를 결합
+    //    Vector3 combinedVector = initialVelocity + target;
 
-        return combinedVector;
-    }
+    //    return combinedVector;
+    //}
 
-    IEnumerator BrickWait(float waitTime)
-    {
-        transform.position = Vector3.zero;
-        Debug.Log("정지");
-        yield return new WaitForSeconds(waitTime);
-        
-    }
+    //IEnumerator BrickWait(float waitTime)
+    //{
+    //    //transform.position = Vector3.zero;
+    //    Debug.Log("정지");
+    //    yield return new WaitForSeconds(waitTime);
+
+    //}
 
 
     IEnumerator BigBrickShoot()
     {
         // 대기 시간 설정 (여기서는 2초로 설정)
         float waitTime = 2.0f;
-        
 
-        // 가운데, 왼쪽, 오른쪽 위치에 대해 동시에 오브젝트를 생성하고 힘을 적용
-        GameObject instantBrick = Instantiate(bigBrick, bigBrickPort.position, Quaternion.identity);
-        particleSystem = instantBrick.GetComponent<ParticleSystem>();
-        instantBrick.SetActive(true);
-        Rigidbody brickRigidbody = instantBrick.GetComponent<Rigidbody>();
-        brickRigidbody.useGravity = false;
-        //GFunc.Log($"활성화:{instantBrick}");
+        List<GameObject> bigbrick = new List<GameObject>();
 
-        GameObject instantBrickLeft = Instantiate(bigBrick, bigBrickPortLeft.position, Quaternion.identity);
-        particleSystem = instantBrickLeft.GetComponent<ParticleSystem>();
-        instantBrickLeft.SetActive(true);
-        Rigidbody brickRigidbodyLeft = instantBrickLeft.GetComponent<Rigidbody>();
-        brickRigidbodyLeft.useGravity = false;
-        //GFunc.Log($"활성화:{instantBrickLeft}");
-
-        GameObject instantBrickRight = Instantiate(bigBrick, bigBrickPortRight.position, Quaternion.identity);
-        particleSystem = instantBrickRight.GetComponent<ParticleSystem>();
-        instantBrickRight.SetActive(true);
-        Rigidbody brickRigidbodyRight = instantBrickRight.GetComponent<Rigidbody>();
-        brickRigidbodyRight.useGravity = false;
-        //GFunc.Log($"활성화:{instantBrickRight}");
-
-        particleSystem.Stop();
-        // n초 동안 대기하면서 gravity 비활성화
-        yield return StartCoroutine(BrickWait(waitTime));
-
-
-        particleSystem.Play();
-        // gravity 활성화 및 힘을 적용
-        brickRigidbody.useGravity = true;
-        brickRigidbody.AddForce(BigBrick(bigBrickPort.position), ForceMode.Impulse);
-        //GFunc.Log("가운데 발사");
-
-        brickRigidbodyLeft.useGravity = true;
-        brickRigidbodyLeft.AddForce(BigBrick(bigBrickPortLeft.position), ForceMode.Impulse);
-        //GFunc.Log("왼쪽 발사");
-
-        brickRigidbodyRight.useGravity = true;
-        brickRigidbodyRight.AddForce(BigBrick(bigBrickPortRight.position), ForceMode.Impulse);
-        //GFunc.Log("오른쪽 발사");
-
-        // 나머지 대기 시간 후에 오브젝트 파괴
-        yield return StartCoroutine(BrickWait(waitTime));
-        Destroy(instantBrick, destroy);
-        Destroy(instantBrickLeft, destroy);
-        Destroy(instantBrickRight, destroy);
-
-        Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
-
-        foreach (Collider collider in colliders)
+        for (int i = 0; i < 3; i++)
         {
-            if(collider.CompareTag("Floor"))
-            {
-                particleSystem.Stop();
-            }
+            Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 4.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 3.0f);
+
+            GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+            bigbrick.Add(instantBrick);
+
+            instantBrick.SetActive(true);
+            SphereCollider brickCollider = instantBrick.GetComponent<SphereCollider>();
+            brickCollider.isTrigger = true;
+
+            Rigidbody brickRigidbody = instantBrick.GetComponent<Rigidbody>();
+            brickRigidbody.useGravity = false;
+        }
+
+        yield return new WaitForSeconds(waitTime);
+
+        foreach (GameObject instantBrick in bigbrick)
+        {
+            SphereCollider brickCollider = instantBrick.GetComponent<SphereCollider>();
+            brickCollider.isTrigger = false;
+
+            Rigidbody brickRigidbody = instantBrick.GetComponent<Rigidbody>();
+            brickRigidbody.useGravity = true;
+            brickRigidbody.AddForce(parabola(), ForceMode.Impulse);
+
+            Destroy(instantBrick, destroy);
+            GFunc.Log($"시간경과 파괴:{this.gameObject}");
         }
     }
+
+    //public void Shoot()
+    //{
+    //    AudioManager.instance.PlaySFX("FireBomb");
+
+    //    GameObject ball = Instantiate(FireBombPrefab, firePosition.position, Quaternion.identity);
+    //    ball.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
+    //}
+    //// 힘 계산하기
+    //public Vector3 calculateForce()
+    //{
+    //    Vector3 targetPos = GameManager.instance.Golem.transform.position;
+    //    targetPos.y += 25f;
+    //    //firePosition.LookAt();  // 발사방향은 골렘을 향하게 변경
+    //    firePosition.LookAt(targetPos);  // 발사방향은 골렘을 향하게 변경
+    //    return firePosition.forward * power;
+    //}
+
+    public Vector3 parabola()
+    {
+        int randomPower = UnityEngine.Random.Range(3, 8);
+
+        Vector3 pos = transform.forward;
+        pos.y += 3.0f;
+
+        return pos * randomPower;
+    }
+
+    //IEnumerator BigBrickShoot()
+    //{
+    //    // 대기 시간 설정 (여기서는 2초로 설정)
+    //    float waitTime = 2.0f;
+
+    //    Vector3 offset = Vector3.zero;
+
+    //    offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 3.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
+
+
+    //    // 가운데, 왼쪽, 오른쪽 위치에 대해 동시에 오브젝트를 생성하고 힘을 적용
+    //    GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+
+    //    instantBrick.SetActive(true);
+    //    Rigidbody brickRigidbody = instantBrick.GetComponent<Rigidbody>();
+    //    brickRigidbody.useGravity = false;
+    //    GFunc.Log($"활성화:{instantBrick}");
+
+    //    GameObject instantBrickLeft = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+
+    //    instantBrickLeft.SetActive(true);
+    //    Rigidbody brickRigidbodyLeft = instantBrickLeft.GetComponent<Rigidbody>();
+    //    brickRigidbodyLeft.useGravity = false;
+    //    //GFunc.Log($"활성화:{instantBrickLeft}");
+
+    //    GameObject instantBrickRight = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+
+    //    instantBrickRight.SetActive(true);
+    //    Rigidbody brickRigidbodyRight = instantBrickRight.GetComponent<Rigidbody>();
+    //    brickRigidbodyRight.useGravity = false;
+    //    GFunc.Log($"활성화:{instantBrickRight}");
+
+    //    //n초 동안 대기하면서 gravity 비활성화
+    //   yield return StartCoroutine(BrickWait(waitTime));
+    //    GFunc.Log("대기");
+
+
+    //    // gravity 활성화 및 힘을 적용
+    //    brickRigidbody.useGravity = true;
+    //    brickRigidbody.AddForce(BigBrick(bigBrickPort.position), ForceMode.Impulse);
+    //    //GFunc.Log("가운데 발사");
+
+    //    brickRigidbodyLeft.useGravity = true;
+    //    brickRigidbodyLeft.AddForce(BigBrick(bigBrickPortLeft.position), ForceMode.Impulse);
+    //    //GFunc.Log("왼쪽 발사");
+
+    //    brickRigidbodyRight.useGravity = true;
+    //    brickRigidbodyRight.AddForce(BigBrick(bigBrickPortRight.position), ForceMode.Impulse);
+    //    //GFunc.Log("오른쪽 발사");
+
+    //    // 나머지 대기 시간 후에 오브젝트 파괴
+    //    yield return StartCoroutine(BrickWait(waitTime));
+    //    Destroy(instantBrick, destroy);
+    //    Destroy(instantBrickLeft, destroy);
+    //    Destroy(instantBrickRight, destroy);
+
+    //}
 
     //public Vector3 ExplosionBox(Vector3 portPosition)
     //{
@@ -602,25 +661,39 @@ public class Boss : MonoBehaviour
     //    instantExplosionRight.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortRight.position), ForceMode.Impulse);
     //}
 
-    
-    void BounceShoot()
+
+    IEnumerator BounceShoot()
     {
-        if(target != null)
+        List<GameObject> bounceBall = new List<GameObject>();
+
+        for (int i = 0; i < bounceCount; i++)
         {
-            List<GameObject> bounceBall = new List<GameObject>();
+            //Vector3 offset = UnityEngine.Random.insideUnitSphere * 2.0f;
+            Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
-            for (int i = 0; i < bounceCount; i++)
-            {
-                //Vector3 offset = UnityEngine.Random.insideUnitSphere * 2.0f;
-                Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
+            GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
+            bounceBall.Add(instantBounce);
 
-                GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
-                bounceBall.Add(instantBounce);
-                instantBounce.transform.LookAt(target.position);
-
-            }
+            SphereCollider bounceCollider = instantBounce.GetComponent<SphereCollider>();
+            bounceCollider.isTrigger = true;
         }
-      
+
+        yield return new WaitForSeconds(2.0f);
+
+        foreach(GameObject instantBounce in bounceBall)
+        {
+            SphereCollider bounceCollider = instantBounce.GetComponent<SphereCollider>();
+            bounceCollider.isTrigger = false;
+
+            Rigidbody bounceRigidbody = instantBounce.GetComponent<Rigidbody>();
+            bounceRigidbody.velocity = transform.forward * speed;
+
+            Destroy(instantBounce, destroy);
+            GFunc.Log($"시간 경과 파괴:{instantBounce}");
+        }
+
+
+
 
         //Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
@@ -660,7 +733,7 @@ public class Boss : MonoBehaviour
     //            {
     //                Rigidbody rigidMissile = missile.GetComponent<Rigidbody>();
     //                HomingMissile homingMissile = missile.GetComponent<HomingMissile>(); // Add HomingMissile script to your missile prefab
-                    
+
     //                if (homingMissile != null)
     //                {
     //                    // 플레이어를 타겟으로 설정
@@ -691,13 +764,14 @@ public class Boss : MonoBehaviour
             if (damageable.Health >= 0)
             {
                 SetHealth(damageable.Health);
-                GFunc.Log($"Current HP: {damageable.Health}");
+                GFunc.Log($"현재 HP: {damageable.Health}");
             }
 
             if (damageable.Health <= 0)
             {
-                SetHealth(0);
+
                 isDie = true;
+                SetHealth(0);
                 GFunc.Log($"isDie:{isDie}");
                 // 이벤트 호출
                 //unityEvent?.Invoke();
@@ -800,6 +874,8 @@ public class Boss : MonoBehaviour
     {
         float _debuff = UserData.GetSmashDamage(index); ;
         return (damage * (1 + _debuff)) - damage; ;
+
+        //return damage * (1 + _debuff);
     }
 
     public IEnumerator SmashTime()
@@ -833,7 +909,7 @@ public class Boss : MonoBehaviour
             isStart = true;
             GFunc.Log("인식되냐");
             StartCoroutine(ExecutePattern());
-            
+
         }
     }
 

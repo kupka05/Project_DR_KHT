@@ -113,7 +113,7 @@ public class BounceBullet : MonoBehaviour
         //6912
         speed = (float)DataManager.Instance.GetData(BounceTableId, "Speed", typeof(float));
         damage = (float)DataManager.Instance.GetData(BounceTableId, "Damage", typeof(float));
-        destoryTime = (float)DataManager.Instance.GetData(BounceTableId, "DesTime", typeof(float));
+        //destoryTime = (float)DataManager.Instance.GetData(BounceTableId, "DesTime", typeof(float));
     }
 
 }

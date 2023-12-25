@@ -52,6 +52,7 @@ public class Boss : MonoBehaviour
     public int bossId;  //보스 테이블
     public int bossProjectileId;  //투사체 테이블
     public int bossProjectileID;
+    public int bossProjectileBounce;
 
     public float power = 5.0f;
 
@@ -80,11 +81,13 @@ public class Boss : MonoBehaviour
     public Transform bouncePortRight;
     public GameObject bounce;
     public int bounceCount = 3;
+    public float destoryTimeBounce;
 
     [Header("타겟")]
     public Transform target;
     public GameObject player;
     public PlayerBackDash knockBack;
+
 
     [Header("테이블")]
     public float hp = default;
@@ -129,7 +132,7 @@ public class Boss : MonoBehaviour
 
     void Awake()
     {
-        GetData(bossId, bossProjectileId, bossProjectileID);
+        GetData(bossId, bossProjectileId, bossProjectileID, bossProjectileBounce);
     }
 
     void Start()
@@ -173,7 +176,7 @@ public class Boss : MonoBehaviour
 
     }
 
-    public void GetData(int bossId, int bossProjectileId, int bossProjectileID)
+    public void GetData(int bossId, int bossProjectileId, int bossProjectileID, int bossProjectileBounce)
     {
         //보스
         maxHp = (float)DataManager.Instance.GetData(bossId, "BossHP", typeof(float));
@@ -187,6 +190,9 @@ public class Boss : MonoBehaviour
 
         //6914
         destroy = (float)DataManager.Instance.GetData(bossProjectileID, "DesTime", typeof(float));
+
+        //6912
+        destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounce, "DesTime", typeof(float));
 
     }
 
@@ -688,7 +694,7 @@ public class Boss : MonoBehaviour
             Rigidbody bounceRigidbody = instantBounce.GetComponent<Rigidbody>();
             bounceRigidbody.velocity = transform.forward * speed;
 
-            Destroy(instantBounce, destroy);
+            Destroy(instantBounce, destoryTimeBounce);
             GFunc.Log($"시간 경과 파괴:{instantBounce}");
         }
 

@@ -102,6 +102,12 @@ public static class UserData
         UserDataManager.Instance.CurHP -= damage;
     }
 
+    /// <summary> 플레이어의 현재 체력을 증감 </summary>
+    public static void SetCurrentHealth(float amount)
+    {
+        // amount는 양수/음수 둘 중 하나의 값을 받는다.
+        UserDataManager.Instance.CurHP += amount;
+    }
 
 
 

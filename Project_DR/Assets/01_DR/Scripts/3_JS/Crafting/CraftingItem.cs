@@ -8,7 +8,7 @@ namespace Js.Crafting
     /// [구조]: MaterialItem -> CompositeItem + ResultItem -> CraftingItem <br></br>
     /// ResultItem은 리스트의 마지막에 추가되어야 한다.
     /// </summary>
-    public class CraftingItem : ScriptableObject, ICraftingComponent
+    public class CraftingItem : ICraftingComponent
     {
         /*************************************************
          *                 Public Fields
@@ -19,11 +19,11 @@ namespace Js.Crafting
         /*************************************************
          *                 Private Fields
          *************************************************/
-        [SerializeField] private List<ICraftingComponent> _components = new List<ICraftingComponent>();
+        private List<ICraftingComponent> _components = new List<ICraftingComponent>();
 
 
         /*************************************************
-         *                 Public Methods
+         *               Initialize Methods
          *************************************************/
         // 추후 할당용 생성자
         public CraftingItem() {}
@@ -38,6 +38,10 @@ namespace Js.Crafting
             }
         }
 
+
+        /*************************************************
+         *                 Public Methods
+         *************************************************/
         // 컴포넌트 추가
         public void AddComponent(ICraftingComponent component)
         {
@@ -64,7 +68,8 @@ namespace Js.Crafting
             }
 
             // TODO: 아이템 지급 및 보유 아이템 차감
-            if (_components[_components.Count - 1] is ResultItem resultItem)
+            int index = _components.Count - 1;
+            if (_components[index] is ResultItem resultItem)
             {
                 string itemName = resultItem.ItemName;
                 GFunc.Log($"결과: {itemName}");

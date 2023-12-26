@@ -295,17 +295,17 @@ public class DungeonCreator : MonoBehaviour
         /* 4.곂치는지 체크
          *  곂친다면 이 아래로 가지 않고 DungeonCreate 다시 호출         
          */
-        //CheckRecreate();
+        CheckRecreate();
 
         //GFunc.Log($"바닥생성이후 isReCreate값 :{isReCreate}");
-        //if(isReCreate == true)
-        //{
-        //    GFunc.Log($"던전 재생성 호출");
-        //    CreateDungeon();
-        //    return;
-        //}
-        //else { /*PASS*/ }
-         
+        if (isReCreate == true)
+        {
+            GFunc.Log($"던전 재생성 호출");
+            CreateDungeon();
+            return;
+        }
+        else { /*PASS*/ }
+
 
         StartCoroutine(BuildDelay());
 
@@ -369,6 +369,7 @@ public class DungeonCreator : MonoBehaviour
         //GFunc.Log($"List 마지막에 들어온얘가 뭐지? -> {bspMeshList[^1].name}");
         int tempBossChildIdx = this.transform.GetChild(1).childCount;
         BossRoomBuild(this.transform.GetChild(1).GetChild(tempBossChildIdx -1).gameObject);
+        //BossRoomBuild(bossRoomFloorObj);
         NextStageRoomBuild();
 
         // 벽 생성
@@ -1696,7 +1697,7 @@ public class DungeonCreator : MonoBehaviour
 
         //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         //Center
-        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) * 0.5f, floorYPos, (topLeftV.z + bottomLeftV.z) * 0.5f);
         BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         floorCol.center = colCenter;
         // Size
@@ -1743,9 +1744,9 @@ public class DungeonCreator : MonoBehaviour
             (bossRoomCornerPos.topLeftCorner.z + bossRoomCornerPos.bottomLeftCorner.z) * 0.5f);
 
         // 방의 하단 중앙위치
-        float bspLastRoomBottomCenterPoint = (lastRoomPos.bottomLeftCorner.x + lastRoomPos.bottomRightCorner.x) / 2;
+        float bspLastRoomBottomCenterPoint = (lastRoomPos.bottomLeftCorner.x + lastRoomPos.bottomRightCorner.x) * 0.5f;
         // 방의 상단 중앙위치
-        float bspLastRoomTopCenterPoint = (lastRoomPos.topLeftCorner.x + lastRoomPos.topRightCorner.x) / 2;
+        float bspLastRoomTopCenterPoint = (lastRoomPos.topLeftCorner.x + lastRoomPos.topRightCorner.x) * 0.5f;
 
         GameObject wallParnet = new GameObject("CustomRoomWallParent");
         wallParnet.transform.parent = bossRoomFloorObj.transform;
@@ -1757,9 +1758,9 @@ public class DungeonCreator : MonoBehaviour
             lastRoomPos, bossRoomFloorObj, false, true, false);
 
         CreateCustomRoomRoof(bossRoomCornerPos.bottomLeftCorner, bossRoomCornerPos.bottomRightCorner,
-            bossRoomCornerPos.topLeftCorner, bossRoomCornerPos.topRightCorner, _bspRoomParent);
+            bossRoomCornerPos.topLeftCorner, bossRoomCornerPos.topRightCorner, bossRoomFloorObj);
 
-        BossRoomAddComponent(bossRoomCornerPos, _bspRoomParent, roomCenter);
+        BossRoomAddComponent(bossRoomCornerPos, bossRoomFloorObj, roomCenter);
     }
 
     /// <summary>

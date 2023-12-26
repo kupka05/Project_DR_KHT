@@ -79,8 +79,10 @@ public class Boss : MonoBehaviour
     public Transform bouncePortLeft;
     public Transform bouncePortRight;
     public GameObject bounce;
-    public int bounceCount = 3;
-    public float destoryTimeBounce;
+    public float bounceCount = default;
+    public float destoryTimeBounce = default;
+    public float speedBounce = default;
+
 
     [Header("타겟")]
     public Transform target;
@@ -120,9 +122,8 @@ public class Boss : MonoBehaviour
     public Transform bigBrickPortRight;
     public GameObject bigBrick;
     new private ParticleSystem particleSystem;
-    public float destroy = default;
-    public float damageRadius = 1.0f;
-
+    public float destroyTimeBrick = default;
+    public float brickCount = default;
 
     [Header("Conversation")]
     public BossNPC npc;
@@ -184,20 +185,22 @@ public class Boss : MonoBehaviour
     {
         //보스
         maxHp = (float)DataManager.Instance.GetData(bossId, "BossHP", typeof(float));
-
+        patternInterval = (float)DataManager.Instance.GetData(bossId, "patternChange", typeof(float)); //이건 하나만
+        
         //소형 투사체 6910
         bulletCount = (float)DataManager.Instance.GetData(bossProjectileId, "Duration", typeof(float));
         delayTime = (float)DataManager.Instance.GetData(bossProjectileId, "Delay", typeof(float));
-        patternInterval = (float)DataManager.Instance.GetData(bossProjectileId, "DelTime", typeof(float)); //이건 하나만
         destoryTime = (float)DataManager.Instance.GetData(bossProjectileId, "DesTime", typeof(float));
         speed = (float)DataManager.Instance.GetData(bossProjectileId, "Speed", typeof(float));
 
-        //6914
-        destroy = (float)DataManager.Instance.GetData(bossProjectileID, "DesTime", typeof(float));
+        //6914 거대벽돌
+        destroyTimeBrick = (float)DataManager.Instance.GetData(bossProjectileID, "DesTime", typeof(float));
+        brickCount = (float)DataManager.Instance.GetData(bossProjectileID, "Duration", typeof(float));
 
-        //6912
+        //6912 애드벌룬
         destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounce, "DesTime", typeof(float));
-
+        speedBounce = (float)DataManager.Instance.GetData(bossProjectileBounce, "Speed", typeof(float));
+        bounceCount = (float)DataManager.Instance.GetData(bossProjectileBounce, "Duration", typeof(float));
     }
 
     public void SetTarget(Transform newTarget)
@@ -406,7 +409,7 @@ public class Boss : MonoBehaviour
                     Rigidbody rigidBullet = bullet.GetComponent<Rigidbody>();
                     rigidBullet.transform.LookAt(target.position);
 
-                    yield return new WaitForSeconds(0.4f);
+                    yield return new WaitForSeconds(delayTime);
 
                     rigidBullet.velocity = (target.position - bullet.transform.position).normalized * speed;
                 }
@@ -418,7 +421,7 @@ public class Boss : MonoBehaviour
             //isShoot = false;
             //GFunc.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
 
-            yield return new WaitForSeconds(6.0f);
+            yield return new WaitForSeconds(destoryTime);
             // 오브젝트 풀을 사용하여 총알을 반환합니다.
             foreach (GameObject bullet in bullets)
             {
@@ -525,12 +528,13 @@ public class Boss : MonoBehaviour
 
         List<GameObject> bigbrick = new List<GameObject>();
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < brickCount; i++)
         {
             Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 4.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 3.0f);
 
             //GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
             GameObject instantBrick = ObjectPoolManager.GetObject();
+
             instantBrick.transform.position = transform.position + offset;
             instantBrick.transform.rotation = Quaternion.identity;
 
@@ -555,7 +559,7 @@ public class Boss : MonoBehaviour
             brickRigidbody.useGravity = true;
             brickRigidbody.AddForce(parabola(), ForceMode.Impulse);
 
-            yield return new WaitForSeconds(6.0f);
+            yield return new WaitForSeconds(destroyTimeBrick);
 
             ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
 
@@ -720,21 +724,15 @@ public class Boss : MonoBehaviour
             bounceCollider.isTrigger = false;
 
             Rigidbody bounceRigidbody = instantBounce.GetComponent<Rigidbody>();
-            bounceRigidbody.velocity = transform.forward * speed;
+            bounceRigidbody.velocity = transform.forward * speedBounce;
 
-            //Destroy(instantBounce, destoryTimeBounce);
-            GFunc.Log($"시간 경과 파괴:{instantBounce}");
-        }
+            yield return new WaitForSeconds(destoryTimeBounce);
 
-        yield return new WaitForSeconds(8.0f);
-        GFunc.Log("반환 전 대기");
-        foreach(GameObject instantBounce in bounceBall)
-        {
-            ObjectPoolManager.ReturnObjectToQueue(instantBounce);
-            GFunc.Log("애드벌룬 반환");
+            ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
         }
 
         bounceBall.Clear();
+
     }
 
     ////유도미사일 테스트

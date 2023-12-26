@@ -68,25 +68,7 @@ public class BounceSmallBullet : MonoBehaviour
             isHit = false;
         }
 
-        //foreach (Collider collider in colliders)
-        //{
-        //    if (collider.CompareTag("Wall"))
-        //    {
-        //        Destroy(this.gameObject);
-        //        GFunc.Log("벽이나 바닥 만났을 때 파괴되는가");
-        //    }
-        //}
-
-
     }
 
-    //public virtual void OnCollisionEnter(Collision collision)
-    //{
-
-    //    if (collision.collider.CompareTag("Player") || collision.collider.CompareTag("Wall"))
-    //    {
-    //        Destroy(this.gameObject);
-    //    }
-    //}
 }
 

@@ -20,7 +20,7 @@ public class BounceBullet : MonoBehaviour
     private float damageRadius = 1.5f;
 
     [Header("테이블 관련")]
-    public float speed = default;
+    //public float speed = default;
     public float damage = default;
     public float destoryTime = default;
 
@@ -92,7 +92,7 @@ public class BounceBullet : MonoBehaviour
     public virtual void GetData(int BounceTableId)
     {
         //6912
-        speed = (float)DataManager.Instance.GetData(BounceTableId, "Speed", typeof(float));
+        //speed = (float)DataManager.Instance.GetData(BounceTableId, "Speed", typeof(float));
         damage = (float)DataManager.Instance.GetData(BounceTableId, "Damage", typeof(float));
         //destoryTime = (float)DataManager.Instance.GetData(BounceTableId, "DesTime", typeof(float));
     }

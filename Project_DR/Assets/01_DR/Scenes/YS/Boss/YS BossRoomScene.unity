@@ -725,7 +725,7 @@ PrefabInstance:
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0023266983
+      value: 0.002200559
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -1787,6 +1787,7 @@ MonoBehaviour:
   IsProtoType: 1
   nowFloor: 1
   isPlayerMaxFloor: 0
+  isGameOver: 0
   ghostObjList: []
   isInItGhost: 0
 --- !u!4 &1005570377
@@ -2485,6 +2486,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectPrefeb: {fileID: 3016696864302411366, guid: 9c76011e52345e24293d9f04f36837d9,
     type: 3}
+  bouncePrefab: {fileID: 548648308873678835, guid: dfd6ac752cdbe2245a1d034e27f13688,
+    type: 3}
+  bounceSmallPrefab: {fileID: 0}
 --- !u!4 &1394120341
 Transform:
   m_ObjectHideFlags: 0

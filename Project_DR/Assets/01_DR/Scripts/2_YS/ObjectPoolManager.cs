@@ -7,6 +7,7 @@ public class ObjectPoolManager : MonoBehaviour
     public GameObject objectPrefeb;
     public GameObject bouncePrefab;
     public GameObject bounceSmallPrefab;
+    public GameObject brickPrefab;
 
     Queue<GameObject> ObjectPool = new Queue<GameObject>(); //오브젝트를 담을 큐
     public static ObjectPoolManager instance = null;

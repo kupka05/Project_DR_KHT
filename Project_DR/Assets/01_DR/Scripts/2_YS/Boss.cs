@@ -302,15 +302,15 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                StartCoroutine(BounceShoot());
+                StartCoroutine(PlayShoot());
                 Debug.Log("패턴 1 선택");
                 break;
             case 1:
-                StartCoroutine(BounceShoot());
+                StartCoroutine(LazerCoroutine());
                 Debug.Log("패턴 2 선택");
                 break;
             case 2:
-                StartCoroutine(BounceShoot());
+                StartCoroutine(BigBrickShoot());
                 Debug.Log("패턴 3 선택");
                 break;
             case 3:
@@ -697,16 +697,6 @@ public class Boss : MonoBehaviour
             Destroy(instantBounce, destoryTimeBounce);
             GFunc.Log($"시간 경과 파괴:{instantBounce}");
         }
-
-
-
-
-        //Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
-
-        //GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
-
-        ////GameObject bounceLeft = Instantiate(bounce, bouncePortLeft.position, bouncePortLeft.rotation);
-        ////GameObject bounceRight = Instantiate(bounce, bouncePortRight.position, bouncePortRight.rotation);
 
     }
 

@@ -90,24 +90,6 @@ public class BounceBullet : MonoBehaviour
         Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.yellow);  
     }               
 
-    //IEnumerator Activate()
-    //{
-    //    // 오브젝트 활성화
-    //    gameObject.SetActive(true);
-    //    //GFunc.Log($"활성화:{gameObject}");
-
-    //    GFunc.Log($"포지션:{gameObject.transform.position}");
-    //    yield return new WaitForSeconds(2.0f);
-    //    //GFunc.Log("대기중");
-
-    //    Play();
-    //}
-
-    //void Play()
-    //{
-    //    rigid.velocity = transform.forward * speed;
-    //}
-
     public virtual void GetData(int BounceTableId)
     {
         //6912

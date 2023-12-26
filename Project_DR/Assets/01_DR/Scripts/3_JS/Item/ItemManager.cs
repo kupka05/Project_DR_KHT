@@ -8,9 +8,9 @@ using Js.Quest;
 public class ItemManager : MonoBehaviour
 {
     /*************************************************
-    *                 Private Fields
+    *                 Public Fields
     *************************************************/
-    #region [+]
+    #region 싱글톤
     // 싱글톤
     private static ItemManager _instance;
     public static ItemManager instance
@@ -33,17 +33,12 @@ public class ItemManager : MonoBehaviour
     [SerializeField] private Inventory _inventory;
     private float overItemResetStateDelay = 5f;     // 초과된 아이템 상태 리셋(슬롯 가능) 딜레이
     #endregion
-    /*************************************************
-    *                 Public Fields
-    *************************************************/
-    #region [+]
     public Inventory Inventory => _inventory;
 
-    #endregion
+
     /*************************************************
     *                 Unity Events
     *************************************************/
-    #region [+]
     private void Awake()
     {
         // 파괴 방지
@@ -53,7 +48,7 @@ public class ItemManager : MonoBehaviour
         ItemDataManager.InitItemDB();
     }
 
-    #endregion
+
     /*************************************************
     *                 Public Methods
     *************************************************/
@@ -61,6 +56,12 @@ public class ItemManager : MonoBehaviour
     public void ConnectInventory(Inventory inventory)
     {
         _inventory = inventory;
+    }
+
+    // ID로 인벤토리에 있는 아이템을 삭제
+    public bool RemoveInventoryItemForID(int id, int amount)
+    {
+        return _inventory.RemoveInventoryItemForID(id, amount);
     }
 
     // 자동으로 타입을 찾아서 인벤토리에 아이템을 생성
@@ -300,12 +301,12 @@ public class ItemManager : MonoBehaviour
 
         return item;
     }
-
     #endregion
+
+
     /*************************************************
     *                 Private Methods
     *************************************************/
-    #region [+]
     // 인벤토리가 가득 찼는지 체크하는 함수
     private bool CheckOverInventorySlot(int num)
     {
@@ -348,17 +349,14 @@ public class ItemManager : MonoBehaviour
         StartCoroutine(RunFuncToCoroutine(func, t));
     }
 
-    #endregion
+
     /*************************************************
      *               Private Methods
      *************************************************/
-    #region [+]
     // 함수를 코루틴으로 실행하는 코루틴 함수
     private IEnumerator RunFuncToCoroutine(Action func, float t)
     {
         yield return new WaitForSeconds(t);
         func();
     }
-
-    #endregion
 }

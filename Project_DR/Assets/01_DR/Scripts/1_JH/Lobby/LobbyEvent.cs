@@ -1,3 +1,4 @@
+using Js.Quest;
 using Meta.WitAi.Data;
 using System;
 using System.Collections;
@@ -198,9 +199,13 @@ public class LobbyEvent : MonoBehaviour
     {
 
         GetNPCDialog();              // NPC 대사 가져오고
-        if(UserData.QuestCheck())
+
+        // 퀘스트가 널이 아니면 새운 퀘스트 가져오기
+        if(!UserData.QuestCheck())
         {
-            //targetQuestID = ()UserData.GetQuest();
+            GFunc.Log("비어있지 않음");
+            Quest curQuest = Unit.GetInProgressMainQuest();
+            targetQuestID = curQuest.QuestData.ID;
         }
         SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
         GetClearData();              // 클리어 데이터 가져오기
@@ -866,14 +871,22 @@ public class LobbyEvent : MonoBehaviour
             npcDialog.text = dialog.log.Peek().ToString();
             dialog.log.Dequeue();
         }
-        else if (isClear)
+
+        // 클리어 했으면 디스플레이 띄워주고 isClear 꺼주기
+        else if (UserData.ClearCheck())
         {
-            isClear = false;
             SetMBTIResult();
             ChangeDisplayButton("Result_MBTI");
+            UserDataManager.Instance.isClear = false;
         }
+        // 문 열림
         else
         {
+            // 이벤트 추가
+            Unit.ChangeQuestStateToInProgress(31_1_1_001);
+            Unit.ChangeQuestStateToInProgress(31_1_1_002);
+            Unit.ChangeQuestStateToInProgress(31_1_1_003);
+
             ChangeDisplayButton("Main");
             OpenSpawnRoomDoor();
         }

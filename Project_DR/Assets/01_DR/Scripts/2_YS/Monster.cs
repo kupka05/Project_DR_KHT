@@ -530,6 +530,9 @@ public class Monster : MonoBehaviour
                 anim.SetTrigger(hashDie);
                 UserData.KillMonster(0, exp);
 
+
+                    Invoke(nameof(Explosion), 3f);
+
                 yield break;
             }
 
@@ -699,6 +702,11 @@ public class Monster : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, attRange);
         }
+
+    }
+    public virtual void Explosion()
+    {
+        Destroy(this.gameObject);
 
     }
 

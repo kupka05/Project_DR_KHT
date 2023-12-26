@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditorInternal.ReorderableList;
+using Js.Quest;
 
 public static class UserData
 {
@@ -68,14 +68,14 @@ public static class UserData
     #region ######################_결과보상_#####################
 
     /// <summary>퀘스트 보상을 결과에 추가하는 메서드 </summary>
-    public static void AddQuestScore(int gold, int exp)
+    public static void AddQuestScore(Quest quest)
     {
-        UserDataManager.Instance.result.AddQuestScore(gold, exp);
+        UserDataManager.Instance.result.AddQuestScore(quest);
     }
     /// <summary>획득한 아이템을 결과에 추가하는 메서드 </summary>
-    public static void AddItemScore(int gold, int exp)
+    public static void AddItemScore(int id)
     {
-        UserDataManager.Instance.result.AddItemScore(gold, exp);
+        UserDataManager.Instance.result.AddItemScore(id);
     }
     #endregion
 
@@ -101,13 +101,14 @@ public static class UserData
     {
         UserDataManager.Instance.CurHP -= damage;
     }
-    /// <summary>플레이어 데이터를 초기화 메서드</summary>
-    public static void ResetPlayer()
-    {
-        UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
-        UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
 
+    /// <summary> 플레이어의 현재 체력을 증감 </summary>
+    public static void SetCurrentHealth(float amount)
+    {
+        // amount는 양수/음수 둘 중 하나의 값을 받는다.
+        UserDataManager.Instance.CurHP += amount;
     }
+
 
 
     #endregion
@@ -378,6 +379,43 @@ public static class UserData
     }
     #endregion
 
+    #region ####################_GamePlay_#####################
+
+    /// <summary>플레이어 데이터를 초기화 메서드. 다시 로비에 돌아올 때 실행됨</summary>
+    public static void ResetPlayer()
+    {
+        // 리셋하면 게임 매니저 삭제
+        if(GameManager.instance)
+        {
+            GameManager.instance.DestroyGameManager();
+        }
+
+        // 퀘스트 재생성 & DB에서 정보 불러오기 & 아이템 초기화
+        Unit.CreateQuestFromDataTable();
+        Unit.LoadUserQuestDataFromDB();
+        Unit.ResetInventory();
+
+        UserDataManager.Instance.isClear = false;
+        UserDataManager.Instance.isGameOver = false;
+
+        UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
+        UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
+    }
+    public static bool ClearCheck()
+    {
+        return UserDataManager.Instance.isClear;
+    }
+    public static void GameOver()
+    {
+        UserDataManager.Instance.isGameOver = true;
+    }
+
+    public static void ClearDungeon()
+    {
+        UserDataManager.Instance.SaveClearData();
+        UserDataManager.Instance.isClear = true;
+    }
+    #endregion
 
 
     /// <summary>유저 데이터를 요청하는 메서드. 데이터 요청 시, DB에서 데이터를 가져왔을 경우 Action을 실행시켜준다. </summary>

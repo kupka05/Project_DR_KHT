@@ -19,15 +19,14 @@ namespace Js.Quest
         // 다음 상태로 변경 {[시작불가] -> [시작가능] -> [진행중] -> [완료가능] -> [완료]}
         public void ChangeToNextState(Quest quest, QuestState questState)
         {
-            // 현재 상태가 [완료가능]일 경우
-            if (questState.State.Equals(QuestState.StateQuest.CAN_COMPLETE))
-            {
-                // [완료]으로 상태 변경
-                questState.ChangeState(QuestState.StateQuest.COMPLETED);
+            // [7] 증정 조건의 아이템 차감은
+            // QuestHandler.GiveQuestReward()에서 처리한다.
 
-                // 퀘스트 콜백 호출
-                QuestCallback.OnQuestDataCallback();
-            }
+            // [완료]으로 상태 변경
+            questState.ChangeState(QuestState.StateQuest.COMPLETED);
+
+            // 퀘스트 콜백 호출
+            QuestCallback.OnQuestDataCallback();
         }
     }
 }

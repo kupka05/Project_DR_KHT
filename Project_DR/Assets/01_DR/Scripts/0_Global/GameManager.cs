@@ -71,9 +71,14 @@ public class GameManager : MonoBehaviour
     public const int FIRSTTIME = 3;
     public const int FIRSTAFTER = 5;
 
-    public static List<bool> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
+    public static List<RandomRoom> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
 
-    private bool isClear = false;       // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
+    private bool allRoomClear = false;              // 모든 방이 클리어 됬다면 true가 될 변수
+
+    private bool isClear = false;                   // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
+    
+    public bool isGameOver;
+
 
     public bool IsClear
     {
@@ -84,6 +89,32 @@ public class GameManager : MonoBehaviour
             {
                 isClear = value;
                 DoorControll(IsClear);
+                if (isClear == true)
+                {
+                    allRoomClear = CheckAllRoomClear();          
+                }
+                if(allRoomClear == true)
+                {
+                    BossRoomDoorOnEvent?.Invoke();
+                }
+            }
+
+        }
+    }
+
+    private bool isBossRoomClear = false;
+    public bool IsBossRoomClear
+    {
+        get { return isBossRoomClear; }
+        set
+        {
+            if (isBossRoomClear != value)
+            {
+                isBossRoomClear = value;
+            }
+            if (isBossRoomClear == true)
+            {
+                NextRoomDoorOnEvent?.Invoke();
             }
         }
     }
@@ -93,6 +124,8 @@ public class GameManager : MonoBehaviour
 
     public event System.Action DoorOnEvent;
     public event System.Action DoorOffEvent;
+    public event System.Action BossRoomDoorOnEvent;
+    public event System.Action NextRoomDoorOnEvent;
 
 
 
@@ -164,7 +197,7 @@ public class GameManager : MonoBehaviour
     {
         if (isClearRoomList == null || isClearRoomList == default)
         {
-            isClearRoomList = new List<bool>();
+            isClearRoomList = new List<RandomRoom>();
         }
 
     }       // AwakeInIt()
@@ -188,6 +221,108 @@ public class GameManager : MonoBehaviour
     }       // StartInIt()
 
 
+
+    /*************************************************
+     *            Game Over & Game Clear
+    *************************************************/
+    #region GameManager
+    // 게임오버
+    public void GameOver()
+    {
+        fader.DoFadeIn();
+        screenText = player.GetComponent<ScreenText>();
+        screenText.OnScreenText(gameoverText);
+        input.enabled = false;
+
+        isGameOver = true;
+        UserData.GameOver();
+        UserData.ResetPlayer();
+
+        SceneLoad(gameoverScene); // 게임오버 씬 전환
+    }
+
+    // 현재 씬 리셋
+    public void ResetScene()
+    {
+        isGameOver = true;
+        UserData.GameOver();
+        UserData.ResetPlayer();
+
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneLoad(currentSceneName);
+    }
+
+    /// <summary>  던전 클리어후 로비로 보내줄 함수 </summary>
+    public void ClearDungeon()
+    {
+        // 출구 층이면 로비로 보내주기
+        if (nowFloor == isPlayerMaxFloor)
+        {
+            isGameOver = true;
+
+            UserData.ClearDungeon();
+
+            string lobbySceneName = "3_LobbyScene";
+            SceneLoad(lobbySceneName);
+        }
+        // 출구 층이 아니라면, 다시 던전씬 돌리기
+        else if (nowFloor < isPlayerMaxFloor)
+        {
+            // 층 높이고
+            nowFloor++;
+            string dungeonSceneName = "SG_TestScene";
+            SceneLoad(dungeonSceneName);
+        }
+        else
+            GFunc.Log("클리어 실패, 현재 층 : " + nowFloor);
+     
+    }       // ClearDungeon()
+
+    #endregion
+
+    public void DestroyGameManager()
+    {
+        Destroy(gameObject);
+    }
+
+
+    /*************************************************
+     *                Scene Manager
+    *************************************************/
+    #region Scene Manager
+    // 씬 전환 함수
+    public void SceneLoad(string _sceneName)
+    {
+        if (string.IsNullOrEmpty(_sceneName))
+        {
+            GFunc.Log("전환할 씬을 찾지 못했습니다.");
+            return;
+        }
+        StartCoroutine(SceneChangeDelay(_sceneName));
+    }
+
+    // 플레이어의 페이드를 포함한 씬 전환 딜레이
+    IEnumerator SceneChangeDelay(string _sceneName)
+    {
+        if (fader)
+        {
+            fader.DoFadeIn();
+        }
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(_sceneName);
+
+        if (isGameOver)
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
+    /*************************************************
+    *                 Dungeon Object
+    *************************************************/
+    #region Dungeon
     /// <summary>
     /// 문을 열고 닫는 함수를 하나로 묶은것
     /// </summary>
@@ -214,60 +349,63 @@ public class GameManager : MonoBehaviour
         DoorOffEvent?.Invoke();
     }       // DoorOff()
 
-
-
-    // 게임오버
-    public void GameOver()
+    /// <summary>
+    /// 모든 방이 클리어 됬는지 체크해줄 함수
+    /// </summary>
+    public bool CheckAllRoomClear()
     {
-        fader.DoFadeIn();
-        screenText = player.GetComponent<ScreenText>();
-        screenText.OnScreenText(gameoverText);
-        input.enabled = false;
+        foreach(RandomRoom temp in isClearRoomList)
+        {
+            if(temp.isClearRoom == false)
+            {
+                return false;
+            }
+        }
+        return true;
+    }       // CheckAllRoomClear()
 
-        SceneLoad(gameoverScene); // 게임오버 씬 전환
-    }
 
-    // 현재 씬 리셋
-    public void ResetScene()
-    {
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneLoad(currentSceneName);
-    }
+
+
+  
 
     /// <summary>
-    /// 던전 클리어후 로비로 보내줄 함수
+    /// 유령 오브젝트를 List에 Add해주는 함수
     /// </summary>
-    public void ClearDungeon()
-    {
-        string lobbySceneName = "3_LobbyScene";
-        SceneLoad(lobbySceneName);
-    }       // ClearDungeon()
-
-
-    // 씬 전환 함수
-    public void SceneLoad(string _sceneName)
-    {
-        if (string.IsNullOrEmpty(_sceneName))
+    public void AllocatedGhostObj()
+    {        
+        if (UserDataManager.Instance.ClearCount < 100)
         {
-            GFunc.Log("전환할 씬을 찾지 못했습니다.");
-            return;
+            if (isInItGhost == false)
+            {       // 문제 X
+                isInItGhost = true;
+                ghostObjList = new List<GameObject>();
+                GameObject ghostObj;
+                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_FT");
+                ghostObjList.Add(ghostObj);
+                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_IE");
+                ghostObjList.Add(ghostObj);
+                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_IEFT");
+                ghostObjList.Add(ghostObj);
+                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_NS");
+                ghostObjList.Add(ghostObj);
+                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_PJ");
+                ghostObjList.Add(ghostObj);
+
+            }
+            else { /*PASS*/ }
         }
-        StartCoroutine(SceneChangeDelay(_sceneName));
-    }
-
-    // 플레이어의 페이드를 포함한 씬 전환 딜레이
-    IEnumerator SceneChangeDelay(string _sceneName)
-    {
-        if (fader)
-        {
-            fader.DoFadeIn();
-        }
-
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(_sceneName);
-    }
+        else { /*PASS*/ }
 
 
+
+    }       // AllocatedGhostObj()
+    #endregion
+
+    /*************************************************
+    *                        Data
+    *************************************************/
+    #region Data
     // 데이터 가져오기
     public void GetData()
     {
@@ -279,37 +417,5 @@ public class GameManager : MonoBehaviour
     {
         _playerID = id;
     }
-
-    /// <summary>
-    /// 유령 오브젝트를 List에 Add해주는 함수
-    /// </summary>
-    public void AllocatedGhostObj()
-    {        
-        if (UserDataManager.Instance.ClearCount < 1)
-        {
-            if (isInItGhost == false)
-            {       // 문제 X
-                isInItGhost = true;
-                ghostObjList = new List<GameObject>();
-                GameObject ghostObj;                
-                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_FT");
-                ghostObjList.Add(ghostObj);
-                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_IE");
-                ghostObjList.Add(ghostObj);
-                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_IEFT");
-                ghostObjList.Add(ghostObj);
-                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_NS");
-                ghostObjList.Add(ghostObj);
-                ghostObj = Resources.Load<GameObject>("NPC_12_Ghost_PJ");
-                ghostObjList.Add(ghostObj);
-                
-            }
-            else { /*PASS*/ }
-        }
-        else { /*PASS*/ }
-
-        
-
-    }       // AllocatedGhostObj()
-
+    #endregion
 }       // ClassEnd

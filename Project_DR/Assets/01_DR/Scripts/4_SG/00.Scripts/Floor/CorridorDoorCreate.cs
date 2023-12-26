@@ -14,7 +14,7 @@ public class CorridorDoorCreate : MonoBehaviour
     }
     void Start()
     {
-        // TODO : prefab찾는 함수 제작해야함
+    
         InstantiateDoor();
     }
 

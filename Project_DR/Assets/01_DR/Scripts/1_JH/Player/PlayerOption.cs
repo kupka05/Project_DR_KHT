@@ -110,6 +110,9 @@ public class PlayerOption : MonoBehaviour
     // 메인으로 이동
     public void GotoMain()
     {
+        // 플레이어 리셋 함수 호출
+        UserData.ResetPlayer();
+
         fader.DoFadeIn();
         StartCoroutine(SceneChange(loginSceneName));
     }

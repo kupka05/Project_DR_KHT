@@ -135,6 +135,11 @@ public class MBTIManager : MonoBehaviour
         ResultValue(P, value.P)
         );
 
+        I = playerMBTI.I;
+        N = playerMBTI.N;
+        F = playerMBTI.F;
+        P = playerMBTI.P;
+
         // 계산 이후 데이터 업데이트
         MbtiDebug();
         SetData();

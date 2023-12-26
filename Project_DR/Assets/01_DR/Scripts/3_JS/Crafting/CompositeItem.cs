@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Js.Crafting
 {
-    public class CompositeItem : ScriptableObject, ICraftingComponent
+    public class CompositeItem : ICraftingComponent
     {
         /*************************************************
          *                 Public Fields
@@ -15,7 +15,7 @@ namespace Js.Crafting
         /*************************************************
          *                 Private Fields
          *************************************************/
-        [SerializeField] private List<ICraftingComponent> _components = new List<ICraftingComponent>();
+        private List<ICraftingComponent> _components = new List<ICraftingComponent>();
 
 
         /*************************************************

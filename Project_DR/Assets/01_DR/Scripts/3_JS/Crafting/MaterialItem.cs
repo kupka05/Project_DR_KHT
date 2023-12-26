@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Js.Crafting
 {
-    public class MaterialItem : ScriptableObject, ICraftingComponent
+    public class MaterialItem : ICraftingComponent
     {
         /*************************************************
          *                 Public Fields
@@ -17,9 +17,9 @@ namespace Js.Crafting
         /*************************************************
          *                 Private Fields
          *************************************************/
-        [SerializeField] private int _itemID;
-        [SerializeField] private int _needAmount;
-        [SerializeField] private string _itemName;
+        private int _itemID;
+        private int _needAmount;
+        private string _itemName;
 
 
         /*************************************************
@@ -39,12 +39,14 @@ namespace Js.Crafting
          *************************************************/
         public bool Craft()
         {
-            // 재료 체크
+            // itemID가 0으로 비어있을 경우 예외 처리
+            if (_itemID.Equals(0)) { return true; }
+
             // TODO: 재료 체크하기
             // 맞을 경우 true
 
             // 재료가 없을 경우
-            return true;
+            return false;
         }
     }
 }

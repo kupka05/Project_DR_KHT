@@ -27,15 +27,23 @@ namespace Js.Crafting
             }
         }
         #endregion
-        public Dictionary<int, ICraftingComponent> ItemCraftingDictionary           // 아이템 조합 크래프팅 딕셔너리
+        public enum Type
+        {
+            CRAFTING = 0,     // 아이템 조합
+            ENHANCE = 1       // 아이템 강화
+        }
+        public Dictionary<int, ICraftingComponent> ItemCraftingDictionary       // 아이템 조합 크래프팅 딕셔너리
            => _itemCraftingDictionary;
-        public const int TABLE_INDEX = 3_0000_1;                              // 테이블 색인 인덱스
+        public readonly int[] CRAFTING_TABLE_INDEX =
+        {
+            3_0000_1, 3_2000_1                                                  // 크래프팅 테이블 색인 인덱스
+        };
 
 
         /*************************************************
          *                 Private Field
          *************************************************/
-        [SerializeField] private Dictionary<int, ICraftingComponent> _itemCraftingDictionary 
+        private Dictionary<int, ICraftingComponent> _itemCraftingDictionary
             = new Dictionary<int, ICraftingComponent>();
 
 
@@ -53,27 +61,37 @@ namespace Js.Crafting
 
 
         /*************************************************
-         *                 Public Methods
+         *               Initialize Methods
          *************************************************/
         public void Initialize()
         {
             // Init
-            List<int> idTable = DataManager.Instance.GetDataTableIDs(TABLE_INDEX);
+            InitializeCrafting(Type.CRAFTING);
+            InitializeCrafting(Type.ENHANCE);
+        }
+
+        // 아이템 [조합/강화] 크래프팅 Init
+        private void InitializeCrafting(Type type)
+        {
+            // Init
+            int tableID = GetTableIndex(type);
+            List<int> idTable = DataManager.Instance.GetDataTableIDs(tableID);
             for (int i = 0; i < idTable.Count; i++)
             {
                 // id 할당
                 int id = idTable[i];
 
-                // 크래프팅 아이템 생성
+                // 크래프팅 아이템 & 마지막 컴포넌트 생성
                 CraftingItem craftingItem = new CraftingItem();
+                ICraftingComponent lastComponent = default;
 
                 // 조건 검색 & 추가
-                int[] conditions = FindCraftingConditions(id);
+                int[] conditions = GetCraftingConditions(id);
                 for (int j = 0; j < conditions.Length; j++)
                 {
                     // conditionID가 0일 경우 예외 처리
                     int conditionID = conditions[j];
-                    if (conditions[j].Equals(0)) { continue; }
+                    if (conditionID.Equals(0)) { continue; }
 
                     // 두 가지 조건의 조합식을 가진 컴포짓 아이템을 생성한다.
                     CompositeItem compositeItem = CreateCompositeItemWithConditions(conditionID);
@@ -81,22 +99,28 @@ namespace Js.Crafting
                     // 크래프팅 아이템에 추가
                     craftingItem.AddComponent(compositeItem);
                 }
+                
+                switch(type)
+                {
+                    // 타입이 크래프팅일 경우
+                    case Type.CRAFTING:
 
-                // 결과 아이템 생성 & 크래프팅 아이템에 추가
-                int resultKeyID = Data.GetInt(id, "Result_KeyID");
-                int resultAmount = Data.GetInt(id, "Result_Amount");
-                ResultItem resultItem = new ResultItem(resultKeyID, resultAmount);
-                craftingItem.AddComponent(resultItem);
+                        // 결과 아이템 생성
+                        lastComponent = CreateResultItem(id);
+                        break;
 
-                // 딕셔너리에 크래프팅 아이템 추가
+                    // 타입이 강화일 경우
+                    case Type.ENHANCE:
+
+                        // 강화 핸들러 생성
+                        lastComponent = CreateEnhanceHandler(id);
+                        break;
+                }
+
+                // 크래프팅 아이템 & 딕셔너리에 추가
+                craftingItem.AddComponent(lastComponent);
                 _itemCraftingDictionary.Add(id, craftingItem);
             }
-        }
-
-        // 크래프팅 아이템(조합식+결과)을 딕셔너리에서 찾아서 반환
-        public ICraftingComponent GetCraftingCondition(int id)
-        {
-            return _itemCraftingDictionary[id];
         }
 
 
@@ -117,8 +141,34 @@ namespace Js.Crafting
             return compositeItem;
         }
 
+        // 결과 아이템을 생성 후 반환한다.
+        private ResultItem CreateResultItem(int id)
+        {
+            int resultKeyID = Data.GetInt(id, "Result_KeyID");
+            int resultAmount = Data.GetInt(id, "Result_Amount");
+            Vector3 itemSpawnPos = GetItemSpawnPos(id);
+            ResultItem resultItem = new ResultItem(resultKeyID, itemSpawnPos, resultAmount);
+
+            return resultItem;
+        }
+
+        // 강화 핸들러를 생성 후 반환한다.
+        private EnhanceHandler CreateEnhanceHandler(int id)
+        {
+            int statKeyID = Data.GetInt(id, "Stat_KeyID");
+            EnhanceHandler enhanceHandler = new EnhanceHandler(statKeyID);
+
+            return enhanceHandler;
+        }
+
+        // 타입에 맞는 테이블 색인 인덱스를 반환한다.
+        private int GetTableIndex(Type type)
+        {
+            return CRAFTING_TABLE_INDEX[(int)type];
+        }
+
         // 크래프팅의 ID에 해당하는 모든 조건식[1 ~ 4]을 찾아서 반환한다.
-        private int[] FindCraftingConditions(int id)
+        private int[] GetCraftingConditions(int id)
         {
             int[] conditions =
             {
@@ -129,6 +179,17 @@ namespace Js.Crafting
             };
 
             return conditions;
+        }
+
+        // 아이템이 생성될 위치를 받아온다
+        private Vector3 GetItemSpawnPos(int id)
+        {
+            Vector3 pos = new Vector3();
+            pos.x = Data.GetFloat(id, "Spawn_Pos_X");
+            pos.y = Data.GetFloat(id, "Spawn_Pos_Y");
+            pos.z = Data.GetFloat(id, "Spawn_Pos_Z");
+
+            return pos;
         }
     }
 }

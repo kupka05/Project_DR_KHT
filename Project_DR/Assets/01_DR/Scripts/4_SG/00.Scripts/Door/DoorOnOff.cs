@@ -60,6 +60,7 @@ public class DoorOnOff : MonoBehaviour
 
     private void OnDestroy()
     {
+        StopAllCoroutines();
         GameManager.instance.DoorOnEvent -= OnDoor;
         GameManager.instance.DoorOffEvent -= OffDoor;
     }

@@ -19,6 +19,16 @@ public enum NPCID
 
 }
 
+public enum RewardID
+{
+    ItemStartId = 322001,
+    ItemEndId = 322005,
+    MBTIStartId = 324001,
+    MBTIEndId = 324013,
+    SilverCoinStartId = 321023,
+    SilverCoinEndId = 321028
+}
+
 public enum NpcTriggerType
 {
     Auto = 10,
@@ -128,6 +138,11 @@ public class NPC : MonoBehaviour
     {
         AwakeInIt();
     }
+    protected virtual void OnDestroy()
+    {
+        // Debug.Log($"NPC 파괴됨 : {npcID}");
+
+    }
 
     #endregion MonoBehaviour함수
 
@@ -217,6 +232,7 @@ public class NPC : MonoBehaviour
     {
         canvasObj = this.transform.GetChild(0).GetChild(0).gameObject;
         NpcCanvas = this.transform.GetChild(0).GetChild(0).GetComponent<NPC_CanvasController>();
+        NpcCanvas.RewardEvent += RewardTypeCheck;
     }       // GetCanvasScript()
 
 
@@ -488,6 +504,14 @@ public class NPC : MonoBehaviour
 
     }       // InspectionConversationEvent()
 
+    IEnumerator CommunicationDelay()
+    {
+        isCommunityDelray = true;
+        yield return delayTime;
+        isCommunityDelray = false;
+
+    }       // CommunicationDelay()
+
     #endregion 대사관련 함수
 
     #region Canvas.SetActive 관련
@@ -510,20 +534,106 @@ public class NPC : MonoBehaviour
 
     #endregion Canvas.SetActive 관련
 
-    IEnumerator CommunicationDelay()
-    {
-        isCommunityDelray = true;
-        yield return delayTime;
-        isCommunityDelray = false;
+    #region 보상 관련 함수
 
-    }       // CommunicationDelay()
+    /// <summary>
+    /// 어떤 보상인지 체크하는 함수
+    /// </summary>
+    /// /// <param name="_rewardId">보상 ID</param>
+    private void RewardTypeCheck(int _rewardId)
+    {
+        if ((int)RewardID.ItemStartId <= _rewardId && (int)RewardID.ItemEndId >= _rewardId)
+        {
+            RewardItem(_rewardId);
+        }
+        else if ((int)RewardID.MBTIStartId <= _rewardId && (int)RewardID.MBTIEndId >= _rewardId)
+        {
+            RewardMBTI(_rewardId);
+        }
+        else if((int)RewardID.SilverCoinStartId <= _rewardId && (int)RewardID.SilverCoinEndId >= _rewardId)
+        {
+            RewardSilverCoin(_rewardId);
+        }
+
+    }       // RewardTypeCheck()
+
+    #region 보상지급 함수
+    /// <summary>
+    /// 은화 보상을 지급하는 함수
+    /// </summary>
+    /// <param name="_rewardId">보상 ID</param>
+    private void RewardSilverCoin(int _rewardId)
+    {
+        int tableProbability = Data.GetInt(_rewardId, "Reward_1_Probability");  // 시트상의 확률
+        int randProbability = 0;
+        bool isPass = true;     // 보상을 지급해도 되는지
+
+        if (tableProbability != 100)
+        {
+            randProbability = UnityEngine.Random.Range(0, 101); // 0 ~ 100 % 
+        }
+        else { /*PASS*/ }
+        if (tableProbability < randProbability)
+        {
+            isPass = false;
+        }
+        else { /*PASS*/ }
+        if (isPass == false)
+        {
+            GFunc.Log($"얻을 확률의 조건을 만족하지 못했습니다.\n얻을 확률 : {tableProbability}\n나온 확률 : {randProbability}");
+            return;
+        }
+        else { /*PASS*/ }
+        
+        UserDataManager.Instance.Gold = UserDataManager.Instance.Gold + Data.GetInt(_rewardId, "GiveGold");
+
+
+    }       // RewardSilverCoin()
+
+    /// <summary>
+    /// MBTI 보상을 지급하는 함수
+    /// </summary>
+    /// <param name="_rewardId">보상 ID</param>
+    private void RewardMBTI(int _rewardId)
+    {
+        float i = Data.GetFloat(_rewardId, "MBTI_VALUE_I");
+        float n = Data.GetFloat(_rewardId, "MBTI_VALUE_N");
+        float f = Data.GetFloat(_rewardId, "MBTI_VALUE_F");
+        float p = Data.GetFloat(_rewardId, "MBTI_VALUE_P");
+
+        MBTI mbti = new MBTI();
+        mbti.SetMBTI(i, n, f, p);
+        //GFunc.Log($"새로 만든 MBTI값\nI : {i}\nN : {n}\nF : {f}\nP : {p}");
+
+        MBTIManager.Instance.ResultMBTI(mbti);
+    }       // RewardMBTI()
+
+    /// <summary>
+    /// 아이템을 지급하는 함수
+    /// </summary>
+    /// <param name="_rewardId">보상 ID</param>
+    private void RewardItem(int _rewardId)
+    {
+        int rewardItemRefId = Data.GetInt(_rewardId, "Reward_1_KeyID");
+        int rewardAmount = Data.GetInt(_rewardId, "Reward_1_Amount");
+        // 잘하면 확률도 확인해야할수도 있음
+        Unit.AddInventoryItem(rewardItemRefId, rewardAmount);     // 인벤토리에 아이템 넣어주기
+    }       // RewardItem()
+
+    #endregion 보상지급 함수
+
+    #endregion 보상 관련 함수
+
+
+
+
+    #region 애니메이션 관련
     /// <summary>
     /// 매개변수 값에 따라서 애니메이터에 존재하는 애니메이션 실행해주는 함수
     /// </summary>
     /// <param name="_playAnimationName">실행시킬 애니메이션 이름</param>
     protected void ChangeAnimationString(string _playAnimationName)
     {
-        if(animator)
         animator.Play(_playAnimationName);
         //Debug.Log($"NPC의 애니메이션 변경 함수 진입\n매개변수값 : {_playAnimationName}");
     }       // ChangeAnimationString()
@@ -620,10 +730,7 @@ public class NPC : MonoBehaviour
         }
     }
 
-    protected virtual void OnDestroy()
-    {
-       // Debug.Log($"NPC 파괴됨 : {npcID}");
 
-    }
+    #endregion 애니메이션 관련
 
 }           // ClassEnd

@@ -302,29 +302,31 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                StartCoroutine(PlayShoot());
-                Debug.Log("패턴 1 선택");
+                StartCoroutine(BounceShoot());
+                //StartCoroutine(PlayShoot());
+                GFunc.Log("패턴 1 선택");
                 break;
             case 1:
-                StartCoroutine(LazerCoroutine());
-                Debug.Log("패턴 2 선택");
+                StartCoroutine(BounceShoot());
+                //StartCoroutine(LazerCoroutine());
+                GFunc.Log("패턴 2 선택");
                 break;
             case 2:
-                StartCoroutine(BigBrickShoot());
-                Debug.Log("패턴 3 선택");
+                StartCoroutine(BounceShoot());
+                //StartCoroutine(BigBrickShoot());
+                GFunc.Log("패턴 3 선택");
                 break;
             case 3:
                 StartCoroutine(BounceShoot());
-                Debug.Log("패턴 4 선택");
+                GFunc.Log("패턴 4 선택");
                 break;
 
         }
 
-
         if (bossState)
         {
             bossState.GetComponent<BossState>().Attack();
-            Debug.Log("보스 attack 애니메이션");
+            GFunc.Log("보스 attack 애니메이션");
         }
     }
 
@@ -372,29 +374,30 @@ public class Boss : MonoBehaviour
                 Vector3 offset = Vector3.zero;
 
                 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
-                //y값 2.0f
 
-                //Vector3 bossForward = transform.forward;
+                //기존 로직
+                //GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
+                //bullets.Add(instantBullet);
+                //instantBullet.transform.LookAt(target.position);
 
-                //// 전방 방향으로만 랜덤 오프셋을 생성합니다.
-                //offset = UnityEngine.Random.insideUnitCircle * 2.0f;
-                //offset = new Vector3(offset.x, offset.y, Mathf.Abs(offset.x)); // 전방 방향으로 조정
-
-
-                GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
-                bullets.Add(instantBullet);
+                // 오브젝트 풀을 사용하여 총알을 가져옵니다.
+                GameObject instantBullet = ObjectPoolManager.GetObject();
+                GFunc.Log("오브젝트 풀 생성");
+                instantBullet.transform.position = transform.position + offset;
+                instantBullet.transform.rotation = Quaternion.identity;
                 instantBullet.transform.LookAt(target.position);
+
+                bullets.Add(instantBullet);
 
             }
 
             yield return new WaitForSeconds(2.0f);
 
-
             GFunc.Log($"리스트 크기 : {bullets.Count}");
 
-            foreach (var bullet in bullets)
+            foreach (GameObject bullet in bullets)
             {
-                if (bullet != null)
+                if (bullet != null && bullet.activeSelf)
                 {
                     Rigidbody rigidBullet = bullet.GetComponent<Rigidbody>();
                     rigidBullet.transform.LookAt(target.position);
@@ -405,18 +408,26 @@ public class Boss : MonoBehaviour
                 }
             }
 
+            //기존 로직
+            //bullets.Clear();
+
+            //isShoot = false;
+            //GFunc.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
+
+            yield return new WaitForSeconds(6.0f);
+            // 오브젝트 풀을 사용하여 총알을 반환합니다.
+            foreach (GameObject bullet in bullets)
+            {
+                ObjectPoolManager.ReturnObjectToQueue(bullet);
+                GFunc.Log("반환 이상 없이 작동하는가?");
+            }
+
             bullets.Clear();
 
             isShoot = false;
-            GFunc.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
+            GFunc.Log($"isShoot:{isShoot}");
         }
     }
-
-    //void LazerShot()
-    //{
-    //    StartCoroutine(LazerCoroutine());
-    //}
-
 
     IEnumerator LazerCoroutine()
     {
@@ -445,6 +456,7 @@ public class Boss : MonoBehaviour
     void LazerFireDestroy()
     {
         Destroy(instantLazerFire);
+        targetImage.gameObject.SetActive(false);
     }
 
     void ShootLazer(Vector3 shootPosition)
@@ -460,9 +472,8 @@ public class Boss : MonoBehaviour
 
     void LazerDestroy()
     {
-        // 레이저를 파괴하고 targetImage를 숨깁니다.
         Destroy(instantLazer);
-        targetImage.gameObject.SetActive(false);
+        //targetImage.gameObject.SetActive(false);
     }
 
     //public Vector3 BigBrick(Vector3 portPosition)
@@ -514,7 +525,11 @@ public class Boss : MonoBehaviour
         {
             Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 4.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 3.0f);
 
-            GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+            //GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+            GameObject instantBrick = ObjectPoolManager.GetObject();
+            instantBrick.transform.position = transform.position + offset;
+            instantBrick.transform.rotation = Quaternion.identity;
+
             bigbrick.Add(instantBrick);
 
             instantBrick.SetActive(true);
@@ -536,9 +551,14 @@ public class Boss : MonoBehaviour
             brickRigidbody.useGravity = true;
             brickRigidbody.AddForce(parabola(), ForceMode.Impulse);
 
-            Destroy(instantBrick, destroy);
-            GFunc.Log($"시간경과 파괴:{this.gameObject}");
+            yield return new WaitForSeconds(6.0f);
+
+            ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+
+            //Destroy(instantBrick, destroy);
+            //GFunc.Log($"시간경과 파괴:{this.gameObject}");
         }
+
     }
 
     //public void Shoot()
@@ -677,7 +697,11 @@ public class Boss : MonoBehaviour
             //Vector3 offset = UnityEngine.Random.insideUnitSphere * 2.0f;
             Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
-            GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
+            //GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
+            GameObject instantBounce = ObjectPoolManager.GetObject();
+            instantBounce.transform.position = transform.position + offset;
+            instantBounce.transform.rotation = Quaternion.identity;
+
             bounceBall.Add(instantBounce);
 
             SphereCollider bounceCollider = instantBounce.GetComponent<SphereCollider>();
@@ -694,10 +718,19 @@ public class Boss : MonoBehaviour
             Rigidbody bounceRigidbody = instantBounce.GetComponent<Rigidbody>();
             bounceRigidbody.velocity = transform.forward * speed;
 
-            Destroy(instantBounce, destoryTimeBounce);
+            //Destroy(instantBounce, destoryTimeBounce);
             GFunc.Log($"시간 경과 파괴:{instantBounce}");
         }
 
+        yield return new WaitForSeconds(8.0f);
+        GFunc.Log("반환 전 대기");
+        foreach(GameObject instantBounce in bounceBall)
+        {
+            ObjectPoolManager.ReturnObjectToQueue(instantBounce);
+            GFunc.Log("애드벌룬 반환");
+        }
+
+        bounceBall.Clear();
     }
 
     ////유도미사일 테스트

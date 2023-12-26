@@ -56,39 +56,38 @@ public class BounceBullet : MonoBehaviour
         // 디버그용: 빨간색 구체로 OverlapSphere 영역을 시각화
         DebugDrawOverlapSphere();
 
+        //Debug.Log("진입"+ distance); 
 
-       
-            //Debug.Log("진입"+ distance); 
-
-            foreach (Collider collider in colliders)
+        foreach (Collider collider in colliders)
+        {
+            if (!isDamage)
             {
-                if(!isDamage)
+                if (collider.CompareTag("Player"))
                 {
-                    if (collider.CompareTag("Player"))
-                    {
-                        Debug.Log("만났는가");
-                        // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
-                        collider.GetComponent<Damageable>().DealDamage(damage);
-                        GFunc.Log($"데미지:{damage}");
+                    GFunc.Log("만났는가");
+                    // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
+                    collider.GetComponent<Damageable>().DealDamage(damage);
+                    GFunc.Log($"데미지:{damage}");
 
-                        isDamage = true;
-                        //Destroy(this.gameObject);
-                        break;
-                    }
-                    isDamage = false;
+                    isDamage = true;
+                    //Destroy(this.gameObject);
+                    break;
                 }
-               
-
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+                //isDamage = false;
             }
-        
+
+        }
+        isDamage = false;
+
 
     }
 
     void DebugDrawOverlapSphere()
     {
         Vector3 dir = target.position - transform.position;
-        Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.yellow);  
-    }               
+        Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.yellow);
+    }
 
     public virtual void GetData(int BounceTableId)
     {

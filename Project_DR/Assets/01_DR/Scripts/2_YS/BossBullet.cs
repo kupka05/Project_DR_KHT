@@ -1,4 +1,5 @@
 using BNG;
+using Oculus.Interaction;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
@@ -20,6 +21,8 @@ public class BossBullet : MonoBehaviour
     public float damageRadius = 1.0f;
 
     public bool isDamage = false;
+    public bool isWeapon = false;
+    public bool isWall = false;
 
     [Header("이펙트")]
     public GameObject bulletEffect;
@@ -42,7 +45,6 @@ public class BossBullet : MonoBehaviour
         //rigid.velocity = transform.forward * 10.0f;
         damageCollider.Damage = damage;
 
-        StartCoroutine(DestroyGameObject());
     }
 
     //void Update()
@@ -87,33 +89,24 @@ public class BossBullet : MonoBehaviour
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
-        if(distance <= attack)
+        if (distance <= attack && !isDamage)
         {
             foreach (Collider collider in colliders)
             {
                 if (collider.CompareTag("Player"))
                 {
+                    isDamage = true;
                     // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
                     collider.GetComponent<Damageable>().DealDamage(damage);
-                    GFunc.Log($"바운스 데미지:{damage}");
-
-                    isDamage = true;
-                    Destroy(this.gameObject);
+                    GFunc.Log($"데미지:{damage}");
                     break;
                 }
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+                GFunc.Log("플레이어 데미지 후 반환");
 
             }
+            isDamage = false;
         }
-
-        foreach (Collider collider in colliders)
-        {
-            if (collider.CompareTag("Wall"))
-            {
-                Destroy(this.gameObject);
-                GFunc.Log("벽이나 바닥 만났을 때 파괴되는가");
-            }
-        }
-
     }
 
     public void GetData(int smallTableID)
@@ -122,11 +115,6 @@ public class BossBullet : MonoBehaviour
         damage = (float)DataManager.Instance.GetData(smallTableID, "Damage", typeof(float));
     }
 
-    IEnumerator DestroyGameObject()
-    {
-        yield return new WaitForSeconds(8.0f);
-
-        Destroy(this.gameObject);
-    }
+    
 
 }

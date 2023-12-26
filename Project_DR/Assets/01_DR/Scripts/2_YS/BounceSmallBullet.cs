@@ -61,20 +61,21 @@ public class BounceSmallBullet : MonoBehaviour
                     GFunc.Log($"데미지:{damage}");
 
                     isHit = true;
-                    Destroy(this.gameObject);
                     break;
                 }
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
             }
+            isHit = false;
         }
 
-        foreach (Collider collider in colliders)
-        {
-            if (collider.CompareTag("Wall"))
-            {
-                Destroy(this.gameObject);
-                GFunc.Log("벽이나 바닥 만났을 때 파괴되는가");
-            }
-        }
+        //foreach (Collider collider in colliders)
+        //{
+        //    if (collider.CompareTag("Wall"))
+        //    {
+        //        Destroy(this.gameObject);
+        //        GFunc.Log("벽이나 바닥 만났을 때 파괴되는가");
+        //    }
+        //}
 
 
     }

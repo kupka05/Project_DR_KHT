@@ -88,6 +88,14 @@ public static class GFunc
     }
 
     // 디버그 로그를 찍어주는 메서드
+    public static void Log(object _input)
+    {
+#if UNITY_EDITOR
+        Debug.Log(_input);
+#endif
+    }
+
+    // 디버그 로그를 찍어주는 메서드
     public static void LogWarning(string _input)
     {
 #if UNITY_EDITOR

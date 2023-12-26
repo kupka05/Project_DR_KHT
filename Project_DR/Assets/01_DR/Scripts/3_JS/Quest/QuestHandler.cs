@@ -30,6 +30,26 @@ namespace Js.Quest
             _quest = quest;
         }
 
+        // 퀘스트를 초기 상태로 변경한다.
+        // 보유하고 있는 진행 값도 초기화한다.
+        public void ResetQuest()
+        {
+            // 퀘스트를 [시작불가] 상태로 변경
+            ChangeState(0);
+
+            // 퀘스트의 현재 진행 값을 초기화
+            ChangeCurrentValue(0);
+
+            // 보유한 모든 퀘스트의 상태를 업데이트
+            QuestManager.Instance.UpdateQuestStatesToNotStartable();
+        }
+
+        // 퀘스트가 [시작가능] 상태 조건을 충족하는지 체크
+        public bool CheckStateForCanStartable()
+        {
+            return QuestState.CheckStateForCanStartable();
+        }
+
         // 퀘스트 클리어
         public int[] ClearQuest()
         {
@@ -61,6 +81,13 @@ namespace Js.Quest
             QuestState.ChangeToNextState();
         }
 
+        // 퀘스트를 특정 상태로 변경
+        public void ChangeState(int state)
+        {
+            QuestState.StateQuest changeState = (QuestState.StateQuest)state;
+            QuestState.ChangeState(changeState);
+        }
+
         // 퀘스트 상태를 출력
         public void PrintCurrentState()
         {
@@ -89,6 +116,18 @@ namespace Js.Quest
             // 퀘스트가 [완료가능] 상태일 경우
             if (_quest.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE))
             {
+                // 조건이 [7]증정일 경우
+                // && 아이템 차감시도 하고 실패할 경우
+                if (QuestData.Condition.Equals(QuestData.ConditionType.GIVE_ITEM))
+                {
+                    if (! Unit.RemoveInventoryItemForID(QuestData.KeyID, QuestData.ClearValue))
+                    {
+                        // [2]'진행중'으로 상태 변경 & 처리 종료
+                        QuestState.ChangeState(QuestState.StateQuest.IN_PROGRESS);
+                        return 0;
+                    }
+                }
+
                 // [완료] 상태 변경 & 클리어 보상 지급
                 QuestState.ChangeToNextState();
                 ClearReward.GetReward();

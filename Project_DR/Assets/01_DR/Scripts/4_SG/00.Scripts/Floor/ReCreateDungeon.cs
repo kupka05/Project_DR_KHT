@@ -23,9 +23,8 @@ public class ReCreateDungeon : MonoBehaviour
     {
 
         if (collision.gameObject.CompareTag("DungeonInspection"))
-        {
-            EndCoroutine();
-            DungeonInspectionManager.dungeonManagerInstance.CheckDungeonReCreating();
+        {            
+            DungeonInspectionManager.dungeonManagerInstance.FloorCollision = true;
         }
     }
 
@@ -35,11 +34,9 @@ public class ReCreateDungeon : MonoBehaviour
         {
             if (collision.gameObject.CompareTag("DungeonInspection"))
             {
-                GFunc.Log($"던전 재생성예정임");
-                EndCoroutine();
-                DungeonInspectionManager.dungeonManagerInstance.CheckDungeonReCreating();
                 secondCheck = false;
-                SecondCheckStart();
+                GFunc.Log($"던전 재생성예정임");
+                DungeonInspectionManager.dungeonManagerInstance.FloorCollision = true;
             }
         }
     }
@@ -50,20 +47,17 @@ public class ReCreateDungeon : MonoBehaviour
         yield return new WaitForSeconds(3f);
         //Destroy(rigid);
         //Destroy(boxCollider);
-        Destroy(this.gameObject);
-        EndCoroutine();
+        Destroy(this.gameObject);        
     }
 
     IEnumerator SecondCheckStart()
     {
         yield return null;
         secondCheck = true;
-
     }
-    // 코루틴을 끝내는 함수
-    private void EndCoroutine()
+
+    private void OnDestroy()
     {
-        //StopAllCoroutines();
+        StopAllCoroutines();
     }
-
 }       // ClassEnd

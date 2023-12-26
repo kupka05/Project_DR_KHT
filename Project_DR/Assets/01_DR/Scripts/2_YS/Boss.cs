@@ -12,7 +12,6 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
-    public UnityEvent bossMeet;
 
     public UnityEngine.UI.Slider bossHPSlider;
 
@@ -125,6 +124,10 @@ public class Boss : MonoBehaviour
     public float damageRadius = 1.0f;
 
 
+    [Header("Conversation")]
+    public BossNPC npc;
+    public UnityEvent bossMeet;
+
     //[Header("유도 미사일 테스트")]
     //public Transform testPort;
     //public GameObject testBullet;
@@ -160,6 +163,7 @@ public class Boss : MonoBehaviour
             bossState.GetComponent<BossState>().CastSpell();
         }
 
+        npc = GetComponent<BossNPC>();
     }
 
     void FixedUpdate()
@@ -807,12 +811,20 @@ public class Boss : MonoBehaviour
 
                 // 보스 죽음 퀘스트
                 QuestCallback.OnBossKillCallback(bossId);
+                Unit.ClearQuestByID(3122001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
+                //Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
 
                 if (bossState)
                 {
                     bossState.GetComponent<BossState>().Die();
                 }
                 StopAllCoroutines();
+
+                Vector3 newSize = new Vector3(0.00001f, 0.00001f, 0.00001f);
+                this.gameObject.transform.localScale = newSize;
+
+                GetComponent<BossMonsterDeadCheck>().BossDie();
+
                 //GFunc.Log("코루틴 멈춤");
             }
 
@@ -930,16 +942,25 @@ public class Boss : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isStart)
         {
-            bossMeet?.Invoke();
+            isStart = true;           
+            
+            // 보스 조우 퀘스트 콜백
+            QuestCallback.OnBossMeetCallback(bossId);   // 상태값 갱신 및 자동 완료
+            Unit.ClearQuestByID(3111001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
+            Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
+            npc.BossMeet();
 
-            // 보스 퀘스트 콜백
-            QuestCallback.OnBossMeetCallback(bossId);
-
-            isStart = true;
-            GFunc.Log("인식되냐");
-            StartCoroutine(ExecutePattern());
+            //isStart = true;
+            //GFunc.Log("인식되냐");
+            //StartCoroutine(ExecutePattern());
 
         }
+    }
+
+    // 전투 시작
+    public void StartAttack()
+    {
+        StartCoroutine(ExecutePattern());
     }
 
 }

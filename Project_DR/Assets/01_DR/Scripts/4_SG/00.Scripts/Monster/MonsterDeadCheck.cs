@@ -28,7 +28,8 @@ public class MonsterDeadCheck : MonoBehaviour
     }   //  ReMoveList()
 
 
-    public void BattleRoomInIt(BattleRoom _battleRoom)
+    public void BattleRoomInIt
+        (BattleRoom _battleRoom)
     {
         battleRoom = _battleRoom;
     }       // BattleRoomInIt()

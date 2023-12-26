@@ -95,6 +95,11 @@ namespace Js.Quest
         // 데이터 테이블에 있는 퀘스트를 가져와서 생성
         public void CreateQuestFromDataTable()
         {
+            GFunc.Log("CreateQuestFromDataTable()");
+
+            // 퀘스트 리스트를 초기화
+            UserDataManager.ResetQuestList();
+
             List<int> idTable = DataManager.Instance.GetDataTableIDs(QUEST_FIRST_ID);
             for (int i = 0; i < idTable.Count; i++)
             {
@@ -110,6 +115,9 @@ namespace Js.Quest
 
             // UserDataManager.questDictionary 할당
             UserDataManager.AddQuestDictionary();
+
+            // 디버그 퀘스트 리스트 생성
+            CreateQuestListDebug();
         }
 
 
@@ -124,10 +132,43 @@ namespace Js.Quest
             UserDataManager.AddQuestToQuestList(quest);
         }
 
-        // 퀘스트를 삭제한다
-        public void RemoveQuest(int index)
+        // ID로 퀘스트를 찾아 초기 상태로 리셋한다.
+        // 현재 진행 값도 초기화 된다.
+        public void ResetQuest(int id)
         {
-            UserDataManager.RemoveQuest(index);
+            GetQuestByID(id).ResetQuest();
+        }
+
+        // 퀘스트 상태 변경[시작불가] -> [시작가능]
+        // 단 선행퀘스트 조건을 충족해야 변경된다.
+        public void UpdateQuestStatesToCanStartable()
+        {
+            foreach (var item in QuestList)
+            {
+                // 상태가 [시작불가]일 경우
+                if (item.QuestState.State.Equals(QuestState.StateQuest.NOT_STARTABLE))
+                {
+                    // [시작가능]으로 상태 변경 시도
+                    item.ChangeToNextState();
+                }
+            }
+        }
+
+        // 퀘스트 상태 변경[시작가능] -> [시작불가]
+        // 선행 퀘스트 초기화로 [시작불가]로 변경해야 할 경우 변경한다.
+        public void UpdateQuestStatesToNotStartable()
+        {
+            foreach (var item in QuestList)
+            {
+                // 상태가 [시작가능]일 경우
+                // && [시작가능] 조건을 충족하지 못할 경우
+                if (item.QuestState.State.Equals(QuestState.StateQuest.CAN_STARTABLE)
+                    && item.QuestHandler.CheckStateForCanStartable().Equals(false))
+                {
+                    // 상태를 [시작불가]로 변경
+                    item.ChangeState(0);
+                }
+            }
         }
 
         // 퀘스트 ID로 퀘스트를 검색하고 반환
@@ -153,7 +194,7 @@ namespace Js.Quest
         }
 
         // 특정 타입의 퀘스트를 List<Quest>로 반환한다 
-        public List<Quest> GetQuestsOfType(int type, int state = 0)
+        public List<Quest> GetQuestsOfType(int type)
         {
             List<Quest> questList = new List<Quest>();
 
@@ -219,6 +260,7 @@ namespace Js.Quest
             return count;
         }
 
+
         /*************************************************
          *               Public DB Methods
          *************************************************/
@@ -242,7 +284,13 @@ namespace Js.Quest
             GFunc.Log($"구조화된 데이터: {json}");
 
             // 데이터가 비어있을 경우 예외처리
-            if (json.Equals("")) { return; }
+            // 퀘스트 전체 상태만 업데이트 [시작불가] -> [시작가능]
+            if (json.Equals(""))
+            {
+                // 조건 충족시 [시작가능]으로 상태 변경
+                UpdateQuestStatesToCanStartable();
+                return; 
+            }
 
             QuestSaveDatas questSaveDatas = JsonUtility.FromJson<QuestSaveDatas>(json);
 
@@ -259,15 +307,15 @@ namespace Js.Quest
         private void AddQuestCallbacks()
         {
             ////TODO: 해당하는 클래스들의 메서드에서 온콜백 호출되게 해야함
-            QuestCallback.QuestDataCallback += ChangeQuestStates;   // DB에서 퀘스트 정보를 가져왔을 때 or 퀘스트가 완료되었을 때
-            QuestCallback.BossMeetCallback += UpdateQuests;         // 보스 조우
-            QuestCallback.BossKillCallback += UpdateQuests;         // 보스 킬
-            QuestCallback.UseItemCallback += UpdateQuests;          // 아이템 사용
-            QuestCallback.MonsterKillCallback += UpdateQuests;      // 몬스터 처치
-            QuestCallback.CraftingCallback += UpdateQuests;         // 크래프팅
-            QuestCallback.ObjectCallback += UpdateQuests;           // 오브젝트
-            QuestCallback.InventoryCallback += UpdateQuests;        // 인벤토리(증정): 디버깅 완료
-            QuestCallback.DialogueCallback += UpdateQuests;         // NPC와 대화
+            QuestCallback.QuestDataCallback += UpdateQuestStatesToCanStartable;   // DB에서 퀘스트 정보를 가져왔을 때 or 퀘스트가 완료되었을 때
+            QuestCallback.BossMeetCallback += UpdateQuests;                       // 보스 조우
+            QuestCallback.BossKillCallback += UpdateQuests;                       // 보스 킬
+            QuestCallback.UseItemCallback += UpdateQuests;                        // 아이템 사용
+            QuestCallback.MonsterKillCallback += UpdateQuests;                    // 몬스터 처치
+            QuestCallback.CraftingCallback += UpdateQuests;                       // 크래프팅
+            QuestCallback.ObjectCallback += UpdateQuests;                         // 오브젝트
+            QuestCallback.InventoryCallback += UpdateQuests;                      // 인벤토리(증정): 디버깅 완료
+            QuestCallback.DialogueCallback += UpdateQuests;                       // NPC와 대화
         ////TODO: 해당하는 클래스들의 메서드에서 온콜백 호출되게 해야함
         }
 
@@ -278,7 +326,9 @@ namespace Js.Quest
             foreach (var item in QuestList)
             {
                 // 퀘스트 타입이 [메인퀘스트]일 경우
-                if (item.QuestData.Type.Equals(QuestData.QuestType.MAIN))
+                // && '실패' 상태가 아닐 경우
+                if (item.QuestData.Type.Equals(QuestData.QuestType.MAIN)
+                    && (! item.QuestState.State.Equals(QuestState.StateQuest.FAILED)))
                 {
                     // QuestSaveData 생성 및 _mainQuestSaveDatas에 추가
                     QuestSaveData questSaveData = new QuestSaveData();
@@ -321,33 +371,18 @@ namespace Js.Quest
             }
         }
 
-        // 퀘스트 상태 변경[시작불가] -> [시작가능]
-        // 단 선행퀘스트 조건을 충족해야 변경된다.
-        private void ChangeQuestStates()
-        {
-            GFunc.Log("OnQuestDataCallback()");
-            foreach (var item in QuestList)
-            {
-                // 상태가 [시작불가]일 경우
-                if (item.QuestState.State.Equals(QuestState.StateQuest.NOT_STARTABLE))
-                {
-                    // [시작가능]으로 상태 변경 시도
-                    item.ChangeToNextState();
-                }    
-            }
-        }
-
         // 퀘스트 업데이트
         private void UpdateQuests(int id, int condition)
         {
+            QuestData.ConditionType conditionType = (QuestData.ConditionType)condition;
             // 조건에 해당하는 퀘스트를 보유했는지 검사
             // 해당하는 퀘스트가 없을 경우
-            if (IsQuestConditionFulfilled(condition).Equals(false)) 
-            { GFunc.Log($"조건[{condition}]에 해당하는 진행중인 퀘스트가 없습니다."); return; }
+            if (IsQuestConditionFulfilled(conditionType).Equals(false)) 
+            { GFunc.Log($"조건[{conditionType}]에 해당하는 진행중인 퀘스트가 없습니다."); return; }
 
             int itemCount = default;
-            // condition이 [7] 증정일 경우
-            if (condition.Equals(7))
+            // conditionType이 [7] 증정일 경우
+            if (conditionType.Equals(QuestData.ConditionType.GIVE_ITEM))
 {
                 // 일치하는 아이템의 갯수를 가져옴
                 itemCount = GetItemCountByID(id);
@@ -356,22 +391,20 @@ namespace Js.Quest
             // 보유한 퀘스트 리스트를 순회해서 값 변경
             foreach (var item in QuestList)
             {
-                // 퀘스트의 condition(조건)이 일치할 경우
+                // 퀘스트의 conditionType(조건)이 일치할 경우
                 // {[1]=보스조우, [2]=보스처치, [3]=소비, [4]=처치, [5]=크래프팅, [6]=오브젝트, [7]=증정, [8]대화}
                 // && 해당하는 퀘스트의 상태가 '진행중'일 경우
-                if (item.QuestData.Condition.Equals(condition)
+                if (item.QuestData.Condition.Equals(conditionType)
                     && item.QuestState.State.Equals(QuestState.StateQuest.IN_PROGRESS))
                 {
                     // id와 퀘스트 키ID가 일치할 경우
                     if (item.QuestData.KeyID.Equals(id))
                     {
                         // condition이 [7] 증정일 경우
-                        if (item.QuestData.Condition.Equals(7))
+                        if (item.QuestData.Condition.Equals(QuestData.ConditionType.GIVE_ITEM))
                         {
                             // 보유한 아이템의 갯수로 값 변경
                             item.ChangeCurrentValue(itemCount);
-                            // 조건 충족시 [완료 가능]으로 상태 변경
-                            item.ChangeToNextState();
                         }
 
                         // condition이 [7]이 아니라면
@@ -379,16 +412,30 @@ namespace Js.Quest
                         {
                             // 값 증가 += 1
                             item.AddCurrentValue();
-                            // 조건 충족시 [완료 가능]으로 상태 변경
-                            item.ChangeToNextState();
                         }
+
+                        // 조건 충족시 [3][완료 가능]으로 상태 변경
+                        item.ChangeToNextState();
                     }
+                }
+
+                // [7] 증정 예외처리
+                // [완료가능] 상태에서 보유 갯수가 줄어들어 현재 값이 목표 값 보다
+                // 낮아질 경우 [진행중]으로 변경한다.
+                if (itemCount.Equals(default).Equals(false)
+                    && item.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE)
+                    && item.QuestData.CurrentValue < item.QuestData.ClearValue)
+                {
+                    GFunc.Log("item");
+                    // 현재 값과 상태를 [2][진행중]으로 변경
+                    item.ChangeCurrentValue(itemCount);
+                    item.ChangeState(2);
                 }
             }
         }
 
         // 조건에 해당하는 퀘스트를 보유했는지 검사
-        private bool IsQuestConditionFulfilled(int condition)
+        private bool IsQuestConditionFulfilled(QuestData.ConditionType condition)
         {
             // 퀘스트 
             foreach (var item in QuestList)
@@ -446,6 +493,22 @@ namespace Js.Quest
 
             // 아닐 경우
             return false;
+        }
+
+        // 디버그용 퀘스트 리스트 생성
+        // type은 표시할 퀘스트 타입이다.
+        private void CreateQuestListDebug()
+        {
+            // 이미 생성되 있을 경우 삭제 후 재생성한다.
+            int childCount = transform.childCount;
+            for (int i = 0; i < childCount; i++)
+            {
+                Transform child = transform.GetChild(i);
+                Destroy(child.gameObject);
+            }
+            GameObject obj = new GameObject("QuestListDebug");
+            obj.transform.SetParent(transform);
+            obj.AddComponent<QuestListDebug>().Initialize();
         }
     }
 }

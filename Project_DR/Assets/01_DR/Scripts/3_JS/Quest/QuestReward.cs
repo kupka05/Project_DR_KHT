@@ -16,14 +16,15 @@ namespace Js.Quest
          *                 Private Fields
          *************************************************/
         private QuestRewardData _questRewardData;
-        
+        private Quest _quest;
 
         /*************************************************
          *                 Public Methods
          *************************************************/
-        public QuestReward(int id)
+        public QuestReward(Quest quest, int id)
         {
             // Init
+            _quest = quest;
             _questRewardData = new QuestRewardData(id);
         }
 
@@ -34,7 +35,7 @@ namespace Js.Quest
             if (QuestRewardData.ID.Equals(0)) { return; }
 
             // 골드, EXP 보상 지급
-            UserData.AddQuestScore(_questRewardData.GiveGold, _questRewardData.GiveEXP);
+            UserData.AddQuestScore(_quest);
 
             // 퀘스트 타입에 따른 보상 획득
             GetQuestRewardByType();

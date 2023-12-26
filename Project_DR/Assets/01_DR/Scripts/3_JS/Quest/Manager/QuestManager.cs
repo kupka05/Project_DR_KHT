@@ -115,6 +115,9 @@ namespace Js.Quest
 
             // UserDataManager.questDictionary 할당
             UserDataManager.AddQuestDictionary();
+
+            // 디버그 퀘스트 리스트 생성
+            CreateQuestListDebug();
         }
 
 
@@ -323,7 +326,9 @@ namespace Js.Quest
             foreach (var item in QuestList)
             {
                 // 퀘스트 타입이 [메인퀘스트]일 경우
-                if (item.QuestData.Type.Equals(QuestData.QuestType.MAIN))
+                // && '실패' 상태가 아닐 경우
+                if (item.QuestData.Type.Equals(QuestData.QuestType.MAIN)
+                    && (! item.QuestState.State.Equals(QuestState.StateQuest.FAILED)))
                 {
                     // QuestSaveData 생성 및 _mainQuestSaveDatas에 추가
                     QuestSaveData questSaveData = new QuestSaveData();
@@ -369,14 +374,15 @@ namespace Js.Quest
         // 퀘스트 업데이트
         private void UpdateQuests(int id, int condition)
         {
+            QuestData.ConditionType conditionType = (QuestData.ConditionType)condition;
             // 조건에 해당하는 퀘스트를 보유했는지 검사
             // 해당하는 퀘스트가 없을 경우
-            if (IsQuestConditionFulfilled(condition).Equals(false)) 
-            { GFunc.Log($"조건[{condition}]에 해당하는 진행중인 퀘스트가 없습니다."); return; }
+            if (IsQuestConditionFulfilled(conditionType).Equals(false)) 
+            { GFunc.Log($"조건[{conditionType}]에 해당하는 진행중인 퀘스트가 없습니다."); return; }
 
             int itemCount = default;
-            // condition이 [7] 증정일 경우
-            if (condition.Equals(7))
+            // conditionType이 [7] 증정일 경우
+            if (conditionType.Equals(QuestData.ConditionType.GIVE_ITEM))
 {
                 // 일치하는 아이템의 갯수를 가져옴
                 itemCount = GetItemCountByID(id);
@@ -385,22 +391,20 @@ namespace Js.Quest
             // 보유한 퀘스트 리스트를 순회해서 값 변경
             foreach (var item in QuestList)
             {
-                // 퀘스트의 condition(조건)이 일치할 경우
+                // 퀘스트의 conditionType(조건)이 일치할 경우
                 // {[1]=보스조우, [2]=보스처치, [3]=소비, [4]=처치, [5]=크래프팅, [6]=오브젝트, [7]=증정, [8]대화}
                 // && 해당하는 퀘스트의 상태가 '진행중'일 경우
-                if (item.QuestData.Condition.Equals(condition)
+                if (item.QuestData.Condition.Equals(conditionType)
                     && item.QuestState.State.Equals(QuestState.StateQuest.IN_PROGRESS))
                 {
                     // id와 퀘스트 키ID가 일치할 경우
                     if (item.QuestData.KeyID.Equals(id))
                     {
                         // condition이 [7] 증정일 경우
-                        if (item.QuestData.Condition.Equals(7))
+                        if (item.QuestData.Condition.Equals(QuestData.ConditionType.GIVE_ITEM))
                         {
                             // 보유한 아이템의 갯수로 값 변경
                             item.ChangeCurrentValue(itemCount);
-                            // 조건 충족시 [3][완료 가능]으로 상태 변경
-                            item.ChangeToNextState();
                         }
 
                         // condition이 [7]이 아니라면
@@ -408,9 +412,10 @@ namespace Js.Quest
                         {
                             // 값 증가 += 1
                             item.AddCurrentValue();
-                            // 조건 충족시 [3][완료 가능]으로 상태 변경
-                            item.ChangeToNextState();
                         }
+
+                        // 조건 충족시 [3][완료 가능]으로 상태 변경
+                        item.ChangeToNextState();
                     }
                 }
 
@@ -421,6 +426,7 @@ namespace Js.Quest
                     && item.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE)
                     && item.QuestData.CurrentValue < item.QuestData.ClearValue)
                 {
+                    GFunc.Log("item");
                     // 현재 값과 상태를 [2][진행중]으로 변경
                     item.ChangeCurrentValue(itemCount);
                     item.ChangeState(2);
@@ -429,7 +435,7 @@ namespace Js.Quest
         }
 
         // 조건에 해당하는 퀘스트를 보유했는지 검사
-        private bool IsQuestConditionFulfilled(int condition)
+        private bool IsQuestConditionFulfilled(QuestData.ConditionType condition)
         {
             // 퀘스트 
             foreach (var item in QuestList)
@@ -487,6 +493,22 @@ namespace Js.Quest
 
             // 아닐 경우
             return false;
+        }
+
+        // 디버그용 퀘스트 리스트 생성
+        // type은 표시할 퀘스트 타입이다.
+        private void CreateQuestListDebug()
+        {
+            // 이미 생성되 있을 경우 삭제 후 재생성한다.
+            int childCount = transform.childCount;
+            for (int i = 0; i < childCount; i++)
+            {
+                Transform child = transform.GetChild(i);
+                Destroy(child.gameObject);
+            }
+            GameObject obj = new GameObject("QuestListDebug");
+            obj.transform.SetParent(transform);
+            obj.AddComponent<QuestListDebug>().Initialize();
         }
     }
 }

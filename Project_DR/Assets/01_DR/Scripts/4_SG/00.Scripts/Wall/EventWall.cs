@@ -5,19 +5,23 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EventWall : MonoBehaviour
 {
     public enum Dir { None, Left, Right, Up, Down}
     public Dir direction = Dir.None;
     [Header("GameObject")]
-    public GameObject walll;
+    public GameObject wall;
     public GameObject floor;
     public GameObject roof;
+    public GameObject block;
 
     [Header("Secret")]
     public bool isSecrecItem;
     public GameObject scerecObj;
+    public int itemID;
+    public int[] itemIDs;
 
     [Header("Option")]
     public LayerMask layerMask;
@@ -27,17 +31,19 @@ public class EventWall : MonoBehaviour
     private GameObject leftWall, rightWall;
 
     private void Start()
-    {
-        Invoke(nameof(SetEventWall), 1f) ;
-
-       
+    {     
+        Invoke(nameof(SetEventWall), 1f) ;       
     }
     private void SetEventWall()
     {
         FloorCheck();
+
+        // 방향을 정하지 못하면 막기
         if (direction == Dir.None)
         {
-            walll.GetComponent<Damageable>().DestroyOnDeath = false;
+            wall.GetComponent<Damageable>().DestroyOnDeath = false;
+            wall.SetActive(false);
+            block.SetActive(true);
         }
     }
 
@@ -59,33 +65,33 @@ public class EventWall : MonoBehaviour
         if (Physics.Raycast(leftPos, -transform.up, out hit, range, layerMask))
         {
             direction = Dir.Left;
-            GFunc.Log("왼쪽");
+            //GFunc.Log("왼쪽");
         }
         else if (Physics.Raycast(rightPos, -transform.up, out hit, range, layerMask))
         {
             direction = Dir.Right;
-            GFunc.Log("오른쪽");
+            //GFunc.Log("오른쪽");
         }
         else if (Physics.Raycast(rightPos, -transform.up, out hit, range, layerMask))
         {
             direction = Dir.Up;
-            GFunc.Log("위");
+            //GFunc.Log("위");
         }
         else if (Physics.Raycast(rightPos, -transform.up, out hit, range, layerMask))
         {
             direction = Dir.Down;
-            GFunc.Log("아래");
+            //GFunc.Log("아래");
         }
         else
         {
 
             if (Physics.Raycast(pos, -transform.up, out hit, 1, layerMask))
             {
-                GFunc.Log("중앙에서는 발견");
+                //GFunc.Log("중앙에서는 발견");
             }
             else
             {
-                GFunc.Log("아무것도 체크 못함");
+                //GFunc.Log("아무것도 체크 못함");
                 direction = Dir.None;
             }
             return;
@@ -93,7 +99,7 @@ public class EventWall : MonoBehaviour
 
         if (!hit.collider.gameObject.CompareTag("Floor"))
         {
-            GFunc.Log("바닥이 아님");
+            //GFunc.Log("바닥이 아님");
             return;
         }
         EventWallPosSet();
@@ -143,14 +149,28 @@ public class EventWall : MonoBehaviour
             secretObjPos.z -= index;
         }
 
-        Instantiate(walll, clonePos, this.transform.rotation, this.transform);
+        Instantiate(wall, clonePos, this.transform.rotation, this.transform);
 
         // 비밀 아이템 생성
-        if(isSecrecItem && scerecObj)
+        if(isSecrecItem)
         {
-            GameObject Item = Instantiate(scerecObj, secretObjPos, this.transform.rotation, this.transform);
-            Item.transform.localScale = Vector3.one;
+            itemIDs = new int[Data.GetCount(itemID)];
+
+            for (int i = 0; i < Data.GetCount(itemID); i++)
+            {
+                itemIDs[i] = Data.GetInt(itemID + i, "ID");
+            }
+
+            int index = Random.Range(0, itemIDs.Length);
+
+            Unit.AddFieldItem(secretObjPos, itemIDs[index]);
+
+            //GameObject Item = Instantiate(scerecObj, secretObjPos, this.transform.rotation, this.transform);
+            //Item.transform.localScale = Vector3.one;
         }
+        
+
+
 
         SetFloorAndRoof();
         leftWall.transform.parent = this.transform;
@@ -232,7 +252,7 @@ public class EventWall : MonoBehaviour
                 CreateVerticalWall(1f);
                 break;
             case Dir.Down:
-                CreateVerticalWall(1f);
+                CreateVerticalWall(-1f);
                 break;
         }
     }

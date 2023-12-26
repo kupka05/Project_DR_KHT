@@ -29,7 +29,7 @@ namespace Js.Quest
         public Quest(int id)
         {
             // Init
-            _questData = new QuestData(id);
+            _questData = new QuestData(this, id);
             _questState = new QuestState(this);
             _questHandler = new QuestHandler(this);
         }

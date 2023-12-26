@@ -63,7 +63,7 @@ public static class GFunc
         _parsString = _parsString.Replace("\\n", "\n");
         _parsString = _parsString.Replace("#", ",");
         _parsString = _parsString.Replace("\\", "");
-        _parsString = _parsString.Replace("_", "");         
+        _parsString = _parsString.Replace("_", "");
         string[] splitParams = _parsString.Split("\n");
 
         int[] splitIds = new int[splitParams.Length];
@@ -74,6 +74,28 @@ public static class GFunc
 
         return splitIds;
     }       // SplitIds()
+
+    /// <summary>
+    /// GetData해온 string값을 Replace와 Split한후 float[]로 변환시켜줘서 반환해주는 함수
+    /// </summary>
+    /// <param name="_parsString">Id값이 들어있는 string</param>
+    /// <returns>int[] 반환</returns>
+    public static float[] SplitFloats(string _parsString)
+    {
+        _parsString = _parsString.Replace("\\n", "\n");
+        _parsString = _parsString.Replace("#", ",");
+        _parsString = _parsString.Replace("\\", "");
+        _parsString = _parsString.Replace("_", "");
+        string[] splitParams = _parsString.Split("\n");
+
+        float[] splitFloat = new float[splitParams.Length];
+        for (int i = 0; i < splitParams.Length; i++)
+        {
+            splitFloat[i] = float.Parse(splitParams[i]);
+        }
+
+        return splitFloat;
+    }       // SplitFloats()
 
     /*************************************************
      *                    Debug

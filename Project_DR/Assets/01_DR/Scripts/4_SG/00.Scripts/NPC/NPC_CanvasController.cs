@@ -34,7 +34,8 @@ public class NPC_CanvasController : MonoBehaviour
     private string underBar;                    // Underbar도 선택지가 존재하지 않는다는 의미로 사용될것임
 
     private int nowConversationRefID;           // 현재 대화에서 참조 되고 있는 ID    
-    // TODO : Ray의 판정을 위해 Image컴포넌트를 가져와야할수도 있음
+
+    public bool isOutPutChoice;                 // 선택지 중복 출력을 방지하기 위한 bool값 -> EnQueue됄때 false 될거임
 
     public event System.Action<int> RewardEvent;        // 보상 지급하라고 NPC에게 알려주는 이벤트
 
@@ -56,7 +57,7 @@ public class NPC_CanvasController : MonoBehaviour
     #region 변수에 데이터 기입관련
     private void AwakeInIt()
     {       // 종속성이 없는 TextMeshPro의 컴포넌트를 Get해올것임
-        stringBuilder = new StringBuilder();        
+        stringBuilder = new StringBuilder();
         isNon = "0";
         underBar = "_";
 
@@ -168,11 +169,12 @@ public class NPC_CanvasController : MonoBehaviour
     /// <param name="_converationRefID">출력해야하는 선택지가 존재하는 대사의 ID값</param>
     public void OutPutChoices(int _conversationRefID)
     {
+        isOutPutChoice = true;
         nowConversationRefID = _conversationRefID;
         // Choice1Event가 존재한다면 그것의 ID를 풀어내서 참조해야함(플레이어퀘스트 || 이후 영향이 줄것)
         string choice1Event = (string)DataManager.Instance.GetData(_conversationRefID, "Choice1Event", typeof(string));
 
-        string choice1 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice1", typeof(string));        
+        string choice1 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice1", typeof(string));
         string choice2 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice2", typeof(string));
         string choice3 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice3", typeof(string));
         // 아래 Choice3는 존재하면 띄우는 조건이 만족하는지 한번 체크해야함 (12.13기준 퀘스트가 나와야 클리어여부를 끌어와서 체크할수있음)
@@ -192,6 +194,7 @@ public class NPC_CanvasController : MonoBehaviour
     private void CheckChoiceNull(string _choice, int _choiceNum,
         TextMeshProUGUI _outputText, NPCUIImage _choiceImageComponent)
     {
+        //GFunc.Log($"해당 선택지의 값 : {_choice} 가 들어왔음");
         //Debug.Log($"여기 들어오나? 들어온다면 어떤 값을 가지고 있지?\n_choice :{_choice}\n_ChoiceNum : {_choiceNum}");
         if (_choice == isNon || _choice == underBar)
         {
@@ -200,9 +203,19 @@ public class NPC_CanvasController : MonoBehaviour
             return;
         }
         else { /*DoNothing*/ }
-        _choiceImageComponent.choiceNum = _choiceNum;
-        ChoiceTextAColorOn(_outputText);
-        _outputText.text = _choice;
+
+        bool isChoiceNum3Pass = true;       // 3번 선택지만 검사들어가고 불통이라면 출력이 안됨
+        if (_choiceNum == 3)
+        {
+            isChoiceNum3Pass = CheckChoice3();
+        }
+
+        if (isChoiceNum3Pass == true)
+        {
+            _choiceImageComponent.choiceNum = _choiceNum;
+            ChoiceTextAColorOn(_outputText);
+            _outputText.text = _choice;
+        }
 
     }       // CheckChoiceNull()
 
@@ -210,15 +223,191 @@ public class NPC_CanvasController : MonoBehaviour
     /// <summary>
     /// 3번 선택지는 무조건 MBTI의 조건을 타기 때문에 조건확인
     /// </summary>
-    private void CheckChoice3()
+    private bool CheckChoice3()
     {
         // TODO : 퀘스트클리어 여부를 확인 가능하다면 그떄에 체크해서 출력시키도록 해야함
+        // 아래 받아온 string값을 int[], string [] 2개로 나누어야함                                 
+        bool isPass = true;
+
+        string choice3ConditionMBTIs = Data.GetString(nowConversationRefID, "Choice3ConditionMBTI");
+
+        string choice3ConditionValues = Data.GetString(nowConversationRefID, "Choice3ConditionValue");
+         
+        string[] arrChoice3ConditionMBTI = GFunc.SplitConversation(choice3ConditionMBTIs);
+
+        float[] arrChoice3ConditionValue = GFunc.SplitFloats(choice3ConditionValues);
+        
+        //GFunc.Log($"arrLength : {arrChoice3ConditionMBTI.Length}"); // 조건 1개짜리 결과 1
+        bool[] checkArray = new bool[arrChoice3ConditionValue.Length];
+
+        for (int i = 0; i < arrChoice3ConditionMBTI.Length; i++)
+        {
+            string findMBTI = FindConditionMBTI(arrChoice3ConditionMBTI[i]);            
+            //checkArray[i] = CheckMBTIValue(arrChoice3ConditionMBTI[i], arrChoice3ConditionValue[i]);
+            checkArray[i] = CheckMBTIValue(findMBTI, arrChoice3ConditionValue[i]);
+        }
+        
+        for (int i = 0; i < checkArray.Length; i++)
+        {            
+            if (checkArray[i] == false)
+            {
+                isPass = false;
+            }
+        }
+
+        return isPass;
 
     }       // CheckChoice3()
 
 
+    /// <summary>
+    /// 해당 MBTI가 뭔지 확인하는 함수
+    /// </summary>
+    /// <param name="_compareMBTI">잘린 배열의 i번쨰의 변수</param>
+    /// <returns></returns>
+    private string FindConditionMBTI(string _compareMBTI)
+    {
+        if (_compareMBTI == "I")
+        {
+            return "I";
+        }
+        else if (_compareMBTI == "E")
+        {
+            return "E";
+        }
+        else if (_compareMBTI == "N")
+        {
+            return "N";
+        }
+        else if (_compareMBTI == "S")
+        {
+            return "S";
+        }
+        else if (_compareMBTI == "F")
+        {
+            return "F";
+        }
+        else if (_compareMBTI == "T")
+        {
+            return "T";
+        }
+        else if (_compareMBTI == "P")
+        {
+            return "P";
+        }
+        else
+        {
+            return "J";
+        }
 
-   
+    }       // FindConditionMBTI()
+
+
+    /// <summary>
+    /// 매개변수로 받은 것에 따라서 값을 비교후 bool값을 리턴해주는 함수
+    /// </summary>
+    /// <param name="_mbti">비교될 MBTI</param>
+    /// <param name="_value">비교할 값</param>
+    /// <returns></returns>
+    private bool CheckMBTIValue(string _mbti, float _value)
+    {
+        GFunc.Log($"검사하기 위해 들어온 매개변수 값 : {_mbti}");
+        if (_mbti == "I")
+        {
+            GFunc.Log($"조건에 들어옴 Value : {_value}\n현재 MBTI I 값 : {UserDataManager.Instance.mbti.I}");
+            if (_value <= UserDataManager.Instance.mbti.I)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (_mbti == "E")
+        {
+            if (_value >= UserDataManager.Instance.mbti.I)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        else if (_mbti == "N")
+        {
+            if (_value <= UserDataManager.Instance.mbti.N)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (_mbti == "S")
+        {
+            if (_value >= UserDataManager.Instance.mbti.N)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        else if (_mbti == "F")
+        {
+            if (_value <= UserDataManager.Instance.mbti.F)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (_mbti == "T")
+        {
+            if (_value >= UserDataManager.Instance.mbti.F)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (_mbti == "P")
+        {
+            if (_value <= UserDataManager.Instance.mbti.P)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {       // "J"
+            if (_value >= UserDataManager.Instance.mbti.P)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+    }        // CheckMBTIValue()
+
+
     private void ItCompensation(int _compensationRefId)
     {
         // 보상
@@ -271,7 +460,7 @@ public class NPC_CanvasController : MonoBehaviour
 
     private void OnClickDialogueImage(NPCUIImage _npcUiImage)
     {
-        if(npc == null || npc == default)
+        if (npc == null || npc == default)
         {
             npc = this.transform.parent.parent.GetComponent<NPC>();
         }
@@ -317,14 +506,14 @@ public class NPC_CanvasController : MonoBehaviour
         // 이벤트가 존재한다면
         // 해당 이벤트 시트에서 가져오기 -> 참조의 ID 확인
         // -> 그 ID 값이 퀘스트인지 보상인지 구별하기 -> 퀘스트,보상 실행
-        
-       // GFunc.Log($"에러부분 ->  eventRefId : {eventRefId}\n nowConversationRefID : {nowConversationRefID}");
+
+        // GFunc.Log($"에러부분 ->  eventRefId : {eventRefId}\n nowConversationRefID : {nowConversationRefID}");
 
         int[] eventRefIds = GFunc.SplitIds(eventRefId);
 
-        int defaultCompensation = 320000;
-        int defaultQuest = 3100000;
-        int defaultConveration = 300000000;
+        int defaultCompensation = 320_000;
+        int defaultQuest = 310_000_0;
+        int defaultConveration = 300_000_00;
 
         #region 작은수 -> 큰수  LEGACY
         // 여기서 나온값이 퀘스트인지 보상인지 대사인지 확인할것임
@@ -349,7 +538,7 @@ public class NPC_CanvasController : MonoBehaviour
         {
             if (eventRefIds[i] >= defaultConveration)
             {
-                ItConveration(eventRefIds[i]);                
+                ItConveration(eventRefIds[i]);
             }
             else if (eventRefIds[i] >= defaultQuest && eventRefIds[i] < defaultConveration)
             {
@@ -362,7 +551,7 @@ public class NPC_CanvasController : MonoBehaviour
         }
 
         ResetChoice();
-        if(eventRefIds[^1] == 0)
+        if (eventRefIds[^1] == 0)
         {
             npc.InvokeEndConverationEvent();
         }

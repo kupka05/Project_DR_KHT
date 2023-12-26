@@ -23,6 +23,7 @@ namespace Js.Crafting
         private string _itemName;
         private Vector3 _spawnPos;
 
+
         /*************************************************
          *                Public Methods
          *************************************************/

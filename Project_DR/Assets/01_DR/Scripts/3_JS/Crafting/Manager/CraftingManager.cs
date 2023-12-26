@@ -29,16 +29,14 @@ namespace Js.Crafting
         #endregion
         public enum Type
         {
-            CRAFTING = 0,    // 아이템 조합
-            ENHANCE = 1      // 아이템 강화
+            CRAFTING = 0,     // 아이템 조합
+            ENHANCE = 1       // 아이템 강화
         }
         public Dictionary<int, ICraftingComponent> ItemCraftingDictionary       // 아이템 조합 크래프팅 딕셔너리
            => _itemCraftingDictionary;
-        public Dictionary<int, ICraftingComponent> ItemEnhanceDictionary        // 아이템 강화 크래프팅 딕셔너리
-           => _itemEnhanceDictionary;
         public readonly int[] CRAFTING_TABLE_INDEX =
-        {                                                                       // 크래프팅 테이블 색인 인덱스
-            3_0000_1, 3_2000_1
+        {
+            3_0000_1, 3_2000_1                                                  // 크래프팅 테이블 색인 인덱스
         };
 
 
@@ -46,8 +44,6 @@ namespace Js.Crafting
          *                 Private Field
          *************************************************/
         private Dictionary<int, ICraftingComponent> _itemCraftingDictionary
-            = new Dictionary<int, ICraftingComponent>();
-        private Dictionary<int, ICraftingComponent> _itemEnhanceDictionary
             = new Dictionary<int, ICraftingComponent>();
 
 
@@ -95,7 +91,7 @@ namespace Js.Crafting
                 {
                     // conditionID가 0일 경우 예외 처리
                     int conditionID = conditions[j];
-                    if (conditions[j].Equals(0)) { continue; }
+                    if (conditionID.Equals(0)) { continue; }
 
                     // 두 가지 조건의 조합식을 가진 컴포짓 아이템을 생성한다.
                     CompositeItem compositeItem = CreateCompositeItemWithConditions(conditionID);
@@ -145,7 +141,7 @@ namespace Js.Crafting
             return compositeItem;
         }
 
-        // 결과 아이템을 생성후 반환한다.
+        // 결과 아이템을 생성 후 반환한다.
         private ResultItem CreateResultItem(int id)
         {
             int resultKeyID = Data.GetInt(id, "Result_KeyID");
@@ -156,7 +152,7 @@ namespace Js.Crafting
             return resultItem;
         }
 
-        // 강화 핸들러를 생성후 반환한다.
+        // 강화 핸들러를 생성 후 반환한다.
         private EnhanceHandler CreateEnhanceHandler(int id)
         {
             int statKeyID = Data.GetInt(id, "Stat_KeyID");

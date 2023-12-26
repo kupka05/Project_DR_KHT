@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Js.Quest;
 
 public static class UserData
 {
@@ -67,14 +68,14 @@ public static class UserData
     #region ######################_결과보상_#####################
 
     /// <summary>퀘스트 보상을 결과에 추가하는 메서드 </summary>
-    public static void AddQuestScore(int gold, int exp)
+    public static void AddQuestScore(Quest quest)
     {
-        UserDataManager.Instance.result.AddQuestScore(gold, exp);
+        UserDataManager.Instance.result.AddQuestScore(quest);
     }
     /// <summary>획득한 아이템을 결과에 추가하는 메서드 </summary>
-    public static void AddItemScore(int gold, int exp)
+    public static void AddItemScore(int id)
     {
-        UserDataManager.Instance.result.AddItemScore(gold, exp);
+        UserDataManager.Instance.result.AddItemScore(id);
     }
     #endregion
 
@@ -101,6 +102,12 @@ public static class UserData
         UserDataManager.Instance.CurHP -= damage;
     }
 
+    /// <summary> 플레이어의 현재 체력을 증감 </summary>
+    public static void SetCurrentHealth(float amount)
+    {
+        // amount는 양수/음수 둘 중 하나의 값을 받는다.
+        UserDataManager.Instance.CurHP += amount;
+    }
 
 
 

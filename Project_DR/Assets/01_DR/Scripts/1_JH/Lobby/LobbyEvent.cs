@@ -207,7 +207,22 @@ public class LobbyEvent : MonoBehaviour
             Quest curQuest = Unit.GetInProgressMainQuest();
             targetQuestID = curQuest.QuestData.ID;
         }
-        SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
+
+        // 게임오버시 메인 디스플레이 출력 대사
+        if (UserDataManager.Instance.isGameOver)
+        {
+            SetNpcDialog(questID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
+        }
+        // 게임 클리어시 메인 디스플레이 출력 대사
+        else if (UserDataManager.Instance.isClear)
+        {
+            SetNpcDialog(targetQuestID+1); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
+        }
+        else
+        {
+            SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
+        }
+
         GetClearData();              // 클리어 데이터 가져오기
 
         // 메인 디스플레이의 클리어 데이터 업데이트
@@ -229,6 +244,7 @@ public class LobbyEvent : MonoBehaviour
         SetSkillLevelBtn();
 
         isClear = UserDataManager.Instance.isClear;
+        UserData.ResetPlayer();
     }
 
     // 클리어 데이터 불러오기
@@ -883,9 +899,9 @@ public class LobbyEvent : MonoBehaviour
         else
         {
             // 이벤트 추가
-            Unit.ChangeQuestStateToInProgress(31_1_1_001);
-            Unit.ChangeQuestStateToInProgress(31_1_1_002);
-            Unit.ChangeQuestStateToInProgress(31_1_1_003);
+            Unit.InProgressQuestByID(31_1_1_001);
+            Unit.InProgressQuestByID(31_1_1_002);
+            Unit.InProgressQuestByID(31_1_1_003);
 
             ChangeDisplayButton("Main");
             OpenSpawnRoomDoor();

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Js.Quest;
+using Rito.InventorySystem;
 
 // 플레이어에게 특정한 명령을 실행하는 클래스
 public static class Unit
@@ -19,6 +20,12 @@ public static class Unit
     public static void AddFieldItem(Vector3 pos, int id, int amount = 1)
     {
         ItemManager.instance.CreateItem(pos, id, amount);
+    }
+
+    // ID로 인벤토리에 있는 아이템을 삭제
+    public static bool RemoveInventoryItemForID(int id, int amount)
+    {
+        return ItemManager.instance.RemoveInventoryItemForID(id, amount);
     }
 
     // 인벤토리의 모든 아이템을 초기화
@@ -45,7 +52,7 @@ public static class Unit
     }
 
     // ID와 일치하는 퀘스트의 상태를 [진행중]으로 변경한다.
-    public static void ChangeQuestStateToInProgress(int id)
+    public static void InProgressQuestByID(int id)
     {
         Quest quest = UserDataManager.QuestDictionary[id];
         // 퀘스트가 [시작가능] 상태일 경우
@@ -86,11 +93,27 @@ public static class Unit
         return false;
     }
 
+
+
     // [시작가능] 상태의 메인 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetCanStartMainQuest()
     {
         return GetCanStartMainQuestForList()[0];
     }
+
+    // [시작가능] 상태의 서브 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetCanStartSubQuest()
+    {
+        return GetCanStartSubQuestForList()[0];
+    }
+
+    // [시작가능] 상태의 특수 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetCanStartSpecialQuest()
+    {
+        return GetCanStartSpeicalQuestForList()[0];
+    }
+
+
 
     // [진행중] 상태의 메인 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetInProgressMainQuest()
@@ -98,25 +121,83 @@ public static class Unit
         return GetInProgressMainQuestForList()[0];
     }
 
+    // [진행중] 상태의 서브 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetInProgressSubQuest()
+    {
+        return GetInProgressSubQuestForList()[0];
+    }
+
+    // [진행중] 상태의 특수 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetInProgressSpecialQuest()
+    {
+        return GetInProgressSpecialQuestForList()[0];
+    }
+
+
+
     // [시작가능] 상태의 메인 퀘스트를 리스트로 가져온다
     public static List<Quest> GetCanStartMainQuestForList()
     {
-        // [진행중] 메인 퀘스트 타입를 리스트로 가져옴
-        List<Quest> questList = GetQuestsOfType(1);
+        // [진행중] [1]메인 퀘스트 타입을 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(1);
         // 가져온 퀘스트 리스트 중에서 [1][시작가능] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 1);
         return questList;
     }
 
+    // [시작가능] 상태의 서브 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetCanStartSubQuestForList()
+    {
+        // [진행중] [2]서브 퀘스트 타입을 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(2);
+        // 가져온 퀘스트 리스트 중에서 [1][시작가능] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 1);
+        return questList;
+    }
+
+    // [시작가능] 상태의 특수 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetCanStartSpeicalQuestForList()
+    {
+        // [진행중] [3]메인 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(3);
+        // 가져온 퀘스트 리스트 중에서 [1][시작가능] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 1);
+        return questList;
+    }
+
+
+
     // [진행중] 상태의 메인 퀘스트를 리스트로 가져온다
     public static List<Quest> GetInProgressMainQuestForList()
     {
-        // [진행중] 메인 퀘스트 타입를 리스트로 가져옴
-        List<Quest> questList = GetQuestsOfType(1);
+        // [진행중] [1]메인 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(1);
         // 가져온 퀘스트 리스트 중에서 [2][진행중] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 2);
         return questList; 
     }
+
+    // [진행중] 상태의 서브 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetInProgressSubQuestForList()
+    {
+        // [진행중] [2]서브 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(2);
+        // 가져온 퀘스트 리스트 중에서 [2][진행중] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 2);
+        return questList;
+    }
+
+    // [진행중] 상태의 특수 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetInProgressSpecialQuestForList()
+    {
+        // [진행중] [3]특수 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(3);
+        // 가져온 퀘스트 리스트 중에서 [2][진행중] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 2);
+        return questList;
+    }
+
+
 
     // 퀘스트 ID로 퀘스트를 검색하고 반환
     public static Quest GetQuestByID(int id)
@@ -132,13 +213,13 @@ public static class Unit
 
     // 특정 타입의 퀘스트를 리스트로 가져온다
     // [1]=메인퀘스트, [2]=서브퀘스트, [3]=특수퀘스트
-    public static List<Quest> GetQuestsOfType(int type)
+    public static List<Quest> GetQuestListOfType(int type)
     {
         return QuestManager.Instance.GetQuestsOfType(type);
     }
 
     // 특정한 상태에 해당하는 모든 퀘스트를 리스트로 가져온다
-    public static List<Quest> GetQuestsByStatus(int state)
+    public static List<Quest> GetQuestListByStatus(int state)
     {
         return QuestManager.Instance.GetQuestsByStatus(state);
     }

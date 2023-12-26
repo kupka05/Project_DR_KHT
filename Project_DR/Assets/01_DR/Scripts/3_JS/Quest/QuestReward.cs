@@ -16,14 +16,15 @@ namespace Js.Quest
          *                 Private Fields
          *************************************************/
         private QuestRewardData _questRewardData;
-        
+        private Quest _quest;
 
         /*************************************************
          *                 Public Methods
          *************************************************/
-        public QuestReward(int id)
+        public QuestReward(Quest quest, int id)
         {
             // Init
+            _quest = quest;
             _questRewardData = new QuestRewardData(id);
         }
 
@@ -33,8 +34,9 @@ namespace Js.Quest
             // 퀘스트 보상 ID가 0일 경우 예외처리
             if (QuestRewardData.ID.Equals(0)) { return; }
 
-            // 골드, EXP 보상 지급
-            UserData.AddQuestScore(_questRewardData.GiveGold, _questRewardData.GiveEXP);
+            // 기본 보상(골드, EXP, 플레이어 체력) 지급
+            UserData.AddQuestScore(_quest);
+            UserData.SetCurrentHealth(_questRewardData.GiveHealth);
 
             // 퀘스트 타입에 따른 보상 획득
             GetQuestRewardByType();
@@ -62,10 +64,10 @@ namespace Js.Quest
                     GetRewardMBTI();
                     break;
 
-                // "스텟" 일 경우
-                case QuestRewardData.TypeReward.EFFECT:
+                // "상태" 일 경우
+                case QuestRewardData.TypeReward.STATE:
                     // 퀘스트 보상 스텟획득
-                    GetRewardEffect();
+                    GetRewardState();
                     break;
             }
         }
@@ -105,10 +107,10 @@ namespace Js.Quest
             MBTIManager.Instance.ResultMBTI(mbti);
         }
 
-        // 퀘스트 보상 스텟 획득
-        private void GetRewardEffect()
+        // 퀘스트 보상 상태 획득
+        private void GetRewardState()
         {
-            // TODO: 퀘스트 스텟 보상 구현하기;
+            // TODO: 퀘스트 상태 보상 구현하기
         }
 
         // 랜덤 확률 돌리기

@@ -95,7 +95,7 @@ public class BossBullet : MonoBehaviour
                 {
                     // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
                     collider.GetComponent<Damageable>().DealDamage(damage);
-                    GFunc.Log($"데미지:{damage}");
+                    GFunc.Log($"바운스 데미지:{damage}");
 
                     isDamage = true;
                     Destroy(this.gameObject);

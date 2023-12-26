@@ -8230,7 +8230,7 @@ ParticleSystem:
   CollisionModule:
     enabled: 0
     serializedVersion: 4
-    type: 0
+    type: 1
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
@@ -8411,7 +8411,7 @@ ParticleSystem:
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 1
   TriggerModule:
@@ -9528,11 +9528,13 @@ MonoBehaviour:
   BounceTableId: 6912
   bounceEffect: {fileID: 0}
   target: {fileID: 0}
-  attack: 0.2
+  attack: 20
+  damageRadius: 1.5
   speed: 0
   damage: 0
   destoryTime: 0
   isShoot: 0
+  isDamage: 0
 --- !u!114 &5304765741451573336
 MonoBehaviour:
   m_ObjectHideFlags: 0

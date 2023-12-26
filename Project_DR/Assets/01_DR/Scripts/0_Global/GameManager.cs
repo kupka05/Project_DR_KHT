@@ -236,7 +236,7 @@ public class GameManager : MonoBehaviour
 
         isGameOver = true;
         UserData.GameOver();
-        UserData.ResetPlayer();
+        //UserData.ResetPlayer();
 
         SceneLoad(gameoverScene); // 게임오버 씬 전환
     }
@@ -246,7 +246,7 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
         UserData.GameOver();
-        UserData.ResetPlayer();
+        //UserData.ResetPlayer();
 
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneLoad(currentSceneName);
@@ -364,6 +364,20 @@ public class GameManager : MonoBehaviour
         return true;
     }       // CheckAllRoomClear()
 
+    public void FadeIn()
+    {
+        if (fader)
+        {
+            fader.DoFadeIn();
+        }
+    }
+    public void FadeOut()
+    {
+        if (fader)
+        {
+            fader.DoFadeOut();
+        }
+    }
 
 
 

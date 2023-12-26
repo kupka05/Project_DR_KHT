@@ -16,7 +16,7 @@ public class DEbugQuest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             Unit.GetQuestByID(00_00_001).ChangeState(2);
-            Unit.ChangeQuestStateToInProgress(00_00_001);
+            Unit.InProgressQuestByID(00_00_001);
         }
 
         if (Input.GetKeyDown(KeyCode.Y))

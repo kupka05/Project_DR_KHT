@@ -272,7 +272,7 @@ public class EventWall : MonoBehaviour
 
         Vector3 _wallPos = this.transform.position;
         _wallPos.z = rightWallPos.z;
-        Instantiate(leftWall, _wallPos, leftWall.transform.rotation, this.transform);
+        //Instantiate(leftWall, _wallPos, leftWall.transform.rotation, this.transform);
     }
     private void CreateHorizontalWall(float distance)
     {
@@ -289,7 +289,7 @@ public class EventWall : MonoBehaviour
 
         Vector3 _wallPos = this.transform.position;
         _wallPos.x = rightWallPos.x;
-        Instantiate(leftWall, _wallPos, leftWall.transform.rotation, this.transform);
+        //Instantiate(leftWall, _wallPos, leftWall.transform.rotation, this.transform);
     }
     private void SetFloorAndRoof()
     {

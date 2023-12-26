@@ -778,12 +778,20 @@ public class Boss : MonoBehaviour
 
                 // 보스 죽음 퀘스트
                 QuestCallback.OnBossKillCallback(bossId);
+                Unit.ClearQuestByID(3122001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
+                //Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
 
                 if (bossState)
                 {
                     bossState.GetComponent<BossState>().Die();
                 }
                 StopAllCoroutines();
+
+                Vector3 newSize = new Vector3(0.00001f, 0.00001f, 0.00001f);
+                this.gameObject.transform.localScale = newSize;
+
+                GetComponent<BossMonsterDeadCheck>().BossDie();
+
                 //GFunc.Log("코루틴 멈춤");
             }
 
@@ -901,9 +909,12 @@ public class Boss : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isStart)
         {
-            isStart = true;            
+            isStart = true;           
+            
             // 보스 조우 퀘스트 콜백
-            QuestCallback.OnBossMeetCallback(bossId);
+            QuestCallback.OnBossMeetCallback(bossId);   // 상태값 갱신 및 자동 완료
+            Unit.ClearQuestByID(3111001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
+            Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
             npc.BossMeet();
 
             //isStart = true;

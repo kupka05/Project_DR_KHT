@@ -73,6 +73,7 @@ public class BossNPC : NPC
             canvasObj.transform.localPosition = new Vector3(0.2f,-0.35f,1.2f);
             canvasObj.transform.localRotation = Quaternion.identity;
         }
+        GameManager.instance.FadeIn();
 
         OnCanvasObj();
         PickConversation(npcID);
@@ -103,6 +104,7 @@ public class BossNPC : NPC
         //ChangeAnimationString(npcWaitMotion);
         base.EndConveration();
         OffCanvasObj();
+        GameManager.instance.FadeOut();
         GFunc.Log("전투를 시작한다.");
 
         GetComponent<Boss>().StartAttack();

@@ -100,7 +100,7 @@ public class BossNPC : NPC
     /// </summary>
     protected override void EndConveration()
     {
-        ChangeAnimationString(npcWaitMotion);
+        //ChangeAnimationString(npcWaitMotion);
         base.EndConveration();
         OffCanvasObj();
         GFunc.Log("전투를 시작한다.");

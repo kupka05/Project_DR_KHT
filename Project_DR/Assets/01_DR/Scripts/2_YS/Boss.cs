@@ -789,6 +789,9 @@ public class Boss : MonoBehaviour
 
                 Vector3 newSize = new Vector3(0.00001f, 0.00001f, 0.00001f);
                 this.gameObject.transform.localScale = newSize;
+
+                GetComponent<BossMonsterDeadCheck>().BossDie();
+
                 //GFunc.Log("코루틴 멈춤");
             }
 

@@ -211,9 +211,10 @@ public class ItemManager : MonoBehaviour
             }
 
             // 생성할 아이템이 Quest 타입일 경우
-            else
+            else if (ItemDataManager.SearchItemDB<QuestItemData>(id))
             {
                 item = CreateQuestItem(pos, id, amount);
+                GFunc.Log("quest 아이템 생성");
             }
 
             return item;

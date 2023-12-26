@@ -1049,6 +1049,45 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Both Hand",
+            "id": "ae58c0b2-e55a-47aa-a354-e6ce75162521",
+            "actions": [
+                {
+                    "name": "Dialog",
+                    "type": "Button",
+                    "id": "bb4ac58b-592e-4a0d-9f0e-eeba3297ebae",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c97a2384-0b40-4217-990f-af7cf780689d",
+                    "path": "<XRController>{LeftHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dialog",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7cd392a2-ddfa-44e1-9503-d11dd9a997a5",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dialog",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

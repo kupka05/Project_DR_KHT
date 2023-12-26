@@ -52,7 +52,7 @@ public static class Unit
     }
 
     // ID와 일치하는 퀘스트의 상태를 [진행중]으로 변경한다.
-    public static void ChangeQuestStateToInProgress(int id)
+    public static void InProgressQuestByID(int id)
     {
         Quest quest = UserDataManager.QuestDictionary[id];
         // 퀘스트가 [시작가능] 상태일 경우

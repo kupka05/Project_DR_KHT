@@ -143,7 +143,6 @@ public class Monster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         monsterTr = GetComponent<Transform>();
         playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().transform; //playerpos
 
@@ -165,7 +164,8 @@ public class Monster : MonoBehaviour
         nav.stoppingDistance = stopDistance;
         //nav.stoppingDistance = attRange - 0.5f;
 
-        SetMaxHealth(hp);
+        SetMaxHealth(damageable.Health); //hp
+        GFunc.Log($"초기 hp 설정 값:{damageable.Health}");
 
         InitMonster();
     }
@@ -178,6 +178,7 @@ public class Monster : MonoBehaviour
         StartCoroutine(MonsterAction());
     }
 
+  
 
     void FixedUpdate()
     {
@@ -228,6 +229,8 @@ public class Monster : MonoBehaviour
     {
         while (!isDie)
         {
+            //SetHealth(damageable.Health);
+
             // 체력이 0 이하면 죽은 상태로 전이
             if (damageable.Health <= 0)
             {
@@ -542,7 +545,7 @@ public class Monster : MonoBehaviour
     public virtual void OnDeal(float damage)
     {
         // 죽지 않은 상태면 HP 바 업데이트
-        if (damageable.Health >= 0)
+        if (damageable.Health > 0)
         {
             SetHealth(damageable.Health);
         }
@@ -563,10 +566,6 @@ public class Monster : MonoBehaviour
         {
             smash.SetActive(true);
             GFunc.Log("분쇄카운트 충족");
-
-            //float smashTakeDamage = damageable.Health * smashOne;
-            //SetHealth(damageable.Health - smashTakeDamage);
-            //Debug.Log($"받는 데미지:{damageable.Health - smashTakeDamage}");
 
             smashCount = 0;
             //GFunc.Log($"분쇄 카운트:{smashCount}");
@@ -616,7 +615,8 @@ public class Monster : MonoBehaviour
 
         if (countNum == 2)
         {
-            damageable.Health -= SmashDamageCalculate(damage, 1);  //여기에 smashone넣어도 되는가?
+            GFunc.Log("스택1진입");
+            damageable.Health -= SmashDamageCalculate(damage, 1);  
             // 갱신된 체력 값을 적용
             SetHealth(damageable.Health);
 
@@ -642,8 +642,6 @@ public class Monster : MonoBehaviour
             Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
 
         }
-
-
 
     }
     /// <summary> 분쇄 데미지를 계산하는 메서드 </summary>
@@ -691,10 +689,6 @@ public class Monster : MonoBehaviour
         yield break;
     }
 
-    
-
-    
-   
     void OnDrawGizmos()
     {
         if (state == State.TRACE)

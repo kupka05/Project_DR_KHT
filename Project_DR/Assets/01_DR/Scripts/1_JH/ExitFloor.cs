@@ -37,7 +37,6 @@ public class ExitFloor : MonoBehaviour
 
         if (other.gameObject.CompareTag("Weapon"))
         {
-
             if (digRoutine != null)
             {
                 return;
@@ -45,12 +44,12 @@ public class ExitFloor : MonoBehaviour
 
             RaycastWeaponDrill drill = other.gameObject.GetComponent<RaycastWeaponDrill>();
 
+
             if (drill?.isSpining == true)
-            {                
-                return;
+            {
+                digRoutine = Digging();
+                StartCoroutine(digRoutine);
             }
-            digRoutine = Digging();
-            StartCoroutine(digRoutine);
         }
     }
 

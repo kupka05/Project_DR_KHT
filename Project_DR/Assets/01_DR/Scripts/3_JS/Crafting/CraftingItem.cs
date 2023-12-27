@@ -52,34 +52,30 @@ namespace Js.Crafting
         /*************************************************
          *               Interface Methods
          *************************************************/
-        public bool Craft()
+        public bool CheckCraft()
         {
             // 크래프팅 아이템 컴포넌트 순회
             // 제작에 필요한 아이템 보유량 체크
             foreach (var item in _components)
             {
-                // 제작에 실패 했을 경우
+                // 제작 조건을 충족하지 못할 경우
                 // 사유: 재료 부족
-                if (item.Craft().Equals(false))
+                if (item.CheckCraft().Equals(false))
                 {
                     GFunc.Log($"CraftingItem.Craft(): 재료가 부족해 아이템 제작에 실패했습니다.");
                     return false;
                 }
             }
 
-            // TODO: 아이템 지급 및 보유 아이템 차감
-            int index = _components.Count - 1;
-            if (_components[index] is ResultItem resultItem)
-            {
-                string itemName = resultItem.ItemName;
-                GFunc.Log($"결과: {itemName}");
+            // 모든 제작 조건 충족시
+            return true;
+        }
 
-                // 크래프트에 성공
-                return true;
-            }
-
-            // 크래프팅 오류 발생시
-            return false;
+        public void Craft() 
+        {
+            // 실제 아이템 [제작 / 강화]
+            int lastIndex = _components.Count - 1;
+            _components[lastIndex].Craft();
         }
     }
 }

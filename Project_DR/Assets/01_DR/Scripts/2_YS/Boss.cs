@@ -779,7 +779,7 @@ public class Boss : MonoBehaviour
                 // 보스 죽음 퀘스트
                 QuestCallback.OnBossKillCallback(bossId);
                 Unit.ClearQuestByID(3122001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
-                //Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
+                //Unit.InProgressQuestByID(3122001);        // 다음 퀘스트 진행중 으로 변경
 
                 if (bossState)
                 {

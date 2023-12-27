@@ -205,7 +205,7 @@ public class LobbyEvent : MonoBehaviour
         {
             GFunc.Log("비어있지 않음");
             Quest curQuest = Unit.GetInProgressMainQuest();
-            targetQuestID = curQuest.QuestData.ID;
+            //targetQuestID = curQuest.QuestData.ID;
         }
 
         // 게임오버시 메인 디스플레이 출력 대사
@@ -222,8 +222,10 @@ public class LobbyEvent : MonoBehaviour
         else
         {
             int clearCount = UserDataManager.Instance.ClearCount;
-            clearCount = clearCount < 22 ? clearCount : 22;
-            SetNpcDialog(targetQuestID + clearCount); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
+            clearCount = clearCount <= 23 ? clearCount : 22;
+            GFunc.Log(clearCount);
+            targetQuestID += clearCount;
+            SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
         }
 
         GetClearData();              // 클리어 데이터 가져오기
@@ -922,7 +924,7 @@ public class LobbyEvent : MonoBehaviour
     {
         DialogData.logs = new List<NpcDialog>();
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 24; i++)
         {
             NpcDialog newDialog = new NpcDialog();
             newDialog.ID = i + questID;
@@ -931,6 +933,7 @@ public class LobbyEvent : MonoBehaviour
 
             log = log.Replace("\\n", "\n");      // 두줄짜리는 한줄로 치환
             log = log.Replace("#", ",");         // "#" 은 ","
+            log = log.Replace("@", "\"");         // "@" 은 """
             log = log.Replace("\\", "");         // 슬래시가 있을 경우 삭제 
 
             newDialog._log = log.Split("\n");

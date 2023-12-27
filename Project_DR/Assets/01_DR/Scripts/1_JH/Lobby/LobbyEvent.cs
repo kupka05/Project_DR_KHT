@@ -213,14 +213,17 @@ public class LobbyEvent : MonoBehaviour
         {
             SetNpcDialog(questID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
         }
-        // 게임 클리어시 메인 디스플레이 출력 대사
-        else if (UserDataManager.Instance.isClear)
-        {
-            SetNpcDialog(targetQuestID+1); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
-        }
+        //// 게임 클리어시 메인 디스플레이 출력 대사
+        //else if (UserDataManager.Instance.isClear)
+        //{
+        //    SetNpcDialog(targetQuestID+1); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
+        //}
+        // 그 외 대사 출력
         else
         {
-            SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
+            int clearCount = UserDataManager.Instance.ClearCount;
+            clearCount = clearCount < 22 ? clearCount : 22;
+            SetNpcDialog(targetQuestID + clearCount); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
         }
 
         GetClearData();              // 클리어 데이터 가져오기

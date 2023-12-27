@@ -6,10 +6,10 @@ ID,Name,Desc,Type,Target,Value1,Value2,Value3,Value4,Value5,Icon_Effect
 721104,,상시 치명타 확률 증가,Buff,Drill,0.1,-,-,-,-,icon_effect_crirate
 721105,,상시 치명타 피해 증가,Buff,Drill,0.2,-,-,-,-,icon_effect_cridmg
 721106,,상시 드릴 크기 증가,Buff,Drill,0.1,-,-,-,-,icon_effect_size
-721007,,상시 HP 최대치 증가,Buff,PC,20,-,-,-,-,icon_effect_hp
+721007,,티무스_상시 HP 최대치 증가,Buff,PC,20,-,-,-,-,icon_effect_hp
 722108,,상시 공격력 감소,Debuff,Drill,2,-,-,-,-,icon_effect_atk
 722109,,상시 공격간격 증가,Debuff,Drill,0.05,5,3,-,-,icon_effect_spin
-722110,,상시 치명타 확률 감소,Debuff,Drill,0.2,-,-,-,-,icon_effect_crirate
+722110,,상시 치명타 확률 감소,Debuff,Drill,0.15,-,-,-,-,icon_effect_crirate
 722111,,상시 치명타 피해 감소,Debuff,Drill,0.3,-,-,-,-,icon_effect_cridmg
 722112,,상시 드릴 크기 감소,Debuff,Drill,0.2,-,-,-,-,icon_effect_size
 722013,,상시 HP 최대치 감소,Debuff,PC,20,-,-,-,-,icon_effect_hp
@@ -17,7 +17,22 @@ ID,Name,Desc,Type,Target,Value1,Value2,Value3,Value4,Value5,Icon_Effect
 721115,,드릴 연마 치명타 피해 증가,Buff,Drill,0.2,2.0,0.5,10.0,-,icon_effect_cridmg
 722216,,드릴 분쇄가 부여하는 디버프,Debuff,Enemy,0.03,0.15,0.6,3,10,icon_effect_grounded
 720217,,드릴 랜딩의 지면 공격,imm,Enemy,10.0,5.0,5.0,1,-,-
+721118,,색투스 대성공_치명타율 증가,Buff,Drill,0.2,-,-,-,-,icon_effect_crirate
+721119,,색투스 대성공_치명타피해 증가,Buff,Drill,0.5,-,-,-,-,icon_effect_cridmg
 1000001,공격력 강화 (소),상점용 버프 아이템,Buff,Drill,2,-,-,-,-,-
 1000002,공격력 강화 (대),상점용 버프 아이템,Buff,Drill,10,-,-,-,-,-
 1000003,체력 증가,상점용 버프 아이템,Buff,PC,10,-,-,-,-,-
 1000004,치명타 피해 증가,상점용 버프 아이템,Buff,Drill,0.5,-,-,-,-,-
+722120,,색투스 강화실패_치명타율_감소,Debuff,Drill,0.15,-,-,-,-,icon_effect_crirate
+722121,,색투스 강화실패_치명타 피해 감소,Debuff,Drill,0.3,-,-,-,-,icon_effect_cridmg
+721022,,퀸투스 RSG 보상_최대 HP 증가,Buff,PC,20,-,-,-,-,icon_effect_hp
+721123,,퀸투스 RMP 보상_치명타피해 증가,Buff,Drill,0.2,-,-,-,-,icon_effect_cridmg
+722024,,퀸투스 RMG 보상_최대 체력 감소,Debuff,PC,10,-,-,-,-,icon_effect_hp
+722125,,퀸투스 RMG 보상_치명타 확률 감소,Debuff,Drill,0.1,-,-,-,-,icon_effect_crirate
+722126,,퀸투스 RMG 보상_치명타 피해 감소,Debuff,Drill,0.2,-,-,-,-,icon_effect_cridmg
+722127,,퀸투스 YSP 보상_치명타 피해 감소,Debuff,Drill,0.3,-,-,-,-,icon_effect_cridmg
+721128,,퀸투스 YSG 보상_드릴 사이즈 증가,Buff,Drill,0.2,-,-,-,-,icon_effect_size
+721029,,퀸투스 YMP 보상_최대 체력 증가,Buff,PC,0.1,-,-,-,-,icon_effect_hp
+721130,,퀸투스 YMP 보상_치명타 확률 증가,Buff,Drill,0.1,-,-,-,-,icon_effect_crirate
+721131,,퀸투스 YMP 보상_치명타 피해 증가,Buff,Drill,0.3,-,-,-,-,icon_effect_cridmg
+722132,,퀸투스 YMG 보상_드릴 사이즈 감소,Debuff,Drill,0.1,-,-,-,-,icon_effect_size

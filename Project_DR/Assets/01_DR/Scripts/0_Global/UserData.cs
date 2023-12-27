@@ -407,6 +407,7 @@ public static class UserData
     }
     public static void GameOver()
     {
+        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.isGameOver = true;
     }
 

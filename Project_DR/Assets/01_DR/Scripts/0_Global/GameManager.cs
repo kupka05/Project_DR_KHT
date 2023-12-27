@@ -170,6 +170,15 @@ public class GameManager : MonoBehaviour
         }
     }       // Start()    
 
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Backspace))
+        {
+            GameOver();
+        }
+    }
+
     private void OnLevelWasLoaded()
     {
         // GFunc.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
@@ -309,7 +318,7 @@ public class GameManager : MonoBehaviour
             fader.DoFadeIn();
         }
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         SceneManager.LoadScene(_sceneName);
 
         if (isGameOver)

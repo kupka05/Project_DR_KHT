@@ -1,6 +1,7 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -13,27 +14,31 @@ public class BounceBullet : MonoBehaviour
 
     public GameObject bounceEffect;
 
+    private List<Collider> damageColliders = new List<Collider>();
+
     public Transform target;
     public float attack = 3.0f;
 
-    [SerializeField]
-    private float damageRadius = 1.5f;
+    public float damageRadius = 1.9f;
+
 
     [Header("테이블 관련")]
     //public float speed = default;
     public float damage = default;
-    public float destoryTime = default;
+    //public float destoryTime = default;
 
     [Header("조건")]
     public bool isShoot = false;
-    public bool isDamage = false;
-    public bool isWeapon = false;
-    public bool isWall = false;
+   
+
+    private void Awake()
+    {
+        GetData(BounceTableId);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        GetData(BounceTableId);
 
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         rigid = GetComponent<Rigidbody>();
@@ -49,14 +54,16 @@ public class BounceBullet : MonoBehaviour
 
     }
 
+
     void DealDamageToNearbyObjects()
     {
-        float distance = Vector3.Distance(target.position, transform.position);
-
         Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
         // 디버그용: 빨간색 구체로 OverlapSphere 영역을 시각화
         DebugDrawOverlapSphere();
+
+        bool isDamage = false;
+        Debug.Log($"isdamage: {isDamage}");
 
         foreach (Collider collider in colliders)
         {
@@ -66,56 +73,51 @@ public class BounceBullet : MonoBehaviour
                 {
                     GFunc.Log("만났는가");
                     // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
-                    collider.GetComponent<Damageable>().DealDamage(damage);
-                    GFunc.Log($"데미지:{damage}");
+                    //collider.GetComponent<Damageable>().DealDamage(damage);
+                    GFunc.Log($"데미지: {damage}");
 
                     isDamage = true;
-                    //Destroy(this.gameObject);
+                    damageColliders.Add(collider); // 리스트에 추가
+                    Debug.Log($"isdamage: {isDamage}");
                     break;
                 }
-                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
-                //isDamage = false;
             }
-
         }
-        isDamage = false;
 
-        foreach (Collider collider in colliders)
+        if (isDamage)
         {
-            if(!isWeapon)
+            // 리스트에 저장된 충돌체에 대해 데미지 처리 수행
+            foreach (Collider damageCollider in damageColliders)
             {
-                if(collider.CompareTag("Weapon"))
-                {
-                    isWeapon = true;
-                    break;
-                }
-                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+                damageCollider.GetComponent<Damageable>().DealDamage(damage);
             }
-        }
-        isWeapon = false;
 
-        foreach (Collider collider in colliders)
-        {
-            if (!isWall)
-            {
-                if (collider.CompareTag("Weapon"))
-                {
-                    isWall = true;
-                    break;
-                }
-                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
-            }
+            // 데미지 처리 후 리스트 초기화
+            damageColliders.Clear();
         }
-        isWall = false;
     }
+
+    //private void OnDrawGizmos()
+    //{
+    //    float distance = Vector3.Distance(target.position, transform.position);
+
+    //    if (distance <= attack)
+    //    {
+    //        Gizmos.color = Color.yellow;
+    //    }
+    //    else if(distance >= attack)
+    //    {
+    //        Gizmos.color = Color.red;
+    //    }
+    //}
 
     void DebugDrawOverlapSphere()
     {
         Vector3 dir = target.position - transform.position;
-        Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.yellow);
+        Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.blue);
     }
 
-    public virtual void GetData(int BounceTableId)
+    public void GetData(int BounceTableId)
     {
         //6912
         //speed = (float)DataManager.Instance.GetData(BounceTableId, "Speed", typeof(float));

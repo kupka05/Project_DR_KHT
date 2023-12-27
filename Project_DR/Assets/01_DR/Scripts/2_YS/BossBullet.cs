@@ -2,6 +2,7 @@ using BNG;
 using Oculus.Interaction;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.Rendering;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
@@ -72,39 +73,24 @@ public class BossBullet : MonoBehaviour
                     GFunc.Log($"데미지:{damage}");
                     break;
                 }
+                else if(collider.CompareTag("Weapon"))
+                {
+                    GFunc.Log("무기에 닿았는가");
+                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+                    GFunc.Log("무기에 닿았을 때 반환한다");
+                    return;
+                }
+                else if(collider.CompareTag("Wall"))
+                {
+                    GFunc.Log("벽에 닿았는가");
+                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+                    GFunc.Log("벽에 닿았을 때 반환한다");
+                }
                 ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
                 GFunc.Log("플레이어 데미지 후 반환");
-
+                
             }
             isDamage = false;
-        }
-
-        if(distance <= attack && !isWeapon)
-        {
-            foreach(Collider collider in colliders)
-            {
-                if(collider.CompareTag("Weapon"))
-                {
-                    isWeapon = true;
-                    break;
-                }
-                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
-            }
-            isWeapon = false;
-        }
-
-        if (distance <= attack && isWall)
-        {
-            foreach (Collider collider in colliders)
-            {
-                if (collider.CompareTag("Wall"))
-                {
-                    isWall = true;
-                    break;
-                }
-                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
-            }
-            isWall = false;
         }
 
     }

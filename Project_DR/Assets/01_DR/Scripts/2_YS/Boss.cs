@@ -50,7 +50,7 @@ public class Boss : MonoBehaviour
     public int bossId;  //보스 테이블
     public int bossProjectileId;  //투사체 테이블
     public int bossProjectileID;
-    public int bossProjectileBounce;
+    public int bossProjectileBounceId;
 
     public float power = 5.0f;
 
@@ -129,7 +129,7 @@ public class Boss : MonoBehaviour
 
     void Awake()
     {
-        GetData(bossId, bossProjectileId, bossProjectileID, bossProjectileBounce);
+        GetData(bossId, bossProjectileId, bossProjectileID, bossProjectileBounceId);
     }
 
     void Start()
@@ -174,7 +174,7 @@ public class Boss : MonoBehaviour
 
     }
 
-    public void GetData(int bossId, int bossProjectileId, int bossProjectileID, int bossProjectileBounce)
+    public void GetData(int bossId, int bossProjectileId, int bossProjectileID, int bossProjectileBounceId)
     {
         //보스
         maxHp = (float)DataManager.Instance.GetData(bossId, "BossHP", typeof(float));
@@ -191,9 +191,9 @@ public class Boss : MonoBehaviour
         brickCount = (float)DataManager.Instance.GetData(bossProjectileID, "Duration", typeof(float));
 
         //6912 애드벌룬
-        destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounce, "DesTime", typeof(float));
-        speedBounce = (float)DataManager.Instance.GetData(bossProjectileBounce, "Speed", typeof(float));
-        bounceCount = (float)DataManager.Instance.GetData(bossProjectileBounce, "Duration", typeof(float));
+        destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "DesTime", typeof(float));
+        speedBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "Speed", typeof(float));
+        //bounceCount = Data.GetInt(id, "MonExp");
     }
 
     public void SetTarget(Transform newTarget)
@@ -302,22 +302,20 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                //StartCoroutine(BounceShoot());
-                StartCoroutine(PlayShoot());
+                StartCoroutine(BounceShoot());
+
                 GFunc.Log("패턴 1 선택");
                 break;
             case 1:
-                StartCoroutine(PlayShoot());
-                //StartCoroutine(LazerCoroutine());
+                StartCoroutine(BounceShoot());
                 GFunc.Log("패턴 2 선택");
                 break;
             case 2:
-                StartCoroutine(PlayShoot());
-                //StartCoroutine(BigBrickShoot());
+                StartCoroutine(BounceShoot());
                 GFunc.Log("패턴 3 선택");
                 break;
             case 3:
-                StartCoroutine(PlayShoot());
+                StartCoroutine(BounceShoot());
                 GFunc.Log("패턴 4 선택");
                 break;
 
@@ -693,15 +691,19 @@ public class Boss : MonoBehaviour
     {
         List<GameObject> bounceBall = new List<GameObject>();
 
-        for (int i = 0; i < bounceCount; i++)
+        for (int i = 0; i < 3; i++)
         {
-            //Vector3 offset = UnityEngine.Random.insideUnitSphere * 2.0f;
+            
             Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
+            //기존 로직
             //GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
             GameObject instantBounce = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBALL);
+            GFunc.Log("오브젝트 풀 생성");
             instantBounce.transform.position = transform.position + offset;
             instantBounce.transform.rotation = Quaternion.identity;
+
+            GFunc.Log("생성");
 
             bounceBall.Add(instantBounce);
 
@@ -721,7 +723,8 @@ public class Boss : MonoBehaviour
 
             yield return new WaitForSeconds(destoryTimeBounce);
 
-            ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+            //ObjectPoolManager.ReturnObjectToQueue(instantBounce);
+            Destroy(instantBounce);
         }
 
         bounceBall.Clear();
@@ -933,8 +936,8 @@ public class Boss : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isStart)
         {
-            isStart = true;           
-            
+            isStart = true;
+
             // 보스 조우 퀘스트 콜백
             QuestCallback.OnBossMeetCallback(bossId);   // 상태값 갱신 및 자동 완료
             Unit.ClearQuestByID(3111001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트

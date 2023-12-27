@@ -79,7 +79,7 @@ public class Shoot : MonoBehaviour
 
                 Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
-                GameObject instantBullet = ObjectPoolManager.GetObject();
+                GameObject instantBullet = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBULLET);
                 instantBullet.transform.position = transform.position + offset;
                 instantBullet.transform.rotation = Quaternion.identity;
                 instantBullet.transform.LookAt(target);

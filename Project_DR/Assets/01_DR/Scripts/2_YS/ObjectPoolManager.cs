@@ -1,9 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static TMPro.Examples.TMP_ExampleScript_01;
 
 public class ObjectPoolManager : MonoBehaviour
 {
+    public enum ProjectileType
+    {
+        CHAINBULLET,
+        BOUNCEBALL,
+        BOUNCEBULLET,
+        BIGBRICK
+    }
+
     public GameObject objectPrefeb;
     public GameObject bouncePrefab;
     public GameObject bounceSmallPrefab;
@@ -20,7 +29,10 @@ public class ObjectPoolManager : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
             for (int i = 0; i < 100; i++)
             {
-                CreateObject(); //초기에 n개의 오브젝트를 생성함
+                CreateObject(ProjectileType.CHAINBULLET); //초기에 n개의 오브젝트를 생성함
+                CreateObject(ProjectileType.BOUNCEBALL); //초기에 n개의 오브젝트를 생성함
+                CreateObject(ProjectileType.BOUNCEBULLET); //초기에 n개의 오브젝트를 생성함
+                CreateObject(ProjectileType.BIGBRICK); //초기에 n개의 오브젝트를 생성함
             }
         }
         else
@@ -28,14 +40,15 @@ public class ObjectPoolManager : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-    GameObject CreateObject() //초기 OR 오브젝트 풀에 남은 오브젝트가 부족할 때, 오브젝트를 생성하기위해 호출되는 함수
+    GameObject CreateObject(ProjectileType projectileType) //초기 OR 오브젝트 풀에 남은 오브젝트가 부족할 때, 오브젝트를 생성하기위해 호출되는 함수
     {
-        GameObject newObj = Instantiate(objectPrefeb, instance.transform);
+        GameObject prefab = GetPrefabType(projectileType);
+        GameObject newObj = Instantiate(prefab);
         newObj.gameObject.SetActive(false);
 
         return newObj;
     }
-    public static GameObject GetObject() //오프젝트가 필요할 때 다른 스크립트에서 호출되는 함수
+    public static GameObject GetObject(ProjectileType projectileType) //오프젝트가 필요할 때 다른 스크립트에서 호출되는 함수
     {
         if (instance.ObjectPool.Count > 0) //현재 큐에 남아있는 오브젝트가 있다면,
         {
@@ -47,8 +60,7 @@ public class ObjectPoolManager : MonoBehaviour
         }
         else //큐에 남아있는 오브젝트가 없을 때 새로 만들어서 사용
         {
-            GameObject objectInPool = instance.CreateObject();
-
+            GameObject objectInPool = instance.CreateObject(projectileType);
             objectInPool.gameObject.SetActive(true);
             objectInPool.transform.SetParent(null);
             return objectInPool;
@@ -68,7 +80,7 @@ public class ObjectPoolManager : MonoBehaviour
                 return;
 
             SphereCollider sphereCollider = obj.GetComponent<SphereCollider>();
-            if(sphereCollider != null)
+            if (sphereCollider != null)
             {
                 sphereCollider.isTrigger = true;
             }
@@ -78,4 +90,23 @@ public class ObjectPoolManager : MonoBehaviour
             instance.ObjectPool.Enqueue(obj);
         }
     }
+
+    GameObject GetPrefabType(ProjectileType projectileType)
+    {
+        switch (projectileType)
+        {
+            case ProjectileType.CHAINBULLET:
+                return instance.objectPrefeb;
+            case ProjectileType.BOUNCEBALL:
+                return instance.bouncePrefab;
+            case ProjectileType.BOUNCEBULLET:
+                return instance.bounceSmallPrefab;
+            case ProjectileType.BIGBRICK:
+                return instance.brickPrefab;
+
+            default: return null;
+        }
+    }
+
+
 }

@@ -309,22 +309,22 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                StartCoroutine(BounceShoot());
-                //StartCoroutine(PlayShoot());
+                //StartCoroutine(BounceShoot());
+                StartCoroutine(PlayShoot());
                 GFunc.Log("패턴 1 선택");
                 break;
             case 1:
-                StartCoroutine(BounceShoot());
+                StartCoroutine(PlayShoot());
                 //StartCoroutine(LazerCoroutine());
                 GFunc.Log("패턴 2 선택");
                 break;
             case 2:
-                StartCoroutine(BounceShoot());
+                StartCoroutine(PlayShoot());
                 //StartCoroutine(BigBrickShoot());
                 GFunc.Log("패턴 3 선택");
                 break;
             case 3:
-                StartCoroutine(BounceShoot());
+                StartCoroutine(PlayShoot());
                 GFunc.Log("패턴 4 선택");
                 break;
 
@@ -388,7 +388,7 @@ public class Boss : MonoBehaviour
                 //instantBullet.transform.LookAt(target.position);
 
                 // 오브젝트 풀을 사용하여 총알을 가져옵니다.
-                GameObject instantBullet = ObjectPoolManager.GetObject();
+                GameObject instantBullet = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.CHAINBULLET);
                 GFunc.Log("오브젝트 풀 생성");
                 instantBullet.transform.position = transform.position + offset;
                 instantBullet.transform.rotation = Quaternion.identity;
@@ -533,7 +533,7 @@ public class Boss : MonoBehaviour
             Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 4.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 3.0f);
 
             //GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
-            GameObject instantBrick = ObjectPoolManager.GetObject();
+            GameObject instantBrick = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BIGBRICK);
 
             instantBrick.transform.position = transform.position + offset;
             instantBrick.transform.rotation = Quaternion.identity;
@@ -706,7 +706,7 @@ public class Boss : MonoBehaviour
             Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
             //GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
-            GameObject instantBounce = ObjectPoolManager.GetObject();
+            GameObject instantBounce = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBALL);
             instantBounce.transform.position = transform.position + offset;
             instantBounce.transform.rotation = Quaternion.identity;
 

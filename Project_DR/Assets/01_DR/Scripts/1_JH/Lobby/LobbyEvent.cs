@@ -182,6 +182,8 @@ public class LobbyEvent : MonoBehaviour
         // 메인 디스플레이 시작 시 세팅
         ChangeDisplayButton("Main");
 
+        ChangeDisplayButton("Result");
+
         // PC 상태창 시작 시 세팅
         SetStatusDisplay();
 
@@ -197,7 +199,6 @@ public class LobbyEvent : MonoBehaviour
     // DB에서 데이터 불러오기 완료 후 이벤트로 실행
     public void GetDataFromDB()
     {
-
         GetNPCDialog();              // NPC 대사 가져오고
 
         // 퀘스트가 널이 아니면 새운 퀘스트 가져오기

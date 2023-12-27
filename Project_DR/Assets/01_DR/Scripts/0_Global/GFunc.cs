@@ -14,17 +14,31 @@ public static class GFunc
     /*************************************************
      *               Public Methods
      *************************************************/
-    public static string SumString(string inputA, string inputB, string inputC = "", string inputD = "")
+    // Legacy:
+    //public static string SumString(string inputA, string inputB, string inputC = "", string inputD = "")
+    //{
+    //    stringBuilder.Clear();
+    //    stringBuilder.Append(inputA);
+    //    stringBuilder.Append(inputB);
+    //    stringBuilder.Append(inputC);
+    //    stringBuilder.Append(inputD);
+
+    //    return stringBuilder.ToString();
+    //}
+
+    /// <summary>
+    /// 매개 변수로 받은 모든 string 인자를 더해서 반환한다.
+    /// </summary>
+    public static string SumString(params string[] inputs)
     {
         stringBuilder.Clear();
-        stringBuilder.Append(inputA);
-        stringBuilder.Append(inputB);
-        stringBuilder.Append(inputC);
-        stringBuilder.Append(inputD);
+        for (int i = 0; i < inputs.Length; i++)
+        {
+            stringBuilder.Append(inputs[i]);
+        }
 
         return stringBuilder.ToString();
     }
-
 
     // 언더바를 없애주는 String 확장 메서드
     public static string RemoveUnderbar(this string input)

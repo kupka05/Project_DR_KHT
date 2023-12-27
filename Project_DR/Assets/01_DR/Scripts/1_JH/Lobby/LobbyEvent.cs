@@ -882,6 +882,7 @@ public class LobbyEvent : MonoBehaviour
         // NPC와 대화/보상 수락 등을 하는 디스플레이 버튼
         public void DisplayButton()
     {
+        // 예외처리해야함
         if (dialog.log.Count != 0)
         {
             npcDialog.text = dialog.log.Peek().ToString();

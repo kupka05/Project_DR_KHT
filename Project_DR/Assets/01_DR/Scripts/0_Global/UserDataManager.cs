@@ -368,6 +368,12 @@ public partial class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("skill_level_4_3", debugLv);
         yield return null;
 
+        PlayerDataManager.Save("clear_count", 0);
+
+        PlayerDataManager.Save("quest_main", "");
+        PlayerDataManager.Save("clear_mbti_value", "");
+        yield return null;
+
         PlayerDataManager.Update(true);
         yield break;
     }

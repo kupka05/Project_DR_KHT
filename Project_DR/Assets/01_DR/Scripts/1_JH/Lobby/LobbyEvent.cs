@@ -933,7 +933,7 @@ public class LobbyEvent : MonoBehaviour
 
             log = log.Replace("\\n", "\n");      // 두줄짜리는 한줄로 치환
             log = log.Replace("#", ",");         // "#" 은 ","
-            log = log.Replace("@", "\"");         // "@" 은 """
+            //log = log.Replace("@", "\"");         // "@" 은 """
             log = log.Replace("\\", "");         // 슬래시가 있을 경우 삭제 
 
             newDialog._log = log.Split("\n");

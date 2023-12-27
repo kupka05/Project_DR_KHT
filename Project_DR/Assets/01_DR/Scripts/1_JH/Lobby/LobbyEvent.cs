@@ -32,6 +32,10 @@ public class LobbyEvent : MonoBehaviour
     public NpcDialogs DialogData = new NpcDialogs();    // 대사 데이터
     public NpcDialog dialog;                            // 현재 대사
 
+    [Header("Result")]
+    public GameObject resultItem;
+
+
     [Header("MBTI Pannel")]
     public GameObject mbtiPannel;
     public TMP_Text mbtiResult;
@@ -42,6 +46,8 @@ public class LobbyEvent : MonoBehaviour
 
     [Header("Result Pannel")]
     public GameObject resultPannel;
+    public TMP_Text resultGold;
+    public TMP_Text resultExp;
 
     [Header("ClearData")]
     public string[] clearDatas;             // 디버그용 클리어 데이터
@@ -182,7 +188,8 @@ public class LobbyEvent : MonoBehaviour
         // 메인 디스플레이 시작 시 세팅
         ChangeDisplayButton("Main");
 
-        ChangeDisplayButton("Result");
+        //ChangeDisplayButton("Result");
+        //SetResultData();
 
         // PC 상태창 시작 시 세팅
         SetStatusDisplay();
@@ -286,11 +293,6 @@ public class LobbyEvent : MonoBehaviour
         NS.text = UserDataManager.Instance.mbti.GetNS();
         FT.text = UserDataManager.Instance.mbti.GetFT();
         PJ.text = UserDataManager.Instance.mbti.GetPJ();
-    }
-
-    public void SetGameResult()
-    {
-
     }
 
     // ################################# UI 업데이트 #################################
@@ -882,7 +884,7 @@ public class LobbyEvent : MonoBehaviour
 
     }
 
-    // NPC와 대화/보상 수락 등을 하는 디스플레이 버튼
+    // NPC와 대화/보상 수락 등을 하는  디스플레이 버튼
     public void DisplayButton()
     {
         // 1. 대사 디큐
@@ -903,8 +905,10 @@ public class LobbyEvent : MonoBehaviour
         // 3. 클리어 결과 정산
         else if (UserData.ClearCheck() && isResult)
         {
+            SetResultData();
             ChangeDisplayButton("Result");
 
+            UserData.ResetResult();
             isResult = false;
             UserDataManager.Instance.isClear = false;
         }
@@ -946,6 +950,107 @@ public class LobbyEvent : MonoBehaviour
 
             DialogData.logs.Add(newDialog);
         }
+    }
+    // 결과창 세팅
+    public void SetResultData()
+    {
+        ResultDebug();
+        GameResult result = UserData.GetResult();
+
+        AddMonsterResult(result);
+        AddItemResult(result);
+        AddQuestResult(result);
+
+        resultGold.text = UserData.GoldCalculator().ToString();
+        resultExp.text = UserData.ExpCalculator().ToString();
+
+        UserData.AddGold(UserData.GoldCalculator());
+        UserData.AddExp(UserData.ExpCalculator());
+
+        UserDataManager.Instance.SaveGoldandExp();
+    }
+
+    public void AddMonsterResult(GameResult result)
+    {
+        GameObject monsterResult = Instantiate(resultItem, resultItem.transform.parent);
+
+        ResultUI resultUI = monsterResult.GetComponent<ResultUI>();   // UI 가져와서
+        resultUI.state = ResultUI.State.Monster;                // 상태 변경 후
+        resultUI.Initialized();                                 // 초기화
+
+        resultUI.AddItem
+            ("일반", result.monster.normal.count, result.monster.normal.gold, result.monster.normal.exp);
+        resultUI.AddItem
+           ("엘리트", result.monster.elite.count, result.monster.elite.gold, result.monster.elite.exp);
+        resultUI.AddItem
+           ("보스", result.monster.boss.count, result.monster.boss.gold, result.monster.boss.exp, true);
+        resultUI.AddLine();
+
+        monsterResult.SetActive(true);
+    }
+    public void AddItemResult(GameResult result)
+    {
+        if(result.item.Count == 0)
+        { return; }
+
+        GameObject itemResult = Instantiate(resultItem, resultItem.transform.parent);
+
+        ResultUI resultUI = itemResult.GetComponent<ResultUI>();   // UI 가져와서
+        resultUI.state = ResultUI.State.Item;                // 상태 변경 후
+        resultUI.Initialized();
+
+        bool lastCheck = false;
+
+        for(int i = 0; i < result.item.Count; i++)
+        {
+            if(i == result.item.Count -1)
+            {
+                lastCheck = true;
+            }    
+            resultUI.AddItem(result.item[i].name, result.item[i].count, result.item[i].gold, result.item[i].exp, lastCheck);
+        }
+        resultUI.AddLine();
+
+        itemResult.SetActive(true);
+    }
+    public void AddQuestResult(GameResult result)
+    {
+        if(result.quest.Count == 0)
+        { return; }
+
+        GameObject questResult = Instantiate(resultItem, resultItem.transform.parent);
+
+        ResultUI resultUI = questResult.GetComponent<ResultUI>();   // UI 가져와서
+        resultUI.state = ResultUI.State.Quest;                // 상태 변경 후
+        resultUI.Initialized();
+
+        bool lastCheck = false;
+        for (int i = 0; i < result.quest.Count; i++)
+        {
+            if (i == result.quest.Count - 1)
+            {
+                lastCheck = true;
+            }
+            resultUI.AddItem(result.quest[i].name, result.quest[i].count, result.quest[i].gold, result.quest[i].exp, lastCheck);
+        }
+        resultUI.AddLine();
+
+        questResult.SetActive(true);
+    }
+
+    public void ResultDebug()
+    {
+        UserData.KillMonster(100);
+        UserData.KillElite(100);
+        UserData.KillBoss(100);
+        UserData.AddItemScore(5302);
+        UserData.AddItemScore(5301);
+        UserData.AddItemScore(5306);
+        UserData.AddItemScore(5303);
+        UserData.AddItemScore(5304);
+        UserData.AddItemScore(5305);
+        UserData.AddItemScore(5301);
+        UserData.AddItemScore(5306);
     }
 
 }

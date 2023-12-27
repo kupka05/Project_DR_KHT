@@ -44,6 +44,17 @@ public class GameResult
     // 아이템 점수 추가
     public void AddItemScore(int _id)
     {
+        string itemName = Data.GetString(_id, "Name");
+
+        // 같은 이름이 있는지 체크
+        foreach (var obj in item)
+        {
+            if (obj.name.Equals(itemName))
+            {
+                ScoreCount(obj);
+                return;
+            };
+        }
         AddScore(item, Data.GetString(_id, "Name"), Data.GetInt(_id, "GiveGold"), Data.GetInt(_id, "GiveEXP"));
     }
 
@@ -58,11 +69,17 @@ public class GameResult
     {
         Score score = new Score();
 
+        score.count++;
         score.name = name;
-        score.gold = gold;
-        score.exp = exp;
+        score.SetGoldExp(gold, exp);
 
         list.Add(score);    // 리스트에 추가
+    }
+    public void ScoreCount(Score score)
+    {
+        score.count++;
+        score.gold = score._gold * score.count;
+        score.exp = score._exp * score.count;
     }
 
     // 몬스터의 결과를 추가하는 메서드들
@@ -172,6 +189,20 @@ public class MonsterScore
 public class Score
 {
     public string name;
+    public int count;
     public int gold;
     public int exp;
+
+    // 점수 초기값 캐싱 용도
+    public int _gold;
+    public int _exp;
+
+    public void SetGoldExp(int newgold, int newexp)
+    {
+        _gold = newgold;
+        _exp = newexp;
+
+        gold = _gold;
+        exp = _exp;
+    }
 }

@@ -195,7 +195,6 @@ public partial class UserDataManager : MonoBehaviour
 
         // ######################### ETC #########################
 
-        QuestMain = PlayerDataManager.QuestMain;
         ClearCount = PlayerDataManager.ClearCount;
 
         // ######################### 클리어 데이터 #########################
@@ -213,7 +212,7 @@ public partial class UserDataManager : MonoBehaviour
         }
 
         // 퀘스트 가져오기
-        Unit.GetCanStartMainQuestForList();
+        //Unit.GetCanStartMainQuestForList();
 
         // 데이터를 불러오고 해야할 이벤트가 있다면 이벤트 실행
         // Ex. 플레이어 상태창, 상점의 현재 골드 등
@@ -222,8 +221,11 @@ public partial class UserDataManager : MonoBehaviour
 
         //// 데이터 테이블에 있는 퀘스트를 가져와서 생성
         //// && 가져온 퀘스트 데이터에 따라 상태 변경
-        Unit.CreateQuestFromDataTable();
-        Unit.LoadUserQuestDataFromDB();
+        //Unit.CreateQuestFromDataTable();
+        //Unit.UpdateUserQuestData();
+        // DB에서 정보를 가져와서 PlayerDataManager 업데이트
+        // 업데이트시 퀘스트 목록 자동으로 생성 & 업데이트 됨
+        Unit.UpdateDataFromDB();
     }
 
     // DB에 데이터를 요청하기 위한 메서드

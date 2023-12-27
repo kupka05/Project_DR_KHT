@@ -390,9 +390,8 @@ public static class UserData
             GameManager.instance.DestroyGameManager();
         }
 
-        // 퀘스트 재생성 & DB에서 정보 불러오기 & 아이템 초기화
-        Unit.CreateQuestFromDataTable();
-        Unit.LoadUserQuestDataFromDB();
+        // DB에서 정보 불러오기 & 퀘스트 생성 & 업데이트 & 아이템 초기화
+        Unit.UpdateDataFromDB();
         Unit.ResetInventory();
 
         UserDataManager.Instance.isClear = false;
@@ -407,6 +406,7 @@ public static class UserData
     }
     public static void GameOver()
     {
+        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.isGameOver = true;
     }
 

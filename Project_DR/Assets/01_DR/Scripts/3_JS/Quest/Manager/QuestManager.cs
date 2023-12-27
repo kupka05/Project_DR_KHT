@@ -275,11 +275,11 @@ namespace Js.Quest
             UserDataManager.Instance.SaveQuestDatasToDB(SerializeQuestSaveDataList());
         }
 
-        // DB에서 가져온 퀘스트 데이터를 UserDataManager에 업데이트
-        public void LoadUserQuestDataFromDB()
+        // PlayerDataManager에 있는 정보로 퀘스트 목록을 업데이트 한다.
+        public void UpdateUserQuestData()
         {
             // json으로 변환된 string은 .NET Framework 디코딩이 필요
-            string json = System.Web.HttpUtility.UrlDecode(UserDataManager.Instance.QuestMain);
+            string json = System.Web.HttpUtility.UrlDecode(PlayerDataManager.QuestMain);
 
             GFunc.Log($"구조화된 데이터: {json}");
 
@@ -294,9 +294,22 @@ namespace Js.Quest
 
             QuestSaveDatas questSaveDatas = JsonUtility.FromJson<QuestSaveDatas>(json);
 
-            // QuestSaveDatas에 있는 데이터를 UserDataManager로 전달
+            // QuestSaveDatas에 있는 데이터를 UserDataManager의 퀘스트 목록으로 전달
             // 보유한 퀘스트의 상태 와 진행 값을 변경한다.
             UpdateUserDataFromQuestSaveDatas(questSaveDatas);
+
+            // 퀘스트의 상태를 업데이트 한다
+            // 조건 충족시 [시작불가] -> [시작가능]으로 변경
+            UpdateQuestStatesToCanStartable();
+        }
+
+        // DB에서 퀘스트 정보를 가져와서 UserDataManager와
+        // 퀘스트 목록을 업데이트 한다.
+        public IEnumerator LoadUserQuestDataCoroutine(float t)
+        {
+            yield return new WaitForSeconds(t);
+            PlayerDataManager.Update();
+            UpdateUserQuestData();
         }
 
 
@@ -307,15 +320,15 @@ namespace Js.Quest
         private void AddQuestCallbacks()
         {
             ////TODO: 해당하는 클래스들의 메서드에서 온콜백 호출되게 해야함
-            QuestCallback.QuestDataCallback += UpdateQuestStatesToCanStartable;   // DB에서 퀘스트 정보를 가져왔을 때 or 퀘스트가 완료되었을 때
-            QuestCallback.BossMeetCallback += UpdateQuests;                       // 보스 조우
-            QuestCallback.BossKillCallback += UpdateQuests;                       // 보스 킬
-            QuestCallback.UseItemCallback += UpdateQuests;                        // 아이템 사용
-            QuestCallback.MonsterKillCallback += UpdateQuests;                    // 몬스터 처치
-            QuestCallback.CraftingCallback += UpdateQuests;                       // 크래프팅
-            QuestCallback.ObjectCallback += UpdateQuests;                         // 오브젝트
-            QuestCallback.InventoryCallback += UpdateQuests;                      // 인벤토리(증정): 디버깅 완료
-            QuestCallback.DialogueCallback += UpdateQuests;                       // NPC와 대화
+            QuestCallback.QuestDataCallback += UpdateQuestStatesToCanStartable;     // DB에서 퀘스트 정보를 가져왔을 때 or 퀘스트가 완료되었을 때
+            QuestCallback.BossMeetCallback += UpdateQuests;                         // 보스 조우
+            QuestCallback.BossKillCallback += UpdateQuests;                         // 보스 킬
+            QuestCallback.UseItemCallback += UpdateQuests;                          // 아이템 사용
+            QuestCallback.MonsterKillCallback += UpdateQuests;                      // 몬스터 처치
+            QuestCallback.CraftingCallback += UpdateQuests;                         // 크래프팅
+            QuestCallback.ObjectCallback += UpdateQuests;                           // 오브젝트
+            QuestCallback.InventoryCallback += UpdateQuests;                        // 인벤토리(증정): 디버깅 완료
+            QuestCallback.DialogueCallback += UpdateQuests;                         // NPC와 대화    
         ////TODO: 해당하는 클래스들의 메서드에서 온콜백 호출되게 해야함
         }
 
@@ -340,6 +353,10 @@ namespace Js.Quest
                 }
             }
         }
+
+        // 퀘스트 데이터가 업데이트 되었을 때 퀘스트 직렬화
+
+
 
         // _questSaveDatas에 있는 데이터를 직렬화
         private string SerializeQuestSaveDataList()

@@ -394,9 +394,6 @@ public static class UserData
         Unit.UpdateDataFromDB();
         Unit.ResetInventory();
 
-        UserDataManager.Instance.isClear = false;
-        UserDataManager.Instance.isGameOver = false;
-
         UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
         UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
     }
@@ -406,12 +403,12 @@ public static class UserData
     }
     public static void GameOver()
     {
-        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.isGameOver = true;
     }
 
     public static void ClearDungeon()
     {
+        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.SaveClearData();
         UserDataManager.Instance.isClear = true;
     }

@@ -195,7 +195,6 @@ public partial class UserDataManager : MonoBehaviour
 
         // ######################### ETC #########################
 
-        QuestMain = PlayerDataManager.QuestMain;
         ClearCount = PlayerDataManager.ClearCount;
 
         // ######################### 클리어 데이터 #########################

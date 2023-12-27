@@ -19,7 +19,7 @@ public class GoogleSheetLoader : MonoBehaviour
         // JS
         "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
         "Item_Shop_Table", "BossMonster_Table", "AttackPattern_Table", "Quest_Table", "Quest_Reward_Table",
-        "Crafting_Table", "Crafting_Condition_Table", "Enhancement_Table", "Bonus_Stat_Table",
+        "Crafting_Table", "Crafting_Condition_Table", "Enhance_Table", "Enhance_Condition_Table", "Bonus_Stat_Table",
 
         // JH
         "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",

@@ -285,9 +285,5 @@ public static class Unit
     {
         GFunc.Log("LoadUserQuestDataFromDB()");
         QuestManager.Instance.LoadUserQuestDataFromDB();
-
-        // 퀘스트의 상태를 업데이트 한다
-        // 조건 충족시 [시작불가] -> [시작가능]으로 변경
-        QuestManager.Instance.UpdateQuestStatesToCanStartable();
     }
 }

@@ -32,19 +32,22 @@ namespace Js.Crafting
             CRAFTING = 0,     // 아이템 조합
             ENHANCE = 1       // 아이템 강화
         }
-        public Dictionary<int, ICraftingComponent> ItemCraftingDictionary       // 아이템 조합 크래프팅 딕셔너리
-           => _itemCraftingDictionary;
+        public Dictionary<int, ICraftingComponent> CraftingDictionary           // 아이템 조합 크래프팅 딕셔너리
+           => _craftingDictionary;
         public readonly int[] CRAFTING_TABLE_INDEX =
         {
             3_0000_1, 3_2000_1                                                  // 크래프팅 테이블 색인 인덱스
         };
+        public Anvil Anvil => _anvil;                                           // 아이템 조합 모루
 
 
         /*************************************************
          *                 Private Field
          *************************************************/
-        private Dictionary<int, ICraftingComponent> _itemCraftingDictionary
+        private Dictionary<int, ICraftingComponent> _craftingDictionary
             = new Dictionary<int, ICraftingComponent>();
+        private Anvil _anvil;
+        private string _anvilPrefabName = "Crafting_Anvil";                                   // 모루 프리팹 이름
 
 
         /*************************************************
@@ -68,6 +71,8 @@ namespace Js.Crafting
             // Init
             InitializeCrafting(Type.CRAFTING);
             InitializeCrafting(Type.ENHANCE);
+            _anvil = CreateAnvil();
+
         }
 
         // 아이템 [조합/강화] 크래프팅 Init
@@ -93,6 +98,7 @@ namespace Js.Crafting
                     int conditionID = conditions[j];
                     if (conditionID.Equals(0)) { continue; }
 
+                    GFunc.Log($"ConditionID {conditionID}");
                     // 두 가지 조건의 조합식을 가진 컴포짓 아이템을 생성한다.
                     CompositeItem compositeItem = CreateCompositeItemWithConditions(conditionID);
 
@@ -119,7 +125,7 @@ namespace Js.Crafting
 
                 // 크래프팅 아이템 & 딕셔너리에 추가
                 craftingItem.AddComponent(lastComponent);
-                _itemCraftingDictionary.Add(id, craftingItem);
+                _craftingDictionary.Add(id, craftingItem);
             }
         }
 
@@ -134,8 +140,9 @@ namespace Js.Crafting
             int material_2_KeyID = Data.GetInt(id, "Material_2_KeyID");
             int material_1_Amount = Data.GetInt(id, "Material_1_Amount");
             int material_2_Amount = Data.GetInt(id, "Material_2_Amount");
-            MaterialItem material_1 = new MaterialItem(material_1_KeyID, material_1_Amount);
-            MaterialItem material_2 = new MaterialItem(material_2_KeyID, material_2_Amount);
+            int needHammeringCount = Data.GetInt(id, "Need_HammeringCount");
+            MaterialItem material_1 = new MaterialItem(material_1_KeyID, material_1_Amount, needHammeringCount);
+            MaterialItem material_2 = new MaterialItem(material_2_KeyID, material_2_Amount, needHammeringCount);
             CompositeItem compositeItem = new CompositeItem(material_1, material_2);
 
             return compositeItem;
@@ -159,6 +166,17 @@ namespace Js.Crafting
             EnhanceHandler enhanceHandler = new EnhanceHandler(statKeyID);
 
             return enhanceHandler;
+        }
+
+        // 모루를 생성 후 반환한다.
+        private Anvil CreateAnvil()
+        {
+            GameObject prefab = Resources.Load<GameObject>(_anvilPrefabName);
+            GameObject gameObject = Instantiate(prefab);
+            gameObject.name = _anvilPrefabName;
+            Anvil anvil = gameObject.AddComponent<Anvil>();
+
+            return anvil;
         }
 
         // 타입에 맞는 테이블 색인 인덱스를 반환한다.

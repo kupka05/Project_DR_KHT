@@ -28,8 +28,8 @@ public class CraftingTest : MonoBehaviour
 
     public void Craft()
     {
-        CraftingManager.Instance.ItemCraftingDictionary[3_0000_1].Craft();
-        CraftingManager.Instance.ItemCraftingDictionary[3_0000_2].Craft();
-        CraftingManager.Instance.ItemCraftingDictionary[3_0000_3].Craft();
+        GFunc.Log(CraftingManager.Instance.CraftingDictionary[3_0000_1].CheckCraft());
+        GFunc.Log(CraftingManager.Instance.CraftingDictionary[3_0000_2].CheckCraft());
+        GFunc.Log(CraftingManager.Instance.CraftingDictionary[3_0000_3].CheckCraft());
     }
 }

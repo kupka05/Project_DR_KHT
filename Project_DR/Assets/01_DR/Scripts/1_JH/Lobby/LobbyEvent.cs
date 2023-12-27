@@ -143,7 +143,7 @@ public class LobbyEvent : MonoBehaviour
     // ################################## 스킬 업그레이드 ##############################################
 
     [Header("Skill1 Upgrade")]
-    public LobbyDisplayButton skill1Btn1;        
+    public LobbyDisplayButton skill1Btn1;
     public LobbyDisplayButton skill1Btn2;
     public UpgradeUI skill1_Up;
     private int skill1Spend;
@@ -169,7 +169,7 @@ public class LobbyEvent : MonoBehaviour
     private int skill4Spend;
 
     private GameObject player;
-    private bool isClear; // 클리어 여부 확인
+    private bool isResult = false; // 클리어 여부 확인
 
     // ################################## START ##################################
 
@@ -186,7 +186,7 @@ public class LobbyEvent : MonoBehaviour
         SetStatusDisplay();
 
         // 상태창 디스플레이 시작 시 세팅
-        ChangeStatusDisplayButton("Main");    
+        ChangeStatusDisplayButton("Main");
 
         // 옵저버 등록
         UserDataManager.Instance.OnUserDataUpdate += UpdatePlayerStatusUI;
@@ -201,24 +201,22 @@ public class LobbyEvent : MonoBehaviour
         GetNPCDialog();              // NPC 대사 가져오고
 
         // 퀘스트가 널이 아니면 새운 퀘스트 가져오기
-        if(!UserData.QuestCheck())
+        if (!UserData.QuestCheck())
         {
-            GFunc.Log("비어있지 않음");
-            Quest curQuest = Unit.GetInProgressMainQuest();
-            //targetQuestID = curQuest.QuestData.ID;
+            // 클리어 한 적이 없으면 굳이 데이터 가져올 필요 없음
+            if (UserDataManager.Instance.ClearCount != 0)
+            {
+                Quest curQuest = Unit.GetInProgressMainQuest();
+            }
         }
 
         // 게임오버시 메인 디스플레이 출력 대사
         if (UserDataManager.Instance.isGameOver)
         {
             SetNpcDialog(questID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
+            UserDataManager.Instance.isGameOver = false;
         }
-        //// 게임 클리어시 메인 디스플레이 출력 대사
-        //else if (UserDataManager.Instance.isClear)
-        //{
-        //    SetNpcDialog(targetQuestID+1); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
-        //}
-        // 그 외 대사 출력
+      
         else
         {
             int clearCount = UserDataManager.Instance.ClearCount;
@@ -231,7 +229,7 @@ public class LobbyEvent : MonoBehaviour
         GetClearData();              // 클리어 데이터 가져오기
 
         // 메인 디스플레이의 클리어 데이터 업데이트
-        UpdateClearDataUI(clearDatas);            
+        UpdateClearDataUI(clearDatas);
 
         // 상태창 : 플레이어 강화
         UpdatePlayerStatusUI();
@@ -248,7 +246,6 @@ public class LobbyEvent : MonoBehaviour
         UpdateSkillUpgradeUI();
         SetSkillLevelBtn();
 
-        isClear = UserDataManager.Instance.isClear;
         UserData.ResetPlayer();
     }
 
@@ -288,7 +285,7 @@ public class LobbyEvent : MonoBehaviour
         NS.text = UserDataManager.Instance.mbti.GetNS();
         FT.text = UserDataManager.Instance.mbti.GetFT();
         PJ.text = UserDataManager.Instance.mbti.GetPJ();
-    }   
+    }
 
     public void SetGameResult()
     {
@@ -338,7 +335,7 @@ public class LobbyEvent : MonoBehaviour
     }
     // 플레이어 업그레이드 상태창 UI 업데이트
     public void UpdatePlayerUpgradeUI()
-    {        
+    {
         // 레벨은 0이하로 될 수 없음. 삼항연산자 활용
         afterPlayerHp.text = MinusCheck(hpUpBtn.newLevel - 1) ? (UserDataManager.Instance.DefaultHP + UserDataManager.Instance.statData.upgradeHp[hpUpBtn.newLevel - 1].sum).ToString() : beforePlayerHp.text;
         afterGoldIncre.text = MinusCheck(goldIncreBtn.newLevel - 1) ? (UserDataManager.Instance.statData.upgradeGainGold[goldIncreBtn.newLevel - 1].sum).ToString() : beforeGoldIncre.text;
@@ -346,12 +343,12 @@ public class LobbyEvent : MonoBehaviour
 
         playerSpend = PlayerCalculator();        // 사용 금액
         pcSpendExp.text = playerSpend.ToString();
-        pcRemainExp.text = (UserDataManager.Instance.Exp - playerSpend).ToString();       
+        pcRemainExp.text = (UserDataManager.Instance.Exp - playerSpend).ToString();
     }
     // 플레이어 업그레이드
     public void PlayerUpgrade()
     {
-        if(playerSpend == 0)
+        if (playerSpend == 0)
         {
             return;
         }
@@ -371,7 +368,7 @@ public class LobbyEvent : MonoBehaviour
             // 경험치 소모
             UserData.SpendExp(playerSpend);
             // 레벨 업데이트
-            UserDataManager.Instance.PlayerStatusUpgrade(hpUpBtn.level, goldIncreBtn.level, expIncreBtn.level);               
+            UserDataManager.Instance.PlayerStatusUpgrade(hpUpBtn.level, goldIncreBtn.level, expIncreBtn.level);
         }
         else
         {
@@ -408,7 +405,7 @@ public class LobbyEvent : MonoBehaviour
     // 음수 값이면 거짓
     public bool MinusCheck(int value)
     {
-        if (0 <= value )
+        if (0 <= value)
         {
             return true;
         }
@@ -464,7 +461,7 @@ public class LobbyEvent : MonoBehaviour
     }
     public int WeaponCalculator()
     {
-        int result, afterAtk, curAtk, afterCritRate, curCritRate, afterCritDmg, curCritDmg, afterAtkRate ,curAtkRate;        // 계산식 필요
+        int result, afterAtk, curAtk, afterCritRate, curCritRate, afterCritDmg, curCritDmg, afterAtkRate, curAtkRate;        // 계산식 필요
 
         afterAtk = MinusCheck(atkUpBtn.newLevel - 1) ? UserDataManager.Instance.statData.upgradeAtk[atkUpBtn.newLevel - 1].totalExp : 0;
         curAtk = MinusCheck(atkUpBtn.level - 1) ? UserDataManager.Instance.statData.upgradeAtk[atkUpBtn.level - 1].totalExp : 0;
@@ -594,7 +591,7 @@ public class LobbyEvent : MonoBehaviour
     }
     public bool UpgradeSkill(int spend)
     {
-        if(spend <= 0)
+        if (spend <= 0)
         {
             return false;
         }
@@ -622,9 +619,9 @@ public class LobbyEvent : MonoBehaviour
 
             // 레벨 업데이트
             UserDataManager.Instance.SkillUpgrade
-                (skill1Btn1.level, skill1Btn2.level, 
-                skill2Btn1.level, skill2Btn2.level, skill2Btn3.level, 
-                skill3Btn.level, 
+                (skill1Btn1.level, skill1Btn2.level,
+                skill2Btn1.level, skill2Btn2.level, skill2Btn3.level,
+                skill3Btn.level,
                 skill4Btn1.level, skill4Btn2.level, skill4Btn3.level);
 
             return true;
@@ -767,7 +764,7 @@ public class LobbyEvent : MonoBehaviour
         goldIncreBtn.level = UserDataManager.Instance.GainGoldLv;
         expIncreBtn.level = UserDataManager.Instance.GainExpLv;
 
-        
+
     }
 
     // 상태창 패널 변경 버튼
@@ -840,7 +837,7 @@ public class LobbyEvent : MonoBehaviour
     // NPC 대사를 세팅하는 함수
     public void SetNpcDialog(int id)
     {
-        int target = BinarySearch(DialogData.logs, 0, DialogData.logs.Count-1, id);
+        int target = BinarySearch(DialogData.logs, 0, DialogData.logs.Count - 1, id);
         // 대사 데이터에서 ID에 맞는 데이터 찾아오기
 
         if (target < 0)
@@ -849,8 +846,8 @@ public class LobbyEvent : MonoBehaviour
             return;
         }
         else
-        // 탐색 완료 시 데이터 변경
-        dialog = DialogData.logs[target];
+            // 탐색 완료 시 데이터 변경
+            dialog = DialogData.logs[target];
 
         // 대화창 업데이트 후 디큐
         npcDialog.text = dialog.log.Peek().ToString();
@@ -860,10 +857,10 @@ public class LobbyEvent : MonoBehaviour
     // 이진 탐색 트리 ID 찾아오기
     int BinarySearch(List<NpcDialog> list, int first, int last, int target)
     {
-        int mid;       
+        int mid;
         // 중간 값 초기화
         if (first > last)                // 만약 첫 숫자가 마지막 숫자보다 작을 경우
-        {   
+        {
             return -1;                   // -1을 반환 : 탐색 실패를 의미
         }
         mid = (first + last) / 2;        // 탐색 영역을 반으로 나누고 탐색을 진행
@@ -881,34 +878,40 @@ public class LobbyEvent : MonoBehaviour
         else
             // mid 또한 탐색범위에 넣기 위해, -1
             return BinarySearch(list, first, mid - 1, target);
-       
+
     }
 
-        // NPC와 대화/보상 수락 등을 하는 디스플레이 버튼
-        public void DisplayButton()
+    // NPC와 대화/보상 수락 등을 하는 디스플레이 버튼
+    public void DisplayButton()
     {
-        // 예외처리해야함
+        // 1. 대사 디큐
         if (dialog.log.Count != 0)
         {
             npcDialog.text = dialog.log.Peek().ToString();
             dialog.log.Dequeue();
         }
 
-        // 클리어 했으면 디스플레이 띄워주고 isClear 꺼주기
-        else if (UserData.ClearCheck())
+        // 2. 클리어 MBTI 결과 표시
+        else if (UserData.ClearCheck() && !isResult)
         {
+            isResult = true;
             SetMBTIResult();
             ChangeDisplayButton("Result_MBTI");
+        }
+
+        // 3. 클리어 결과 정산
+        else if (UserData.ClearCheck() && isResult)
+        {
+            ChangeDisplayButton("Result");
+
+            isResult = false;
             UserDataManager.Instance.isClear = false;
         }
-        // 문 열림
+
+        // 4. 문 열림
         else
         {
-            // 이벤트 추가
-            Unit.InProgressQuestByID(31_1_1_001);
-            Unit.InProgressQuestByID(31_1_1_002);
-            Unit.InProgressQuestByID(31_1_1_003);
-
+            GFunc.ChoiceEvent(targetQuestID);
             ChangeDisplayButton("Main");
             OpenSpawnRoomDoor();
         }
@@ -918,6 +921,7 @@ public class LobbyEvent : MonoBehaviour
     {
         UserDataManager.Instance.ResetData();
     }
+
 
     // NPC 대사 데이터를 가져오는 메서드
     public void GetNPCDialog()

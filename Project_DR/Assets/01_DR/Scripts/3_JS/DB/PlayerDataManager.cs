@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using Js.Quest;
 
 public static class PlayerDataManager
 {
@@ -33,10 +34,10 @@ public static class PlayerDataManager
     public static int SkillLevel4_1 => _skill_level_4_1;
     public static int SkillLevel4_2 => _skill_level_4_2;
     public static int SkillLevel4_3 => _skill_level_4_3;
-    public static string QuestMain => _quest_main;
     public static int ClearCount => _clear_count;
     public static string ClearMBTIValue => _clear_mbti_value;
     public static string ClearTime => _clear_time;
+    public static string QuestMain => _quest_main;
 
     #endregion
     /*************************************************
@@ -70,10 +71,10 @@ public static class PlayerDataManager
     private static int _skill_level_4_3;      // 스킬 그린랜딩 레벨
 
     [Header("ClearData")]
-    private static string _quest_main;        // 메인 퀘스트 진행도(직렬화 데이터)
     private static int _clear_count;          // 게임 클리어 횟수
     private static string _clear_mbti_value;  // 저장된 MBTI 수치
     private static string _clear_time;        // 클리어 한 날짜 및 시간
+    private static string _quest_main;        // 메인 퀘스트 진행도(직렬화 데이터)
 
     #endregion
     /*************************************************
@@ -174,6 +175,10 @@ public static class PlayerDataManager
         _clear_count = clearCount;                 // 게임 클리어 횟수
         _clear_mbti_value = clearMBTIValue;        // 저장된 MBTI 수치(직렬화 데이터)
         _clear_time = clearTime;                   // 클리어 한 날짜 및 시간(직렬화 데이터)
+
+        // 퀘스트 목록을 생성 & 업데이트
+        QuestManager.Instance.CreateQuestFromDataTable();
+        QuestManager.Instance.UpdateUserQuestData();
     }
 
     // Data를 PlayerData에 맞게 변환한다.

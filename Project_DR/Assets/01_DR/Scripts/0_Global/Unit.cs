@@ -272,7 +272,7 @@ public static class Unit
 
 
     /*************************************************
-     *            Public DB Quest Methods
+     *                Public DB Methods
      *************************************************/
     // 퀘스트 데이터를 DB에 저장한다
     public static void SaveQuestDataToDB()
@@ -280,10 +280,17 @@ public static class Unit
         QuestManager.Instance.SaveQuestDataToDB();
     }
 
-    // DB에서 퀘스트 정보를 가져와서 UserDataManagr를 업데이트한다
-    public static void LoadUserQuestDataFromDB()
+    // PlayerDataManager에 있는 정보로 퀘스트 목록을 업데이트 한다.
+    public static void UpdateUserQuestData()
     {
-        GFunc.Log("LoadUserQuestDataFromDB()");
-        QuestManager.Instance.LoadUserQuestDataFromDB();
+        GFunc.Log("LoadUserQuestData()");
+        QuestManager.Instance.UpdateUserQuestData();
+    }
+
+    // DB에서 정보를 가져온다.
+    // 가져오면서 퀘스트 생성 & 업데이트한다.
+    public static void UpdateDataFromDB()
+    {
+        PlayerDataManager.Update();
     }
 }

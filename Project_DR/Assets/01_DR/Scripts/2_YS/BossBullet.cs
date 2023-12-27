@@ -23,6 +23,7 @@ public class BossBullet : MonoBehaviour
     public bool isDamage = false;
     public bool isWeapon = false;
     public bool isWall = false;
+    
 
     [Header("이펙트")]
     public GameObject bulletEffect;
@@ -77,6 +78,35 @@ public class BossBullet : MonoBehaviour
             }
             isDamage = false;
         }
+
+        if(distance <= attack && !isWeapon)
+        {
+            foreach(Collider collider in colliders)
+            {
+                if(collider.CompareTag("Weapon"))
+                {
+                    isWeapon = true;
+                    break;
+                }
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+            }
+            isWeapon = false;
+        }
+
+        if (distance <= attack && isWall)
+        {
+            foreach (Collider collider in colliders)
+            {
+                if (collider.CompareTag("Wall"))
+                {
+                    isWall = true;
+                    break;
+                }
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+            }
+            isWall = false;
+        }
+
     }
 
     public void GetData(int smallTableID)

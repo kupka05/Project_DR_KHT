@@ -43,7 +43,7 @@ public class ObjectPoolManager : MonoBehaviour
     GameObject CreateObject(ProjectileType projectileType) //초기 OR 오브젝트 풀에 남은 오브젝트가 부족할 때, 오브젝트를 생성하기위해 호출되는 함수
     {
         GameObject prefab = GetPrefabType(projectileType);
-        GameObject newObj = Instantiate(prefab);
+        GameObject newObj = Instantiate(prefab);        //instance.transform
         newObj.gameObject.SetActive(false);
 
         return newObj;

@@ -21,6 +21,8 @@ public class BounceSmallBullet : MonoBehaviour
     public float damageRadius = 1.0f;
 
     public bool isHit = false;
+    public bool isWeapon = false;
+    public bool isWall = false;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +52,7 @@ public class BounceSmallBullet : MonoBehaviour
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
-        if (distance <= attack)
+        if (distance <= attack && !isHit)
         {
             foreach (Collider collider in colliders)
             {
@@ -68,6 +70,33 @@ public class BounceSmallBullet : MonoBehaviour
             isHit = false;
         }
 
+        if(distance <= attack && !isWeapon)
+        {
+            foreach(Collider collider in colliders)
+            {
+                if(collider.CompareTag("Weapon"))
+                {
+                    isWeapon = true;
+                    break;
+                }
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+            }
+            isWeapon = false;
+        }
+
+        if (distance <= attack && !isWall)
+        {
+            foreach (Collider collider in colliders)
+            {
+                if (collider.CompareTag("Wall"))
+                {
+                    isWall = true;
+                    break;
+                }
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+            }
+            isWall = false;
+        }
     }
 
 }

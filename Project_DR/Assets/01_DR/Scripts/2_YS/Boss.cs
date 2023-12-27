@@ -12,7 +12,6 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
-
     public UnityEngine.UI.Slider bossHPSlider;
 
     public GameObject bossState;
@@ -75,9 +74,6 @@ public class Boss : MonoBehaviour
     public float speed = default;
 
     [Header("애드벌룬 투사체 생성")]
-    public Transform bouncePort;
-    public Transform bouncePortLeft;
-    public Transform bouncePortRight;
     public GameObject bounce;
     public float bounceCount = default;
     public float destoryTimeBounce = default;
@@ -117,11 +113,8 @@ public class Boss : MonoBehaviour
     //public Transform explosionPortRight;
 
     [Header("포물선 안 터지는 오브젝트")]
-    public Transform bigBrickPort;
-    public Transform bigBrickPortLeft;
-    public Transform bigBrickPortRight;
     public GameObject bigBrick;
-    new private ParticleSystem particleSystem;
+    //new private ParticleSystem particleSystem;
     public float destroyTimeBrick = default;
     public float brickCount = default;
 
@@ -153,7 +146,7 @@ public class Boss : MonoBehaviour
         target = player.GetComponent<PlayerPosition>().playerPos;
         knockBack = player.GetComponent<PlayerBackDash>();
 
-        particleSystem = GetComponent<ParticleSystem>();
+        //particleSystem = GetComponent<ParticleSystem>();
 
         damageable.Health = maxHp;
 

@@ -27,6 +27,8 @@ public class BounceBullet : MonoBehaviour
     [Header("조건")]
     public bool isShoot = false;
     public bool isDamage = false;
+    public bool isWeapon = false;
+    public bool isWall = false;
 
     // Start is called before the first frame update
     void Start()
@@ -56,8 +58,6 @@ public class BounceBullet : MonoBehaviour
         // 디버그용: 빨간색 구체로 OverlapSphere 영역을 시각화
         DebugDrawOverlapSphere();
 
-        //Debug.Log("진입"+ distance); 
-
         foreach (Collider collider in colliders)
         {
             if (!isDamage)
@@ -80,7 +80,33 @@ public class BounceBullet : MonoBehaviour
         }
         isDamage = false;
 
+        foreach (Collider collider in colliders)
+        {
+            if(!isWeapon)
+            {
+                if(collider.CompareTag("Weapon"))
+                {
+                    isWeapon = true;
+                    break;
+                }
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+            }
+        }
+        isWeapon = false;
 
+        foreach (Collider collider in colliders)
+        {
+            if (!isWall)
+            {
+                if (collider.CompareTag("Weapon"))
+                {
+                    isWall = true;
+                    break;
+                }
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+            }
+        }
+        isWall = false;
     }
 
     void DebugDrawOverlapSphere()

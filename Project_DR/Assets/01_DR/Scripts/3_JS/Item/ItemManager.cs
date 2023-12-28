@@ -4,6 +4,7 @@ using Rito.InventorySystem;
 using System;
 using System.Collections;
 using Js.Quest;
+using BNG;
 
 public class ItemManager : MonoBehaviour
 {
@@ -182,6 +183,22 @@ public class ItemManager : MonoBehaviour
     public GameObject CreateItem(int id, int amount = 1)
     {
         return CreateItem(Vector3.zero, id, amount);
+    }
+
+    // 크래프팅 출력용 임시 아이템 생성
+    public GameObject CreateTempItem(Vector3 pos, int id, Transform parent, int amount = 1)
+    {
+        // 아이템 생성 & 컴포넌트 끄기
+        GameObject item = CreateItem(pos, id, amount);
+        item.transform.SetParent(parent);
+        item.transform.localPosition = pos;
+        item.GetComponent<ItemColliderHandler>().enabled = false;
+        item.GetComponent<Grabbable>().enabled = false;
+
+        // TODO: 플레이어와 닿았을 경우 조합 취소하는 기능 추가
+        // 
+
+        return item;
     }
 
     public GameObject CreateItem(Vector3 pos, int id, int amount = 1)

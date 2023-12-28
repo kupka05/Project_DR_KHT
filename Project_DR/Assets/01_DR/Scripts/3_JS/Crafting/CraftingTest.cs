@@ -23,13 +23,15 @@ public class CraftingTest : MonoBehaviour
         //// 조합 실행
         //GFunc.Log($"제작 성공 여부: {compositeItem.Craft()}");
 
-        Invoke("Craft", 1f);
+        Invoke("CreateAnvil", 1f);
     }
 
-    public void Craft()
+    public void CreateAnvil()
     {
-        GFunc.Log(CraftingManager.Instance.CraftingDictionary[3_0000_1].CheckCraft());
-        GFunc.Log(CraftingManager.Instance.CraftingDictionary[3_0000_2].CheckCraft());
-        GFunc.Log(CraftingManager.Instance.CraftingDictionary[3_0000_3].CheckCraft());
+        Vector3 pos = Vector3.zero;
+        pos.x = 22.883f;
+        pos.y = 0.987f;
+        pos.z = -40.57f;
+        CraftingManager.Instance.CreateAnvil(pos);
     }
 }

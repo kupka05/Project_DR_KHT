@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Collections;
 using UnityEngine;
+using Js.Quest;
 
 public static class GFunc
 {
@@ -169,7 +170,12 @@ public static class GFunc
     }
     #endregion
 
-
+    // 강제로 진행중으로 변경하는 메서드
+    public static void DebugQuestInProgress(int id)
+    {
+        Quest quest = UserDataManager.QuestDictionary[id];
+        quest.ChangeState(3);
+    }
 
     // NPC 대화의 이벤트를 실행시켜주는 함수
     public static void ChoiceEvent(int targetID)

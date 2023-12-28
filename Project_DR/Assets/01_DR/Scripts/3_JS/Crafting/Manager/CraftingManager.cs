@@ -133,13 +133,15 @@ namespace Js.Crafting
          *************************************************/
         // 지정한 위치에 모루를 생성한다.
         // 생성 후 _anvil에 할당
-        public void CreateAnvil(Vector3 pos)
+        public GameObject CreateAnvil(Vector3 pos)
         {
             GameObject prefab = Resources.Load<GameObject>(_anvilPrefabName);
             GameObject anvil = Instantiate(prefab);
             anvil.name = _anvilPrefabName;
             anvil.transform.position = pos;
             _anvil = anvil.GetComponent<Anvil>();
+
+            return anvil;
         }
 
 

@@ -19,7 +19,8 @@ public enum NPCID
     Decius_Random = 1111601,
     Tregal_Random = 1110301,
     Tutis_Random = 1111701,
-    Dent_Random = 1110501
+    Dent_Random = 1110501,
+    Saektus_Random = 1110401
 
 
 }

@@ -126,7 +126,7 @@ public class BossNPC : NPC
         GFunc.ChoiceEvent(conversationID);
 
         GetComponent<Boss>().StartAttack();
-        
+
     }       // EndConveration()
 
 

@@ -197,6 +197,40 @@ public static class Unit
         return questList;
     }
 
+
+
+    // [완료가능] 상태의 메인 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetCanCompleteMainQuestForList()
+    {
+        // [완료가능] [1]메인 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(1);
+        // 가져온 퀘스트 리스트 중에서 [3][완료가능] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 3);
+        return questList;
+    }
+
+    // [완료가능] 상태의 서브 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetCanCompleteSubQuestForList()
+    {
+        // [완료가능] [2]서브 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(2);
+        // 가져온 퀘스트 리스트 중에서 [3][완료가능] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 3);
+        return questList;
+    }
+
+    // [완료가능] 상태의 특수 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetCanCompleteSpecialQuestForList()
+    {
+        // [완료가능] [3]특수 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(3);
+        // 가져온 퀘스트 리스트 중에서 [3][완료가능] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 3);
+        return questList;
+    }
+
+
+
     // 퀘스트 ID로 퀘스트를 검색하고 반환
     public static Quest GetQuestByID(int id)
     {

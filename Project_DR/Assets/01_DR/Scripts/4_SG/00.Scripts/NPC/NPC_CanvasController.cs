@@ -32,6 +32,7 @@ public class NPC_CanvasController : MonoBehaviour
 
     private string isNon;                       // 해당 선택지가 존재하지 않는지 -> 존재하지 않으면 "0"으로 표시될것
     private string underBar;                    // Underbar도 선택지가 존재하지 않는다는 의미로 사용될것임
+    private string endTalk;                     // \\n을 의미하며 대화를 끝내는 용도로 사용
 
     private int nowConversationRefID;           // 현재 대화에서 참조 되고 있는 ID    
 
@@ -60,7 +61,8 @@ public class NPC_CanvasController : MonoBehaviour
         stringBuilder = new StringBuilder();
         isNon = "0";
         underBar = "_";
-
+        endTalk = "\\\\n0";
+        GFunc.Log($"endTalk : {endTalk}");
         aZeroColor = new Color(1, 1, 1, 0);
         aMaxColor = new Color(1, 1, 1, 1);
 
@@ -177,6 +179,7 @@ public class NPC_CanvasController : MonoBehaviour
         string choice1 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice1", typeof(string));
         string choice2 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice2", typeof(string));
         string choice3 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice3", typeof(string));
+        GFunc.Log($"선택지 시트에서 가져오기 시도\nChoice1 : {choice1}\nChoice2 : {choice2}\nChoice3 : {choice3}");
         // 아래 Choice3는 존재하면 띄우는 조건이 만족하는지 한번 체크해야함 (12.13기준 퀘스트가 나와야 클리어여부를 끌어와서 체크할수있음)
 
         CheckChoiceNull(choice1, 1, choice1Text, choice1Image);
@@ -194,6 +197,10 @@ public class NPC_CanvasController : MonoBehaviour
     private void CheckChoiceNull(string _choice, int _choiceNum,
         TextMeshProUGUI _outputText, NPCUIImage _choiceImageComponent)
     {
+        //if(_choiceNum == 2)
+        //{
+        //    //GFunc.Log($"Choice : {_choice}");
+        //}
         //GFunc.Log($"해당 선택지의 값 : {_choice} 가 들어왔음");
         //Debug.Log($"여기 들어오나? 들어온다면 어떤 값을 가지고 있지?\n_choice :{_choice}\n_ChoiceNum : {_choiceNum}");
         if (_choice == isNon || _choice == underBar)
@@ -490,9 +497,10 @@ public class NPC_CanvasController : MonoBehaviour
         }
         else { /*PASS*/ }
 
+        
         string eventRefId = (string)DataManager.Instance.GetData(nowConversationRefID, stringBuilder.ToString(), typeof(string));
-
-        if (eventRefId == isNon || eventRefId == underBar)
+        GFunc.Log($"StBuild의 값 : {stringBuilder}\n참조해온 선택지 이벤트 값 : {eventRefId}");
+        if (eventRefId == isNon || eventRefId == underBar || eventRefId == endTalk)
         {
             // 이벤트가 없으므로 대화 끝
             NPC npc;
@@ -511,9 +519,9 @@ public class NPC_CanvasController : MonoBehaviour
 
         int[] eventRefIds = GFunc.SplitIds(eventRefId);
 
-        int defaultCompensation = 320_000;
-        int defaultQuest = 310_000_0;
-        int defaultConveration = 300_000_00;
+        int defaultCompensation = 320000;
+        int defaultQuest = 3100000;
+        int defaultConveration = 30000000;
 
         #region 작은수 -> 큰수  LEGACY
         // 여기서 나온값이 퀘스트인지 보상인지 대사인지 확인할것임

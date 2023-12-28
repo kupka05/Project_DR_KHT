@@ -42,7 +42,7 @@ public static class GFunc
         _placeString = _placeString.Replace("\\n", "\n");
         _placeString = _placeString.Replace("#", ",");
         _placeString = _placeString.Replace("\\", "");
-        _placeString = _placeString.Replace("_", "");         
+        _placeString = _placeString.Replace("_", "");
 
         string[] replaceStrings = _placeString.Split("\n");
 
@@ -88,6 +88,10 @@ public static class GFunc
         _parsString = _parsString.Replace("_", "");
         string[] splitParams = _parsString.Split("\n");
 
+        for (int i = 0; i < splitParams.Length; i++)
+        {
+            GFunc.Log($"splitParms 값 {splitParams[i]}");
+        }
         float[] splitFloat = new float[splitParams.Length];
         for (int i = 0; i < splitParams.Length; i++)
         {

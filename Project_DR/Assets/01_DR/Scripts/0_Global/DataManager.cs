@@ -93,7 +93,8 @@ public class DataManager : MonoBehaviour
         "Floor3_MonsterSpawn_Table","Floor4_MonsterSpawn_Table","Floor5_MonsterSpawn_Table",
         "BattleRoomObjectCreate_Table","EventRoomObjectCreate_Table","NullRoomObjectCreate_Table",
         "LightObject_Table","EnvObject_Table","MatObject_Table",
-        "NPC_Table","NPC_Comunication_Table"
+        "NPC_Table","NPC_Comunication_Table","BossRoomObjectCreate_Table"
+
 
     };
 

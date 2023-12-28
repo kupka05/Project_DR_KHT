@@ -117,6 +117,8 @@ public partial class UserDataManager
     public float _weaponCritRate;
     public float _weaponCritDamage;
     public float _weaponAtkRate;
+    public float effectDamage;
+    public float effectCritDamage;
 
     [Header("Weapon Data")]
     public float weaponAtk;

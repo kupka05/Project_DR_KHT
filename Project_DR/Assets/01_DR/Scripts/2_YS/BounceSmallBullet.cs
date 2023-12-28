@@ -22,6 +22,8 @@ public class BounceSmallBullet : MonoBehaviour
 
     public bool isDamage = false;
 
+    public float destroyTime = default;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +33,8 @@ public class BounceSmallBullet : MonoBehaviour
         //rigid.velocity = transform.forward * 10.0f;
 
         damageCollider.Damage = damage;
+
+        Invoke(nameof(ReturnBullet), destroyTime);
     }
 
     void Update()
@@ -38,10 +42,16 @@ public class BounceSmallBullet : MonoBehaviour
         DealDamageToNearbyObjects();
     }
 
+    public void ReturnBullet()
+    {
+        // 리턴 함수
+    }
+
     public virtual void GetData(int BounceSmallTableID)
     {
         //6913
         damage = (float)DataManager.Instance.GetData(BounceSmallTableID, "Damage", typeof(float));
+        destroyTime = (float)DataManager.Instance.GetData(BounceSmallTableID, "DesTime", typeof(float));
     }
 
     void DealDamageToNearbyObjects()

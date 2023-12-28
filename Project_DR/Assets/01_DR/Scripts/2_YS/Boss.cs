@@ -52,6 +52,7 @@ public class Boss : MonoBehaviour
     public int bossProjectileId;  //투사체 테이블
     public int bossProjectileID;
     public int bossProjectileBounce;
+    public int bossExp;
 
     public float power = 5.0f;
 
@@ -186,6 +187,7 @@ public class Boss : MonoBehaviour
         //보스
         maxHp = (float)DataManager.Instance.GetData(bossId, "BossHP", typeof(float));
         patternInterval = (float)DataManager.Instance.GetData(bossId, "PatternChange", typeof(float)); //이건 하나만
+        bossExp = Data.GetInt(bossId, "GiveEXP");
 
         //소형 투사체 6910
         bulletCount = (float)DataManager.Instance.GetData(bossProjectileId, "Duration", typeof(float));
@@ -303,7 +305,6 @@ public class Boss : MonoBehaviour
     {
         int pattern = UnityEngine.Random.Range(0, 4);
 
-        pattern = 3;
         switch (pattern)
         {
             case 0:
@@ -778,6 +779,7 @@ public class Boss : MonoBehaviour
                 //unityEvent?.Invoke();
 
                 ClearBossKillQuest();
+                UserData.KillBoss(bossExp);
 
                 if (bossState)
                 {

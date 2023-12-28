@@ -14,7 +14,10 @@ public class BounceBullet : MonoBehaviour
     public GameObject bounceEffect;
 
     public Transform target;
-    public float attack = 0.2f;
+    public float attack = 3.0f;
+
+    [SerializeField]
+    private float damageRadius = 1.5f;
 
     [Header("테이블 관련")]
     public float speed = default;
@@ -23,6 +26,7 @@ public class BounceBullet : MonoBehaviour
 
     [Header("조건")]
     public bool isShoot = false;
+    public bool isDamage = false;
 
     // Start is called before the first frame update
     void Start()
@@ -34,58 +38,64 @@ public class BounceBullet : MonoBehaviour
 
         damageCollider.Damage = damage;
 
-        StartCoroutine(Activate());
+        //StartCoroutine(Activate());
     }
 
     void Update()
     {
+        DealDamageToNearbyObjects();
+
+    }
+
+    void DealDamageToNearbyObjects()
+    {
         float distance = Vector3.Distance(target.position, transform.position);
 
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+        Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
-            if (distance <= attack)
+        // 디버그용: 빨간색 구체로 OverlapSphere 영역을 시각화
+        DebugDrawOverlapSphere();
+
+
+       
+            //Debug.Log("진입"+ distance); 
+
+            foreach (Collider collider in colliders)
             {
-                if (hit.collider.CompareTag("Player"))
+                if(!isDamage)
                 {
-                    hit.collider.GetComponent<Damageable>().DealDamage(damage);
-                    GFunc.Log($"데미지:{damage}");
+                    if (collider.CompareTag("Player"))
+                    {
+                        Debug.Log("만났는가");
+                        // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
+                        collider.GetComponent<Damageable>().DealDamage(damage);
+                        GFunc.Log($"데미지:{damage}");
 
-                    //GameObject instanceEffect = Instantiate(bounceEffect, transform.position, Quaternion.identity);
+                        isDamage = true;
+                        //Destroy(this.gameObject);
+                        break;
+                    }
+                    isDamage = false;
                 }
+               
+
             }
-
-        Destroy(this.gameObject, 8.0f);
-        //GameObject instanceEffectDestroy = Instantiate(bounceEffect, transform.position, Quaternion.identity);
-
-    }
-
-    IEnumerator Activate()
-    {
-        // 오브젝트 활성화
-        gameObject.SetActive(true);
-        //GFunc.Log($"활성화:{gameObject}");
-
-        GFunc.Log($"포지션:{gameObject.transform.position}");
-        yield return new WaitForSeconds(2.0f);
-        //GFunc.Log("대기중");
         
-        Play();
+
     }
 
-    void Play()
+    void DebugDrawOverlapSphere()
     {
-        rigid.velocity = transform.forward * speed;
-    }
-
-    
+        Vector3 dir = target.position - transform.position;
+        Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.yellow);  
+    }               
 
     public virtual void GetData(int BounceTableId)
     {
         //6912
         speed = (float)DataManager.Instance.GetData(BounceTableId, "Speed", typeof(float));
         damage = (float)DataManager.Instance.GetData(BounceTableId, "Damage", typeof(float));
-        destoryTime = (float)DataManager.Instance.GetData(BounceTableId, "DesTime", typeof(float));
+        //destoryTime = (float)DataManager.Instance.GetData(BounceTableId, "DesTime", typeof(float));
     }
 
 }

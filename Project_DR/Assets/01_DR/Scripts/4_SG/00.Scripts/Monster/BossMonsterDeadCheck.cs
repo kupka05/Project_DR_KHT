@@ -19,5 +19,10 @@ public class BossMonsterDeadCheck : MonoBehaviour
         bossRoom.CheckClearBoss();
     }
 
+    public void BossDie()
+    {
+        bossRoom.bossList.Remove(this.gameObject);
+        bossRoom.CheckClearBoss();
+    }
 
 }

@@ -22,7 +22,6 @@ namespace BossMonster
         public IState DieState => _dieState;
         public IState[] AttackStates => _attackStates;
         public List<int> AvailableAttackPatternsList => _bossData.AvailableAttackPatternsList;  // 사용 가능한 공격 패턴(0 ~ 9)[10]
-
         public Rigidbody Rigidbody => _bossData.Rigidbody;                                      // 리지드 바디
         public Damageable Damageable => _bossData.Damageable;                                   // 데미지 관련 처리
         public Transform Target => _bossData.Target;                                            // 공격 대상

@@ -52,7 +52,7 @@ public static class Unit
     }
 
     // ID와 일치하는 퀘스트의 상태를 [진행중]으로 변경한다.
-    public static void ChangeQuestStateToInProgress(int id)
+    public static void InProgressQuestByID(int id)
     {
         Quest quest = UserDataManager.QuestDictionary[id];
         // 퀘스트가 [시작가능] 상태일 경우
@@ -197,8 +197,6 @@ public static class Unit
         return questList;
     }
 
-
-
     // 퀘스트 ID로 퀘스트를 검색하고 반환
     public static Quest GetQuestByID(int id)
     {
@@ -274,7 +272,7 @@ public static class Unit
 
 
     /*************************************************
-     *            Public DB Quest Methods
+     *                Public DB Methods
      *************************************************/
     // 퀘스트 데이터를 DB에 저장한다
     public static void SaveQuestDataToDB()
@@ -282,14 +280,17 @@ public static class Unit
         QuestManager.Instance.SaveQuestDataToDB();
     }
 
-    // DB에서 퀘스트 정보를 가져와서 UserDataManagr를 업데이트한다
-    public static void LoadUserQuestDataFromDB()
+    // PlayerDataManager에 있는 정보로 퀘스트 목록을 업데이트 한다.
+    public static void UpdateUserQuestData()
     {
-        GFunc.Log("LoadUserQuestDataFromDB()");
-        QuestManager.Instance.LoadUserQuestDataFromDB();
+        GFunc.Log("LoadUserQuestData()");
+        QuestManager.Instance.UpdateUserQuestData();
+    }
 
-        // 퀘스트의 상태를 업데이트 한다
-        // 조건 충족시 [시작불가] -> [시작가능]으로 변경
-        QuestManager.Instance.UpdateQuestStatesToCanStartable();
+    // DB에서 정보를 가져온다.
+    // 가져오면서 퀘스트 생성 & 업데이트한다.
+    public static void UpdateDataFromDB()
+    {
+        PlayerDataManager.Update();
     }
 }

@@ -311,7 +311,7 @@ public class EliteMonster : Monster
                     nav.isStopped = true;
                     //GFunc.Log("nav.isStopped: " + nav.isStopped);
                     anim.SetTrigger(hashDie);
-                    UserData.KillElite(0, exp);
+                    UserData.KillElite(exp);
                     //Destroy(this.gameObject, 1.3f); //damageable 쪽에서 처리
                     yield break;
             }
@@ -325,7 +325,7 @@ public class EliteMonster : Monster
     public override void OnDeal(float damage)
     {
         // 죽지 않은 상태면 HP 바 업데이트
-        if (damageable.Health >= 0)
+        if (damageable.Health > 0)
         {
             SetHealth(damageable.Health);
         }
@@ -346,10 +346,6 @@ public class EliteMonster : Monster
         {
             smash.SetActive(true);
             GFunc.Log("분쇄카운트 충족");
-
-            //float smashTakeDamage = damageable.Health * smashOne;
-            //SetHealth(damageable.Health - smashTakeDamage);
-            //Debug.Log($"받는 데미지:{damageable.Health - smashTakeDamage}");
 
             smashCount = 0;
             //GFunc.Log($"분쇄 카운트:{smashCount}");

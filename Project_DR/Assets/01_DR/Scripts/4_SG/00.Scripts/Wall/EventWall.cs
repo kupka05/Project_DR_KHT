@@ -19,9 +19,9 @@ public class EventWall : MonoBehaviour
 
     [Header("Secret")]
     public bool isSecrecItem;
-    public GameObject scerecObj;
     public int itemID;
     public int[] itemIDs;
+    public int index = 3;
 
     [Header("Option")]
     public LayerMask layerMask;
@@ -162,7 +162,7 @@ public class EventWall : MonoBehaviour
             }
 
             int index = Random.Range(0, itemIDs.Length);
-
+            GFunc.Log(itemIDs[index] + "생성 예정");
             Unit.AddFieldItem(secretObjPos, itemIDs[index]);
 
             //GameObject Item = Instantiate(scerecObj, secretObjPos, this.transform.rotation, this.transform);
@@ -257,7 +257,6 @@ public class EventWall : MonoBehaviour
         }
     }
 
-    public int index = 3;
     private void CreateVerticalWall(float distance)
     {
         Vector3 leftWallPos = leftWall.transform.position,
@@ -273,7 +272,7 @@ public class EventWall : MonoBehaviour
 
         Vector3 _wallPos = this.transform.position;
         _wallPos.z = rightWallPos.z;
-        Instantiate(leftWall, _wallPos, leftWall.transform.rotation, this.transform);
+        //Instantiate(leftWall, _wallPos, leftWall.transform.rotation, this.transform);
     }
     private void CreateHorizontalWall(float distance)
     {
@@ -290,7 +289,7 @@ public class EventWall : MonoBehaviour
 
         Vector3 _wallPos = this.transform.position;
         _wallPos.x = rightWallPos.x;
-        Instantiate(leftWall, _wallPos, leftWall.transform.rotation, this.transform);
+        //Instantiate(leftWall, _wallPos, leftWall.transform.rotation, this.transform);
     }
     private void SetFloorAndRoof()
     {

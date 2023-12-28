@@ -76,17 +76,17 @@ public class BossBullet : MonoBehaviour
                 else if(collider.CompareTag("Weapon"))
                 {
                     GFunc.Log("무기에 닿았는가");
-                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
                     GFunc.Log("무기에 닿았을 때 반환한다");
                     return;
                 }
                 else if(collider.CompareTag("Wall"))
                 {
                     GFunc.Log("벽에 닿았는가");
-                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
                     GFunc.Log("벽에 닿았을 때 반환한다");
                 }
-                ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
                 GFunc.Log("플레이어 데미지 후 반환");
                 
             }

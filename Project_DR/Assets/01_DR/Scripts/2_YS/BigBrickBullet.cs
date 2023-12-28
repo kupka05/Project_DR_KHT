@@ -75,18 +75,18 @@ public class BigBrickBullet : MonoBehaviour
     {
         if (collision.collider.CompareTag("Wall"))
         {
-            ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+            ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BIGBRICK);
         }
 
         if(collision.collider.CompareTag("Player"))
         {
             collision.collider.GetComponent<Damageable>().DealDamage(damage);
-            ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+            ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BIGBRICK);
         }
 
         if(collision.collider.CompareTag("Weapon"))
         {
-            ObjectPoolManager.ReturnObjectToQueue(this.gameObject);
+            ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BIGBRICK);
         }
     }
 

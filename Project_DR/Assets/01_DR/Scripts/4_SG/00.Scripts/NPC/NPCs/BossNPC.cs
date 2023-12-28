@@ -107,7 +107,7 @@ public class BossNPC : NPC
         GameManager.instance.FadeOut();
         GFunc.Log("전투를 시작한다.");
 
-        GetComponent<Boss>().StartAttack();
+        //GetComponent<Boss>().StartAttack();
         
     }       // EndConveration()
 

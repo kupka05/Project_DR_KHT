@@ -14,7 +14,7 @@ public class BounceBullet : MonoBehaviour
 
     public GameObject bounceEffect;
 
-    private List<Collider> damageColliders = new List<Collider>();
+   
 
     public Transform target;
     public float attack = 3.0f;
@@ -29,7 +29,7 @@ public class BounceBullet : MonoBehaviour
 
     [Header("조건")]
     public bool isShoot = false;
-   
+    public bool isDamage = false;
 
     private void Awake()
     {
@@ -62,39 +62,27 @@ public class BounceBullet : MonoBehaviour
         // 디버그용: 빨간색 구체로 OverlapSphere 영역을 시각화
         DebugDrawOverlapSphere();
 
-        bool isDamage = false;
-        Debug.Log($"isdamage: {isDamage}");
-
         foreach (Collider collider in colliders)
         {
-            if (!isDamage)
-            {
-                if (collider.CompareTag("Player"))
-                {
-                    GFunc.Log("만났는가");
-                    // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
-                    //collider.GetComponent<Damageable>().DealDamage(damage);
-                    GFunc.Log($"데미지: {damage}");
+            
 
-                    isDamage = true;
-                    damageColliders.Add(collider); // 리스트에 추가
-                    Debug.Log($"isdamage: {isDamage}");
-                    break;
-                }
+            if (collider.CompareTag("Player") && !isDamage)
+            {
+                //GFunc.Log("만났는가");
+                // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
+                // collider.GetComponent<Damageable>().DealDamage(damage);
+                //GFunc.Log($"데미지: {damage}");
+
+                isDamage = true;
+                //Debug.Log($"isdamage: {isDamage}");
+
+                break;
             }
         }
+        isDamage = false;
+        //GFunc.Log("false되냐");
 
-        if (isDamage)
-        {
-            // 리스트에 저장된 충돌체에 대해 데미지 처리 수행
-            foreach (Collider damageCollider in damageColliders)
-            {
-                damageCollider.GetComponent<Damageable>().DealDamage(damage);
-            }
-
-            // 데미지 처리 후 리스트 초기화
-            damageColliders.Clear();
-        }
+        
     }
 
     //private void OnDrawGizmos()

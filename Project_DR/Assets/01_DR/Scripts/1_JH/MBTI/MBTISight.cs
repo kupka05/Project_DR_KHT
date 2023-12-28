@@ -8,18 +8,6 @@ public class MBTISight : MonoBehaviour
 
     private IEnumerator checkRoutine;
     private MBTIChecker lastChecker;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     IEnumerator SightCheck(float timer)
     {
         lastChecker.DebugOn();

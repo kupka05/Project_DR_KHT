@@ -20,7 +20,7 @@ public class BounceSmallBullet : MonoBehaviour
 
     public float damageRadius = 1.0f;
 
-    public bool isHit = false;
+    public bool isDamage = false;
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +28,7 @@ public class BounceSmallBullet : MonoBehaviour
         GetData(BounceSmallTableID);
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         rigid = GetComponent<Rigidbody>();
-        rigid.velocity = transform.forward * 10.0f;
+        //rigid.velocity = transform.forward * 10.0f;
 
         damageCollider.Damage = damage;
     }
@@ -50,42 +50,36 @@ public class BounceSmallBullet : MonoBehaviour
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
-        if (distance <= attack)
+        if (distance <= attack && !isDamage)
         {
             foreach (Collider collider in colliders)
             {
                 if (collider.CompareTag("Player"))
                 {
+                    isDamage = true;
                     // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
                     collider.GetComponent<Damageable>().DealDamage(damage);
                     GFunc.Log($"데미지:{damage}");
-
-                    isHit = true;
-                    Destroy(this.gameObject);
-                    break;
                 }
+                else if (collider.CompareTag("Weapon"))
+                {
+                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+                    GFunc.Log("반환");
+                    GFunc.Log("무기에 닿았는가");
+                }
+                else if (collider.CompareTag("Wall"))
+                {
+                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+                    GFunc.Log("반환");
+                    GFunc.Log("벽에 닿았는가");
+                }
+
+                ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+                GFunc.Log("플레이어 데미지 후 반환");
             }
+            isDamage = false;
         }
-
-        foreach (Collider collider in colliders)
-        {
-            if (collider.CompareTag("Wall"))
-            {
-                Destroy(this.gameObject);
-                GFunc.Log("벽이나 바닥 만났을 때 파괴되는가");
-            }
-        }
-
-
     }
 
-    //public virtual void OnCollisionEnter(Collision collision)
-    //{
-
-    //    if (collision.collider.CompareTag("Player") || collision.collider.CompareTag("Wall"))
-    //    {
-    //        Destroy(this.gameObject);
-    //    }
-    //}
 }
 

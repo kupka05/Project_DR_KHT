@@ -1,3 +1,4 @@
+using BNG;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -5,7 +6,7 @@ using UnityEngine;
 
 public class MBTIChecker : MonoBehaviour
 {
-    public enum CheckType { Default, Grab, Collision, Sight, Choice}
+    public enum CheckType { Default, Grab, Collision, Sight, Choice, Touch}
     private MBTI mbti;
     private BoxCollider boxCollider;
 
@@ -91,6 +92,20 @@ public class MBTIChecker : MonoBehaviour
             GetComponent<MeshRenderer>().materials[0].color = Color.yellow;
         }
     }
+
+    // 터치 체크
+    public void TouchEvent(Collider other)
+    {
+        if (!other.GetComponent<Grabber>())
+        { return; }
+
+        ActiveMBTI();
+
+        if (isDestroy)
+        {
+            boxCollider.enabled = false;
+        }
+    }
     public void DebugOn()
     {
         if (DEBUG)
@@ -117,6 +132,10 @@ public class MBTIChecker : MonoBehaviour
         {
             CollisionEvent(other);
         }
+        else if (type == CheckType.Touch)
+        {
+            TouchEvent(other);
+        }
     }
 
 
@@ -138,6 +157,8 @@ public class MBTIChecker : MonoBehaviour
                 type = CheckType.Sight; break;
             case "Choice":
                 type = CheckType.Choice; break;
+            case "Touch":
+                type = CheckType.Touch; break;
         }
 
         I = (float)DataManager.Instance.GetData(ID, "I", typeof(float));

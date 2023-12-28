@@ -378,6 +378,15 @@ public partial class UserDataManager : MonoBehaviour
         yield break;
     }
 
+    public void SaveGoldandExp()
+    {
+        PlayerDataManager.Save("gold", Gold);
+        PlayerDataManager.Save("exp", Exp);
+        PlayerDataManager.Update(true);
+
+    }
+
+
     // #######################  MBTI  ####################### \\
     public void InitMBTI()
     {

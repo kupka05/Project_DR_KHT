@@ -82,7 +82,7 @@ public class BossNPC : NPC
         if (Camera.main)
         {
             canvasObj.transform.parent = Camera.main.transform;
-            canvasObj.transform.localPosition = new Vector3(0.2f,-0.35f,1.2f);
+            canvasObj.transform.localPosition = new Vector3(0.2f,-0.35f,0.8f);
             canvasObj.transform.localRotation = Quaternion.identity;
         }
         
@@ -125,7 +125,7 @@ public class BossNPC : NPC
         GFunc.Log("전투를 시작한다.");
         GFunc.ChoiceEvent(conversationID);
 
-        GetComponent<Boss>().StartAttack();
+        //GetComponent<Boss>().StartAttack();
         
     }       // EndConveration()
 

@@ -38,7 +38,7 @@ public class DoorOnOff : MonoBehaviour
         doorOnTime = 5f;
         doorOffTime = 8f;
 
-        boxCollider = this.GetComponent<BoxCollider>(); 
+        boxCollider = this.GetComponent<BoxCollider>();
     }       // AwakeInIt()
 
     private void StartInIt()
@@ -49,12 +49,20 @@ public class DoorOnOff : MonoBehaviour
 
     public void OnDoor()
     {
-        StartCoroutine(OnDoorCoroutine());
+        if (this.gameObject.activeSelf == true)
+        {
+            StartCoroutine(OnDoorCoroutine());
+        }
+        else { /*PASS*/ }
     }
 
     public void OffDoor()
     {
-        StartCoroutine(OffDoorCoroutine());
+        if (this.gameObject.activeSelf == true)
+        {
+            StartCoroutine(OffDoorCoroutine());
+        }
+        else { /*PASS*/ }
     }
 
 
@@ -74,13 +82,13 @@ public class DoorOnOff : MonoBehaviour
         while (!compleateDoorOn)
         {
             recallCount++;
-            if(recallCount >= 350)     // 350 = 임시
+            if (recallCount >= 350)     // 350 = 임시
             {
                 this.transform.position = targetV3;
             }
             if (transform.position == targetV3)
             {
-                compleateDoorOn = true;                
+                compleateDoorOn = true;
             }
             transform.position = Vector3.Lerp(transform.position, targetV3, doorOnTime * Time.deltaTime);
             yield return null;
@@ -102,7 +110,7 @@ public class DoorOnOff : MonoBehaviour
             {
                 this.transform.position = defaultV3;
             }
-            if(transform.position == defaultV3)
+            if (transform.position == defaultV3)
             {
                 compleateDoorOff = true;
             }

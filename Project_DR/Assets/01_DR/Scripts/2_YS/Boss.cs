@@ -794,7 +794,6 @@ public class Boss : MonoBehaviour
                 UserData.KillBoss(bossExp);
                 //GFunc.Log("코루틴 멈춤");
 
-                Destroy(gameObject, 3f);
             }
 
             smashCount++;   // 분쇄 카운트 추가

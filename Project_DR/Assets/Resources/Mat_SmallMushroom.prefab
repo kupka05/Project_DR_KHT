@@ -48,7 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7621ec65345ebe4d9a98f6e85aa9ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemID: 17200
   dropItem: 57140000
   maxDrop: 3
 --- !u!33 &5620711895692671967
@@ -140,6 +139,12 @@ MonoBehaviour:
   RemoveBulletHolesOnDeath: 1
   onDamaged:
     m_PersistentCalls:
+      m_Calls: []
+  onKnockback:
+    m_PersistentCalls:
+      m_Calls: []
+  onDestroyed:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1568483100350540294}
         m_TargetAssemblyTypeName: FarmingObject, Assembly-CSharp
@@ -153,12 +158,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onKnockback:
-    m_PersistentCalls:
-      m_Calls: []
-  onDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
   onRespawn:
     m_PersistentCalls:
       m_Calls: []

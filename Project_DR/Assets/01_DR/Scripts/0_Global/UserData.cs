@@ -12,6 +12,11 @@ public static class UserData
     {
         return UserDataManager.Instance.statData;
     }
+
+    public static GameResult GetResult()
+    {
+        return UserDataManager.Instance.result;
+    }
     #endregion
 
     #region #######################_골드_#######################
@@ -49,17 +54,17 @@ public static class UserData
     #region #######################_몬스터_######################
 
     /// <summary>일반 몬스터 처치 시 획득하는 경험치와 EXP </summary>
-    public static void KillMonster(int gold, int exp)
+    public static void KillMonster(int exp, int gold = 0)
     {
         UserDataManager.Instance.result.AddMonsterNormal(gold, exp);
     }
     /// <summary>엘리트 몬스터 처치 시 획득하는 경험치와 EXP </summary>
-    public static void KillElite(int gold, int exp)
+    public static void KillElite(int exp, int gold = 0)
     {
         UserDataManager.Instance.result.AddMonsterElite(gold, exp);
     }
     /// <summary>보스 몬스터 처치 시 획득하는 경험치와 EXP </summary>
-    public static void KillBoss(int gold, int exp)
+    public static void KillBoss(int exp, int gold = 0)
     {
         UserDataManager.Instance.result.AddMonsterBoss(gold, exp);
     }
@@ -71,12 +76,62 @@ public static class UserData
     public static void AddQuestScore(Quest quest)
     {
         UserDataManager.Instance.result.AddQuestScore(quest);
-    }
+    }   
     /// <summary>획득한 아이템을 결과에 추가하는 메서드 </summary>
     public static void AddItemScore(int id)
     {
         UserDataManager.Instance.result.AddItemScore(id);
     }
+
+    /// <summary>획득한 모든 골드를 계산해주는 메서드 </summary>
+    public static int GoldCalculator()
+    {
+        GameResult result = UserDataManager.Instance.result;
+
+        int monsterGold = result.monster.normal.gold + result.monster.elite.gold + result.monster.boss.gold;
+
+        int itemGold = 0;
+        for (int i = 0; i < result.item.Count; i++)
+        {
+            itemGold += result.item[i].gold;
+        }
+
+        int questGold = 0;
+        for (int i = 0; i < result.quest.Count; i++)
+        {
+            questGold += result.quest[i].gold;
+        }
+
+        return monsterGold + itemGold + questGold;
+    }
+
+    /// <summary>획득한 모든 골드를 계산해주는 메서드 </summary>
+    public static int ExpCalculator()
+    {
+        GameResult result = UserDataManager.Instance.result;
+
+        int monsterExp = result.monster.normal.exp + result.monster.elite.exp + result.monster.boss.exp;
+
+        int itemExp = 0;
+        for (int i = 0; i < result.item.Count; i++)
+        {
+            itemExp += result.item[i].exp;
+        }
+
+        int questExp = 0;
+        for (int i = 0; i < result.quest.Count; i++)
+        {
+            questExp += result.quest[i].exp;
+        }
+
+        return monsterExp + itemExp + questExp;
+    }
+
+    public static void ResetResult()
+    {
+        UserDataManager.Instance.result = new GameResult();
+    }
+
     #endregion
 
     #region ####################_UserData_#####################
@@ -390,13 +445,9 @@ public static class UserData
             GameManager.instance.DestroyGameManager();
         }
 
-        // 퀘스트 재생성 & DB에서 정보 불러오기 & 아이템 초기화
-        Unit.CreateQuestFromDataTable();
-        Unit.LoadUserQuestDataFromDB();
+        // DB에서 정보 불러오기 & 퀘스트 생성 & 업데이트 & 아이템 초기화
+        Unit.UpdateDataFromDB();
         Unit.ResetInventory();
-
-        UserDataManager.Instance.isClear = false;
-        UserDataManager.Instance.isGameOver = false;
 
         UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
         UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
@@ -412,6 +463,7 @@ public static class UserData
 
     public static void ClearDungeon()
     {
+        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.SaveClearData();
         UserDataManager.Instance.isClear = true;
     }

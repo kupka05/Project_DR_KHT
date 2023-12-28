@@ -159,6 +159,7 @@ public class RandomRoomObjCreate : MonoBehaviour
         Vector3 spawnPos = PickSpwanPos(_CreateObjId);
         InstantiateObj(spawnObjClone, spawnPos);
 
+
     }       // CreateObj()
 
     /// <summary>

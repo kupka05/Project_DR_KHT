@@ -127,6 +127,7 @@ public class Boss : MonoBehaviour
     [Header("Conversation")]
     public BossNPC npc;
     public UnityEvent bossMeet;
+    public int questID;
 
     //[Header("유도 미사일 테스트")]
     //public Transform testPort;
@@ -776,10 +777,7 @@ public class Boss : MonoBehaviour
                 // 이벤트 호출
                 //unityEvent?.Invoke();
 
-                // 보스 죽음 퀘스트
-                QuestCallback.OnBossKillCallback(bossId);
-                Unit.ClearQuestByID(3122001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
-                //Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
+                ClearBossKillQuest();
 
                 if (bossState)
                 {
@@ -789,6 +787,9 @@ public class Boss : MonoBehaviour
 
                 Vector3 newSize = new Vector3(0.00001f, 0.00001f, 0.00001f);
                 this.gameObject.transform.localScale = newSize;
+
+                GetComponent<BossMonsterDeadCheck>().BossDie();
+
                 //GFunc.Log("코루틴 멈춤");
             }
 
@@ -906,14 +907,11 @@ public class Boss : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isStart)
         {
-            isStart = true;           
-            
-            // 보스 조우 퀘스트 콜백
-            QuestCallback.OnBossMeetCallback(bossId);   // 상태값 갱신 및 자동 완료
-            Unit.ClearQuestByID(3111001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
-            Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
-            npc.BossMeet();
+            isStart = true;
 
+            npc.BossMeet();                             //  보스 조우 이벤트 발생
+
+            //Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
             //isStart = true;
             //GFunc.Log("인식되냐");
             //StartCoroutine(ExecutePattern());
@@ -927,4 +925,17 @@ public class Boss : MonoBehaviour
         StartCoroutine(ExecutePattern());
     }
 
+
+    public void ClearBossKillQuest()
+    {
+        QuestCallback.OnBossKillCallback(bossId);
+
+        Quest curQuest = Unit.GetInProgressMainQuest();
+        questID = curQuest.QuestData.ID;
+        GFunc.Log($"현재 진행중인 메인 퀘스트 ID : {questID}");
+
+        // 보스 죽음 퀘스트
+        Unit.ClearQuestByID(3122001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
+        //Unit.InProgressQuestByID(3122001);        // 다음 퀘스트 진행중 으로 변경
+    }
 }

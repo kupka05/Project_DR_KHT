@@ -9,7 +9,6 @@ namespace Js.Quest
         /*************************************************
          *                 Public Fields
          *************************************************/
-
         public QuestData QuestData => _questData;               // 퀘스트 데이터
         public QuestState QuestState => _questState;            // 퀘스트 상태
         public QuestHandler QuestHandler => _questHandler;      // 퀘스트 핸들러

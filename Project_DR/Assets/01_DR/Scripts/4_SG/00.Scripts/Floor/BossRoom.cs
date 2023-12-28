@@ -35,10 +35,11 @@ public class BossRoom : MonoBehaviour
         GameObject bossClone;
         Vector3 bossPos = _centerPos;
         bossPos.y = bossPos.y + 3f;
+        bossPos.z = bossRoomPos.topLeftCorner.z - 10f;
 
         bossClone = Instantiate(_spawnBossSkin, bossPos, Quaternion.Euler(0f, 180f, 0f), monsterParent.transform);
         //bossClone.transform.localRotation = Quaternion.EulerRotation
-        bossPos = _centerPos;
+        //bossPos = _centerPos;
         bossPos.z = bossPos.z - 3f;
         bossPos.y = 1f;
 
@@ -46,6 +47,7 @@ public class BossRoom : MonoBehaviour
         bossClone = Instantiate(spawnBossCapsule, bossPos, Quaternion.identity, monsterParent.transform);
 
         bossClone.AddComponent<BossMonsterDeadCheck>().InItBossRoom(this);
+        this.gameObject.AddComponent<BossRoomObjSpawn>().InItBossSpawnPos(bossPos);
 
     }
 

@@ -52,6 +52,7 @@ public class Boss : MonoBehaviour
     public int bossProjectileId;  //투사체 테이블
     public int bossProjectileID;
     public int bossProjectileBounce;
+    public int bossExp;
 
     public float power = 5.0f;
 
@@ -185,11 +186,12 @@ public class Boss : MonoBehaviour
     {
         //보스
         maxHp = (float)DataManager.Instance.GetData(bossId, "BossHP", typeof(float));
+        patternInterval = (float)DataManager.Instance.GetData(bossId, "PatternChange", typeof(float)); //이건 하나만
+        bossExp = Data.GetInt(bossId, "GiveEXP");
 
         //소형 투사체 6910
         bulletCount = (float)DataManager.Instance.GetData(bossProjectileId, "Duration", typeof(float));
         delayTime = (float)DataManager.Instance.GetData(bossProjectileId, "Delay", typeof(float));
-        patternInterval = (float)DataManager.Instance.GetData(bossProjectileId, "DelTime", typeof(float)); //이건 하나만
         destoryTime = (float)DataManager.Instance.GetData(bossProjectileId, "DesTime", typeof(float));
         speed = (float)DataManager.Instance.GetData(bossProjectileId, "Speed", typeof(float));
 
@@ -198,7 +200,6 @@ public class Boss : MonoBehaviour
 
         //6912
         destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounce, "DesTime", typeof(float));
-
     }
 
     public void SetTarget(Transform newTarget)
@@ -777,7 +778,6 @@ public class Boss : MonoBehaviour
                 // 이벤트 호출
                 //unityEvent?.Invoke();
 
-                ClearBossKillQuest();
 
                 if (bossState)
                 {
@@ -790,6 +790,8 @@ public class Boss : MonoBehaviour
 
                 GetComponent<BossMonsterDeadCheck>().BossDie();
 
+                ClearBossKillQuest();
+                UserData.KillBoss(bossExp);
                 //GFunc.Log("코루틴 멈춤");
             }
 

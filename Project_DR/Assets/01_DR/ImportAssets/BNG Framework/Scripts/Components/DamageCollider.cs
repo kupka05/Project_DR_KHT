@@ -52,7 +52,7 @@ namespace BNG
         public bool isKnockback = true;
         public bool isBossProjectile;  //보스 예외 처리
         public bool isEliteProjectile; //엘리트몬스터 예외 처리
-
+        public bool isProjectile;
 
         Damageable thisDamageable;
 
@@ -89,7 +89,8 @@ namespace BNG
             if (!isEliteProjectile && collision.gameObject.GetComponent<EliteMonster>())
                 return;
 
-
+            if (!isProjectile && collision.gameObject.CompareTag("Weapon"))
+                return;
 
             OnCollisionEvent(collision);
         }

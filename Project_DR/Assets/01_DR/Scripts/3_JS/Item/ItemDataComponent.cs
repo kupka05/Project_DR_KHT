@@ -7,10 +7,12 @@ public class ItemDataComponent : MonoBehaviour
      *                 Private Methods
      *************************************************/
     #region [+]
-    private object _itemData; // Init(object data)
+    public object Data => _data;
+    private object _data; // Init(object data)
     private bool isUpdated = false;
-    public object ItemData => _itemData;
 
+    public ItemData ItemData => _itemData;
+    private ItemData _itemData;
     [Header("<Debbugging> \n Double Click => Scriptable Data")]
     [SerializeField]
     private PortionItemData _potionData = default;
@@ -40,11 +42,14 @@ public class ItemDataComponent : MonoBehaviour
     {
         if (isUpdated == false)
         {
-            _itemData = data;
+            _data = data;
             isUpdated = true;
 
             // 인스펙터 디버깅용 함수 호출
             SetInspectorDebbuingVariable();
+
+            // itemData 할당
+            _itemData = data as ItemData;
         }
     }
 
@@ -56,16 +61,16 @@ public class ItemDataComponent : MonoBehaviour
         switch (_itemData)
         {
             case PortionItemData portionItemData:
-                _potionData = (PortionItemData)_itemData;
+                _potionData = (PortionItemData)_data;
                 break;
             case BombItemData bombItemData:
-                _bombData = (BombItemData)_itemData;
+                _bombData = (BombItemData)_data;
                 break;
             case MaterialItemData materialItemData:
-                _materialData = (MaterialItemData)_itemData;
+                _materialData = (MaterialItemData)_data;
                 break;
             case QuestItemData questItemData:
-                _questData = (QuestItemData)_itemData;
+                _questData = (QuestItemData)_data;
                 break;
             default:
                 break;

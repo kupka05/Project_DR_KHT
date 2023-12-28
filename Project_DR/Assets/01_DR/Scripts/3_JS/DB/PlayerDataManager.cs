@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using Js.Quest;
 
 public static class PlayerDataManager
 {
@@ -33,10 +34,10 @@ public static class PlayerDataManager
     public static int SkillLevel4_1 => _skill_level_4_1;
     public static int SkillLevel4_2 => _skill_level_4_2;
     public static int SkillLevel4_3 => _skill_level_4_3;
-    public static string QuestMain => _quest_main;
     public static int ClearCount => _clear_count;
     public static string ClearMBTIValue => _clear_mbti_value;
     public static string ClearTime => _clear_time;
+    public static string QuestMain => _quest_main;
 
     #endregion
     /*************************************************
@@ -59,21 +60,21 @@ public static class PlayerDataManager
     private static int _weapon_exp;           // 무기 경험치
 
     [Header("Skill")]
-    private static int _skill_level_1_1;        // 스킬 테라드릴 레벨
-    private static int _skill_level_1_2;        // 스킬 테라드릴 레벨
-    private static int _skill_level_2_1;        // 스킬 드릴연마 레벨
-    private static int _skill_level_2_2;        // 스킬 드릴연마 레벨
-    private static int _skill_level_2_3;        // 스킬 드릴연마 레벨
+    private static int _skill_level_1_1;      // 스킬 테라드릴 레벨
+    private static int _skill_level_1_2;      // 스킬 테라드릴 레벨
+    private static int _skill_level_2_1;      // 스킬 드릴연마 레벨
+    private static int _skill_level_2_2;      // 스킬 드릴연마 레벨
+    private static int _skill_level_2_3;      // 스킬 드릴연마 레벨
     private static int _skill_level_3;        // 스킬 그릴분쇄 레벨
-    private static int _skill_level_4_1;        // 스킬 그린랜딩 레벨
-    private static int _skill_level_4_2;        // 스킬 그린랜딩 레벨
-    private static int _skill_level_4_3;        // 스킬 그린랜딩 레벨
+    private static int _skill_level_4_1;      // 스킬 그린랜딩 레벨
+    private static int _skill_level_4_2;      // 스킬 그린랜딩 레벨
+    private static int _skill_level_4_3;      // 스킬 그린랜딩 레벨
 
     [Header("ClearData")]
-    private static string _quest_main;        // 메인 퀘스트 진행도(직렬화 데이터)
     private static int _clear_count;          // 게임 클리어 횟수
     private static string _clear_mbti_value;  // 저장된 MBTI 수치
     private static string _clear_time;        // 클리어 한 날짜 및 시간
+    private static string _quest_main;        // 메인 퀘스트 진행도(직렬화 데이터)
 
     #endregion
     /*************************************************
@@ -114,8 +115,8 @@ public static class PlayerDataManager
     {
         _id = id;
     }
-    #endregion
 
+    #endregion
     /*************************************************
      *                 Private Methods
      *************************************************/
@@ -143,18 +144,18 @@ public static class PlayerDataManager
         )
     {
         // [Player]
-        _hp = hp;                              // 플레이어의 체력
-        _gold = gold;                          // 플레이어의 소지금
-        _exp = exp;                            // 플레이어의 경험치
-        _gold_increase = goldIncrease;         // 경험치 증가량
-        _exp_increase = expIncrease;           // 골드 증가량
+        _hp = hp;                                  // 플레이어의 체력
+        _gold = gold;                              // 플레이어의 소지금
+        _exp = exp;                                // 플레이어의 경험치
+        _gold_increase = goldIncrease;             // 경험치 증가량
+        _exp_increase = expIncrease;               // 골드 증가량
 
         // [Weapon]
-        _weapon_atk = weaponAtk;               // 무기 공격력
-        _weapon_cri_rate = weaponCriRate;      // 무기 치명타 확률
-        _weapon_cri_damage = weaponCriDamage;  // 무기 치명타 공격력
-        _weapon_atk_rate = weaponAtkRate;      // 무기 공격 간격
-        _weapon_exp = weaponExp;               // 무기 경험치
+        _weapon_atk = weaponAtk;                   // 무기 공격력
+        _weapon_cri_rate = weaponCriRate;          // 무기 치명타 확률
+        _weapon_cri_damage = weaponCriDamage;      // 무기 치명타 공격력
+        _weapon_atk_rate = weaponAtkRate;          // 무기 공격 간격
+        _weapon_exp = weaponExp;                   // 무기 경험치
 
         // [Skill]
         _skill_level_1_1 = skillLevel1_1;          // 스킬 테라드릴 레벨
@@ -162,7 +163,7 @@ public static class PlayerDataManager
         _skill_level_2_1 = skillLevel2_1;          // 스킬 드릴연마 레벨
         _skill_level_2_2 = skillLevel2_2;          // 스킬 드릴연마 레벨
         _skill_level_2_3 = skillLevel2_3;          // 스킬 드릴연마 레벨
-        _skill_level_3 = skillLevel3;          // 스킬 그릴분쇄 레벨
+        _skill_level_3 = skillLevel3;              // 스킬 그릴분쇄 레벨
         _skill_level_4_1 = skillLevel4_1;          // 스킬 그린랜딩 레벨
         _skill_level_4_2 = skillLevel4_2;          // 스킬 그린랜딩 레벨
         _skill_level_4_3 = skillLevel4_3;          // 스킬 그린랜딩 레벨
@@ -170,10 +171,14 @@ public static class PlayerDataManager
         // [ClearData]
         ////// TODO: 클리어 데이터의 직렬화를 변환하는 함수를 구현 및
         ////// 연동하기
-        _quest_main = questMain;               // 메인 퀘스트 진행도(직렬화 데이터)
-        _clear_count = clearCount;             // 게임 클리어 횟수
-        _clear_mbti_value = clearMBTIValue;    // 저장된 MBTI 수치(직렬화 데이터)
-        _clear_time = clearTime;               // 클리어 한 날짜 및 시간(직렬화 데이터)
+        _quest_main = questMain;                   // 메인 퀘스트 진행도(직렬화 데이터)
+        _clear_count = clearCount;                 // 게임 클리어 횟수
+        _clear_mbti_value = clearMBTIValue;        // 저장된 MBTI 수치(직렬화 데이터)
+        _clear_time = clearTime;                   // 클리어 한 날짜 및 시간(직렬화 데이터)
+
+        // 퀘스트 목록을 생성 & 업데이트
+        QuestManager.Instance.CreateQuestFromDataTable();
+        QuestManager.Instance.UpdateUserQuestData();
     }
 
     // Data를 PlayerData에 맞게 변환한다.

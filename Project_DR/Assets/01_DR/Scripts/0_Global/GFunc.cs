@@ -74,6 +74,7 @@ public static class GFunc
     /// <returns>int[] 반환</returns>
     public static int[] SplitIds(string _parsString)
     {
+        _parsString = _parsString.Replace("\\\\n", "\n");
         _parsString = _parsString.Replace("\\n", "\n");
         _parsString = _parsString.Replace("#", ",");
         _parsString = _parsString.Replace("\\", "");

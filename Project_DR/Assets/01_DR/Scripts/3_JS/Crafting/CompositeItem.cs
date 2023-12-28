@@ -44,7 +44,6 @@ namespace Js.Crafting
                 // 사유: 재료 부족
                 if (item.CheckCraft().Equals(false))
                 {
-                    GFunc.Log($"CompositeItem.Craft(): 재료가 부족해 아이템 제작에 실패했습니다.");
                     return false;
                 }
             }

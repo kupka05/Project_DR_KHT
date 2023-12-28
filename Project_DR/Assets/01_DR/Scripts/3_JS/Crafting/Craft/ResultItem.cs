@@ -49,7 +49,12 @@ namespace Js.Crafting
         public void Craft()
         {
             // 아이템 스폰
-            Unit.AddFieldItem(_spawnPos, _giveAmount);
+            Transform parent = CraftingManager.Instance.Anvil.transform;
+            GameObject item = Unit.AddAnvilItem(_spawnPos, _itemID, parent, _giveAmount);
+
+            // 물리효과 제거
+            Rigidbody rigidbody = item.GetComponent<Rigidbody>();
+            rigidbody.isKinematic = true;
 
             // 디버그
             GFunc.Log($"[{_itemID}]아이템 [{_itemName}]이 [{_giveAmount}] 갯수만큼 제작되었습니다.");

@@ -71,8 +71,6 @@ namespace Js.Crafting
             // Init
             InitializeCrafting(Type.CRAFTING);
             InitializeCrafting(Type.ENHANCE);
-            _anvil = CreateAnvil();
-
         }
 
         // 아이템 [조합/강화] 크래프팅 Init
@@ -87,7 +85,7 @@ namespace Js.Crafting
                 int id = idTable[i];
 
                 // 크래프팅 아이템 & 마지막 컴포넌트 생성
-                CraftingItem craftingItem = new CraftingItem();
+                CraftingItem craftingItem = new CraftingItem(id);
                 ICraftingComponent lastComponent = default;
 
                 // 조건 검색 & 추가
@@ -131,6 +129,23 @@ namespace Js.Crafting
 
 
         /*************************************************
+         *                Public Methods
+         *************************************************/
+        // 지정한 위치에 모루를 생성한다.
+        // 생성 후 _anvil에 할당
+        public GameObject CreateAnvil(Vector3 pos)
+        {
+            GameObject prefab = Resources.Load<GameObject>(_anvilPrefabName);
+            GameObject anvil = Instantiate(prefab);
+            anvil.name = _anvilPrefabName;
+            anvil.transform.position = pos;
+            _anvil = anvil.GetComponent<Anvil>();
+
+            return anvil;
+        }
+
+
+        /*************************************************
          *                Private Methods
          *************************************************/
         // 두 가지 조합식을 가진 컴포짓 아이템을 생성한다.
@@ -140,9 +155,8 @@ namespace Js.Crafting
             int material_2_KeyID = Data.GetInt(id, "Material_2_KeyID");
             int material_1_Amount = Data.GetInt(id, "Material_1_Amount");
             int material_2_Amount = Data.GetInt(id, "Material_2_Amount");
-            int needHammeringCount = Data.GetInt(id, "Need_HammeringCount");
-            MaterialItem material_1 = new MaterialItem(material_1_KeyID, material_1_Amount, needHammeringCount);
-            MaterialItem material_2 = new MaterialItem(material_2_KeyID, material_2_Amount, needHammeringCount);
+            MaterialItem material_1 = new MaterialItem(material_1_KeyID, material_1_Amount);
+            MaterialItem material_2 = new MaterialItem(material_2_KeyID, material_2_Amount);
             CompositeItem compositeItem = new CompositeItem(material_1, material_2);
 
             return compositeItem;
@@ -166,17 +180,6 @@ namespace Js.Crafting
             EnhanceHandler enhanceHandler = new EnhanceHandler(statKeyID);
 
             return enhanceHandler;
-        }
-
-        // 모루를 생성 후 반환한다.
-        private Anvil CreateAnvil()
-        {
-            GameObject prefab = Resources.Load<GameObject>(_anvilPrefabName);
-            GameObject gameObject = Instantiate(prefab);
-            gameObject.name = _anvilPrefabName;
-            Anvil anvil = gameObject.AddComponent<Anvil>();
-
-            return anvil;
         }
 
         // 타입에 맞는 테이블 색인 인덱스를 반환한다.

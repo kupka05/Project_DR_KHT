@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Js.Quest;
 using Rito.InventorySystem;
+using Js.Crafting;
 
 // 플레이어에게 특정한 명령을 실행하는 클래스
 public static class Unit
@@ -22,6 +23,23 @@ public static class Unit
         ItemManager.instance.CreateItem(pos, id, amount);
     }
 
+    // 모루 위에 크래프팅 아이템을 생성
+    public static GameObject AddAnvilItem(Vector3 pos, int id, Transform parent, int amount = 1)
+    {
+        GameObject item = ItemManager.instance.CreateItem(pos, id, amount);
+        Transform transform = item.transform;
+        transform.SetParent(parent);
+        transform.localPosition = pos;
+
+        return item;
+    }
+
+    // 필드에 크래프팅 임시 아이템을 생성하고 반환
+    public static GameObject AddFieldTempItem(Vector3 pos, int id, Transform parent, int amount = 1)
+    {
+        return ItemManager.instance.CreateTempItem(pos, id, parent, amount);
+    }
+
     // ID로 인벤토리에 있는 아이템을 삭제
     public static bool RemoveInventoryItemForID(int id, int amount)
     {
@@ -33,6 +51,17 @@ public static class Unit
     {
         UserDataManager.ResetInventory();
     }
+
+
+    /*************************************************
+     *            Public Crafting Methods
+     *************************************************/
+    // 특정한 위치에 모루를 생성한다
+    public static GameObject CrateAnvil(Vector3 pos)
+    {
+        return CraftingManager.Instance.CreateAnvil(pos);
+    }
+
 
     /*************************************************
      *             Public Quest Methods
@@ -196,6 +225,39 @@ public static class Unit
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 2);
         return questList;
     }
+
+
+    // [완료가능] 상태의 메인 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetCanCompleteMainQuestForList()
+    {
+        // [완료가능] [1]메인 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(1);
+        // 가져온 퀘스트 리스트 중에서 [3][완료가능] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 3);
+        return questList;
+    }
+
+    // [완료가능] 상태의 서브 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetCanCompleteSubQuestForList()
+    {
+        // [완료가능] [2]서브 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(2);
+        // 가져온 퀘스트 리스트 중에서 [3][완료가능] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 3);
+        return questList;
+    }
+
+    // [완료가능] 상태의 특수 퀘스트를 리스트로 가져온다
+    public static List<Quest> GetCanCompleteSpecialQuestForList()
+    {
+        // [완료가능] [3]특수 퀘스트 타입를 리스트로 가져옴
+        List<Quest> questList = GetQuestListOfType(3);
+        // 가져온 퀘스트 리스트 중에서 [3][완료가능] 상태인 퀘스트만 추출 및 반환
+        QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 3);
+        return questList;
+    }
+
+
 
     // 퀘스트 ID로 퀘스트를 검색하고 반환
     public static Quest GetQuestByID(int id)

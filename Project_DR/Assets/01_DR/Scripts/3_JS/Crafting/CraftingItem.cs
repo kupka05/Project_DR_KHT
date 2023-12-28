@@ -14,19 +14,24 @@ namespace Js.Crafting
          *                 Public Fields
          *************************************************/
         public List<ICraftingComponent> Components => _components;      // 크래프팅 아이템 컴포넌트
+        public int NeedHammeringCount => _needHammeringCount;           // 필요한 망치질 횟수
 
 
         /*************************************************
          *                 Private Fields
          *************************************************/
         private List<ICraftingComponent> _components = new List<ICraftingComponent>();
-
+        private int _needHammeringCount;
 
         /*************************************************
          *               Initialize Methods
          *************************************************/
         // 추후 할당용 생성자
-        public CraftingItem() {}
+        public CraftingItem(int id)
+        {
+            // Init
+            _needHammeringCount = Data.GetInt(id, "Need_Hammering_Count");
+        }
 
         // 초기 할당용 생성자
         public CraftingItem(params ICraftingComponent[] components)
@@ -62,7 +67,7 @@ namespace Js.Crafting
                 // 사유: 재료 부족
                 if (item.CheckCraft().Equals(false))
                 {
-                    GFunc.Log($"CraftingItem.Craft(): 재료가 부족해 아이템 제작에 실패했습니다.");
+                    GFunc.Log($"CraftingItem.Craft(): 재료가 부족합니다.");
                     return false;
                 }
             }

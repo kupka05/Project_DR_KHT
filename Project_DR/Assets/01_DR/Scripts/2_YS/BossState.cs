@@ -43,7 +43,7 @@ public class BossState : MonoBehaviour
     {
         GFunc.Log("애니메이션 작동");
         anim.SetTrigger("isDie");
-
+        Destroy(this.gameObject, 3f);
     }
 
     public void CastSpell()

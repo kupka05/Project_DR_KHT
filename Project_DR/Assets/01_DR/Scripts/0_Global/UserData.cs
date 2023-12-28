@@ -76,7 +76,7 @@ public static class UserData
     public static void AddQuestScore(Quest quest)
     {
         UserDataManager.Instance.result.AddQuestScore(quest);
-    }
+    }   
     /// <summary>획득한 아이템을 결과에 추가하는 메서드 </summary>
     public static void AddItemScore(int id)
     {

@@ -185,11 +185,11 @@ public class Boss : MonoBehaviour
     {
         //보스
         maxHp = (float)DataManager.Instance.GetData(bossId, "BossHP", typeof(float));
+        patternInterval = (float)DataManager.Instance.GetData(bossId, "PatternChange", typeof(float)); //이건 하나만
 
         //소형 투사체 6910
         bulletCount = (float)DataManager.Instance.GetData(bossProjectileId, "Duration", typeof(float));
         delayTime = (float)DataManager.Instance.GetData(bossProjectileId, "Delay", typeof(float));
-        patternInterval = (float)DataManager.Instance.GetData(bossProjectileId, "DelTime", typeof(float)); //이건 하나만
         destoryTime = (float)DataManager.Instance.GetData(bossProjectileId, "DesTime", typeof(float));
         speed = (float)DataManager.Instance.GetData(bossProjectileId, "Speed", typeof(float));
 
@@ -198,7 +198,6 @@ public class Boss : MonoBehaviour
 
         //6912
         destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounce, "DesTime", typeof(float));
-
     }
 
     public void SetTarget(Transform newTarget)
@@ -304,6 +303,7 @@ public class Boss : MonoBehaviour
     {
         int pattern = UnityEngine.Random.Range(0, 4);
 
+        pattern = 3;
         switch (pattern)
         {
             case 0:

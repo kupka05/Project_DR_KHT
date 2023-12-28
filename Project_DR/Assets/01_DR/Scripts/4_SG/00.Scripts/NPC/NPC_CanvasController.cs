@@ -62,7 +62,7 @@ public class NPC_CanvasController : MonoBehaviour
         isNon = "0";
         underBar = "_";
         endTalk = "\\\\n0";
-        GFunc.Log($"endTalk : {endTalk}");
+        //GFunc.Log($"endTalk : {endTalk}");
         aZeroColor = new Color(1, 1, 1, 0);
         aMaxColor = new Color(1, 1, 1, 1);
 
@@ -179,7 +179,7 @@ public class NPC_CanvasController : MonoBehaviour
         string choice1 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice1", typeof(string));
         string choice2 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice2", typeof(string));
         string choice3 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice3", typeof(string));
-        GFunc.Log($"선택지 시트에서 가져오기 시도\nChoice1 : {choice1}\nChoice2 : {choice2}\nChoice3 : {choice3}");
+        //GFunc.Log($"선택지 시트에서 가져오기 시도\nChoice1 : {choice1}\nChoice2 : {choice2}\nChoice3 : {choice3}");
         // 아래 Choice3는 존재하면 띄우는 조건이 만족하는지 한번 체크해야함 (12.13기준 퀘스트가 나와야 클리어여부를 끌어와서 체크할수있음)
 
         CheckChoiceNull(choice1, 1, choice1Text, choice1Image);
@@ -499,7 +499,7 @@ public class NPC_CanvasController : MonoBehaviour
 
         
         string eventRefId = (string)DataManager.Instance.GetData(nowConversationRefID, stringBuilder.ToString(), typeof(string));
-        GFunc.Log($"StBuild의 값 : {stringBuilder}\n참조해온 선택지 이벤트 값 : {eventRefId}");
+        //GFunc.Log($"StBuild의 값 : {stringBuilder}\n참조해온 선택지 이벤트 값 : {eventRefId}");
         if (eventRefId == isNon || eventRefId == underBar || eventRefId == endTalk)
         {
             // 이벤트가 없으므로 대화 끝

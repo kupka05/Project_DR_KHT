@@ -370,13 +370,23 @@ public partial class UserDataManager : MonoBehaviour
 
         PlayerDataManager.Save("clear_count", 0);
 
-        PlayerDataManager.Save("quest_main", "");
-        PlayerDataManager.Save("clear_mbti_value", "");
         yield return null;
+        PlayerDataManager.Save("quest_main", "");
+        yield return null;
+        PlayerDataManager.Save("clear_mbti_value", "");
 
         PlayerDataManager.Update(true);
         yield break;
     }
+
+    public void SaveGoldandExp()
+    {
+        PlayerDataManager.Save("gold", Gold);
+        PlayerDataManager.Save("exp", Exp);
+        PlayerDataManager.Update(true);
+
+    }
+
 
     // #######################  MBTI  ####################### \\
     public void InitMBTI()

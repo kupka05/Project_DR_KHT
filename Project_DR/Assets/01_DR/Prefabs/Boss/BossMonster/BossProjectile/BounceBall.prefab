@@ -9511,6 +9511,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &1252694536677347387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9529,10 +9530,8 @@ MonoBehaviour:
   bounceEffect: {fileID: 0}
   target: {fileID: 0}
   attack: 20
-  damageRadius: 1.5
-  speed: 0
+  damageRadius: 1.9
   damage: 0
-  destoryTime: 0
   isShoot: 0
   isDamage: 0
 --- !u!114 &5304765741451573336
@@ -9555,9 +9554,9 @@ MonoBehaviour:
   attack: 0.2
   bulletCount: 0
   speed: 0
-  destoryTime: 0
-  delayTime: 0
+  destoryTimeBounceSmall: 0
   delay: 0
+  shotDelay: 0
   target: {fileID: 0}
 --- !u!1 &548729743913798831
 GameObject:

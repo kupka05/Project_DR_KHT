@@ -1751,7 +1751,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6780438471017655951}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-  m_LocalPosition: {x: 0.3, y: 0.29, z: 11.39}
+  m_LocalPosition: {x: 0.3, y: 0.29, z: 55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1769,7 +1769,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7.65, y: 5, z: 6}
+  m_Size: {x: 7.65, y: 65, z: 6}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6954074123159344514
 GameObject:
@@ -2236,6 +2236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7cac795bb9b3e240956efd951c7b772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOutPutChoice: 0
 --- !u!1 &8364801948526611809
 GameObject:
   m_ObjectHideFlags: 0
@@ -2393,7 +2394,8 @@ MonoBehaviour:
   bossId: 6872
   bossProjectileId: 6910
   bossProjectileID: 6914
-  bossProjectileBounceId: 6912
+  bossProjectileBounce: 6912
+  bossExp: 0
   power: 5
   lazerPort: {fileID: 7934396489761765115}
   lazer: {fileID: 7801054870893074991, guid: 9de885b41bc52fe488e338a87491f2a7, type: 3}
@@ -2405,10 +2407,12 @@ MonoBehaviour:
   delayTime: 0
   destoryTime: 0
   speed: 0
+  bouncePort: {fileID: 0}
+  bouncePortLeft: {fileID: 0}
+  bouncePortRight: {fileID: 0}
   bounce: {fileID: 548648308873678835, guid: dfd6ac752cdbe2245a1d034e27f13688, type: 3}
   bounceCount: 3
   destoryTimeBounce: 0
-  speedBounce: 0
   target: {fileID: 0}
   player: {fileID: 0}
   knockBack: {fileID: 0}
@@ -2425,14 +2429,18 @@ MonoBehaviour:
   isKnockBackThird: 0
   isStart: 0
   patternInterval: 0
+  bigBrickPort: {fileID: 0}
+  bigBrickPortLeft: {fileID: 0}
+  bigBrickPortRight: {fileID: 0}
   bigBrick: {fileID: 2771416323480820311, guid: d440c508ec26253479dd7347cc62eccb,
     type: 3}
-  destroyTimeBrick: 0
-  brickCount: 0
+  destroy: 0
+  damageRadius: 1
   npc: {fileID: 524828505406735166}
   bossMeet:
     m_PersistentCalls:
       m_Calls: []
+  questID: 0
 --- !u!114 &4783316878540129904
 MonoBehaviour:
   m_ObjectHideFlags: 0

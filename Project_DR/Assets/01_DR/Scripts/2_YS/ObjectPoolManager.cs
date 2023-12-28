@@ -40,7 +40,7 @@ public class ObjectPoolManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            //DontDestroyOnLoad(this.gameObject);
 
             // 각각의 프로젝타일 종류에 대해 오브젝트를 생성하여 풀에 추가
             CreateObjects(ProjectileType.CHAINBULLET);

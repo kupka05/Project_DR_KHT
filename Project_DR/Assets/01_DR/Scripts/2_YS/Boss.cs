@@ -778,8 +778,6 @@ public class Boss : MonoBehaviour
                 // 이벤트 호출
                 //unityEvent?.Invoke();
 
-                ClearBossKillQuest();
-                UserData.KillBoss(bossExp);
 
                 if (bossState)
                 {
@@ -792,6 +790,8 @@ public class Boss : MonoBehaviour
 
                 GetComponent<BossMonsterDeadCheck>().BossDie();
 
+                ClearBossKillQuest();
+                UserData.KillBoss(bossExp);
                 //GFunc.Log("코루틴 멈춤");
             }
 

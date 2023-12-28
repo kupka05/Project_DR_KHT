@@ -196,7 +196,7 @@ public class Boss : MonoBehaviour
         //6912 애드벌룬
         destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "DesTime", typeof(float));
         speedBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "Speed", typeof(float));
-        //bounceCount = Data.GetInt(id, "MonExp");
+        bounceCount = (float)DataManager.Instance.GetData(bossProjectileBounceId, "Duration", typeof(float));
     }
 
     public void SetTarget(Transform newTarget)

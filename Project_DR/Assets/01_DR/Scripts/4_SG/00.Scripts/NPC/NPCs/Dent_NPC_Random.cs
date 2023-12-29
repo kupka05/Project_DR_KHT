@@ -12,7 +12,7 @@ public class Dent_NPC_Random : HumanTypeNPC
 
     private void AwakeInIt()
     {
-        npcID = (int)NPCID.Decius_Random;
+        npcID = (int)NPCID.Dent_Random;
 
     }       // AwakeInIt()
 

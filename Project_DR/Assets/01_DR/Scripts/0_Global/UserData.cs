@@ -164,7 +164,10 @@ public static class UserData
         UserDataManager.Instance.CurHP += amount;
     }
 
-
+    public static void ActiveSkill(int id)
+    {
+        SkillManager.instance.ActiveSkill(id);
+    }
 
     #endregion
 
@@ -461,6 +464,10 @@ public static class UserData
 
         UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
         UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
+
+        UserDataManager.Instance.effectCritDamage = 0;
+        UserDataManager.Instance.effectCritProbability = 0;
+        UserDataManager.Instance.effectDamage = 0;
     }
     public static bool ClearCheck()
     {

@@ -80,7 +80,7 @@ public class SkillManager : MonoBehaviour
 
     }
 
-    //  =======================  테라드릴  =======================
+    //  #######################  테라드릴  #######################
     #region 테라드릴
     // 테라드릴 이벤트 시작
     public void StartTeraDrill()
@@ -128,8 +128,8 @@ public class SkillManager : MonoBehaviour
         }
         Damage.instance.isTeradrill = false;
     }
-#endregion
-    //  =======================  드릴 연마  =======================
+    #endregion
+    //  #######################  드릴 연마  #######################
     #region 드릴 연마
     public void StartGrinderDrill()
     {
@@ -202,9 +202,8 @@ public class SkillManager : MonoBehaviour
         }
     }
     #endregion
-
-    //  =======================  드릴 랜딩  =======================
-
+    //  #######################  드릴 랜딩  #######################
+    #region 드릴 랜딩
     public void CheckLandingHeight()
     {
         if(UserData.GetDrillLandingCount() <= 0)
@@ -251,7 +250,77 @@ public class SkillManager : MonoBehaviour
         }
         yield break;
     }
+    #endregion
 
+    //  #######################  스킬 이펙트  #######################
+
+    public void ActiveSkill(int id)
+    {
+        string effect = Data.GetString(id, "Effect");
+
+        switch (effect) 
+        {
+            case "Attack":
+                ActiveAttack(id);
+                return;                
+
+            case "AttackRate":
+                ActiveAttackRate(id);
+                return;
+
+            case "CritDamage":
+                ActiveCritDamage(id);
+                return;
+
+            case "CritProbability":
+                ActiveCritProbability(id);
+                return;
+
+            case "DrillSize":
+                ActiveDrillSize(id);
+                return;
+
+            case "MaxHP":
+                ActiveMaxHP(id);
+                return;
+        }
+        GFunc.Log("스킬 효과를 찾을 수 없는 ID : " + id);
+    }
+
+
+    // 공격력 스킬
+    public void ActiveAttack(int id)
+    {
+        float attackDamage = Data.GetFloat(id, "Value1");
+        Damage.instance.AddEffectDamage(attackDamage); 
+    }
+    // 공격 속도 스킬
+    public void ActiveAttackRate(int id)
+    {
+
+    }
+    // 치명타 공격력 스킬
+    public void ActiveCritDamage(int id)
+    {
+        float critDamage = Data.GetFloat(id, "Value1");
+        Damage.instance.AddEffectCritDamage(critDamage);
+    }
+    // 치명타 확률 스킬
+    public void ActiveCritProbability(int id)
+    {
+        float critProbability = Data.GetFloat(id, "Value1");
+        Damage.instance.AddEffectCritProbability(critProbability);
+    }
+    // 드릴 사이즈 스킬
+    public void ActiveDrillSize(int id)
+    {
+
+    }    
+    // 최대체력 스킬
+    public void ActiveMaxHP(int id)
+    {
+
+    }
 
 
     private void GetData()

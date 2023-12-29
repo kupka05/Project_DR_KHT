@@ -18,7 +18,7 @@ public class FarmingObject : MonoBehaviour
         // 하나 확정 드롭
         DropItem();
 
-        if (1 <= dropItem.Length)
+        if (dropItem.Length <= 1)
         { return; }
 
         for(int i = 0; i < maxDrop - 2; i++)

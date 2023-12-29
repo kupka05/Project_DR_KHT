@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Damage : MonoBehaviour 
+public class Damage : MonoBehaviour
 {
     public static Damage instance
     {
@@ -18,7 +18,7 @@ public class Damage : MonoBehaviour
     }
     private static Damage m_instance; // 싱글톤이 할당될 static 변수    
 
-  
+
 
     // 스킬 액티브 여부
     public bool isTeradrill = false;    // 테라 드릴
@@ -35,6 +35,8 @@ public class Damage : MonoBehaviour
     public float landingIncrease;
     public float smashIncrease;
 
+    public float effectDmgIncrease;     // 효과에 따른 데미지 증감
+    public float effectCritIncrease;    // 효과에 따른 치명타 데미지 증감
 
 
     // Start is called before the first frame update
@@ -52,15 +54,15 @@ public class Damage : MonoBehaviour
         float _landingIncrease = isLanding ? landingIncrease : 0;
 
         float val = isLanding ? -1 : Random.Range(0f, 100f);
-       
+
         //GFunc.Log("치명타 확률" + critChance +"+"+ grinderCritChance + "이번 확률 :" + val);
-        float _critIncrease = critChance + _grinderCritChance <= val ? 0 : critIncrease ;
+        float _critIncrease = critChance + _grinderCritChance <= val ? 0 : critIncrease;
 
         //GFunc.Log(_damage + " * = (1 + " + _teraIncrease + " ) * ( 1 + (" + _critIncrease + " + " + _grinderIncrease + " + " + _landingIncrease + ")");
         //공격 계산식 = {기본 공격력*(1+테라드릴 증가)}*{1+(치명타 배율+드릴 연마 배율+랜딩 스킬 배율)}
-        _damage *= (1 + _teraIncrease) * (1 + (_critIncrease + _grinderIncrease + _landingIncrease));
+        _damage *= (1 + _teraIncrease + effectDmgIncrease) * (1 + (_critIncrease + _grinderIncrease + _landingIncrease + effectCritIncrease));
 
-  
+
         return _damage;
     }
 
@@ -76,6 +78,8 @@ public class Damage : MonoBehaviour
 
         landingIncrease = UserData.GetLandingCritIncrease();
 
+        effectCritIncrease = UserData.GetEffectCritDamage();
+        effectDmgIncrease = UserData.GetEffectDamage();
 
         //critChance = (float)DataManager.Instance.GetData(1100, "CritChance", typeof(float));      // 치명타 확률
         //critIncrease = (float)DataManager.Instance.GetData(1100, "CritIncrease", typeof(float));  // 치명타 증가율
@@ -84,5 +88,19 @@ public class Damage : MonoBehaviour
         //grinderCritChance = (float)DataManager.Instance.GetData(721114, "Value1", typeof(float)); // 드릴연마 치확
         //grinderIncrease = (float)DataManager.Instance.GetData(721115, "Value1", typeof(float));    // 드릴연마 증가
         //landingIncrease = (float)DataManager.Instance.GetData(720217, "Value2", typeof(float));
+    }
+
+    // 데미지 추가 버프
+    public void AddEffectDamage(float value)
+    {
+        effectDmgIncrease += value;
+        UserDataManager.Instance.effectDamage = effectDmgIncrease;
+    }
+
+    // 치명타 데미지 추가 버프
+    public void AddEffectCritDamage(int value)
+    {
+        effectCritIncrease += value;
+        UserDataManager.Instance.effectCritDamage = effectCritIncrease;
     }
 }

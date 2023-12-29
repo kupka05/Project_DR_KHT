@@ -16,12 +16,17 @@ namespace BNG {
         public float resetTime;
         Coroutine resetCoroutine;
 
+        [Header("Crafting")]
+        // 강화 슬롯 스냅존 전용
+        [SerializeField] private bool isEnhance = false;
+
         [Header("Starting / Held Item")]
         [Tooltip("The currently held item. Set this in the editor to equip on Start().")]
         public Grabbable HeldItem;
 
         [Tooltip("TSet this in the editor to equip on Start().")]
         public Grabbable StartingItem;
+        public Grabbable[] StartingItems;
 
         [Header("Options")]
         /// <summary>
@@ -115,6 +120,16 @@ namespace BNG {
             gZone = GetComponent<GrabbablesInTrigger>();
             _scaleTo = ScaleItem;
 
+            // 강화 슬롯일 경우 Player의 drill을 찾아서 할당
+            if (isEnhance)
+            {
+                StartingItems = new Grabbable[2];
+                GameObject drill_L = GameObject.Find("Drill L");
+                GameObject drill_R = GameObject.Find("Drill R");
+                StartingItems[0] = drill_L.GetComponent<Grabbable>();
+                StartingItems[1] = drill_R.GetComponent<Grabbable>();
+            }
+
             // Auto Equip item by moving it into place and grabbing it
             if (StartingItem != null) {
                 StartingItem.transform.position = transform.position;
@@ -164,9 +179,15 @@ namespace BNG {
                 if (HeldItem.BeingHeld || HeldItem.transform.parent != transform) {
                     ReleaseAll();
                 }
-                else {
-                    // Scale Item while inside zone.                                            
-                    HeldItem.transform.localScale = Vector3.Lerp(HeldItem.transform.localScale, HeldItem.OriginalScale * _scaleTo, Time.deltaTime * 30f);
+                else
+                {
+                    // 강화 슬롯이 아닐 경우 기존 코드 실행
+                    // 사유: 사이즈가 커지는 현상 발생
+                    if (!isEnhance)
+                    {
+                        // Scale Item while inside zone.
+                        HeldItem.transform.localScale = Vector3.Lerp(HeldItem.transform.localScale, HeldItem.OriginalScale * _scaleTo, Time.deltaTime * 30f);
+                    }
 
                     // Make sure this can't be grabbed from the snap zone
                     if (HeldItem.enabled || (disabledColliders != null && disabledColliders.Count > 0 && disabledColliders[0] != null && disabledColliders[0].enabled)) {
@@ -265,7 +286,27 @@ namespace BNG {
                 if (closest != null && closest != StartingItem)
                 return null;
             }
-            
+
+            // 강화슬롯일 경우
+            if (isEnhance)
+            {
+                bool isDrill = false;
+                // 스타트 아이템[](드릴L,R)이 아니면 보관할 수 없도록 하기
+                for (int i = 0; i < StartingItems.Length; i++)
+                {
+                    // 넣을 아이템(closest)가 드릴일 경우
+                    if (closest != null && closest.Equals(StartingItems[i]))
+                    {
+                        isDrill = true;                     
+                    }
+                }
+
+                // 넣을 아이템(closest)이 드릴이 아닐 경우
+                if (isDrill.Equals(false))
+                {
+                    return null;
+                }
+            }
 
             return closest;
         }
@@ -281,6 +322,15 @@ namespace BNG {
                 ReleaseAll();
             }
 
+            // 강화 전용 슬롯일 경우 grab 인스턴스로 변경
+            if (isEnhance)
+            {
+                Grabbable tempGrab = Instantiate(grab);
+                grab.gameObject.SetActive(false);
+                grab = tempGrab;
+            }
+
+            // 아닐 경우 기존 grab 사용
             HeldItem = grab;
             heldItemRigid = HeldItem.GetComponent<Rigidbody>();
 
@@ -298,12 +348,16 @@ namespace BNG {
 
             // Set scale factor            
             // Use SnapZoneScale if specified
-            if (grab.GetComponent<SnapZoneScale>()) {
+
+            if (grab.GetComponent<SnapZoneScale>()) 
+            {
                 _scaleTo = grab.GetComponent<SnapZoneScale>().Scale;
             }
-            else {
+            else 
+            {
                 _scaleTo = ScaleItem;
             }
+ 
 
             // Is there an offset to apply?
             SnapZoneOffset off = grab.GetComponent<SnapZoneOffset>();
@@ -369,10 +423,18 @@ namespace BNG {
         /// This is typically called by the GrabAction on the SnapZone
         /// </summary>
         /// <param name="grabber"></param>
-        public virtual void GrabEquipped(Grabber grabber) {
-
+        public virtual void GrabEquipped(Grabber grabber) 
+        {
             if (grabber != null) {
-                if (HeldItem) {
+                if (HeldItem) 
+                {
+                    //// 강화 슬롯일 경우 grabber 체인지
+                    //if (isEnhance)
+                    //{
+                    //    Grabber tempGrabber = grabber;
+                    //    grabber.gameObject.SetActive(false);
+                    //    grabber = tempGrabber;
+                    //}
 
                     // Not allowed to be removed
                     if (!CanBeRemoved()) {
@@ -428,6 +490,8 @@ namespace BNG {
             return true;
         }
 
+
+        // 슬롯에서 나왔을 경우 호출
         /// <summary>
         /// Release  everything snapped to us
         /// </summary>
@@ -443,7 +507,12 @@ namespace BNG {
                 trackedItem = HeldItem;
             }
 
-            HeldItem.ResetScale();
+            // 강화 슬롯이 아닐 경우 기존 코드 실행
+            // 사유: 사이즈가 커지는 현상 발생
+            if (! isEnhance)
+            {
+                HeldItem.ResetScale();
+            }
 
             if (DisableColliders && disabledColliders != null) {
                 foreach (var c in disabledColliders) {
@@ -482,6 +551,12 @@ namespace BNG {
                         ge[x].OnSnapZoneExit();
                     }
                 }
+            }
+
+            // 강화 슬롯일 경우 강화 슬롯에서 나온 n초 후 아이템 삭제
+            if (isEnhance)
+            {
+                Destroy(HeldItem.gameObject, 1.0f);
             }
 
             HeldItem = null;

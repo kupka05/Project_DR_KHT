@@ -39,7 +39,7 @@ namespace Js.Crafting
             3_0000_1, 3_2000_1                                                  // 크래프팅 테이블 색인 인덱스
         };
         public Anvil Anvil => _anvil;                                           // 아이템 조합 모루
-
+        public bool IsEnhance => _isEnhance;                                    // 강화중인지 외부에서 체크하는 함수
 
         /*************************************************
          *                 Private Field
@@ -48,7 +48,7 @@ namespace Js.Crafting
             = new Dictionary<int, ICraftingComponent>();
         [SerializeField] private Anvil _anvil;
         private string _anvilPrefabName = "Crafting_Anvil";                     // 모루 프리팹 이름
-
+        private bool _isEnhance = false;
 
         /*************************************************
          *                  Unity Events
@@ -62,10 +62,22 @@ namespace Js.Crafting
             Initialize();
         }
 
+        // 디버그용
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.B))
+            {
+                Vector3 pos = GameObject.Find("PlayerController").transform.position;
+                CreateAnvil(pos);
+            }
+        }
 
         /*************************************************
          *               Initialize Methods
          *************************************************/
+        // 생성용 함수
+        public void Create() { }
+
         public void Initialize()
         {
             // Init
@@ -160,6 +172,8 @@ namespace Js.Crafting
             CompositeItem compositeItem = new CompositeItem(material_1, material_2);
             item.AddMaterialData(material_1_KeyID, material_1_Amount);
             item.AddMaterialData(material_2_KeyID, material_2_Amount);
+            GFunc.Log($"id: {material_1_KeyID} / amount: {material_1_Amount}");
+            GFunc.Log($"id: {material_2_KeyID} / amount: {material_2_Amount}");
 
             return compositeItem;
         }

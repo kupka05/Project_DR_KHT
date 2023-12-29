@@ -489,7 +489,10 @@ public partial class UserDataManager : MonoBehaviour
     // 인벤토리의 모든 아이템을 초기화
     public static void ResetInventory()
     {
-        items = new Item[Inventory.MaxCapacity];
+        for (int i = 0; i < items.Length; i++)
+        {
+            items[i] = null;
+        }
     }
 
     // ######################### 퀘스트 #########################

@@ -242,6 +242,16 @@ public static class UserData
         }
         return spinForce;
     }
+
+    public static float GetEffectDamage()
+    {
+        return UserDataManager.Instance.effectDamage;
+    }
+
+    public static float GetEffectCritDamage()
+    {
+        return UserDataManager.Instance.effectCritDamage;
+    }
     #endregion
 
     #region ####################_Skill_1_Data_#####################

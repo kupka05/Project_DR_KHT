@@ -275,7 +275,7 @@ public class Boss : MonoBehaviour
                 {
                     GFunc.Log("체력별 패턴 4 진입");
 
-                    RandomPatternSecond();
+                    RandomPattern();
                     //GFunc.Log("랜덤 패턴4 발동");
 
                     if (bossState && !isKnockBackThird)
@@ -304,11 +304,11 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                StartCoroutine(BounceShoot());
+                StartCoroutine(PlayShoot());
                 GFunc.Log("패턴 1 선택");
                 break;
             case 1:
-                StartCoroutine(BounceShoot());
+                StartCoroutine(LazerCoroutine());
                 GFunc.Log("패턴 2 선택");
                 break;
             case 2:
@@ -316,7 +316,7 @@ public class Boss : MonoBehaviour
                 GFunc.Log("패턴 3 선택");
                 break;
             case 3:
-                StartCoroutine(BounceShoot());
+                StartCoroutine(BigBrickShoot());
                 GFunc.Log("패턴 4 선택");
                 break;
         }
@@ -883,11 +883,7 @@ public class Boss : MonoBehaviour
                 // 이벤트 호출
                 //unityEvent?.Invoke();
 
-                // 보스 죽음 퀘스트
-                QuestCallback.OnBossKillCallback(bossId);
-                Unit.ClearQuestByID(3122001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
-                //Unit.InProgressQuestByID(3122001);        // 다음 퀘스트 진행중 으로 변경
-
+              
                 if (bossState)
                 {
                     bossState.GetComponent<BossState>().Die();
@@ -899,6 +895,13 @@ public class Boss : MonoBehaviour
 
                 GetComponent<BossMonsterDeadCheck>().BossDie();
 
+                // 보스 죽음 퀘스트
+                QuestCallback.OnBossKillCallback(bossId);
+                // 1층 1회차 클리어
+                Unit.ClearQuestByID(3122001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
+                //Unit.InProgressQuestByID(3122001);        // 다음 퀘스트 진행중 으로 변경
+
+                UserData.KillBoss(Data.GetInt(bossId, "GiveEXP"));
                 //GFunc.Log("코루틴 멈춤");
             }
 
@@ -1022,19 +1025,20 @@ public class Boss : MonoBehaviour
             //QuestCallback.OnBossMeetCallback(bossId);   // 상태값 갱신 및 자동 완료
             //Unit.ClearQuestByID(3111001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
             //Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
-            //npc.BossMeet();
+            
+            npc.BossMeet();
 
-            isStart = true;
-            GFunc.Log("인식되냐");
-            StartCoroutine(ExecutePattern());
+            //isStart = true;
+            //GFunc.Log("인식되냐");
+            //StartCoroutine(ExecutePattern());
 
         }
     }
 
-    //// 전투 시작
-    //public void StartAttack()
-    //{
-    //    StartCoroutine(ExecutePattern());
-    //}
+    // 전투 시작
+    public void StartAttack()
+    {
+        StartCoroutine(ExecutePattern());
+    }
 
 }

@@ -30,6 +30,7 @@ public class BossRoomObjSpawn : MonoBehaviour
     private Vector3 bossPos;                            // 보스의 좌표
     private int hookShootSpawnCount;                    // 훅샷기둥 스폰한 횟수
     private FloorMeshPos roomPos;
+    private float hookShootColumnWallDis;               // 벽과 훅샷기둥의 거리  ex) 0.1 = 벽의 10%
 
 
     private void Awake()
@@ -45,6 +46,7 @@ public class BossRoomObjSpawn : MonoBehaviour
     private void DataInIt()
     {
         roomPos = this.gameObject.GetComponent<FloorMeshPos>();
+        hookShootColumnWallDis = Data.GetFloat(16033, "HookShootColumnWallDis");
         defaultColumnSpawnPosList = new List<Vector3>();
         hookShootSpawnCount = 1;
         defaultColumn = (GameObject)Resources.Load("tempDefaultColumn");
@@ -71,7 +73,7 @@ public class BossRoomObjSpawn : MonoBehaviour
         float bossRoomWidth = Data.GetInt(9105, "BossRoomWidth");
 
         int defualtColumnSpawnCount = UnityEngine.Random.Range(defaultColumnMinSpawnValue, defaultColumnMaxSpawnValue + 1);
-        float spawnStartDefaultColumnWidth = bossRoomWidth * 0.3f;
+        float spawnStartDefaultColumnWidth = bossRoomWidth * hookShootColumnWallDis;
         float spawnEndDefaultColumnWidth = bossRoomWidth - spawnStartDefaultColumnWidth;
 
         for (int i = 0; i < defualtColumnSpawnCount; i++)
@@ -86,8 +88,8 @@ public class BossRoomObjSpawn : MonoBehaviour
         float hookShotColumnDis = Data.GetFloat((int)ColumnID.hookShootColumn, "HookShootColumnDis");
         GFunc.Log($"시트에서 가져온 Dis값 : {hookShootSpawnCount}\n소환 카운트 : {hookShootSpawnCount}");
 
-        float leftColumnXPos = roomPos.bottomLeftCorner.x + (bossRoomWidth * 0.3f);
-        float rightColumnXPos = roomPos.bottomRightCorner.x - (bossRoomWidth * 0.3f);
+        float leftColumnXPos = roomPos.bottomLeftCorner.x + (bossRoomWidth * hookShootColumnWallDis);
+        float rightColumnXPos = roomPos.bottomRightCorner.x - (bossRoomWidth * hookShootColumnWallDis);
         for (int i = 0; i < hookShootColumnSpawnValue; i++)
         {
             SpawnHookShootColumn(objParent,leftColumnXPos,rightColumnXPos,hookShotColumnDis);

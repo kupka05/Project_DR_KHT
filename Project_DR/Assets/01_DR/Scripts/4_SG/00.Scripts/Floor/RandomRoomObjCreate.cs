@@ -5,10 +5,12 @@ using System.Text;
 using UnityEngine;
 
 // 스폰될 오브젝트의 포지션이 고정값인지 아닌지 구별할 Enum
-public enum IsFixPosition
+public enum SpawnPlace
 {
-    False = 0,
-    True = 1
+    Floor = 0,
+    Roop = 1,
+    Wall = 2
+
 }
 
 public class RandomRoomObjCreate : MonoBehaviour
@@ -168,14 +170,14 @@ public class RandomRoomObjCreate : MonoBehaviour
     /// <returns>중복 검사이후 중복이 없는 Vector3값</returns>
     private Vector3 PickSpwanPos(int _CreateObjId)
     {
-        int isFixPos = (int)DataManager.Instance.GetData(_CreateObjId, "IsFixPosition", typeof(int));
+        int spawnPlace = (int)DataManager.Instance.GetData(_CreateObjId, "SpawnPlace", typeof(int));
         Vector3 tempPos;
         if(reCallCount >= 15)
         {
             createPass = true;
             return Vector3.zero;
         }
-        if (isFixPos == (int)IsFixPosition.False)
+        if (spawnPlace == (int)SpawnPlace.Floor)
         {
             float xPos = UnityEngine.Random.Range(cornerPos.bottomLeftCorner.x + 1f, cornerPos.bottomRightCorner.x - 1f);
             float yPos = 0f;
@@ -184,14 +186,18 @@ public class RandomRoomObjCreate : MonoBehaviour
             tempPos = new Vector3(xPos, yPos, zPos);
             reCallCount++;
         }
-        else
+        else if(spawnPlace == (int)SpawnPlace.Roop) 
         {
             float xPos = (cornerPos.bottomLeftCorner.x + cornerPos.bottomRightCorner.x) * 0.5f;
             float yPos = (float)DataManager.Instance.GetData(_CreateObjId, "PosY", typeof(float)); // 대충 지붕 위치
             float zPos = (cornerPos.bottomLeftCorner.z + cornerPos.topLeftCorner.z) * 0.5f;
             tempPos = new Vector3(xPos, yPos, zPos);
         }
-       
+        else
+        {
+            GFunc.Log("추가예정");
+            tempPos = Vector3.zero;
+        }
         float dis;
         
         foreach (Vector3 pos in spawnPosList)

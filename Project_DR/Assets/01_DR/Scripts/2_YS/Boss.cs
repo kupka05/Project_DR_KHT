@@ -129,16 +129,16 @@ public class Boss : MonoBehaviour
     //public GameObject testBullet;
 
 
-    void Awake()
+    public void Awake()
     {
         GetData(bossId, bossProjectileId, bossProjectileID, bossProjectileBounceId);
     }
 
-    void Start()
+    public void Start()
     {
         InitializeBoss();
     }
-    void InitializeBoss()
+    public void InitializeBoss()
     {
         GFunc.Log($"게임시작");
         bossState = GameObject.FindWithTag("Boss");
@@ -162,7 +162,7 @@ public class Boss : MonoBehaviour
         npc = GetComponent<BossNPC>();
     }
 
-    void Update()
+    public void FixedUpdate()
     {
         if (target != null)
         {
@@ -174,14 +174,14 @@ public class Boss : MonoBehaviour
 
         }
         else
-            return; 
+            return;
     }
 
     public void GetData(int bossId, int bossProjectileId, int bossProjectileID, int bossProjectileBounceId)
     {
         //보스
         maxHp = (float)DataManager.Instance.GetData(bossId, "BossHP", typeof(float));
-        patternInterval = (float)DataManager.Instance.GetData(bossId, "patternChange", typeof(float)); //이건 하나만
+        patternInterval = (float)DataManager.Instance.GetData(bossId, "PatternChange", typeof(float)); //이건 하나만
 
         //소형 투사체 6910
         bulletCount = (float)DataManager.Instance.GetData(bossProjectileId, "Duration", typeof(float));
@@ -214,7 +214,7 @@ public class Boss : MonoBehaviour
         bossHPSlider.value = newHealth;
     }
 
-    IEnumerator ExecutePattern()
+    public virtual IEnumerator ExecutePattern()
     {
         //GFunc.Log("코루틴이 한번만 실행이 되는지");
 
@@ -275,7 +275,7 @@ public class Boss : MonoBehaviour
                 {
                     GFunc.Log("체력별 패턴 4 진입");
 
-                    RandomPattern();
+                    RandomPatternSecond();
                     //GFunc.Log("랜덤 패턴4 발동");
 
                     if (bossState && !isKnockBackThird)
@@ -293,12 +293,11 @@ public class Boss : MonoBehaviour
                 yield return new WaitForSeconds(patternInterval);
                 isPatternExecuting = false;
 
-
             }
         }
     }
 
-    void RandomPattern()
+    public virtual void RandomPattern()
     {
         int pattern = UnityEngine.Random.Range(0, 4);
 
@@ -320,7 +319,6 @@ public class Boss : MonoBehaviour
                 StartCoroutine(BounceShoot());
                 GFunc.Log("패턴 4 선택");
                 break;
-
         }
 
         if (bossState)
@@ -330,7 +328,59 @@ public class Boss : MonoBehaviour
         }
     }
 
-    void PushPlayerBackward()
+    public virtual void RandomPatternSecond()
+    {
+        int pattern = UnityEngine.Random.Range(0, 4);
+        int pattern2 = UnityEngine.Random.Range(0, 4);
+
+        switch (pattern)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        switch (pattern2)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        if (bossState)
+        {
+            bossState.GetComponent<BossState>().Attack();
+            GFunc.Log("보스 attack 애니메이션");
+        }
+    }
+
+    public void PushPlayerBackward()
     {
         if (knockBack)
         {
@@ -359,7 +409,7 @@ public class Boss : MonoBehaviour
     //    StartCoroutine(PushPlayerBackwardCoroutine());
     //}
 
-    IEnumerator PlayShoot()
+    public IEnumerator PlayShoot()
     {
 
         if (!isShoot)
@@ -418,7 +468,7 @@ public class Boss : MonoBehaviour
             // 오브젝트 풀을 사용하여 총알을 반환합니다.
             foreach (GameObject bullet in bullets)
             {
-                ObjectPoolManager.ReturnObjectToQueue(bullet, ObjectPoolManager.ProjectileType.CHAINBULLET);  
+                ObjectPoolManager.ReturnObjectToQueue(bullet, ObjectPoolManager.ProjectileType.CHAINBULLET);
                 GFunc.Log("반환 이상 없이 작동하는가?");
             }
 
@@ -429,7 +479,7 @@ public class Boss : MonoBehaviour
         }
     }
 
-    IEnumerator LazerCoroutine()
+    public IEnumerator LazerCoroutine()
     {
         if (targetImage != null)
         {
@@ -447,19 +497,19 @@ public class Boss : MonoBehaviour
         }
     }
 
-    void LazerFire(Vector3 firePosition)
+    public void LazerFire(Vector3 firePosition)
     {
         instantLazerFire = Instantiate(lazerFire, firePosition, Quaternion.identity);
         Invoke("LazerFireDestroy", 1.0f);
     }
 
-    void LazerFireDestroy()
+    public void LazerFireDestroy()
     {
         Destroy(instantLazerFire);
         targetImage.gameObject.SetActive(false);
     }
 
-    void ShootLazer(Vector3 shootPosition)
+    public void ShootLazer(Vector3 shootPosition)
     {
         // 레이저를 생성하고 shootPosition을 기준으로 방향을 설정합니다.
         instantLazer = Instantiate(lazer, lazerPort.position, lazerPort.rotation);
@@ -470,7 +520,7 @@ public class Boss : MonoBehaviour
         Invoke("LazerDestroy", 1.0f);
     }
 
-    void LazerDestroy()
+    public void LazerDestroy()
     {
         Destroy(instantLazer);
         //targetImage.gameObject.SetActive(false);
@@ -514,9 +564,9 @@ public class Boss : MonoBehaviour
     //}
 
 
-    IEnumerator BigBrickShoot()
+    public IEnumerator BigBrickShoot()
     {
-        if(!isBrick)
+        if (!isBrick)
         {
             isBrick = true;
 
@@ -567,9 +617,9 @@ public class Boss : MonoBehaviour
             isBrick = false;
         }
 
-       
 
-   
+
+
     }
 
     //public void Shoot()
@@ -699,9 +749,9 @@ public class Boss : MonoBehaviour
     //}
 
 
-    IEnumerator BounceShoot()
+    public IEnumerator BounceShoot()
     {
-        if(!isBounce)
+        if (!isBounce)
         {
             isBounce = true;
 
@@ -709,7 +759,6 @@ public class Boss : MonoBehaviour
 
             for (int i = 0; i < bounceCount; i++)
             {
-
                 Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 6.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
                 //기존 로직
@@ -721,12 +770,11 @@ public class Boss : MonoBehaviour
 
                 bounceBall.Add(instantBounce);
 
-                
                 SphereCollider bounceCollider = instantBounce.GetComponent<SphereCollider>();
                 bounceCollider.isTrigger = true;
                 GFunc.Log("생성 후 트리거 true");
 
-                
+
             }
 
             yield return new WaitForSeconds(3.0f);
@@ -734,7 +782,7 @@ public class Boss : MonoBehaviour
 
             foreach (GameObject instantBounce in bounceBall)
             {
-                if(instantBounce != null &&  instantBounce.activeSelf)
+                if (instantBounce != null && instantBounce.activeSelf)
                 {
                     SphereCollider bounceCollider = instantBounce.GetComponent<SphereCollider>();
                     bounceCollider.isTrigger = false;
@@ -744,7 +792,7 @@ public class Boss : MonoBehaviour
                     bounceRigidbody.velocity = -instantBounce.transform.forward.normalized * speedBounce;
                     GFunc.Log("발사");
                 }
-               
+
             }
 
             yield return new WaitForSeconds(destoryTimeBounce);
@@ -753,13 +801,13 @@ public class Boss : MonoBehaviour
             {
                 ObjectPoolManager.ReturnObjectToQueue(instantBounce, ObjectPoolManager.ProjectileType.BOUNCEBALL);
             }
-            
+
             bounceBall.Clear();
 
             isBounce = false;
         }
 
-       
+
 
     }
 
@@ -964,7 +1012,7 @@ public class Boss : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && !isStart)
         {

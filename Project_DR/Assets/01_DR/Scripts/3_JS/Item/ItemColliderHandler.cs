@@ -21,12 +21,14 @@ public class ItemColliderHandler : MonoBehaviour
     #region [+]
     public enum State
     {
-        Default = 0,
-        Processing,
-        Handed,
-        Stop,
-        Grabbed
+        DEFAULT = 0,
+        PROCESSING = 1,
+        HANDED = 2,
+        STOP = 3,
+        GRABBED = 4,
+        CRAFTING = 5
     }
+
     public State state;
 
     #endregion
@@ -89,7 +91,7 @@ public class ItemColliderHandler : MonoBehaviour
     // 상태 초기화
     public void ResetState()
     {
-        state = State.Default;
+        state = State.DEFAULT;
     }
 
     #endregion
@@ -101,7 +103,7 @@ public class ItemColliderHandler : MonoBehaviour
     private void ProcessItemInSlot(Collider other)
     {
         // 대상이 아이템 슬롯일 경우
-        if (other.CompareTag("ItemSlot") && state == State.Grabbed)
+        if (other.CompareTag("ItemSlot") && state == State.GRABBED)
         {
             ItemSlotController itemSlot = other.GetComponent<ItemSlotController>();
             // 수납 가능한 경우에만 수납함
@@ -121,7 +123,7 @@ public class ItemColliderHandler : MonoBehaviour
                     }
                 }
                 // 작업 상태로 변경
-                state = State.Processing;
+                state = State.PROCESSING;
 
                 ItemDataComponent itemDataComponent = gameObject.GetComponent<ItemDataComponent>();
                 //GFunc.Log($"GameObject {gameObject.GetComponent<ItemDataComponent>()}");

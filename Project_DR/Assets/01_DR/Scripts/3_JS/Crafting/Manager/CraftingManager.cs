@@ -46,8 +46,8 @@ namespace Js.Crafting
          *************************************************/
         private Dictionary<int, ICraftingComponent> _craftingDictionary
             = new Dictionary<int, ICraftingComponent>();
-        private Anvil _anvil;
-        private string _anvilPrefabName = "Crafting_Anvil";                                   // 모루 프리팹 이름
+        [SerializeField] private Anvil _anvil;
+        private string _anvilPrefabName = "Crafting_Anvil";                     // 모루 프리팹 이름
 
 
         /*************************************************
@@ -98,7 +98,7 @@ namespace Js.Crafting
 
                     GFunc.Log($"ConditionID {conditionID}");
                     // 두 가지 조건의 조합식을 가진 컴포짓 아이템을 생성한다.
-                    CompositeItem compositeItem = CreateCompositeItemWithConditions(conditionID);
+                    CompositeItem compositeItem = CreateCompositeItemWithConditions(craftingItem, conditionID);
 
                     // 크래프팅 아이템에 추가
                     craftingItem.AddComponent(compositeItem);
@@ -149,15 +149,17 @@ namespace Js.Crafting
          *                Private Methods
          *************************************************/
         // 두 가지 조합식을 가진 컴포짓 아이템을 생성한다.
-        private CompositeItem CreateCompositeItemWithConditions(int id)
+        private CompositeItem CreateCompositeItemWithConditions(CraftingItem item, int id)
         {
             int material_1_KeyID = Data.GetInt(id, "Material_1_KeyID");
             int material_2_KeyID = Data.GetInt(id, "Material_2_KeyID");
             int material_1_Amount = Data.GetInt(id, "Material_1_Amount");
             int material_2_Amount = Data.GetInt(id, "Material_2_Amount");
-            MaterialItem material_1 = new MaterialItem(material_1_KeyID, material_1_Amount);
-            MaterialItem material_2 = new MaterialItem(material_2_KeyID, material_2_Amount);
+            MaterialItem material_1 = new MaterialItem(item, material_1_KeyID);
+            MaterialItem material_2 = new MaterialItem(item, material_2_KeyID);
             CompositeItem compositeItem = new CompositeItem(material_1, material_2);
+            item.AddMaterialData(material_1_KeyID, material_1_Amount);
+            item.AddMaterialData(material_2_KeyID, material_2_Amount);
 
             return compositeItem;
         }

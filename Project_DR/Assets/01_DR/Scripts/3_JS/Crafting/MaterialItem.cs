@@ -9,27 +9,25 @@ namespace Js.Crafting
         /*************************************************
          *                 Public Fields
          *************************************************/
-        public Anvil Anvil => CraftingManager.Instance.Anvil;               // 모루
-        public int ItemID => _itemID;                                       // 아이템 ID
-        public int NeedAmount => _needAmount;                               // 필요한 갯수
-        public int CurrentHammeringCount => Anvil.CurrentHammeringCount;    // 현재 망치질 횟수
-        
+        public Anvil Anvil => CraftingManager.Instance.Anvil;                   // 모루
+        public int NeedAmount => _craftingItem.MaterialDictionary[_itemID];     // 필요한 갯수
+
 
         /*************************************************
          *                 Private Fields
          *************************************************/
-        private int _itemID;
-        private int _needAmount;
+        private CraftingItem _craftingItem;                                     // 최상위 오브젝트
+        private int _itemID;                                                    // 아이템 아이디
 
 
         /*************************************************
          *                Public Methods
          *************************************************/
-        public MaterialItem(int id, int amount)
+        public MaterialItem(CraftingItem item, int id)
         {
             // Init
+            _craftingItem = item;
             _itemID = id;
-            _needAmount = amount;
         }
 
 
@@ -42,7 +40,7 @@ namespace Js.Crafting
             if (_itemID.Equals(0)) { return true; }
 
             // 제작 조건을 충족하지 못할 경우 예외 처리
-            if (! Anvil.CheckCanCraft(_itemID, _needAmount)) { return false; }
+            if (! Anvil.CheckCanCraft(_itemID, NeedAmount)) { return false; }
 
             // 제작이 가능한 경우
             return true;

@@ -7,12 +7,6 @@ namespace Js.Crafting
     public class CompositeItem : ICraftingComponent
     {
         /*************************************************
-         *                 Public Fields
-         *************************************************/
-        public List<ICraftingComponent> Components => _components;      // 크래프팅 아이템 컴포넌트
-
-
-        /*************************************************
          *                 Private Fields
          *************************************************/
         private List<ICraftingComponent> _components = new List<ICraftingComponent>();
@@ -52,6 +46,13 @@ namespace Js.Crafting
             return true;
         }
 
-        public void Craft() { }
+        public void Craft() 
+        {
+            // 모든 컴포넌트에게 Craft() 명령
+            for (int i = 0; i < _components.Count; i++)
+            {
+                _components[i].Craft();
+            }
+        }
     }
 }

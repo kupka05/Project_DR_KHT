@@ -18,13 +18,13 @@ public class ItemBombHandler : MonoBehaviour
             //GFunc.Log(itemHandler.state);
             //GFunc.Log(collision.collider.tag);
             if (collision.collider.CompareTag("Floor")
-                && itemHandler.state == ItemColliderHandler.State.Grabbed)
+                && itemHandler.state == ItemColliderHandler.State.GRABBED)
             {
                 // 아이템 사용
                 GFunc.Log("USE");
                 GetComponent<UseItem>().Use();
 
-                itemHandler.state = ItemColliderHandler.State.Stop;
+                itemHandler.state = ItemColliderHandler.State.STOP;
             }
         }
     }

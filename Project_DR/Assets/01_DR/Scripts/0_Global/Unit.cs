@@ -22,6 +22,23 @@ public static class Unit
         ItemManager.instance.CreateItem(pos, id, amount);
     }
 
+    // 모루 위에 크래프팅 아이템을 생성
+    public static GameObject AddAnvilItem(Vector3 pos, int id, Transform parent, int amount = 1)
+    {
+        GameObject item = ItemManager.instance.CreateItem(pos, id, amount);
+        Transform transform = item.transform;
+        transform.SetParent(parent);
+        transform.localPosition = pos;
+
+        return item;
+    }
+
+    // 필드에 크래프팅 임시 아이템을 생성하고 반환
+    public static GameObject AddFieldTempItem(Vector3 pos, int id, Transform parent, int amount = 1)
+    {
+        return ItemManager.instance.CreateTempItem(pos, id, parent, amount);
+    }
+
     // ID로 인벤토리에 있는 아이템을 삭제
     public static bool RemoveInventoryItemForID(int id, int amount)
     {

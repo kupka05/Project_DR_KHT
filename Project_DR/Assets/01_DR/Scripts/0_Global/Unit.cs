@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Js.Quest;
 using Rito.InventorySystem;
+using Js.Crafting;
 
 // 플레이어에게 특정한 명령을 실행하는 클래스
 public static class Unit
@@ -50,6 +51,15 @@ public static class Unit
     {
         UserDataManager.ResetInventory();
     }
+    /*************************************************
+     *           Public Crafting Methods
+     *************************************************/
+    // 모루를 생성한다. 크래프팅용
+    public static GameObject CreateAnvil(Vector3 pos)
+    {
+        return CraftingManager.Instance.CreateAnvil(pos);
+    }
+
 
     /*************************************************
      *             Public Quest Methods

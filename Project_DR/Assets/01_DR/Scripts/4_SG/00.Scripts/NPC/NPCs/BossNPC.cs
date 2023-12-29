@@ -7,7 +7,9 @@ using System;
 
 public class BossNPC : NPC
 {
+    public enum BossLevel { Floor1, Floor2, Floor3, Floor4, Floor5 };
 
+    public BossLevel boss;
     private int conversationID;
 
     protected override void OnDestroy()
@@ -16,7 +18,25 @@ public class BossNPC : NPC
     }
     private void AwakeInIt()
     {
-        npcID = GetComponent<Boss>().bossId;
+        switch(boss)
+        {
+            case BossLevel.Floor1:
+                npcID = 6872;
+                break;
+            case BossLevel.Floor2:
+                npcID = 6873;
+                break;
+            case BossLevel.Floor3:
+                npcID = 6874;
+                break;
+            case BossLevel.Floor4:
+                npcID = 6875;
+                break;
+            case BossLevel.Floor5:
+                npcID = 6876;
+                break;
+        }
+
     }       // AwakeInIt()
 
     protected override void Awake()
@@ -125,7 +145,7 @@ public class BossNPC : NPC
         GFunc.Log("전투를 시작한다.");
         GFunc.ChoiceEvent(conversationID);
 
-        GetComponent<Boss>().StartAttack();
+        //GetComponent<Boss>().StartAttack();
 
     }       // EndConveration()
 

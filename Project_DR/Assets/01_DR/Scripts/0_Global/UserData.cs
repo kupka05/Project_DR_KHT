@@ -242,6 +242,16 @@ public static class UserData
         }
         return spinForce;
     }
+
+    public static float GetEffectDamage()
+    {
+        return UserDataManager.Instance.effectDamage;
+    }
+
+    public static float GetEffectCritDamage()
+    {
+        return UserDataManager.Instance.effectCritDamage;
+    }
     #endregion
 
     #region ####################_Skill_1_Data_#####################
@@ -302,7 +312,7 @@ public static class UserData
     /// <summary>업그레이드가 반영된 드릴연마의 지속시간 반환</summary>
     public static float GetGrinderMaxTime()
     {
-        float grinderMaxTime = Data.GetFloat(721114, "Value3");
+        float grinderMaxTime = Data.GetFloat(721114, "Value4");
         if (UserDataManager.Instance.Skill2Lv_3 != 0)
         {
             grinderMaxTime = grinderMaxTime + UserDataManager.Instance.statData.upgradeSkill2[UserDataManager.Instance.Skill2Lv_3 - 1].sum3;

@@ -40,6 +40,7 @@ public class SkillManager : MonoBehaviour
     public float GD_addTime;        // 증가 시간
     public float GD_maxTime;        // 최대 시간
     public float GD_drillSize;      // 드릴 크기 증가
+    public bool canAttack = false;  // 드릴 연마시 공격 해제
     IEnumerator grinderDrillRoutine;
 
     [Header("DrillLanding")]
@@ -182,6 +183,9 @@ public class SkillManager : MonoBehaviour
 
     public void ShootEnable()
     {
+        if (!canAttack)
+        { return; }
+
         for (int i = 0; i < 2; i++)
         {
             drills[i].isShootPossible = true;
@@ -189,6 +193,9 @@ public class SkillManager : MonoBehaviour
     }
     public void ShootDisable()
     {
+        if (!canAttack)
+        { return; }
+
         for (int i = 0; i < 2; i++)
         {
             drills[i].isShootPossible = false;

@@ -954,7 +954,7 @@ public class LobbyEvent : MonoBehaviour
     // 결과창 세팅
     public void SetResultData()
     {
-        ResultDebug();
+        //ResultDebug();
         GameResult result = UserData.GetResult();
 
         AddMonsterResult(result);

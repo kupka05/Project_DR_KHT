@@ -13,8 +13,6 @@ namespace Js.Crafting
         public int ItemID => _itemID;                                       // 아이템 ID
         public int NeedAmount => _needAmount;                               // 필요한 갯수
         public int CurrentHammeringCount => Anvil.CurrentHammeringCount;    // 현재 망치질 횟수
-        public int NeedHammeringCount => _needHammeringCount;               // 필요한 망치질 횟수
-        public string ItemName => _itemName;                                // 아이템 이름
         
 
         /*************************************************
@@ -22,20 +20,16 @@ namespace Js.Crafting
          *************************************************/
         private int _itemID;
         private int _needAmount;
-        private int _needHammeringCount;
-        private string _itemName;
 
 
         /*************************************************
          *                Public Methods
          *************************************************/
-        public MaterialItem(int id, int amount, int count)
+        public MaterialItem(int id, int amount)
         {
             // Init
             _itemID = id;
             _needAmount = amount;
-            _needHammeringCount = count;
-            _itemName = Data.GetString(id, "Name");
         }
 
 
@@ -48,7 +42,7 @@ namespace Js.Crafting
             if (_itemID.Equals(0)) { return true; }
 
             // 제작 조건을 충족하지 못할 경우 예외 처리
-            if (! Anvil.CheckCanCraft(_itemID, _needAmount, _needHammeringCount)) { return false; }
+            if (! Anvil.CheckCanCraft(_itemID, _needAmount)) { return false; }
 
             // 제작이 가능한 경우
             return true;

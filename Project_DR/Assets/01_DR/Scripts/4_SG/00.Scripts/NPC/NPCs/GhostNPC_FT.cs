@@ -10,7 +10,7 @@ public class GhostNPC_FT : HumanTypeNPC
     }
     private void AwakeInIt()
     {
-        npcID = (int)NPCID.Ghost_F_T;
+        npcID = (int)GhostNPCID.Ghost_F_T;
 
     }       // AwakeInIt()
 

@@ -7,14 +7,16 @@ using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum NPCID
+public enum GhostNPCID
 {
-    Olive = 1111201,
+    Ghost_IE_FT = 1111206,
     Ghost_I_E = 1111202,
     Ghost_N_S = 1111203,
     Ghost_P_J = 1111204,
-    Ghost_F_T = 1111205,
-    Ghost_IE_FT = 1111206,
+    Ghost_F_T = 1111205
+}
+public enum NPCID
+{         
     Klau_Random = 1110101,
     Decius_Random = 1111601,
     Tregal_Random = 1110301,
@@ -22,7 +24,11 @@ public enum NPCID
     Dent_Random = 1110501,
     Saektus_Random = 1110401
 
+}
 
+public enum LobbyNPC
+{
+    Olive = 1111201
 }
 
 public enum RewardID

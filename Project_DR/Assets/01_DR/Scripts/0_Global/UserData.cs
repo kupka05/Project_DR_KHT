@@ -144,7 +144,11 @@ public static class UserData
         {
             UserDataManager.Instance.MaxHP = UserDataManager.Instance.DefaultHP + UserDataManager.Instance.statData.upgradeHp[UserDataManager.Instance.HPLv - 1].sum;
         }
-        return UserDataManager.Instance.MaxHP;
+        return UserDataManager.Instance.MaxHP + GetEffectMaxHP();
+    }
+    public static float GetEffectMaxHP()
+    {
+        return (UserDataManager.Instance.MaxHP * (UserDataManager.Instance.effectMaxHP / 100));
     }
     /// <summary>현재 플레이어의 체력을 반환</summary>
     public static float GetHP()
@@ -164,6 +168,7 @@ public static class UserData
         UserDataManager.Instance.CurHP += amount;
     }
 
+    // 해당 ID의 스킬을 호출한다.
     public static void ActiveSkill(int id)
     {
         SkillManager.instance.ActiveSkill(id);
@@ -223,7 +228,7 @@ public static class UserData
         {
             attackSpeed = attackSpeed - UserDataManager.Instance.statData.upgradeAtkSpd[UserDataManager.Instance.WeaponAtkRateLv - 1].sum1;
         }
-        return attackSpeed;
+        return attackSpeed + UserDataManager.Instance.effectAttackRate;
     }
     /// <summary>업그레이드가 반영된 최대 드릴 회전 속도를 반환</summary>
     public static float GetMaxSpin()
@@ -254,6 +259,15 @@ public static class UserData
     public static float GetEffectCritDamage()
     {
         return UserDataManager.Instance.effectCritDamage;
+    }
+
+    public static float GetEffectDrillSize()
+    {
+        return UserDataManager.Instance.effectDrillSize;
+    }
+    public static void EffectMaxHP(float value)
+    {
+        UserDataManager.Instance.effectMaxHP += value;
     }
     #endregion
 

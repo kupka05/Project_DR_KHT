@@ -156,9 +156,8 @@ public class PlayerEvent : MonoBehaviour
                 // 패시브 스킬일 경우
                 else
                 {
-            ////// TODO: 패시브 스킬 동작 로직 추가하기 & 패시브는 1번만 구매하게 설정
-            /////////////////////////////////////////
-                
+                    ////// TODO: 패시브 스킬 동작 로직 추가하기 & 패시브는 1번만 구매하게 설정
+                    UserData.ActiveSkill(itemID);
                 }
             }
 

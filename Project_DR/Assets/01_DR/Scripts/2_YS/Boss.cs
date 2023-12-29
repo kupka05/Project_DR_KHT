@@ -166,7 +166,7 @@ public class Boss : MonoBehaviour
     {
         if (target != null)
         {
-            GFunc.Log("플레이어 바라 보는가?");
+            //GFunc.Log("플레이어 바라 보는가?");
             // Look At Y 각도로만 기울어지게 하기
             Vector3 targetPostition =
                 new Vector3(target.position.x, this.transform.position.y, target.position.z);

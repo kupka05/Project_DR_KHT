@@ -185,8 +185,8 @@ public class DungeonCreator : MonoBehaviour
 
     public GameObject entrancePrefab;
     public GameObject exitObjPrefab;        // !현재 위치값은 매직넘버로 이루어져있음
-    public GameObject bossMonsterSkin;      // 보스몬스터 인형
-    public GameObject bossMonsterCapsule;   // 보스몬스터 본체
+    public GameObject[] bossMonsterSkin;      // 보스몬스터 인형
+    public GameObject[] bossMonsterCapsule;   // 보스몬스터 본체
 
 
 
@@ -1786,7 +1786,7 @@ public class DungeonCreator : MonoBehaviour
         //bossClone = Instantiate(bossMonsterCapsule, bossPos, Quaternion.identity, monsterParent.transform);
         #endregion LEGACY
 
-        _dungeonFloor.AddComponent<BossRoom>().VariablesInIt(_floorMeshPos, bossMonsterSkin, bossMonsterCapsule,_dungeonFloor.transform,_centerPos);
+        _dungeonFloor.AddComponent<BossRoom>().VariablesInIt(_floorMeshPos, bossMonsterSkin[GameManager.instance.nowFloor -1], bossMonsterCapsule[GameManager.instance.nowFloor -1], _dungeonFloor.transform,_centerPos);
 
     }       // CreateBossMonster()
 

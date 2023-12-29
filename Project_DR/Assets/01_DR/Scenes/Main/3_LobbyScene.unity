@@ -97,9 +97,10 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 3c7e0b9564e7f6c41a6f23117cabd214,
+  m_LightingDataAsset: {fileID: 112000000, guid: 7703e50e72009fb48a37a9785773e8bd,
     type: 2}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 75e9bb7c7d969944e8989582b20349df,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -3629,7 +3630,7 @@ PrefabInstance:
     - target: {fileID: 7837797319980225010, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0038307742
+      value: -0.003782264
       objectReference: {fileID: 0}
     - target: {fileID: 7837797319993773063, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -3679,7 +3680,7 @@ PrefabInstance:
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.00087649794
+      value: -0.0008489964
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -8230,7 +8231,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &203844587
 MonoBehaviour:
@@ -87026,6 +87027,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624818583575066435, guid: 17b08516637fe5d419a1ed00af0ca83f,
+        type: 3}
+      propertyPath: _shopItems.Array.data[3]._id
+      value: 5404
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624818583575066435, guid: 17b08516637fe5d419a1ed00af0ca83f,
+        type: 3}
+      propertyPath: _shopItems.Array.data[4]._id
+      value: 5405
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624818583575066435, guid: 17b08516637fe5d419a1ed00af0ca83f,
+        type: 3}
+      propertyPath: _shopItems.Array.data[5]._id
+      value: 5406
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624818583575066435, guid: 17b08516637fe5d419a1ed00af0ca83f,
+        type: 3}
+      propertyPath: _shopItems.Array.data[6]._id
+      value: 5407
       objectReference: {fileID: 0}
     - target: {fileID: 4624818583620480961, guid: 17b08516637fe5d419a1ed00af0ca83f,
         type: 3}

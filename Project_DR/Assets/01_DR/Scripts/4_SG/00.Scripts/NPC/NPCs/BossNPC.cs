@@ -145,7 +145,7 @@ public class BossNPC : NPC
         GFunc.Log("전투를 시작한다.");
         GFunc.ChoiceEvent(conversationID);
 
-        //GetComponent<Boss>().StartAttack();
+        GetComponent<Boss>().StartAttack();
 
     }       // EndConveration()
 

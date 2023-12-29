@@ -19,7 +19,7 @@ public class PlayerEvent : MonoBehaviour
         // 인벤토리에 넣는 아이템인지 확인
         if (grabItem.GetComponent<ItemColliderHandler>() != null)
         {
-            grabItem.GetComponent<ItemColliderHandler>().state = ItemColliderHandler.State.Stop;
+            grabItem.GetComponent<ItemColliderHandler>().state = ItemColliderHandler.State.STOP;
         }
 
         // 인벤토리인지 확인
@@ -50,9 +50,13 @@ public class PlayerEvent : MonoBehaviour
     // 아이템 놓는 상태
     public void ReleaseItem(Grabbable grabItem)
     {
-        if (grabItem.GetComponent<ItemColliderHandler>() != null)
+        ItemColliderHandler itemColliderHandler = grabItem.GetComponent<ItemColliderHandler>();
+        if (itemColliderHandler != null)
         {
-            grabItem.GetComponent<ItemColliderHandler>().state = ItemColliderHandler.State.Grabbed;
+            // 아이템 상태가 크래프팅일 경우 예외처리 
+            if (itemColliderHandler.state.Equals(ItemColliderHandler.State.CRAFTING)) { return; }
+
+            itemColliderHandler.state = ItemColliderHandler.State.GRABBED;
         }
     }
 
@@ -101,7 +105,7 @@ public class PlayerEvent : MonoBehaviour
             GameObject item = ItemManager.instance.CreateItem(grabber.transform.position,
                 itemID, itemAmount);
             ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
-            itemColliderHandler.state = ItemColliderHandler.State.Stop;
+            itemColliderHandler.state = ItemColliderHandler.State.STOP;
 
             // 아이템 수량(1) 감소
             inventory.Use(slotIndex);
@@ -143,7 +147,7 @@ public class PlayerEvent : MonoBehaviour
                     GameObject item = ItemManager.instance.CreateItem(grabber.transform.position,
                         itemID);
                     ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
-                    itemColliderHandler.state = ItemColliderHandler.State.Stop;
+                    itemColliderHandler.state = ItemColliderHandler.State.STOP;
 
                     // 들고있던 아이템 놔주기
                     grabItem.DropItem(grabber.GetComponent<Grabber>(), true, false);
@@ -156,9 +160,8 @@ public class PlayerEvent : MonoBehaviour
                 // 패시브 스킬일 경우
                 else
                 {
-            ////// TODO: 패시브 스킬 동작 로직 추가하기 & 패시브는 1번만 구매하게 설정
-            /////////////////////////////////////////
-                
+                    ////// TODO: 패시브 스킬 동작 로직 추가하기 & 패시브는 1번만 구매하게 설정
+                    UserData.ActiveSkill(itemID);
                 }
             }
 

@@ -7,15 +7,6 @@ namespace Js.Crafting
     public class ResultItem : ICraftingComponent
     {
         /*************************************************
-         *                 Public Fields
-         *************************************************/
-        public int ItemID => _itemID;                   // 아이템 ID
-        public int GiveAmount => _giveAmount;           // 지급 아이템 갯수
-        public string ItemName => _itemName;            // 아이템 이름
-        public Vector3 SpawnPos => _spawnPos;           // 아이템이 생성될 위치
-
-
-        /*************************************************
          *                 Private Fields
          *************************************************/
         private int _itemID;

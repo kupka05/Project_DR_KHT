@@ -4,6 +4,7 @@ using Js.Crafting;
 
 public class CraftingTest : MonoBehaviour
 {
+    public bool isDone = false;
     void Start()
     {
         //// 단일 아이템
@@ -23,7 +24,19 @@ public class CraftingTest : MonoBehaviour
         //// 조합 실행
         //GFunc.Log($"제작 성공 여부: {compositeItem.Craft()}");
 
-        Invoke("CreateAnvil", 1f);
+        //Invoke("CreateAnvil", 1f);
+    }
+
+    private void Update()
+    {
+        if (! isDone)
+        {
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                isDone = true;
+                CreateAnvil();
+            }
+        }
     }
 
     public void CreateAnvil()

@@ -117,8 +117,15 @@ public partial class UserDataManager
     public float _weaponCritRate;
     public float _weaponCritDamage;
     public float _weaponAtkRate;
+
+    [Header("SkillEffect")]
     public float effectDamage;
     public float effectCritDamage;
+    public float effectCritProbability;
+    public float effectAttackRate;
+    public float effectMaxHP;
+    public float effectDrillSize;
+    
 
     [Header("Weapon Data")]
     public float weaponAtk;

@@ -21,22 +21,29 @@ public class Damage : MonoBehaviour
 
 
     // 스킬 액티브 여부
+    [Header ("Drill Skill Active")]
     public bool isTeradrill = false;    // 테라 드릴
     public bool isGrinder = false;      // 드릴 연마 
     public bool isSmash = false;        // 분쇄 디버프
 
-    public float critChance;           // 치명타 확률
+    [Header("Critical")]
+    public float critProbability;           // 치명타 확률
     public float critIncrease;         // 치명타 배율
     public float grinderCritChance;     // 드릴 연마 추가 치명타 확률
 
     // 효과
+    [Header("Drill Skill Damage Increase")]
     public float teraIncrease;
     public float grinderIncrease;      // 드릴 연마 추가 데미지
     public float landingIncrease;
     public float smashIncrease;
 
+    [Header("Skill Effect")]
     public float effectDmgIncrease;     // 효과에 따른 데미지 증감
     public float effectCritIncrease;    // 효과에 따른 치명타 데미지 증감
+
+
+
 
 
     // Start is called before the first frame update
@@ -56,10 +63,11 @@ public class Damage : MonoBehaviour
         float val = isLanding ? -1 : Random.Range(0f, 100f);
 
         //GFunc.Log("치명타 확률" + critChance +"+"+ grinderCritChance + "이번 확률 :" + val);
-        float _critIncrease = critChance + _grinderCritChance <= val ? 0 : critIncrease;
+        float _critIncrease = critProbability + _grinderCritChance <= val ? 0 : critIncrease;
 
         //GFunc.Log(_damage + " * = (1 + " + _teraIncrease + " ) * ( 1 + (" + _critIncrease + " + " + _grinderIncrease + " + " + _landingIncrease + ")");
         //공격 계산식 = {기본 공격력*(1+테라드릴 증가)}*{1+(치명타 배율+드릴 연마 배율+랜딩 스킬 배율)}
+
         _damage *= (1 + _teraIncrease + effectDmgIncrease) * (1 + (_critIncrease + _grinderIncrease + _landingIncrease + effectCritIncrease));
 
 
@@ -68,7 +76,7 @@ public class Damage : MonoBehaviour
 
     void GetData()
     {
-        critChance = UserData.GetCritChance();
+        critProbability = UserData.GetCritChance();
 
         critIncrease = UserData.GetCritIncrease();
         teraIncrease = UserData.GetTeraIncrease();
@@ -98,9 +106,14 @@ public class Damage : MonoBehaviour
     }
 
     // 치명타 데미지 추가 버프
-    public void AddEffectCritDamage(int value)
+    public void AddEffectCritDamage(float value)
     {
         effectCritIncrease += value;
         UserDataManager.Instance.effectCritDamage = effectCritIncrease;
+    }
+    public void AddEffectCritProbability(float value)
+    {
+        critProbability += value;
+        UserDataManager.Instance.effectCritProbability = critProbability;
     }
 }

@@ -226,6 +226,10 @@ namespace BNG
 
             weaponRigid = GetComponent<Rigidbody>();
             grappling = GetComponent<Grappling>();
+
+            float drillSize = 1 + UserDataManager.Instance.effectDrillSize;
+            drillHead.transform.localScale = new Vector3(drillSize, drillSize, drillSize);
+
             grappling.drill = drillHead;
             damageCollider = GetComponent<DamageCollider>();
             damageCollider.Damage = SetDamage();
@@ -896,6 +900,10 @@ namespace BNG
             //damage = (float)DataManager.Instance.GetData(1100, "Damage", typeof(float)) ;
             //dotDamage = (float)DataManager.Instance.GetData(1100, "DotDamage", typeof(float)) ;
             //FiringRate = (float)DataManager.Instance.GetData(1100, "AttackSpeed", typeof(float));
+        }
+        public void SetEffectFireRate(float value)
+        {
+            FiringRate = value;
         }
     }
 

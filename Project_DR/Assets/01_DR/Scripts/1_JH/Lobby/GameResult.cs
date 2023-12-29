@@ -39,7 +39,7 @@ public class GameResult
     {
         int gold = _quest.QuestData.ClearReward.QuestRewardData.GiveGold;
         int exp = _quest.QuestData.ClearReward.QuestRewardData.GiveEXP;
-        AddScore(quest, _quest.QuestData.name, gold, exp);
+        AddScore(quest, _quest.QuestData.Desc, gold, exp);
     }
     // 아이템 점수 추가
     public void AddItemScore(int _id)

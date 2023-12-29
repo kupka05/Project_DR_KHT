@@ -1,6 +1,7 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,6 +43,8 @@ public class SkillManager : MonoBehaviour
     public float GD_drillSize;      // 드릴 크기 증가
     public bool canAttack = false;  // 드릴 연마시 공격 해제
     IEnumerator grinderDrillRoutine;
+
+    public float effectDrillSize;
 
     [Header("DrillLanding")]
     public SkillEvent landingSkill;
@@ -109,11 +112,10 @@ public class SkillManager : MonoBehaviour
     {
         VibrateManager.instance.Vibrate(0.1f, 0.2f, 0.1f,ControllerHand.Right);
         VibrateManager.instance.Vibrate(0.1f, 0.2f, 0.1f,ControllerHand.Left);
-        for (int i = 0; i < 2; i++)
-        {
-            drills[i].drillHead.transform.localScale = new Vector3(TD_drillSize, TD_drillSize, TD_drillSize);
-            drills[i].MaxRange = 0.5f * TD_drillSize;
-        }
+
+        float drillSize = TD_drillSize + effectDrillSize;
+        SetDrillSize(drillSize);
+        
         Damage.instance.isTeradrill = true;
     }
     // 테라드릴 스킬 해제
@@ -121,12 +123,20 @@ public class SkillManager : MonoBehaviour
     {
         VibrateManager.instance.Vibrate(0.1f, 0.2f, 0.1f, ControllerHand.Right);
         VibrateManager.instance.Vibrate(0.1f, 0.2f, 0.1f, ControllerHand.Left);
+
+        float drillSize = 1 + effectDrillSize;
+        SetDrillSize(drillSize);
+       
+        Damage.instance.isTeradrill = false;
+    }
+
+    private void SetDrillSize(float size)
+    {
         for (int i = 0; i < 2; i++)
         {
-            drills[i].drillHead.transform.localScale = Vector3.one;
-            drills[i].MaxRange = 0.5f;
+            drills[i].drillHead.transform.localScale = new Vector3(size, size, size);
+            drills[i].MaxRange = 0.5f * size;
         }
-        Damage.instance.isTeradrill = false;
     }
     #endregion
     //  #######################  드릴 연마  #######################
@@ -297,7 +307,14 @@ public class SkillManager : MonoBehaviour
     // 공격 속도 스킬
     public void ActiveAttackRate(int id)
     {
+        float attackSpeed = Data.GetFloat(id, "Value1");
+        UserDataManager.Instance.effectAttackRate += attackSpeed;
 
+        // 드릴들의 공격속도 업데이트
+        for (int i = 0; i < 2; i++)
+        {
+            drills[i].SetEffectFireRate(UserData.GetAttackSpeed());            
+        }
     }
     // 치명타 공격력 스킬
     public void ActiveCritDamage(int id)
@@ -314,12 +331,20 @@ public class SkillManager : MonoBehaviour
     // 드릴 사이즈 스킬
     public void ActiveDrillSize(int id)
     {
+        DeactiveTeraDrill();    // 드릴사이즈 먼저 줄이고
 
-    }    
+        float drillSize = Data.GetFloat(id, "Value1");
+        effectDrillSize += drillSize;
+        UserDataManager.Instance.effectDrillSize = effectDrillSize;
+
+        SetDrillSize(effectDrillSize);
+    }
     // 최대체력 스킬
     public void ActiveMaxHP(int id)
     {
-
+        float maxHP = Data.GetFloat(id, "Value1");
+        UserData.EffectMaxHP(maxHP);
+        transform.GetChild(0).GetChild(0).GetComponent<PlayerHealth>().EffectMaxHPUpdate();
     }
 
 
@@ -334,6 +359,8 @@ public class SkillManager : MonoBehaviour
         LDskillCount = UserData.GetDrillLandingCount();
         activePcDistance = Data.GetFloat(999, "DLActiveHeight");
         SetGrinderSlider();
+
+        effectDrillSize = UserData.GetEffectDrillSize();
 
         //TD_collDown = Data.GetFloat(721100, "Value2");
         //TD_drillSize = Data.GetFloat(721100, "Value1");

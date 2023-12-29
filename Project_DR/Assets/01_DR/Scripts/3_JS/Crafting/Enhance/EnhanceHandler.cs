@@ -63,11 +63,15 @@ namespace Js.Crafting
         /*************************************************
          *                 Public Methods
          *************************************************/
-        public bool Craft()
+        public bool CheckCraft()
         {
-            // TODO: 강화시 모든 아이템 조건 체크 후
-            // 강화 성공시 true 나오도록 설정
+            // 조건이 없으므로 true 반환
             return true;
+        }
+
+        public void Craft()
+        {
+            // TODO: 강화 추가
         }
     }
 }

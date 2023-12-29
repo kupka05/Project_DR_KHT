@@ -91,7 +91,7 @@ public class PlayerHealth : MonoBehaviour
         health = UserData.GetHP();
 
         playerDamage.Health = health; // 체력 세팅해주기
-        SetMaxHealthUIUpdate();
+        SetMaxHealthUIUpdate(maxHealth);
         SetHealthUIUpdate() ;
     }
     // 데미지를 입을 때 체력 업데이트
@@ -101,11 +101,11 @@ public class PlayerHealth : MonoBehaviour
         SetHealthUIUpdate();
     }
 
-    private void SetMaxHealthUIUpdate()
+    private void SetMaxHealthUIUpdate(float value)
     {
         for (int i = 0; i < playerHealthUI.Length; i++)
         {
-            playerHealthUI[i].SetMaxHealth(maxHealth);
+            playerHealthUI[i].SetMaxHealth(value);
         }
     }
 
@@ -129,6 +129,23 @@ public class PlayerHealth : MonoBehaviour
             playerRigid.AddForce(transform.localPosition - targetPos * knockbackForce, ForceMode.Impulse);          
         }
 
+    }
+
+    // 최대체력 업데이트
+    public void EffectMaxHPUpdate()
+    {
+        float newMaxHealth = UserData.GetMaxHP();
+        health += UserData.GetEffectMaxHP();
+
+        if (health > newMaxHealth)
+        {
+            health = newMaxHealth;
+            playerDamage.Health = health;
+        }
+        //GFunc.Log($"체력 업그레이드 | 최대 체력 : {UserData.GetMaxHP()}, 더할 체력 : {UserData.GetEffectMaxHP()}, 더해진 체력 : {health}");
+
+        SetMaxHealthUIUpdate(newMaxHealth);
+        SetHealthUIUpdate();
     }
 
     // Regacy

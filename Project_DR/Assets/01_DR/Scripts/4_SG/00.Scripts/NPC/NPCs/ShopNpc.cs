@@ -28,7 +28,7 @@ public class ShopNpc : AnnouncementNPC
 
     private void AwakeInIt()
     {
-        npcID = (int)NPCID.Olive;
+        npcID = (int)LobbyNPC.Olive;
 
     }       // AwakeInIt()
 

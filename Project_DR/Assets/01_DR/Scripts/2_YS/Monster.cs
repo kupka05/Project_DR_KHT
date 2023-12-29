@@ -528,7 +528,7 @@ public class Monster : MonoBehaviour
                 nav.isStopped = true;
                 //GFunc.Log("nav.isStopped: " + nav.isStopped);
                 anim.SetTrigger(hashDie);
-                UserData.KillMonster(0, exp);
+                UserData.KillMonster(exp);
 
 
                     Invoke(nameof(Explosion), 3f);

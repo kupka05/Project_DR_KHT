@@ -32,19 +32,22 @@ namespace Js.Crafting
             CRAFTING = 0,     // 아이템 조합
             ENHANCE = 1       // 아이템 강화
         }
-        public Dictionary<int, ICraftingComponent> ItemCraftingDictionary       // 아이템 조합 크래프팅 딕셔너리
-           => _itemCraftingDictionary;
+        public Dictionary<int, ICraftingComponent> CraftingDictionary           // 아이템 조합 크래프팅 딕셔너리
+           => _craftingDictionary;
         public readonly int[] CRAFTING_TABLE_INDEX =
         {
             3_0000_1, 3_2000_1                                                  // 크래프팅 테이블 색인 인덱스
         };
+        public Anvil Anvil => _anvil;                                           // 아이템 조합 모루
 
 
         /*************************************************
          *                 Private Field
          *************************************************/
-        private Dictionary<int, ICraftingComponent> _itemCraftingDictionary
+        private Dictionary<int, ICraftingComponent> _craftingDictionary
             = new Dictionary<int, ICraftingComponent>();
+        private Anvil _anvil;
+        private string _anvilPrefabName = "Crafting_Anvil";                                   // 모루 프리팹 이름
 
 
         /*************************************************
@@ -82,7 +85,7 @@ namespace Js.Crafting
                 int id = idTable[i];
 
                 // 크래프팅 아이템 & 마지막 컴포넌트 생성
-                CraftingItem craftingItem = new CraftingItem();
+                CraftingItem craftingItem = new CraftingItem(id);
                 ICraftingComponent lastComponent = default;
 
                 // 조건 검색 & 추가
@@ -93,6 +96,7 @@ namespace Js.Crafting
                     int conditionID = conditions[j];
                     if (conditionID.Equals(0)) { continue; }
 
+                    GFunc.Log($"ConditionID {conditionID}");
                     // 두 가지 조건의 조합식을 가진 컴포짓 아이템을 생성한다.
                     CompositeItem compositeItem = CreateCompositeItemWithConditions(conditionID);
 
@@ -119,8 +123,25 @@ namespace Js.Crafting
 
                 // 크래프팅 아이템 & 딕셔너리에 추가
                 craftingItem.AddComponent(lastComponent);
-                _itemCraftingDictionary.Add(id, craftingItem);
+                _craftingDictionary.Add(id, craftingItem);
             }
+        }
+
+
+        /*************************************************
+         *                Public Methods
+         *************************************************/
+        // 지정한 위치에 모루를 생성한다.
+        // 생성 후 _anvil에 할당
+        public GameObject CreateAnvil(Vector3 pos)
+        {
+            GameObject prefab = Resources.Load<GameObject>(_anvilPrefabName);
+            GameObject anvil = Instantiate(prefab);
+            anvil.name = _anvilPrefabName;
+            anvil.transform.position = pos;
+            _anvil = anvil.GetComponent<Anvil>();
+
+            return anvil;
         }
 
 

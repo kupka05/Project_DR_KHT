@@ -12,6 +12,11 @@ public static class UserData
     {
         return UserDataManager.Instance.statData;
     }
+
+    public static GameResult GetResult()
+    {
+        return UserDataManager.Instance.result;
+    }
     #endregion
 
     #region #######################_골드_#######################
@@ -49,17 +54,17 @@ public static class UserData
     #region #######################_몬스터_######################
 
     /// <summary>일반 몬스터 처치 시 획득하는 경험치와 EXP </summary>
-    public static void KillMonster(int gold, int exp)
+    public static void KillMonster(int exp, int gold = 0)
     {
         UserDataManager.Instance.result.AddMonsterNormal(gold, exp);
     }
     /// <summary>엘리트 몬스터 처치 시 획득하는 경험치와 EXP </summary>
-    public static void KillElite(int gold, int exp)
+    public static void KillElite(int exp, int gold = 0)
     {
         UserDataManager.Instance.result.AddMonsterElite(gold, exp);
     }
     /// <summary>보스 몬스터 처치 시 획득하는 경험치와 EXP </summary>
-    public static void KillBoss(int gold, int exp)
+    public static void KillBoss(int exp, int gold = 0)
     {
         UserDataManager.Instance.result.AddMonsterBoss(gold, exp);
     }
@@ -71,12 +76,62 @@ public static class UserData
     public static void AddQuestScore(Quest quest)
     {
         UserDataManager.Instance.result.AddQuestScore(quest);
-    }
+    }   
     /// <summary>획득한 아이템을 결과에 추가하는 메서드 </summary>
     public static void AddItemScore(int id)
     {
         UserDataManager.Instance.result.AddItemScore(id);
     }
+
+    /// <summary>획득한 모든 골드를 계산해주는 메서드 </summary>
+    public static int GoldCalculator()
+    {
+        GameResult result = UserDataManager.Instance.result;
+
+        int monsterGold = result.monster.normal.gold + result.monster.elite.gold + result.monster.boss.gold;
+
+        int itemGold = 0;
+        for (int i = 0; i < result.item.Count; i++)
+        {
+            itemGold += result.item[i].gold;
+        }
+
+        int questGold = 0;
+        for (int i = 0; i < result.quest.Count; i++)
+        {
+            questGold += result.quest[i].gold;
+        }
+
+        return monsterGold + itemGold + questGold;
+    }
+
+    /// <summary>획득한 모든 골드를 계산해주는 메서드 </summary>
+    public static int ExpCalculator()
+    {
+        GameResult result = UserDataManager.Instance.result;
+
+        int monsterExp = result.monster.normal.exp + result.monster.elite.exp + result.monster.boss.exp;
+
+        int itemExp = 0;
+        for (int i = 0; i < result.item.Count; i++)
+        {
+            itemExp += result.item[i].exp;
+        }
+
+        int questExp = 0;
+        for (int i = 0; i < result.quest.Count; i++)
+        {
+            questExp += result.quest[i].exp;
+        }
+
+        return monsterExp + itemExp + questExp;
+    }
+
+    public static void ResetResult()
+    {
+        UserDataManager.Instance.result = new GameResult();
+    }
+
     #endregion
 
     #region ####################_UserData_#####################
@@ -89,7 +144,11 @@ public static class UserData
         {
             UserDataManager.Instance.MaxHP = UserDataManager.Instance.DefaultHP + UserDataManager.Instance.statData.upgradeHp[UserDataManager.Instance.HPLv - 1].sum;
         }
-        return UserDataManager.Instance.MaxHP;
+        return UserDataManager.Instance.MaxHP + GetEffectMaxHP();
+    }
+    public static float GetEffectMaxHP()
+    {
+        return (UserDataManager.Instance.MaxHP * (UserDataManager.Instance.effectMaxHP / 100));
     }
     /// <summary>현재 플레이어의 체력을 반환</summary>
     public static float GetHP()
@@ -109,7 +168,11 @@ public static class UserData
         UserDataManager.Instance.CurHP += amount;
     }
 
-
+    // 해당 ID의 스킬을 호출한다.
+    public static void ActiveSkill(int id)
+    {
+        SkillManager.instance.ActiveSkill(id);
+    }
 
     #endregion
 
@@ -165,7 +228,7 @@ public static class UserData
         {
             attackSpeed = attackSpeed - UserDataManager.Instance.statData.upgradeAtkSpd[UserDataManager.Instance.WeaponAtkRateLv - 1].sum1;
         }
-        return attackSpeed;
+        return attackSpeed + UserDataManager.Instance.effectAttackRate;
     }
     /// <summary>업그레이드가 반영된 최대 드릴 회전 속도를 반환</summary>
     public static float GetMaxSpin()
@@ -186,6 +249,25 @@ public static class UserData
             spinForce = spinForce + UserDataManager.Instance.statData.upgradeAtkSpd[UserDataManager.Instance.WeaponAtkRateLv - 1].sum3;
         }
         return spinForce;
+    }
+
+    public static float GetEffectDamage()
+    {
+        return UserDataManager.Instance.effectDamage;
+    }
+
+    public static float GetEffectCritDamage()
+    {
+        return UserDataManager.Instance.effectCritDamage;
+    }
+
+    public static float GetEffectDrillSize()
+    {
+        return UserDataManager.Instance.effectDrillSize;
+    }
+    public static void EffectMaxHP(float value)
+    {
+        UserDataManager.Instance.effectMaxHP += value;
     }
     #endregion
 
@@ -247,7 +329,7 @@ public static class UserData
     /// <summary>업그레이드가 반영된 드릴연마의 지속시간 반환</summary>
     public static float GetGrinderMaxTime()
     {
-        float grinderMaxTime = Data.GetFloat(721114, "Value3");
+        float grinderMaxTime = Data.GetFloat(721114, "Value4");
         if (UserDataManager.Instance.Skill2Lv_3 != 0)
         {
             grinderMaxTime = grinderMaxTime + UserDataManager.Instance.statData.upgradeSkill2[UserDataManager.Instance.Skill2Lv_3 - 1].sum3;
@@ -390,16 +472,16 @@ public static class UserData
             GameManager.instance.DestroyGameManager();
         }
 
-        // 퀘스트 재생성 & DB에서 정보 불러오기 & 아이템 초기화
-        Unit.CreateQuestFromDataTable();
-        Unit.LoadUserQuestDataFromDB();
+        // DB에서 정보 불러오기 & 퀘스트 생성 & 업데이트 & 아이템 초기화
+        Unit.UpdateDataFromDB();
         Unit.ResetInventory();
-
-        UserDataManager.Instance.isClear = false;
-        UserDataManager.Instance.isGameOver = false;
 
         UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
         UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
+
+        UserDataManager.Instance.effectCritDamage = 0;
+        UserDataManager.Instance.effectCritProbability = 0;
+        UserDataManager.Instance.effectDamage = 0;
     }
     public static bool ClearCheck()
     {
@@ -407,12 +489,12 @@ public static class UserData
     }
     public static void GameOver()
     {
-        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.isGameOver = true;
     }
 
     public static void ClearDungeon()
     {
+        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.SaveClearData();
         UserDataManager.Instance.isClear = true;
     }

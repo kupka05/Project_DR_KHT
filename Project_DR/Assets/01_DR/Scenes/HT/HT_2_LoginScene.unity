@@ -1979,50 +1979,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -255.8, z: 0}
---- !u!1 &1062424930
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1062424932}
-  - component: {fileID: 1062424931}
-  m_Layer: 0
-  m_Name: QuestManagerCreator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1062424931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1062424930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0aee28411af896647a8831248536f75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1062424932
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1062424930}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1147281398
 GameObject:
   m_ObjectHideFlags: 0
@@ -2522,7 +2478,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1354013551
 MonoBehaviour:
@@ -8308,6 +8264,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!1 &624268137138975896
 GameObject:
   m_ObjectHideFlags: 0
@@ -10594,6 +10551,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!4 &847388283857355281
 Transform:
   m_ObjectHideFlags: 0
@@ -12180,6 +12138,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!23 &1040113587417731907
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -19129,6 +19088,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!136 &1802062037129507571
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -23506,6 +23466,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!1 &2220389717281967862
 GameObject:
   m_ObjectHideFlags: 0
@@ -30106,6 +30067,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!4 &2863597733210573257
 Transform:
   m_ObjectHideFlags: 0
@@ -38650,6 +38612,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!4 &3719865056914463971
 Transform:
   m_ObjectHideFlags: 0
@@ -38817,6 +38780,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!4 &3719865058147859305
 Transform:
   m_ObjectHideFlags: 0
@@ -42193,6 +42157,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!136 &4047185360849687435
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -42888,6 +42853,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!4 &4096997679530526907
 Transform:
   m_ObjectHideFlags: 0
@@ -50216,6 +50182,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!1 &4803334785710898568
 GameObject:
   m_ObjectHideFlags: 0
@@ -50676,6 +50643,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!1 &4853969519600664091
 GameObject:
   m_ObjectHideFlags: 0
@@ -72521,6 +72489,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!1 &7079520541311170839
 GameObject:
   m_ObjectHideFlags: 0
@@ -72845,6 +72814,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!136 &7130124194769379174
 CapsuleCollider:
   m_ObjectHideFlags: 0

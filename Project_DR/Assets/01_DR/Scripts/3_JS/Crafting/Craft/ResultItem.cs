@@ -40,11 +40,24 @@ namespace Js.Crafting
         /*************************************************
          *               Interface Methods
          *************************************************/
-        public bool Craft()
+        public bool CheckCraft()
         {
-            Unit.AddFieldItem(_spawnPos, _giveAmount);
-
+            // 조건이 없으므로 true 반환
             return true;
+        }
+
+        public void Craft()
+        {
+            // 아이템 스폰
+            Transform parent = CraftingManager.Instance.Anvil.transform;
+            GameObject item = Unit.AddAnvilItem(_spawnPos, _itemID, parent, _giveAmount);
+
+            // 물리효과 제거
+            Rigidbody rigidbody = item.GetComponent<Rigidbody>();
+            rigidbody.isKinematic = true;
+
+            // 디버그
+            GFunc.Log($"[{_itemID}]아이템 [{_itemName}]이 [{_giveAmount}] 갯수만큼 제작되었습니다.");
         }
     }
 }

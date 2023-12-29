@@ -118,6 +118,15 @@ public partial class UserDataManager
     public float _weaponCritDamage;
     public float _weaponAtkRate;
 
+    [Header("SkillEffect")]
+    public float effectDamage;
+    public float effectCritDamage;
+    public float effectCritProbability;
+    public float effectAttackRate;
+    public float effectMaxHP;
+    public float effectDrillSize;
+    
+
     [Header("Weapon Data")]
     public float weaponAtk;
     public float weaponCritRate;
@@ -180,12 +189,12 @@ public partial class UserDataManager
     public static Item[] items = new Item[Inventory.MaxCapacity];
 
     [Header("Quest Data")]
-    public string QuestMain;                                                             
-    public string DebugQuest;
-    public static List<Quest> QuestList => _questList;                                       // 보유 퀘스트 리스트
-    public static Dictionary<int, Quest> QuestDictionary => _questDictionary;                // 보유 퀘스트 딕셔너리화
     private static List<Quest> _questList = new List<Quest>();                               
     private static Dictionary<int, Quest> _questDictionary = new Dictionary<int, Quest>();    
+    public static List<Quest> QuestList => _questList;                          // 보유 퀘스트 리스트
+    public static Dictionary<int, Quest> QuestDictionary => _questDictionary;   // 보유 퀘스트 딕셔너리화
+    public string QuestMain => PlayerDataManager.QuestMain;                     // 메인 퀘스트
+    public string DebugQuest;
 
     [Header("Result Data")]
     public GameResult result = new GameResult();

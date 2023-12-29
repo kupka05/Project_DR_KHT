@@ -6,6 +6,7 @@ namespace Js.Crafting
 {
     public interface ICraftingComponent
     {
-        bool Craft();
+        bool CheckCraft();
+        void Craft();
     }
 }

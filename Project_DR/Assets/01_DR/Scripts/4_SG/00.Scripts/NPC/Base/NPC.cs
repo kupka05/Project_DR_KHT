@@ -7,16 +7,28 @@ using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum NPCID
+public enum GhostNPCID
 {
-    Olive = 1111201,
+    Ghost_IE_FT = 1111206,
     Ghost_I_E = 1111202,
     Ghost_N_S = 1111203,
     Ghost_P_J = 1111204,
-    Ghost_F_T = 1111205,
-    Ghost_IE_FT = 1111206
+    Ghost_F_T = 1111205
+}
+public enum NPCID
+{         
+    Klau_Random = 1110101,
+    Decius_Random = 1111601,
+    Tregal_Random = 1110301,
+    Tutis_Random = 1111701,
+    Dent_Random = 1110501,
+    Saektus_Random = 1110401
 
+}
 
+public enum LobbyNPC
+{
+    Olive = 1111201
 }
 
 public enum RewardID
@@ -313,6 +325,7 @@ public class NPC : MonoBehaviour
     /// <param name="_ComunicationTableId">대사테이블의 ID</param>
     public virtual void EnQueueConversation(int _comunicationTableId)
     {
+        NpcCanvas.isOutPutChoice = false;
         nowDialogueId = _comunicationTableId;
         string converationText = (string)DataManager.Instance.GetData(_comunicationTableId, "OutPutText", typeof(string));
 
@@ -338,7 +351,7 @@ public class NPC : MonoBehaviour
         {
             NpcCanvas.OutPutConversation(converationText.Dequeue());
         }
-        else
+        else if (NpcCanvas.isOutPutChoice == false)
         {
             // 선택지 출력해야함
             NpcCanvas.OutPutChoices(nowDialogueId);
@@ -648,7 +661,7 @@ public class NPC : MonoBehaviour
         switch (_aniType)
         {
             case NPCAnimationType.Idle:
-                aniname = "Ani_Motion_Idle";        // 아직 이름모름
+               aniname = "Ani_Motion_Idle";
                 animator.Play(aniname);
                 break;
 

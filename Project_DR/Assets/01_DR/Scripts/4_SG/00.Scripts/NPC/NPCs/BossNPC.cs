@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Js.Quest;
 using System.Text;
-
+using System;
 
 public class BossNPC : NPC
 {
+    public enum BossLevel { Floor1, Floor2, Floor3, Floor4, Floor5 };
+
+    public BossLevel boss;
+    private int conversationID;
 
     protected override void OnDestroy()
     {
@@ -14,7 +18,24 @@ public class BossNPC : NPC
     }
     private void AwakeInIt()
     {
-        npcID = 6872;
+        switch(boss)
+        {
+            case BossLevel.Floor1:
+                npcID = 6872;
+                break;
+            case BossLevel.Floor2:
+                npcID = 6873;
+                break;
+            case BossLevel.Floor3:
+                npcID = 6874;
+                break;
+            case BossLevel.Floor4:
+                npcID = 6875;
+                break;
+            case BossLevel.Floor5:
+                npcID = 6876;
+                break;
+        }
 
     }       // AwakeInIt()
 
@@ -62,20 +83,36 @@ public class BossNPC : NPC
 
     }       // ConvertionEventInIt()
 
+
+
+    public void BossMeet()
+    {
+        GFunc.Log("대화를 시작한다.");
+        StartConvertion();
+        ClearBossMeetQuest();
+    }
+
+
     /// <summary>
     /// 대화 시작
     /// </summary>
     protected override void StartConvertion()
     {
+        // 플레이어 화면에 UI 캔버스 붙여주기
         if (Camera.main)
         {
             canvasObj.transform.parent = Camera.main.transform;
-            canvasObj.transform.localPosition = new Vector3(0.2f,-0.35f,1.2f);
+            canvasObj.transform.localPosition = new Vector3(0.2f,-0.35f,0.8f);
             canvasObj.transform.localRotation = Quaternion.identity;
         }
+        
+        // 화면 어둡게 페이드인
         GameManager.instance.FadeIn();
-
+        
+        // 캔버스 켜주기
         OnCanvasObj();
+
+        // npc 대화 선택
         PickConversation(npcID);
         //base.PickConversationEvent(npcID);
     }       // StartConvertion()
@@ -106,17 +143,11 @@ public class BossNPC : NPC
         OffCanvasObj();
         GameManager.instance.FadeOut();
         GFunc.Log("전투를 시작한다.");
+        GFunc.ChoiceEvent(conversationID);
 
-        //GetComponent<Boss>().StartAttack();
-        
+        GetComponent<Boss>().StartAttack();
+
     }       // EndConveration()
-
-
-    public void BossMeet()
-    {
-        GFunc.Log("대화를 시작한다.");
-        StartConvertion();
-    }
 
 
     public void PickConversation(int _npcId)
@@ -125,9 +156,6 @@ public class BossNPC : NPC
         string conversation = Data.GetString(_npcId, "ConversationTableID");
         int[] conversationIds = GFunc.SplitIds(conversation);
 
-        // 디버그용
-        //Unit.ChangeQuestStateToInProgress(31_1_1_001);
-
         int conversationId = FindQuestConversationID(conversationIds);
 
         if (conversationId == -1)
@@ -135,7 +163,7 @@ public class BossNPC : NPC
             GFunc.Log("찾으려는 현재 진행중인 퀘스트 ID가 없습니다.");
             return;
         }
-        GFunc.Log(conversationId);
+        conversationID = conversationId;
 
         EnQueueConversation(conversationId);
         DeQueueConversation();
@@ -165,6 +193,19 @@ public class BossNPC : NPC
         }
         return -1;
     }
+
+
+    public void ClearBossMeetQuest()
+    {
+        QuestCallback.OnBossMeetCallback(npcID);   // 상태값 갱신 및 자동 완료
+
+        Quest curQuest = Unit.GetInProgressMainQuest();
+        int questID = curQuest.QuestData.ID;
+        GFunc.Log($"현재 진행중인 메인 퀘스트 ID : {questID}");
+
+        Unit.ClearQuestByID(questID);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
+    }
+
 
 
 

@@ -15,13 +15,14 @@ public class BounceSmallBullet : MonoBehaviour
     public float attack = 0.3f;
     
     public float damage = default;
-    public float destoryTime = default;
 
     public Transform target;
 
     public float damageRadius = 1.0f;
 
     public bool isDamage = false;
+
+    public float destroyTime = default;
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +34,7 @@ public class BounceSmallBullet : MonoBehaviour
 
         damageCollider.Damage = damage;
 
-        Invoke(nameof(Return), destoryTime);
+        Invoke(nameof(ReturnBullet), destroyTime);
     }
 
     void Update()
@@ -41,16 +42,16 @@ public class BounceSmallBullet : MonoBehaviour
         DealDamageToNearbyObjects();
     }
 
+    public void ReturnBullet()
+    {
+        // 리턴 함수
+    }
+
     public virtual void GetData(int BounceSmallTableID)
     {
         //6913
         damage = (float)DataManager.Instance.GetData(BounceSmallTableID, "Damage", typeof(float));
-        destoryTime = (float)DataManager.Instance.GetData(BounceSmallTableID, "DesTime", typeof(float));
-    }
-
-    void Return()
-    {
-        ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+        destroyTime = (float)DataManager.Instance.GetData(BounceSmallTableID, "DesTime", typeof(float));
     }
 
     void DealDamageToNearbyObjects()

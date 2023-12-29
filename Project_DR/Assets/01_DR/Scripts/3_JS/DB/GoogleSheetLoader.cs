@@ -19,7 +19,7 @@ public class GoogleSheetLoader : MonoBehaviour
         // JS
         "Item_Potion_Table", "Item_Bomb_Table", "Item_Material_Table", "Item_Quest_Table",
         "Item_Shop_Table", "BossMonster_Table", "AttackPattern_Table", "Quest_Table", "Quest_Reward_Table",
-        "Crafting_Table", "Crafting_Condition_Table", "Enhance_Table", "Bonus_Stat_Table",
+        "Crafting_Table", "Crafting_Condition_Table", "Enhance_Table", "Enhance_Condition_Table", "Bonus_Stat_Table",
 
         // JH
         "Player_Table", "Drill_Table", "Skill_Table", "SkillEffect_Table", "MBTI_Table",
@@ -37,7 +37,8 @@ public class GoogleSheetLoader : MonoBehaviour
         "Floor3_MonsterSpawn_Table","Floor4_MonsterSpawn_Table","Floor5_MonsterSpawn_Table",
         "BattleRoomObjectCreate_Table","EventRoomObjectCreate_Table","NullRoomObjectCreate_Table",
         "LightObject_Table","EnvObject_Table","MatObject_Table",
-        "NPC_Table","NPC_Comunication_Table"
+        "NPC_Table","NPC_Comunication_Table","BossRoomObjectCreate_Table"
+
     };
 
     // 코루틴에서 데이터를 반환하고

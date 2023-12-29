@@ -167,12 +167,12 @@ public class ObjectPoolManager : MonoBehaviour
                     rigidbodyBounce.velocity = Vector3.zero;
                     rigidbodyBounce.angularVelocity = Vector3.zero;
                 }
-                //SphereCollider sphereCollider = obj.GetComponent<SphereCollider>();
-                //if(sphereCollider != null)
-                //{
-                //    sphereCollider.isTrigger = false;
-                //}
-                
+                SphereCollider sphereCollider = obj.GetComponent<SphereCollider>();
+                if (sphereCollider != null)
+                {
+                    sphereCollider.isTrigger = true;
+                }
+
                 break;
 
             case ProjectileType.BOUNCEBULLET:

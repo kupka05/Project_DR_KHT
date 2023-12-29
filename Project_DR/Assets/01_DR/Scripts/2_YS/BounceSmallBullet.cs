@@ -15,6 +15,7 @@ public class BounceSmallBullet : MonoBehaviour
     public float attack = 0.3f;
     
     public float damage = default;
+    public float destoryTime = default;
 
     public Transform target;
 
@@ -31,6 +32,8 @@ public class BounceSmallBullet : MonoBehaviour
         //rigid.velocity = transform.forward * 10.0f;
 
         damageCollider.Damage = damage;
+
+        Invoke(nameof(Return), destoryTime);
     }
 
     void Update()
@@ -42,6 +45,12 @@ public class BounceSmallBullet : MonoBehaviour
     {
         //6913
         damage = (float)DataManager.Instance.GetData(BounceSmallTableID, "Damage", typeof(float));
+        destoryTime = (float)DataManager.Instance.GetData(BounceSmallTableID, "DesTime", typeof(float));
+    }
+
+    void Return()
+    {
+        ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
     }
 
     void DealDamageToNearbyObjects()

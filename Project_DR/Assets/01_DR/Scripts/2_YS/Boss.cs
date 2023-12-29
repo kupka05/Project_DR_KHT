@@ -181,7 +181,7 @@ public class Boss : MonoBehaviour
     {
         //보스
         maxHp = (float)DataManager.Instance.GetData(bossId, "BossHP", typeof(float));
-        patternInterval = (float)DataManager.Instance.GetData(bossId, "patternChange", typeof(float)); //이건 하나만
+        patternInterval = (float)DataManager.Instance.GetData(bossId, "PatternChange", typeof(float)); //이건 하나만
 
         //소형 투사체 6910
         bulletCount = (float)DataManager.Instance.GetData(bossProjectileId, "Duration", typeof(float));

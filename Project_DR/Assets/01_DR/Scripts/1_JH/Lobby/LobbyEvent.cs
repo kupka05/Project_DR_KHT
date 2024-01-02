@@ -199,6 +199,9 @@ public class LobbyEvent : MonoBehaviour
 
         // 옵저버 등록
         UserDataManager.Instance.OnUserDataUpdate += UpdatePlayerStatusUI;
+
+        Vector3 itemPos = new Vector3(23, 1.5f, -42);
+        Unit.AddFieldItem(itemPos, 5304);
     }
 
     // ############################### 데이터 불러오기 ###############################

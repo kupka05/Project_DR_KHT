@@ -17,27 +17,32 @@ public class TEST : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            UserDataManager.QuestList[0].QuestState.PrintCurrentState();
-            _questList = UserDataManager.QuestList;
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    UserDataManager.QuestList[0].QuestState.PrintCurrentState();
+        //    _questList = UserDataManager.QuestList;
+        //}
 
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Unit.AddInventoryItem(5001);
-            UserDataManager.QuestList[0].ChangeToNextState();
-            UserDataManager.QuestList[0].QuestState.PrintCurrentState();
-        }
+        //if (Input.GetKeyDown(KeyCode.W))
+        //{
+        //    Unit.AddInventoryItem(5001);
+        //    UserDataManager.QuestList[0].ChangeToNextState();
+        //    UserDataManager.QuestList[0].QuestState.PrintCurrentState();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            UserDataManager.QuestList[0].ClearQuest();
-        }
+        //if (Input.GetKeyDown(KeyCode.E))
+        //{
+        //    UserDataManager.QuestList[0].ClearQuest();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            QuestCallback.OnInventoryCallback(5001);
-        }
+        //if (Input.GetKeyDown(KeyCode.A))
+        //{
+        //    QuestCallback.OnInventoryCallback(5001);
+        //}
+    }
+
+    public void OnClick()
+    {
+        GFunc.Log("OnClick");
     }
 }

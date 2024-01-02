@@ -1,3 +1,4 @@
+using Js.Crafting;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -328,6 +329,10 @@ namespace BNG {
                 Grabbable tempGrab = Instantiate(grab);
                 grab.gameObject.SetActive(false);
                 grab = tempGrab;
+                // 캔버스 끄기
+                grab.transform.Find("Canvas").gameObject.SetActive(false);
+                // 강화 캔버스 켜기
+                gameObject.GetComponent<EnhanceSlot>().InSlot();
             }
 
             // 아닐 경우 기존 grab 사용
@@ -553,10 +558,14 @@ namespace BNG {
                 }
             }
 
-            // 강화 슬롯일 경우 강화 슬롯에서 나온 n초 후 아이템 삭제
+            // 강화 슬롯일 경우
             if (isEnhance)
             {
+                // 1초 후 삭제
                 Destroy(HeldItem.gameObject, 1.0f);
+
+                // 강화 UI 캔버스 끄기
+                gameObject.GetComponent<EnhanceSlot>().OutSlot();
             }
 
             HeldItem = null;

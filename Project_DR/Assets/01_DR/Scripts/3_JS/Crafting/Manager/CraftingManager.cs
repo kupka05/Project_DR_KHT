@@ -41,14 +41,21 @@ namespace Js.Crafting
         public Anvil Anvil => _anvil;                                           // 아이템 조합 모루
         public bool IsEnhance => _isEnhance;                                    // 강화중인지 외부에서 체크하는 함수
 
+
         /*************************************************
          *                 Private Field
          *************************************************/
         private Dictionary<int, ICraftingComponent> _craftingDictionary
             = new Dictionary<int, ICraftingComponent>();
+        private List<ICraftingComponent> _craftingList
+            = new List<ICraftingComponent>();
+        private List<ICraftingComponent> _enhanceList
+            = new List<ICraftingComponent>();
         [SerializeField] private Anvil _anvil;
         private string _anvilPrefabName = "Crafting_Anvil";                     // 모루 프리팹 이름
+        private string _enhancePrefabName = "Crafting_Enhance";                 // 강화소 프리팹 이름
         private bool _isEnhance = false;
+
 
         /*************************************************
          *                  Unity Events
@@ -121,15 +128,17 @@ namespace Js.Crafting
                     // 타입이 크래프팅일 경우
                     case Type.CRAFTING:
 
-                        // 결과 아이템 생성
+                        // 결과 아이템 생성 & 리스트에 추가
                         lastComponent = CreateResultItem(id);
+                        _craftingList.Add(craftingItem);
                         break;
 
                     // 타입이 강화일 경우
                     case Type.ENHANCE:
 
-                        // 강화 핸들러 생성
+                        // 강화 핸들러 생성 & 리스트에 추가
                         lastComponent = CreateEnhanceHandler(id);
+                        _enhanceList.Add(craftingItem);
                         break;
                 }
 
@@ -154,6 +163,32 @@ namespace Js.Crafting
             _anvil = anvil.GetComponent<Anvil>();
 
             return anvil;
+        }
+
+        // 지정한 위치에 강화소를 생성한다.
+        public GameObject CreateEnhance(Vector3 pos)
+        {
+            GameObject prefab = Resources.Load<GameObject>(_enhancePrefabName);
+            GameObject enhance = Instantiate(prefab);
+            enhance.name = _anvilPrefabName;
+            enhance.transform.position = pos;
+
+            return enhance;
+        }
+
+        // ID로 딕셔너리에 있는 크래프팅 아이템을 반환
+        public CraftingItem SearchDictionaryByID(int id)
+        {
+            return _craftingDictionary[id] as CraftingItem;
+        }
+
+        // 강화 크래프팅 아이템을 index로 검색 후 반환한다.
+        public CraftingItem FindEnhanceByID(int index)
+        {
+            CraftingItem item = _enhanceList[index] as CraftingItem;
+
+            GFunc.Log($"item {item}");
+            return item;
         }
 
 

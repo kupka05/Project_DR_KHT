@@ -69,9 +69,42 @@ namespace Js.Crafting
             return true;
         }
 
-        public void Craft()
+        public bool CheckEnhance()
         {
-            // TODO: 강화 추가
+            // 조건이 없으므로 true 반환
+            return true;
+        }
+
+        public void Craft() { }
+
+        // 강화 시도
+        public void Enhance(int type)
+        {
+            // 강화 성공시
+            if (GetRandomProbability(_successProbabilities[type]))
+            {
+                //TODO 강화 능력치 추가
+                GFunc.Log($"[{type}] 강화 성공! 확률[{_successProbabilities[type]}] ");
+                //UserData.ActiveSkill(_statID, _statAmounts[type]);
+            }
+        }
+
+        /*************************************************
+         *                Private Methods
+         *************************************************/
+        // 랜덤 확률 돌리기
+        // [true = 성공] / [false = 실패]
+        private bool GetRandomProbability(int probability)
+        {
+            int randomprobability = Random.Range(0, 101);
+            if (randomprobability <= probability)
+            {
+                // 성공할 경우
+                return true;
+            }
+
+            // 실패할 경우
+            return false;
         }
     }
 }

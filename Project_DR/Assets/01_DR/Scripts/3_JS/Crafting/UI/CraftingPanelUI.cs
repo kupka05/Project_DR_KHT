@@ -28,7 +28,7 @@ namespace Js.Crafting
         {
             // Init
             gameObject.SetActive(true);
-            RectTransform rectTransform = GetComponent<RectTransform>();
+            RectTransform rectTransform = this.GetComponent<RectTransform>();
             rectTransform.localPosition = Vector3.zero;
             rectTransform.localScale = Vector3.one;
             _text.text = ConvertText(id);
@@ -42,7 +42,7 @@ namespace Js.Crafting
         private string ConvertText(int id)
         {
             string itemName = Data.GetString(id, "Name");
-            string text = GFunc.SumString(itemName, ":");
+            string text = GFunc.SumString(itemName, " ▶");
             int[] conditionKeyIDs =
             {
                Data.GetInt(id, "Condition_1_KeyID"),

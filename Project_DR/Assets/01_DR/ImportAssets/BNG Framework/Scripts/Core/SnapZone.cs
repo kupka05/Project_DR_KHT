@@ -328,6 +328,8 @@ namespace BNG {
                 Grabbable tempGrab = Instantiate(grab);
                 grab.gameObject.SetActive(false);
                 grab = tempGrab;
+                // 캔버스 끄기
+                grab.transform.Find("Canvas").gameObject.SetActive(false);
             }
 
             // 아닐 경우 기존 grab 사용

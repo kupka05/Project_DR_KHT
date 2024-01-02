@@ -18,7 +18,7 @@ namespace Js.Crafting
         /*************************************************
          *                Private Fields
          *************************************************/
-        private const int TABLE_ID = 3_0000_1;                                          // 테이블 색인 ID
+        [SerializeField] private int TABLE_ID = 3_0000_1;                               // 테이블 색인 ID
         [SerializeField] private Transform _content = default;                          // 스크롤 패널 Content
         [SerializeField] private GameObject _panelPrefab = default;                     // 기본 패널 프리팹
         [SerializeField] private List<CraftingPanelUI> _panelList;                      // 패널 리스트
@@ -55,6 +55,7 @@ namespace Js.Crafting
             GameObject panel = Instantiate(_panelPrefab);
             panel.transform.SetParent(parent);
             panel.name = "Panel";
+            panel.transform.rotation = parent.rotation;
 
             return panel.GetComponent<CraftingPanelUI>();
         }

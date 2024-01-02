@@ -41,6 +41,7 @@ namespace Js.Crafting
         public Anvil Anvil => _anvil;                                           // 아이템 조합 모루
         public bool IsEnhance => _isEnhance;                                    // 강화중인지 외부에서 체크하는 함수
 
+
         /*************************************************
          *                 Private Field
          *************************************************/
@@ -49,6 +50,7 @@ namespace Js.Crafting
         [SerializeField] private Anvil _anvil;
         private string _anvilPrefabName = "Crafting_Anvil";                     // 모루 프리팹 이름
         private bool _isEnhance = false;
+
 
         /*************************************************
          *                  Unity Events

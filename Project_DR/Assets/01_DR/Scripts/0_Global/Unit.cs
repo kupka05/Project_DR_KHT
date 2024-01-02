@@ -51,6 +51,8 @@ public static class Unit
     {
         UserDataManager.ResetInventory();
     }
+
+
     /*************************************************
      *           Public Crafting Methods
      *************************************************/
@@ -58,6 +60,12 @@ public static class Unit
     public static GameObject CreateAnvil(Vector3 pos)
     {
         return CraftingManager.Instance.CreateAnvil(pos);
+    }
+
+    // 강화소를 생성한다. 크래프팅용
+    public static GameObject CreateEnhance(Vector3 pos)
+    {
+        return CraftingManager.Instance.CreateEnhance(pos);
     }
 
 

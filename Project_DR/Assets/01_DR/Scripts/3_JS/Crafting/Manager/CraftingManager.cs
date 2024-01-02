@@ -53,6 +53,7 @@ namespace Js.Crafting
             = new List<ICraftingComponent>();
         [SerializeField] private Anvil _anvil;
         private string _anvilPrefabName = "Crafting_Anvil";                     // 모루 프리팹 이름
+        private string _enhancePrefabName = "Crafting_Enhance";                 // 강화소 프리팹 이름
         private bool _isEnhance = false;
 
 
@@ -162,6 +163,17 @@ namespace Js.Crafting
             _anvil = anvil.GetComponent<Anvil>();
 
             return anvil;
+        }
+
+        // 지정한 위치에 강화소를 생성한다.
+        public GameObject CreateEnhance(Vector3 pos)
+        {
+            GameObject prefab = Resources.Load<GameObject>(_enhancePrefabName);
+            GameObject enhance = Instantiate(prefab);
+            enhance.name = _anvilPrefabName;
+            enhance.transform.position = pos;
+
+            return enhance;
         }
 
         // ID로 딕셔너리에 있는 크래프팅 아이템을 반환

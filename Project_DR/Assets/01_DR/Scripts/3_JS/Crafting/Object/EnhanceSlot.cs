@@ -7,47 +7,26 @@ namespace Js.Crafting
     public class EnhanceSlot : MonoBehaviour
     {
         /*************************************************
-         *                 Public Fields
-         *************************************************/
-
-
-        /*************************************************
          *                 Private Fields
         *************************************************/
         [SerializeField] private CraftingUI _craftingUI;
 
 
         /*************************************************
-         *                  Unity Events
-        *************************************************/
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
-
-        /*************************************************
          *                 Public Methods
          *************************************************/
-        public void OnSlot(bool IsDrillInserted)
+        // 슬롯에 드릴이 들어올 떄 호출
+        public void InSlot()
         {
-            // 슬롯에 드릴이 들어갔을 경우
-            if (IsDrillInserted)
-            {
+            // 캔버스의 표시 상태를 초기 상태로 변경
+            _craftingUI.ResetCanvasActive();
+        }
 
-            }
-
-            // 슬롯에서 드릴이 빠져나왔을 경우
-            else
-            {
-
-            }
+        // 슬롯에 드릴이 나갈 떄 호출
+        public void OutSlot()
+        {
+            // 캔버스를 전부 끔
+            _craftingUI.DisableAllCanvas();
         }
     }
 }

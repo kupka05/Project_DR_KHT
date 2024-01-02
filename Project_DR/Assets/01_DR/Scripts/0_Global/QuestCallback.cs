@@ -16,7 +16,7 @@ namespace Js.Quest
         public static event Action<int, int> BossKillCallback;      // [완료] -> [2] 보스 킬
         public static event Action<int, int> UseItemCallback;       // [3] 아이템 사용
         public static event Action<int, int> MonsterKillCallback;   // [4] 몬스터 처치
-        public static event Action<int, int> CraftingCallback;      // [5] 크래프팅
+        public static event Action<int, int> CraftingCallback;      // [완료] -> [5] 크래프팅
         public static event Action<int, int> ObjectCallback;        // [6] 오브젝트
         public static event Action<int, int> InventoryCallback;     // [완료] -> [7] 인벤토리(증정)
         public static event Action<int, int> DialogueCallback;      // [8] NPC와 대화

@@ -514,6 +514,45 @@ namespace Rito.InventorySystem
             }
         }
 
+        /// <summary> ID로 인벤토리에 있는 아이템 보유량 확인 </summary>
+        public int FindInventoryItemForID(int id)
+        {
+            List<int> itemIndexList = new List<int>();
+            List<int> itemAmountList = new List<int>();
+            int itemTotalAmount = default;
+            for (int i = 0; i < Items.Length; i++)
+            {
+                // 아이템 보유량 체크 및 인덱스 보관
+                // 인벤토리에 있는 아이템 ID와 받아온 ID가 일치할 경우
+                if (id.Equals(Items[i]?.Data.ID))
+                {
+                    int itemCount = default;
+                    // 셀 수 있는 아이템일 경우
+                    if (Items[i] is CountableItem ci)
+                    {
+                        GFunc.Log($"ci.amount = {ci.Amount}");
+                        // 아이템 총 보유량 & 보유량 리스트 추가
+                        itemTotalAmount += ci.Amount;
+                        itemCount = ci.Amount;
+                    }
+
+                    // 아닐 경우
+                    else
+                    {
+                        itemTotalAmount++;
+                        itemCount = 1;
+                    }
+
+                    // 인덱스 & 카운트 보관
+                    itemIndexList.Add(i);
+                    itemAmountList.Add(itemCount);
+                }
+            }
+
+            // 아이템 갯수 반환
+            return itemTotalAmount;
+        }
+
         /// <summary> 두 인덱스의 아이템 위치를 서로 교체 </summary>
         public void Swap(int indexA, int indexB)
         {

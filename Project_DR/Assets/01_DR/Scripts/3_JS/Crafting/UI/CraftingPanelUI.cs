@@ -12,34 +12,62 @@ namespace Js.Crafting
         /*************************************************
          *                Public Fields
          *************************************************/
-        public TMP_Text Text => _text;          // UI에 표시될 텍스트
-
+        public TMP_Text Text => _text;                             // UI에 표시될 텍스트
+        public CraftingCanvas.Type CurrentType => _craftingCanvas.CurrentType;
 
         /*************************************************
          *                Private Fields
          *************************************************/
+        [SerializeField] private int _id;
+        [SerializeField] private int _index;                       // 패널 순서 인덱스
+        [SerializeField] private bool _isNormal = true;            // 텍스트 세팅 형태
+        [SerializeField] private CraftingCanvas _craftingCanvas;
+        [SerializeField] private Button _button;
         [SerializeField] private TMP_Text _text;
+        [SerializeField] private bool _isEnhance;                  // 강화 패널인지 여부
 
 
         /*************************************************
          *                Public Methods
          *************************************************/
-        public void Initialize(int id)
+        public void Initialize(int id, int index, CraftingCanvas craftingCanvas)
         {
             // Init
+            _id = id;
+            _index = index;
+            _craftingCanvas = craftingCanvas;
             gameObject.SetActive(true);
-            RectTransform rectTransform = this.GetComponent<RectTransform>();
+            RectTransform rectTransform = GetComponent<RectTransform>();
             rectTransform.localPosition = Vector3.zero;
             rectTransform.localScale = Vector3.one;
             _text.text = ConvertText(id);
+            _button = GetComponent<Button>();
+            _button?.onClick.AddListener(OnClick);
         }
 
 
         /*************************************************
          *               Private Methods
          *************************************************/
-        // 크래프팅에 맞게 텍스트를 변경 후 반환한다.
+        // 형태에 맞게 텍스트를 변경 후 반환한다.
         private string ConvertText(int id)
+        {
+            // 기본 형태일 경우
+            if (_isNormal)
+            {
+                return ConvertTextForNormal(id);
+            }
+
+            // 보너스 형태일 경우
+            else
+            {
+                return ConvertTextForBonus(id);
+            }
+        }
+
+        // 보너스 스텟형 텍스트 세팅
+        // 기본형 텍스트 세팅
+        private string ConvertTextForNormal(int id)
         {
             string itemName = Data.GetString(id, "Name");
             string text = GFunc.SumString(itemName, " ▶");
@@ -70,6 +98,18 @@ namespace Js.Crafting
             return text.Substring(0, text.Length - 1);
         }
 
+        // 기본형 텍스트 세팅
+        private string ConvertTextForBonus(int id)
+        {
+            string itemName = Data.GetString(id, "Name");
+            string text = GFunc.SumString(itemName, " ▶");
+            string statAmount = Data.GetString(id, "Stat_Amount");
+            string statProbaility = Data.GetString(id, "Success_Probability");
+            text = GFunc.SumString(text, "증가량: ", statAmount, "% ", "성공 확률: ", statProbaility, "%");
+
+            return text;
+        }
+
         // id가 0이 아닐 경우 텍스트 추가
         private string AddTextIfIDNotZero(int id, string name, int amount)
         {
@@ -80,6 +120,66 @@ namespace Js.Crafting
             }
 
             return text;
+        }
+
+
+        /*************************************************
+         *                Public Methods
+         *************************************************/
+        // 클릭시 관련 동작
+        public void OnClick()
+        {
+            // 패널이 강화 전용일 경우
+            if (_isEnhance)
+            {
+                switch (CurrentType)
+                {
+                    // 캔버스 타입이 [Type.ONE]일 경우
+                    case CraftingCanvas.Type.ONE:
+                        // EMPTY //
+                        break;
+
+                    // 캔버스 타입이 [Type.TWO]일 경우
+                    case CraftingCanvas.Type.TWO:
+                        // TODO: 강화시도
+                        GFunc.Log("강화시도!");
+                        int id = _craftingCanvas.EnhanceID;
+                        TryEnhance(id);
+
+                        // 모든 캔버스 토글
+                        break;
+                }
+
+                // 모든 캔버스 토글 & 강화 ID 전송
+                _craftingCanvas.CraftingUI.ToggleAllCanvas(_id);
+            }
+        }
+
+        // 강화를 시도한다
+        public void TryEnhance(int id)
+        {
+            CraftingItem craftingItem = 
+                CraftingManager.Instance.CraftingDictionary[id] as CraftingItem;
+
+            // 예외 처리
+            if (craftingItem.Equals(null)) { return; }
+
+            int type = _index;
+            // 재료가 있을 경우
+            if (craftingItem.CheckEnhance())
+            {
+                for (int i = 0; i < craftingItem.Components.Count; i++)
+                {
+                    // 순회하며 모든 재료 소비 & 강화 시도
+                    craftingItem.Components[i].Enhance(type);
+                }
+            }
+            
+            // 재료가 없을 경우
+            else
+            {
+                GFunc.Log("재료가 부족합니다.");
+            }
         }
     }
 }

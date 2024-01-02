@@ -46,6 +46,27 @@ namespace Js.Crafting
             return true;
         }
 
+        public bool CheckEnhance()
+        {
+            // 아이템 보유량 가져옴
+            int haveAmount = ItemManager.instance.Inventory.FindInventoryItemForID(_itemID);
+            // 필요한 재료를 가지고 있을 경우
+            if (haveAmount >= NeedAmount)
+            {
+                return true;
+            }
+
+            // 재료가 없을 경우
+            GFunc.Log($"[{_itemID}]{Data.GetString(_itemID, "Name")} 재료가 [{NeedAmount}]개가 있어야 합니다.");
+            return false;
+        }
+
+        public void Enhance(int type)
+        {
+            // 재료 삭제
+            ItemManager.instance.Inventory.RemoveInventoryItemForID(_itemID, NeedAmount);
+        }
+
         public void Craft()
         {
             // 모루 저장소에서 아이템을 삭제

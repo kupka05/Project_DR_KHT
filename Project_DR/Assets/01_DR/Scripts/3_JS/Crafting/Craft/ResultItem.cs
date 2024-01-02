@@ -37,6 +37,12 @@ namespace Js.Crafting
             return true;
         }
 
+        public bool CheckEnhance()
+        {
+            // 조건이 없으므로 true 반환
+            return true;
+        }
+
         public void Craft()
         {
             // 아이템 스폰
@@ -50,5 +56,7 @@ namespace Js.Crafting
             // 디버그
             GFunc.Log($"[{_itemID}]아이템 [{_itemName}]이 [{_giveAmount}] 갯수만큼 제작되었습니다.");
         }
+
+        public void Enhance(int type) { }
     }
 }

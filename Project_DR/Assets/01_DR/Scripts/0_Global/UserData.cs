@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Js.Quest;
+using Js.Crafting;
 
 public static class UserData
 {
@@ -482,6 +483,8 @@ public static class UserData
         UserDataManager.Instance.effectCritDamage = 0;
         UserDataManager.Instance.effectCritProbability = 0;
         UserDataManager.Instance.effectDamage = 0;
+
+        CraftingManager.Instance.Create();
     }
     public static bool ClearCheck()
     {

@@ -354,7 +354,7 @@ public class ItemManager : MonoBehaviour
         ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
 
         // 슬롯에 넣을 수 없도록 아이템 상태 Stop으로 변경
-        itemColliderHandler.state = ItemColliderHandler.State.Stop;
+        itemColliderHandler.state = ItemColliderHandler.State.STOP;
 
         // hand 위치로 포지션 이동
         item.transform.position = handPos;

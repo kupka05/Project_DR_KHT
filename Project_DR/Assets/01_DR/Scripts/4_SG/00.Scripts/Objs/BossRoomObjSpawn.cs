@@ -133,6 +133,8 @@ public class BossRoomObjSpawn : MonoBehaviour
         spawnClone.transform.position = new Vector3(spawnClone.transform.position.x, spawnClone.transform.localScale.y * 0.5f,
             spawnClone.transform.position.z);
 
+        spawnClone.transform.tag = "Wall";
+
     }       // SpawnDefaultColumn()
 
     private void SpawnHookShootColumn(GameObject _objParent, float _leftColumnXPos, float _rightColumnXPos,
@@ -143,11 +145,14 @@ public class BossRoomObjSpawn : MonoBehaviour
 
         GameObject leftColumnClone = Instantiate(hookShootColumn, leftColumnPos, Quaternion.identity, _objParent.transform);
 
+        leftColumnClone.transform.tag = "Wall";
+
         Vector3 rightColumnPos = new Vector3(_rightColumnXPos, 0f,
             leftColumnPos.z);
 
         GameObject rightColumnClone = Instantiate(hookShootColumn, rightColumnPos, Quaternion.identity, _objParent.transform);
 
+        rightColumnClone.transform.tag = "Wall";
         hookShootSpawnCount++;
     }       // SpawnHookShootColumn()
 

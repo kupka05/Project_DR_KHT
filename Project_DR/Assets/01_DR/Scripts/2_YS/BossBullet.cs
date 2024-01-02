@@ -21,9 +21,7 @@ public class BossBullet : MonoBehaviour
     public float damageRadius = 1.0f;
 
     public bool isDamage = false;
-    public bool isWeapon = false;
-    public bool isWall = false;
-    
+   
 
     [Header("이펙트")]
     public GameObject bulletEffect;
@@ -64,30 +62,39 @@ public class BossBullet : MonoBehaviour
         {
             foreach (Collider collider in colliders)
             {
+                if (collider.CompareTag("Weapon"))
+                {
+                    Destroy(this.gameObject);
+                    GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
+                    GFunc.Log("연쇄총알 무기에 닿았는가");
+                    //ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
+                    //GFunc.Log("무기에 닿았을 때 반환한다");
+                    return;
+                }
+
+                if (collider.CompareTag("Wall"))
+                {
+                    Destroy(this.gameObject);
+                    GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
+                    GFunc.Log("연쇄총알 벽에 닿았는가");
+                    //ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
+                    //GFunc.Log("벽에 닿았을 때 반환한다");
+                    return;
+                }
+                //ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
+                //GFunc.Log("플레이어 데미지 후 반환");
+
+
                 if (collider.CompareTag("Player"))
                 {
                     isDamage = true;
                     // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
                     collider.GetComponent<Damageable>().DealDamage(damage);
+                    GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
                     GFunc.Log($"데미지:{damage}");
                     break;
                 }
-                else if(collider.CompareTag("Weapon"))
-                {
-                    GFunc.Log("무기에 닿았는가");
-                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
-                    GFunc.Log("무기에 닿았을 때 반환한다");
-                    return;
-                }
-                else if(collider.CompareTag("Wall"))
-                {
-                    GFunc.Log("벽에 닿았는가");
-                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
-                    GFunc.Log("벽에 닿았을 때 반환한다");
-                }
-                ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
-                GFunc.Log("플레이어 데미지 후 반환");
-                
+                Destroy(this.gameObject);
             }
             isDamage = false;
         }

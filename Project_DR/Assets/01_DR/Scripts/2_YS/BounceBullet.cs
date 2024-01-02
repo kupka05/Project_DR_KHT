@@ -14,13 +14,14 @@ public class BounceBullet : MonoBehaviour
 
     public GameObject bounceEffect;
 
-   
+
 
     public Transform target;
     public float attack = 3.0f;
 
     public float damageRadius = 1.9f;
 
+    LayerMask bouncePlayerLayer;
 
     [Header("테이블 관련")]
     //public float speed = default;
@@ -39,6 +40,7 @@ public class BounceBullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        bouncePlayerLayer = LayerMask.NameToLayer("Player");
 
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         rigid = GetComponent<Rigidbody>();
@@ -54,35 +56,28 @@ public class BounceBullet : MonoBehaviour
 
     }
 
-
     void DealDamageToNearbyObjects()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
-
+  
         // 디버그용: 빨간색 구체로 OverlapSphere 영역을 시각화
-        DebugDrawOverlapSphere();
+        OnDrawGizmos();
 
         foreach (Collider collider in colliders)
         {
-            
-
             if (collider.CompareTag("Player") && !isDamage)
             {
-                //GFunc.Log("만났는가");
-                // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
-                // collider.GetComponent<Damageable>().DealDamage(damage);
-                //GFunc.Log($"데미지: {damage}");
-
+                collider.GetComponent<Damageable>().DealDamage(damage);
+                GameObject effect = Instantiate(bounceEffect, transform.position, Quaternion.identity);
                 isDamage = true;
-                //Debug.Log($"isdamage: {isDamage}");
-
                 break;
             }
+
+            return;
+
         }
         isDamage = false;
-        //GFunc.Log("false되냐");
 
-        
     }
 
     //private void OnDrawGizmos()
@@ -99,10 +94,17 @@ public class BounceBullet : MonoBehaviour
     //    }
     //}
 
-    void DebugDrawOverlapSphere()
+    //void DebugDrawOverlapSphere()
+    //{
+    //    Vector3 dir = target.position - transform.position;
+    //    Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.magenta);
+    //}
+
+    void OnDrawGizmos()
     {
-        Vector3 dir = target.position - transform.position;
-        Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.blue);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(this.transform.position, damageRadius);
     }
 
     public void GetData(int BounceTableId)

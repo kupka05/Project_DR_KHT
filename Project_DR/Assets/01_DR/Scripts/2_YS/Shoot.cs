@@ -82,16 +82,16 @@ public class Shoot : MonoBehaviour
                 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
                 //기존 로직
-                //GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
-                //bullets.Add(instantBullet);
-                //instantBullet.transform.LookAt(target.position);
+                GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
+                bullets.Add(instantBullet);
+                instantBullet.transform.LookAt(target.position);
 
                 // 오브젝트 풀을 사용하여 총알을 가져옵니다.
-                GameObject instantBullet = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBULLET);
-                GFunc.Log("오브젝트 풀 생성");
-                instantBullet.transform.position = transform.position + offset;
-                instantBullet.transform.rotation = Quaternion.identity;
-                instantBullet.transform.LookAt(target.position);
+                //GameObject instantBullet = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+                //GFunc.Log("오브젝트 풀 생성");
+                //instantBullet.transform.position = transform.position + offset;
+                //instantBullet.transform.rotation = Quaternion.identity;
+                //instantBullet.transform.LookAt(target.position);
 
                 bullets.Add(instantBullet);
 
@@ -112,13 +112,14 @@ public class Shoot : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(destoryTimeBounceSmall);
-            // 오브젝트 풀을 사용하여 총알을 반환합니다.
-            foreach (GameObject bullet in bullets)
-            {
-                ObjectPoolManager.ReturnObjectToQueue(bullet, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
-                GFunc.Log("반환 이상 없이 작동하는가?");
-            }
+            //yield return new WaitForSeconds(destoryTimeBounceSmall);
+            //// 오브젝트 풀을 사용하여 총알을 반환합니다.
+            //foreach (GameObject bullet in bullets)
+            //{
+            //     Destroy(smallBulletPrefab);
+            //    //ObjectPoolManager.ReturnObjectToQueue(bullet, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+            //    //GFunc.Log("반환 이상 없이 작동하는가?");
+            //}
 
             bullets.Clear();
 

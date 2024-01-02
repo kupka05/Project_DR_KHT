@@ -6,12 +6,17 @@ using System.Collections.Generic;
 using System.Data;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
+    [Header("테스트")]
+    public float angleRange = 30f;
+    public float radius = 3f;
+
     public UnityEngine.UI.Slider bossHPSlider;
 
     public GameObject bossState;
@@ -275,7 +280,7 @@ public class Boss : MonoBehaviour
                 {
                     GFunc.Log("체력별 패턴 4 진입");
 
-                    RandomPattern();
+                    RandomPatternSecond();
                     //GFunc.Log("랜덤 패턴4 발동");
 
                     if (bossState && !isKnockBackThird)
@@ -297,10 +302,11 @@ public class Boss : MonoBehaviour
         }
     }
 
-    public virtual void RandomPattern()
+    public void RandomPattern()
     {
         int pattern = UnityEngine.Random.Range(0, 4);
 
+        
         switch (pattern)
         {
             case 0:
@@ -328,7 +334,7 @@ public class Boss : MonoBehaviour
         }
     }
 
-    public virtual void RandomPatternSecond()
+    public void RandomPatternSecond()
     {
         int pattern = UnityEngine.Random.Range(0, 4);
         int pattern2 = UnityEngine.Random.Range(0, 4);
@@ -372,6 +378,290 @@ public class Boss : MonoBehaviour
                 GFunc.Log("패턴 4 선택");
                 break;
         }
+
+        if (bossState)
+        {
+            bossState.GetComponent<BossState>().Attack();
+            GFunc.Log("보스 attack 애니메이션");
+        }
+    }
+
+    public void RandomPatternThird()
+    {
+        int pattern = UnityEngine.Random.Range(0, 4);
+        int pattern2 = UnityEngine.Random.Range(0, 4);
+        int pattern3 = UnityEngine.Random.Range(0, 4);
+
+        switch (pattern)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        switch (pattern2)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        switch (pattern3)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        if (bossState)
+        {
+            bossState.GetComponent<BossState>().Attack();
+            GFunc.Log("보스 attack 애니메이션");
+        }
+    }
+
+    public void RandomPatternForth()
+    {
+        int pattern = UnityEngine.Random.Range(0, 4);
+        int pattern2 = UnityEngine.Random.Range(0, 4);
+        int pattern3 = UnityEngine.Random.Range(0, 4);
+        int pattern4 = UnityEngine.Random.Range(0, 4);
+
+        switch (pattern)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        switch (pattern2)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        switch (pattern3)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        switch (pattern4)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+
+        if (bossState)
+        {
+            bossState.GetComponent<BossState>().Attack();
+            GFunc.Log("보스 attack 애니메이션");
+        }
+    }
+
+    public void RandomPatternFifth()
+    {
+        int pattern = UnityEngine.Random.Range(0, 4);
+        int pattern2 = UnityEngine.Random.Range(0, 4);
+        int pattern3 = UnityEngine.Random.Range(0, 4);
+        int pattern4 = UnityEngine.Random.Range(0, 4);
+        int pattern5 = UnityEngine.Random.Range(0, 4);
+
+        switch (pattern)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        switch (pattern2)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        switch (pattern3)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        switch (pattern4)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
+        switch (pattern5)
+        {
+            case 0:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BounceShoot());
+                GFunc.Log("패턴 4 선택");
+                break;
+        }
+
 
         if (bossState)
         {
@@ -426,22 +716,22 @@ public class Boss : MonoBehaviour
                 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
                 //기존 로직
-                //GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
+                GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
                 //bullets.Add(instantBullet);
                 //instantBullet.transform.LookAt(target.position);
 
                 // 오브젝트 풀을 사용하여 총알을 가져옵니다.
-                GameObject instantBullet = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.CHAINBULLET);
-                GFunc.Log("오브젝트 풀 생성");
-                instantBullet.transform.position = transform.position + offset;
-                instantBullet.transform.rotation = Quaternion.identity;
+                //GameObject instantBullet = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.CHAINBULLET);
+                //GFunc.Log("오브젝트 풀 생성");
+                //instantBullet.transform.position = transform.position + offset;
+                //instantBullet.transform.rotation = Quaternion.identity;
                 instantBullet.transform.LookAt(target.position);
 
                 bullets.Add(instantBullet);
 
             }
 
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(3.0f);
 
             GFunc.Log($"리스트 크기 : {bullets.Count}");
 
@@ -468,8 +758,9 @@ public class Boss : MonoBehaviour
             // 오브젝트 풀을 사용하여 총알을 반환합니다.
             foreach (GameObject bullet in bullets)
             {
-                ObjectPoolManager.ReturnObjectToQueue(bullet, ObjectPoolManager.ProjectileType.CHAINBULLET);
-                GFunc.Log("반환 이상 없이 작동하는가?");
+                Destroy(bullet);
+                //ObjectPoolManager.ReturnObjectToQueue(bullet, ObjectPoolManager.ProjectileType.CHAINBULLET);
+                //GFunc.Log("반환 이상 없이 작동하는가?");
             }
 
             bullets.Clear();
@@ -485,7 +776,7 @@ public class Boss : MonoBehaviour
         {
             targetImage.transform.position = target.position;
             targetImage.gameObject.SetActive(true);
-
+           
             yield return new WaitForSeconds(3.0f);
 
             // 3초 대기 후, targetImage의 위치에서 레이저 발사
@@ -576,11 +867,10 @@ public class Boss : MonoBehaviour
             {
                 Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 4.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 3.0f);
 
-                //GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
-                GameObject instantBrick = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BIGBRICK);
-
-                instantBrick.transform.position = transform.position + offset;
-                instantBrick.transform.rotation = Quaternion.identity;
+                GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+                //GameObject instantBrick = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BIGBRICK);
+                //instantBrick.transform.position = transform.position + offset;
+                //instantBrick.transform.rotation = Quaternion.identity;
 
                 bigbrick.Add(instantBrick);
 
@@ -609,7 +899,8 @@ public class Boss : MonoBehaviour
 
             foreach (GameObject instantBrick in bigbrick)
             {
-                ObjectPoolManager.ReturnObjectToQueue(instantBrick, ObjectPoolManager.ProjectileType.BIGBRICK);
+                Destroy(instantBrick);
+                //ObjectPoolManager.ReturnObjectToQueue(instantBrick, ObjectPoolManager.ProjectileType.BIGBRICK);
             }
 
             bigbrick.Clear();
@@ -759,14 +1050,14 @@ public class Boss : MonoBehaviour
 
             for (int i = 0; i < bounceCount; i++)
             {
-                Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 6.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
+                Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 6.0f, 3.0f, UnityEngine.Random.insideUnitCircle.y * 5.0f);
 
                 //기존 로직
-                //GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
-                GameObject instantBounce = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBALL);
-                GFunc.Log("오브젝트 풀 생성");
-                instantBounce.transform.position = transform.position + offset;
-                instantBounce.transform.rotation = Quaternion.identity;
+                GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
+                //GameObject instantBounce = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBALL);
+                //GFunc.Log("오브젝트 풀 생성");
+                //instantBounce.transform.position = transform.position + offset;
+                //instantBounce.transform.rotation = Quaternion.identity;
 
                 bounceBall.Add(instantBounce);
 
@@ -799,7 +1090,8 @@ public class Boss : MonoBehaviour
 
             foreach (GameObject instantBounce in bounceBall)
             {
-                ObjectPoolManager.ReturnObjectToQueue(instantBounce, ObjectPoolManager.ProjectileType.BOUNCEBALL);
+                Destroy(instantBounce);
+                //ObjectPoolManager.ReturnObjectToQueue(instantBounce, ObjectPoolManager.ProjectileType.BOUNCEBALL);
             }
 
             bounceBall.Clear();
@@ -1039,6 +1331,20 @@ public class Boss : MonoBehaviour
     public void StartAttack()
     {
         StartCoroutine(ExecutePattern());
+    }
+
+    private void OnDrawGizmos()
+    {
+        
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, angleRange / 2, radius);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -angleRange / 2, radius);
+
+    }
+
+    void DebugDrawOverlapSphere()
+    {
+        //Vector3 dir = target.position - transform.position;
+        //Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.blue);
     }
 
 }

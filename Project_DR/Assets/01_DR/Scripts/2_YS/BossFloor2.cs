@@ -47,7 +47,7 @@ public class BossFloor2 : Boss
                 {
                     GFunc.Log("체력별 패턴 3 진입");
 
-                    RandomPattern();
+                    RandomPatternSecond();
                     //GFunc.Log("랜덤 패턴3 발동");
 
                     if (bossState && !isKnockBackSecond)
@@ -65,7 +65,7 @@ public class BossFloor2 : Boss
                 {
                     GFunc.Log("체력별 패턴 4 진입");
 
-                    RandomPattern();
+                    RandomPatternThird();
                     //GFunc.Log("랜덤 패턴4 발동");
 
                     if (bossState && !isKnockBackThird)
@@ -84,62 +84,6 @@ public class BossFloor2 : Boss
                 isPatternExecuting = false;
 
             }
-        }
-    }
-
-    public override void RandomPattern()
-    {
-        int pattern = UnityEngine.Random.Range(0, 4);
-        int pattern2 = UnityEngine.Random.Range(0, 4);
-
-        switch (pattern)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        
-
-        switch (pattern2)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-
-
-        if (bossState)
-        {
-            bossState.GetComponent<BossState>().Attack();
-            GFunc.Log("보스 attack 애니메이션");
         }
     }
 }

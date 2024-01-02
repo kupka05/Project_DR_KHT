@@ -122,6 +122,13 @@ MonoBehaviour:
   brickTableId: 6914
   isCheck: 0
   damageRadius: 1
+  brickHp: 3
+  brickStoneEffect: {fileID: 6399246634582237389, guid: b2064ab083902e548b18973fc12496cf,
+    type: 3}
+  birckSmokeEffect: {fileID: 5702874951012959920, guid: 6bf56114665f76544a38ed27c9139e7c,
+    type: 3}
+  brickFloorEffect: {fileID: 5532396580440673772, guid: 192c81136c20c2343b52750303ab58ac,
+    type: 3}
 --- !u!114 &3310836557318637696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,6 +153,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!135 &6719504253615205134
 SphereCollider:
   m_ObjectHideFlags: 0

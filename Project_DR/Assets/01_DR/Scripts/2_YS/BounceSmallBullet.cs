@@ -24,6 +24,8 @@ public class BounceSmallBullet : MonoBehaviour
 
     public float destroyTime = default;
 
+    public GameObject bountSmallBulletEffect;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,7 +46,7 @@ public class BounceSmallBullet : MonoBehaviour
 
     public void ReturnBullet()
     {
-        // 리턴 함수
+        Destroy(this.gameObject);
     }
 
     public virtual void GetData(int BounceSmallTableID)
@@ -69,23 +71,31 @@ public class BounceSmallBullet : MonoBehaviour
                     isDamage = true;
                     // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
                     collider.GetComponent<Damageable>().DealDamage(damage);
+                    GameObject effect = Instantiate(bountSmallBulletEffect, transform.position, Quaternion.identity);
                     GFunc.Log($"데미지:{damage}");
+                    break;
                 }
                 else if (collider.CompareTag("Weapon"))
                 {
-                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
-                    GFunc.Log("반환");
-                    GFunc.Log("무기에 닿았는가");
+                    Destroy(this.gameObject);
+                    GameObject effect = Instantiate(bountSmallBulletEffect, transform.position, Quaternion.identity);
+                    //ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+                    //GFunc.Log("반환");
+                    GFunc.Log("애드벌룬 하위 총알 무기에 닿았는가");
+                    return;
                 }
                 else if (collider.CompareTag("Wall"))
                 {
-                    ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
-                    GFunc.Log("반환");
-                    GFunc.Log("벽에 닿았는가");
+                    Destroy(this.gameObject);
+                    GameObject effect = Instantiate(bountSmallBulletEffect, transform.position, Quaternion.identity);
+                    //ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+                    //GFunc.Log("반환");
+                    GFunc.Log("애드벌룬 하위 총알 벽에 닿았는가");
+                    return;
                 }
-
-                ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
-                GFunc.Log("플레이어 데미지 후 반환");
+                Destroy(this.gameObject);
+                //ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+                //GFunc.Log("플레이어 데미지 후 반환");
             }
             isDamage = false;
         }

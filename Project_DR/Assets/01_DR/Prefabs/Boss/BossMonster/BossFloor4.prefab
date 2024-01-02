@@ -2128,6 +2128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 117eb1763435fd2499b7192e0b43088b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  angleRange: 30
+  radius: 3
   bossHPSlider: {fileID: 8187150871282055724}
   bossState: {fileID: 1824147110975331316, guid: 49ff47f9e55ea3a4185d3ecb1c11dd40,
     type: 3}
@@ -2146,10 +2148,10 @@ MonoBehaviour:
   smashThird: 0.6
   smashCount: 0
   smashMaxCount: 3
-  bossId: 0
-  bossProjectileId: 0
-  bossProjectileID: 0
-  bossProjectileBounceId: 0
+  bossId: 6872
+  bossProjectileId: 6910
+  bossProjectileID: 6914
+  bossProjectileBounceId: 6912
   power: 5
   lazerPort: {fileID: 5851581971671007355}
   lazer: {fileID: 7801054870893074991, guid: 9de885b41bc52fe488e338a87491f2a7, type: 3}

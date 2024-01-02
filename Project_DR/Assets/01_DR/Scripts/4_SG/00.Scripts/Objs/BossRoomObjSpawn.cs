@@ -30,7 +30,8 @@ public class BossRoomObjSpawn : MonoBehaviour
     private Vector3 bossPos;                            // 보스의 좌표
     private int hookShootSpawnCount;                    // 훅샷기둥 스폰한 횟수
     private FloorMeshPos roomPos;
-    private float hookShootColumnWallDis;               // 벽과 훅샷기둥의 거리  ex) 0.1 = 벽의 10%
+    private float hookShootColumnWallDis;               // 벽과 훅샷기둥의 거리  ex) 0.1 = 벽의 10%    
+    
 
 
     private void Awake()
@@ -46,7 +47,7 @@ public class BossRoomObjSpawn : MonoBehaviour
     private void DataInIt()
     {
         roomPos = this.gameObject.GetComponent<FloorMeshPos>();
-        hookShootColumnWallDis = Data.GetFloat(16033, "HookShootColumnWallDis");
+        hookShootColumnWallDis = Data.GetFloat(16033, "HookShootColumnWallDis");        
         defaultColumnSpawnPosList = new List<Vector3>();
         hookShootSpawnCount = 1;
         defaultColumn = (GameObject)Resources.Load("tempDefaultColumn");
@@ -77,7 +78,7 @@ public class BossRoomObjSpawn : MonoBehaviour
         float spawnEndDefaultColumnWidth = bossRoomWidth - spawnStartDefaultColumnWidth;
 
         for (int i = 0; i < defualtColumnSpawnCount; i++)
-        {            
+        {
             SpawnDefaultColumn(objParent, spawnStartDefaultColumnWidth, spawnEndDefaultColumnWidth,
                 defaultColumnYSizeMinValue, defaultColumnYSizeMaxValue);
         }
@@ -86,19 +87,21 @@ public class BossRoomObjSpawn : MonoBehaviour
         // {----------------------------------------- 훅샷 기둥 소환 관련 ---------------------------------------------
         int hookShootColumnSpawnValue = Data.GetInt((int)ColumnID.hookShootColumn, "HookShootColumnSpawnValue");
         float hookShotColumnDis = Data.GetFloat((int)ColumnID.hookShootColumn, "HookShootColumnDis");
-        GFunc.Log($"시트에서 가져온 Dis값 : {hookShootSpawnCount}\n소환 카운트 : {hookShootSpawnCount}");
+        //GFunc.Log($"시트에서 가져온 Dis값 : {hookShootSpawnCount}\n소환 카운트 : {hookShootSpawnCount}");
 
         float leftColumnXPos = roomPos.bottomLeftCorner.x + (bossRoomWidth * hookShootColumnWallDis);
         float rightColumnXPos = roomPos.bottomRightCorner.x - (bossRoomWidth * hookShootColumnWallDis);
         for (int i = 0; i < hookShootColumnSpawnValue; i++)
         {
-            SpawnHookShootColumn(objParent,leftColumnXPos,rightColumnXPos,hookShotColumnDis);
+            SpawnHookShootColumn(objParent, leftColumnXPos, rightColumnXPos, hookShotColumnDis);
         }
     }       // StartSpawn()
 
 
+
+
     private void SpawnDefaultColumn(GameObject _objParent, float _spawnStartDefaultColumnWidth,
-        float _spawnEndDefaultColumnWidth, float _minYSclae,float _maxYSclae)
+        float _spawnEndDefaultColumnWidth, float _minYSclae, float _maxYSclae)
     {       // 기본형 기둥을 인스턴스해주는 함수
             //float bossRoomWidth = Data.GetInt(9105, "BossRoomWidth");
             //float spawnStartWidth = bossRoomWidth * 0.3f;
@@ -114,14 +117,15 @@ public class BossRoomObjSpawn : MonoBehaviour
 
         foreach (Vector3 pos in defaultColumnSpawnPosList)
         {
-            if (pos == spawnPos)
+            if (spawnPos == pos)
             {
-                return;
+                continue;
             }
         }
         defaultColumnSpawnPosList.Add(spawnPos);
 
         GameObject spawnClone = Instantiate(defaultColumn, spawnPos, Quaternion.identity, _objParent.transform);
+
 
         float randSclae = UnityEngine.Random.Range(_minYSclae, _maxYSclae + 1);
         spawnClone.transform.localScale = new Vector3(1f, randSclae, 1f);
@@ -129,12 +133,9 @@ public class BossRoomObjSpawn : MonoBehaviour
         spawnClone.transform.position = new Vector3(spawnClone.transform.position.x, spawnClone.transform.localScale.y * 0.5f,
             spawnClone.transform.position.z);
 
-
-
-
     }       // SpawnDefaultColumn()
 
-    private void SpawnHookShootColumn(GameObject _objParent,float _leftColumnXPos,float _rightColumnXPos,
+    private void SpawnHookShootColumn(GameObject _objParent, float _leftColumnXPos, float _rightColumnXPos,
         float _hookShotColumnDis)
     {       // 훅샷기둥을 인스턴스해주는 함수
         Vector3 leftColumnPos = new Vector3(_leftColumnXPos, 0f
@@ -145,7 +146,7 @@ public class BossRoomObjSpawn : MonoBehaviour
         Vector3 rightColumnPos = new Vector3(_rightColumnXPos, 0f,
             leftColumnPos.z);
 
-        GameObject rightColumnClone = Instantiate(hookShootColumn,rightColumnPos,Quaternion.identity, _objParent.transform);
+        GameObject rightColumnClone = Instantiate(hookShootColumn, rightColumnPos, Quaternion.identity, _objParent.transform);
 
         hookShootSpawnCount++;
     }       // SpawnHookShootColumn()

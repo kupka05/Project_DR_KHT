@@ -62,7 +62,7 @@ public class ObjectPoolManager : MonoBehaviour
         for (int i = 0; i < 300; i++)
         {
             CreateObject(projectileType);
-            Debug.Log($"프로젝타일 타입 {projectileType}을(를) 생성했습니다. (총 {i + 1}개)");
+            //Debug.Log($"프로젝타일 타입 {projectileType}을(를) 생성했습니다. (총 {i + 1}개)");
         }
     }
 
@@ -83,7 +83,7 @@ public class ObjectPoolManager : MonoBehaviour
         GameObject newObj = Instantiate(prefab, instance.transform);
         newObj.SetActive(false);
 
-        Debug.Log($"프로젝타일 타입 {projectileType}을(를) 풀에 추가하고 비활성화했습니다.");
+        //Debug.Log($"프로젝타일 타입 {projectileType}을(를) 풀에 추가하고 비활성화했습니다.");
 
         return newObj;
     }

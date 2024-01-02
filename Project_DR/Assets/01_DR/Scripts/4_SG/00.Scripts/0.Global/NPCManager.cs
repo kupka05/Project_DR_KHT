@@ -35,7 +35,7 @@ public class NPCManager : MonoBehaviour
     /// <summary>
     /// 매개변수로 넣어준 확률을 넣어서 해당 확률에 당첨되면 true 아니면 false를 반환해주는 함수
     /// </summary>
-    /// <param name="_getProbability">확률</param>
+    /// <param name="_getProbability">얻을확률</param>
     /// <param name="_minProbability">(Default : 0%)랜덤의 최소값</param>
     /// <param name="_maxProbability">(Default : 100%)랜덤의 최대값</param>
     /// <returns>확률이 당첨되었는지 당첨되지 않았는지</returns>

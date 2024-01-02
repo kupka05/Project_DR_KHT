@@ -24,6 +24,13 @@ public enum Layer
     BattleRoomFloor = 20
 }       // Layer
 
+public enum GameRound
+{
+    Prototype,      // 프로토타입 상태
+    FirstTime,      // 1회차 (클리어 하지 못함)
+    FirstAfter      // 다회차 (1회차 클리어)
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance
@@ -44,7 +51,7 @@ public class GameManager : MonoBehaviour
     }
     private static GameManager m_instance; // 싱글톤이 할당될 static 변수    
 
-
+    public GameRound round;
     [Header("Player Object")]
     public GameObject player;
     private ScreenFader fader;
@@ -177,6 +184,10 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
+        if(Input.GetKeyDown(KeyCode.F12))
+        {
+            ClearDungeon();
+        }
     }
 
     private void OnLevelWasLoaded()
@@ -214,18 +225,18 @@ public class GameManager : MonoBehaviour
     private void StartInIt()
     {
         // TODO : 프로토타입 이후 수정 예정
-        if (IsProtoType == true)
+        if (round == GameRound.Prototype)
         {
             isPlayerMaxFloor = PROTOTYPE;
             return;
         }
-        if (UserDataManager.Instance.ClearCount <= 1)
+        if (round == GameRound.FirstTime)
         {
-            isPlayerMaxFloor = FIRSTAFTER;
+            isPlayerMaxFloor = FIRSTTIME;
         }
         else
         {
-            isPlayerMaxFloor = FIRSTTIME;
+            isPlayerMaxFloor = FIRSTAFTER;
         }
     }       // StartInIt()
 
@@ -267,6 +278,8 @@ public class GameManager : MonoBehaviour
         // 출구 층이면 로비로 보내주기
         if (nowFloor == isPlayerMaxFloor)
         {
+            GFunc.Log("클리어 성공, 현재 층 : " + nowFloor);
+
             isGameOver = true;
 
             UserData.ClearDungeon();
@@ -277,6 +290,8 @@ public class GameManager : MonoBehaviour
         // 출구 층이 아니라면, 다시 던전씬 돌리기
         else if (nowFloor < isPlayerMaxFloor)
         {
+            GFunc.Log("출구층 아님, 현재 층 : " + nowFloor);
+
             // 층 높이고
             nowFloor++;
             string dungeonSceneName = "SG_TestScene";
@@ -432,6 +447,7 @@ public class GameManager : MonoBehaviour
     // 데이터 가져오기
     public void GetData()
     {
+        SetPlayState();
         gameoverText = (string)DataManager.Instance.GetData(1001, "GameOverText", typeof(string));
     }
 
@@ -439,6 +455,24 @@ public class GameManager : MonoBehaviour
     public void SetPlayerID(string id)
     {
         _playerID = id;
+    }
+
+    // 플레이 상태 세팅
+    private void SetPlayState()
+    {
+        if(UserDataManager.Instance.ClearCount == 0)
+        {
+            round = GameRound.FirstTime;
+        }
+        else
+        {
+            round = GameRound.FirstAfter;
+        }
+
+        if(IsProtoType)
+        {
+            round = GameRound.Prototype;
+        }       
     }
     #endregion
 }       // ClassEnd

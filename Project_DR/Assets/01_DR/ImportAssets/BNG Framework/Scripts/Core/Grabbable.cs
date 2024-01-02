@@ -267,6 +267,7 @@ namespace BNG {
 
         [Tooltip("If true, the object's velocity will be adjusted to match the grabber. This is in addition to any forces added by the configurable joint.")]
         public bool ApplyCorrectiveForce = true;
+        public bool sleepRigid = false;
 
         [Header("Velocity Grab Settings")]
         public float MoveVelocityForce = 3000f;
@@ -450,6 +451,7 @@ namespace BNG {
         [HideInInspector]
         public bool UseCustomInspector = true;
 
+
         /// <summary>
         /// If a BNGPlayerController is provided we can check for player movements and make certain adjustments to physics.
         /// </summary>
@@ -477,6 +479,7 @@ namespace BNG {
             }
         }
         protected bool didParentHands = false;
+
 
         protected void Awake() {
             col = GetComponent<Collider>();
@@ -1814,6 +1817,8 @@ namespace BNG {
                         }
                     }
 
+                    
+
                     // Reset hand pose
                     CustomHandPose = initialHandPoseId;
                     SelectedHandPose = initialHandPose;
@@ -2066,6 +2071,12 @@ namespace BNG {
 
             rigid.velocity = releaseVelocity;
             rigid.angularVelocity = angularVelocity;
+
+            if(sleepRigid)
+            {
+                rigid.Sleep();
+                rigid.WakeUp();
+            }
         }
 
         public virtual bool IsValidCollision(Collision collision) {

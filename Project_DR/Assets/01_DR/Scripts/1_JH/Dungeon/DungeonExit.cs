@@ -12,6 +12,7 @@ public class DungeonExit : MonoBehaviour
     public float sceneDelay;    // 씬 딜레이
 
     private ScreenFader fader;
+    private bool playerPass = false;
 
     // 12.12 SG 추가
 
@@ -30,13 +31,19 @@ public class DungeonExit : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
+            if(playerPass)
+            {
+                return;
+            }
+
+            playerPass = true;
             if (isLobby)
             {
                 SceneLoad(sceneName);
                 //await LoadSceneAsync(sceneName);
             }
 
-            else if(GameManager.instance.isPlayerMaxFloor <= GameManager.instance.nowFloor )
+            else if(GameManager.instance.nowFloor <= GameManager.instance.isPlayerMaxFloor )
             {
                 GameManager.instance.ClearDungeon();
             }

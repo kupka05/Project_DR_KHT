@@ -264,14 +264,14 @@ public class SkillManager : MonoBehaviour
 
     //  #######################  스킬 이펙트  #######################
 
-    public void ActiveSkill(int id)
+    public void ActiveSkill(int id, float amount = 100)
     {
         string effect = Data.GetString(id, "Effect");
 
         switch (effect) 
         {
             case "Attack":
-                ActiveAttack(id);
+                ActiveAttack(id, amount);
                 return;                
 
             case "AttackRate":
@@ -279,7 +279,7 @@ public class SkillManager : MonoBehaviour
                 return;
 
             case "CritDamage":
-                ActiveCritDamage(id);
+                ActiveCritDamage(id, amount);
                 return;
 
             case "CritProbability":
@@ -299,9 +299,10 @@ public class SkillManager : MonoBehaviour
 
 
     // 공격력 스킬
-    public void ActiveAttack(int id)
+    public void ActiveAttack(int id, float amount = 100)
     {
         float attackDamage = Data.GetFloat(id, "Value1");
+        attackDamage *= (amount / 100);
         Damage.instance.AddEffectDamage(attackDamage); 
     }
     // 공격 속도 스킬
@@ -317,9 +318,10 @@ public class SkillManager : MonoBehaviour
         }
     }
     // 치명타 공격력 스킬
-    public void ActiveCritDamage(int id)
+    public void ActiveCritDamage(int id, float amount)
     {
         float critDamage = Data.GetFloat(id, "Value1");
+        critDamage *= (amount / 100);
         Damage.instance.AddEffectCritDamage(critDamage);
     }
     // 치명타 확률 스킬

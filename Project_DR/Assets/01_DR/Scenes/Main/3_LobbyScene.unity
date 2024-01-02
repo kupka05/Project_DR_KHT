@@ -3067,6 +3067,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -3630,7 +3631,7 @@ PrefabInstance:
     - target: {fileID: 7837797319980225010, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0037728208
+      value: -0.0038520491
       objectReference: {fileID: 0}
     - target: {fileID: 7837797319993773063, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -3680,7 +3681,7 @@ PrefabInstance:
     - target: {fileID: 8632280359026240688, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.00087313884
+      value: -0.00080746145
       objectReference: {fileID: 0}
     - target: {fileID: 8632280359747570399, guid: 9af8996cf7742564d86ec55ab5e912c0,
         type: 3}
@@ -5789,6 +5790,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -6697,6 +6699,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -9693,82 +9696,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247677714}
   m_CullTransparentMesh: 0
---- !u!1 &248885854
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 248885855}
-  - component: {fileID: 248885857}
-  - component: {fileID: 248885856}
-  m_Layer: 5
-  m_Name: BackGround
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &248885855
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248885854}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 846752393}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1080, y: 720}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &248885856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248885854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.16078432, b: 0.25490198, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &248885857
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248885854}
-  m_CullTransparentMesh: 1
 --- !u!1 &250261597
 GameObject:
   m_ObjectHideFlags: 0
@@ -10857,6 +10784,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -11128,6 +11056,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -13445,6 +13374,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -19056,6 +18986,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -22490,6 +22421,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -28093,6 +28025,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -30535,6 +30468,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -30799,6 +30733,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -34147,6 +34082,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -34826,6 +34762,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -37138,6 +37075,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -37907,7 +37845,6 @@ RectTransform:
   m_LocalScale: {x: 0.00179, y: 0.00179, z: 2.0564198}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 248885855}
   - {fileID: 1378752581}
   m_Father: {fileID: 2229443232786095417}
   m_RootOrder: 0
@@ -39263,6 +39200,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -41035,6 +40973,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -46050,6 +45989,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -47857,6 +47797,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -50248,6 +50189,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -52367,6 +52309,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -53845,6 +53788,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -58757,6 +58701,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -58925,6 +58870,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -59621,6 +59567,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -60960,6 +60907,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -62779,6 +62727,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -66820,7 +66769,7 @@ RectTransform:
   - {fileID: 1462263653}
   - {fileID: 131561685}
   m_Father: {fileID: 846752393}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -66901,9 +66850,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1920788381}
-        m_TargetAssemblyTypeName: LobbyEvent, Assembly-CSharp
-        m_MethodName: DisplayButton
+      - m_Target: {fileID: 2229443232786095425}
+        m_TargetAssemblyTypeName: TutorialTablet, Assembly-CSharp
+        m_MethodName: NextSlide
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -69236,6 +69185,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -70532,6 +70482,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -76502,6 +76453,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -77499,6 +77451,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -81430,6 +81383,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -84989,6 +84943,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -92564,6 +92519,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -97054,6 +97010,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -98125,6 +98082,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -100501,6 +100459,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -101457,6 +101416,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -104712,6 +104672,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -104879,6 +104840,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -106362,6 +106324,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -112991,6 +112954,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -114040,6 +114004,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -114810,9 +114775,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2229443232786095410}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 500
+  m_Drag: 500
+  m_AngularDrag: 500
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -114827,6 +114792,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2229443232786095417}
+  - component: {fileID: 2229443232786095425}
   - component: {fileID: 2229443232786095418}
   - component: {fileID: 2229443232786095419}
   - component: {fileID: 2229443232786095420}
@@ -114836,7 +114802,7 @@ GameObject:
   - component: {fileID: 2229443232786095408}
   - component: {fileID: 2229443232786095424}
   m_Layer: 0
-  m_Name: Item_Quest_ExpCapsule_T2
+  m_Name: Tutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114849,8 +114815,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2229443232786095410}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 22.433529, y: 0.853, z: -42.02524}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 22.132, y: 1.829, z: -44.063}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -114863,7 +114829,7 @@ Transform:
   - {fileID: 2229443232366606871}
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &2229443232786095418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114919,6 +114885,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 1
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -115037,6 +115004,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.02, y: 0.3, z: 0.4}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2229443232786095425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2229443232786095410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7052834328c7a6409c49d426b5a6ba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  page: 0
+  images:
+  - {fileID: 21300000, guid: f61f0f77388aee94eacc5d0fe017b0b8, type: 3}
+  - {fileID: 21300000, guid: 68246cd4e6afea84a8b2ed0dec2be2f8, type: 3}
+  - {fileID: 21300000, guid: 764351bce7b6149458a216078748fbc7, type: 3}
+  - {fileID: 21300000, guid: 7af1edff5c175ca47ab69113861a5e66, type: 3}
+  - {fileID: 21300000, guid: d11147b2397862340b783f54bc0c2c75, type: 3}
+  - {fileID: 21300000, guid: 6248a8b278ff9fa4385ee4e2696302df, type: 3}
+  - {fileID: 21300000, guid: cac61209145fea545b8ae824f7ec16a9, type: 3}
 --- !u!1 &2294044097917407191
 GameObject:
   m_ObjectHideFlags: 0
@@ -116463,6 +116451,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0

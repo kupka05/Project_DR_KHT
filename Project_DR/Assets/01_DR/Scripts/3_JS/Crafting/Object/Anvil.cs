@@ -93,7 +93,11 @@ namespace Js.Crafting
         // 모루 초기화
         public void ResetAnvil()
         {
+            // 모루 위에 있는 아이템 전부 표시
+            ActiveObjectFromAnvilStorage(true);
+
             // 초기화
+            _anvilStorageDictionary.Clear();
             Destroy(_tempResultItem);
             _currentState = State.DEFAULT;
             _currentHammeringCount = 0;
@@ -107,6 +111,9 @@ namespace Js.Crafting
         // [1단계]
         public void FirstStepCraft()
         {
+            // 임시 결과 딕셔너리 안에 있는 모든 아이템을 비활성화
+            SetActiveFalseInDictionary();
+
             List<int> craftingIDList = new List<int>();
             foreach (var item in CraftingDictionary)
             {
@@ -124,15 +131,18 @@ namespace Js.Crafting
             }
 
             // 조합식에 해당하는 재료가 없을 경우 예외 처리
-            if (craftingIDList.Count.Equals(0)) { return; }
+            if (craftingIDList.Count.Equals(0)) 
+            {
+                // 상태 변경
+                _currentState = State.DEFAULT;
+                return; 
+            }
 
             // 결과 임시 아이템 생성 & 할당
             int index = craftingIDList.Count - 1;
             _currentConditionID = craftingIDList[index];
 
-            // 임시 결과 딕셔너리 안에 있는 모든 아이템을 비활성화
-            // & 해당하는 결과 아이템을 활성화
-            SetActiveFalseInDictionary();
+            // 해당하는 결과 아이템을 활성화
             _tempResultItemDictionary[_currentConditionID].SetActive(true);
 
             // 필요한 망치질 횟수 할당
@@ -165,8 +175,8 @@ namespace Js.Crafting
             _tempResultItemHandler.Initialize(this);
             _tempResultItem = item;
 
-            // 모루 위에 있는 아이템 전부 회수
-            DestroyObjectFromAnvilStorage();
+            // 모루 위에 있는 아이템 전부 숨기기
+            ActiveObjectFromAnvilStorage(false);
 
             // 상태 변경
             _currentState = State.TWO_STEP;
@@ -187,11 +197,20 @@ namespace Js.Crafting
 
             // 모루 초기화
             ResetAnvil();
+
+            // 모루위에 올라간 아이템 기준으로
+            // 임시 결과물 출력
+            FirstStepCraft();
         }
 
         // 저장소에서 아이템을 삭제한다
         public void RemoveItemFromStorage(int id, int amount)
         {
+            GFunc.Log($"id: {id} / amount: {amount}");
+
+            // id가 0일 경우 예외처리
+            if (id.Equals(0)) { return; }
+
             // amount만큼 아이템 제거
             int removeAmount = default;
             for (int i = 0; i < _anvilStorageDictionary[id].Count; i++)
@@ -199,9 +218,8 @@ namespace Js.Crafting
                 // 제거 완료시 반복문 종료
                 if (removeAmount.Equals(amount)) { break; }
 
-                // 리스트에서 아이템 제거 & 오브젝트 파괴
-                GameObject item = _anvilStorageDictionary[id][0];
-                _anvilStorageDictionary[id].RemoveAt(0);
+                // 아이템 삭제
+                GameObject item = _anvilStorageDictionary[id][i];
                 Destroy(item);
 
                 removeAmount++;
@@ -257,7 +275,7 @@ namespace Js.Crafting
                         // 아이템에 가해진 모든 물리효과 제거
                         // & 인벤토리에 들어가지 못하도록 함
                         RemoveAllPhysicsEffects(gameObject);
-                        BlockItemEntryToInventory(gameObject);
+                        ChangeStateItem(gameObject, 5);
 
                         // 저장소에서 아이템 추가
                         AddAmountAnvilStorage(itemID, gameObject);
@@ -265,6 +283,7 @@ namespace Js.Crafting
 
                     case "Exit":
                         // 저장소에서 아이템 삭제
+                        ChangeStateItem(gameObject, 0);
                         RemoveAmountAnvilStorage(itemID, gameObject);
                         break;
                 }
@@ -284,15 +303,15 @@ namespace Js.Crafting
             // 현재 망치질이 불가능할 경우 예외 처리
             if (_isHammeringPossible.Equals(false)) { return; }
 
-            // 현재 상태가 [1단계]일 경우 [2단계로] 변경
-            if (_currentState.Equals(State.FIRST_STEP))
-            {
-                TwoStepCraft();
-            }
-
             // Hammer 태그를 가지고 있을 경우
             if (collision.collider.CompareTag("Hammer"))
             {
+                // 현재 상태가 [1단계]일 경우 [2단계로] 변경
+                if (_currentState.Equals(State.FIRST_STEP))
+                {
+                    TwoStepCraft();
+                }
+
                 // 망치질 횟수 추가
                 _currentHammeringCount += 1;
 
@@ -316,19 +335,21 @@ namespace Js.Crafting
             }
         }
 
-        // 모루 저장소에 있는 모든 아이템을 삭제
-        private void DestroyObjectFromAnvilStorage()
+        // 모루 저장소에 있는 모든 아이템을 표시/숨김
+        // 원할 경우 상태도 변경
+        private void ActiveObjectFromAnvilStorage(bool isActive)
         {
             foreach (var item in AnvilStorageDictionary)
             {
                 int count = AnvilStorageDictionary[item.Key].Count;
                 for (int i = 0; i < count; i++)
                 {
-                    Destroy(AnvilStorageDictionary[item.Key][i]);
+                    GameObject storageItem = AnvilStorageDictionary[item.Key][i];
+                    storageItem.SetActive(isActive);
                 }
             }
         }
-        
+
         // 모루 저장소에 아이템을 추가
         private void AddAmountAnvilStorage(int id, GameObject gameObject)
         {
@@ -391,13 +412,15 @@ namespace Js.Crafting
         /*************************************************
          *              Private Get Methods
          *************************************************/
-        // 아이템이 인벤토리에 들어가지 못하게 함
-        private void BlockItemEntryToInventory(GameObject gameObject)
+        /// <summary> 아이템의 상태를 변경함 [0]=디폴트, [5]=크래프팅 </summary>
+        private void ChangeStateItem(GameObject gameObject, int state)
         {
+            ItemColliderHandler.State changeState = (ItemColliderHandler.State)state;
             ItemColliderHandler item = gameObject.GetComponent<ItemColliderHandler>();
             if (item != null)
             {
-                item.state = ItemColliderHandler.State.Default;
+                // 상태 변경
+                item.state = changeState;
             }
         }
 

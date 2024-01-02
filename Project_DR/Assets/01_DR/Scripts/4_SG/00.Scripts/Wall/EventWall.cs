@@ -149,14 +149,16 @@ public class EventWall : MonoBehaviour
             secretObjPos.z -= index;
         }
 
-        Instantiate(wall, clonePos, this.transform.rotation, this.transform);
+        Instantiate(rightWall, clonePos, this.transform.rotation, this.transform);
 
         // 비밀 아이템 생성
         if(isSecrecItem)
         {
-            itemIDs = new int[Data.GetCount(itemID)];
+            //itemIDs = new int[Data.GetCount(itemID)];
+            itemIDs = new int[6];
 
-            for (int i = 0; i < Data.GetCount(itemID); i++)
+
+            for (int i = 0; i < 6; i++)
             {
                 itemIDs[i] = Data.GetInt(itemID + i, "ID");
             }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -52,6 +52,7 @@ namespace BNG {
         SerializedProperty MoveAngularVelocityForce;
         SerializedProperty GrabPoints;
         SerializedProperty collisions;
+        SerializedProperty sleepRigid;
 
 
         void OnEnable() {
@@ -90,6 +91,7 @@ namespace BNG {
             MoveAngularVelocityForce = serializedObject.FindProperty("MoveAngularVelocityForce");
             GrabPoints = serializedObject.FindProperty("GrabPoints");
             collisions = serializedObject.FindProperty("collisions");
+            sleepRigid = serializedObject.FindProperty("sleepRigid");
         }
 
         public override void OnInspectorGUI() {
@@ -118,6 +120,7 @@ namespace BNG {
             EditorGUILayout.PropertyField(CustomHandPose);
 
             EditorGUILayout.PropertyField(GrabPoints);
+            EditorGUILayout.PropertyField(sleepRigid);
 
             // Only show Debug Fields when playing in editor
             if (Application.isPlaying) {

@@ -234,6 +234,7 @@ public class ItemManager : MonoBehaviour
                 GFunc.Log("quest 아이템 생성");
             }
 
+            CreateNameTag(item);
             return item;
         }
         catch (Exception ex)
@@ -319,6 +320,22 @@ public class ItemManager : MonoBehaviour
 
         return item;
     }
+
+    // 아이템에 네임택을 넣어주는 메서드
+    public void CreateNameTag(GameObject item)
+    {
+        if(item.name.Equals(""))
+        {
+            GFunc.Log(item.name + " 해당 아이템에 이름이 없습니다.");
+            return;
+        }
+
+        GameObject ItemTag = Resources.Load<GameObject>("Prefabs/Item_NameTag");
+        GameObject itemTag = Instantiate(ItemTag, item.transform.position, item.transform.rotation, item.transform);
+        itemTag.GetComponent<ItemNameTag>().SetName(item.name);
+        itemTag.GetComponent<ItemNameTag>().SetPosition(item.transform);
+    }
+
     #endregion
 
 
@@ -354,7 +371,7 @@ public class ItemManager : MonoBehaviour
         ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
 
         // 슬롯에 넣을 수 없도록 아이템 상태 Stop으로 변경
-        itemColliderHandler.state = ItemColliderHandler.State.Stop;
+        itemColliderHandler.state = ItemColliderHandler.State.STOP;
 
         // hand 위치로 포지션 이동
         item.transform.position = handPos;

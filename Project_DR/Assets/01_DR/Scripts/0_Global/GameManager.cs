@@ -169,10 +169,15 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
-        if(Input.GetKeyDown(KeyCode.F12))
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            TeleportToBoss();
+        }
+        if (Input.GetKeyDown(KeyCode.F12))
         {
             ClearDungeon();
         }
+
     }
 
     private void OnLevelWasLoaded()
@@ -287,7 +292,7 @@ public class GameManager : MonoBehaviour
 
             // 층 높이고
             nowFloor++;
-            string dungeonSceneName = "SG_TestScene";
+            string dungeonSceneName = "6_DungeonReadyScene";
             SceneLoad(dungeonSceneName);
         }
         else
@@ -468,4 +473,12 @@ public class GameManager : MonoBehaviour
         }       
     }
     #endregion
+
+
+
+    private void TeleportToBoss()
+    {
+        player.transform.position = GameObject.FindGameObjectWithTag("Finish").transform.position;
+
+    }
 }       // ClassEnd

@@ -160,7 +160,8 @@ public class BossNPC : NPC
 
         if (conversationId == -1)
         {
-            GFunc.Log(_npcId + "찾으려는 현재 진행중인 퀘스트 ID가 없습니다..");
+            GFunc.LogError(_npcId + "찾으려는 현재 진행중인 퀘스트 ID가 없습니다..");
+            conversationID = conversationIds[0];
             return;
         }
         conversationID = conversationId;

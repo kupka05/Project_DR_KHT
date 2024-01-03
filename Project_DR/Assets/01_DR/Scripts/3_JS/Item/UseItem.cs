@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Rito.InventorySystem;
 using System;
+using Js.Quest;
 
 public class UseItem : MonoBehaviour
 {
@@ -55,6 +56,9 @@ public class UseItem : MonoBehaviour
             // 현재 아이템의 타입을 가져온 후,
             // 아이템을 사용함
             Use(GetItemType());
+
+            // 아이템 사용 콜백 호출
+            QuestCallback.OnUseItemCallback(_itemData.ID);
         }
     }
 

@@ -327,6 +327,160 @@ public static class Unit
 
 
 
+    // KeyID와 일치하는 모든 퀘스트 리스트를 가져온다.
+    public static List<Quest> GetQuestListByKeyID(int id)
+    {
+        List<Quest> questList = QuestManager.Instance.GetQuestListByKeyID(id);
+        return questList;
+    }
+
+    // KeyID와 일치하는 특정한 상태의 퀘스트 리스트를 가져온다.
+    public static List<Quest> GetQuestListByKeyIDAndType(int id, int type)
+    {
+        List<Quest> questList = new List<Quest>();
+        List<Quest> tempQuestList = QuestManager.Instance.GetQuestListByKeyID(id);
+        QuestState.StateQuest tempType = (QuestState.StateQuest)type;
+        for (int i = 0; i < tempQuestList.Count; i++)
+        {
+            // 퀘스트가 type과 같은 상태일 경우
+            if (tempQuestList[i].QuestState.State.Equals(tempType))
+            {
+                // 리스트에 퀘스트 추가
+                questList.Add(tempQuestList[i]);
+            }
+        }
+
+        return questList;
+    }
+
+
+    /*************************************************
+     *         Public List<Quest> KeyID Methods
+     *************************************************/
+    // KeyID와 일치하는 [시작불가] 상태의 퀘스트 리스트를 가져온다.
+    public static List<Quest> GetNotStartableQuestListByKeyID(int id)
+    {
+        // [0][시작불가] 상태의 퀘스트 리스트를 가져온다.
+        List<Quest> questList = GetQuestListByKeyIDAndType(id, 0);
+        return questList;
+    }
+
+    // KeyID와 일치하는 [시작가능] 상태의 퀘스트 리스트를 가져온다.
+    public static List<Quest> GetCanStartableQuestListByKeyID(int id)
+    {
+        // [1][시작가능] 상태의 퀘스트 리스트를 가져온다.
+        List<Quest> questList = GetQuestListByKeyIDAndType(id, 1);
+        return questList;
+    }
+
+    // KeyID와 일치하는 [진행중] 상태의 퀘스트 리스트를 가져온다.
+    public static List<Quest> GetInProgressQuestListByKeyID(int id)
+    {
+        // [2][진행중] 상태의 퀘스트 리스트를 가져온다.
+        List<Quest> questList = GetQuestListByKeyIDAndType(id, 2);
+        return questList;
+    }
+
+    // KeyID와 일치하는 [완료가능] 상태의 퀘스트 리스트를 가져온다.
+    public static List<Quest> GetCanCompleteQuestListByKeyID(int id)
+    {
+        // [3][완료가능] 상태의 퀘스트 리스트를 가져온다.
+        List<Quest> questList = GetQuestListByKeyIDAndType(id, 3);
+        return questList;
+    }
+
+    // KeyID와 일치하는 [완료] 상태의 퀘스트 리스트를 가져온다.
+    public static List<Quest> GetCompleteQuestListByKeyID(int id)
+    {
+        // [4][완료] 상태의 퀘스트 리스트를 가져온다.
+        List<Quest> questList = GetQuestListByKeyIDAndType(id, 4);
+        return questList;
+    }
+
+    // KeyID와 일치하는 [실패] 상태의 퀘스트 리스트를 가져온다.
+    public static List<Quest> GetFailedQuestListByKeyID(int id)
+    {
+        // [5][실패] 상태의 퀘스트 리스트를 가져온다.
+        List<Quest> questList = GetQuestListByKeyIDAndType(id, 5);
+        return questList;
+    }
+
+
+    /*************************************************
+     *              Public Quest KeyID Methods
+     *************************************************/
+    // KeyID와 일치하는 [시작불가] 상태의 첫 번째 퀘스트를 가져온다.
+    public static Quest GetNotStartableQuestByKeyID(int id)
+    {
+        // [0][시작불가] 상태의 퀘스트를 가져온다.
+        return GetNotStartableQuestListByKeyID(id)[0];
+    }
+
+    // KeyID와 일치하는 [시작가능] 상태의 첫 번째 퀘스트를 가져온다.
+    public static Quest GetCanStartableQuestByKeyID(int id)
+    {
+        // [1][시작가능] 상태의 퀘스트를 가져온다.
+        return GetCanStartableQuestListByKeyID(id)[0];
+    }
+
+    // KeyID와 일치하는 [진행중] 상태의 첫 번째 퀘스트를 가져온다.
+    public static Quest GetInProgressQuestByKeyID(int id)
+    {
+        // [2][진행중] 상태의 퀘스트를 가져온다.
+        return GetInProgressQuestListByKeyID(id)[0];
+    }
+
+    // KeyID와 일치하는 [완료가능] 상태의 첫 번째 퀘스트를 가져온다.
+    public static Quest GetCanCompleteQuestByKeyID(int id)
+    {
+        // [3][완료가능] 상태의 퀘스트를 가져온다.
+        return GetCanCompleteQuestListByKeyID(id)[0];
+    }
+
+    // KeyID와 일치하는 [완료] 상태의 첫 번째 퀘스트를 가져온다.
+    public static Quest GetCompleteQuestByKeyID(int id)
+    {
+        // [4][완료] 상태의 퀘스트를 가져온다.
+        return GetCompleteQuestListByKeyID(id)[0];
+    }
+
+    // KeyID와 일치하는 [실패] 상태의 첫 번째 퀘스트를 가져온다.
+    public static Quest GetFailedQuestByKeyID(int id)
+    {
+        // [5][실패] 상태의 퀘스트를 가져온다.
+        return GetFailedQuestListByKeyID(id)[0];
+    }
+
+
+    // KeyID와 일치하는 [시작가능] 상태의 서브 퀘스트 리스트를 가져온다
+    public static List<Quest> GetCanStartableSubQuestListByKeyID(int id)
+    {
+        List<Quest> questList = new List<Quest>();
+        List<Quest> tempQuestList = GetCanStartableQuestListByKeyID(id);
+        for (int i = 0; i < tempQuestList.Count; i++)
+        {
+            // 서브 퀘스트일 경우
+            if (tempQuestList[i].QuestData.Type.Equals(QuestData.QuestType.SUB))
+            {
+                // 리스트에 추가
+                questList.Add(tempQuestList[i]);
+            }
+        }
+
+        return questList;
+    }
+
+    // KeyID와 일치하는 [시작가능] 상태의 첫 번째 서브 퀘스트를 가져온다
+    public static Quest GetCanStartableSubQuestByKeyID(int id)
+    {
+        // [1][시작가능] 상태의 서브 퀘스트를 가져온다.
+        return GetCanStartableSubQuestListByKeyID(id)[0];
+    }
+
+
+
+
+
     // 퀘스트 ID로 퀘스트를 검색하고 반환
     public static Quest GetQuestByID(int id)
     {

@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
     [Header("Dungeon")]
     // ----------------------------------------------- SG ------------------------------------------------
 
-    public bool IsProtoType = true;
+    public bool IsProtoType;
 
     public int nowFloor;        // 현재 몇층인지 알려줄 변수
     public int isPlayerMaxFloor;    // 현재 플레이어의 회차의따라서 아래 const변수값이 대입될것임
@@ -535,6 +535,8 @@ public class GameManager : MonoBehaviour
 
     private void TeleportToBoss()
     {
+        Damage.instance.critProbability = 100;
+        Damage.instance.critIncrease = 100;
         player.transform.position = GameObject.FindGameObjectWithTag("Finish").transform.position;
 
     }

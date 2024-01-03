@@ -275,7 +275,7 @@ public class SkillManager : MonoBehaviour
                 return;                
 
             case "AttackRate":
-                ActiveAttackRate(id);
+                ActiveAttackRate(id, amount);
                 return;
 
             case "CritDamage":
@@ -283,7 +283,7 @@ public class SkillManager : MonoBehaviour
                 return;
 
             case "CritProbability":
-                ActiveCritProbability(id);
+                ActiveCritProbability(id, amount);
                 return;
 
             case "DrillSize":
@@ -306,9 +306,11 @@ public class SkillManager : MonoBehaviour
         Damage.instance.AddEffectDamage(attackDamage); 
     }
     // 공격 속도 스킬
-    public void ActiveAttackRate(int id)
+    public void ActiveAttackRate(int id, float amount = 100)
     {
         float attackSpeed = Data.GetFloat(id, "Value1");
+        attackSpeed *= (amount / 100);
+
         UserDataManager.Instance.effectAttackRate += attackSpeed;
 
         // 드릴들의 공격속도 업데이트
@@ -325,9 +327,11 @@ public class SkillManager : MonoBehaviour
         Damage.instance.AddEffectCritDamage(critDamage);
     }
     // 치명타 확률 스킬
-    public void ActiveCritProbability(int id)
+    public void ActiveCritProbability(int id, float amount = 100)
     {
         float critProbability = Data.GetFloat(id, "Value1");
+        critProbability *= (amount / 100);
+
         Damage.instance.AddEffectCritProbability(critProbability);
     }
     // 드릴 사이즈 스킬

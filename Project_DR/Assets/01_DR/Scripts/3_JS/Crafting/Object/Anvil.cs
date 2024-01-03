@@ -299,7 +299,7 @@ namespace Js.Crafting
         // 망치질 횟수를 추가한다.
         private void AddCurrentHammeringCount(Collision collision)
         {
-            GFunc.Log($"_isHammeringPossible {_isHammeringPossible}");
+            //GFunc.Log($"_isHammeringPossible {_isHammeringPossible}");
             // 현재 망치질이 불가능할 경우 예외 처리
             if (_isHammeringPossible.Equals(false)) { return; }
 

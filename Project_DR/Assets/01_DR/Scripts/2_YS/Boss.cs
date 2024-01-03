@@ -1250,13 +1250,13 @@ public class Boss : MonoBehaviour
         StartCoroutine(ExecutePattern());
     }
 
-    private void OnDrawGizmos()
-    {
+    //private void OnDrawGizmos()
+    //{
 
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, angleRange / 2, radius);
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -angleRange / 2, radius);
+    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, angleRange / 2, radius);
+    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -angleRange / 2, radius);
 
-    }
+    //}
 
     void DebugDrawOverlapSphere()
     {

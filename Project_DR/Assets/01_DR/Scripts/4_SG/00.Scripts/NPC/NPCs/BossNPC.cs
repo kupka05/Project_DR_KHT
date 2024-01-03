@@ -88,8 +88,8 @@ public class BossNPC : NPC
     public void BossMeet()
     {
         GFunc.Log("대화를 시작한다.");
-        StartConvertion();
         ClearBossMeetQuest();
+        StartConvertion();
     }
 
 

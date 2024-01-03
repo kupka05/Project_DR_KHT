@@ -27,6 +27,27 @@ public class DungeonExit : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
+    private bool debug= false;
+    public void Update()
+    {
+        if(!isLobby)
+        { return; }
+
+        if(Input.GetKeyDown(KeyCode.F12) && !debug)
+        {
+            debug = true;
+            int targetQuestID = 3010001;
+            int clearCount = UserDataManager.Instance.ClearCount;
+            clearCount = clearCount <= 23 ? clearCount : 22;
+            GFunc.Log(clearCount);
+            targetQuestID += clearCount;
+            GFunc.ChoiceEvent(targetQuestID);
+
+            SceneLoad(sceneName);
+        }
+    }
+#endif
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Player"))

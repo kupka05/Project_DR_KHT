@@ -12,13 +12,18 @@ public class Lazer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
+        Invoke("Return", 1);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void Return()
+    {
+        Destroy(this.gameObject);
     }
 
     public void OnParticleCollision(GameObject other)

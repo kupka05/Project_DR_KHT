@@ -75,7 +75,7 @@ public class BossBullet : MonoBehaviour
                     GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
                     float destoryTime = 2.0f;
                     Destroy(effect, destoryTime);
-                    GFunc.Log("연쇄총알 무기에 닿았는가");
+                    //GFunc.Log("연쇄총알 무기에 닿았는가");
                     //ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
                     //GFunc.Log("무기에 닿았을 때 반환한다");
                     return;
@@ -87,7 +87,7 @@ public class BossBullet : MonoBehaviour
                     GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
                     float destoryTime = 2.0f;
                     Destroy(effect, destoryTime);
-                    GFunc.Log("연쇄총알 벽에 닿았는가");
+                    //GFunc.Log("연쇄총알 벽에 닿았는가");
                     //ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.CHAINBULLET);
                     //GFunc.Log("벽에 닿았을 때 반환한다");
                     return;
@@ -104,7 +104,7 @@ public class BossBullet : MonoBehaviour
                     GameObject effect = Instantiate(bulletEffect, transform.position, Quaternion.identity);
                     float destoryTime = 2.0f;
                     Destroy(effect, destoryTime);
-                    GFunc.Log($"데미지:{damage}");
+                    //GFunc.Log($"데미지:{damage}");
                     break;
                 }
                 Destroy(this.gameObject);

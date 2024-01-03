@@ -98,7 +98,7 @@ public class Shoot : MonoBehaviour
 
             }
 
-            GFunc.Log($"리스트 크기 : {bullets.Count}");
+            //GFunc.Log($"리스트 크기 : {bullets.Count}");
 
             foreach (GameObject bullet in bullets)
             {

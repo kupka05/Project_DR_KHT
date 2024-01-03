@@ -58,7 +58,7 @@ public class RandomRoomObjCreate : MonoBehaviour
         stringBuilder = new StringBuilder();
         spawnPosList = new List<Vector3>();
         parentObj = new GameObject("SpawnObjs");
-        cornerPos = GetComponent<FloorMeshPos>();
+        cornerPos = this.GetComponent<FloorMeshPos>();
 
         doorPos = new List<Vector3>();
         upDoorPos = new Vector3((cornerPos.topLeftCorner.x + cornerPos.topRightCorner.x) * 0.5f, 0f, cornerPos.topLeftCorner.z);
@@ -172,6 +172,7 @@ public class RandomRoomObjCreate : MonoBehaviour
         Vector3 spawnPos = PickSpwanPos(_CreateObjId);
         if (spawnPos != Vector3.zero)
         {
+            spawnPosList.Add(spawnPos);
             bool isWallSpawn = ObjRotationSetting(_CreateObjId);
             InstantiateObj(spawnObjClone, spawnPos, isWallSpawn);
         }
@@ -190,7 +191,7 @@ public class RandomRoomObjCreate : MonoBehaviour
         Vector3 tempPos;
         if (reCallCount >= 15)
         {
-            GFunc.Log($"초과재귀로 오브젝트 생성 건너뜀");
+            //GFunc.Log($"초과재귀로 오브젝트 생성 건너뜀");
             reCallCount = 0;
             createPass = true;
             return Vector3.zero;
@@ -211,7 +212,7 @@ public class RandomRoomObjCreate : MonoBehaviour
             //Debug.Log("벽오브젝트 생성으로 진입");
             int isSpawnCompass = UnityEngine.Random.Range((int)SpawnCompass.Up, (int)SpawnCompass.RandomMax);
             spawnCompass = (SpawnCompass)isSpawnCompass;
-            tempPos = GetWallSpawnPos(_CreateObjId, isSpawnCompass);
+            tempPos = GetWallSpawnPos(isSpawnCompass);
             bool isCollision = IsNotCollisionDoor(tempPos);
             if (isCollision == true)
             {
@@ -238,8 +239,7 @@ public class RandomRoomObjCreate : MonoBehaviour
                 return PickSpwanPos(_CreateObjId);
 
             }
-        }
-        spawnPosList.Add(tempPos);
+        }        
         return tempPos;
     }       // PickSpwanPos()
 
@@ -249,7 +249,7 @@ public class RandomRoomObjCreate : MonoBehaviour
     /// <param name="_CreateObjId">생성할오브젝트의 ID</param>
     /// <param name="_isSpawnCompass">생성할 오브젝트의 위치</param>
     /// <returns>랜덤으로 지정된 위치</returns>
-    private Vector3 GetWallSpawnPos(int _CreateObjId, int _isSpawnCompass)
+    private Vector3 GetWallSpawnPos(int _isSpawnCompass)
     {
         float xPos;
         float yPos = Data.GetFloat(9009, "RoopYpos");
@@ -311,7 +311,7 @@ public class RandomRoomObjCreate : MonoBehaviour
         foreach (Vector3 tempV3 in doorPos)
         {
             float dis = Vector3.Distance(_tempSpawnPos, tempV3);
-            if (dis < 1)
+            if (dis < 3)
             {
                 return true;
             }
@@ -377,8 +377,6 @@ public class RandomRoomObjCreate : MonoBehaviour
         reCallCount = 0;
 
         GameObject spawnObjClone = Instantiate(_spawnObj, _spawnPos, Quaternion.identity, parentObj.transform);
-        //Debug.Log($"스폰된 것의 이름 : {spawnObjClone.name}");
-        reCallCount = 0;
         ObjectLayerSetting(spawnObjClone);
         if (_isWallSpawn == true)
         {
@@ -417,7 +415,7 @@ public class RandomRoomObjCreate : MonoBehaviour
         else
         {
             // 추가적인 축 추가를 위해 임시로 비워둠
-        }
+        }        
     }       // SpawnObjRotationSet()
 
 

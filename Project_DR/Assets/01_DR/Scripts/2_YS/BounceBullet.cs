@@ -14,18 +14,16 @@ public class BounceBullet : MonoBehaviour
 
     public GameObject bounceEffect;
 
-   
-
     public Transform target;
     public float attack = 3.0f;
 
     public float damageRadius = 1.9f;
 
-
     [Header("테이블 관련")]
     //public float speed = default;
     public float damage = default;
     //public float destoryTime = default;
+    public float destoryTimeBounce = default;
 
     [Header("조건")]
     public bool isShoot = false;
@@ -40,11 +38,14 @@ public class BounceBullet : MonoBehaviour
     void Start()
     {
 
+
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         rigid = GetComponent<Rigidbody>();
 
         damageCollider.Damage = damage;
 
+
+        Invoke("Return", destoryTimeBounce);
         //StartCoroutine(Activate());
     }
 
@@ -54,23 +55,21 @@ public class BounceBullet : MonoBehaviour
 
     }
 
-
     void DealDamageToNearbyObjects()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
         // 디버그용: 빨간색 구체로 OverlapSphere 영역을 시각화
-        DebugDrawOverlapSphere();
+        //DebugDrawOverlapSphere();
 
         foreach (Collider collider in colliders)
         {
-            
 
             if (collider.CompareTag("Player") && !isDamage)
             {
                 //GFunc.Log("만났는가");
                 // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
-                // collider.GetComponent<Damageable>().DealDamage(damage);
+                collider.GetComponent<Damageable>().DealDamage(damage);
                 //GFunc.Log($"데미지: {damage}");
 
                 isDamage = true;
@@ -82,8 +81,38 @@ public class BounceBullet : MonoBehaviour
         isDamage = false;
         //GFunc.Log("false되냐");
 
-        
+
     }
+
+    void Return()
+    {
+        Destroy(this.gameObject);
+    }
+
+     //기존로직
+    //void DealDamageToNearbyObjects()
+    //{
+    //    Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
+
+    //    // 디버그용: 빨간색 구체로 OverlapSphere 영역을 시각화
+    //    OnDrawGizmos();
+
+    //    foreach (Collider collider in colliders)
+    //    {
+    //        if (collider.CompareTag("Player") && !isDamage)
+    //        {
+    //            collider.GetComponent<Damageable>().DealDamage(damage);
+    //            GameObject effect = Instantiate(bounceEffect, transform.position, Quaternion.identity);
+    //            isDamage = true;
+    //            break;
+    //        }
+
+    //        return;
+
+    //    }
+    //    isDamage = false;
+
+    //}
 
     //private void OnDrawGizmos()
     //{
@@ -99,10 +128,17 @@ public class BounceBullet : MonoBehaviour
     //    }
     //}
 
-    void DebugDrawOverlapSphere()
+    //void DebugDrawOverlapSphere()
+    //{
+    //    Vector3 dir = target.position - transform.position;
+    //    Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.magenta);
+    //}
+
+    void OnDrawGizmos()
     {
-        Vector3 dir = target.position - transform.position;
-        Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.blue);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(this.transform.position, damageRadius);
     }
 
     public void GetData(int BounceTableId)
@@ -110,7 +146,7 @@ public class BounceBullet : MonoBehaviour
         //6912
         //speed = (float)DataManager.Instance.GetData(BounceTableId, "Speed", typeof(float));
         damage = (float)DataManager.Instance.GetData(BounceTableId, "Damage", typeof(float));
-        //destoryTime = (float)DataManager.Instance.GetData(BounceTableId, "DesTime", typeof(float));
+        destoryTimeBounce = (float)DataManager.Instance.GetData(BounceTableId, "DesTime", typeof(float));
     }
 
 }

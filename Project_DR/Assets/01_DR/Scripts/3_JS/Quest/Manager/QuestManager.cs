@@ -248,7 +248,7 @@ namespace Js.Quest
                     // tempQuestList에 퀘스트 추가
                     tempQuestList.Add(item);
 
-                    GFunc.LogError($"{questState} / {item.QuestData.ID}");
+                    GFunc.LogError($"{questState} / {tempQuestList[0].QuestData.ID}");
                 }
             }
 

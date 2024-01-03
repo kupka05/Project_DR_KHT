@@ -28,7 +28,7 @@ public class ShopDoor : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // 플레이어가 못나가게 문을 막음
-            Invoke("ActiveShield", 0.1f);
+            Invoke("ActiveShield", 0.5f);
 
             // n초 후 문을 닫는다.
             Invoke("CloseDoor", _delay);

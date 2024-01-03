@@ -133,19 +133,34 @@ public static class Unit
     // [시작가능] 상태의 메인 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetCanStartMainQuest()
     {
-        return GetCanStartMainQuestForList()[0];
+        Quest quest = GetCanStartMainQuestForList()[0];
+        if (quest.Equals(null))
+        {
+            GFunc.LogError("받아온 퀘스트의 인덱스[0]이 null 입니다.");
+        }
+        return quest;
     }
 
     // [시작가능] 상태의 서브 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetCanStartSubQuest()
     {
-        return GetCanStartSubQuestForList()[0];
+        Quest quest = GetCanStartSubQuestForList()[0];
+        if (quest.Equals(null))
+        {
+            GFunc.LogError("받아온 퀘스트의 인덱스[0]이 null 입니다.");
+        }
+        return quest;
     }
 
     // [시작가능] 상태의 특수 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetCanStartSpecialQuest()
     {
-        return GetCanStartSpeicalQuestForList()[0];
+        Quest quest = GetCanStartSpeicalQuestForList()[0];
+        if (quest.Equals(null))
+        {
+            GFunc.LogError("받아온 퀘스트의 인덱스[0]이 null 입니다.");
+        }
+        return quest;
     }
 
 
@@ -153,38 +168,69 @@ public static class Unit
     // [진행중] 상태의 메인 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetInProgressMainQuest()
     {
-        return GetInProgressMainQuestForList()[0];
+        Quest quest = GetInProgressMainQuestForList()[0];
+        if (quest.Equals(null))
+        {
+            GFunc.LogError("받아온 퀘스트의 인덱스[0]이 null 입니다.");
+        }
+        return quest;
     }
 
     // [진행중] 상태의 서브 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetInProgressSubQuest()
     {
-        return GetInProgressSubQuestForList()[0];
+        Quest quest = GetInProgressSubQuestForList()[0];
+        if (quest.Equals(null))
+        {
+            GFunc.LogError("받아온 퀘스트의 인덱스[0]이 null 입니다.");
+        }
+        return quest;
     }
 
     // [진행중] 상태의 특수 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetInProgressSpecialQuest()
     {
-        return GetInProgressSpecialQuestForList()[0];
+        Quest quest = GetInProgressSpecialQuestForList()[0];
+        if (quest.Equals(null))
+        {
+            GFunc.LogError("받아온 퀘스트의 인덱스[0]이 null 입니다.");
+        }
+        return quest;
     }
 
 
     // [완료가능] 상태의 메인 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetCanCompleteMainQuest()
     {
-        return GetCanCompleteMainQuestForList()[0];
+        Quest quest = GetCanCompleteMainQuestForList()[0];
+        if (quest.Equals(null))
+        {
+            GFunc.LogError("받아온 퀘스트의 인덱스[0]이 null 입니다.");
+        }
+        GFunc.LogError($"{quest.QuestData.ID}");
+        return quest;
     }
 
     // [완료가능] 상태의 서브 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetCanCompleteSubQuest()
     {
-        return GetCanCompleteSubQuestForList()[0];
+        Quest quest = GetCanCompleteSubQuestForList()[0];
+        if (quest.Equals(null))
+        {
+            GFunc.LogError("받아온 퀘스트의 인덱스[0]이 null 입니다.");
+        }
+        return quest;
     }
 
     // [완료가능] 상태의 특수 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
     public static Quest GetCanCompleteSpecialQuest()
     {
-        return GetCanCompleteSpecialQuestForList()[0];
+        Quest quest = GetCanCompleteSpecialQuestForList()[0];
+        if (quest.Equals(null))
+        {
+            GFunc.LogError("받아온 퀘스트의 인덱스[0]이 null 입니다.");
+        }
+        return quest;
     }
 
 

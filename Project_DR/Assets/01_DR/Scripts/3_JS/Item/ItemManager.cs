@@ -189,19 +189,16 @@ public class ItemManager : MonoBehaviour
     public GameObject CreateTempItem(Vector3 pos, int id, Transform parent, int amount = 1)
     {
         // 아이템 생성 & 컴포넌트 끄기
-        GameObject item = CreateItem(pos, id, amount);
+        GameObject item = CreateItem(pos, id, amount, true);
         item.transform.SetParent(parent);
         item.transform.localPosition = pos;
         item.GetComponent<ItemColliderHandler>().enabled = false;
         item.GetComponent<Grabbable>().enabled = false;
 
-        // TODO: 플레이어와 닿았을 경우 조합 취소하는 기능 추가
-        // 
-
         return item;
     }
 
-    public GameObject CreateItem(Vector3 pos, int id, int amount = 1)
+    public GameObject CreateItem(Vector3 pos, int id, int amount = 1, bool isTempItem = false)
     {
         /////////////////////////////////////////////
         // amount 값이 변해도 하나만 생성하도록 고정함
@@ -234,7 +231,12 @@ public class ItemManager : MonoBehaviour
                 GFunc.Log("quest 아이템 생성");
             }
 
-            CreateNameTag(item);
+            // 크래프팅 임시 결과 아이템이 아닐 경우 네임태그 추가
+            if (isTempItem.Equals(false))
+            {
+                CreateNameTag(item);
+            }
+
             return item;
         }
         catch (Exception ex)

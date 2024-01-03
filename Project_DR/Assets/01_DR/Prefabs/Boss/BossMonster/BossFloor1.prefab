@@ -2373,8 +2373,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0bc0660f8c3f054c948ba7e5bca38c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  angleRange: 30
   radius: 40
-  angle: 45
   bossHPSlider: {fileID: 118018865473801991}
   bossState: {fileID: 3770469314472680577, guid: 66055d0e3ac8d0c479422d8d40ff04f2,
     type: 3}
@@ -2455,7 +2455,7 @@ MonoBehaviour:
   ActivateGameObjectsOnDeath: []
   DeactivateGameObjectsOnDeath: []
   DeactivateCollidersOnDeath: []
-  DestroyOnDeath: 0
+  DestroyOnDeath: 1
   DropOnDeath: 1
   DestroyDelay: 0
   Respawn: 0

@@ -48,7 +48,7 @@ public class BossFloor2 : Boss
                     GFunc.Log("체력별 패턴 3 진입");
 
                     RandomPatternSecond();
-                    //GFunc.Log("랜덤 패턴3 발동");
+                    GFunc.Log("랜덤 패턴 2개 발동");
 
                     if (bossState && !isKnockBackSecond)
                     {
@@ -66,7 +66,7 @@ public class BossFloor2 : Boss
                     GFunc.Log("체력별 패턴 4 진입");
 
                     RandomPatternThird();
-                    //GFunc.Log("랜덤 패턴4 발동");
+                    GFunc.Log("랜덤 패턴 3개 발동");
 
                     if (bossState && !isKnockBackThird)
                     {

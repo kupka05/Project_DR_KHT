@@ -65,7 +65,7 @@ public class BossFloor5 : Boss
                 {
                     GFunc.Log("체력별 패턴 4 진입");
 
-                    RandomPatternFifth();
+                    RandomPatternForth();
                     //GFunc.Log("랜덤 패턴4 발동");
 
                     if (bossState && !isKnockBackThird)

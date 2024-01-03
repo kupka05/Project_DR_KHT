@@ -77,14 +77,15 @@ public class Shoot : MonoBehaviour
             // 총알 미리 생성
             for (int i = 0; i < bulletCount; i++)
             {
-                Vector3 offset = Vector3.zero;
-
-                offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
+                Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
                 //기존 로직
                 GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
-                bullets.Add(instantBullet);
                 instantBullet.transform.LookAt(target.position);
+                
+                bullets.Add(instantBullet);
+                
+                //instantBullet.transform.LookAt(target.position);
 
                 // 오브젝트 풀을 사용하여 총알을 가져옵니다.
                 //GameObject instantBullet = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBULLET);
@@ -93,7 +94,7 @@ public class Shoot : MonoBehaviour
                 //instantBullet.transform.rotation = Quaternion.identity;
                 //instantBullet.transform.LookAt(target.position);
 
-                bullets.Add(instantBullet);
+               // bullets.Add(instantBullet);
 
             }
 

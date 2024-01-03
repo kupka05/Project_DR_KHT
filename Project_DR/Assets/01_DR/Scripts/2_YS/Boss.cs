@@ -199,7 +199,7 @@ public class Boss : MonoBehaviour
         brickCount = (float)DataManager.Instance.GetData(bossProjectileID, "Duration", typeof(float));
 
         //6912 애드벌룬
-        destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "DesTime", typeof(float));
+        //destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "DesTime", typeof(float));
         speedBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "Speed", typeof(float));
         bounceCount = (float)DataManager.Instance.GetData(bossProjectileBounceId, "Duration", typeof(float));
     }
@@ -237,14 +237,16 @@ public class Boss : MonoBehaviour
                     //GFunc.Log("체력별 패턴 1 진입");
 
                     RandomPattern();
+                    //GFunc.Log("3개 패턴 동시에 발동");
                     //GFunc.Log("랜덤 패턴1 발동");
 
                 }
                 else if (damageable.Health <= maxHp * 0.75f && damageable.Health > maxHp * 0.51f)
                 {
-                    GFunc.Log("체력별 패턴 2 진입");
+                 
 
                     RandomPattern();
+                    GFunc.Log("4개 패턴 동시에 발동");
                     //GFunc.Log("랜덤 패턴2 발동");
 
                     if (bossState && !isKnockBack)
@@ -306,24 +308,24 @@ public class Boss : MonoBehaviour
     {
         int pattern = UnityEngine.Random.Range(0, 4);
 
-        
+
         switch (pattern)
         {
             case 0:
                 StartCoroutine(PlayShoot());
-                GFunc.Log("패턴 1 선택");
+                //GFunc.Log("패턴 1 선택");
                 break;
             case 1:
                 StartCoroutine(LazerCoroutine());
-                GFunc.Log("패턴 2 선택");
+                //GFunc.Log("패턴 2 선택");
                 break;
             case 2:
                 StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
+                //GFunc.Log("패턴 3 선택");
                 break;
             case 3:
                 StartCoroutine(BigBrickShoot());
-                GFunc.Log("패턴 4 선택");
+                //GFunc.Log("패턴 4 선택");
                 break;
         }
 
@@ -333,341 +335,150 @@ public class Boss : MonoBehaviour
             GFunc.Log("보스 attack 애니메이션");
         }
     }
-
     public void RandomPatternSecond()
     {
-        int pattern = UnityEngine.Random.Range(0, 4);
+        StartCoroutine(ExecuteRandomPatterns());
+    }
+    public IEnumerator ExecuteRandomPatterns()
+    {
+        int pattern1 = UnityEngine.Random.Range(0, 4);
         int pattern2 = UnityEngine.Random.Range(0, 4);
 
-        switch (pattern)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        switch (pattern2)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
+        // 랜덤으로 선택된 두 개의 패턴을 동시에 실행
+        yield return StartCoroutine(ExecutePattern(pattern1, "첫 번째 패턴"));
+        yield return StartCoroutine(ExecutePattern(pattern2, "두 번째 패턴"));
 
         if (bossState)
         {
             bossState.GetComponent<BossState>().Attack();
             GFunc.Log("보스 attack 애니메이션");
         }
+    }
+
+    public IEnumerator ExecutePattern(int pattern, string logMessage)
+    {
+        switch (pattern)
+        {
+            case 0:
+                StartCoroutine(PlayShoot());
+                GFunc.Log(logMessage + ": 패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(LazerCoroutine());
+                GFunc.Log(logMessage + ": 패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log(logMessage + ": 패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BigBrickShoot());
+                GFunc.Log(logMessage + ": 패턴 4 선택");
+                break;
+        }
+
+        // 코루틴이 완료될 때까지 대기
+        yield return new WaitForSeconds(0);
     }
 
     public void RandomPatternThird()
     {
-        int pattern = UnityEngine.Random.Range(0, 4);
-        int pattern2 = UnityEngine.Random.Range(0, 4);
-        int pattern3 = UnityEngine.Random.Range(0, 4);
-
-        switch (pattern)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        switch (pattern2)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        switch (pattern3)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        if (bossState)
-        {
-            bossState.GetComponent<BossState>().Attack();
-            GFunc.Log("보스 attack 애니메이션");
-        }
+        StartCoroutine(ExecuteRandomPatternThird());
     }
 
-    public void RandomPatternForth()
+    public IEnumerator ExecuteRandomPatternThird()
     {
-        int pattern = UnityEngine.Random.Range(0, 4);
-        int pattern2 = UnityEngine.Random.Range(0, 4);
-        int pattern3 = UnityEngine.Random.Range(0, 4);
-        int pattern4 = UnityEngine.Random.Range(0, 4);
-
-        switch (pattern)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        switch (pattern2)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        switch (pattern3)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        switch (pattern4)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-
-        if (bossState)
-        {
-            bossState.GetComponent<BossState>().Attack();
-            GFunc.Log("보스 attack 애니메이션");
-        }
-    }
-
-    public void RandomPatternFifth()
-    {
-        int pattern = UnityEngine.Random.Range(0, 4);
-        int pattern2 = UnityEngine.Random.Range(0, 4);
         int pattern3 = UnityEngine.Random.Range(0, 4);
         int pattern4 = UnityEngine.Random.Range(0, 4);
         int pattern5 = UnityEngine.Random.Range(0, 4);
 
-        switch (pattern)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        switch (pattern2)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        switch (pattern3)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        switch (pattern4)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        switch (pattern5)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
+        // 랜덤으로 선택된 두 개의 패턴을 동시에 실행
+        yield return StartCoroutine(ExecutePatternThird(pattern3, "첫 번째 패턴"));
+        yield return StartCoroutine(ExecutePatternThird(pattern4, "두 번째 패턴"));
+        yield return StartCoroutine(ExecutePatternThird(pattern5, "세 번째 패턴"));
 
         if (bossState)
         {
             bossState.GetComponent<BossState>().Attack();
             GFunc.Log("보스 attack 애니메이션");
         }
+    }
+
+    public IEnumerator ExecutePatternThird(int pattern, string logMessage)
+    {
+        switch (pattern)
+        {
+            case 0:
+                StartCoroutine(PlayShoot());
+                GFunc.Log(logMessage + ": 패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(LazerCoroutine());
+                GFunc.Log(logMessage + ": 패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log(logMessage + ": 패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BigBrickShoot());
+                GFunc.Log(logMessage + ": 패턴 4 선택");
+                break;
+        }
+
+        // 코루틴이 완료될 때까지 대기
+        yield return new WaitForSeconds(0);
+    }
+
+    public void RandomPatternForth()
+    {
+        StartCoroutine(ExecuteRandomPatternForth());
+    }
+
+    public IEnumerator ExecuteRandomPatternForth()
+    {
+        int pattern6 = UnityEngine.Random.Range(0, 4);
+        int pattern7 = UnityEngine.Random.Range(0, 4);
+        int pattern8 = UnityEngine.Random.Range(0, 4);
+        int pattern9 = UnityEngine.Random.Range(0, 4);
+
+        // 랜덤으로 선택된 두 개의 패턴을 동시에 실행
+        yield return StartCoroutine(ExecutePatternForth(pattern6, "첫 번째 패턴"));
+        yield return StartCoroutine(ExecutePatternForth(pattern7, "두 번째 패턴"));
+        yield return StartCoroutine(ExecutePatternForth(pattern8, "세 번째 패턴"));
+        yield return StartCoroutine(ExecutePatternForth(pattern9, "네 번째 패턴"));
+
+        if (bossState)
+        {
+            bossState.GetComponent<BossState>().Attack();
+            GFunc.Log("보스 attack 애니메이션");
+        }
+    }
+
+    public IEnumerator ExecutePatternForth(int pattern, string logMessage)
+    {
+        switch (pattern)
+        {
+            case 0:
+                StartCoroutine(PlayShoot());
+                GFunc.Log(logMessage + ": 패턴 1 선택");
+                break;
+            case 1:
+                StartCoroutine(LazerCoroutine());
+                GFunc.Log(logMessage + ": 패턴 2 선택");
+                break;
+            case 2:
+                StartCoroutine(BounceShoot());
+                GFunc.Log(logMessage + ": 패턴 3 선택");
+                break;
+            case 3:
+                StartCoroutine(BigBrickShoot());
+                GFunc.Log(logMessage + ": 패턴 4 선택");
+                break;
+        }
+
+        // 코루틴이 완료될 때까지 대기
+        yield return new WaitForSeconds(0);
     }
 
     public void PushPlayerBackward()
@@ -749,24 +560,21 @@ public class Boss : MonoBehaviour
             }
 
             //기존 로직
-            //bullets.Clear();
-
-            //isShoot = false;
-            //GFunc.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
-
-            yield return new WaitForSeconds(destoryTime);
-            // 오브젝트 풀을 사용하여 총알을 반환합니다.
-            foreach (GameObject bullet in bullets)
-            {
-                Destroy(bullet);
-                //ObjectPoolManager.ReturnObjectToQueue(bullet, ObjectPoolManager.ProjectileType.CHAINBULLET);
-                //GFunc.Log("반환 이상 없이 작동하는가?");
-            }
-
             bullets.Clear();
 
             isShoot = false;
-            GFunc.Log($"isShoot:{isShoot}");
+            GFunc.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
+
+            //yield return new WaitForSeconds(destoryTime);
+            //// 오브젝트 풀을 사용하여 총알을 반환합니다.
+            //foreach (GameObject bullet in bullets)
+            //{
+            //    Destroy(bullet);
+            //    //ObjectPoolManager.ReturnObjectToQueue(bullet, ObjectPoolManager.ProjectileType.CHAINBULLET);
+            //    //GFunc.Log("반환 이상 없이 작동하는가?");
+            //}
+
+           
         }
     }
 
@@ -895,13 +703,13 @@ public class Boss : MonoBehaviour
 
             }
 
-            yield return new WaitForSeconds(destroyTimeBrick);
+            //yield return new WaitForSeconds(destroyTimeBrick);
 
-            foreach (GameObject instantBrick in bigbrick)
-            {
-                Destroy(instantBrick);
-                //ObjectPoolManager.ReturnObjectToQueue(instantBrick, ObjectPoolManager.ProjectileType.BIGBRICK);
-            }
+            //foreach (GameObject instantBrick in bigbrick)
+            //{
+            //    Destroy(instantBrick);
+            //    //ObjectPoolManager.ReturnObjectToQueue(instantBrick, ObjectPoolManager.ProjectileType.BIGBRICK);
+            //}
 
             bigbrick.Clear();
 
@@ -1086,13 +894,13 @@ public class Boss : MonoBehaviour
 
             }
 
-            yield return new WaitForSeconds(destoryTimeBounce);
+            //yield return new WaitForSeconds(destoryTimeBounce);
 
-            foreach (GameObject instantBounce in bounceBall)
-            {
-                Destroy(instantBounce);
-                //ObjectPoolManager.ReturnObjectToQueue(instantBounce, ObjectPoolManager.ProjectileType.BOUNCEBALL);
-            }
+            //foreach (GameObject instantBounce in bounceBall)
+            //{
+            //    Destroy(instantBounce);
+            //    //ObjectPoolManager.ReturnObjectToQueue(instantBounce, ObjectPoolManager.ProjectileType.BOUNCEBALL);
+            //}
 
             bounceBall.Clear();
 

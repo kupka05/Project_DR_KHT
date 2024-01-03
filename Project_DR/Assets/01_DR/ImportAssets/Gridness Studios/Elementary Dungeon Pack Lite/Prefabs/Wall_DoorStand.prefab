@@ -12,13 +12,14 @@ GameObject:
   - component: {fileID: 4773556815127557383}
   - component: {fileID: 3920107450084553110}
   - component: {fileID: 1398000841477646401}
+  - component: {fileID: 2064266015}
   m_Layer: 0
   m_Name: Door_Middle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3410788359522788007
 Transform:
   m_ObjectHideFlags: 0
@@ -33,7 +34,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7613687411510550139}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &4773556815127557383
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -98,6 +99,23 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4216444321136458003, guid: edcc86a903182d0429c0d7b2c727fec0, type: 3}
+--- !u!111 &2064266015
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015392160495992983}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: d90c9c63aba5da9469d50bf734298c2a, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: d90c9c63aba5da9469d50bf734298c2a, type: 2}
+  - {fileID: 7400000, guid: bd19cf0ca88bb244f97970c3e01132c0, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &6060765555651036034
 GameObject:
   m_ObjectHideFlags: 0

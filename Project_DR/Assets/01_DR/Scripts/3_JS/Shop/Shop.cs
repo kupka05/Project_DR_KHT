@@ -9,6 +9,7 @@ public class Shop : MonoBehaviour
      *************************************************/
     #region [+]
     public ShopItemPurchaseHandler ShopItemPurchaseHandler => _shopItemPurchaseHandler;
+    public bool IsPurchasedPassiveSkill => _isPurchasedPassiveSkill;
 
     #endregion
     /*************************************************
@@ -19,6 +20,7 @@ public class Shop : MonoBehaviour
         = new ShopItemPurchaseHandler();
     [SerializeField] private ShopPlayerGoldTextController _playerGoldText = default;
     [SerializeField] private List<ShopItemReference> _shopItems = default;
+    [SerializeField] private bool _isPurchasedPassiveSkill = false;
 
     // 인스펙터에서 ShopItem과 ID를 설정하기 위해
     // 직렬화 클래스 생성
@@ -59,7 +61,6 @@ public class Shop : MonoBehaviour
     /*************************************************
      *                 Public Methods
      *************************************************/
-    #region [+]
     // 플레이어 골드 안내 텍스트 갱신
     public void UpdatePlayerGoldText()
     {
@@ -70,7 +71,13 @@ public class Shop : MonoBehaviour
         _playerGoldText.GetDataAndSetText();
     }
 
-    #endregion
+    // 패시브 스킬을 구매했는지 여부를 설정한다.
+    public void SetisPurchasedPassiveSkill(bool isPurchased)
+    {
+        _isPurchasedPassiveSkill = isPurchased;
+    }
+
+
     /*************************************************
      *                 Private Methods
      *************************************************/

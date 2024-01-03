@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class ShopDoor : MonoBehaviour
 {
-    private Animation _animation;
+    /*************************************************
+     *                Private Fields
+     *************************************************/
+    [SerializeField] private Animation _animation;
+    [SerializeField] private float _delay = 2f;
 
+
+    /*************************************************
+     *                 Unity Events
+     *************************************************/
     void Start()
     {
         // Init
@@ -18,17 +26,25 @@ public class ShopDoor : MonoBehaviour
         // 플레이어가 들어왔을 경우
         if (other.CompareTag("Player"))
         {
-            // 1초 후 문을 닫는다.
-            Invoke("CloseDoor", 1f);
+            // n초 후 문을 닫는다.
+            Invoke("CloseDoor", _delay);
         }
     }
 
+
+    /*************************************************
+     *             Initialize Methods
+     *************************************************/
     public void Initialize()
     {
         // Init
         _animation = transform.parent.Find("Door_Middle").GetComponent<Animation>();
     }
 
+
+    /*************************************************
+     *              Private Methods
+     *************************************************/
     private void CloseDoor()
     {
         _animation.Play("ShopDoor_Close");

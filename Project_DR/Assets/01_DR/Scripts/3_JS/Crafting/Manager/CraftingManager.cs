@@ -69,15 +69,21 @@ namespace Js.Crafting
             Initialize();
         }
 
-        //// 디버그용
-        //private void Update()
-        //{
-        //    if (Input.GetKeyUp(KeyCode.B))
-        //    {
-        //        Vector3 pos = GameObject.Find("PlayerController").transform.position;
-        //        CreateAnvil(pos);
-        //    }
-        //}
+        // 디버그용
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.B))
+            {
+                Vector3 pos = GameObject.Find("PlayerController").transform.position;
+                CreateAnvil(pos);
+            }
+
+            if (Input.GetKeyUp(KeyCode.N))
+            {
+                Vector3 pos = GameObject.Find("PlayerController").transform.position;
+                CreateEnhance(pos);
+            }
+        }
 
         /*************************************************
          *               Initialize Methods

@@ -62,9 +62,9 @@ public class RandomRoomObjCreate : MonoBehaviour
 
         doorPos = new List<Vector3>();
         upDoorPos = new Vector3((cornerPos.topLeftCorner.x + cornerPos.topRightCorner.x) * 0.5f, 0f, cornerPos.topLeftCorner.z);
-        downDoorPos = new Vector3((cornerPos.bottomLeftCorner.x + cornerPos.bottomRightCorner.x) * 0.5f, 0f, cornerPos.topLeftCorner.z);
+        downDoorPos = new Vector3((cornerPos.bottomLeftCorner.x + cornerPos.bottomRightCorner.x) * 0.5f, 0f, cornerPos.bottomLeftCorner.z);
         leftDoorPos = new Vector3(cornerPos.bottomLeftCorner.x, 0f, (cornerPos.bottomLeftCorner.z + cornerPos.topLeftCorner.z) * 0.5f);
-        rightDoorPos = new Vector3(cornerPos.bottomLeftCorner.x, 0f, (cornerPos.bottomRightCorner.z + cornerPos.topRightCorner.z) * 0.5f);
+        rightDoorPos = new Vector3(cornerPos.bottomRightCorner.x, 0f, (cornerPos.bottomRightCorner.z + cornerPos.topRightCorner.z) * 0.5f);
 
 
         doorPos.Add(upDoorPos);
@@ -190,6 +190,8 @@ public class RandomRoomObjCreate : MonoBehaviour
         Vector3 tempPos;
         if (reCallCount >= 15)
         {
+            GFunc.Log($"초과재귀로 오브젝트 생성 건너뜀");
+            reCallCount = 0;
             createPass = true;
             return Vector3.zero;
         }
@@ -206,11 +208,11 @@ public class RandomRoomObjCreate : MonoBehaviour
         }
         else if (spawnPlace == (int)SpawnPlace.Wall)
         {
-            Debug.Log("벽오브젝트 생성으로 진입");
+            //Debug.Log("벽오브젝트 생성으로 진입");
             int isSpawnCompass = UnityEngine.Random.Range((int)SpawnCompass.Up, (int)SpawnCompass.RandomMax);
             spawnCompass = (SpawnCompass)isSpawnCompass;
             tempPos = GetWallSpawnPos(_CreateObjId, isSpawnCompass);
-            bool isCollision = IsNotCollisionDoor(tempPos, doorPos);
+            bool isCollision = IsNotCollisionDoor(tempPos);
             if (isCollision == true)
             {
                 reCallCount++;
@@ -259,25 +261,29 @@ public class RandomRoomObjCreate : MonoBehaviour
             case (int)SpawnCompass.Up:
                 xPos = UnityEngine.Random.Range(cornerPos.topLeftCorner.x + 0.5f, cornerPos.topRightCorner.x);
                 zPos = cornerPos.topLeftCorner.z - 0.5f;
-                return spawnPos = new Vector3(xPos, yPos, zPos);
+                spawnPos = new Vector3(xPos, yPos, zPos);
+                return spawnPos;
 
             case (int)SpawnCompass.Down:
                 xPos = UnityEngine.Random.Range(cornerPos.bottomLeftCorner.x + 0.5f, cornerPos.bottomRightCorner.x);
                 zPos = cornerPos.bottomLeftCorner.z + 0.5f;
-                return spawnPos = new Vector3(xPos, yPos, zPos);
+                spawnPos = new Vector3(xPos, yPos, zPos);
+                return spawnPos;
 
             case (int)SpawnCompass.Left:
                 xPos = cornerPos.bottomLeftCorner.x + 0.5f;
                 zPos = UnityEngine.Random.Range(cornerPos.bottomLeftCorner.z + 0.5f, cornerPos.topLeftCorner.z);
-                return spawnPos = new Vector3(xPos, yPos, zPos);
+                spawnPos = new Vector3(xPos, yPos, zPos);
+                return spawnPos;
 
             case (int)SpawnCompass.Right:
                 xPos = cornerPos.bottomLeftCorner.x - 0.5f;
                 zPos = UnityEngine.Random.Range(cornerPos.bottomRightCorner.z + 0.5f, cornerPos.topRightCorner.z);
-                return spawnPos = new Vector3(xPos, yPos, zPos);
+                spawnPos = new Vector3(xPos, yPos, zPos);
+                return spawnPos;
         }
 
-        GFunc.Log($"해당 리턴에 들어오면 안되는데 들어옴");
+        //GFunc.Log($"해당 리턴에 들어오면 안되는데 들어옴");
         return Vector3.zero;
 
     }       // GetWallSpawnPos()
@@ -300,12 +306,12 @@ public class RandomRoomObjCreate : MonoBehaviour
     /// <param name="_tempSpawnPos">적용되기 전에 스폰될 위치</param>
     /// <param name="_doorList">문이 존재하는 위치 리스트</param>
     /// <returns></returns>
-    private bool IsNotCollisionDoor(Vector3 _tempSpawnPos, List<Vector3> _doorList)
+    private bool IsNotCollisionDoor(Vector3 _tempSpawnPos)
     {
-        foreach (Vector3 tempV3 in _doorList)
+        foreach (Vector3 tempV3 in doorPos)
         {
             float dis = Vector3.Distance(_tempSpawnPos, tempV3);
-            if (dis > 3)
+            if (dis < 1)
             {
                 return true;
             }
@@ -397,8 +403,8 @@ public class RandomRoomObjCreate : MonoBehaviour
             _spawnObjClone.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
         else if (spawnCompass == SpawnCompass.Down)
-        {
-            // PASS
+        {            
+            _spawnObjClone.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
         else if (spawnCompass == SpawnCompass.Left)
         {

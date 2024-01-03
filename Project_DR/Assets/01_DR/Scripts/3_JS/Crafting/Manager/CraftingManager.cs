@@ -39,6 +39,7 @@ namespace Js.Crafting
             3_0000_1, 3_2000_1                                                  // 크래프팅 테이블 색인 인덱스
         };
         public Anvil Anvil => _anvil;                                           // 아이템 조합 모루
+        public bool IsEnhance => _isEnhance;                                    // 강화중인지 외부에서 체크하는 함수
 
 
         /*************************************************
@@ -46,8 +47,14 @@ namespace Js.Crafting
          *************************************************/
         private Dictionary<int, ICraftingComponent> _craftingDictionary
             = new Dictionary<int, ICraftingComponent>();
-        private Anvil _anvil;
-        private string _anvilPrefabName = "Crafting_Anvil";                                   // 모루 프리팹 이름
+        private List<ICraftingComponent> _craftingList
+            = new List<ICraftingComponent>();
+        private List<ICraftingComponent> _enhanceList
+            = new List<ICraftingComponent>();
+        [SerializeField] private Anvil _anvil;
+        private string _anvilPrefabName = "Crafting_Anvil";                     // 모루 프리팹 이름
+        private string _enhancePrefabName = "Crafting_Enhance";                 // 강화소 프리팹 이름
+        private bool _isEnhance = false;
 
 
         /*************************************************
@@ -62,10 +69,28 @@ namespace Js.Crafting
             Initialize();
         }
 
+        // 디버그용
+        //private void Update()
+        //{
+        //    if (Input.GetKeyUp(KeyCode.B))
+        //    {
+        //        Vector3 pos = GameObject.Find("PlayerController").transform.position;
+        //        CreateAnvil(pos);
+        //    }
+
+        //    if (Input.GetKeyUp(KeyCode.N))
+        //    {
+        //        Vector3 pos = GameObject.Find("PlayerController").transform.position;
+        //        CreateEnhance(pos);
+        //    }
+        //}
 
         /*************************************************
          *               Initialize Methods
          *************************************************/
+        // 생성용 함수
+        public void Create() { }
+
         public void Initialize()
         {
             // Init
@@ -98,7 +123,7 @@ namespace Js.Crafting
 
                     GFunc.Log($"ConditionID {conditionID}");
                     // 두 가지 조건의 조합식을 가진 컴포짓 아이템을 생성한다.
-                    CompositeItem compositeItem = CreateCompositeItemWithConditions(conditionID);
+                    CompositeItem compositeItem = CreateCompositeItemWithConditions(craftingItem, conditionID);
 
                     // 크래프팅 아이템에 추가
                     craftingItem.AddComponent(compositeItem);
@@ -109,15 +134,17 @@ namespace Js.Crafting
                     // 타입이 크래프팅일 경우
                     case Type.CRAFTING:
 
-                        // 결과 아이템 생성
+                        // 결과 아이템 생성 & 리스트에 추가
                         lastComponent = CreateResultItem(id);
+                        _craftingList.Add(craftingItem);
                         break;
 
                     // 타입이 강화일 경우
                     case Type.ENHANCE:
 
-                        // 강화 핸들러 생성
+                        // 강화 핸들러 생성 & 리스트에 추가
                         lastComponent = CreateEnhanceHandler(id);
+                        _enhanceList.Add(craftingItem);
                         break;
                 }
 
@@ -144,20 +171,50 @@ namespace Js.Crafting
             return anvil;
         }
 
+        // 지정한 위치에 강화소를 생성한다.
+        public GameObject CreateEnhance(Vector3 pos)
+        {
+            GameObject prefab = Resources.Load<GameObject>(_enhancePrefabName);
+            GameObject enhance = Instantiate(prefab);
+            enhance.name = _anvilPrefabName;
+            enhance.transform.position = pos;
+
+            return enhance;
+        }
+
+        // ID로 딕셔너리에 있는 크래프팅 아이템을 반환
+        public CraftingItem SearchDictionaryByID(int id)
+        {
+            return _craftingDictionary[id] as CraftingItem;
+        }
+
+        // 강화 크래프팅 아이템을 index로 검색 후 반환한다.
+        public CraftingItem FindEnhanceByID(int index)
+        {
+            CraftingItem item = _enhanceList[index] as CraftingItem;
+
+            GFunc.Log($"item {item}");
+            return item;
+        }
+
 
         /*************************************************
          *                Private Methods
          *************************************************/
         // 두 가지 조합식을 가진 컴포짓 아이템을 생성한다.
-        private CompositeItem CreateCompositeItemWithConditions(int id)
+        private CompositeItem CreateCompositeItemWithConditions(CraftingItem item, int id)
         {
             int material_1_KeyID = Data.GetInt(id, "Material_1_KeyID");
             int material_2_KeyID = Data.GetInt(id, "Material_2_KeyID");
             int material_1_Amount = Data.GetInt(id, "Material_1_Amount");
             int material_2_Amount = Data.GetInt(id, "Material_2_Amount");
-            MaterialItem material_1 = new MaterialItem(material_1_KeyID, material_1_Amount);
-            MaterialItem material_2 = new MaterialItem(material_2_KeyID, material_2_Amount);
+            MaterialItem material_1 = new MaterialItem(item, material_1_KeyID);
+            MaterialItem material_2 = new MaterialItem(item, material_2_KeyID);
             CompositeItem compositeItem = new CompositeItem(material_1, material_2);
+            item.AddMaterialData(material_1_KeyID, material_1_Amount);
+            item.AddMaterialData(material_2_KeyID, material_2_Amount);
+            GFunc.Log($"id: {material_1_KeyID} / amount: {material_1_Amount}");
+            GFunc.Log($"id: {material_2_KeyID} / amount: {material_2_Amount}");
 
             return compositeItem;
         }

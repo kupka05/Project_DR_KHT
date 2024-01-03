@@ -370,7 +370,7 @@ GameObject:
   - component: {fileID: 2647230023010791604}
   - component: {fileID: 4527552382205476878}
   - component: {fileID: 1290020038106012667}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1738,7 +1738,7 @@ GameObject:
   - component: {fileID: 581350270918758876}
   m_Layer: 0
   m_Name: GameStart
-  m_TagString: Untagged
+  m_TagString: Finish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1782,7 +1782,7 @@ GameObject:
   - component: {fileID: 3040635323689073035}
   - component: {fileID: 7619670159952220947}
   - component: {fileID: 8870276170113880679}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1831,7 +1831,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2373,6 +2373,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0bc0660f8c3f054c948ba7e5bca38c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  angleRange: 30
+  radius: 40
   bossHPSlider: {fileID: 118018865473801991}
   bossState: {fileID: 3770469314472680577, guid: 66055d0e3ac8d0c479422d8d40ff04f2,
     type: 3}

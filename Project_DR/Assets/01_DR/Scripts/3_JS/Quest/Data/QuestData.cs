@@ -44,6 +44,7 @@ namespace Js.Quest
         /*************************************************
          *                 Private Fields
          *************************************************/
+        [SerializeField] private Quest _quest;
         [SerializeField] private int _id;
         [SerializeField] private int _requiredQuestID;
         [SerializeField] private ConditionType _condition;
@@ -61,12 +62,14 @@ namespace Js.Quest
         [SerializeField] private QuestRewardData _failRewardData;
         // 디버그
 
+
         /*************************************************
          *                 Public Methods
          *************************************************/
         public QuestData(Quest quest, int id)
         {
             // Init
+            _quest = quest;
             _id = id;
             _requiredQuestID = Data.GetInt(id, "RequiredQuestID");
             _condition = (ConditionType)Data.GetInt(id, "Condition");
@@ -89,12 +92,24 @@ namespace Js.Quest
         public void AddCurrentValue(int value = 1)
         {
             _currentValue += value;
+
+            // 현재 퀘스트가 서브, 특수 퀘스트일 경우 콜백 호출
+            if (Type.Equals(QuestType.SUB) && Type.Equals(QuestType.SPECIAL))
+            {
+                QuestCallback.OnSubspecialQuestValueChangedCallback(_quest);
+            }
         }
 
         // 현재 퀘스트 진행 값 변경
         public void ChangeCurrentValue(int value)
         {
             _currentValue = value;
+
+            // 현재 퀘스트가 서브, 특수 퀘스트일 경우 콜백 호출
+            if (Type.Equals(QuestType.SUB) && Type.Equals(QuestType.SPECIAL))
+            {
+                QuestCallback.OnSubspecialQuestValueChangedCallback(_quest);
+            }
         }
     }
 }

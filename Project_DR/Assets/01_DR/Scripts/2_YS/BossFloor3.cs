@@ -29,15 +29,15 @@ public class BossFloor3 : Boss
                 }
                 else if (damageable.Health <= maxHp * 0.75f && damageable.Health > maxHp * 0.51f)
                 {
-                    GFunc.Log("체력별 패턴 2 진입");
+                    //GFunc.Log("체력별 패턴 2 진입");
 
-                    RandomPattern();
+                    RandomPatternSecond();
                     //GFunc.Log("랜덤 패턴2 발동");
 
                     if (bossState && !isKnockBack)
                     {
                         PushPlayerBackward();
-                        GFunc.Log("넉백");
+                        //GFunc.Log("넉백");
 
                         bossState.GetComponent<BossState>().CastSpell();
                         //GFunc.Log("넉백 애니메이션 작동");
@@ -47,15 +47,15 @@ public class BossFloor3 : Boss
                 }
                 else if (damageable.Health <= maxHp * 0.5 && damageable.Health > maxHp * 0.26f)
                 {
-                    GFunc.Log("체력별 패턴 3 진입");
+                    //GFunc.Log("체력별 패턴 3 진입");
 
-                    RandomPattern();
+                    RandomPatternThird();
                     //GFunc.Log("랜덤 패턴3 발동");
 
                     if (bossState && !isKnockBackSecond)
                     {
                         PushPlayerBackward();
-                        GFunc.Log("넉백");
+                        //GFunc.Log("넉백");
 
                         bossState.GetComponent<BossState>().CastSpell();
                         //GFunc.Log("넉백 애니메이션 작동");
@@ -65,15 +65,15 @@ public class BossFloor3 : Boss
                 }
                 else if (damageable.Health <= maxHp * 0.25f)
                 {
-                    GFunc.Log("체력별 패턴 4 진입");
+                    //GFunc.Log("체력별 패턴 4 진입");
 
-                    RandomPattern();
+                    RandomPatternForth();
                     //GFunc.Log("랜덤 패턴4 발동");
 
                     if (bossState && !isKnockBackThird)
                     {
                         PushPlayerBackward();
-                        GFunc.Log("넉백");
+                        //GFunc.Log("넉백");
 
                         bossState.GetComponent<BossState>().CastSpell();
                         //GFunc.Log("넉백 애니메이션 작동");
@@ -89,34 +89,5 @@ public class BossFloor3 : Boss
         }
     }
 
-    public override void RandomPattern()
-    {
-        int pattern = UnityEngine.Random.Range(0, 4);
-
-        switch (pattern)
-        {
-            case 0:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 1 선택");
-                break;
-            case 1:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 2 선택");
-                break;
-            case 2:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 3 선택");
-                break;
-            case 3:
-                StartCoroutine(BounceShoot());
-                GFunc.Log("패턴 4 선택");
-                break;
-        }
-
-        if (bossState)
-        {
-            bossState.GetComponent<BossState>().Attack();
-            GFunc.Log("보스 attack 애니메이션");
-        }
-    }
+    
 }

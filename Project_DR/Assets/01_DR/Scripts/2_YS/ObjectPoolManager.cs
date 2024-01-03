@@ -80,7 +80,8 @@ public class ObjectPoolManager : MonoBehaviour
         }
 
         // 프리팹을 복제하여 새로운 오브젝트 생성 및 풀에 추가
-        GameObject newObj = Instantiate(prefab, instance.transform);
+        GameObject newObj = Instantiate(prefab, this.transform);
+        ObjectPool.Enqueue(newObj);     //큐에 있으니 큐 내부에 if문 발사 - getobject
         newObj.SetActive(false);
 
         //Debug.Log($"프로젝타일 타입 {projectileType}을(를) 풀에 추가하고 비활성화했습니다.");
@@ -113,6 +114,7 @@ public class ObjectPoolManager : MonoBehaviour
     // 특정 프로젝타일에 대한 오브젝트를 풀에서 가져오는 메서드
     public static GameObject GetObject(ProjectileType projectileType)
     {
+
         if (instance.ObjectPool.Count > 0)
         {
             // 풀에서 오브젝트를 꺼내와서 활성화하고 부모를 해제

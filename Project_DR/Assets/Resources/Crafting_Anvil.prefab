@@ -169,6 +169,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -982,7 +983,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eab6869cdf652442bcc067787ad09c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _id: 0
+  _index: 0
+  _isNormal: 1
+  _craftingCanvas: {fileID: 0}
+  _button: {fileID: 0}
   _text: {fileID: 8717223482157893758}
+  _isEnhance: 0
 --- !u!1 &8717223481566387849
 GameObject:
   m_ObjectHideFlags: 0
@@ -2095,6 +2102,7 @@ GameObject:
   - component: {fileID: 8717223483045463209}
   - component: {fileID: 8717223483045463210}
   - component: {fileID: 917910801888782741}
+  - component: {fileID: 5448725303491105160}
   m_Layer: 0
   m_Name: Crafting_Anvil
   m_TagString: Untagged
@@ -2203,6 +2211,20 @@ MonoBehaviour:
   _tempResultItem: {fileID: 0}
   _tempResultItemHandler: {fileID: 0}
   _currentState: 0
+--- !u!114 &5448725303491105160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8717223483045463204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 261318faf63d3c342ab75c75bfbf3402, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _craftingCanvases:
+  - {fileID: 8717223483153477378}
 --- !u!1 &8717223483153477371
 GameObject:
   m_ObjectHideFlags: 0
@@ -2386,6 +2408,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db0bdd9335bd4b749a987a5ff04f7ed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TABLE_ID: 300001
+  _enhanceID: 0
+  _currentType: 0
+  _craftingUI: {fileID: 0}
+  _canvas: {fileID: 0}
   _content: {fileID: 8717223481849007174}
+  _parent: {fileID: 0}
   _panelPrefab: {fileID: 8717223481314358750}
   _panelList: []

@@ -149,20 +149,22 @@ public class EventWall : MonoBehaviour
             secretObjPos.z -= index;
         }
 
-        Instantiate(wall, clonePos, this.transform.rotation, this.transform);
+        Instantiate(rightWall, clonePos, this.transform.rotation, this.transform);
 
         // 비밀 아이템 생성
         if(isSecrecItem)
         {
-            itemIDs = new int[Data.GetCount(itemID)];
+            //itemIDs = new int[Data.GetCount(itemID)];
+            itemIDs = new int[6];
 
-            for (int i = 0; i < Data.GetCount(itemID); i++)
+
+            for (int i = 0; i < 6; i++)
             {
                 itemIDs[i] = Data.GetInt(itemID + i, "ID");
             }
 
             int index = Random.Range(0, itemIDs.Length);
-            GFunc.Log(itemIDs[index] + "생성 예정");
+            //GFunc.Log(itemIDs[index] + "생성 예정");
             Unit.AddFieldItem(secretObjPos, itemIDs[index]);
 
             //GameObject Item = Instantiate(scerecObj, secretObjPos, this.transform.rotation, this.transform);
@@ -228,7 +230,7 @@ public class EventWall : MonoBehaviour
         }
         if(leftWall == null || rightWall == null)
         {
-            GFunc.Log("좌우 벽을 찾을 수 없습니다.");
+            //GFunc.Log("좌우 벽을 찾을 수 없습니다.");
             return false;
         }
         return true;

@@ -189,19 +189,16 @@ public class ItemManager : MonoBehaviour
     public GameObject CreateTempItem(Vector3 pos, int id, Transform parent, int amount = 1)
     {
         // 아이템 생성 & 컴포넌트 끄기
-        GameObject item = CreateItem(pos, id, amount);
+        GameObject item = CreateItem(pos, id, amount, true);
         item.transform.SetParent(parent);
         item.transform.localPosition = pos;
         item.GetComponent<ItemColliderHandler>().enabled = false;
         item.GetComponent<Grabbable>().enabled = false;
 
-        // TODO: 플레이어와 닿았을 경우 조합 취소하는 기능 추가
-        // 
-
         return item;
     }
 
-    public GameObject CreateItem(Vector3 pos, int id, int amount = 1)
+    public GameObject CreateItem(Vector3 pos, int id, int amount = 1, bool isTempItem = false)
     {
         /////////////////////////////////////////////
         // amount 값이 변해도 하나만 생성하도록 고정함
@@ -232,6 +229,12 @@ public class ItemManager : MonoBehaviour
             {
                 item = CreateQuestItem(pos, id, amount);
                 GFunc.Log("quest 아이템 생성");
+            }
+
+            // 크래프팅 임시 결과 아이템이 아닐 경우 네임태그 추가
+            if (isTempItem.Equals(false))
+            {
+                CreateNameTag(item);
             }
 
             return item;
@@ -319,6 +322,22 @@ public class ItemManager : MonoBehaviour
 
         return item;
     }
+
+    // 아이템에 네임택을 넣어주는 메서드
+    public void CreateNameTag(GameObject item)
+    {
+        if(item.name.Equals(""))
+        {
+            GFunc.Log(item.name + " 해당 아이템에 이름이 없습니다.");
+            return;
+        }
+
+        GameObject ItemTag = Resources.Load<GameObject>("Prefabs/Item_NameTag");
+        GameObject itemTag = Instantiate(ItemTag, item.transform.position, item.transform.rotation, item.transform);
+        itemTag.GetComponent<ItemNameTag>().SetName(item.name);
+        itemTag.GetComponent<ItemNameTag>().SetPosition(item.transform);
+    }
+
     #endregion
 
 
@@ -354,7 +373,7 @@ public class ItemManager : MonoBehaviour
         ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
 
         // 슬롯에 넣을 수 없도록 아이템 상태 Stop으로 변경
-        itemColliderHandler.state = ItemColliderHandler.State.Stop;
+        itemColliderHandler.state = ItemColliderHandler.State.STOP;
 
         // hand 위치로 포지션 이동
         item.transform.position = handPos;

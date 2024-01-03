@@ -341,9 +341,9 @@ public class DataManager : MonoBehaviour
     {
         // 아이디의 실제 인덱스를 가져오는 함수 호출
         id = GetDataKey(id);
-
         return id;
     }
+
     #endregion
 
     /*************************************************

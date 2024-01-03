@@ -77,27 +77,28 @@ public class Shoot : MonoBehaviour
             // 총알 미리 생성
             for (int i = 0; i < bulletCount; i++)
             {
-                Vector3 offset = Vector3.zero;
-
-                offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
+                Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
                 //기존 로직
-                //GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
-                //bullets.Add(instantBullet);
+                GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
+                instantBullet.transform.LookAt(target.position);
+                
+                bullets.Add(instantBullet);
+                
                 //instantBullet.transform.LookAt(target.position);
 
                 // 오브젝트 풀을 사용하여 총알을 가져옵니다.
-                GameObject instantBullet = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBULLET);
-                GFunc.Log("오브젝트 풀 생성");
-                instantBullet.transform.position = transform.position + offset;
-                instantBullet.transform.rotation = Quaternion.identity;
-                instantBullet.transform.LookAt(target.position);
+                //GameObject instantBullet = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+                //GFunc.Log("오브젝트 풀 생성");
+                //instantBullet.transform.position = transform.position + offset;
+                //instantBullet.transform.rotation = Quaternion.identity;
+                //instantBullet.transform.LookAt(target.position);
 
-                bullets.Add(instantBullet);
+               // bullets.Add(instantBullet);
 
             }
 
-            GFunc.Log($"리스트 크기 : {bullets.Count}");
+            //GFunc.Log($"리스트 크기 : {bullets.Count}");
 
             foreach (GameObject bullet in bullets)
             {
@@ -112,13 +113,14 @@ public class Shoot : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(destoryTimeBounceSmall);
-            // 오브젝트 풀을 사용하여 총알을 반환합니다.
-            foreach (GameObject bullet in bullets)
-            {
-                ObjectPoolManager.ReturnObjectToQueue(bullet, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
-                GFunc.Log("반환 이상 없이 작동하는가?");
-            }
+            //yield return new WaitForSeconds(destoryTimeBounceSmall);
+            //// 오브젝트 풀을 사용하여 총알을 반환합니다.
+            //foreach (GameObject bullet in bullets)
+            //{
+            //     Destroy(smallBulletPrefab);
+            //    //ObjectPoolManager.ReturnObjectToQueue(bullet, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
+            //    //GFunc.Log("반환 이상 없이 작동하는가?");
+            //}
 
             bullets.Clear();
 

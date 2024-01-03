@@ -13,15 +13,18 @@ namespace Js.Crafting
         /*************************************************
          *                 Public Fields
          *************************************************/
-        public List<ICraftingComponent> Components => _components;      // 크래프팅 아이템 컴포넌트
-        public int NeedHammeringCount => _needHammeringCount;           // 필요한 망치질 횟수
+        public List<ICraftingComponent> Components => _components;              // 크래프팅 아이템 컴포넌트
+        public int NeedHammeringCount => _needHammeringCount;                   // 필요한 망치질 횟수
+        public Dictionary<int, int> MaterialDictionary => _materialDictionary;  // 필요한 재료 정보 딕셔너리
 
 
         /*************************************************
          *                 Private Fields
          *************************************************/
         private List<ICraftingComponent> _components = new List<ICraftingComponent>();
+        private Dictionary<int, int> _materialDictionary = new Dictionary<int, int>();
         private int _needHammeringCount;
+
 
         /*************************************************
          *               Initialize Methods
@@ -53,6 +56,21 @@ namespace Js.Crafting
             _components.Add(component);
         }
 
+        // 데이터 추가
+        public void AddMaterialData(int id, int amount)
+        {
+            // 딕셔너리[ID]가 비어있을 경우
+            if (! _materialDictionary.ContainsKey(id))
+            {
+                _materialDictionary.Add(id, amount);
+            }
+
+            // 있을 경우
+            else
+            {
+                _materialDictionary[id] += amount;
+            }
+        }
 
         /*************************************************
          *               Interface Methods
@@ -67,7 +85,26 @@ namespace Js.Crafting
                 // 사유: 재료 부족
                 if (item.CheckCraft().Equals(false))
                 {
-                    GFunc.Log($"CraftingItem.Craft(): 재료가 부족합니다.");
+                    GFunc.Log($"CraftingItem.CheckCraft(): 재료가 부족합니다.");
+                    return false;
+                }
+            }
+
+            // 모든 제작 조건 충족시
+            return true;
+        }
+
+        public bool CheckEnhance()
+        {
+            // 크래프팅 아이템 컴포넌트 순회
+            // 강화에 필요한 아이템 보유량 체크
+            foreach (var item in _components)
+            {
+                // 제작 조건을 충족하지 못할 경우
+                // 사유: 재료 부족
+                if (item.CheckEnhance().Equals(false))
+                {
+                    GFunc.Log($"CraftingItem.CheckEnhance(): 재료가 부족합니다.");
                     return false;
                 }
             }
@@ -78,9 +115,20 @@ namespace Js.Crafting
 
         public void Craft() 
         {
-            // 실제 아이템 [제작 / 강화]
-            int lastIndex = _components.Count - 1;
-            _components[lastIndex].Craft();
+            // 모든 컴포넌트에게 Craft() 명령
+            for (int i = 0; i < _components.Count; i++)
+            {
+                _components[i].Craft();
+            }
+        }
+
+        public void Enhance(int type)
+        {
+            // 모든 컴포넌트에게 Enhance() 명령
+            for (int i = 0; i < _components.Count; i++)
+            {
+                _components[i].Enhance(type);
+            }
         }
     }
 }

@@ -42,7 +42,7 @@ public class BossNPC : NPC
     protected override void Awake()
     {
         base.Awake();
-        AwakeInIt();
+        npcID = GetComponent<Boss>().bossId;
         ConvertionEventInIt();
     }       // Awake()
 
@@ -160,7 +160,8 @@ public class BossNPC : NPC
 
         if (conversationId == -1)
         {
-            GFunc.Log("찾으려는 현재 진행중인 퀘스트 ID가 없습니다.");
+            GFunc.LogError(_npcId + "찾으려는 현재 진행중인 퀘스트 ID가 없습니다..");
+            conversationID = conversationIds[0];
             return;
         }
         conversationID = conversationId;
@@ -176,7 +177,8 @@ public class BossNPC : NPC
     /// <returns></returns>
     public int FindQuestConversationID(int[] _conversationIds)
     {
-        Quest curQuest = Unit.GetInProgressMainQuest();
+        Quest curQuest = Unit.GetCanCompleteMainQuest();
+
         StringBuilder stringBuilder = new StringBuilder();      // 비교할때 사용할 StringBuilder
 
         for (int i = 0; i < _conversationIds.Length; i++)
@@ -191,6 +193,7 @@ public class BossNPC : NPC
                 return _conversationIds[i];
             }
         }
+        GFunc.Log("못찾은 퀘스트 ID: " + curQuest.QuestData.ID);
         return -1;
     }
 
@@ -199,9 +202,9 @@ public class BossNPC : NPC
     {
         QuestCallback.OnBossMeetCallback(npcID);   // 상태값 갱신 및 자동 완료
 
-        Quest curQuest = Unit.GetInProgressMainQuest();
+        Quest curQuest = Unit.GetCanCompleteMainQuest();
         int questID = curQuest.QuestData.ID;
-        GFunc.Log($"현재 진행중인 메인 퀘스트 ID : {questID}");
+        GFunc.Log($"현재 완료가능 메인 퀘스트 ID : {questID}");
 
         Unit.ClearQuestByID(questID);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
     }

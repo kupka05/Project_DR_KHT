@@ -16,12 +16,15 @@ namespace Js.Quest
         public static event Action<int, int> BossKillCallback;      // [완료] -> [2] 보스 킬
         public static event Action<int, int> UseItemCallback;       // [3] 아이템 사용
         public static event Action<int, int> MonsterKillCallback;   // [4] 몬스터 처치
-        public static event Action<int, int> CraftingCallback;      // [5] 크래프팅
+        public static event Action<int, int> CraftingCallback;      // [완료] -> [5] 크래프팅
         public static event Action<int, int> ObjectCallback;        // [6] 오브젝트
         public static event Action<int, int> InventoryCallback;     // [완료] -> [7] 인벤토리(증정)
         public static event Action<int, int> DialogueCallback;      // [8] NPC와 대화
 
-
+        // 퀘스트 패널용 콜백
+        public static event Action<Quest> SubspecialQuestProgressCallback;       // [완료] -> 서브, 특수 퀘스트가 [진행중]이 될 때
+        public static event Action<Quest> SubspecialQuestValueChangedCallback;   // [완료] -> 서브, 특수 퀘스트의 currentValue가 변경될 때
+        public static event Action<Quest> SubspecialQuestCompletedCallback;      // [완료] -> [진행중] 서브, 특수 퀘스트가 [완료]로 변경될 때
         /*************************************************
          *                Public Methods
          *************************************************/
@@ -77,6 +80,24 @@ namespace Js.Quest
         public static void OnDialogueCallback(int id, int condition = 8)
         {
             DialogueCallback?.Invoke(id, condition);
+        }
+
+        // 서브, 특수 퀘스트가 [진행중]이 될 때
+        public static void OnSubspecialQuestProgressCallback(Quest quest)
+        {
+            SubspecialQuestProgressCallback?.Invoke(quest);
+        }
+
+        // 서부, 특수 퀘스트의 currentValue가 변경될 때
+        public static void OnSubspecialQuestValueChangedCallback(Quest quest)
+        {
+            SubspecialQuestValueChangedCallback?.Invoke(quest);
+        }
+
+        // [진행중] 서브, 특수 퀘스트가 [완료]로 변경될 때
+        public static void OnSubspecialQuestCompletedCallback(Quest quest)
+        {
+            SubspecialQuestCompletedCallback?.Invoke(quest);
         }
     }
 }

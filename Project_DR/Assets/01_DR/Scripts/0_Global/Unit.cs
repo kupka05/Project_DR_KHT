@@ -51,6 +51,8 @@ public static class Unit
     {
         UserDataManager.ResetInventory();
     }
+
+
     /*************************************************
      *           Public Crafting Methods
      *************************************************/
@@ -58,6 +60,12 @@ public static class Unit
     public static GameObject CreateAnvil(Vector3 pos)
     {
         return CraftingManager.Instance.CreateAnvil(pos);
+    }
+
+    // 강화소를 생성한다. 크래프팅용
+    public static GameObject CreateEnhance(Vector3 pos)
+    {
+        return CraftingManager.Instance.CreateEnhance(pos);
     }
 
 
@@ -161,11 +169,30 @@ public static class Unit
     }
 
 
+    // [완료가능] 상태의 메인 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetCanCompleteMainQuest()
+    {
+        return GetCanCompleteMainQuestForList()[0];
+    }
+
+    // [완료가능] 상태의 서브 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetCanCompleteSubQuest()
+    {
+        return GetCanCompleteSubQuestForList()[0];
+    }
+
+    // [완료가능] 상태의 특수 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetCanCompleteSpecialQuest()
+    {
+        return GetCanCompleteSpecialQuestForList()[0];
+    }
+
+
 
     // [시작가능] 상태의 메인 퀘스트를 리스트로 가져온다
     public static List<Quest> GetCanStartMainQuestForList()
     {
-        // [진행중] [1]메인 퀘스트 타입을 리스트로 가져옴
+        // [1]메인 퀘스트 타입을 리스트로 가져옴
         List<Quest> questList = GetQuestListOfType(1);
         // 가져온 퀘스트 리스트 중에서 [1][시작가능] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 1);
@@ -175,7 +202,7 @@ public static class Unit
     // [시작가능] 상태의 서브 퀘스트를 리스트로 가져온다
     public static List<Quest> GetCanStartSubQuestForList()
     {
-        // [진행중] [2]서브 퀘스트 타입을 리스트로 가져옴
+        // [2]서브 퀘스트 타입을 리스트로 가져옴
         List<Quest> questList = GetQuestListOfType(2);
         // 가져온 퀘스트 리스트 중에서 [1][시작가능] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 1);
@@ -185,7 +212,7 @@ public static class Unit
     // [시작가능] 상태의 특수 퀘스트를 리스트로 가져온다
     public static List<Quest> GetCanStartSpeicalQuestForList()
     {
-        // [진행중] [3]메인 퀘스트 타입를 리스트로 가져옴
+        // [3]특수 퀘스트 타입를 리스트로 가져옴
         List<Quest> questList = GetQuestListOfType(3);
         // 가져온 퀘스트 리스트 중에서 [1][시작가능] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 1);
@@ -197,7 +224,7 @@ public static class Unit
     // [진행중] 상태의 메인 퀘스트를 리스트로 가져온다
     public static List<Quest> GetInProgressMainQuestForList()
     {
-        // [진행중] [1]메인 퀘스트 타입를 리스트로 가져옴
+        // [1]메인 퀘스트 타입를 리스트로 가져옴
         List<Quest> questList = GetQuestListOfType(1);
         // 가져온 퀘스트 리스트 중에서 [2][진행중] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 2);
@@ -207,7 +234,7 @@ public static class Unit
     // [진행중] 상태의 서브 퀘스트를 리스트로 가져온다
     public static List<Quest> GetInProgressSubQuestForList()
     {
-        // [진행중] [2]서브 퀘스트 타입를 리스트로 가져옴
+        // [2]서브 퀘스트 타입를 리스트로 가져옴
         List<Quest> questList = GetQuestListOfType(2);
         // 가져온 퀘스트 리스트 중에서 [2][진행중] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 2);
@@ -217,8 +244,9 @@ public static class Unit
     // [진행중] 상태의 특수 퀘스트를 리스트로 가져온다
     public static List<Quest> GetInProgressSpecialQuestForList()
     {
-        // [진행중] [3]특수 퀘스트 타입를 리스트로 가져옴
+        // [3]특수 퀘스트 타입를 리스트로 가져옴
         List<Quest> questList = GetQuestListOfType(3);
+
         // 가져온 퀘스트 리스트 중에서 [2][진행중] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 2);
         return questList;
@@ -229,8 +257,12 @@ public static class Unit
     // [완료가능] 상태의 메인 퀘스트를 리스트로 가져온다
     public static List<Quest> GetCanCompleteMainQuestForList()
     {
-        // [완료가능] [1]메인 퀘스트 타입를 리스트로 가져옴
+        // [1]메인 퀘스트 타입를 리스트로 가져옴
         List<Quest> questList = GetQuestListOfType(1);
+        foreach (var item in questList)
+        {
+            GFunc.Log($"questList: {item.QuestData.ID}");
+        }
         // 가져온 퀘스트 리스트 중에서 [3][완료가능] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 3);
         return questList;
@@ -239,7 +271,7 @@ public static class Unit
     // [완료가능] 상태의 서브 퀘스트를 리스트로 가져온다
     public static List<Quest> GetCanCompleteSubQuestForList()
     {
-        // [완료가능] [2]서브 퀘스트 타입를 리스트로 가져옴
+        // [2]서브 퀘스트 타입를 리스트로 가져옴
         List<Quest> questList = GetQuestListOfType(2);
         // 가져온 퀘스트 리스트 중에서 [3][완료가능] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 3);
@@ -249,7 +281,7 @@ public static class Unit
     // [완료가능] 상태의 특수 퀘스트를 리스트로 가져온다
     public static List<Quest> GetCanCompleteSpecialQuestForList()
     {
-        // [완료가능] [3]특수 퀘스트 타입를 리스트로 가져옴
+        // [3]특수 퀘스트 타입를 리스트로 가져옴
         List<Quest> questList = GetQuestListOfType(3);
         // 가져온 퀘스트 리스트 중에서 [3][완료가능] 상태인 퀘스트만 추출 및 반환
         QuestManager.Instance.GetQuestsByStatusFromQuestList(questList, 3);

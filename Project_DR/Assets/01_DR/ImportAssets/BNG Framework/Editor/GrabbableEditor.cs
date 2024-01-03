@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +64,8 @@ namespace BNG {
         SerializedProperty MoveAngularVelocityForce;
         SerializedProperty GrabPoints;
         SerializedProperty collisions;
+        SerializedProperty sleepRigid;
+
 
         void OnEnable() {
             grabButton = serializedObject.FindProperty("GrabButton");
@@ -112,6 +114,7 @@ namespace BNG {
             MoveAngularVelocityForce = serializedObject.FindProperty("MoveAngularVelocityForce");
             GrabPoints = serializedObject.FindProperty("GrabPoints");
             collisions = serializedObject.FindProperty("collisions");
+            sleepRigid = serializedObject.FindProperty("sleepRigid");
         }
 
         public override void OnInspectorGUI() {
@@ -152,6 +155,8 @@ namespace BNG {
             if (grabbable.GrabPhysics == GrabPhysics.PhysicsJoint || grabbable.GrabPhysics == GrabPhysics.FixedJoint) {
                 EditorGUILayout.PropertyField(ApplyCorrectiveForce);
             }
+            EditorGUILayout.PropertyField(sleepRigid);
+
 
             if (grabbable.GrabPhysics == GrabPhysics.Velocity) {
                 EditorGUILayout.PropertyField(MoveVelocityForce);

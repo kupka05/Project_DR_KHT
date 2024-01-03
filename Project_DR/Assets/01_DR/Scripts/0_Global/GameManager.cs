@@ -159,22 +159,7 @@ public class GameManager : MonoBehaviour
         // 데이터 가져오기
         GetData();
         StartInIt();
-
-        // 플레이어 찾아오기
-        player = GameObject.FindGameObjectWithTag("Player");
-        if (player)
-        {
-            input = player.transform.parent.GetComponent<InputBridge>();
-        }
-        else
-        {
-            GFunc.Log("플레이어를 찾지 못했습니다.");
-        }
-        // 스크린 페이더 가져오기
-        if (Camera.main)
-        {
-            fader = Camera.main.transform.GetComponent<ScreenFader>();
-        }
+        SetPlayer();
     }       // Start()    
 
 
@@ -184,10 +169,15 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
-        if(Input.GetKeyDown(KeyCode.F12))
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            TeleportToBoss();
+        }
+        if (Input.GetKeyDown(KeyCode.F12))
         {
             ClearDungeon();
         }
+
     }
 
     private void OnLevelWasLoaded()
@@ -195,18 +185,7 @@ public class GameManager : MonoBehaviour
         // GFunc.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
         // 데이터 가져오기
         GetData();
-
-        // 플레이어 찾아오기
-        player = GameObject.FindGameObjectWithTag("Player");
-        if (player)
-        {
-            input = player.transform.parent.GetComponent<InputBridge>();
-        }
-        else
-        {
-            GFunc.Log("플레이어를 찾지 못했습니다.");
-        }
-
+        SetPlayer();
     }
 
 
@@ -240,6 +219,25 @@ public class GameManager : MonoBehaviour
         }
     }       // StartInIt()
 
+    private void SetPlayer()
+    {
+
+        // 플레이어 찾아오기
+        player = GameObject.FindGameObjectWithTag("Player");
+        if (player)
+        {
+            input = player.transform.parent.GetComponent<InputBridge>();
+        }
+        else
+        {
+            GFunc.Log("플레이어를 찾지 못했습니다.");
+        }
+        // 스크린 페이더 가져오기
+        if (Camera.main)
+        {
+            fader = Camera.main.transform.GetComponent<ScreenFader>();
+        }
+    }
 
 
     /*************************************************
@@ -294,7 +292,7 @@ public class GameManager : MonoBehaviour
 
             // 층 높이고
             nowFloor++;
-            string dungeonSceneName = "SG_TestScene";
+            string dungeonSceneName = "6_DungeonReadyScene";
             SceneLoad(dungeonSceneName);
         }
         else
@@ -475,4 +473,12 @@ public class GameManager : MonoBehaviour
         }       
     }
     #endregion
+
+
+
+    private void TeleportToBoss()
+    {
+        player.transform.position = GameObject.FindGameObjectWithTag("Finish").transform.position;
+
+    }
 }       // ClassEnd

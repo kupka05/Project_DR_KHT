@@ -311,6 +311,10 @@ public class EliteMonster : Monster
                     nav.isStopped = true;
                     //GFunc.Log("nav.isStopped: " + nav.isStopped);
                     anim.SetTrigger(hashDie);
+                    foreach (CapsuleCollider capsuleCollider in capsuleColliders)
+                    {
+                        capsuleCollider.isTrigger = true;
+                    }
                     UserData.KillElite(exp);
                     //Destroy(this.gameObject, 1.3f); //damageable 쪽에서 처리
                     yield break;

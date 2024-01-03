@@ -121,7 +121,8 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> ghostObjList;       // 유령을 담아둘 리스트
     public List<NullRoom> nullRoomList;         // 빈방을 담아두는 리스트 (모루생성에 필요)
-    public bool isInItGhost = false;    
+    public bool isInItGhost = false;
+    public bool isAnvilCreate = false;
 
     public event System.Action DoorOnEvent;
     public event System.Action DoorOffEvent;
@@ -387,18 +388,46 @@ public class GameManager : MonoBehaviour
         else { /*PASS*/ }
 
         nullRoomList.Add(_nullRoom);
-        
-        //GFunc.Log($"NullRomListCount : {nullRoomList.Count}\nNowFloor : {nowFloor}");
-        
-        if(nullRoomList.Count == 2 && nowFloor % 2 == 0)
-        {   // 빈방이 2개일때와 현재층이 짝수 일때에 들어오는 조건문
-            int randListIdx = UnityEngine.Random.Range(0, nullRoomList.Count);                        
 
-            nullRoomList[randListIdx].CreateAnvilObj();
-            GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
-        }
-        else { GFunc.Log($"조건에 맞지않아서 모루가 생성되지 않았음");/*PASS*/ }
+        StartCoroutine(CreateAnvil());
+
+        //if (nullRoomList.Count == 2 && nowFloor % 2 == 0)
+        //{   // 빈방이 2개일때와 현재층이 짝수 일때에 들어오는 조건문
+        //    int randListIdx = UnityEngine.Random.Range(0, nullRoomList.Count);
+
+        //    nullRoomList[randListIdx].CreateAnvilObj();
+        //    GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
+        //}
+
+        //GFunc.Log($"NullRomListCount : {nullRoomList.Count}\nNowFloor : {nowFloor}");
+
+        
     }       // AddNullRoom()
+
+    IEnumerator CreateAnvil()
+    {
+        yield return new WaitForSeconds(nullRoomList.Count);
+
+        if(isAnvilCreate == false)
+        {
+            if (nullRoomList.Count >= 2 && nowFloor % 2 == 0)
+            {   // 빈방이 2개일때와 현재층이 짝수 일때에 들어오는 조건문
+                int randListIdx = UnityEngine.Random.Range(0, nullRoomList.Count);
+
+                nullRoomList[randListIdx].CreateAnvilObj();
+                GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
+                isAnvilCreate = true;
+            }
+        }
+        else { /*PASS*/ }
+
+    }
+    
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
 
 
     public void FadeIn()

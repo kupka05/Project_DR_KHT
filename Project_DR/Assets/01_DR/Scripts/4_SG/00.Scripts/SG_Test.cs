@@ -1,25 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Text;
 using System;
-using Newtonsoft.Json.Bson;
-using TMPro;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
 
+
+
+public enum testEnum
+{
+    one = 1,
+    two = 2,
+    three = 3,
+    four = 4,
+    five = 5
+}
 public class SG_Test : MonoBehaviour
 {
-    SG_Test002 test002;
-    public GameObject tempObj;
+    Transform box;
+
+
+    private void Awake()
+    {
+        box = this.GetComponent<Transform>();
+    }
 
     private void Start()
     {
-        //Debug.Log($"GetComponent전 용량{Marshal.SizeOf(test002.num4)}");
-        test002 = tempObj.GetComponent<SG_Test002>();
-
         
-        Debug.Log($"GetComponent후 용량{Marshal.SizeOf(test002.num4)}");
+
+        box.transform.localEulerAngles = new Vector3 (0, 90, 0);
+        Debug.Log($"LocalEulerAngles 수정후 Rotation : {box.transform.rotation}");
+
+        box.transform.localEulerAngles = new Vector3(0, 0, 0);
+
+        box.transform.rotation = Quaternion.Euler(0, 90, 0);
+        Debug.Log($"rotation = Quaternion.Euler 수정후 Rotation : {box.transform.rotation}");
+
+
+
     }
 
 

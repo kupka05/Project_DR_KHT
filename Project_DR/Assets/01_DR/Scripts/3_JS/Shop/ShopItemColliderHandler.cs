@@ -8,21 +8,19 @@ public class ShopItemColliderHandler : MonoBehaviour
     /*************************************************
      *               Public Fields
      *************************************************/
-    #region [+]
     public GameObject curGrabber;
 
-    #endregion
+
     /*************************************************
      *               Public Fields
      *************************************************/
-    #region [+]
+
     private ShopItem _shopItem;
 
-    #endregion
+
     /*************************************************
      *                Unity Events
      *************************************************/
-    #region [+]
     private void OnTriggerEnter(Collider other)
     {
         Grabber grabber = other.GetComponent<Grabber>();
@@ -42,15 +40,12 @@ public class ShopItemColliderHandler : MonoBehaviour
             curGrabber = null;
     }
 
-    #endregion
+
     /*************************************************
      *                Public Methods
      *************************************************/
-    #region [+]
     public ShopItem GetShopItem()
     {
         return _shopItem ?? GetComponentInParent<ShopItem>();
     }
-
-    #endregion
 }

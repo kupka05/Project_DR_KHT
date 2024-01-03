@@ -505,6 +505,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &611287757877344652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13876,8 +13877,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHolder: 0
   resetTime: 0
+  isEnhance: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 0}
+  StartingItems: []
   CanDropItem: 1
   CanSwapItem: 1
   CanRemoveItem: 1
@@ -13975,6 +13978,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -14700,6 +14704,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &530031173480939933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15477,6 +15482,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &167113907646550020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21720,6 +21726,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &93448142521068276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24810,6 +24817,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &1341794677219681296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33550,8 +33558,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHolder: 1
   resetTime: 3
+  isEnhance: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 1753638152282928479}
+  StartingItems: []
   CanDropItem: 1
   CanSwapItem: 1
   CanRemoveItem: 1
@@ -33648,6 +33658,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -38873,6 +38884,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &1006185840862004511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52912,6 +52924,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &8246583119140640746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58749,8 +58762,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHolder: 1
   resetTime: 3
+  isEnhance: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 1974920245642944449}
+  StartingItems: []
   CanDropItem: 1
   CanSwapItem: 1
   CanRemoveItem: 1
@@ -58847,6 +58862,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -66887,6 +66903,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &7528243053479888042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69697,6 +69714,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 59.355312
@@ -74356,7 +74374,7 @@ GameObject:
   - component: {fileID: 5751810932310615319}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Weapon
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74392,13 +74410,15 @@ MonoBehaviour:
   isTeradrill: 0
   isGrinder: 0
   isSmash: 0
-  critChance: 0
+  critProbability: 0
   critIncrease: 0
   grinderCritChance: 0
   teraIncrease: 0
   grinderIncrease: 0
   landingIncrease: 0
   smashIncrease: 0
+  effectDmgIncrease: 0
+  effectCritIncrease: 0
 --- !u!114 &5808190486002320340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74421,6 +74441,8 @@ MonoBehaviour:
   GD_addTime: 0
   GD_maxTime: 0
   GD_drillSize: 0
+  canAttack: 0
+  effectDrillSize: 0
   landingSkill: {fileID: 1523373499}
   LDskillCount: 0
   isHookShot: 0
@@ -81389,6 +81411,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &1257201234258451659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82886,6 +82909,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &1266050355521349310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84326,6 +84350,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &5595822707264958905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88150,6 +88175,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &7759840879073069010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89689,6 +89715,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &2330449186646317003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100044,6 +100071,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &8760366981206289038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101914,6 +101942,7 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &4253340522480176976
 MonoBehaviour:
   m_ObjectHideFlags: 0

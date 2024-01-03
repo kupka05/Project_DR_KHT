@@ -135,7 +135,14 @@ public class PlayerEvent : MonoBehaviour
             ShopItem shopItem = shopItemCollider.GetShopItem();
             int shopItemID = shopItem.ID;
             int itemID = (int)DataManager.Instance.GetData(shopItem.ID, "KeyID", typeof(int));
+            Shop shop = shopItem.Shop;
             ShopItemPurchaseHandler shopItemPurchaseHandler = shopItem.Shop.ShopItemPurchaseHandler;
+
+            // 패시브일 경우 이미 한 번 구매했다면 구매 못하게 예외 처리
+            if (shopItem.IsItem.Equals(false) && shop.IsPurchasedPassiveSkill.Equals(true)) 
+            {
+                GFunc.Log($"이미 패시브 스킬을 구매했습니다."); return; 
+            }
 
             // 아이템 구매 처리(골드 차감)
             if (shopItemPurchaseHandler.CheckAndDeductGoldForItemPurchase(shopItemID))
@@ -160,8 +167,10 @@ public class PlayerEvent : MonoBehaviour
                 // 패시브 스킬일 경우
                 else
                 {
-                    ////// TODO: 패시브 스킬 동작 로직 추가하기 & 패시브는 1번만 구매하게 설정
+                    // 패시브 스킬 적용 & 1번만 구매하게 설정
                     UserData.ActiveSkill(itemID);
+                    shop.SetisPurchasedPassiveSkill(true);
+                    GFunc.Log($"[{itemID}] 패시브 스킬 구매 완료");
                 }
             }
 

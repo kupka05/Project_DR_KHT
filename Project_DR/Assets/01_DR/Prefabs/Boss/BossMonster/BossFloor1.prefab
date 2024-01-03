@@ -370,7 +370,7 @@ GameObject:
   - component: {fileID: 2647230023010791604}
   - component: {fileID: 4527552382205476878}
   - component: {fileID: 1290020038106012667}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1782,7 +1782,7 @@ GameObject:
   - component: {fileID: 3040635323689073035}
   - component: {fileID: 7619670159952220947}
   - component: {fileID: 8870276170113880679}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1831,7 +1831,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2455,7 +2455,7 @@ MonoBehaviour:
   ActivateGameObjectsOnDeath: []
   DeactivateGameObjectsOnDeath: []
   DeactivateCollidersOnDeath: []
-  DestroyOnDeath: 1
+  DestroyOnDeath: 0
   DropOnDeath: 1
   DestroyDelay: 0
   Respawn: 0

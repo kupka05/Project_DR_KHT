@@ -518,7 +518,7 @@ GameObject:
   - component: {fileID: 6657762413670764004}
   - component: {fileID: 8486469614845073216}
   - component: {fileID: 3571398916488144799}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -948,7 +948,7 @@ MonoBehaviour:
   ActivateGameObjectsOnDeath: []
   DeactivateGameObjectsOnDeath: []
   DeactivateCollidersOnDeath: []
-  DestroyOnDeath: 1
+  DestroyOnDeath: 0
   DropOnDeath: 1
   DestroyDelay: 0
   Respawn: 0
@@ -994,7 +994,7 @@ MonoBehaviour:
   npcTriggerType: 0
   isComunity: 0
   isReadyToAutoComunication: 0
-  boss: 0
+  boss: 2
 --- !u!114 &318313894511379535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1027,7 +1027,7 @@ MonoBehaviour:
   smashThird: 0.6
   smashCount: 0
   smashMaxCount: 3
-  bossId: 6872
+  bossId: 6874
   bossProjectileId: 6910
   bossProjectileID: 6914
   bossProjectileBounceId: 6912
@@ -1832,7 +1832,7 @@ GameObject:
   - component: {fileID: 1892465746424350396}
   - component: {fileID: 5684439306664532605}
   - component: {fileID: 1504057859409074854}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Canvas (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

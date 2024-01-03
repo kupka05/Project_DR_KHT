@@ -106,6 +106,5 @@ public class QuestPannel : MonoBehaviour
         {
             AddQuest(special);
         }
-
     }
 }

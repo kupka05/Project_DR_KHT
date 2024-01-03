@@ -169,6 +169,23 @@ public static class Unit
     }
 
 
+    // [완료가능] 상태의 메인 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetCanCompleteMainQuest()
+    {
+        return GetCanCompleteMainQuestForList()[0];
+    }
+
+    // [완료가능] 상태의 서브 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetCanCompleteSubQuest()
+    {
+        return GetCanCompleteSubQuestForList()[0];
+    }
+
+    // [완료가능] 상태의 특수 퀘스트의 첫번째 인덱스[0]를 퀘스트로 반환한다.
+    public static Quest GetCanCompleteSpecialQuest()
+    {
+        return GetCanCompleteSpecialQuestForList()[0];
+    }
 
     // [시작가능] 상태의 메인 퀘스트를 리스트로 가져온다
     public static List<Quest> GetCanStartMainQuestForList()

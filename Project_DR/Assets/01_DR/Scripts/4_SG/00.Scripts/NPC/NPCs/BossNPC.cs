@@ -42,7 +42,7 @@ public class BossNPC : NPC
     protected override void Awake()
     {
         base.Awake();
-        AwakeInIt();
+        npcID = GetComponent<Boss>().bossId;
         ConvertionEventInIt();
     }       // Awake()
 
@@ -160,7 +160,7 @@ public class BossNPC : NPC
 
         if (conversationId == -1)
         {
-            GFunc.Log("찾으려는 현재 진행중인 퀘스트 ID가 없습니다.");
+            GFunc.Log(_npcId + "찾으려는 현재 진행중인 퀘스트 ID가 없습니다..");
             return;
         }
         conversationID = conversationId;
@@ -176,7 +176,8 @@ public class BossNPC : NPC
     /// <returns></returns>
     public int FindQuestConversationID(int[] _conversationIds)
     {
-        Quest curQuest = Unit.GetInProgressMainQuest();
+        Quest curQuest = Unit.GetCanCompleteMainQuest();
+
         StringBuilder stringBuilder = new StringBuilder();      // 비교할때 사용할 StringBuilder
 
         for (int i = 0; i < _conversationIds.Length; i++)
@@ -191,6 +192,7 @@ public class BossNPC : NPC
                 return _conversationIds[i];
             }
         }
+        GFunc.Log("못찾은 퀘스트 ID: " + curQuest.QuestData.ID);
         return -1;
     }
 

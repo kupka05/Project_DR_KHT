@@ -985,8 +985,12 @@ public class LobbyEvent : MonoBehaviour
         resultUI.AddItem
            ("보스", result.monster.boss.count, result.monster.boss.gold, result.monster.boss.exp, true);
         resultUI.AddLine();
-
-        monsterResult.SetActive(true);
+        
+        // 0이 아닐 경우에만 실행
+        if (result.monster.normal.count + result.monster.elite.count + result.monster.boss.count != 0)
+        {
+            monsterResult.SetActive(true);
+        }
     }
     public void AddItemResult(GameResult result)
     {

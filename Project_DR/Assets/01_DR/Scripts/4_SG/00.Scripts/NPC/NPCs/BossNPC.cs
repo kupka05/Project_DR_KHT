@@ -88,9 +88,8 @@ public class BossNPC : NPC
     public void BossMeet()
     {
         GFunc.Log("대화를 시작한다.");
-        int questID = ClearBossMeetQuest();
+        ClearBossMeetQuest();
         StartConvertion();
-        Unit.ClearQuestByID(questID);
     }
 
 
@@ -199,16 +198,15 @@ public class BossNPC : NPC
     }
 
 
-    public int ClearBossMeetQuest()
+    public void ClearBossMeetQuest()
     {
         QuestCallback.OnBossMeetCallback(npcID);   // 상태값 갱신 및 자동 완료
-        GFunc.LogError($"{npcID}");
+
         Quest curQuest = Unit.GetCanCompleteMainQuest();
         int questID = curQuest.QuestData.ID;
         GFunc.Log($"현재 완료가능 메인 퀘스트 ID : {questID}");
 
-        //Unit.ClearQuestByID(questID);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
-        return questID;
+        Unit.ClearQuestByID(questID);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
     }
 
 

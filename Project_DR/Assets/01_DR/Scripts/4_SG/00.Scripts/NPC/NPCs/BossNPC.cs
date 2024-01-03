@@ -201,9 +201,9 @@ public class BossNPC : NPC
     {
         QuestCallback.OnBossMeetCallback(npcID);   // 상태값 갱신 및 자동 완료
 
-        Quest curQuest = Unit.GetInProgressMainQuest();
+        Quest curQuest = Unit.GetCanCompleteMainQuest();
         int questID = curQuest.QuestData.ID;
-        GFunc.Log($"현재 진행중인 메인 퀘스트 ID : {questID}");
+        GFunc.Log($"현재 완료가능 메인 퀘스트 ID : {questID}");
 
         Unit.ClearQuestByID(questID);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
     }

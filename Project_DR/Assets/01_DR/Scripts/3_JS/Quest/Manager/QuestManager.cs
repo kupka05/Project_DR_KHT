@@ -52,6 +52,8 @@ namespace Js.Quest
         public List<Quest> QuestList => UserDataManager.QuestList;                           // 보유 퀘스트 리스트
         public Dictionary<int, Quest> QuestDictionary => UserDataManager.QuestDictionary;    // 보유 퀘스트 딕셔너리
 
+        public Dictionary<int, List<Quest>> KeyIDQuestDictionary => UserDataManager.KeyIDQuestDictionary;    // NPC ID가 키 값인 딕셔너리
+
         public const int QUEST_FIRST_ID = 31_1_1_001;                                        // 퀘스트 테이블 시작 ID
 
 
@@ -116,6 +118,9 @@ namespace Js.Quest
             // UserDataManager.questDictionary 할당
             UserDataManager.AddQuestDictionary();
 
+            // UserDataManager.keyIDQuestDictionary 할당
+            UserDataManager.AddKeyIDQuestDictionary();
+
             // 디버그 퀘스트 리스트 생성
             CreateQuestListDebug();
         }
@@ -171,7 +176,7 @@ namespace Js.Quest
             }
         }
 
-        // 퀘스트 ID로 퀘스트를 검색하고 반환
+        // 퀘스트 ID로 딕셔너리에서 퀘스트를 검색하고 반환
         public Quest GetQuestByID(int id)
         {
             // 딕셔너리가 비어있을 경우 / 예외 처리
@@ -183,6 +188,21 @@ namespace Js.Quest
             }
 
             Quest quest = QuestDictionary[id];
+            return quest;
+        }
+
+        // 퀘스트 Key ID로 딕셔너리에서 퀘스트 리스트를 검색하고 반환
+        public List<Quest> GetQuestListByKeyID(int id)
+        {
+            // 딕셔너리가 비어있을 경우 / 예외 처리
+            if (KeyIDQuestDictionary[id].Count.Equals(0))
+            {
+                GFunc.LogWarning("QuestManager.GetQuestByKeyID(): 퀘스트 Key ID 검색 및 호출 실패! / " +
+                    "퀘스트가 생성되기 전에 딕셔너리를 호출한 것 같습니다.");
+                return default;
+            }
+
+            List<Quest> quest = KeyIDQuestDictionary[id];
             return quest;
         }
 

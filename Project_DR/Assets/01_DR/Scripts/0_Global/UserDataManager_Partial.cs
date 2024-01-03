@@ -190,10 +190,12 @@ public partial class UserDataManager
 
     [Header("Quest Data")]
     private static List<Quest> _questList = new List<Quest>();                               
-    private static Dictionary<int, Quest> _questDictionary = new Dictionary<int, Quest>();    
-    public static List<Quest> QuestList => _questList;                          // 보유 퀘스트 리스트
-    public static Dictionary<int, Quest> QuestDictionary => _questDictionary;   // 보유 퀘스트 딕셔너리화
-    public string QuestMain => PlayerDataManager.QuestMain;                     // 메인 퀘스트
+    private static Dictionary<int, Quest> _questDictionary = new Dictionary<int, Quest>();
+    private static Dictionary<int, List<Quest>> _keyIDQuestDictionary = new Dictionary<int, List<Quest>>();
+    public static List<Quest> QuestList => _questList;                                          // 보유 퀘스트 리스트
+    public static Dictionary<int, Quest> QuestDictionary => _questDictionary;                   // 보유 퀘스트 딕셔너리화
+    public static Dictionary<int, List<Quest>> KeyIDQuestDictionary => _keyIDQuestDictionary;   // Key ID가 키 값인 보유 퀘스트 딕셔너리화
+    public string QuestMain => PlayerDataManager.QuestMain;                                     // 메인 퀘스트
     public string DebugQuest;
 
     [Header("Result Data")]

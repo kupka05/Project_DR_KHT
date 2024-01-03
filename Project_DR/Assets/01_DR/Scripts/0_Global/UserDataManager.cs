@@ -522,6 +522,29 @@ public partial class UserDataManager : MonoBehaviour
             quest => quest.QuestData.ID, quest => quest);
     }
 
+    // _questList 리스트를 NPC ID를 키값으로하는 딕셔너리로 변경 및
+    // _questNPCIDDictionary에 할당
+    public static void AddKeyIDQuestDictionary()
+    {
+        // Key ID를 키 값으로 하는 <int, Quest> 딕셔너리 할당
+        for (int i = 0; i < _questList.Count; i++)
+        {
+            // 딕셔너리에 Key 값이 없을 경우
+            if (! _keyIDQuestDictionary.ContainsKey(_questList[i].QuestData.KeyID))
+            {
+                // KeyID를 키 값으로 List<Quest> 초기화
+                _keyIDQuestDictionary.Add(_questList[i].QuestData.KeyID, new List<Quest>());
+            }
+        }
+
+        // _questDictionary에 있는 quest를 _keyIDQuestDictionary에 추가
+        foreach (var item in _questDictionary)
+        {
+            Quest quest = _questDictionary[item.Key];
+            _keyIDQuestDictionary[quest.QuestData.KeyID].Add(quest);
+        }
+    }
+
     // 퀘스트 정보(json)를 DB에 저장
     public void SaveQuestDatasToDB(string json)
     {

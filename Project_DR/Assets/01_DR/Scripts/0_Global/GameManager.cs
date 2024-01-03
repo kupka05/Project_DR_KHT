@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsProtoType = true;
 
-    public int nowFloor = 1;        // 현재 몇층인지 알려줄 변수
+    public int nowFloor;        // 현재 몇층인지 알려줄 변수
     public int isPlayerMaxFloor;    // 현재 플레이어의 회차의따라서 아래 const변수값이 대입될것임
     // 던전 진행 Max층을 알려줄 const int 변수
     public const int PROTOTYPE = 1;
@@ -127,7 +127,9 @@ public class GameManager : MonoBehaviour
     }
 
     public List<GameObject> ghostObjList;       // 유령을 담아둘 리스트
+    public List<NullRoom> nullRoomList;         // 빈방을 담아두는 리스트 (모루생성에 필요)
     public bool isInItGhost = false;
+    public bool isAnvilCreate = false;
 
     public event System.Action DoorOnEvent;
     public event System.Action DoorOffEvent;
@@ -385,6 +387,61 @@ public class GameManager : MonoBehaviour
         }
         return true;
     }       // CheckAllRoomClear()
+
+    /// <summary>
+    /// 리스트에 NullRoom이라는 객체를 Add해주는 함수
+    /// </summary>
+    /// <param name="_nullRoom"></param>
+    public void AddNullRoom(NullRoom _nullRoom)
+    {
+        if (nullRoomList == null || nullRoomList == default)
+        {       // 참조되는순간에 New할당
+            nullRoomList = new List<NullRoom>();
+        }
+        else { /*PASS*/ }
+
+        nullRoomList.Add(_nullRoom);
+
+        StartCoroutine(CreateAnvil());
+
+        //if (nullRoomList.Count == 2 && nowFloor % 2 == 0)
+        //{   // 빈방이 2개일때와 현재층이 짝수 일때에 들어오는 조건문
+        //    int randListIdx = UnityEngine.Random.Range(0, nullRoomList.Count);
+
+        //    nullRoomList[randListIdx].CreateAnvilObj();
+        //    GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
+        //}
+
+        //GFunc.Log($"NullRomListCount : {nullRoomList.Count}\nNowFloor : {nowFloor}");
+
+        
+    }       // AddNullRoom()
+
+    IEnumerator CreateAnvil()
+    {
+        yield return new WaitForSeconds(nullRoomList.Count);
+
+        if(isAnvilCreate == false)
+        {
+            if (nullRoomList.Count >= 2 && nowFloor % 2 == 0)
+            {   // 빈방이 2개일때와 현재층이 짝수 일때에 들어오는 조건문
+                int randListIdx = UnityEngine.Random.Range(0, nullRoomList.Count);
+
+                nullRoomList[randListIdx].CreateAnvilObj();
+                GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
+                isAnvilCreate = true;
+            }
+        }
+        else { /*PASS*/ }
+
+    }
+    
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
 
     public void FadeIn()
     {

@@ -8,6 +8,7 @@ public class ShopDoor : MonoBehaviour
      *                Private Fields
      *************************************************/
     [SerializeField] private Animation _animation;
+    [SerializeField] private Collider _shield;
     [SerializeField] private float _delay = 2f;
 
 
@@ -26,6 +27,9 @@ public class ShopDoor : MonoBehaviour
         // 플레이어가 들어왔을 경우
         if (other.CompareTag("Player"))
         {
+            // 플레이어가 못나가게 문을 막음
+            Invoke("ActiveShield", 0.1f);
+
             // n초 후 문을 닫는다.
             Invoke("CloseDoor", _delay);
         }
@@ -39,6 +43,7 @@ public class ShopDoor : MonoBehaviour
     {
         // Init
         _animation = transform.parent.Find("Door_Middle").GetComponent<Animation>();
+        _shield = transform.parent.Find("Shield").gameObject.GetComponent<BoxCollider>();
     }
 
 
@@ -49,5 +54,10 @@ public class ShopDoor : MonoBehaviour
     {
         _animation.Play("ShopDoor_Close");
         Destroy(this);
+    }
+
+    private void ActiveShield()
+    {
+        _shield.enabled = true;
     }
 }

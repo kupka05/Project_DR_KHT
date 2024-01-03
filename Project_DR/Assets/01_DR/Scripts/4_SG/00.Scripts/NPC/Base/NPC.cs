@@ -16,7 +16,7 @@ public enum GhostNPCID
     Ghost_F_T = 1111205
 }
 public enum NPCID
-{         
+{
     Klau_Random = 1110101,
     Decius_Random = 1111601,
     Tregal_Random = 1110301,
@@ -38,8 +38,12 @@ public enum RewardID
     MBTIStartId = 324001,
     MBTIEndId = 324013,
     SilverCoinStartId = 321023,
-    SilverCoinEndId = 321028
+    SilverCoinEndId = 321028,
+    EffectStartId = 323001,
+    EffectEndId = 323025
+
 }
+
 
 public enum NpcTriggerType
 {
@@ -563,9 +567,13 @@ public class NPC : MonoBehaviour
         {
             RewardMBTI(_rewardId);
         }
-        else if((int)RewardID.SilverCoinStartId <= _rewardId && (int)RewardID.SilverCoinEndId >= _rewardId)
+        else if ((int)RewardID.SilverCoinStartId <= _rewardId && (int)RewardID.SilverCoinEndId >= _rewardId)
         {
             RewardSilverCoin(_rewardId);
+        }
+        else if ((int)RewardID.EffectStartId <= _rewardId && (int)RewardID.EffectEndId >= _rewardId)
+        {
+            RewardEffect(_rewardId);
         }
 
     }       // RewardTypeCheck()
@@ -577,30 +585,14 @@ public class NPC : MonoBehaviour
     /// <param name="_rewardId">보상 ID</param>
     private void RewardSilverCoin(int _rewardId)
     {
-        int tableProbability = Data.GetInt(_rewardId, "Reward_1_Probability");  // 시트상의 확률
-        int randProbability = 0;
-        bool isPass = true;     // 보상을 지급해도 되는지
+        int tableProbability = Data.GetInt(_rewardId, "Reward_1_Probability");  // 시트상의 확률        
+        bool isPass = NPCManager.Instance.GetProbabilityResult(tableProbability);     // 보상을 지급해도 되는지
 
-        if (tableProbability != 100)
+        if (isPass == true)
         {
-            randProbability = UnityEngine.Random.Range(0, 101); // 0 ~ 100 % 
+            UserDataManager.Instance.Gold = UserDataManager.Instance.Gold + Data.GetInt(_rewardId, "GiveGold");
         }
         else { /*PASS*/ }
-        if (tableProbability < randProbability)
-        {
-            isPass = false;
-        }
-        else { /*PASS*/ }
-        if (isPass == false)
-        {
-            GFunc.Log($"얻을 확률의 조건을 만족하지 못했습니다.\n얻을 확률 : {tableProbability}\n나온 확률 : {randProbability}");
-            return;
-        }
-        else { /*PASS*/ }
-        
-        UserDataManager.Instance.Gold = UserDataManager.Instance.Gold + Data.GetInt(_rewardId, "GiveGold");
-
-
     }       // RewardSilverCoin()
 
     /// <summary>
@@ -627,12 +619,31 @@ public class NPC : MonoBehaviour
     /// <param name="_rewardId">보상 ID</param>
     private void RewardItem(int _rewardId)
     {
-        int rewardItemRefId = Data.GetInt(_rewardId, "Reward_1_KeyID");
-        int rewardAmount = Data.GetInt(_rewardId, "Reward_1_Amount");
-        // 잘하면 확률도 확인해야할수도 있음
-        Unit.AddInventoryItem(rewardItemRefId, rewardAmount);     // 인벤토리에 아이템 넣어주기
+        List<int> rewardItemRefIdList = NPCManager.Instance.GetRewardItemRefIdList(_rewardId);      // 보상의 ID
+        List<int> rewardAmountList = NPCManager.Instance.GetRewardAmountList(_rewardId);            // 보상의 갯수
+        List<int> rewardProbabilityList = NPCManager.Instance.GetRewardProbabilityList(_rewardId);  // 보상의 확률
+
+
+        for (int i = 0; i < rewardItemRefIdList.Count; i++)
+        {
+            bool isRewardInIt = NPCManager.Instance.GetProbabilityResult(rewardProbabilityList[i]);
+
+            if (isRewardInIt == true)
+            {
+                Unit.AddInventoryItem(rewardItemRefIdList[i], rewardAmountList[i]);
+            }
+            else { /*PASS*/ }
+        }
+
+
     }       // RewardItem()
 
+
+
+    private void RewardEffect(int _rewardId)
+    {
+
+    }
     #endregion 보상지급 함수
 
     #endregion 보상 관련 함수
@@ -651,98 +662,7 @@ public class NPC : MonoBehaviour
         //Debug.Log($"NPC의 애니메이션 변경 함수 진입\n매개변수값 : {_playAnimationName}");
     }       // ChangeAnimationString()
 
-    /// <summary>
-    /// 애니메이션이 NPCAnimationType값에 따라 실행되는 함수 (사용 안함)
-    /// </summary>
-    /// <param name="_aniType">현재 NPC의 NPCAnimationType</param>
-    protected void ChangeAnimationEnum(NPCAnimationType _aniType)
-    {
-        string aniname;     // 애니메이션 이름
-        switch (_aniType)
-        {
-            case NPCAnimationType.Idle:
-               aniname = "Ani_Motion_Idle";
-                animator.Play(aniname);
-                break;
-
-            case NPCAnimationType.Walk:
-                aniname = "Ani_Motion_Walking";
-                animator.Play(aniname);
-                break;
-
-            case NPCAnimationType.Talk_1:
-                aniname = "Ani_Motion_Talk_1";
-                animator.Play(aniname);
-                break;
-
-            case NPCAnimationType.Talk_2:
-                aniname = "Ani_Motion_Talk_2";
-                animator.Play(aniname);
-                break;
-
-            case NPCAnimationType.Hi_1:
-                aniname = "Ani_Motion_HI_1";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.Hi_2:
-                aniname = "Ani_Motion_HI_2";
-                animator.Play(aniname);
-                break;
-
-            case NPCAnimationType.Sleeping_1:
-                aniname = "Ani_Motion_Sleeping_1";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.Sleeping_2:
-                aniname = "Ani_Motion_Sleeping_2";
-                animator.Play(aniname);
-                break;
-
-            case NPCAnimationType.Clap:
-                aniname = "Ani_Motion_Clap";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.Sneezing:
-                aniname = "Ani_Motion_Sneezing";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.Loudly:
-                aniname = "Ani_Motion_Talk_Loudly";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.Dance_2:
-                aniname = "Ani_Motion_DANCE_2";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.Kill:
-                aniname = "Ani_Motion_Kill";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.Secretly:
-                aniname = "Ani_Motion_Talk_Secretly";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.Bored:
-                aniname = "Ani_Motion_Bored";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.HappyWalk:
-                aniname = "Ani_Motion_Happy Walk";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.LALA:
-                aniname = "Ani_Motion_LALA";
-                animator.Play(aniname);
-                break;
-            case NPCAnimationType.Crying:
-                aniname = "Ani_Motion_Crying";
-                animator.Play(aniname);
-                break;
-
-
-        }
-    }
-
+    
 
     #endregion 애니메이션 관련
 

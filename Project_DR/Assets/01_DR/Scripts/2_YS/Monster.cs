@@ -165,7 +165,7 @@ public class Monster : MonoBehaviour
         //nav.stoppingDistance = attRange - 0.5f;
 
         SetMaxHealth(damageable.Health); //hp
-        GFunc.Log($"초기 hp 설정 값:{damageable.Health}");
+        //GFunc.Log($"초기 hp 설정 값:{damageable.Health}");
 
         InitMonster();
     }

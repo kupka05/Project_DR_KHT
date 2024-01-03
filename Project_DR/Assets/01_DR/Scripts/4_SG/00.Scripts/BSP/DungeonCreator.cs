@@ -1179,7 +1179,7 @@ public class DungeonCreator : MonoBehaviour
         // 처음으로 매쉬가 생성된 방의 꼭지점Pos 얻기
         //FloorMeshPos firstRoomPos = _bspFloorParent.transform.GetChild(0).GetComponent<FloorMeshPos>();
         FloorMeshPos firstRoomPos = _bspFloorParent.transform.GetComponent<FloorMeshPos>();
-        GFunc.Log($"FloorMeshPos == null? : {firstRoomPos == null}");
+        //GFunc.Log($"FloorMeshPos == null? : {firstRoomPos == null}");
         // 방의 하단 중앙위치
         float bspfirstRoomBottomCenterPoint = (firstRoomPos.bottomLeftCorner.x + firstRoomPos.bottomRightCorner.x) / 2;
         // 방의 상단 중앙위치

@@ -68,6 +68,7 @@ public class NPC_CanvasController : MonoBehaviour
 
     }       // AwakeInIt()
 
+    
     private void StartInIt()
     {
         npc = this.transform.parent.parent.GetComponent<NPC>();

@@ -74,7 +74,7 @@ public class BounceSmallBullet : MonoBehaviour
                     GameObject effect = Instantiate(bountSmallBulletEffect, transform.position, Quaternion.identity);
                     float destoryTime = 2.0f;
                     Destroy(effect, destoryTime);
-                    GFunc.Log($"데미지:{damage}");
+                    //GFunc.Log($"데미지:{damage}");
                     break;
                 }
                 
@@ -87,7 +87,7 @@ public class BounceSmallBullet : MonoBehaviour
                     Destroy(effect, destoryTime);
                     //ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
                     //GFunc.Log("반환");
-                    GFunc.Log("애드벌룬 하위 총알 무기에 닿았는가");
+                    //GFunc.Log("애드벌룬 하위 총알 무기에 닿았는가");
                     return;
                 }
                 else if (collider.CompareTag("Wall"))
@@ -99,7 +99,7 @@ public class BounceSmallBullet : MonoBehaviour
                     Destroy(effect, destoryTime);
                     //ObjectPoolManager.ReturnObjectToQueue(this.gameObject, ObjectPoolManager.ProjectileType.BOUNCEBULLET);
                     //GFunc.Log("반환");
-                    GFunc.Log("애드벌룬 하위 총알 벽에 닿았는가");
+                    //GFunc.Log("애드벌룬 하위 총알 벽에 닿았는가");
                     return;
                 }
                 Destroy(this.gameObject);

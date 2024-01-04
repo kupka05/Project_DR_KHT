@@ -759,6 +759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterHpSlider: {fileID: 4208682596847741297}
   state: 0
+  capsuleColliders: []
   monsterId: 7002
   monsterType: 1
   smash: {fileID: 5444551150700271490}
@@ -781,18 +782,21 @@ MonoBehaviour:
   stunDelay: 1
   stunCount: 0
   stopDistance: 0
+  lastDamageTime: 0
   monsterTr: {fileID: 3608231402854440894}
   playerTr: {fileID: 0}
   anim: {fileID: 7274210064967239108}
   rigid: {fileID: 640281646}
   nav: {fileID: 640281645}
   damageCollider:
-  - {fileID: 958297001376935849}
   - {fileID: 958297001432788588}
+  - {fileID: 958297001376935849}
+  - {fileID: 2919002065786152521}
   damageable: {fileID: 0}
   isDie: 0
   isStun: 0
   isStack: 0
+  isAttack: 0
   distanceDebug: 0
   distanceFromGround: 0
   distanceFromGroundOffset: 0
@@ -2031,6 +2035,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}
+--- !u!114 &2919002065786152521 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2724377479285917373}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2919002065786152564 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,

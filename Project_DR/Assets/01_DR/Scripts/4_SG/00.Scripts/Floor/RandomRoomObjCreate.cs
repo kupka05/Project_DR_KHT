@@ -1,3 +1,4 @@
+using OVR.OpenVR;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -155,11 +156,32 @@ public class RandomRoomObjCreate : MonoBehaviour
 
             int pickObjID = UnityEngine.Random.Range(0, DataManager.Instance.GetCount(matCateforyID)) + matCateforyID;
 
-            CreateObj(pickObjID);
+            CreateMatObj(pickObjID);
         }
     }       // SpawnMatObj
 
 
+    /// <summary>
+    ///  Mat오브젝트를 생성해주는 함수
+    /// </summary>
+    /// <param name="_pickObjId">랜덤으로 선택된 오브젝트의 아이디값</param>
+    private void CreateMatObj(int _pickObjId)
+    {
+        
+        Vector3 spawnPos = PickSpwanPos(_pickObjId);
+        if (spawnPos != Vector3.zero)
+        {
+            int pickObjRefId = Data.GetInt(_pickObjId, "ReferenceObjID");
+            spawnPosList.Add(spawnPos);
+            bool isWallSpawn = ObjRotationSetting(_pickObjId);
+            GameObject spawnObj = Unit.AddFieldItem(spawnPos,pickObjRefId);
+            //Debug.Log($"Mat 스폰된 오브젝트 : {spawnObj.name} ID: {pickObjRefId}");
+            spawnObj.transform.parent = parentObj.transform;
+            spawnObj.transform.localPosition = spawnPos;
+        }
+        else { /*PASS*/ }
+
+    }       // CreateMatObj()
 
 
 

@@ -278,6 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcTriggerType: 0
+  isTryCommunity: 0
   isComunity: 0
   isReadyToAutoComunication: 0
 --- !u!1 &6762518278844223832
@@ -3800,17 +3801,22 @@ PrefabInstance:
     - target: {fileID: 2720595020978443611, guid: 72ff53238fcb1d045ba9471692b2fc3a,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2720595020978443611, guid: 72ff53238fcb1d045ba9471692b2fc3a,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2720595020978443611, guid: 72ff53238fcb1d045ba9471692b2fc3a,
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2720595021520951744, guid: 72ff53238fcb1d045ba9471692b2fc3a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2720595021520951746, guid: 72ff53238fcb1d045ba9471692b2fc3a,
         type: 3}

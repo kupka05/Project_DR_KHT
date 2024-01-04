@@ -18,9 +18,9 @@ public static class Unit
     }
 
     // 필드에 아이템을 생성
-    public static void AddFieldItem(Vector3 pos, int id, int amount = 1)
+    public static GameObject AddFieldItem(Vector3 pos, int id, int amount = 1)
     {
-        ItemManager.instance.CreateItem(pos, id, amount);
+        return ItemManager.instance.CreateItem(pos, id, amount);
     }
 
     // 모루 위에 크래프팅 아이템을 생성

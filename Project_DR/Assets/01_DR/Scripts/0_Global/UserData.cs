@@ -477,6 +477,7 @@ public static class UserData
         Unit.UpdateDataFromDB();
         Unit.ResetInventory();
 
+
         UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
         UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
 

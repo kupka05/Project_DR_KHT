@@ -489,7 +489,13 @@ public static class UserData
     }
     public static bool ClearCheck()
     {
+
         return UserDataManager.Instance.isClear;
+    }
+    public static bool GameOverCheck()
+    {
+
+        return UserDataManager.Instance.isGameOver;
     }
     public static void GameOver()
     {

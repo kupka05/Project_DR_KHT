@@ -450,6 +450,7 @@ public class DungeonCreator : MonoBehaviour
     private void CreateCorridorDoor(Transform _corridor, bool _isBspRoom,
         bool _isBossRoom, bool _isNextRoom)
     {
+        _corridor.gameObject.AddComponent<CorridorColorChange>();
         if (_isBspRoom == true)
         {
             _corridor.gameObject.AddComponent<CorridorDoorCreate>();

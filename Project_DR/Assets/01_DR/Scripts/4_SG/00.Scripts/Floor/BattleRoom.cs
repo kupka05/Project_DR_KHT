@@ -103,11 +103,11 @@ public class BattleRoom : RandomRoom
         int objectVariety = 0;      // 오브젝트 종류가 몇개있는지 담아둘 변수
 
         defaultObjectVariety = 10000;
+        objectVariety = DataManager.Instance.GetCount(10001);
         for (int nomalMonster = 0; nomalMonster < _nomalSpawnCount; nomalMonster++)
         {       // 노말 몬스터 
 
             // 어떤 몬스터할지
-            objectVariety = DataManager.Instance.GetCount(10001);
             int randomNum = Random.Range(1, objectVariety + 1);
             int reslutNum = randomNum + defaultObjectVariety;
             stringBuilder.Clear();
@@ -123,6 +123,23 @@ public class BattleRoom : RandomRoom
             //GFunc.Log($"{gameObject.name} : {stringBuilder}");
         }
 
+        int defaultEliteMonsterID = 10006;
+        objectVariety = Data.GetCount(defaultEliteMonsterID + 1);
+        //GFunc.Log($"GetCount해온값 : {objectVariety}");
+        for (int nowEliteMonsterSpawnCount = 0; nowEliteMonsterSpawnCount < _eliteSpawnCount; nowEliteMonsterSpawnCount++)
+        {
+            int randNum = Random.Range(0, objectVariety + 1);
+            int reslutNum = randNum + defaultEliteMonsterID;
+            stringBuilder.Clear();
+            stringBuilder.Append(Data.GetString(reslutNum, "ResourceName"));
+
+            Vector3 spawnPoint = SettingSpawnPoint();
+            spawnPointList.Add(spawnPoint);
+
+            // 소환
+            SpawnMonster(spawnPoint);
+        }       
+
     }       // ChoiceSpawnCount()
 
     private Vector3 SettingSpawnPoint()
@@ -130,8 +147,8 @@ public class BattleRoom : RandomRoom
 
         float spawnPointX = Random.Range(meshPos.bottomLeftCorner.x + 3f, meshPos.bottomRightCorner.x - 3f);
         float spawnPointY = 1f;
-        float spawnPointZ = Random.Range(meshPos.bottomLeftCorner.z + 3f, meshPos.topLeftCorner.z - 3f);        
-        Vector3 spawnPoint = new Vector3(spawnPointX,spawnPointY,spawnPointZ);
+        float spawnPointZ = Random.Range(meshPos.bottomLeftCorner.z + 3f, meshPos.topLeftCorner.z - 3f);
+        Vector3 spawnPoint = new Vector3(spawnPointX, spawnPointY, spawnPointZ);
         bool isExamineSpawnPosition = ExamineSpawnPosition(spawnPoint);
         if (isExamineSpawnPosition == true && recallCount < maxRecallCount)
         {
@@ -150,8 +167,8 @@ public class BattleRoom : RandomRoom
     private bool ExamineSpawnPosition(Vector3 spawnPoint_)
     {
         bool examineReslut = false;
-        
-        foreach (Vector3 existingXPos in spawnPointList) 
+
+        foreach (Vector3 existingXPos in spawnPointList)
         {
             //if(existingPos.x == spawnPoint_.x || existingPos.z == spawnPoint_.z)            {           }
             float posDis = Vector3.Distance(existingXPos, spawnPoint_);
@@ -160,7 +177,7 @@ public class BattleRoom : RandomRoom
                 examineReslut = true;
                 return examineReslut;
             }
-        }      
+        }
 
         return examineReslut;
     }       // ExamineSpawnPosition()
@@ -179,12 +196,14 @@ public class BattleRoom : RandomRoom
             return;
         }
         GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
-        //GFunc.Log($"GameObject : {prefabObj} , SB : {stringBuilder}");
+        //GFunc.Log($"GameObjectIsNull? : {prefabObj == null} , SB : {stringBuilder}");
         spawnMonster = Instantiate(prefabObj, _spawnPoint, Quaternion.identity, monstersParent.transform);
+
+        //GFunc.Log($"소환된 몬스터 이름 : {spawnMonster.gameObject.name}");
 
 
         SpawnMonsterSetting(spawnMonster);
-        
+
 
     }       // SponMonster()
 
@@ -244,9 +263,9 @@ public class BattleRoom : RandomRoom
     /// </summary>
     public void CheckClearRoom()
     {
-        if(monsterList.Count == 0)
+        if (monsterList.Count == 0)
         {
-            ClearRoomBoolSetTrue();            
+            ClearRoomBoolSetTrue();
         }
 
     }       // CheckClearRoom()

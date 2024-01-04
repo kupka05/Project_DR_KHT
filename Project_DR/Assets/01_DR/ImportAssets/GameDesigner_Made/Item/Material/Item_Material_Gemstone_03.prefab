@@ -390,7 +390,6 @@ GameObject:
   - component: {fileID: 8408943103661053364}
   - component: {fileID: 8408943103661053365}
   - component: {fileID: 8408943103661053366}
-  - component: {fileID: 8408943103661053367}
   m_Layer: 9
   m_Name: Item_Material_Gemstone_03
   m_TagString: ItemMaterial
@@ -553,6 +552,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -623,6 +623,9 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &8408943103661053366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,15 +648,3 @@ MonoBehaviour:
   F: 0
   P: 0
   DEBUG: 0
---- !u!114 &8408943103661053367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8408943103661541776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd937d9499953d843abd809f29ca3a21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

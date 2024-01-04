@@ -91,50 +91,65 @@ namespace Rito.InventorySystem
         }
 
         /// <summary> 툴팁의 위치 조정 </summary>
-        public void SetRectPosition(RectTransform slotRect)
+        public void SetRectPosition(RectTransform slotRect, int widthSlots, int heightSlots, int index, float slotSize)
         {
-            // 캔버스 스케일러에 따른 해상도 대응
-            float wRatio = Screen.width / _canvasScaler.referenceResolution.x;
-            float hRatio = Screen.height / _canvasScaler.referenceResolution.y;
-            float ratio = 
-                wRatio * (1f - _canvasScaler.matchWidthOrHeight) +
-                hRatio * (_canvasScaler.matchWidthOrHeight);
+            //// 캔버스 스케일러에 따른 해상도 대응
+            //float wRatio = Screen.width / _canvasScaler.referenceResolution.x;
+            //float hRatio = Screen.height / _canvasScaler.referenceResolution.y;
+            //float ratio = 
+            //    wRatio * (1f - _ca
+            //    nvasScaler.matchWidthOrHeight) +
+            //    hRatio * (_canvasScaler.matchWidthOrHeight);
 
-            float slotWidth = slotRect.rect.width * ratio;
-            float slotHeight = slotRect.rect.height * ratio;
+            //float slotWidth = slotRect.rect.width * ratio;
+            //float slotHeight = slotRect.rect.height * ratio;
 
-            // 툴팁 초기 위치(슬롯 우하단) 설정
-            _rt.position = slotRect.position + new Vector3(slotWidth, -slotHeight);
-            Vector2 pos = _rt.position;
+            //// 툴팁 초기 위치(슬롯 우하단) 설정
+            //_rt.position = slotRect.position + new Vector3(slotWidth, -slotHeight);
+            //Vector2 pos = _rt.position;
 
-            // 툴팁의 크기
-            float width = _rt.rect.width * ratio;
-            float height = _rt.rect.height * ratio;
+            //// 툴팁의 크기
+            //float width = _rt.rect.width * ratio;
+            //float height = _rt.rect.height * ratio;
 
-            // 우측, 하단이 잘렸는지 여부
-            bool rightTruncated = pos.x + width > Screen.width;
-            bool bottomTruncated = pos.y - height < 0f;
+            //// 우측, 하단이 잘렸는지 여부
+            //bool rightTruncated = pos.x + width > Screen.width;
+            //bool bottomTruncated = pos.y - height < 0f;
 
-            ref bool R = ref rightTruncated;
-            ref bool B = ref bottomTruncated;
+            //ref bool R = ref rightTruncated;
+            //ref bool B = ref bottomTruncated;
 
-            // 오른쪽만 잘림 => 슬롯의 Left Bottom 방향으로 표시
-            if (R && !B)
-            {
-                _rt.position = new Vector2(pos.x - width - slotWidth, pos.y);
-            }
-            // 아래쪽만 잘림 => 슬롯의 Right Top 방향으로 표시
-            else if (!R && B)
-            {
-                _rt.position = new Vector2(pos.x, pos.y + height + slotHeight);
-            }
-            // 모두 잘림 => 슬롯의 Left Top 방향으로 표시
-            else if (R && B)
-            {
-                _rt.position = new Vector2(pos.x - width - slotWidth, pos.y + height + slotHeight);
-            }
-            // 잘리지 않음 => 슬롯의 Right Bottom 방향으로 표시
-            // Do Nothing
+            //// 오른쪽만 잘림 => 슬롯의 Left Bottom 방향으로 표시
+            //if (R && !B)
+            //{
+            //    _rt.position = new Vector2(pos.x - width - slotWidth, pos.y);
+            //}
+            //// 아래쪽만 잘림 => 슬롯의 Right Top 방향으로 표시
+            //else if (!R && B)
+            //{
+            //    _rt.position = new Vector2(pos.x, pos.y + height + slotHeight);
+            //}
+            //// 모두 잘림 => 슬롯의 Left Top 방향으로 표시
+            //else if (R && B)
+            //{
+            //    _rt.position = new Vector2(pos.x - width - slotWidth, pos.y + height + slotHeight);
+            //}
+            //// 잘리지 않음 => 슬롯의 Right Bottom 방향으로 표시
+            //// Do Nothing
+
+            // 현재 인벤토리 기준으로 툴팁 위치 계산
+            // 인벤토리 패널 사이즈가 변할 경우 위치가 틀어질 수 있음
+            int xIndex = (index + 1) % widthSlots == 0 ? widthSlots - 1 : ((index + 1) % widthSlots) - 1;
+            int yIndex = index / widthSlots;
+            //GFunc.Log(yIndex);
+            float defaultWidth = -277f;
+            float defaultHeight = 327f;
+            float minWidth = -277f;
+            float maxWidth = 15f;
+            float widthRange = Math.Abs(minWidth) + Math.Abs(maxWidth);
+            float adjustWidth = (widthRange / (widthSlots - 1)) * xIndex;
+            float adjustHeight = slotSize * yIndex;
+            _rt.anchoredPosition3D = new Vector3((defaultWidth + adjustWidth), (defaultHeight - adjustHeight), 0f);
         }
 
         public void Show() => gameObject.SetActive(true);

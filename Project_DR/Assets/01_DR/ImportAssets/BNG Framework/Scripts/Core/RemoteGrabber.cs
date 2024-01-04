@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,7 +34,7 @@ namespace BNG {
 
         void Start() {
             if(PhysicsCheckType == RemoteGrabType.Trigger && GetComponent<Collider>() == null) {
-                Debug.LogWarning("Remote Grabber set to 'Trigger', but no Trigger Collider was found. You may need to add a collider, or switch to a different physics check type.");
+                GFunc.LogWarning("Remote Grabber set to 'Trigger', but no Trigger Collider was found. You may need to add a collider, or switch to a different physics check type.");
             }
 
             // Add a raycast check if we're using a trigger type. Trigger types don't check collision.
@@ -132,6 +132,13 @@ namespace BNG {
                 ParentGrabber.AddValidRemoteGrabbable(other, gc.ParentGrabbable);
                 return;
             }
+
+            NPC npc = other.GetComponent<NPC>();
+            if(npc != null && ParentGrabber != null)
+            {
+                ParentGrabber.AddValidRemoteNPC(other, npc);
+                return;
+            }
         }
 
         void OnTriggerExit(Collider other) {
@@ -151,6 +158,13 @@ namespace BNG {
             GrabbableChild gc = other.GetComponent<GrabbableChild>();
             if (gc != null && ParentGrabber != null) {
                 ParentGrabber.RemoveValidRemoteGrabbable(other, gc.ParentGrabbable);
+                return;
+            }
+
+            NPC npc = other.GetComponent<NPC>();
+            if (npc != null && ParentGrabber != null)
+            {
+                ParentGrabber.RemoveValidRemoteNPC(other, npc);
                 return;
             }
         }

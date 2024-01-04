@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+//using BNG;
+using Button = UnityEngine.UI.Button;
 
 /*
     [기능 - 에디터 전용]
@@ -51,13 +53,15 @@ namespace Rito.InventorySystem
         #region .
         [Header("Options")]
         [Range(0, 10)]
-        [SerializeField] private int _horizontalSlotCount = 8;  // 슬롯 가로 개수
+        [SerializeField] private int _horizontalSlotCount = 4;  // 슬롯 가로 개수
         [Range(0, 10)]
-        [SerializeField] private int _verticalSlotCount = 8;      // 슬롯 세로 개수
+        [SerializeField] private int _verticalSlotCount = 5;      // 슬롯 세로 개수
         [SerializeField] private float _slotMargin = 8f;          // 한 슬롯의 상하좌우 여백
         [SerializeField] private float _contentAreaPadding = 20f; // 인벤토리 영역의 내부 여백
-        [Range(32, 64)]
-        [SerializeField] private float _slotSize = 64f;      // 각 슬롯의 크기
+        [Range(1, 128)]
+        // 임시로 1로 설정
+        [SerializeField] private float _slotSize = 116f;      // 각 슬롯의 크기
+        [SerializeField] private float _scrollScale = 1.3f;    // 스크롤 범위 배율
 
         [Space]
         [SerializeField] private bool _showTooltip = true;
@@ -69,6 +73,7 @@ namespace Rito.InventorySystem
         [SerializeField] private GameObject _slotUiPrefab;     // 슬롯의 원본 프리팹
         [SerializeField] private ItemTooltipUI _itemTooltip;   // 아이템 정보를 보여줄 툴팁 UI
         [SerializeField] private InventoryPopupUI _popup;      // 팝업 UI 관리 객체
+        [SerializeField] private RectTransform _scrollPanelRect;   // 스크롤 사이즈 조절을 위한 RectTransform
 
         [Header("Buttons")]
         [SerializeField] private Button _trimButton;
@@ -82,6 +87,7 @@ namespace Rito.InventorySystem
         [Space(16)]
         [SerializeField] private bool _mouseReversed = false; // 마우스 클릭 반전 여부
 
+        //public global::BNG.UIPointer UIPointer; // UI 포인터
         #endregion
         /***********************************************************************
         *                               Private Fields
@@ -125,17 +131,31 @@ namespace Rito.InventorySystem
             InitSlots();
             InitButtonEvents();
             InitToggleEvents();
+            ChangeScrollRange();
         }
 
+        // 임시
+        ConvertControllerPosition convertControllerPosition = new ConvertControllerPosition();
         private void Update()
         {
-            _ped.position = Input.mousePosition;
+            //_ped.position = Input.mousePosition;
+            //_ped.position = UIPointer.publicUISystem.RightPointerTransform.position;
 
-            OnPointerEnterAndExit();
-            if(_showTooltip) ShowOrHideItemTooltip();
-            OnPointerDown();
-            OnPointerDrag();
-            OnPointerUp();
+            //float convertX = Input.mousePosition.x - (_ped.position.x - Input.mousePosition.x);
+            //float convertY = Input.mousePosition.y - (_ped.position.y - Input.mousePosition.y);
+            //convertX = convertX / 2.000634366822615f;
+            //convertY = convertY / 2.018859837119589f;
+            //Vector2 convertedPos = new Vector2(convertX, convertY);
+
+            //_ped.position = Input.mousePosition;
+            //OnPointerEnterAndExit();
+            //if(_showTooltip) ShowOrHideItemTooltip();
+            //GFunc.Log($"0: Mouse Pos: {Input.mousePosition}");
+            //GFunc.Log($"0: Controller Pos: {_ped.position}");
+            //GFunc.Log($"0: Converted Pos: {convertedPos}");
+            //OnPointerDown();
+            //OnPointerDrag();
+            //OnPointerUp();
         }
 
         #endregion
@@ -157,7 +177,7 @@ namespace Rito.InventorySystem
             if (_itemTooltip == null)
             {
                 _itemTooltip = GetComponentInChildren<ItemTooltipUI>();
-                EditorLog("인스펙터에서 아이템 툴팁 UI를 직접 지정하지 않아 자식에서 발견하여 초기화하였습니다.");
+                //EditorLog("인스펙터에서 아이템 툴팁 UI를 직접 지정하지 않아 자식에서 발견하여 초기화하였습니다.");
             }
         }
 
@@ -180,6 +200,7 @@ namespace Rito.InventorySystem
 
             _slotUIList = new List<ItemSlotUI>(_verticalSlotCount * _horizontalSlotCount);
 
+            int index = default;
             // 슬롯들 동적 생성
             for (int j = 0; j < _verticalSlotCount; j++)
             {
@@ -192,13 +213,24 @@ namespace Rito.InventorySystem
                     slotRT.anchoredPosition = curPos;
                     slotRT.gameObject.SetActive(true);
                     slotRT.gameObject.name = $"Item Slot [{slotIndex}]";
-
+                // Changed* 로컬 스케일 1로 고정
+                    slotRT.localScale = Vector3.one;
+                    // Changed* PosZ 0으로 고정
+                    Vector3 tempPos = slotRT.anchoredPosition3D;
+                    tempPos.z = 0f;
+                    slotRT.anchoredPosition3D = tempPos;
                     var slotUI = slotRT.GetComponent<ItemSlotUI>();
                     slotUI.SetSlotIndex(slotIndex);
                     _slotUIList.Add(slotUI);
 
                     // Next X
                     curPos.x += (_slotMargin + _slotSize);
+
+                    // 인벤토리에서 슬롯에 접근하기 위한 인덱스 할당
+                    slotUI.GetComponentInChildren<ItemSlotController>().SetIndex(index);
+                    
+                    // 인덱스 증가
+                    index++;
                 }
 
                 // Next Line
@@ -255,15 +287,35 @@ namespace Rito.InventorySystem
         /// <summary> 레이캐스트하여 얻은 첫 번째 UI에서 컴포넌트 찾아 리턴 </summary>
         private T RaycastAndGetFirstComponent<T>() where T : Component
         {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
             _rrList.Clear();
 
-            _gr.Raycast(_ped, _rrList);
-            
-            if(_rrList.Count == 0)
-                return null;
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                // 디버그용으로 레이를 시각적으로 표시
+                //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red, 0.1f);
 
-            return _rrList[0].gameObject.GetComponent<T>();
+                // 충돌 지점 출력
+                //GFunc.Log($"Ray Hit Point: {hit.point}");
+
+                // 충돌한 객체에서 원하는 컴포넌트 가져오기
+                T component = hit.collider.GetComponent<T>();
+
+                if (component != null)
+                {
+                    // 가져온 컴포넌트를 사용하여 원하는 작업 수행
+                    //GFunc.Log("Detected Component: " + component.name);
+                    return component;
+                }
+            }
+
+            return null;
         }
+
+
+
         /// <summary> 슬롯에 포인터가 올라가는 경우, 슬롯에서 포인터가 빠져나가는 경우 </summary>
         private void OnPointerEnterAndExit()
         {
@@ -272,6 +324,7 @@ namespace Rito.InventorySystem
 
             // 현재 프레임의 슬롯
             var curSlot = _pointerOverSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
+            //GFunc.Log($"curSlot: {curSlot}");
 
             if (prevSlot == null)
             {
@@ -300,6 +353,7 @@ namespace Rito.InventorySystem
             // ===================== Local Methods ===============================
             void OnCurrentEnter()
             {
+                //GFunc.Log("OnCurrentEnter");
                 if(_showHighlight)
                     curSlot.Highlight(true);
             }
@@ -309,79 +363,107 @@ namespace Rito.InventorySystem
             }
         }
         /// <summary> 아이템 정보 툴팁 보여주거나 감추기 </summary>
-        private void ShowOrHideItemTooltip()
-        {
-            // 마우스가 유효한 아이템 아이콘 위에 올라와 있다면 툴팁 보여주기
-            bool isValid =
-                _pointerOverSlot != null && _pointerOverSlot.HasItem && _pointerOverSlot.IsAccessible
-                && (_pointerOverSlot != _beginDragSlot); // 드래그 시작한 슬롯이면 보여주지 않기
+        //public void ShowOrHideItemTooltip()
+        //{
+        //    // 마우스가 유효한 아이템 아이콘 위에 올라와 있다면 툴팁 보여주기
+        //    bool isValid =
+        //        _pointerOverSlot != null && _pointerOverSlot.HasItem && _pointerOverSlot.IsAccessible
+        //        && (_pointerOverSlot != _beginDragSlot); // 드래그 시작한 슬롯이면 보여주지 않기
 
-            if (isValid)
+        //    if (isValid)
+        //    {
+        //        UpdateTooltipUI(_pointerOverSlot);
+        //        _itemTooltip.Show();
+        //    }
+        //    //else
+        //    //    _itemTooltip.Hide();
+        //}
+
+        public void ShowTooltip(int index)
+        {
+            // 슬롯에 아이템이 있을 경우 && 접근 가능한 슬롯일 경우
+            if (_slotUIList[index].HasItem && _slotUIList[index].IsAccessible)
             {
-                UpdateTooltipUI(_pointerOverSlot);
+                UpdateTooltipUI(_slotUIList[index]);
                 _itemTooltip.Show();
+
+///////////////////////////////////
+                // 데이터매니저 불러오기 예외처리 관련
+                // 디버그 일시작업 중단
+                //GFunc.Log($"GetData: {(float)DataManager.Instance.GetData(1001, "Health")}");
             }
-            else
-                _itemTooltip.Hide();
         }
-        /// <summary> 슬롯에 클릭하는 경우 </summary>
-        private void OnPointerDown()
+
+        public void HideTooltip()
         {
-            // Left Click : Begin Drag
-            if (Input.GetMouseButtonDown(_leftClick))
-            {
-                _beginDragSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
+            _itemTooltip.Hide();
+        }
 
-                // 아이템을 갖고 있는 슬롯만 해당
-                if (_beginDragSlot != null && _beginDragSlot.HasItem && _beginDragSlot.IsAccessible)
-                {
-                    EditorLog($"Drag Begin : Slot [{_beginDragSlot.Index}]");
+        /// <summary> 슬롯에 클릭하는 경우 </summary>
+        public void OnPointerDown()
+        {
+            //// Left Click : Begin Drag
+            //if (global::BNG.InputBridge.Instance.RightTriggerDown)
+            //{
+            //    _beginDragSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
 
-                    // 위치 기억, 참조 등록
-                    _beginDragIconTransform = _beginDragSlot.IconRect.transform;
-                    _beginDragIconPoint = _beginDragIconTransform.position;
-                    _beginDragCursorPoint = Input.mousePosition;
+            //    // 아이템을 갖고 있는 슬롯만 해당
+            //    if (_beginDragSlot != null && _beginDragSlot.HasItem && _beginDragSlot.IsAccessible)
+            //    {
+            //        //EditorLog($"Drag Begin : Slot [{_beginDragSlot.Index}]");
 
-                    // 맨 위에 보이기
-                    _beginDragSlotSiblingIndex = _beginDragSlot.transform.GetSiblingIndex();
-                    _beginDragSlot.transform.SetAsLastSibling();
+            //        // 위치 기억, 참조 등록
+            //        _beginDragIconTransform = _beginDragSlot.IconRect.transform;
+            //        _beginDragIconPoint = _beginDragIconTransform.position;
+            //        Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
+            //        _beginDragCursorPoint = rightControllerPos;
+            //        //GFunc.Log($"rightControlPos: {_beginDragCursorPoint}");
 
-                    // 해당 슬롯의 하이라이트 이미지를 아이콘보다 뒤에 위치시키기
-                    _beginDragSlot.SetHighlightOnTop(false);
-                }
-                else
-                {
-                    _beginDragSlot = null;
-                }
-            }
+            //        // 맨 위에 보이기
+            //        _beginDragSlotSiblingIndex = _beginDragSlot.transform.GetSiblingIndex();
+            //        _beginDragSlot.transform.SetAsLastSibling();
 
-            // Right Click : Use Item
-            else if (Input.GetMouseButtonDown(_rightClick))
-            {
-                ItemSlotUI slot = RaycastAndGetFirstComponent<ItemSlotUI>();
+            //        // 해당 슬롯의 하이라이트 이미지를 아이콘보다 뒤에 위치시키기
+            //        _beginDragSlot.SetHighlightOnTop(false);
+            //    }
+            //    else
+            //    {
+            //        _beginDragSlot = null;
+            //    }
+            //}
 
-                if (slot != null && slot.HasItem && slot.IsAccessible)
-                {
-                    TryUseItem(slot.Index);
-                }
-            }
+            //// Right Click : Use Item
+            //else if (Input.GetMouseButtonDown(_rightClick))
+            //{
+            //    ItemSlotUI slot = RaycastAndGetFirstComponent<ItemSlotUI>();
+
+            //    if (slot != null && slot.HasItem && slot.IsAccessible)
+            //    {
+            //        TryUseItem(slot.Index);
+            //    }
+            //}
         }
         /// <summary> 드래그하는 도중 </summary>
-        private void OnPointerDrag()
+        public void OnPointerDrag()
         {
             if(_beginDragSlot == null) return;
 
-            if (Input.GetMouseButton(_leftClick))
+            // 라이트 트리거를 누르고 있는 경우 (1 == true)
+            if (global::BNG.InputBridge.Instance.RightTrigger == 1)
             {
+                //GFunc.Log("1: TRUE");
                 // 위치 이동
-                _beginDragIconTransform.position =
-                    _beginDragIconPoint + (Input.mousePosition - _beginDragCursorPoint);
+                //Vector3 rightControllerPos = UIPointer.publicUISystem.RightPointerTransform.position;
+                //GFunc.Log($"Cursor Pos: {rightControllerPos}");
+                //_beginDragIconTransform.position = (_beginDragIconPoint + rightControllerPos - _beginDragCursorPoint);
+                //GFunc.Log($"Current Pos: {rightControllerPos}");
+                //GFunc.Log($"Dragged Pos: {_beginDragIconTransform.position}");
             }
         }
         /// <summary> 클릭을 뗄 경우 </summary>
         private void OnPointerUp()
         {
-            if (Input.GetMouseButtonUp(_leftClick))
+            if (global::BNG.InputBridge.Instance.RightTriggerUp)
             {
                 // End Drag
                 if (_beginDragSlot != null)
@@ -405,7 +487,7 @@ namespace Rito.InventorySystem
             }
         }
 
-        private void EndDrag()
+        public void EndDrag()
         {
             ItemSlotUI endDragSlot = RaycastAndGetFirstComponent<ItemSlotUI>();
 
@@ -466,7 +548,7 @@ namespace Rito.InventorySystem
             // 슬롯이 아닌 다른 UI 위에 놓은 경우
             else
             {
-                EditorLog($"Drag End(Do Nothing)");
+                //EditorLog($"Drag End(Do Nothing)");
             }
         }
 
@@ -479,7 +561,7 @@ namespace Rito.InventorySystem
         /// <summary> UI 및 인벤토리에서 아이템 제거 </summary>
         private void TryRemoveItem(int index)
         {
-            EditorLog($"UI - Try Remove Item : Slot [{index}]");
+            //EditorLog($"UI - Try Remove Item : Slot [{index}]");
 
             _inventory.Remove(index);
         }
@@ -487,7 +569,7 @@ namespace Rito.InventorySystem
         /// <summary> 아이템 사용 </summary>
         private void TryUseItem(int index)
         {
-            EditorLog($"UI - Try Use Item : Slot [{index}]");
+            //EditorLog($"UI - Try Use Item : Slot [{index}]");
 
             _inventory.Use(index);
         }
@@ -497,11 +579,11 @@ namespace Rito.InventorySystem
         {
             if (from == to)
             {
-                EditorLog($"UI - Try Swap Items: Same Slot [{from.Index}]");
+                //EditorLog($"UI - Try Swap Items: Same Slot [{from.Index}]");
                 return;
             }
 
-            EditorLog($"UI - Try Swap Items: Slot [{from.Index} -> {to.Index}]");
+            //EditorLog($"UI - Try Swap Items: Slot [{from.Index} -> {to.Index}]");
 
             from.SwapOrMoveIcon(to);
             _inventory.Swap(from.Index, to.Index);
@@ -512,11 +594,11 @@ namespace Rito.InventorySystem
         {
             if (indexA == indexB)
             {
-                EditorLog($"UI - Try Separate Amount: Same Slot [{indexA}]");
+                //EditorLog($"UI - Try Separate Amount: Same Slot [{indexA}]");
                 return;
             }
 
-            EditorLog($"UI - Try Separate Amount: Slot [{indexA} -> {indexB}]");
+            //EditorLog($"UI - Try Separate Amount: Slot [{indexA} -> {indexB}]");
 
             string itemName = $"{_inventory.GetItemName(indexA)} x{amount}";
 
@@ -532,11 +614,26 @@ namespace Rito.InventorySystem
             if(!slot.IsAccessible || !slot.HasItem)
                 return;
 
+            //GFunc.Log("UpdateTooltupUI");
             // 툴팁 정보 갱신
             _itemTooltip.SetItemInfo(_inventory.GetItemData(slot.Index));
 
             // 툴팁 위치 조정
-            _itemTooltip.SetRectPosition(slot.SlotRect);
+            _itemTooltip.SetRectPosition(slot.SlotRect, _horizontalSlotCount, 
+                _verticalSlotCount, slot.Index, _slotSize);
+        }
+
+        /// <summary> 스크롤 패널의 스크롤 범위(사이즈)를 변경 </summary>
+        private void ChangeScrollRange()
+        {
+            // 현재 사이즈 가져오기
+            Vector2 sizeDelta = _scrollPanelRect.sizeDelta;
+
+            // height 변경
+            sizeDelta.y = (_slotSize * _scrollScale) * _verticalSlotCount;
+
+            // 적용
+            _scrollPanelRect.sizeDelta = sizeDelta;
         }
 
         #endregion
@@ -563,7 +660,7 @@ namespace Rito.InventorySystem
         /// <summary> 슬롯에 아이템 아이콘 등록 </summary>
         public void SetItemIcon(int index, Sprite icon)
         {
-            EditorLog($"Set Item Icon : Slot [{index}]");
+            //EditorLog($"Set Item Icon : Slot [{index}]");
 
             _slotUIList[index].SetItem(icon);
         }
@@ -571,7 +668,7 @@ namespace Rito.InventorySystem
         /// <summary> 해당 슬롯의 아이템 개수 텍스트 지정 </summary>
         public void SetItemAmountText(int index, int amount)
         {
-            EditorLog($"Set Item Amount Text : Slot [{index}], Amount [{amount}]");
+            //EditorLog($"Set Item Amount Text : Slot [{index}], Amount [{amount}]");
 
             // NOTE : amount가 1 이하일 경우 텍스트 미표시
             _slotUIList[index].SetItemAmount(amount);
@@ -580,7 +677,7 @@ namespace Rito.InventorySystem
         /// <summary> 해당 슬롯의 아이템 개수 텍스트 지정 </summary>
         public void HideItemAmountText(int index)
         {
-            EditorLog($"Hide Item Amount Text : Slot [{index}]");
+            //EditorLog($"Hide Item Amount Text : Slot [{index}]");
 
             _slotUIList[index].SetItemAmount(1);
         }
@@ -588,7 +685,7 @@ namespace Rito.InventorySystem
         /// <summary> 슬롯에서 아이템 아이콘 제거, 개수 텍스트 숨기기 </summary>
         public void RemoveItem(int index)
         {
-            EditorLog($"Remove Item : Slot [{index}]");
+            //EditorLog($"Remove Item : Slot [{index}]");
 
             _slotUIList[index].RemoveItem();
         }
@@ -639,214 +736,214 @@ namespace Rito.InventorySystem
         /***********************************************************************
         *                               Editor Only Debug
         ***********************************************************************/
-        #region .
-#if UNITY_EDITOR
-        [Header("Editor Options")]
-        [SerializeField] private bool _showDebug = true;
-#endif
-        [System.Diagnostics.Conditional("UNITY_EDITOR")]
-        private void EditorLog(object message)
-        {
-            if (!_showDebug) return;
-            UnityEngine.Debug.Log($"[InventoryUI] {message}");
-        }
+//        #region .
+//#if UNITY_EDITOR
+//        [Header("Editor Options")]
+//        [SerializeField] private bool _showDebug = true;
+//#endif
+//        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+//        private void EditorLog(object message)
+//        {
+//            if (!_showDebug) return;
+//            UnityEngine.GFunc.Log($"[InventoryUI] {message}");
+//        }
 
-        #endregion
+        //#endregion
         /***********************************************************************
         *                               Editor Preview
         ***********************************************************************/
         #region .
-#if UNITY_EDITOR
-        [SerializeField] private bool __showPreview = false;
+//#if UNITY_EDITOR
+//        [SerializeField] private bool __showPreview = false;
 
-        [Range(0.01f, 1f)]
-        [SerializeField] private float __previewAlpha = 0.1f;
+//        [Range(0.01f, 1f)]
+//        [SerializeField] private float __previewAlpha = 0.1f;
 
-        private List<GameObject> __previewSlotGoList = new List<GameObject>();
-        private int __prevSlotCountPerLine;
-        private int __prevSlotLineCount;
-        private float __prevSlotSize;
-        private float __prevSlotMargin;
-        private float __prevContentPadding;
-        private float __prevAlpha;
-        private bool __prevShow = false;
-        private bool __prevMouseReversed = false;
+//        private List<GameObject> __previewSlotGoList = new List<GameObject>();
+//        private int __prevSlotCountPerLine;
+//        private int __prevSlotLineCount;
+//        private float __prevSlotSize;
+//        private float __prevSlotMargin;
+//        private float __prevContentPadding;
+//        private float __prevAlpha;
+//        private bool __prevShow = false;
+//        private bool __prevMouseReversed = false;
 
-        private void OnValidate()
-        {
-            if (__prevMouseReversed != _mouseReversed)
-            {
-                __prevMouseReversed = _mouseReversed;
-                InvertMouse(_mouseReversed);
+//        private void OnValidate()
+//        {
+//            if (__prevMouseReversed != _mouseReversed)
+//            {
+//                __prevMouseReversed = _mouseReversed;
+//                InvertMouse(_mouseReversed);
 
-                EditorLog($"Mouse Reversed : {_mouseReversed}");
-            }
+//                //EditorLog($"Mouse Reversed : {_mouseReversed}");
+//            }
 
-            if (Application.isPlaying) return;
+//            if (Application.isPlaying) return;
 
-            if (__showPreview && !__prevShow)
-            {
-                CreateSlots();
-            }
-            __prevShow = __showPreview;
+//            if (__showPreview && !__prevShow)
+//            {
+//                CreateSlots();
+//            }
+//            __prevShow = __showPreview;
 
-            if (Unavailable())
-            {
-                ClearAll();
-                return;
-            }
-            if (CountChanged())
-            {
-                ClearAll();
-                CreateSlots();
-                __prevSlotCountPerLine = _horizontalSlotCount;
-                __prevSlotLineCount = _verticalSlotCount;
-            }
-            if (ValueChanged())
-            {
-                DrawGrid();
-                __prevSlotSize = _slotSize;
-                __prevSlotMargin = _slotMargin;
-                __prevContentPadding = _contentAreaPadding;
-            }
-            if (AlphaChanged())
-            {
-                SetImageAlpha();
-                __prevAlpha = __previewAlpha;
-            }
+//            if (Unavailable())
+//            {
+//                ClearAll();
+//                return;
+//            }
+//            if (CountChanged())
+//            {
+//                ClearAll();
+//                CreateSlots();
+//                __prevSlotCountPerLine = _horizontalSlotCount;
+//                __prevSlotLineCount = _verticalSlotCount;
+//            }
+//            if (ValueChanged())
+//            {
+//                DrawGrid();
+//                __prevSlotSize = _slotSize;
+//                __prevSlotMargin = _slotMargin;
+//                __prevContentPadding = _contentAreaPadding;
+//            }
+//            if (AlphaChanged())
+//            {
+//                SetImageAlpha();
+//                __prevAlpha = __previewAlpha;
+//            }
 
-            bool Unavailable()
-            {
-                return !__showPreview ||
-                        _horizontalSlotCount < 1 ||
-                        _verticalSlotCount < 1 ||
-                        _slotSize <= 0f ||
-                        _contentAreaRT == null ||
-                        _slotUiPrefab == null;
-            }
-            bool CountChanged()
-            {
-                return _horizontalSlotCount != __prevSlotCountPerLine ||
-                       _verticalSlotCount != __prevSlotLineCount;
-            }
-            bool ValueChanged()
-            {
-                return _slotSize != __prevSlotSize ||
-                       _slotMargin != __prevSlotMargin ||
-                       _contentAreaPadding != __prevContentPadding;
-            }
-            bool AlphaChanged()
-            {
-                return __previewAlpha != __prevAlpha;
-            }
-            void ClearAll()
-            {
-                foreach (var go in __previewSlotGoList)
-                {
-                    Destroyer.Destroy(go);
-                }
-                __previewSlotGoList.Clear();
-            }
-            void CreateSlots()
-            {
-                int count = _horizontalSlotCount * _verticalSlotCount;
-                __previewSlotGoList.Capacity = count;
+//            bool Unavailable()
+//            {
+//                return !__showPreview ||
+//                        _horizontalSlotCount < 1 ||
+//                        _verticalSlotCount < 1 ||
+//                        _slotSize <= 0f ||
+//                        _contentAreaRT == null ||
+//                        _slotUiPrefab == null;
+//            }
+//            bool CountChanged()
+//            {
+//                return _horizontalSlotCount != __prevSlotCountPerLine ||
+//                       _verticalSlotCount != __prevSlotLineCount;
+//            }
+//            bool ValueChanged()
+//            {
+//                return _slotSize != __prevSlotSize ||
+//                       _slotMargin != __prevSlotMargin ||
+//                       _contentAreaPadding != __prevContentPadding;
+//            }
+//            bool AlphaChanged()
+//            {
+//                return __previewAlpha != __prevAlpha;
+//            }
+//            void ClearAll()
+//            {
+//                foreach (var go in __previewSlotGoList)
+//                {
+//                    Destroyer.Destroy(go);
+//                }
+//                __previewSlotGoList.Clear();
+//            }
+//            void CreateSlots()
+//            {
+//                int count = _horizontalSlotCount * _verticalSlotCount;
+//                __previewSlotGoList.Capacity = count;
 
-                // 슬롯의 피벗은 Left Top으로 고정
-                RectTransform slotPrefabRT = _slotUiPrefab.GetComponent<RectTransform>();
-                slotPrefabRT.pivot = new Vector2(0f, 1f);
+//                // 슬롯의 피벗은 Left Top으로 고정
+//                RectTransform slotPrefabRT = _slotUiPrefab.GetComponent<RectTransform>();
+//                slotPrefabRT.pivot = new Vector2(0f, 1f);
 
-                for (int i = 0; i < count; i++)
-                {
-                    GameObject slotGo = Instantiate(_slotUiPrefab);
-                    slotGo.transform.SetParent(_contentAreaRT.transform);
-                    slotGo.SetActive(true);
-                    slotGo.AddComponent<PreviewItemSlot>();
+//                for (int i = 0; i < count; i++)
+//                {
+//                    GameObject slotGo = Instantiate(_slotUiPrefab);
+//                    slotGo.transform.SetParent(_contentAreaRT.transform);
+//                    slotGo.SetActive(true);
+//                    slotGo.AddComponent<PreviewItemSlot>();
 
-                    slotGo.transform.localScale = Vector3.one; // 버그 해결
+//                    slotGo.transform.localScale = Vector3.one; // 버그 해결
 
-                    HideGameObject(slotGo);
+//                    HideGameObject(slotGo);
 
-                    __previewSlotGoList.Add(slotGo);
-                }
+//                    __previewSlotGoList.Add(slotGo);
+//                }
 
-                DrawGrid();
-                SetImageAlpha();
-            }
-            void DrawGrid()
-            {
-                Vector2 beginPos = new Vector2(_contentAreaPadding, -_contentAreaPadding);
-                Vector2 curPos = beginPos;
+//                DrawGrid();
+//                SetImageAlpha();
+//            }
+//            void DrawGrid()
+//            {
+//                Vector2 beginPos = new Vector2(_contentAreaPadding, -_contentAreaPadding);
+//                Vector2 curPos = beginPos;
 
-                // Draw Slots
-                int index = 0;
-                for (int j = 0; j < _verticalSlotCount; j++)
-                {
-                    for (int i = 0; i < _horizontalSlotCount; i++)
-                    {
-                        GameObject slotGo = __previewSlotGoList[index++];
-                        RectTransform slotRT = slotGo.GetComponent<RectTransform>();
+//                // Draw Slots
+//                int index = 0;
+//                for (int j = 0; j < _verticalSlotCount; j++)
+//                {
+//                    for (int i = 0; i < _horizontalSlotCount; i++)
+//                    {
+//                        GameObject slotGo = __previewSlotGoList[index++];
+//                        RectTransform slotRT = slotGo.GetComponent<RectTransform>();
 
-                        slotRT.anchoredPosition = curPos;
-                        slotRT.sizeDelta = new Vector2(_slotSize, _slotSize);
-                        __previewSlotGoList.Add(slotGo);
+//                        slotRT.anchoredPosition = curPos;
+//                        slotRT.sizeDelta = new Vector2(_slotSize, _slotSize);
+//                        __previewSlotGoList.Add(slotGo);
 
-                        // Next X
-                        curPos.x += (_slotMargin + _slotSize);
-                    }
+//                        // Next X
+//                        curPos.x += (_slotMargin + _slotSize);
+//                    }
 
-                    // Next Line
-                    curPos.x = beginPos.x;
-                    curPos.y -= (_slotMargin + _slotSize);
-                }
-            }
-            void HideGameObject(GameObject go)
-            {
-                go.hideFlags = HideFlags.HideAndDontSave;
+//                    // Next Line
+//                    curPos.x = beginPos.x;
+//                    curPos.y -= (_slotMargin + _slotSize);
+//                }
+//            }
+//            void HideGameObject(GameObject go)
+//            {
+//                go.hideFlags = HideFlags.HideAndDontSave;
 
-                Transform tr = go.transform;
-                for (int i = 0; i < tr.childCount; i++)
-                {
-                    tr.GetChild(i).gameObject.hideFlags = HideFlags.HideAndDontSave;
-                }
-            }
-            void SetImageAlpha()
-            {
-                foreach (var go in __previewSlotGoList)
-                {
-                    var images = go.GetComponentsInChildren<Image>();
-                    foreach (var img in images)
-                    {
-                        img.color = new Color(img.color.r, img.color.g, img.color.b, __previewAlpha);
-                        var outline = img.GetComponent<Outline>();
-                        if (outline)
-                            outline.effectColor = new Color(outline.effectColor.r, outline.effectColor.g, outline.effectColor.b, __previewAlpha);
-                    }
-                }
-            }
-        }
+//                Transform tr = go.transform;
+//                for (int i = 0; i < tr.childCount; i++)
+//                {
+//                    tr.GetChild(i).gameObject.hideFlags = HideFlags.HideAndDontSave;
+//                }
+//            }
+//            void SetImageAlpha()
+//            {
+//                foreach (var go in __previewSlotGoList)
+//                {
+//                    var images = go.GetComponentsInChildren<Image>();
+//                    foreach (var img in images)
+//                    {
+//                        img.color = new Color(img.color.r, img.color.g, img.color.b, __previewAlpha);
+//                        var outline = img.GetComponent<Outline>();
+//                        if (outline)
+//                            outline.effectColor = new Color(outline.effectColor.r, outline.effectColor.g, outline.effectColor.b, __previewAlpha);
+//                    }
+//                }
+//            }
+//        }
 
-        private class PreviewItemSlot : MonoBehaviour { }
+//        private class PreviewItemSlot : MonoBehaviour { }
 
-        [UnityEditor.InitializeOnLoad]
-        private static class Destroyer
-        {
-            private static Queue<GameObject> targetQueue = new Queue<GameObject>();
+//        [UnityEditor.InitializeOnLoad]
+//        private static class Destroyer
+//        {
+//            private static Queue<GameObject> targetQueue = new Queue<GameObject>();
 
-            static Destroyer()
-            { 
-                UnityEditor.EditorApplication.update += () =>
-                {
-                    for (int i = 0; targetQueue.Count > 0 && i < 100000; i++)
-                    {
-                        var next = targetQueue.Dequeue();
-                        DestroyImmediate(next);
-                    }
-                };
-            }
-            public static void Destroy(GameObject go) => targetQueue.Enqueue(go);
-        }
-#endif
+//            static Destroyer()
+//            { 
+//                UnityEditor.EditorApplication.update += () =>
+//                {
+//                    for (int i = 0; targetQueue.Count > 0 && i < 100000; i++)
+//                    {
+//                        var next = targetQueue.Dequeue();
+//                        DestroyImmediate(next);
+//                    }
+//                };
+//            }
+//            public static void Destroy(GameObject go) => targetQueue.Enqueue(go);
+//        }
+//#endif
 
         #endregion
     }

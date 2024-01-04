@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -100,7 +100,7 @@ namespace BNG {
                 AssignCameraToAllCanvases(Camera.main);
 
                 if (this.gameObject.activeSelf) {
-                    // Debug.Log("Diabling VRIF's VRUISystem since XR Interaction Kit UI support is enabled");
+                    // GFunc.Log("Diabling VRIF's VRUISystem since XR Interaction Kit UI support is enabled");
                     this.enabled = false;
                 }
             }

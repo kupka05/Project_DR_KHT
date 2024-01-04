@@ -7,6 +7,19 @@ TagManager:
   - Floor
   - Wall
   - EventWall
+  - test
+  - ItemSlot
+  - Weapon
+  - ItemPotion
+  - ItemBomb
+  - ItemMaterial
+  - ItemQuest
+  - DungeonInspection
+  - Item
+  - Boss
+  - PlayerSkill
+  - Hammer
+  - Inventory
   layers:
   - Default
   - TransparentFX
@@ -19,16 +32,16 @@ TagManager:
   - 
   - Grabbable
   - 
+  - Drill
+  - Monster
+  - MonsterWall
+  - Player
+  - Postprocessing
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - MapObject
+  - BattleRoomFloor
   - 
   - 
   - 
@@ -43,4 +56,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Dialog
+    uniqueID: 3876314647
     locked: 0

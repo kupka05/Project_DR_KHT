@@ -72,7 +72,7 @@ namespace OculusSampleFramework
             float freq = OVRManager.display.displayFrequency;
             if (freq > 0.1f)
             {
-                Debug.Log("Setting Time.fixedDeltaTime to: " + (1.0f / freq));
+                GFunc.Log("Setting Time.fixedDeltaTime to: " + (1.0f / freq));
                 Time.fixedDeltaTime = 1.0f / freq;
             }
         }

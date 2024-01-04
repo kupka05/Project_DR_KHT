@@ -56,7 +56,7 @@ namespace BNG {
                 vrKeyboard.PressKey(key);
             }
             else {
-                Debug.Log("Pressed key " + key + ", but no keyboard was found");
+                GFunc.Log("Pressed key " + key + ", but no keyboard was found");
             }
         }
     }

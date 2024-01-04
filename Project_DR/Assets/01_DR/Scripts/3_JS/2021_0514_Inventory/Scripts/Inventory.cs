@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Js.Quest;
 
 /*
     [Item의 상속구조]
@@ -74,18 +75,24 @@ namespace Rito.InventorySystem
 
         // 초기 수용 한도
         [SerializeField, Range(8, 64)]
-        private int _initalCapacity = 8;
+        private int _initalCapacity = 64;
+        public int InitalCapacity => _initalCapacity;
 
         // 최대 수용 한도(아이템 배열 크기)
         [SerializeField, Range(8, 64)]
-        private int _maxCapacity = 64;
+        private static int _maxCapacity = 64;
+        public static int MaxCapacity => _maxCapacity;
 
         [SerializeField]
         private InventoryUI _inventoryUI; // 연결된 인벤토리 UI
 
+        [SerializeField]
+        private PlayerInventoryUI _playerInventoryUI; // 연결된 플레이어 인벤토리 UI
+
         /// <summary> 아이템 목록 </summary>
         [SerializeField]
-        private Item[] _items;
+        private Item[] _items = UserDataManager.items;
+        public Item[] Items => _items;
 
         /// <summary> 업데이트 할 인덱스 목록 </summary>
         private readonly HashSet<int> _indexSetForUpdate = new HashSet<int>();
@@ -94,10 +101,10 @@ namespace Rito.InventorySystem
         private readonly static Dictionary<Type, int> _sortWeightDict = new Dictionary<Type, int>
         {
             { typeof(PortionItemData), 10000 },
-            { typeof(WeaponItemData),  20000 },
-            { typeof(ArmorItemData),   30000 },
+            { typeof(BombItemData),  20000 },
+            { typeof(MaterialItemData),   30000 },
+            { typeof(QuestItemData),   40000 },
         };
-
         private class ItemComparer : IComparer<Item>
         {
             public int Compare(Item a, Item b)
@@ -123,7 +130,6 @@ namespace Rito.InventorySystem
 #endif
         private void Awake()
         {
-            _items = new Item[_maxCapacity];
             Capacity = _initalCapacity;
             _inventoryUI.SetInventoryReference(this);
         }
@@ -179,13 +185,11 @@ namespace Rito.InventorySystem
             if (!IsValidIndex(index)) return;
 
             Item item = _items[index];
-
             // 1. 아이템이 슬롯에 존재하는 경우
             if (item != null)
             {
                 // 아이콘 등록
                 _inventoryUI.SetItemIcon(index, item.Data.IconSprite);
-
                 // 1-1. 셀 수 있는 아이템
                 if (item is CountableItem ci)
                 {
@@ -223,6 +227,8 @@ namespace Rito.InventorySystem
                 _inventoryUI.RemoveItem(index);
                 _inventoryUI.HideItemAmountText(index); // 수량 텍스트 숨기기
             }
+
+            _playerInventoryUI.UpdatePlayerInventory();
         }
 
         /// <summary> 해당하는 인덱스의 슬롯들의 상태 및 UI 갱신 </summary>
@@ -316,7 +322,6 @@ namespace Rito.InventorySystem
         public int Add(ItemData itemData, int amount = 1)
         {
             int index;
-
             // 1. 수량이 있는 아이템
             if (itemData is CountableItemData ciData)
             {
@@ -329,7 +334,7 @@ namespace Rito.InventorySystem
                     if (findNextCountable)
                     {
                         index = FindCountableItemSlotIndex(ciData, index + 1);
-
+                      
                         // 개수 여유있는 기존재 슬롯이 더이상 없다고 판단될 경우, 빈 슬롯부터 탐색 시작
                         if (index == -1)
                         {
@@ -340,7 +345,6 @@ namespace Rito.InventorySystem
                         {
                             CountableItem ci = _items[index] as CountableItem;
                             amount = ci.AddAmountAndGetExcess(amount);
-
                             UpdateSlot(index);
                         }
                     }
@@ -363,7 +367,6 @@ namespace Rito.InventorySystem
 
                             // 슬롯에 추가
                             _items[index] = ci;
-
                             // 남은 개수 계산
                             amount = (amount > ciData.MaxAmount) ? (amount - ciData.MaxAmount) : 0;
 
@@ -417,8 +420,137 @@ namespace Rito.InventorySystem
         {
             if (!IsValidIndex(index)) return;
 
+            int itemID = _items[index].Data.ID;
             _items[index] = null;
             _inventoryUI.RemoveItem(index);
+
+            // 퀘스트 콜백 호출
+            QuestCallback.OnInventoryCallback(itemID);
+        }
+
+        /// <summary> ID로 인벤토리에 있는 아이템을 제거 </summary>
+        public bool RemoveInventoryItemForID(int id, int amount)
+        {
+            List<int> itemIndexList = new List<int>();
+            List<int> itemAmountList = new List<int>();
+            int removeAmount = amount;
+            int itemTotalAmount = default;
+            for (int i = 0; i < Items.Length; i++)
+            {
+                // 아이템 보유량 체크 및 인덱스 보관
+                // 인벤토리에 있는 아이템 ID와 받아온 ID가 일치할 경우
+                if (id.Equals(Items[i]?.Data.ID))
+                {
+                    int itemCount = default;
+                    // 셀 수 있는 아이템일 경우
+                    if (Items[i] is CountableItem ci)
+                    {
+                        GFunc.Log($"ci.amount = {ci.Amount}");
+                        // 아이템 총 보유량 & 보유량 리스트 추가
+                        itemTotalAmount += ci.Amount;
+                        itemCount = ci.Amount;
+                    }
+
+                    // 아닐 경우
+                    else
+                    {
+                        itemTotalAmount++;
+                        itemCount = 1;
+                    }
+
+                    // 인덱스 & 카운트 보관
+                    itemIndexList.Add(i);
+                    itemAmountList.Add(itemCount);
+                }
+            }
+
+            // 아이템 총 보유량이 삭제할 보유량 이상일 경우
+            if (itemTotalAmount >= amount)
+            {
+                // 삭제할 아이템 갯수
+                for (int i = (itemIndexList.Count - 1); i > -1; i--)
+                {
+                    GFunc.Log(i);
+                    // 해당 슬롯의 아이템 보유량 만큼 차감 & 아이템 삭제
+                    int itemAmount = itemAmountList[i];
+                    if ((removeAmount - itemAmount) > 0)
+                    {
+                        // 해당 슬롯 아이템 삭제
+                        removeAmount -= itemAmount;
+                        Remove(itemIndexList[i]);
+                    }
+
+                    // 해당 슬롯의 아이템 보유량이 남을 경우
+                    else
+                    {
+                        // 해당 슬롯 아이템 보유량 차감
+                        itemAmount -= removeAmount;
+                        CountableItem ci = Items[i] as CountableItem;
+                        ci.SetAmount(itemAmount);
+
+                        // 처리 종료
+                        break;
+                    }
+                }
+
+                // 모든 슬롯 업데이트
+                UpdateAllSlot();
+
+                // 아이템 정렬 및 PlayerInventoryUI 갱신
+                SortAndUpdatePlayerInventoryUI();
+
+                // 삭제 성공 반환
+                return true;
+            }
+
+            // 아이템 보유량이 적을 경우
+            else
+            {
+                GFunc.Log($"Inventory.RemoveInventoryItemForID(): 삭제할 아이템 ID[{id}]의 보유량[{itemTotalAmount}]이 " +
+                    $"삭제할 갯수[{removeAmount}]보다 적어서 삭제에 실패했습니다.");
+
+                // 삭제 실패 반환
+                return false;
+            }
+        }
+
+        /// <summary> ID로 인벤토리에 있는 아이템 보유량 확인 </summary>
+        public int FindInventoryItemForID(int id)
+        {
+            List<int> itemIndexList = new List<int>();
+            List<int> itemAmountList = new List<int>();
+            int itemTotalAmount = default;
+            for (int i = 0; i < Items.Length; i++)
+            {
+                // 아이템 보유량 체크 및 인덱스 보관
+                // 인벤토리에 있는 아이템 ID와 받아온 ID가 일치할 경우
+                if (id.Equals(Items[i]?.Data.ID))
+                {
+                    int itemCount = default;
+                    // 셀 수 있는 아이템일 경우
+                    if (Items[i] is CountableItem ci)
+                    {
+                        GFunc.Log($"ci.amount = {ci.Amount}");
+                        // 아이템 총 보유량 & 보유량 리스트 추가
+                        itemTotalAmount += ci.Amount;
+                        itemCount = ci.Amount;
+                    }
+
+                    // 아닐 경우
+                    else
+                    {
+                        itemTotalAmount++;
+                        itemCount = 1;
+                    }
+
+                    // 인덱스 & 카운트 보관
+                    itemIndexList.Add(i);
+                    itemAmountList.Add(itemCount);
+                }
+            }
+
+            // 아이템 갯수 반환
+            return itemTotalAmount;
         }
 
         /// <summary> 두 인덱스의 아이템 위치를 서로 교체 </summary>
@@ -485,7 +617,7 @@ namespace Rito.InventorySystem
         }
 
         /// <summary> 해당 슬롯의 아이템 사용 </summary>
-        public void Use(int index)
+        public void Use(int index, int amount = 1)
         {
             if (!IsValidIndex(index)) return;
             if (_items[index] == null) return;
@@ -498,9 +630,22 @@ namespace Rito.InventorySystem
 
                 if (succeeded)
                 {
+                    // 업데이트
                     UpdateSlot(index);
+
+                    // 아이템 정렬 및 PlayerInventoryUI 갱신
+                    SortAndUpdatePlayerInventoryUI();
                 }
             }
+        }
+
+        public void SortAndUpdatePlayerInventoryUI()
+        {
+            // 아이템 정렬
+            SortAll();
+
+            // PlayerInventoryUI 갱신
+            _playerInventoryUI.UpdatePlayerInventory();
         }
 
         /// <summary> 모든 슬롯 UI에 접근 가능 여부 업데이트 </summary>

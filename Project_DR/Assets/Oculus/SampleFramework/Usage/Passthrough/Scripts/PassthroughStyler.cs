@@ -247,7 +247,7 @@ public class PassthroughStyler : MonoBehaviour
         var localPos = _colorWheel.transform.InverseTransformPoint(_cursorPosition);
         var toImg = new Vector2(localPos.x / _colorWheel.sizeDelta.x + 0.5f,
             localPos.y / _colorWheel.sizeDelta.y + 0.5f);
-        Debug.Log("Sanctuary: " + toImg.x.ToString() + ", " + toImg.y.ToString());
+        GFunc.Log("Sanctuary: " + toImg.x.ToString() + ", " + toImg.y.ToString());
         Color sampledColor = Color.black;
         if (toImg.x < 1.0 && toImg.x > 0.0f && toImg.y < 1.0 && toImg.y > 0.0f)
         {

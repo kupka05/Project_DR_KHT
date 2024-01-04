@@ -26,7 +26,7 @@ namespace BNG {
                 UpdateInputField(key);
             }
             else {
-                Debug.Log("Pressed Key : " + key);
+                GFunc.Log("Pressed Key : " + key);
             }
         }
 
@@ -57,7 +57,7 @@ namespace BNG {
                 }
             }
             else if (formattedKey.ToLower() == "enter") {
-                // Debug.Log("Pressed Enter");
+                // GFunc.Log("Pressed Enter");
                 // UnityEngine.EventSystems.ExecuteEvents.Execute(AttachedInputField.gameObject, null, UnityEngine.EventSystems.ExecuteEvents.submitHandler);
             }
             else if (formattedKey.ToLower() == "shift") {

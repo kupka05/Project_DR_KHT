@@ -42,7 +42,7 @@ public class Spawnable : ISerializationCallbackReceiver
 
             if (_editorClassificationIndex < 0)
             {
-                Debug.LogError($"[{nameof(Spawnable)}] OnAfterDeserialize() " + ClassificationLabel +
+                GFunc.LogError($"[{nameof(Spawnable)}] OnAfterDeserialize() " + ClassificationLabel +
                                " not found. The Classification list in OVRSceneManager has likely changed");
             }
         }

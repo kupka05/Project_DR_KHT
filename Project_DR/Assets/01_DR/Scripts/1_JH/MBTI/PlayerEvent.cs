@@ -171,6 +171,9 @@ public class PlayerEvent : MonoBehaviour
                     UserData.ActiveSkill(itemID);
                     shop.SetisPurchasedPassiveSkill(true);
                     GFunc.Log($"[{itemID}] 패시브 스킬 구매 완료");
+
+                    // 패시브 아이템이 돌아가는 애니메이션 재생
+                    shopItem.transform.parent.GetComponent<Animation>().Play("ShopPassive_Disable");
                 }
             }
 

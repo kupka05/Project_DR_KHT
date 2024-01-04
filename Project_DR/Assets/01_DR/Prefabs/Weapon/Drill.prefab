@@ -3182,7 +3182,7 @@ MonoBehaviour:
   distanceFromGroundOffset: 0.6
   GroundedLayers:
     serializedVersion: 2
-    m_Bits: 2097153
+    m_Bits: 3145729
   grabbable: {fileID: 0}
   EjectInput: 00000000
   ReleaseSlideInput: 00000000
@@ -3293,6 +3293,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 0
   CollisionAngularMotionZ: 0
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -3479,6 +3480,7 @@ MonoBehaviour:
   isKnockback: 0
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &3038501380516454709
 MonoBehaviour:
   m_ObjectHideFlags: 0

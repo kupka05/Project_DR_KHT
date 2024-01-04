@@ -37,6 +37,7 @@ public class DialogDebug : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckOptionToggleInput();
         if (Input.GetKeyDown(KeyCode.F1))
         {
             enter.Invoke();

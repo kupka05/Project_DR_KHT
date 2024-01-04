@@ -219,7 +219,6 @@ public class LobbyEvent : MonoBehaviour
         if (UserDataManager.Instance.isGameOver)
         {
             SetNpcDialog(questID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
-            UserDataManager.Instance.isGameOver = false;
         }
       
         else
@@ -900,7 +899,7 @@ public class LobbyEvent : MonoBehaviour
         }
 
         // 3. 클리어 결과 정산
-        else if (UserData.ClearCheck() && isResult)
+        else if (UserData.ClearCheck() && isResult || UserData.GameOverCheck())
         {
             SetResultData();
             ChangeDisplayButton("Result");
@@ -908,6 +907,8 @@ public class LobbyEvent : MonoBehaviour
             UserData.ResetResult();
             isResult = false;
             UserDataManager.Instance.isClear = false;
+            UserDataManager.Instance.isGameOver = false;
+
         }
 
         // 4. 문 열림

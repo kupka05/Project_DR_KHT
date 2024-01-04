@@ -311,6 +311,7 @@ public class EliteMonster : Monster
                     nav.isStopped = true;
                     //GFunc.Log("nav.isStopped: " + nav.isStopped);
                     anim.SetTrigger(hashDie);
+                    Invoke(nameof(DieAnimation), 2.0f);
                     foreach (CapsuleCollider capsuleCollider in capsuleColliders)
                     {
                         capsuleCollider.isTrigger = true;
@@ -324,6 +325,11 @@ public class EliteMonster : Monster
         }
 
 
+    }
+
+    public void DieAnimation()
+    {
+        Destroy(this.gameObject);
     }
 
     public override void OnDeal(float damage)

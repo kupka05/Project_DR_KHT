@@ -201,7 +201,7 @@ public class RandomRoomObjCreate : MonoBehaviour
 
         if (spawnPlace == (int)SpawnPlace.Floor)
         {
-            tempPos = GetFloorSpawnPos();
+            tempPos = GetFloorSpawnPos(_CreateObjId);
         }
         else if (spawnPlace == (int)SpawnPlace.Roop)
         {
@@ -325,12 +325,21 @@ public class RandomRoomObjCreate : MonoBehaviour
     /// 바닥에 생성되어야 하는 오브젝트 포지션 지정해주는 함수
     /// </summary>
     /// <returns>랜덤으로 지정된 위치</returns>
-    private Vector3 GetFloorSpawnPos()
+    private Vector3 GetFloorSpawnPos(int _createObjId)
     {
         Vector3 spawnPos;
         float xPos = UnityEngine.Random.Range(cornerPos.bottomLeftCorner.x + 1f, cornerPos.bottomRightCorner.x - 1f);
-        float yPos = 0f;
+        float yPos;
         float zPos = UnityEngine.Random.Range(cornerPos.bottomLeftCorner.z + 1f, cornerPos.topLeftCorner.z - 1f);
+
+        if(Data.GetString(_createObjId, "PrefabName").Contains("Flower") == true)
+        {
+            yPos = 0.2f;
+        }
+        else
+        {
+            yPos = 0f;
+        }
 
         return spawnPos = new Vector3(xPos, yPos, zPos);
     }       // GetFloorSpawnPos()
@@ -360,7 +369,7 @@ public class RandomRoomObjCreate : MonoBehaviour
     {
         stringBuilder.Clear();
         stringBuilder.Append((string)DataManager.Instance.GetData(_objId, "PrefabName", typeof(string)));
-        //GFunc.Log($"들어간 Sb : {stringBuilder}\n sb에 참조된 ID : {_objId}");        
+        GFunc.Log($"들어간 Sb : {stringBuilder}\n sb에 참조된 ID : {_objId}");        
         GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
         //GFunc.Log($"지정된 Prefab : {prefabObj}");
         return prefabObj;

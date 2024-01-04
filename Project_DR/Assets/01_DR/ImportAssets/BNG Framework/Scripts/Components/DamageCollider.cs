@@ -55,6 +55,7 @@ namespace BNG
         public bool isProjectile;
 
         Damageable thisDamageable;
+        public bool isMonster;
 
         private void Start()
         {
@@ -68,6 +69,10 @@ namespace BNG
 
         private void OnCollisionEnter(Collision collision)
         {
+            if(isMonster)
+            {
+                return;
+            }
 
             if (!this.isActiveAndEnabled)
             {
@@ -112,7 +117,7 @@ namespace BNG
                     if (isKnockback)
                     {
                         d.OnKnockBack(collision.GetContact(0).point);
-                        GFunc.Log(collision.gameObject.name + "에게 " + Damage);
+                        GFunc.Log(collision.gameObject.name + "에게 " + Damage + " / " + transform.name);
 
                     }
 

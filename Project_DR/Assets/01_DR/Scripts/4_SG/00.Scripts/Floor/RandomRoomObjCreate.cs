@@ -369,7 +369,7 @@ public class RandomRoomObjCreate : MonoBehaviour
     {
         stringBuilder.Clear();
         stringBuilder.Append((string)DataManager.Instance.GetData(_objId, "PrefabName", typeof(string)));
-        GFunc.Log($"들어간 Sb : {stringBuilder}\n sb에 참조된 ID : {_objId}");        
+        //GFunc.Log($"들어간 Sb : {stringBuilder}\n sb에 참조된 ID : {_objId}");        
         GameObject prefabObj = Resources.Load<GameObject>($"{stringBuilder}");
         //GFunc.Log($"지정된 Prefab : {prefabObj}");
         return prefabObj;

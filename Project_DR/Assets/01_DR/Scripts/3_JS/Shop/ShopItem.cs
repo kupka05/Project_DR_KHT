@@ -10,18 +10,16 @@ public class ShopItem : MonoBehaviour
     /*************************************************
      *                 Public Fields
      *************************************************/
-    #region [+]
     public int ID => _id;
     public ShopItemText ShopItemText => _shopItemText;
     public Collider ShopItemCollider => _shopItemCollider;
     public bool IsItem => _isItem;
     public Shop Shop => _shop;
 
-    #endregion
+
     /*************************************************
      *                Private Fields
      *************************************************/
-    #region [+]
     [SerializeField] private int _id = default;
     [SerializeField] private ShopItemText _shopItemText;
     [SerializeField] private Collider _shopItemCollider;
@@ -29,15 +27,13 @@ public class ShopItem : MonoBehaviour
     private const int ITEM_ID_MAX_RANGE = 5999;
     private Shop _shop;
 
-    #endregion
+
     /*************************************************
      *                 Public Methods
      *************************************************/
-    #region [+]
-    // Init
     public void Initialize(int id)
     {
-        // id 할당
+        // Init
         _id = id;
 
         // _isItem 확인
@@ -94,11 +90,10 @@ public class ShopItem : MonoBehaviour
         }
     }
 
-    #endregion
+
     /*************************************************
      *                Private Methods
      *************************************************/
-    #region [+]
     // 현재 ID에 해당하는 상점 아이템이
     // 실제 아이템인지 확인
     public bool CheckIsItem(int id)
@@ -111,5 +106,4 @@ public class ShopItem : MonoBehaviour
 
         return false;
     }
-    #endregion
 }

@@ -124,7 +124,7 @@ public class NPC : MonoBehaviour
     protected float npcConversationScope;   // NPC 대화범위
     protected float npcRecognitionRange;    // NPC 인식범위
 
-    protected bool isTryCommunity;       // 대화를 한적 있는지?
+    public bool isTryCommunity;       // 대화를 한적 있는지?
     public bool isComunity;                 // 대화중인지 체크할 변수
     protected bool isCommunityDelray;       // 대화의 딜레이를 줄 함수 대화창 클릭이벤트에 관련있음
     public bool isReadyToAutoComunication;  // 자동으로 다가가서 일정거리 안에 있다면 true가 될것임

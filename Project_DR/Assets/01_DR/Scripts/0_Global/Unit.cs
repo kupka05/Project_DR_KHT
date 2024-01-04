@@ -407,7 +407,7 @@ public static class Unit
 
 
     /*************************************************
-     *              Public Quest Methods
+     *              Public Quest KeyID Methods
      *************************************************/
     // KeyID와 일치하는 [시작불가] 상태의 첫 번째 퀘스트를 가져온다.
     public static Quest GetNotStartableQuestByKeyID(int id)
@@ -449,6 +449,32 @@ public static class Unit
     {
         // [5][실패] 상태의 퀘스트를 가져온다.
         return GetFailedQuestListByKeyID(id)[0];
+    }
+
+
+    // KeyID와 일치하는 [시작가능] 상태의 서브 퀘스트 리스트를 가져온다
+    public static List<Quest> GetCanStartableSubQuestListByKeyID(int id)
+    {
+        List<Quest> questList = new List<Quest>();
+        List<Quest> tempQuestList = GetCanStartableQuestListByKeyID(id);
+        for (int i = 0; i < tempQuestList.Count; i++)
+        {
+            // 서브 퀘스트일 경우
+            if (tempQuestList[i].QuestData.Type.Equals(QuestData.QuestType.SUB))
+            {
+                // 리스트에 추가
+                questList.Add(tempQuestList[i]);
+            }
+        }
+
+        return questList;
+    }
+
+    // KeyID와 일치하는 [시작가능] 상태의 첫 번째 서브 퀘스트를 가져온다
+    public static Quest GetCanStartableSubQuestByKeyID(int id)
+    {
+        // [1][시작가능] 상태의 서브 퀘스트를 가져온다.
+        return GetCanStartableSubQuestListByKeyID(id)[0];
     }
 
 

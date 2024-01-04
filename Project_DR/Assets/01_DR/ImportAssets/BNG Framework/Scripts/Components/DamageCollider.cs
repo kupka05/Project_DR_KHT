@@ -89,8 +89,6 @@ namespace BNG
             if (!isEliteProjectile && collision.gameObject.GetComponent<EliteMonster>())
                 return;
 
-            if (!isProjectile && collision.gameObject.CompareTag("Weapon"))
-                return;
 
             OnCollisionEvent(collision);
         }

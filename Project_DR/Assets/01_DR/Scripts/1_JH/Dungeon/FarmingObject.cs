@@ -8,10 +8,10 @@ public class FarmingObject : MonoBehaviour
     public int[] dropItem;          // 드롭할 아이템 ID
     public int maxDrop;             // 최대 드롭 개수
 
-    public void Start()
-    {
-        GFunc.Log(gameObject.name);
-    }
+    //public void Start()
+    //{
+    //    GFunc.Log(gameObject.name);
+    //}
 
     public void DrpoItems()
     {

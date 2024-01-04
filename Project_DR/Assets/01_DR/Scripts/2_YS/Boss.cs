@@ -1077,39 +1077,9 @@ public class Boss : MonoBehaviour
                 this.gameObject.transform.localScale = newSize;
 
                 GetComponent<BossMonsterDeadCheck>().BossDie();
-
-                // 보스 죽음 퀘스트
-                QuestCallback.OnBossKillCallback(bossId);
-                // 1층 1회차 클리어
                 UserData.KillBoss(Data.GetInt(bossId, "GiveEXP"));
 
-                int clearID = 3122001;
-                switch (bossId)
-                {
-                    case 6872:
-                        clearID = 31_2_2_001;
-                        break;
-                    case 6873:
-                        clearID = 31_2_2_002;
-                        break;
-                    case 6874:
-                        clearID = 31_2_2_003;
-                        break;
-                    case 6875:
-                        clearID = 31_2_2_004;
-                        break;
-                    case 6876:
-                        clearID = 31_2_2_005;
-                        break;
-                }
-                if (UserDataManager.Instance.ClearCount != 0)
-                {
-                    clearID += (UserDataManager.Instance.ClearCount * 5);
-                }
-
-
-                    Unit.ClearQuestByID(clearID);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
-                //Unit.InProgressQuestByID(3122001);        // 다음 퀘스트 진행중 으로 변경
+                ClearBossKillQuest();
 
                 //GFunc.Log("코루틴 멈춤");
             }
@@ -1262,6 +1232,27 @@ public class Boss : MonoBehaviour
     {
         //Vector3 dir = target.position - transform.position;
         //Debug.DrawRay(transform.position, dir.normalized * damageRadius, Color.blue);
+    }
+
+    // 보스 처치 후 퀘스트
+    private void ClearBossKillQuest()
+    {
+        // 보스 죽음 퀘스트
+        QuestCallback.OnBossKillCallback(bossId);
+
+        Quest curSubQuest = Unit.GetCanCompleteSubQuest();    // 현재 진행중인 서브 퀘스트 반환 (보스 처치 퀘스트)
+        int clearID = curSubQuest.QuestData.ID;              // 진행중 서브 퀘스트 ID
+
+        int[] clearEventIDs = Unit.ClearQuestByID(clearID);  // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
+        if (clearEventIDs != null)
+        {
+            for(int i = 0; i < clearEventIDs.Length; i++)
+            {
+                if (clearEventIDs[i] == 0)
+                    break;
+                Unit.InProgressQuestByID(clearEventIDs[i]);        // 다음 퀘스트 진행중 으로 변경
+            }
+        }
     }
 
 }

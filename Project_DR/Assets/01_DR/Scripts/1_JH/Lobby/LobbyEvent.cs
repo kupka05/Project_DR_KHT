@@ -188,9 +188,6 @@ public class LobbyEvent : MonoBehaviour
         // 메인 디스플레이 시작 시 세팅
         ChangeDisplayButton("Main");
 
-        //ChangeDisplayButton("Result");
-        //SetResultData();
-
         // PC 상태창 시작 시 세팅
         SetStatusDisplay();
 
@@ -230,8 +227,7 @@ public class LobbyEvent : MonoBehaviour
             int clearCount = UserDataManager.Instance.ClearCount;
             clearCount = clearCount <= 23 ? clearCount : 22;
             GFunc.Log(clearCount);
-            //TODO : 보스 퀘스트 연결 후
-            //targetQuestID += clearCount;
+            targetQuestID += clearCount;
             SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
         }
 

@@ -497,8 +497,7 @@ public static class UserData
 
     public static void ClearDungeon()
     {
-        // TODO : 보스 퀘스트 클리어 성공시 다시 복귀하기
-        //Unit.SaveQuestDataToDB();
+        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.SaveClearData();
         UserDataManager.Instance.isClear = true;
     }

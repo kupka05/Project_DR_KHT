@@ -72,9 +72,7 @@ public class BossNPC : NPC
     }       // GetCanvasScript_Obj()
     #endregion Base
 
-    /// <summary>
-    /// NPC 베이스 스크립트에 이벤트 구독
-    /// </summary>
+    /// <summary> NPC 베이스 스크립트에 이벤트 구독 </summary>
     private void ConvertionEventInIt()
     {
         //StartConverationEvent += StartConvertion;
@@ -84,19 +82,16 @@ public class BossNPC : NPC
     }       // ConvertionEventInIt()
 
 
-
+    /// <summary> 보스와의 조우 </summary>
     public void BossMeet()
     {
-        GFunc.Log("대화를 시작한다.");
-        int questID = ClearBossMeetQuest();
-        StartConvertion();
-        Unit.ClearQuestByID(questID);
+        QuestCallback.OnBossMeetCallback(npcID);        // 상태값 갱신 및 자동 완료
+
+        StartConvertion();                              // 완료 가능한 퀘스트 ID의 대화를 불러와 시작
     }
 
 
-    /// <summary>
-    /// 대화 시작
-    /// </summary>
+    /// <summary> 대화 시작 </summary>
     protected override void StartConvertion()
     {
         // 플레이어 화면에 UI 캔버스 붙여주기
@@ -113,14 +108,14 @@ public class BossNPC : NPC
         // 캔버스 켜주기
         OnCanvasObj();
 
+        int questID = GetCanCompleteMainQuestID();                              // 완료 가능한 퀘스트 불러오기 
+        int[] conversationIDs = Unit.ClearQuestByID(questID);                   // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인 후 시작가능으로 업데이트
+        conversationID = conversationIDs[0];
         // npc 대화 선택
-        PickConversation(npcID);
-        //base.PickConversationEvent(npcID);
+        PickConversation(conversationID);
     }       // StartConvertion()
 
-    /// <summary>
-    /// 다음 대사 출력할때 호출
-    /// </summary>
+    /// <summary> 다음 대사 출력할 때 호출 </summary>
     /// <param name="_nextConverationId">다음 대사의 ID</param>
     protected override void NextConveration(int _nextConverationId)
     {
@@ -131,51 +126,48 @@ public class BossNPC : NPC
             DeQueueConversation();
         }
         else { /* PASS */ }
-        //OutPutPickText(_nextConverationId);
     }       // NextConveration()
 
-    /// <summary>
-    /// 대사끝날때 호출
-    /// </summary>
+    /// <summary> 대사끝날 때 호출 </summary>
     protected override void EndConveration()
     {
-        //ChangeAnimationString(npcWaitMotion);
         base.EndConveration();
-        OffCanvasObj();
-        GameManager.instance.FadeOut();
-        GFunc.Log("전투를 시작한다.");
-        GFunc.ChoiceEvent(conversationID);
 
-        GetComponent<Boss>().StartAttack();
+        OffCanvasObj();                      // 캔버스 끄기
+        GameManager.instance.FadeOut();      // 플레이어 페이드 아웃
 
+        GFunc.ChoiceEvent(conversationID);   // 대화 종료 후 대사 클리어 이벤트 진행중으로 변경
+
+        GetComponent<Boss>().StartAttack();  // 보스 전투 시작
+        GameManager.instance.isBossFight = true;
+
+        transform.GetChild(0).gameObject.SetActive(false);
     }       // EndConveration()
 
-
-    public void PickConversation(int _npcId)
+    /// <summary> 대사 선정 </summary>
+    public void PickConversation(int conversationId)
     {
-        // 테이블의 해당 conversationID를 가져와 분리
-        string conversation = Data.GetString(_npcId, "ConversationTableID");
-        int[] conversationIds = GFunc.SplitIds(conversation);
+        //// 테이블의 해당 conversationID를 가져와 분리
+        //string conversation = Data.GetString(_npcId, "ConversationTableID");
+        //int[] conversationIds = GFunc.SplitIds(conversation);
 
-        int conversationId = FindQuestConversationID(conversationIds);
+        //int conversationId = FindQuestConversationID(conversationIds);
 
-        if (conversationId == -1)
-        {
-            GFunc.LogError(_npcId + "찾으려는 현재 진행중인 퀘스트 ID가 없습니다..");
-            conversationID = conversationIds[0];
-            return;
-        }
-        conversationID = conversationId;
+        //if (conversationId == -1)
+        //{
+        //    GFunc.LogError(_npcId + "찾으려는 현재 진행중인 퀘스트 ID가 없습니다..");
+        //    conversationID = conversationIds[0];
+        //    return;
+        //}
+        //conversationID = conversationId;
 
         EnQueueConversation(conversationId);
         DeQueueConversation();
     }
 
-    /// <summary>
-    /// 현재 진행중인 퀘스트의 ID 를 찾는 함수
-    /// </summary>
+    /// <summary> 현재 진행중인 퀘스트의 ID 를 찾는 함수  </summary>
     /// <param name="_conversationIds">찾고자 하는 ID 배열</param>
-    /// <returns></returns>
+    /// <returns>퀘스트 ID</returns>
     public int FindQuestConversationID(int[] _conversationIds)
     {
         Quest curQuest = Unit.GetCanCompleteMainQuest();
@@ -198,16 +190,11 @@ public class BossNPC : NPC
         return -1;
     }
 
-
-    public int ClearBossMeetQuest()
+    /// <summary>완료 가능 퀘스트 ID 반환</summary>
+    public int GetCanCompleteMainQuestID()
     {
-        QuestCallback.OnBossMeetCallback(npcID);   // 상태값 갱신 및 자동 완료
-        GFunc.LogError($"{npcID}");
         Quest curQuest = Unit.GetCanCompleteMainQuest();
         int questID = curQuest.QuestData.ID;
-        GFunc.Log($"현재 완료가능 메인 퀘스트 ID : {questID}");
-
-        //Unit.ClearQuestByID(questID);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
         return questID;
     }
 

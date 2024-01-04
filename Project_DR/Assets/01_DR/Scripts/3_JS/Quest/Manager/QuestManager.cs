@@ -109,7 +109,7 @@ namespace Js.Quest
                 Quest quest = new Quest(idTable[i]);
                 UserDataManager.AddQuestToQuestList(quest);
 
-                GFunc.Log($"퀘스트 [{idTable[i]}] 생성 완료");
+                //GFunc.Log($"퀘스트 [{idTable[i]}] 생성 완료");
             }
 
             // 디버그
@@ -268,7 +268,7 @@ namespace Js.Quest
                     // tempQuestList에 퀘스트 추가
                     tempQuestList.Add(item);
 
-                    GFunc.LogError($"{questState} / {tempQuestList[0].QuestData.ID}");
+                    //GFunc.LogError($"{questState} / {tempQuestList[0].QuestData.ID}");
                 }
             }
 

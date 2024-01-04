@@ -10,6 +10,32 @@ using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.UI.GridLayoutGroup;
 using TMPro;
 
+// 데미지를 체크하는 클래스
+public class DamageChecker : MonoBehaviour
+{
+    public Monster monster;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // 공격 상태일 때 반환
+        if (monster.isAttack)
+        { return; }
+
+        if (collision.gameObject.tag.Equals("Player"))
+        {
+            monster.isAttack = true;
+
+            transform.GetComponent<DamageCollider>().OnCollisionEvent(collision);
+            // 아닐 경우 모든 데미지 콜라이더를 꺼준다.
+            for (int i = 0; i < monster.damageCollider.Length; i++)
+            {
+                monster.damageCollider[i].enabled = false;
+            }
+            monster.ResetDamageCollider();
+        }
+    }
+}
+
 
 public class Monster : MonoBehaviour
 {
@@ -70,6 +96,7 @@ public class Monster : MonoBehaviour
     public float hp = default;       //체력이랑 damageble 보내준다
     public float attack = default;
     public float attDelay = default;   //몬스터 공격간격 
+    public float hitDelay = default;   //몬스터 히트시 공격간격 
     public int exp = default;
     public float speed = default;      //몬스터 이동속도
     public float recRange = 30.0f;   //pc 인식범위
@@ -78,6 +105,8 @@ public class Monster : MonoBehaviour
     public float stunCount = default;  //경직 횟수, 일반 몬스터는 필요 없음
     public float stopDistance = default;
     //몬스터 이름도 추가될 예정
+
+    public float lastDamageTime;
 
     [Header("트랜스폼")]
     public Transform monsterTr;
@@ -119,6 +148,7 @@ public class Monster : MonoBehaviour
     public bool isDie = false;
     public bool isStun = false;
     public bool isStack = false;
+    public bool isAttack = false;
 
     public IEnumerator stunRoutine; // 스턴 루틴
 
@@ -147,15 +177,16 @@ public class Monster : MonoBehaviour
     {
         capsuleColliders = GetComponentsInChildren<CapsuleCollider>();
         monsterTr = GetComponent<Transform>();
-        playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().transform; 
+        playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().transform;
 
         damageable = GetComponent<Damageable>();
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
-        
+
 
         damageable.Health = hp;
+        lastDamageTime = Time.time;
 
         foreach (DamageCollider damageCollider in damageCollider)
         {
@@ -172,6 +203,8 @@ public class Monster : MonoBehaviour
         //GFunc.Log($"초기 hp 설정 값:{damageable.Health}");
 
         InitMonster();
+
+        SetDamageCollider();        // 데이미 콜라이더를 제어하는 클래스를 세팅
     }
 
     public void InitMonster()
@@ -207,6 +240,7 @@ public class Monster : MonoBehaviour
         exp = Data.GetInt(id, "MonExp");
         attack = (float)DataManager.Instance.GetData(id, "MonAtt", typeof(float));
         attDelay = (float)DataManager.Instance.GetData(id, "MonDel", typeof(float));
+        hitDelay = Data.GetFloat(id, "HitDel");
         speed = (float)DataManager.Instance.GetData(id, "MonSpd", typeof(float));
         attRange = (float)DataManager.Instance.GetData(id, "MonAtr", typeof(float));
         recRange = (float)DataManager.Instance.GetData(id, "MonRer", typeof(float));
@@ -534,7 +568,7 @@ public class Monster : MonoBehaviour
                     anim.SetTrigger(hashDie);
                     foreach (CapsuleCollider capsuleCollider in capsuleColliders)
                     {
-                       capsuleCollider.isTrigger = true;
+                        capsuleCollider.isTrigger = true;
                     }
                     UserData.KillMonster(exp);
 
@@ -808,8 +842,39 @@ public class Monster : MonoBehaviour
         }
 
     }
+    // 데미지 콜라이더를 세팅해준다.
+    public void SetDamageCollider()
+    {
+        // 데미지 콜라이더가 있을 경우
+        if (damageCollider.Length == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < damageCollider.Length; i++)
+        {
+            damageCollider[i].isMonster = true;
+            damageCollider[i].AddComponent<DamageChecker>();
+            damageCollider[i].GetComponent<DamageChecker>().monster = this;
+        }
+    }
+
+    /// <summary>공격 시간 이후에 데미지 콜라이더 활성화 </summary>
+    public void ResetDamageCollider()
+    {
+        Invoke(nameof(EnableDamageCollider), hitDelay);
+    }
+    /// <summary>데미지 콜라이더 활성화 </summary>
+    private void EnableDamageCollider()
+    {
+        for (int i = 0; i < damageCollider.Length; i++)
+        {
+            damageCollider[i].enabled = true;
+        }
+        isAttack = false;
+    }
+
 
 }
-
 
 

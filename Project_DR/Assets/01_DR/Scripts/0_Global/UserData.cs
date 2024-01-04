@@ -477,6 +477,7 @@ public static class UserData
         Unit.UpdateDataFromDB();
         Unit.ResetInventory();
 
+
         UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
         UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
 
@@ -488,7 +489,13 @@ public static class UserData
     }
     public static bool ClearCheck()
     {
+
         return UserDataManager.Instance.isClear;
+    }
+    public static bool GameOverCheck()
+    {
+
+        return UserDataManager.Instance.isGameOver;
     }
     public static void GameOver()
     {
@@ -497,8 +504,7 @@ public static class UserData
 
     public static void ClearDungeon()
     {
-        // TODO : 보스 퀘스트 클리어 성공시 다시 복귀하기
-        //Unit.SaveQuestDataToDB();
+        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.SaveClearData();
         UserDataManager.Instance.isClear = true;
     }

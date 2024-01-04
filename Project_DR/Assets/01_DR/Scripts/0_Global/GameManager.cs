@@ -1,4 +1,5 @@
 using BNG;
+using Js.Quest;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -83,8 +84,10 @@ public class GameManager : MonoBehaviour
     private bool allRoomClear = false;              // 모든 방이 클리어 됬다면 true가 될 변수
 
     private bool isClear = false;                   // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
-    
     public bool isGameOver;
+
+    [Header("Boss Fight")]
+    public bool isBossFight = false;
 
 
     public bool IsClear
@@ -249,6 +252,12 @@ public class GameManager : MonoBehaviour
     // 게임오버
     public void GameOver()
     {
+        // 보스전일 경우 보스 처치 실패
+        if (isBossFight)
+        {
+            BossKillFail();
+        }
+
         fader.DoFadeIn();
         screenText = player.GetComponent<ScreenText>();
         screenText.OnScreenText(gameoverText);
@@ -256,7 +265,6 @@ public class GameManager : MonoBehaviour
 
         isGameOver = true;
         UserData.GameOver();
-        //UserData.ResetPlayer();
 
         SceneLoad(gameoverScene); // 게임오버 씬 전환
     }
@@ -266,7 +274,6 @@ public class GameManager : MonoBehaviour
     {
         isGameOver = true;
         UserData.GameOver();
-        //UserData.ResetPlayer();
 
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneLoad(currentSceneName);
@@ -301,6 +308,26 @@ public class GameManager : MonoBehaviour
             GFunc.Log("클리어 실패, 현재 층 : " + nowFloor);
      
     }       // ClearDungeon()
+
+    // 보스 처치 실패
+    public void BossKillFail()
+    {
+        isBossFight = false;
+
+        Quest curSubQuest = Unit.GetInProgressSubQuest();    // 현재 진행중인 서브 퀘스트 반환 (보스 처치 퀘스트)
+        int clearID = curSubQuest.QuestData.ID;              // 진행중 서브 퀘스트 ID
+        int[] clearEventIDs = Unit.ClearQuestByID(clearID);  // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
+        //if (clearEventIDs != null)
+        //{
+        //    for (int i = 0; i < clearEventIDs.Length; i++)
+        //    {
+        //        if (clearEventIDs[i] == 0)
+        //            break;
+        //        Quest quest = Unit.GetQuestByID(clearEventIDs[i]);
+        //        quest.ChangeState(1);
+        //    }
+        //}
+    }
 
     #endregion
 

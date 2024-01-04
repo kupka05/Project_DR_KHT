@@ -725,7 +725,7 @@ public class Boss : MonoBehaviour
         lazerPort.transform.LookAt(shootPosition);
 
         // 1초 후에 레이저를 파괴하도록 예약합니다.
-        Invoke("ReturnImage", 1.0f);
+        //Invoke("ReturnImage", 1.0f);
     }
 
     public void ReturnImage()

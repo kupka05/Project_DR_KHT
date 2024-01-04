@@ -230,7 +230,8 @@ public class LobbyEvent : MonoBehaviour
             int clearCount = UserDataManager.Instance.ClearCount;
             clearCount = clearCount <= 23 ? clearCount : 22;
             GFunc.Log(clearCount);
-            targetQuestID += clearCount;
+            //TODO : 보스 퀘스트 연결 후
+            //targetQuestID += clearCount;
             SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
         }
 

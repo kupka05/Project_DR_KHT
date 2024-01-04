@@ -41,9 +41,11 @@ public class QuestPannel : MonoBehaviour
     private GameObject questItem;
     private Transform contentParent;
     public Dictionary<Quest, GameObject> QuestList = new Dictionary<Quest, GameObject>();
+    private Vector3 offSize = new Vector3(0.000001f, 0.000001f, 0.000001f);
 
     private void Start()
     {
+        transform.parent.localScale = offSize;
         // 퀘스트 아이템 및 부모 지정
         questItem = transform.GetChild(1).GetChild(0).GetChild(0).GetChild(2).gameObject;
         contentParent = transform.GetChild(1).GetChild(0).GetChild(0).transform;
@@ -63,6 +65,8 @@ public class QuestPannel : MonoBehaviour
     /// <summary> 퀘스트를 패널에 추가하는 메서드  </summary>
     public void AddQuest(Quest quest)
     {
+        transform.parent.localScale = Vector3.one;
+
         // 패널 내의 새 퀘스트 오브젝트 생성
         GameObject newQuestObj = Instantiate(questItem, contentParent);
         newQuestObj.SetActive(true);
@@ -88,6 +92,12 @@ public class QuestPannel : MonoBehaviour
         // 패널 내의 퀘스트 오브젝트 삭제 후 딕셔너리 제거
         Destroy(QuestList[quest]);
         QuestList.Remove(quest);
+
+        if(QuestList.Count == 0)
+        {
+            transform.parent.localScale = offSize;
+        }
+
     }
 
     /// <summary> 진행중인 퀘스트가 있을 경우 업데이트  </summary>

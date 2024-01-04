@@ -139,6 +139,8 @@ public class BossNPC : NPC
         GFunc.ChoiceEvent(conversationID);   // 대화 종료 후 대사 클리어 이벤트 진행중으로 변경
 
         GetComponent<Boss>().StartAttack();  // 보스 전투 시작
+        GameManager.instance.isBossFight = true;
+
         transform.GetChild(0).gameObject.SetActive(false);
     }       // EndConveration()
 

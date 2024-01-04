@@ -797,6 +797,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterHpSlider: {fileID: 2767832186488124884}
   state: 0
+  capsuleColliders: []
   monsterId: 7004
   monsterType: 2
   smash: {fileID: 7171906250592818437}
@@ -827,10 +828,13 @@ MonoBehaviour:
   damageCollider:
   - {fileID: 958297002537054432}
   - {fileID: 958297000993922955}
+  - {fileID: 4162810993219946542}
   damageable: {fileID: 6041716752347440668}
   isDie: 0
   isStun: 0
   isStack: 0
+  isAttack: 0
+  isDelay: 0
   distanceDebug: 0
   distanceFromGround: 0
   distanceFromGroundOffset: 0
@@ -3277,6 +3281,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3785777419077462234}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4162810993219946542 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 3785777419077462234}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6057008983505627619
 PrefabInstance:
   m_ObjectHideFlags: 0

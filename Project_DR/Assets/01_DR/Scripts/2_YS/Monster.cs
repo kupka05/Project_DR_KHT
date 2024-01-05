@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.UI.GridLayoutGroup;
 using TMPro;
+using BossMonster;
 
 // 데미지를 체크하는 클래스
 public class DamageChecker : MonoBehaviour
@@ -355,7 +356,7 @@ public class Monster : MonoBehaviour
                             anim.SetBool(hashidle, true);
                             anim.SetBool(hashAttack, false);
                             anim.SetBool(hashRun, false);
-                            yield return new WaitForSeconds(0.3f);
+                            yield return new WaitForSeconds(attDelay);
                             break;
 
                         case Type.HUMAN_GOLEM:
@@ -372,7 +373,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack, false);
                                     anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
@@ -384,7 +385,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 2:
@@ -395,7 +396,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack3, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                             }
@@ -415,7 +416,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
@@ -425,7 +426,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 2:
@@ -435,7 +436,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack3, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                             }
@@ -455,7 +456,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
@@ -465,7 +466,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 2:
@@ -475,7 +476,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack3, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
                                     //case 3:
                                     //    anim.SetBool(hashAttack4, true);
@@ -503,7 +504,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
@@ -513,7 +514,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
                             }
                             break;
@@ -532,7 +533,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
@@ -543,7 +544,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 2:
@@ -553,7 +554,7 @@ public class Monster : MonoBehaviour
                                     anim.SetBool(hashAttack3, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
                             }
                             break;
@@ -593,6 +594,7 @@ public class Monster : MonoBehaviour
         }
         else
             return;
+
 
         Debug.Log($"체력:{damageable.Health}");
 
@@ -874,6 +876,8 @@ public class Monster : MonoBehaviour
         isAttack = false;
     }
 
+
+    
 
 }
 

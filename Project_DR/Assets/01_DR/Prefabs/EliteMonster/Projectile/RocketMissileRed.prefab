@@ -14735,7 +14735,9 @@ MonoBehaviour:
   canSelfHarm: 0
   isKnockback: 1
   isBossProjectile: 0
-  isEliteProjectile: 0
+  isEliteProjectile: 1
+  isProjectile: 0
+  isMonster: 0
 --- !u!114 &5105486300896707413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14753,5 +14755,7 @@ MonoBehaviour:
   target: {fileID: 0}
   attack: 1
   ProjectileID: 7013
+  damageRadius: 1
+  isDamage: 0
   speed: 0
   damage: 0

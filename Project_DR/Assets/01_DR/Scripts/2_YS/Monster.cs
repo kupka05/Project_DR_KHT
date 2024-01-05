@@ -118,6 +118,7 @@ public class Monster : MonoBehaviour
     public Rigidbody rigid;
     public NavMeshAgent nav;
 
+    IEnumerator actionRoutine;
 
 
     public DamageCollider[] damageCollider;
@@ -213,7 +214,9 @@ public class Monster : MonoBehaviour
         isDie = false;
         nav.isStopped = false;
         StartCoroutine(MonsterState());
-        StartCoroutine(MonsterAction());
+
+        actionRoutine = MonsterAction();
+        StartCoroutine(actionRoutine);
     }
 
 
@@ -275,6 +278,15 @@ public class Monster : MonoBehaviour
             {
                 SetHealth(0);
                 state = State.DIE;
+                
+                if(actionRoutine != null)
+                {
+                    StopCoroutine(actionRoutine);
+                    actionRoutine = null;
+                }
+
+                actionRoutine = MonsterAction();
+                StartCoroutine(actionRoutine);
             }
 
 

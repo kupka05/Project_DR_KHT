@@ -508,6 +508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcTriggerType: 0
+  isTryCommunity: 0
   isComunity: 0
   isReadyToAutoComunication: 0
   boss: 3
@@ -547,21 +548,25 @@ MonoBehaviour:
   bossProjectileId: 6910
   bossProjectileID: 6914
   bossProjectileBounceId: 6912
+  bossProjectileLazerId: 6915
   power: 5
   lazerPort: {fileID: 5851581971671007355}
   lazer: {fileID: 7801054870893074991, guid: 9de885b41bc52fe488e338a87491f2a7, type: 3}
   lazerFire: {fileID: 2981110298664549651, guid: 3727415ae6fdff740af6dbabe736138b,
     type: 3}
+  waitLazer: 0
   bulletCount: 0
   smallBulletPrefab: {fileID: 3016696864302411366, guid: 9c76011e52345e24293d9f04f36837d9,
     type: 3}
   delayTime: 0
   destoryTime: 0
   speed: 0
+  waitBullet: 0
   bounce: {fileID: 548648308873678835, guid: dfd6ac752cdbe2245a1d034e27f13688, type: 3}
   bounceCount: 0
   destoryTimeBounce: 0
   speedBounce: 0
+  waitBounce: 0
   target: {fileID: 0}
   player: {fileID: 0}
   knockBack: {fileID: 0}
@@ -584,6 +589,7 @@ MonoBehaviour:
     type: 3}
   destroyTimeBrick: 0
   brickCount: 0
+  waitBrick: 0
   npc: {fileID: 0}
   bossMeet:
     m_PersistentCalls:

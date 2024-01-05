@@ -1,17 +1,28 @@
 using BNG;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class Lazer : MonoBehaviour
 {
     public DamageCollider damageCollider;
 
-    public float damage = 0.1f;
+    public int LazerId;
 
+
+    public float returnTime = default;
+    public float damage = default;
+
+    void Awake()
+    {
+        GetData(LazerId);
+    }
     // Start is called before the first frame update
     void Start()
     {
+        damageCollider = GetComponent<DamageCollider>();
+        damageCollider.Damage = damage;
         Invoke("Return", 1);
     }
 
@@ -20,6 +31,13 @@ public class Lazer : MonoBehaviour
     {
         
     }
+
+    public void GetData(int lazerId)
+    {
+        returnTime = (float)DataManager.Instance.GetData(lazerId, "DesTime", typeof(float));
+        damage = (float)DataManager.Instance.GetData(lazerId, "Damage", typeof(float));
+    }
+
 
     void Return()
     {
@@ -31,6 +49,7 @@ public class Lazer : MonoBehaviour
         if(other.tag.Equals("Player"))
         {
             other.GetComponent<Damageable>().DealDamage(damage);
+            GFunc.Log("레이저 데미지 들어온다");
         }
     }
 }

@@ -57,8 +57,9 @@ namespace Js.Crafting
                     }
                 }
 
-                // 상자 설정
+                // 상자 설정 & 크래프팅 인벤토리 정렬
                 SetChest();
+                SortAllInventorySlot();
                 _isInitalize = true;
             }
 
@@ -126,6 +127,17 @@ namespace Js.Crafting
             inventory.localPosition = position;
             inventory.localScale = scale;
             inventory.localRotation = rotation;
+        }
+
+        // 인벤토리의 모든 슬롯을 정렬
+        private void SortAllInventorySlot()
+        {
+            Inventory inventory = _canvasInventory.transform.Find("Inventory")
+                .gameObject?.GetComponent<InventoryUI>()?.Inventory;
+            if (inventory != null)
+            {
+                inventory.SortAndUpdatePlayerInventoryUI();
+            }
         }
     }
 }

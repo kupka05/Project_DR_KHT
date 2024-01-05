@@ -95,6 +95,7 @@ namespace Rito.InventorySystem
         #region .
 
         /// <summary> 연결된 인벤토리 </summary>
+        public Inventory Inventory => _inventory;
         private Inventory _inventory;
 
         private List<ItemSlotUI> _slotUIList = new List<ItemSlotUI>();
@@ -725,8 +726,11 @@ namespace Rito.InventorySystem
             // null인 슬롯은 타입 검사 없이 필터 활성화
             if(itemData != null)
             {
-                // 포션 아이템 데이터만 필터 숨김
-                isFiltered = !(itemData is PortionItemData);
+                // 포션 & 폭탄 아이템만 필터 활성화해서 숨김
+                if (! (itemData is PortionItemData | itemData is BombItemData))
+                {
+                    isFiltered = false;
+                }
             }
                 //switch (_currentFilterOption)
                 //{

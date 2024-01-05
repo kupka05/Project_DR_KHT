@@ -131,7 +131,7 @@ namespace Rito.InventorySystem
             Init();
             InitSlots();
             InitButtonEvents();
-            InitToggleEvents();
+            //InitToggleEvents();
             ChangeScrollRange();
         }
 
@@ -267,19 +267,19 @@ namespace Rito.InventorySystem
 
         private void InitToggleEvents()
         {
-            _toggleFilterAll.onValueChanged.AddListener(       flag => UpdateFilter(flag, FilterOption.All));
-            _toggleFilterEquipments.onValueChanged.AddListener(flag => UpdateFilter(flag, FilterOption.Equipment));
-            _toggleFilterPortions.onValueChanged.AddListener(  flag => UpdateFilter(flag, FilterOption.Portion));
+            //_toggleFilterAll.onValueChanged.AddListener(       flag => UpdateFilter(flag, FilterOption.All));
+            //_toggleFilterEquipments.onValueChanged.AddListener(flag => UpdateFilter(flag, FilterOption.Equipment));
+            //_toggleFilterPortions.onValueChanged.AddListener(  flag => UpdateFilter(flag, FilterOption.Portion));
 
             // Local Method
-            void UpdateFilter(bool flag, FilterOption option)
-            {
-                if (flag)
-                {
-                    _currentFilterOption = option;
-                    UpdateAllSlotFilters();
-                }
-            }
+            //void UpdateFilter(bool flag, FilterOption option)
+            //{
+            //    if (flag)
+            //    {
+            //        _currentFilterOption = option;
+            //        UpdateAllSlotFilters();
+            //    }
+            //}
         }
 
         #endregion
@@ -722,12 +722,12 @@ namespace Rito.InventorySystem
         public void UpdateSlotFilterState(int index, ItemData itemData)
         {
             bool isFiltered = true;
-
+            GFunc.Log("UpdateSlotFilterState()");
             // null인 슬롯은 타입 검사 없이 필터 활성화
             if(itemData != null)
             {
                 // 포션 & 폭탄 아이템만 필터 활성화해서 숨김
-                if (! (itemData is PortionItemData | itemData is BombItemData))
+                if ((itemData is PortionItemData) || (itemData is BombItemData))
                 {
                     isFiltered = false;
                 }
@@ -743,7 +743,7 @@ namespace Rito.InventorySystem
                 //        break;
                 //}
 
-            // itemData가 null일 경우 true로 필터 활성화
+            // itemData가 null일 경우 true로 필터 활성화(아이템 표시)
             _slotUIList[index].SetItemAccessibleState(isFiltered);
         }
 

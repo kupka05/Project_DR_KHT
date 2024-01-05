@@ -917,6 +917,7 @@ public class LobbyEvent : MonoBehaviour
         {
             GFunc.ChoiceEvent(targetQuestID);
             ChangeDisplayButton("Main");
+            UpdatePlayerStatusUI();
             OpenSpawnRoomDoor();
         }
     }

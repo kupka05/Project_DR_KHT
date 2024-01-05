@@ -100,10 +100,10 @@ namespace Rito.InventorySystem
         /// <summary> 아이템 데이터 타입별 정렬 가중치 </summary>
         private readonly static Dictionary<Type, int> _sortWeightDict = new Dictionary<Type, int>
         {
-            { typeof(PortionItemData), 10000 },
-            { typeof(BombItemData),  20000 },
-            { typeof(MaterialItemData),   30000 },
-            { typeof(QuestItemData),   40000 },
+            { typeof(QuestItemData),   10000 },
+            { typeof(MaterialItemData),   20000 },
+            { typeof(BombItemData),  30000 },
+            { typeof(PortionItemData), 40000 },
         };
         private class ItemComparer : IComparer<Item>
         {
@@ -168,7 +168,15 @@ namespace Rito.InventorySystem
                 if (current == null)
                     continue;
 
-                // 아이템 종류 일치, 개수 여유 확인
+                // 아이템 종류 일치, 개수 여유
+                if (current is CountableItem ci2)
+                {
+                    GFunc.Log(target);
+                }
+                if (current.Data == target)
+                {
+                    GFunc.Log("current.Data == target");
+                }
                 if (current.Data == target && current is CountableItem ci)
                 {
                     if (!ci.IsMax)
@@ -241,7 +249,7 @@ namespace Rito.InventorySystem
         }
 
         /// <summary> 모든 슬롯들의 상태를 UI에 갱신 </summary>
-        private void UpdateAllSlot()
+        public void UpdateAllSlot()
         {
             for (int i = 0; i < Capacity; i++)
             {
@@ -334,15 +342,18 @@ namespace Rito.InventorySystem
                     if (findNextCountable)
                     {
                         index = FindCountableItemSlotIndex(ciData, index + 1);
+                        GFunc.Log($"인덱스: {index}");
                       
                         // 개수 여유있는 기존재 슬롯이 더이상 없다고 판단될 경우, 빈 슬롯부터 탐색 시작
                         if (index == -1)
                         {
+                            GFunc.Log("인벤토리에 없음");
                             findNextCountable = false;
                         }
                         // 기존재 슬롯을 찾은 경우, 양 증가시키고 초과량 존재 시 amount에 초기화
                         else
                         {
+                            GFunc.Log("인벤토리에 있음");
                             CountableItem ci = _items[index] as CountableItem;
                             amount = ci.AddAmountAndGetExcess(amount);
                             UpdateSlot(index);
@@ -412,6 +423,7 @@ namespace Rito.InventorySystem
                 }
             }
 
+            GFunc.Log(amount);
             return amount;
         }
 

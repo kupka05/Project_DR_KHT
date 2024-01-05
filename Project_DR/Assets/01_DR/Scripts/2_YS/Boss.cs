@@ -56,6 +56,7 @@ public class Boss : MonoBehaviour
     public int bossProjectileId;  //투사체 테이블
     public int bossProjectileID;
     public int bossProjectileBounceId;
+    public int bossProjectileLazerId;
 
     public float power = 5.0f;
 
@@ -70,6 +71,7 @@ public class Boss : MonoBehaviour
     public Transform lazerPort;
     public GameObject lazer;
     public GameObject lazerFire;
+    public float waitLazer = default;
 
     [Header("원거리 공격 소형 투사체")]
     public float bulletCount = default;
@@ -77,13 +79,14 @@ public class Boss : MonoBehaviour
     public float delayTime = default;
     public float destoryTime = default;
     public float speed = default;
+    public float waitBullet = default;
 
     [Header("애드벌룬 투사체 생성")]
     public GameObject bounce;
     public float bounceCount = default;
     public float destoryTimeBounce = default;
     public float speedBounce = default;
-
+    public float waitBounce = default;
 
     [Header("타겟")]
     public Transform target;
@@ -109,6 +112,7 @@ public class Boss : MonoBehaviour
     public bool isStart = false;
     public bool isBounce = false;
     public bool isBrick = false;
+    public bool isLazerCoroutineRunning = false;
 
     [Header("패턴 간격")]
     public float patternInterval = default;
@@ -124,6 +128,7 @@ public class Boss : MonoBehaviour
     //new private ParticleSystem particleSystem;
     public float destroyTimeBrick = default;
     public float brickCount = default;
+    public float waitBrick = default;
 
     [Header("Conversation")]
     public BossNPC npc;
@@ -132,11 +137,11 @@ public class Boss : MonoBehaviour
     //[Header("유도 미사일 테스트")]
     //public Transform testPort;
     //public GameObject testBullet;
-
+    private Vector3 initialTargetImagePosition;
 
     public void Awake()
     {
-        GetData(bossId, bossProjectileId, bossProjectileID, bossProjectileBounceId);
+        GetData(bossId, bossProjectileId, bossProjectileID, bossProjectileBounceId, bossProjectileLazerId);
     }
 
     public void Start()
@@ -171,18 +176,21 @@ public class Boss : MonoBehaviour
     {
         if (target != null)
         {
-            //GFunc.Log("플레이어 바라 보는가?");
-            // Look At Y 각도로만 기울어지게 하기
-            Vector3 targetPostition =
-                new Vector3(target.position.x, this.transform.position.y, target.position.z);
-            this.transform.LookAt(targetPostition);
-
+            if (!isLazerCoroutineRunning)
+            {
+                // Look At Y 각도로만 기울어지게 하기
+                Vector3 targetPostition =
+                    new Vector3(target.position.x, this.transform.position.y, target.position.z);
+                this.transform.LookAt(targetPostition);
+            }
         }
         else
+        {
             return;
+        }
     }
 
-    public void GetData(int bossId, int bossProjectileId, int bossProjectileID, int bossProjectileBounceId)
+    public void GetData(int bossId, int bossProjectileId, int bossProjectileID, int bossProjectileBounceId, int bossProjectileLazerId)
     {
         //보스
         maxHp = (float)DataManager.Instance.GetData(bossId, "BossHP", typeof(float));
@@ -191,17 +199,23 @@ public class Boss : MonoBehaviour
         //소형 투사체 6910
         bulletCount = (float)DataManager.Instance.GetData(bossProjectileId, "Duration", typeof(float));
         delayTime = (float)DataManager.Instance.GetData(bossProjectileId, "Delay", typeof(float));
-
+        waitBullet = (float)DataManager.Instance.GetData(bossProjectileId, "WaitTime", typeof(float));
         speed = (float)DataManager.Instance.GetData(bossProjectileId, "Speed", typeof(float));
 
         //6914 거대벽돌
         destroyTimeBrick = (float)DataManager.Instance.GetData(bossProjectileID, "DesTime", typeof(float));
         brickCount = (float)DataManager.Instance.GetData(bossProjectileID, "Duration", typeof(float));
+        waitBrick = (float)DataManager.Instance.GetData(bossProjectileID, "WaitTime", typeof(float));
 
         //6912 애드벌룬
         //destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "DesTime", typeof(float));
         speedBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "Speed", typeof(float));
         bounceCount = (float)DataManager.Instance.GetData(bossProjectileBounceId, "Duration", typeof(float));
+        waitBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "WaitTime", typeof(float));
+
+        //6915
+        waitLazer = (float)DataManager.Instance.GetData(bossProjectileLazerId, "WaitTime", typeof(float));
+
     }
 
     public void SetTarget(Transform newTarget)
@@ -278,7 +292,7 @@ public class Boss : MonoBehaviour
 
                     }
                 }
-                else if (damageable.Health <= maxHp * 0.25f)
+                else if (0 < damageable.Health && damageable.Health <= maxHp * 0.25f)
                 {
                     //GFunc.Log("체력별 패턴 4 진입");
 
@@ -296,6 +310,11 @@ public class Boss : MonoBehaviour
 
                     }
                 }
+                else if(damageable.Health <= 0)
+                {
+                    BossDie();
+                }
+
 
                 yield return new WaitForSeconds(patternInterval);
                 isPatternExecuting = false;
@@ -308,7 +327,6 @@ public class Boss : MonoBehaviour
     {
         int pattern = UnityEngine.Random.Range(0, 4);
 
-        pattern = 1;
         switch (pattern)
         {
             case 0:
@@ -542,7 +560,7 @@ public class Boss : MonoBehaviour
 
             }
 
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(waitBullet);
 
             //GFunc.Log($"리스트 크기 : {bullets.Count}");
 
@@ -576,146 +594,42 @@ public class Boss : MonoBehaviour
 
 
         }
+        yield break;
     }
 
-    //public IEnumerator LazerCoroutine()
-    //{
-    //    if (targetImage != null)
-    //    {
-    //        targetImage.transform.position = target.position;
-    //        targetImage.gameObject.SetActive(true);
-
-    //        yield return new WaitForSeconds(3.0f);
-
-    //        // 3초 대기 후, targetImage의 위치에서 레이저 발사
-    //        ShootLazer(targetImage.transform.position);
-
-    //        // 추가: 레이저가 발사된 후 n초 대기 후 레이저 파이어 생성
-    //        yield return new WaitForSeconds(0.1f);
-    //        LazerFire(targetImage.transform.position);
-    //    }
-    //}
-
-    //public void LazerFire(Vector3 firePosition)
-    //{
-    //    instantLazerFire = Instantiate(lazerFire, firePosition, Quaternion.identity);
-    //    Invoke("LazerFireDestroy", 1.0f);
-    //}
-
-    //public void LazerFireDestroy()
-    //{
-    //    if (instantLazerFire != null)
-    //    {
-    //        Destroy(instantLazerFire);
-    //        GFunc.Log("화염지대 파괴되는가");
-    //    }
-    //    else
-    //    {
-    //        CancelInvoke("LazerFireDestroy");
-    //        GFunc.Log("cancelinvoke");
-    //    }
-
-    //    targetImage.gameObject.SetActive(false);
-    //    //CancelInvoke("LazerFireDestroy");
-    //}
-
-    //public void ShootLazer(Vector3 shootPosition)
-    //{
-    //    // 레이저를 생성하고 shootPosition을 기준으로 방향을 설정합니다.
-    //    instantLazer = Instantiate(lazer, lazerPort.position, lazerPort.rotation);
-    //    instantLazer.transform.LookAt(shootPosition); // target.position 대신에 shootPosition을 사용합니다.
-    //    lazerPort.transform.LookAt(shootPosition);
-
-    //    // 1초 후에 레이저를 파괴하도록 예약합니다.
-    //    Invoke("LazerDestroy", 1.0f);
-    //}
-
-    //public void LazerDestroy()
-    //{
-    //    if (instantLazer != null)
-    //    {
-    //        Destroy(instantLazer);
-    //        GFunc.Log("레이저 파괴되는가");
-    //    }
-
-    //    CancelInvoke("LazerDestroy");
-
-    //}
-
-
-
-    //public Vector3 BigBrick(Vector3 portPosition)
-    //{
-    //    int randomBrick = UnityEngine.Random.Range(0, 10);
-    //    // 해당 위치에 따라 초기 속도 설정
-    //    Vector3 initialVelocity = transform.forward * 10.0f;  //10.0f;
-
-    //    Vector3 target = transform.forward * 10.0f;   //5.0f;
-
-    //    //int randomBrick = UnityEngine.Random.Range(0, 3);
-    //    // 각 포트 위치에 따라 Y축 오프셋 값 조절
-    //    if (portPosition == bigBrickPort.position)
-    //    {
-    //        target.y += randomBrick;
-    //    }
-    //    else if (portPosition == bigBrickPortLeft.position)
-    //    {   
-    //        target.y += randomBrick;
-    //    }
-    //    else if (portPosition == bigBrickPortRight.position)
-    //    {
-    //        target.y += randomBrick;
-    //    }
-
-    //    // 초기 속도와 목표 위치를 결합
-    //    Vector3 combinedVector = initialVelocity + target;
-
-    //    return combinedVector;
-    //}
-
-    //IEnumerator BrickWait(float waitTime)
-    //{
-    //    //transform.position = Vector3.zero;
-    //    Debug.Log("정지");
-    //    yield return new WaitForSeconds(waitTime);
-
-    //}
 
     public IEnumerator LazerCoroutine()
     {
         if (targetImage != null)
         {
-            targetImage.transform.position = target.position;
+            isLazerCoroutineRunning = true;
+
+            // 처음 활성화될 때의 위치를 저장
+            initialTargetImagePosition = target.position;
+
+            // 처음 위치로 설정
+            targetImage.transform.position = initialTargetImagePosition;
             targetImage.gameObject.SetActive(true);
 
-            yield return new WaitForSeconds(3.0f);
+            // 기다리고
+            yield return new WaitForSeconds(waitLazer);
 
-            // 3초 대기 후, targetImage의 위치에서 레이저 발사
-            ShootLazer(targetImage.transform.position);
+            // 발사될 때 처음 위치 사용
+            ShootLazer(initialTargetImagePosition);
 
             // 레이저가 발사된 후 n초 대기 후 레이저 파이어 생성
             yield return new WaitForSeconds(0.1f);
-            LazerFire(targetImage.transform.position);
+            LazerFire(initialTargetImagePosition);
+
+            isLazerCoroutineRunning = false;
         }
+        yield break;
     }
 
     public void LazerFire(Vector3 firePosition)
     {
         instantLazerFire = Instantiate(lazerFire, firePosition, Quaternion.identity);
-        //Invoke("DestroyLazerFire", 1.0f);
     }
-
-    //public void DestroyLazerFire()
-    //{
-    //    if (instantLazerFire != null)
-    //    {
-    //        Destroy(instantLazerFire);
-    //        GFunc.Log("화염지대 파괴되는가");
-    //    }
-
-    //    // 레이저 파괴
-    //    DestroyLazer();
-    //}
 
     public void ShootLazer(Vector3 shootPosition)
     {
@@ -725,7 +639,7 @@ public class Boss : MonoBehaviour
         lazerPort.transform.LookAt(shootPosition);
 
         // 1초 후에 레이저를 파괴하도록 예약합니다.
-        //Invoke("ReturnImage", 1.0f);
+        Invoke("ReturnImage", 1.0f);
     }
 
     public void ReturnImage()
@@ -773,7 +687,7 @@ public class Boss : MonoBehaviour
                 brickRigidbody.useGravity = false;
             }
 
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(waitBrick);
 
             foreach (GameObject instantBrick in bigbrick)
             {
@@ -800,26 +714,10 @@ public class Boss : MonoBehaviour
         }
 
 
+        yield break;
 
 
     }
-
-    //public void Shoot()
-    //{
-    //    AudioManager.instance.PlaySFX("FireBomb");
-
-    //    GameObject ball = Instantiate(FireBombPrefab, firePosition.position, Quaternion.identity);
-    //    ball.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
-    //}
-    //// 힘 계산하기
-    //public Vector3 calculateForce()
-    //{
-    //    Vector3 targetPos = GameManager.instance.Golem.transform.position;
-    //    targetPos.y += 25f;
-    //    //firePosition.LookAt();  // 발사방향은 골렘을 향하게 변경
-    //    firePosition.LookAt(targetPos);  // 발사방향은 골렘을 향하게 변경
-    //    return firePosition.forward * power;
-    //}
 
     public Vector3 parabola()
     {
@@ -830,106 +728,6 @@ public class Boss : MonoBehaviour
 
         return pos * randomPower;
     }
-
-    //IEnumerator BigBrickShoot()
-    //{
-    //    // 대기 시간 설정 (여기서는 2초로 설정)
-    //    float waitTime = 2.0f;
-
-    //    Vector3 offset = Vector3.zero;
-
-    //    offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 3.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
-
-
-    //    // 가운데, 왼쪽, 오른쪽 위치에 대해 동시에 오브젝트를 생성하고 힘을 적용
-    //    GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
-
-    //    instantBrick.SetActive(true);
-    //    Rigidbody brickRigidbody = instantBrick.GetComponent<Rigidbody>();
-    //    brickRigidbody.useGravity = false;
-    //    GFunc.Log($"활성화:{instantBrick}");
-
-    //    GameObject instantBrickLeft = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
-
-    //    instantBrickLeft.SetActive(true);
-    //    Rigidbody brickRigidbodyLeft = instantBrickLeft.GetComponent<Rigidbody>();
-    //    brickRigidbodyLeft.useGravity = false;
-    //    //GFunc.Log($"활성화:{instantBrickLeft}");
-
-    //    GameObject instantBrickRight = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
-
-    //    instantBrickRight.SetActive(true);
-    //    Rigidbody brickRigidbodyRight = instantBrickRight.GetComponent<Rigidbody>();
-    //    brickRigidbodyRight.useGravity = false;
-    //    GFunc.Log($"활성화:{instantBrickRight}");
-
-    //    //n초 동안 대기하면서 gravity 비활성화
-    //   yield return StartCoroutine(BrickWait(waitTime));
-    //    GFunc.Log("대기");
-
-
-    //    // gravity 활성화 및 힘을 적용
-    //    brickRigidbody.useGravity = true;
-    //    brickRigidbody.AddForce(BigBrick(bigBrickPort.position), ForceMode.Impulse);
-    //    //GFunc.Log("가운데 발사");
-
-    //    brickRigidbodyLeft.useGravity = true;
-    //    brickRigidbodyLeft.AddForce(BigBrick(bigBrickPortLeft.position), ForceMode.Impulse);
-    //    //GFunc.Log("왼쪽 발사");
-
-    //    brickRigidbodyRight.useGravity = true;
-    //    brickRigidbodyRight.AddForce(BigBrick(bigBrickPortRight.position), ForceMode.Impulse);
-    //    //GFunc.Log("오른쪽 발사");
-
-    //    // 나머지 대기 시간 후에 오브젝트 파괴
-    //    yield return StartCoroutine(BrickWait(waitTime));
-    //    Destroy(instantBrick, destroy);
-    //    Destroy(instantBrickLeft, destroy);
-    //    Destroy(instantBrickRight, destroy);
-
-    //}
-
-    //public Vector3 ExplosionBox(Vector3 portPosition)
-    //{
-    //    int randomBox = UnityEngine.Random.Range(0, 10);
-    //    // 해당 위치에 따라 초기 속도 설정
-    //    Vector3 initialVelocity = transform.forward * randomBox;  //10.0f;
-
-    //    Vector3 target = transform.forward * randomBox;   //5.0f;
-
-    //    // 각 포트 위치에 따라 Y축 오프셋 값 조절
-    //    if (portPosition == explosionPort.position)
-    //    {
-    //        target.y += randomBox;
-    //    }
-    //    else if (portPosition == explosionPortLeft.position)
-    //    {
-    //        target.y += randomBox;
-    //    }
-    //    else if (portPosition == explosionPortRight.position)
-    //    {
-    //        target.y += randomBox;
-    //    }
-
-    //    // 초기 속도와 목표 위치를 결합
-    //    Vector3 combinedVector = initialVelocity + target;
-
-    //    return combinedVector;
-    //}
-
-
-    //void ExplosionShoot()
-    //{
-    //    GameObject instantExplosion = Instantiate(explosionPrefab, explosionPort.position, Quaternion.identity);
-    //    instantExplosion.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPort.position), ForceMode.Impulse);
-
-    //    GameObject instantExplosionLeft = Instantiate(explosionPrefab, explosionPortLeft.position, Quaternion.identity);
-    //    instantExplosionLeft.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortLeft.position), ForceMode.Impulse);
-
-    //    GameObject instantExplosionRight = Instantiate(explosionPrefab, explosionPortRight.position, Quaternion.identity);
-    //    instantExplosionRight.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortRight.position), ForceMode.Impulse);
-    //}
-
 
     public IEnumerator BounceShoot()
     {
@@ -959,7 +757,7 @@ public class Boss : MonoBehaviour
 
             }
 
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(waitBounce);
             GFunc.Log("대기한다");
 
             foreach (GameObject instantBounce in bounceBall)
@@ -990,65 +788,17 @@ public class Boss : MonoBehaviour
             isBounce = false;
         }
 
-
+        yield break;
 
     }
 
-    ////유도미사일 테스트
-    //IEnumerator GuidedShoot()
-    //{
-    //    if (!isShoot)
-    //    {
-    //        isShoot = true;
-
-    //        List<GameObject> missiles = new List<GameObject>();
-
-    //        // 미사일 미리 생성
-    //        for (int i = 0; i < missileCount; i++)
-    //        {
-    //            Vector3 offset = UnityEngine.Random.insideUnitSphere * 2.0f;
-
-    //            GameObject instantMissile = Instantiate(testBullet, transform.position + offset, Quaternion.identity);
-    //            missiles.Add(instantMissile);
-    //        }
-
-    //        yield return new WaitForSeconds(2.0f);
-
-    //        GFunc.Log($"리스트 크기 : {missiles.Count}");
-
-    //        foreach (var missile in missiles)
-    //        {
-    //            // 미사일이 이미 파괴되었는지 확인
-    //            if (missile != null)
-    //            {
-    //                Rigidbody rigidMissile = missile.GetComponent<Rigidbody>();
-    //                HomingMissile homingMissile = missile.GetComponent<HomingMissile>(); // Add HomingMissile script to your missile prefab
-
-    //                if (homingMissile != null)
-    //                {
-    //                    // 플레이어를 타겟으로 설정
-    //                    homingMissile.SetTarget(GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos);
-    //                }
-
-    //                yield return new WaitForSeconds(0.4f);
-
-    //                // 발사 방향 설정 및 속도 적용
-    //                rigidMissile.velocity = rigidMissile.transform.forward * speed;
-
-    //                Destroy(rigidMissile, 6.0f);
-    //            }
-    //        }
-
-    //        missiles.Clear();
-
-    //        isShoot = false;
-    //        GFunc.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
-    //    }
-    //}
-
-
     public void OnDeal(float damage)
     {
+        if (damageable.Health <= 0)
+        {
+            BossDie();               
+        }
+
         if (!isDie)
         {
             if (damageable.Health >= 0)
@@ -1057,32 +807,6 @@ public class Boss : MonoBehaviour
                 GFunc.Log($"현재 HP: {damageable.Health}");
             }
 
-            if (damageable.Health <= 0)
-            {
-
-                isDie = true;
-                SetHealth(0);
-                GFunc.Log($"isDie:{isDie}");
-                // 이벤트 호출
-                //unityEvent?.Invoke();
-
-
-                if (bossState)
-                {
-                    bossState.GetComponent<BossState>().Die();
-                }
-                StopAllCoroutines();
-
-                Vector3 newSize = new Vector3(0.00001f, 0.00001f, 0.00001f);
-                this.gameObject.transform.localScale = newSize;
-
-                GetComponent<BossMonsterDeadCheck>().BossDie();
-                UserData.KillBoss(Data.GetInt(bossId, "GiveEXP"));
-
-                ClearBossKillQuest();
-
-                //GFunc.Log("코루틴 멈춤");
-            }
 
             smashCount++;   // 분쇄 카운트 추가
 
@@ -1255,4 +979,295 @@ public class Boss : MonoBehaviour
         }
     }
 
+    public void BossDie()
+    {
+        StopAllCoroutines();
+
+        isDie = true;
+        SetHealth(0);
+
+        if (bossState)
+        {
+            bossState.GetComponent<BossState>().Die();
+        }
+
+        Vector3 newSize = new Vector3(0.00001f, 0.00001f, 0.00001f);
+        this.gameObject.transform.localScale = newSize;
+
+        GetComponent<BossMonsterDeadCheck>().BossDie();
+        UserData.KillBoss(Data.GetInt(bossId, "GiveEXP"));
+
+        ClearBossKillQuest();
+    }
+
+
+    //public IEnumerator LazerCoroutine()
+    //{
+    //    if (targetImage != null)
+    //    {
+    //        targetImage.transform.position = target.position;
+    //        targetImage.gameObject.SetActive(true);
+
+    //        yield return new WaitForSeconds(3.0f);
+
+    //        // 3초 대기 후, targetImage의 위치에서 레이저 발사
+    //        ShootLazer(targetImage.transform.position);
+
+    //        // 추가: 레이저가 발사된 후 n초 대기 후 레이저 파이어 생성
+    //        yield return new WaitForSeconds(0.1f);
+    //        LazerFire(targetImage.transform.position);
+    //    }
+    //}
+
+    //public void LazerFire(Vector3 firePosition)
+    //{
+    //    instantLazerFire = Instantiate(lazerFire, firePosition, Quaternion.identity);
+    //    Invoke("LazerFireDestroy", 1.0f);
+    //}
+
+    //public void LazerFireDestroy()
+    //{
+    //    if (instantLazerFire != null)
+    //    {
+    //        Destroy(instantLazerFire);
+    //        GFunc.Log("화염지대 파괴되는가");
+    //    }
+    //    else
+    //    {
+    //        CancelInvoke("LazerFireDestroy");
+    //        GFunc.Log("cancelinvoke");
+    //    }
+
+    //    targetImage.gameObject.SetActive(false);
+    //    //CancelInvoke("LazerFireDestroy");
+    //}
+
+    //public void ShootLazer(Vector3 shootPosition)
+    //{
+    //    // 레이저를 생성하고 shootPosition을 기준으로 방향을 설정합니다.
+    //    instantLazer = Instantiate(lazer, lazerPort.position, lazerPort.rotation);
+    //    instantLazer.transform.LookAt(shootPosition); // target.position 대신에 shootPosition을 사용합니다.
+    //    lazerPort.transform.LookAt(shootPosition);
+
+    //    // 1초 후에 레이저를 파괴하도록 예약합니다.
+    //    Invoke("LazerDestroy", 1.0f);
+    //}
+
+    //public void LazerDestroy()
+    //{
+    //    if (instantLazer != null)
+    //    {
+    //        Destroy(instantLazer);
+    //        GFunc.Log("레이저 파괴되는가");
+    //    }
+
+    //    CancelInvoke("LazerDestroy");
+
+    //}
+
+
+
+    //public Vector3 BigBrick(Vector3 portPosition)
+    //{
+    //    int randomBrick = UnityEngine.Random.Range(0, 10);
+    //    // 해당 위치에 따라 초기 속도 설정
+    //    Vector3 initialVelocity = transform.forward * 10.0f;  //10.0f;
+
+    //    Vector3 target = transform.forward * 10.0f;   //5.0f;
+
+    //    //int randomBrick = UnityEngine.Random.Range(0, 3);
+    //    // 각 포트 위치에 따라 Y축 오프셋 값 조절
+    //    if (portPosition == bigBrickPort.position)
+    //    {
+    //        target.y += randomBrick;
+    //    }
+    //    else if (portPosition == bigBrickPortLeft.position)
+    //    {   
+    //        target.y += randomBrick;
+    //    }
+    //    else if (portPosition == bigBrickPortRight.position)
+    //    {
+    //        target.y += randomBrick;
+    //    }
+
+    //    // 초기 속도와 목표 위치를 결합
+    //    Vector3 combinedVector = initialVelocity + target;
+
+    //    return combinedVector;
+    //}
+
+    //IEnumerator BrickWait(float waitTime)
+    //{
+    //    //transform.position = Vector3.zero;
+    //    Debug.Log("정지");
+    //    yield return new WaitForSeconds(waitTime);
+
+    //}
+    ////유도미사일 테스트
+    //IEnumerator GuidedShoot()
+    //{
+    //    if (!isShoot)
+    //    {
+    //        isShoot = true;
+
+    //        List<GameObject> missiles = new List<GameObject>();
+
+    //        // 미사일 미리 생성
+    //        for (int i = 0; i < missileCount; i++)
+    //        {
+    //            Vector3 offset = UnityEngine.Random.insideUnitSphere * 2.0f;
+
+    //            GameObject instantMissile = Instantiate(testBullet, transform.position + offset, Quaternion.identity);
+    //            missiles.Add(instantMissile);
+    //        }
+
+    //        yield return new WaitForSeconds(2.0f);
+
+    //        GFunc.Log($"리스트 크기 : {missiles.Count}");
+
+    //        foreach (var missile in missiles)
+    //        {
+    //            // 미사일이 이미 파괴되었는지 확인
+    //            if (missile != null)
+    //            {
+    //                Rigidbody rigidMissile = missile.GetComponent<Rigidbody>();
+    //                HomingMissile homingMissile = missile.GetComponent<HomingMissile>(); // Add HomingMissile script to your missile prefab
+
+    //                if (homingMissile != null)
+    //                {
+    //                    // 플레이어를 타겟으로 설정
+    //                    homingMissile.SetTarget(GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos);
+    //                }
+
+    //                yield return new WaitForSeconds(0.4f);
+
+    //                // 발사 방향 설정 및 속도 적용
+    //                rigidMissile.velocity = rigidMissile.transform.forward * speed;
+
+    //                Destroy(rigidMissile, 6.0f);
+    //            }
+    //        }
+
+    //        missiles.Clear();
+
+    //        isShoot = false;
+    //        GFunc.Log($"불값 초기화가 언제 호출 되는지 : {isShoot}");
+    //    }
+    //}
+
+    //IEnumerator BigBrickShoot()
+    //{
+    //    // 대기 시간 설정 (여기서는 2초로 설정)
+    //    float waitTime = 2.0f;
+
+    //    Vector3 offset = Vector3.zero;
+
+    //    offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 3.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
+
+
+    //    // 가운데, 왼쪽, 오른쪽 위치에 대해 동시에 오브젝트를 생성하고 힘을 적용
+    //    GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+
+    //    instantBrick.SetActive(true);
+    //    Rigidbody brickRigidbody = instantBrick.GetComponent<Rigidbody>();
+    //    brickRigidbody.useGravity = false;
+    //    GFunc.Log($"활성화:{instantBrick}");
+
+    //    GameObject instantBrickLeft = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+
+    //    instantBrickLeft.SetActive(true);
+    //    Rigidbody brickRigidbodyLeft = instantBrickLeft.GetComponent<Rigidbody>();
+    //    brickRigidbodyLeft.useGravity = false;
+    //    //GFunc.Log($"활성화:{instantBrickLeft}");
+
+    //    GameObject instantBrickRight = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+
+    //    instantBrickRight.SetActive(true);
+    //    Rigidbody brickRigidbodyRight = instantBrickRight.GetComponent<Rigidbody>();
+    //    brickRigidbodyRight.useGravity = false;
+    //    GFunc.Log($"활성화:{instantBrickRight}");
+
+    //    //n초 동안 대기하면서 gravity 비활성화
+    //   yield return StartCoroutine(BrickWait(waitTime));
+    //    GFunc.Log("대기");
+
+
+    //    // gravity 활성화 및 힘을 적용
+    //    brickRigidbody.useGravity = true;
+    //    brickRigidbody.AddForce(BigBrick(bigBrickPort.position), ForceMode.Impulse);
+    //    //GFunc.Log("가운데 발사");
+
+    //    brickRigidbodyLeft.useGravity = true;
+    //    brickRigidbodyLeft.AddForce(BigBrick(bigBrickPortLeft.position), ForceMode.Impulse);
+    //    //GFunc.Log("왼쪽 발사");
+
+    //    brickRigidbodyRight.useGravity = true;
+    //    brickRigidbodyRight.AddForce(BigBrick(bigBrickPortRight.position), ForceMode.Impulse);
+    //    //GFunc.Log("오른쪽 발사");
+
+    //    // 나머지 대기 시간 후에 오브젝트 파괴
+    //    yield return StartCoroutine(BrickWait(waitTime));
+    //    Destroy(instantBrick, destroy);
+    //    Destroy(instantBrickLeft, destroy);
+    //    Destroy(instantBrickRight, destroy);
+
+    //}
+
+    //public Vector3 ExplosionBox(Vector3 portPosition)
+    //{
+    //    int randomBox = UnityEngine.Random.Range(0, 10);
+    //    // 해당 위치에 따라 초기 속도 설정
+    //    Vector3 initialVelocity = transform.forward * randomBox;  //10.0f;
+
+    //    Vector3 target = transform.forward * randomBox;   //5.0f;
+
+    //    // 각 포트 위치에 따라 Y축 오프셋 값 조절
+    //    if (portPosition == explosionPort.position)
+    //    {
+    //        target.y += randomBox;
+    //    }
+    //    else if (portPosition == explosionPortLeft.position)
+    //    {
+    //        target.y += randomBox;
+    //    }
+    //    else if (portPosition == explosionPortRight.position)
+    //    {
+    //        target.y += randomBox;
+    //    }
+
+    //    // 초기 속도와 목표 위치를 결합
+    //    Vector3 combinedVector = initialVelocity + target;
+
+    //    return combinedVector;
+    //}
+
+
+    //void ExplosionShoot()
+    //{
+    //    GameObject instantExplosion = Instantiate(explosionPrefab, explosionPort.position, Quaternion.identity);
+    //    instantExplosion.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPort.position), ForceMode.Impulse);
+
+    //    GameObject instantExplosionLeft = Instantiate(explosionPrefab, explosionPortLeft.position, Quaternion.identity);
+    //    instantExplosionLeft.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortLeft.position), ForceMode.Impulse);
+
+    //    GameObject instantExplosionRight = Instantiate(explosionPrefab, explosionPortRight.position, Quaternion.identity);
+    //    instantExplosionRight.GetComponent<Rigidbody>().AddForce(ExplosionBox(explosionPortRight.position), ForceMode.Impulse);
+    //}
+
+    //public void Shoot()
+    //{
+    //    AudioManager.instance.PlaySFX("FireBomb");
+
+    //    GameObject ball = Instantiate(FireBombPrefab, firePosition.position, Quaternion.identity);
+    //    ball.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
+    //}
+    //// 힘 계산하기
+    //public Vector3 calculateForce()
+    //{
+    //    Vector3 targetPos = GameManager.instance.Golem.transform.position;
+    //    targetPos.y += 25f;
+    //    //firePosition.LookAt();  // 발사방향은 골렘을 향하게 변경
+    //    firePosition.LookAt(targetPos);  // 발사방향은 골렘을 향하게 변경
+    //    return firePosition.forward * power;
+    //}
 }

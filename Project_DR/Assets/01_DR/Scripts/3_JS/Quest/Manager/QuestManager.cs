@@ -303,7 +303,7 @@ namespace Js.Quest
             // json으로 변환된 string은 .NET Framework 디코딩이 필요
             string json = System.Web.HttpUtility.UrlDecode(PlayerDataManager.QuestMain);
 
-            GFunc.Log($"구조화된 데이터: {json}");
+            GFunc.Log($"디코딩된 데이터: {json}");
 
             // 데이터가 비어있을 경우 예외처리
             // 퀘스트 전체 상태만 업데이트 [시작불가] -> [시작가능]

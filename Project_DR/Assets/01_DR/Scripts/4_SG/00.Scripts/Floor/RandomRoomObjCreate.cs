@@ -409,6 +409,7 @@ public class RandomRoomObjCreate : MonoBehaviour
 
         GameObject spawnObjClone = Instantiate(_spawnObj, _spawnPos, Quaternion.identity, parentObj.transform);
         ObjectLayerSetting(spawnObjClone);
+        //GFunc.Log($"스폰된 오브젝트 : {spawnObjClone.name}");
         if (_isWallSpawn == true)
         {
             SpawnObjRotationSet(spawnObjClone);

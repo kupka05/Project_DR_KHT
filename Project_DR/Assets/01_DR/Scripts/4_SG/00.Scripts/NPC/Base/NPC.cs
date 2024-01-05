@@ -559,6 +559,7 @@ public class NPC : MonoBehaviour
     /// /// <param name="_rewardId">보상 ID</param>
     private void RewardTypeCheck(int _rewardId)
     {
+        //GFunc.Log($"TypeCheck : {_rewardId}");
         if ((int)RewardID.ItemStartId <= _rewardId && (int)RewardID.ItemEndId >= _rewardId)
         {
             RewardItem(_rewardId);
@@ -621,12 +622,11 @@ public class NPC : MonoBehaviour
     {
         List<int> rewardItemRefIdList = NPCManager.Instance.GetRewardItemRefIdList(_rewardId);      // 보상의 ID
         List<int> rewardAmountList = NPCManager.Instance.GetRewardAmountList(_rewardId);            // 보상의 갯수
-        List<int> rewardProbabilityList = NPCManager.Instance.GetRewardProbabilityList(_rewardId);  // 보상의 확률
-
+        List<int> rewardProbabilityList = NPCManager.Instance.GetRewardProbabilityList(_rewardId);  // 보상의 확률        
 
         for (int i = 0; i < rewardItemRefIdList.Count; i++)
         {
-            bool isRewardInIt = NPCManager.Instance.GetProbabilityResult(rewardProbabilityList[i]);
+            bool isRewardInIt = NPCManager.Instance.GetProbabilityResult(rewardProbabilityList[i]);            
 
             if (isRewardInIt == true)
             {

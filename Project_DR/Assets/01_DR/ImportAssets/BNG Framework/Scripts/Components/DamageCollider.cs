@@ -88,10 +88,10 @@ namespace BNG
             if (isPlayer && collision.gameObject.CompareTag("Player"))
                 return;
 
-            if (!isBossProjectile && collision.gameObject.GetComponent<Boss>())
+            if (isBossProjectile && collision.gameObject.GetComponent<Boss>())
                 return;
 
-            if (!isEliteProjectile && collision.gameObject.GetComponent<EliteMonster>())
+            if (isEliteProjectile && collision.gameObject.GetComponent<EliteMonster>())
                 return;
 
 

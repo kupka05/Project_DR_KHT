@@ -5,13 +5,22 @@ using UnityEngine;
 
 public class LazerFire : MonoBehaviour
 {
-    public Damageable damageable;
+    public DamageCollider damageCollider;
 
-    public float damage = 0.1f;
+    public int lazerFireId;
 
+    public float returnTime = default;
+    public float damage = default;
+
+    void Awake()
+    {
+        GetData(lazerFireId);
+    }
     // Start is called before the first frame update
     void Start()
     {
+        damageCollider = GetComponent<DamageCollider>();
+        damageCollider.Damage = damage;
         Invoke("Return", 1);
     }
 
@@ -25,6 +34,13 @@ public class LazerFire : MonoBehaviour
     {
         Destroy(this.gameObject);
     }
+
+    public void GetData(int lazerFireId)
+    {
+        returnTime = (float)DataManager.Instance.GetData(lazerFireId, "DesTime", typeof(float));
+        damage = (float)DataManager.Instance.GetData(lazerFireId, "Damage", typeof(float));
+    }
+
 
     public void OnParticleCollision(GameObject other)
     {

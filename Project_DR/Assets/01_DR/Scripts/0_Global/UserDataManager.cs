@@ -211,8 +211,6 @@ public partial class UserDataManager : MonoBehaviour
             clearDatas.list = new List<ClearData>();
         }
 
-        result.Initialize();    // 결과 초기화
-
         // 데이터를 불러오고 해야할 이벤트가 있다면 이벤트 실행
         // Ex. 플레이어 상태창, 상점의 현재 골드 등
         dataLoadSuccess = true;
@@ -548,5 +546,10 @@ public partial class UserDataManager : MonoBehaviour
     public void SaveQuestDatasToDB(string json)
     {
         PlayerDataManager.Save("quest_main", json);
+    }
+
+    public void DestroyUserDataManager()
+    {
+        Destroy(gameObject);
     }
 }

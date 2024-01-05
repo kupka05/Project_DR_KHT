@@ -755,7 +755,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 3
 --- !u!114 &1815641168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -786,6 +786,7 @@ MonoBehaviour:
   hp: 0
   attack: 0
   attDelay: 0
+  hitDelay: 0
   exp: 0
   speed: 0
   recRange: 30
@@ -793,6 +794,7 @@ MonoBehaviour:
   stunDelay: 1
   stunCount: 0
   stopDistance: 0
+  lastDamageTime: 0
   monsterTr: {fileID: 6284214424667939738}
   playerTr: {fileID: 0}
   anim: {fileID: 132345388006521312}
@@ -803,6 +805,7 @@ MonoBehaviour:
   isDie: 0
   isStun: 0
   isStack: 0
+  isAttack: 0
   distanceDebug: 0
   distanceFromGround: 0
   distanceFromGroundOffset: 0

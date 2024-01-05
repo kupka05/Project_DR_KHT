@@ -403,8 +403,18 @@ public class DungeonCreator : MonoBehaviour
 
 
         //DungeonInspectionManager.dungeonManagerInstance.isCreateDungeonEnd = true;
-        GFunc.Log("던전 생성 끝");
 
+        CheckRecreate();
+
+        if (isReCreate == true)
+        {
+            GFunc.Log($"2차 검수 불통 던전 재생성 호출");
+            CreateDungeon();
+            return;
+        }
+        else { /*PASS*/ }
+
+        GFunc.Log("던전 생성 끝");
     }       // CreateDungeonBuildTime()
 
 
@@ -1063,18 +1073,19 @@ public class DungeonCreator : MonoBehaviour
         //GFunc.LogFormat("FPChildCount -> {0}", floorParent.transform.childCount);
 
         // 방의 하단 중앙위치
-        float bspfirstRoomBottomCenterPoint = (firstRoomPos.bottomLeftCorner.x + firstRoomPos.bottomRightCorner.x) / 2;
+        float bspfirstRoomBottomCenterPoint = (firstRoomPos.bottomLeftCorner.x + firstRoomPos.bottomRightCorner.x) * 0.5f;
         // 방의 상단 중앙위치
-        float bspFirstRoomTopCenterPoint = (firstRoomPos.topLeftCorner.x + firstRoomPos.topRightCorner.x) / 2;
+        float bspFirstRoomTopCenterPoint = (firstRoomPos.topLeftCorner.x + firstRoomPos.topRightCorner.x) * 0.5f;
 
         //// 바닥 메시 생성을 위한 꼭지점 좌표 설정
         Vector3 topLeftV = new Vector3
-            (bspfirstRoomBottomCenterPoint - (pcRoomWidth / 2), 0f, firstRoomPos.bottomLeftCorner.z - pcRoomDistance);
+            (bspfirstRoomBottomCenterPoint - (pcRoomWidth * 0.5f), 0f, firstRoomPos.bottomLeftCorner.z - pcRoomDistance);
         Vector3 topRightV = new Vector3
-            (bspfirstRoomBottomCenterPoint + (pcRoomWidth / 2), 0f, firstRoomPos.bottomRightCorner.z - pcRoomDistance);
+            (bspfirstRoomBottomCenterPoint + (pcRoomWidth * 0.5f), 0f, firstRoomPos.bottomRightCorner.z - pcRoomDistance);
         Vector3 bottomLeftV = new Vector3(topLeftV.x, 0f, topLeftV.z - pcRoomHeight);
         Vector3 bottomRightV = new Vector3(topRightV.x, 0f, topLeftV.z - pcRoomHeight);
-
+        
+        //GFunc.Log($"11PCMeshPos!\n pcRoomWidth : {pcRoomWidth}\nPCRoomHeight : {pcRoomHeight}\n PCRoomDistance : {pcRoomDistance}");
         // 바닥 메시를 위한 꼭지점 배열 생성
         Vector3[] vertices = new Vector3[]
         {
@@ -1108,6 +1119,8 @@ public class DungeonCreator : MonoBehaviour
         mesh.uv = uvs;
         mesh.triangles = triangles;
 
+        //GFunc.Log($"PCMeshPos!\n TopLeft : {topLeftV}\n TopRight : {topRightV}\n BottomLeft :{bottomLeftV}\n BottomRight : {bottomRightV}");
+
 
         GameObject dungeonFloor = new GameObject("PCRoomMesh" + InItNum + bottomLeftV,
             typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
@@ -1128,7 +1141,7 @@ public class DungeonCreator : MonoBehaviour
         //메시의 중간지점을 구하고 콜라이더를 중앙 지점에 놔주기
         //Center
         //Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, 0, (topLeftV.z + bottomLeftV.z) / 2);
-        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) / 2, floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
+        Vector3 colCenter = new Vector3((bottomLeftV.x + bottomRightV.x) * 0.5f, floorYPos, (topLeftV.z + bottomLeftV.z) / 2);
         BoxCollider floorCol = dungeonFloor.GetComponent<BoxCollider>();
         floorCol.center = colCenter;
         // Size
@@ -1183,9 +1196,9 @@ public class DungeonCreator : MonoBehaviour
         FloorMeshPos firstRoomPos = _bspFloorParent.transform.GetComponent<FloorMeshPos>();
         //GFunc.Log($"FloorMeshPos == null? : {firstRoomPos == null}");
         // 방의 하단 중앙위치
-        float bspfirstRoomBottomCenterPoint = (firstRoomPos.bottomLeftCorner.x + firstRoomPos.bottomRightCorner.x) / 2;
+        float bspfirstRoomBottomCenterPoint = (firstRoomPos.bottomLeftCorner.x + firstRoomPos.bottomRightCorner.x) * 0.5f;
         // 방의 상단 중앙위치
-        float bspFirstRoomTopCenterPoint = (firstRoomPos.topLeftCorner.x + firstRoomPos.topRightCorner.x) / 2;
+        float bspFirstRoomTopCenterPoint = (firstRoomPos.topLeftCorner.x + firstRoomPos.topRightCorner.x) * 0.5f ;
 
 
         CustomRoomCorridorCreateMinusPos(wallParnet, playerRoomCornerPos.bottomLeftCorner, playerRoomCornerPos.bottomRightCorner
@@ -1294,9 +1307,9 @@ public class DungeonCreator : MonoBehaviour
         {       // if : CustomPCRoom
             // 바닥 메시 생성을 위한 꼭지점 좌표 설정
             topLeftV = new Vector3
-                (bspRoomBottomCenterPoint_ - (corridorWidth / 2), 0f, bspRoomPos_.bottomLeftCorner.z);
+                (bspRoomBottomCenterPoint_ - (corridorWidth * 0.5f), 0f, bspRoomPos_.bottomLeftCorner.z);
             topRightV = new Vector3
-                (bspRoomBottomCenterPoint_ + (corridorWidth / 2), 0f, bspRoomPos_.bottomLeftCorner.z);
+                (bspRoomBottomCenterPoint_ + (corridorWidth * 0.5f), 0f, bspRoomPos_.bottomLeftCorner.z);
 
             bottomLeftV = new Vector3(topLeftV.x, 0f, topLeftV.z - pcRoomDistance);
             bottomRightV = new Vector3(topRightV.x, 0f, topLeftV.z - pcRoomDistance);
@@ -1396,6 +1409,8 @@ public class DungeonCreator : MonoBehaviour
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
 
         dungeonFloor.transform.parent = parentRoom_.transform;
+
+        CreateDungeonInspection(colCenter,bottomLeftV,bottomRightV,topLeftV, dungeonFloor);
 
         if (isPositive_ == false)
         { CustomRoomCorridorCreateMinusPos(dungeonFloor, bottomLeftV, bottomRightV, topLeftV, topRightV, true); }

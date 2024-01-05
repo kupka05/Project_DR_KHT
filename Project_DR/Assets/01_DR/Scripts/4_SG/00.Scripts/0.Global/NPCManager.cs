@@ -43,7 +43,7 @@ public class NPCManager : MonoBehaviour
     {
         _maxProbability += 1;       // Range의 마지막은 제외되기 때문에 내부에서 1을 더해주고 돌릴것임        
 
-        int randValue = UnityEngine.Random.Range(_minProbability, _maxProbability);
+        int randValue = Random.Range(_minProbability, _maxProbability);
 
         if (_getProbability < randValue)
         {

@@ -100,10 +100,10 @@ namespace Rito.InventorySystem
         /// <summary> 아이템 데이터 타입별 정렬 가중치 </summary>
         private readonly static Dictionary<Type, int> _sortWeightDict = new Dictionary<Type, int>
         {
-            { typeof(PortionItemData), 10000 },
-            { typeof(BombItemData),  20000 },
-            { typeof(MaterialItemData),   30000 },
-            { typeof(QuestItemData),   40000 },
+            { typeof(QuestItemData),   10000 },
+            { typeof(MaterialItemData),   20000 },
+            { typeof(BombItemData),  30000 },
+            { typeof(PortionItemData), 40000 },
         };
         private class ItemComparer : IComparer<Item>
         {

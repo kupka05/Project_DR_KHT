@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LazerFire : MonoBehaviour
 {
-    public Damageable damageable;
+    public DamageCollider damageCollider;
 
     public float damage = 0.1f;
 

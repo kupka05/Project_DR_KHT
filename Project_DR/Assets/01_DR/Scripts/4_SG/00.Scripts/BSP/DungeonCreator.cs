@@ -1400,6 +1400,8 @@ public class DungeonCreator : MonoBehaviour
 
         dungeonFloor.transform.parent = parentRoom_.transform;
 
+        CreateDungeonInspection(colCenter,bottomLeftV,bottomRightV,topLeftV, dungeonFloor);
+
         if (isPositive_ == false)
         { CustomRoomCorridorCreateMinusPos(dungeonFloor, bottomLeftV, bottomRightV, topLeftV, topRightV, true); }
         else { CustomRoomCorridorCreatePlusPos(dungeonFloor, bottomLeftV, bottomRightV, topLeftV, topRightV, true); }

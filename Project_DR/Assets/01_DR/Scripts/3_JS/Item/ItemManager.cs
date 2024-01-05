@@ -198,6 +198,21 @@ public class ItemManager : MonoBehaviour
         return item;
     }
 
+    // 상점용 구매 아이템 생성
+    public GameObject CreateShopItem(Vector3 pos, int id, int amount = 1, bool isTempItem = false)
+    {
+        // 아이템 생성 & 아이템 사용 불가능하게 설정
+        GameObject item = CreateItem(pos, id, amount, isTempItem);
+        UseItem useItem = item.GetComponent<UseItem>();
+        if (useItem != null)
+        {
+            Destroy(useItem);
+        }
+
+        return item;
+    }
+
+    // 아이템 생성
     public GameObject CreateItem(Vector3 pos, int id, int amount = 1, bool isTempItem = false)
     {
         /////////////////////////////////////////////

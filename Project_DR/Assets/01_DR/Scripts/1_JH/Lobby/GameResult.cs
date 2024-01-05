@@ -10,12 +10,12 @@ using UnityEngine;
 public class GameResult
 {
     // 결과를 위한 리스트
-    public MonsterResult monster;
-    public List<Score> item;
-    public List<Score> quest;
+    public MonsterResult monster = new MonsterResult();
+    public List<Score> item = new List<Score>();
+    public List<Score> quest = new List<Score>();
 
     // 최종 스코어
-    public Score result;
+    public Score result = new Score();
 
     // 버프
     public float gainGold;
@@ -39,6 +39,8 @@ public class GameResult
     {
         int gold = _quest.QuestData.ClearReward.QuestRewardData.GiveGold;
         int exp = _quest.QuestData.ClearReward.QuestRewardData.GiveEXP;
+        GFunc.Log($"퀘스트 : {quest}");
+        GFunc.Log($"퀘스트 명 : {_quest.QuestData.Desc}");
         AddScore(quest, _quest.QuestData.Desc, gold, exp);
     }
     // 아이템 점수 추가

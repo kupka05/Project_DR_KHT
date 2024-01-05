@@ -292,7 +292,7 @@ public class Boss : MonoBehaviour
 
                     }
                 }
-                else if (damageable.Health <= maxHp * 0.25f)
+                else if (0 < damageable.Health && damageable.Health <= maxHp * 0.25f)
                 {
                     //GFunc.Log("체력별 패턴 4 진입");
 
@@ -322,7 +322,6 @@ public class Boss : MonoBehaviour
     {
         int pattern = UnityEngine.Random.Range(0, 4);
 
-        pattern = 1;
         switch (pattern)
         {
             case 0:
@@ -590,6 +589,7 @@ public class Boss : MonoBehaviour
 
 
         }
+        yield break;
     }
 
 
@@ -618,6 +618,7 @@ public class Boss : MonoBehaviour
 
             isLazerCoroutineRunning = false;
         }
+        yield break;
     }
 
     public void LazerFire(Vector3 firePosition)
@@ -707,6 +708,10 @@ public class Boss : MonoBehaviour
             isBrick = false;
         }
 
+
+        yield break;
+
+
     }
 
     public Vector3 parabola()
@@ -778,12 +783,17 @@ public class Boss : MonoBehaviour
             isBounce = false;
         }
 
-
+        yield break;
 
     }
 
     public void OnDeal(float damage)
     {
+        if (damageable.Health <= 0)
+        {
+            BossDie();               
+        }
+
         if (!isDie)
         {
             if (damageable.Health >= 0)
@@ -792,30 +802,6 @@ public class Boss : MonoBehaviour
                 GFunc.Log($"현재 HP: {damageable.Health}");
             }
 
-            if (damageable.Health <= 0)
-            {
-
-                isDie = true;
-                SetHealth(0);
-                GFunc.Log($"isDie:{isDie}");
-                // 이벤트 호출
-                //unityEvent?.Invoke();
-
-
-                if (bossState)
-                {
-                    bossState.GetComponent<BossState>().Die();
-                }
-                StopAllCoroutines();
-
-                Vector3 newSize = new Vector3(0.00001f, 0.00001f, 0.00001f);
-                this.gameObject.transform.localScale = newSize;
-
-                GetComponent<BossMonsterDeadCheck>().BossDie();
-                UserData.KillBoss(Data.GetInt(bossId, "GiveEXP"));
-
-                ClearBossKillQuest();
-            }
 
             smashCount++;   // 분쇄 카운트 추가
 
@@ -986,6 +972,27 @@ public class Boss : MonoBehaviour
                 Unit.InProgressQuestByID(clearEventIDs[i]);        // 다음 퀘스트 진행중 으로 변경
             }
         }
+    }
+
+    public void BossDie()
+    {
+        StopAllCoroutines();
+
+        isDie = true;
+        SetHealth(0);
+
+        if (bossState)
+        {
+            bossState.GetComponent<BossState>().Die();
+        }
+
+        Vector3 newSize = new Vector3(0.00001f, 0.00001f, 0.00001f);
+        this.gameObject.transform.localScale = newSize;
+
+        GetComponent<BossMonsterDeadCheck>().BossDie();
+        UserData.KillBoss(Data.GetInt(bossId, "GiveEXP"));
+
+        ClearBossKillQuest();
     }
 
 

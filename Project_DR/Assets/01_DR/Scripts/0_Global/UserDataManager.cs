@@ -547,4 +547,9 @@ public partial class UserDataManager : MonoBehaviour
     {
         PlayerDataManager.Save("quest_main", json);
     }
+
+    public void DestroyUserDataManager()
+    {
+        Destroy(gameObject);
+    }
 }

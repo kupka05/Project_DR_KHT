@@ -44,7 +44,7 @@ public class ReCreateDungeon : MonoBehaviour
     // 커스텀방의 곂침현상을 감지할때 rigidBody가 있으면 점점 내려가는 현상떄문에 제작한 코루틴
     IEnumerator DesRigid()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         //Destroy(rigid);
         //Destroy(boxCollider);
         Destroy(this.gameObject);        

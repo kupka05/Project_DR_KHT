@@ -23,6 +23,12 @@ public static class Unit
         return ItemManager.instance.CreateItem(pos, id, amount);
     }
 
+    // 상점용 아이템을 생성(UseItem 없이 생성)
+    public static GameObject AddShopItem(Vector3 pos, int id, int amount = 1)
+    {
+        return ItemManager.instance.CreateShopItem(pos, id, amount);
+    }
+
     // 모루 위에 크래프팅 아이템을 생성
     public static GameObject AddAnvilItem(Vector3 pos, int id, Transform parent, int amount = 1)
     {

@@ -2288,7 +2288,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3216023249476686731}
   m_HandleRect: {fileID: 3216023249476686730}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3424,7 +3424,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _initalCapacity: 32
-  _maxCapacity: 64
   _inventoryUI: {fileID: 3216023249105429877}
   _playerInventoryUI: {fileID: 4010713277216616468}
 --- !u!1 &3216023249473996150
@@ -3681,7 +3680,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3216023249534232420
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6121,8 +6120,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3216023249473996144}
   m_HandleRect: {fileID: 3216023249473996151}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.379717
+  m_Value: 1.0000004
+  m_Size: 0.3797169
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8006,6 +8005,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -9619,7 +9619,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4010713277286957217}
   m_HandleRect: {fileID: 4010713277286957216}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.99999976
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -12569,6 +12569,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -13365,8 +13366,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4010713276108567464}
   m_HandleRect: {fileID: 4010713276108567467}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 1
+  m_Value: 0.125
+  m_Size: 0.9999978
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

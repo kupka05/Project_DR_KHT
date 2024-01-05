@@ -12,7 +12,7 @@ using TMPro;
 using BossMonster;
 
 // 데미지를 체크하는 클래스
-public class DamageChecker : MonoBehaviour 
+public class DamageChecker : MonoBehaviour
 {
     public Monster monster;
 
@@ -178,13 +178,13 @@ public class Monster : MonoBehaviour
     {
         capsuleColliders = GetComponentsInChildren<CapsuleCollider>();
         monsterTr = GetComponent<Transform>();
-        playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().transform; 
+        playerTr = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().transform;
 
         damageable = GetComponent<Damageable>();
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
-        
+
 
         damageable.Health = hp;
         lastDamageTime = Time.time;
@@ -569,7 +569,7 @@ public class Monster : MonoBehaviour
                     anim.SetTrigger(hashDie);
                     foreach (CapsuleCollider capsuleCollider in capsuleColliders)
                     {
-                       capsuleCollider.isTrigger = true;
+                        capsuleCollider.isTrigger = true;
                     }
                     UserData.KillMonster(exp);
 
@@ -848,14 +848,14 @@ public class Monster : MonoBehaviour
     public void SetDamageCollider()
     {
         // 데미지 콜라이더가 있을 경우
-        if(damageCollider.Length == 0)
+        if (damageCollider.Length == 0)
         {
             return;
         }
 
-        for(int i = 0; i < damageCollider.Length ; i++)
+        for (int i = 0; i < damageCollider.Length; i++)
         {
-            damageCollider[i].isMonster = true;            
+            damageCollider[i].isMonster = true;
             damageCollider[i].AddComponent<DamageChecker>();
             damageCollider[i].GetComponent<DamageChecker>().monster = this;
         }
@@ -869,7 +869,7 @@ public class Monster : MonoBehaviour
     /// <summary>데미지 콜라이더 활성화 </summary>
     private void EnableDamageCollider()
     {
-        for(int i = 0; i < damageCollider.Length; i++)
+        for (int i = 0; i < damageCollider.Length; i++)
         {
             damageCollider[i].enabled = true;
         }
@@ -880,6 +880,5 @@ public class Monster : MonoBehaviour
     
 
 }
-
 
 

@@ -203,7 +203,11 @@ public class ItemManager : MonoBehaviour
     {
         // 아이템 생성 & 아이템 사용 불가능하게 설정
         GameObject item = CreateItem(pos, id, amount, isTempItem);
-        Destroy(item.GetComponent<UseItem>());
+        UseItem useItem = item.GetComponent<UseItem>();
+        if (useItem != null)
+        {
+            Destroy(useItem);
+        }
 
         return item;
     }

@@ -1,4 +1,5 @@
 using BNG;
+using Js.Crafting;
 using Rito.InventorySystem;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,6 +45,9 @@ public class PlayerEvent : MonoBehaviour
 
         // 상점 아이템일 경우 이벤트 실행
         ShopItemSlotEvent(grabItem);
+
+        // 크래프팅 인벤토리 상자일 경우 이벤트 실행
+        CraftingChestEvent(grabItem);
     }
 
 
@@ -151,8 +155,7 @@ public class PlayerEvent : MonoBehaviour
                 // 아이템일 경우
                 if (shopItem.IsItem)
                 {
-                    GameObject item = ItemManager.instance.CreateShopItem(grabber.transform.position,
-                        itemID);
+                    GameObject item = Unit.AddShopItem(grabber.transform.position, itemID);
                     ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
                     itemColliderHandler.state = ItemColliderHandler.State.STOP;
 
@@ -182,6 +185,20 @@ public class PlayerEvent : MonoBehaviour
             {
                 GFunc.Log("돈이 업슴당");
             }
+        }
+    }
+
+    // 크래프팅 상자 이벤트
+    public void CraftingChestEvent(Grabbable grabItem)
+    {
+        InventoryChest inventoryChest = 
+            grabItem.GetComponent<InventoryChest>();
+        // 크래프팅 인벤토리 상자일 경우
+        if (inventoryChest != null)
+        {
+            // 상자 초기화 & 토글
+            inventoryChest.Initialize(gameObject);
+            inventoryChest.ToggleChest();
         }
     }
 }

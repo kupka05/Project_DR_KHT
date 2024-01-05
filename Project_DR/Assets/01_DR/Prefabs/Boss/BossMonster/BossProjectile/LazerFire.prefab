@@ -9794,7 +9794,7 @@ GameObject:
   - component: {fileID: 3141573193643246797}
   - component: {fileID: 3142852579357911829}
   - component: {fileID: 1866749775420758797}
-  - component: {fileID: 3602915439677839510}
+  - component: {fileID: 3949765288543629028}
   m_Layer: 0
   m_Name: LazerFire
   m_TagString: Untagged
@@ -14678,9 +14678,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 657a69e6ae8107c47861d0662330ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageable: {fileID: 3602915439677839510}
+  damageCollider: {fileID: 3949765288543629028}
+  lazerFireId: 6916
+  returnTime: 0
   damage: 0.1
---- !u!114 &3602915439677839510
+--- !u!114 &3949765288543629028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14689,33 +14691,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 2981110298664549651}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c6de38f13d6b1443b2c5a5a20ac08d6, type: 3}
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 100
-  SpawnOnDeath: {fileID: 0}
-  ActivateGameObjectsOnDeath: []
-  DeactivateGameObjectsOnDeath: []
-  DeactivateCollidersOnDeath: []
-  DestroyOnDeath: 1
-  DropOnDeath: 1
-  DestroyDelay: 0
-  Respawn: 0
-  RespawnTime: 10
-  RemoveBulletHolesOnDeath: 1
-  onDamaged:
-    m_PersistentCalls:
-      m_Calls: []
-  onKnockback:
-    m_PersistentCalls:
-      m_Calls: []
-  onDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
-  onRespawn:
-    m_PersistentCalls:
-      m_Calls: []
-  stun: 0
+  Damage: 25
+  ColliderRigidbody: {fileID: 0}
+  MinForce: 0.1
+  LastRelativeVelocity: 0
+  LastDamageForce: 0
+  TakeCollisionDamage: 0
+  CollisionDamage: 5
+  isPlayer: 0
+  canSelfHarm: 0
+  isKnockback: 1
+  isBossProjectile: 1
+  isEliteProjectile: 0
+  isProjectile: 0
+  isMonster: 0
 --- !u!1 &2981117896784495453
 GameObject:
   m_ObjectHideFlags: 0

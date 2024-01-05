@@ -1,4 +1,6 @@
 using BNG;
+using Js.Crafting;
+using Js.Quest;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -112,6 +114,7 @@ public class PlayerOption : MonoBehaviour
     {
         // 플레이어 리셋 함수 호출
         UserData.ResetPlayer();
+        UserDataManager.Instance.DestroyUserDataManager();
 
         fader.DoFadeIn();
         StartCoroutine(SceneChange(loginSceneName));

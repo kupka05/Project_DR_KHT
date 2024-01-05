@@ -278,7 +278,7 @@ public class Boss : MonoBehaviour
 
                     }
                 }
-                else if (damageable.Health <= maxHp * 0.25f)
+                else if (0 < damageable.Health && damageable.Health <= maxHp * 0.25f)
                 {
                     //GFunc.Log("체력별 패턴 4 진입");
 
@@ -308,7 +308,6 @@ public class Boss : MonoBehaviour
     {
         int pattern = UnityEngine.Random.Range(0, 4);
 
-        pattern = 1;
         switch (pattern)
         {
             case 0:
@@ -576,6 +575,7 @@ public class Boss : MonoBehaviour
 
 
         }
+        yield break;
     }
 
     //public IEnumerator LazerCoroutine()
@@ -697,6 +697,7 @@ public class Boss : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             LazerFire(targetImage.transform.position);
         }
+        yield break;
     }
 
     public void LazerFire(Vector3 firePosition)
@@ -800,7 +801,7 @@ public class Boss : MonoBehaviour
         }
 
 
-
+        yield break;
 
     }
 
@@ -990,7 +991,7 @@ public class Boss : MonoBehaviour
             isBounce = false;
         }
 
-
+        yield break;
 
     }
 
@@ -1049,39 +1050,17 @@ public class Boss : MonoBehaviour
 
     public void OnDeal(float damage)
     {
+        if (damageable.Health <= 0)
+        {
+            BossDie();               
+        }
+
         if (!isDie)
         {
             if (damageable.Health >= 0)
             {
                 SetHealth(damageable.Health);
                 GFunc.Log($"현재 HP: {damageable.Health}");
-            }
-
-            if (damageable.Health <= 0)
-            {
-
-                isDie = true;
-                SetHealth(0);
-                GFunc.Log($"isDie:{isDie}");
-                // 이벤트 호출
-                //unityEvent?.Invoke();
-
-
-                if (bossState)
-                {
-                    bossState.GetComponent<BossState>().Die();
-                }
-                StopAllCoroutines();
-
-                Vector3 newSize = new Vector3(0.00001f, 0.00001f, 0.00001f);
-                this.gameObject.transform.localScale = newSize;
-
-                GetComponent<BossMonsterDeadCheck>().BossDie();
-                UserData.KillBoss(Data.GetInt(bossId, "GiveEXP"));
-
-                ClearBossKillQuest();
-
-                //GFunc.Log("코루틴 멈춤");
             }
 
             smashCount++;   // 분쇄 카운트 추가
@@ -1253,6 +1232,27 @@ public class Boss : MonoBehaviour
                 Unit.InProgressQuestByID(clearEventIDs[i]);        // 다음 퀘스트 진행중 으로 변경
             }
         }
+    }
+
+    public void BossDie()
+    {
+        StopAllCoroutines();
+
+        isDie = true;
+        SetHealth(0);
+
+        if (bossState)
+        {
+            bossState.GetComponent<BossState>().Die();
+        }
+
+        Vector3 newSize = new Vector3(0.00001f, 0.00001f, 0.00001f);
+        this.gameObject.transform.localScale = newSize;
+
+        GetComponent<BossMonsterDeadCheck>().BossDie();
+        UserData.KillBoss(Data.GetInt(bossId, "GiveEXP"));
+
+        ClearBossKillQuest();
     }
 
 }

@@ -403,8 +403,18 @@ public class DungeonCreator : MonoBehaviour
 
 
         //DungeonInspectionManager.dungeonManagerInstance.isCreateDungeonEnd = true;
-        GFunc.Log("던전 생성 끝");
 
+        CheckRecreate();
+
+        if (isReCreate == true)
+        {
+            GFunc.Log($"2차 검수 불통 던전 재생성 호출");
+            CreateDungeon();
+            return;
+        }
+        else { /*PASS*/ }
+
+        GFunc.Log("던전 생성 끝");
     }       // CreateDungeonBuildTime()
 
 

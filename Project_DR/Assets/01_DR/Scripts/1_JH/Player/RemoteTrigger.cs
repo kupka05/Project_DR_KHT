@@ -28,6 +28,9 @@ public class RemoteTrigger : MonoBehaviour
     private float _lastDistance;
     private float _thisDistance;
 
+    public GameObject infoPannel;
+    private Vector3 _npcPosition;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,7 +56,11 @@ public class RemoteTrigger : MonoBehaviour
     /// </summary>
     void UpdateClosestRemoteNPC()
     {
-        closestNPC = GetClosestNPC(ValidRemoteNPCs);       
+        closestNPC = GetClosestNPC(ValidRemoteNPCs);    
+        if (closestNPC == null) 
+        {
+            ResetInfoText();
+        }
     }
     /// <summary>
     /// 가장 가까운 NPC를 찾아준다.
@@ -67,6 +74,7 @@ public class RemoteTrigger : MonoBehaviour
 
         if (npcs == null)
         {
+            ResetInfoText();
             return null;
         }
 
@@ -96,7 +104,7 @@ public class RemoteTrigger : MonoBehaviour
                 _closest = npc.Value;
             }
         }
-
+        SetNPCInfoText(_closest);
         return _closest;
     }
 
@@ -120,12 +128,11 @@ public class RemoteTrigger : MonoBehaviour
                 // 거리 체크
                 if (hitDistance > 0.09f)
                 {
-                    //GFunc.Log("Something in-between : " + hit.collider.gameObject.name + " At Distance : " + hitDistance);
                     return true;
                 }
                 else
                 {
-                    //GFunc.Log("Something in between but very close : " + hit.collider.gameObject.name);
+                    //* 장애물이 있다. Pass *//
                 }
             }
         }
@@ -210,7 +217,32 @@ public class RemoteTrigger : MonoBehaviour
             //GFunc.Log("NPC 이벤트 호출");
             // NPC 대화 이벤트 호출
             closestNPC.InvokeStartConverationEvent();
-        }
-       
+            ResetInfoText();
+        }       
     }
+
+    /// <summary>  NPC가 있을 경우, 패널을 npc의 위치로 옮긴다.  </summary>
+    void SetNPCInfoText(NPC npc)
+    {
+        if(npc == null)
+        {  return; }
+
+        if (!npc.isTryCommunity && npc.GetComponent<HumanTypeNPC>())
+        {
+            infoPannel.SetActive(true);
+
+            _npcPosition = npc.transform.position;
+            _npcPosition.y += 1f;
+
+            _npcPosition += (npc.transform.forward * 0.25f);
+
+            infoPannel.transform.position = _npcPosition;
+        }
+    }
+    /// <summary>  NPC가 없을 경우, 패널을 끈다.  </summary>
+    void ResetInfoText()
+    {
+        infoPannel.SetActive(false);
+    }
+
 }

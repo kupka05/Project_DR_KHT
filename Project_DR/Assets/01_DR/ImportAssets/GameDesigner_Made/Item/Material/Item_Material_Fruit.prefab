@@ -390,7 +390,6 @@ GameObject:
   - component: {fileID: 7155751902763266989}
   - component: {fileID: 7155751902763266988}
   - component: {fileID: 7155751902763266991}
-  - component: {fileID: 7155751902763266990}
   m_Layer: 0
   m_Name: Item_Material_Fruit
   m_TagString: Untagged
@@ -553,6 +552,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -623,6 +623,9 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &7155751902763266991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,15 +648,3 @@ MonoBehaviour:
   F: 0
   P: 0
   DEBUG: 0
---- !u!114 &7155751902763266990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7181738665807790333}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd937d9499953d843abd809f29ca3a21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

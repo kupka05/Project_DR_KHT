@@ -86,17 +86,17 @@ public partial class UserDataManager : MonoBehaviour
         GetReferenceData();
         PlayerDataManager.Update(true); // 데이터 요청
     }
-    public void Update()
-    {
-        if (Input.GetKeyDown("r"))
-        {
-            StartCoroutine(SetDebugData());
-        }
-        //else if (Input.GetKeyDown(KeyCode.F1))
-        //{
-        //    SaveClearData();
-        //}
-    }
+    //public void Update()
+    //{
+    //    if (Input.GetKeyDown("r"))
+    //    {
+    //        StartCoroutine(SetDebugData());
+    //    }
+    //    //else if (Input.GetKeyDown(KeyCode.F1))
+    //    //{
+    //    //    SaveClearData();
+    //    //}
+    //}
 
     // ####################### 데이터 로드 #######################
 
@@ -210,9 +210,6 @@ public partial class UserDataManager : MonoBehaviour
         {
             clearDatas.list = new List<ClearData>();
         }
-
-        // 퀘스트 가져오기
-        //Unit.GetCanStartMainQuestForList();
 
         // 데이터를 불러오고 해야할 이벤트가 있다면 이벤트 실행
         // Ex. 플레이어 상태창, 상점의 현재 골드 등

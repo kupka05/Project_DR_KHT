@@ -477,6 +477,7 @@ public static class UserData
         Unit.UpdateDataFromDB();
         Unit.ResetInventory();
 
+
         UserDataManager.Instance.CurHP = UserDataManager.Instance.MaxHP;
         UserDataManager.Instance.drillLandingCount = SetDrillLandingCount();
 
@@ -488,7 +489,13 @@ public static class UserData
     }
     public static bool ClearCheck()
     {
+
         return UserDataManager.Instance.isClear;
+    }
+    public static bool GameOverCheck()
+    {
+
+        return UserDataManager.Instance.isGameOver;
     }
     public static void GameOver()
     {

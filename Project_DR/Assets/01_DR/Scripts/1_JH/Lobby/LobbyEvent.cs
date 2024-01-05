@@ -219,7 +219,6 @@ public class LobbyEvent : MonoBehaviour
         if (UserDataManager.Instance.isGameOver)
         {
             SetNpcDialog(questID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
-            UserDataManager.Instance.isGameOver = false;
         }
       
         else
@@ -900,14 +899,17 @@ public class LobbyEvent : MonoBehaviour
         }
 
         // 3. 클리어 결과 정산
-        else if (UserData.ClearCheck() && isResult)
+        else if (UserData.ClearCheck() && isResult || UserData.GameOverCheck())
         {
-            SetResultData();
             ChangeDisplayButton("Result");
 
+            SetResultData();
             UserData.ResetResult();
+
             isResult = false;
             UserDataManager.Instance.isClear = false;
+            UserDataManager.Instance.isGameOver = false;
+
         }
 
         // 4. 문 열림
@@ -951,7 +953,6 @@ public class LobbyEvent : MonoBehaviour
     // 결과창 세팅
     public void SetResultData()
     {
-        //ResultDebug();
         GameResult result = UserData.GetResult();
 
         AddMonsterResult(result);
@@ -1039,19 +1040,5 @@ public class LobbyEvent : MonoBehaviour
         questResult.SetActive(true);
     }
 
-    public void ResultDebug()
-    {
-        UserData.KillMonster(100);
-        UserData.KillElite(100);
-        UserData.KillBoss(100);
-        UserData.AddItemScore(5302);
-        UserData.AddItemScore(5301);
-        UserData.AddItemScore(5306);
-        UserData.AddItemScore(5303);
-        UserData.AddItemScore(5304);
-        UserData.AddItemScore(5305);
-        UserData.AddItemScore(5301);
-        UserData.AddItemScore(5306);
-    }
 
 }

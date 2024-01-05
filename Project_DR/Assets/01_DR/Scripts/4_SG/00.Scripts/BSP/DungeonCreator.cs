@@ -238,6 +238,7 @@ public class DungeonCreator : MonoBehaviour
         DungeonInspectionManager.dungeonManagerInstance.FloorCollision = false;
         DungeonInspectionManager.dungeonManagerInstance.isEndCreateFloor = false;
 
+        StopAllCoroutines();
         bspMeshList.Clear();
         bspRoom.Clear();
         listOfRoom.Clear();
@@ -2176,6 +2177,25 @@ public class DungeonCreator : MonoBehaviour
             CreateDungeon();
         }
 
+        StartCoroutine(FloorColSizeFix());
+
+    }
+
+    IEnumerator FloorColSizeFix()
+    {
+        yield return new WaitForSeconds(10);
+
+        BoxCollider boxCollider;
+        Vector3 reSize;
+        for (int i = 0; i < bspMeshList.Count; i++)
+        {
+            boxCollider = bspMeshList[i].GetComponent<BoxCollider>();
+            reSize = boxCollider.size;
+            reSize = new Vector3(reSize.x + 1f, reSize.y, reSize.z + 1f);
+            boxCollider.size = reSize;
+        }
+
+        GFunc.Log($"던전 바닥 콜라이더 사이즈 조정 완료");
     }
 
 }   // ClassEnd

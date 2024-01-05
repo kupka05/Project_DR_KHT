@@ -15663,6 +15663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterHpSlider: {fileID: 2580326510073146759}
   state: 0
+  capsuleColliders: []
   monsterId: 7003
   monsterType: 0
   smash: {fileID: 5730448431322882074}
@@ -15691,11 +15692,15 @@ MonoBehaviour:
   rigid: {fileID: 5781229974144954181}
   nav: {fileID: 1924480271}
   damageCollider:
+  - {fileID: 2893742421266673756}
   - {fileID: 958297002008718128}
+  - {fileID: 2955053476965435209}
   damageable: {fileID: 3329566814893935045}
   isDie: 0
   isStun: 0
   isStack: 0
+  isAttack: 0
+  isDelay: 0
   distanceDebug: 0
   distanceFromGround: 0
   distanceFromGroundOffset: 0
@@ -16143,6 +16148,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}
+--- !u!114 &2955053476965435209 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2616304895526381501}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2955053476965435252 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,
@@ -16258,6 +16275,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 664b69faab8dd60459c45403084b9f9e, type: 3}
+--- !u!114 &2893742421266673756 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 958297001894207732, guid: 664b69faab8dd60459c45403084b9f9e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2694328424325828776}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2893742421266673761 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 958297001894207689, guid: 664b69faab8dd60459c45403084b9f9e,

@@ -105,7 +105,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack, false);
                                     anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
@@ -117,7 +117,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                             }
@@ -137,7 +137,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack, false);
                                     anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
@@ -149,7 +149,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 2:
@@ -160,7 +160,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack3, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                             }
@@ -180,7 +180,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
@@ -190,7 +190,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 2:
@@ -200,7 +200,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack3, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                             }
@@ -216,7 +216,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                         case Type.SIMPLE_TOADSTOOL:
@@ -234,7 +234,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack, false);
                                     anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
@@ -245,7 +245,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 2:
@@ -256,7 +256,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack3, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
                             }
                             break;
@@ -276,7 +276,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     //anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
@@ -287,7 +287,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     //anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 2:
@@ -298,7 +298,7 @@ public class EliteMonster : Monster
                                     anim.SetBool(hashAttack3, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
-                                    yield return new WaitForSeconds(0.3f);
+                                    yield return new WaitForSeconds(attDelay);
                                     break;
                             }
                             break;
@@ -311,6 +311,7 @@ public class EliteMonster : Monster
                     nav.isStopped = true;
                     //GFunc.Log("nav.isStopped: " + nav.isStopped);
                     anim.SetTrigger(hashDie);
+                    Invoke(nameof(MonsterDestroy), 3.0f);
                     foreach (CapsuleCollider capsuleCollider in capsuleColliders)
                     {
                         capsuleCollider.isTrigger = true;
@@ -324,6 +325,11 @@ public class EliteMonster : Monster
         }
 
 
+    }
+
+    public void MonsterDestroy()
+    {
+        Destroy(this.gameObject);
     }
 
     public override void OnDeal(float damage)

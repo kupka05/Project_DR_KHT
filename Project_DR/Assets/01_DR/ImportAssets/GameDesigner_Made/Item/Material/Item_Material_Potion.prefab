@@ -278,7 +278,6 @@ GameObject:
   - component: {fileID: 7196743163211589415}
   - component: {fileID: 7196743163211589412}
   - component: {fileID: 7196743163211589413}
-  - component: {fileID: 7196743163211589434}
   m_Layer: 9
   m_Name: Item_Material_Potion
   m_TagString: ItemMaterial
@@ -441,6 +440,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -511,6 +511,9 @@ MonoBehaviour:
   isPlayer: 0
   canSelfHarm: 0
   isKnockback: 1
+  isBossProjectile: 0
+  isEliteProjectile: 0
+  isProjectile: 0
 --- !u!114 &7196743163211589413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,18 +536,6 @@ MonoBehaviour:
   F: 0
   P: 0
   DEBUG: 0
---- !u!114 &7196743163211589434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7150677433344267449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd937d9499953d843abd809f29ca3a21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7150677433520371289
 GameObject:
   m_ObjectHideFlags: 0

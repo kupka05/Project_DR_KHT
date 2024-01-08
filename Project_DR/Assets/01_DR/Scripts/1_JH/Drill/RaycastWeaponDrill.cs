@@ -17,6 +17,7 @@ namespace BNG
 
         // 근접 공격 무기인지 체크
         public bool isMelee;
+        public bool isLeft;
         public GameObject drillHead;
         private Grappling grappling;        
         // 드릴 작동을 위한 클래스
@@ -574,22 +575,24 @@ namespace BNG
             // Damage if possible
             Damageable d = hit.collider.GetComponent<Damageable>();
             DamageablePart damagePart = hit.collider.GetComponent<DamageablePart>();
+            (float, bool) finalDamage = FinalDamage();
+
 
             if (d)
             {
-                d.DealDamage(FinalDamage(), hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
+                d.DealDamage(finalDamage.Item1, hit.point, hit.normal, true, gameObject, hit.collider.gameObject, left : isLeft,critical: finalDamage.Item2);
 
                 if (onDealtDamageEvent != null)
                 {
-                    onDealtDamageEvent.Invoke(FinalDamage());
+                    onDealtDamageEvent.Invoke(finalDamage.Item1);
                 }
             }
             else if (damagePart)
             {
-                damagePart.parent.DealDamage(FinalDamage(), hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
+                damagePart.parent.DealDamage(finalDamage.Item1, hit.point, hit.normal, true, gameObject, hit.collider.gameObject, left: isLeft, critical: finalDamage.Item2);
                 if (onDealtDamageEvent != null)
                 {
-                    onDealtDamageEvent.Invoke(FinalDamage());
+                    onDealtDamageEvent.Invoke(finalDamage.Item1);
                 }
             }
 
@@ -876,12 +879,12 @@ namespace BNG
             }
         }
         // 데미지 연산하는 함수
-        private float FinalDamage()
+        private (float, bool) FinalDamage()
         {
             return Damage.instance.DamageCalculate(dotDamage);
         }
 
-        private float SetDamage()
+        private (float, bool) SetDamage()
         {
            return Damage.instance.DamageCalculate(damage);
         }

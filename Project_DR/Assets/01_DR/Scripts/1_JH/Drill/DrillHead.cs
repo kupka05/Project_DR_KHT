@@ -56,7 +56,7 @@ public class DrillHead : MonoBehaviour
         }
     }
             // 데미지 연산하는 함수
-        private float FinalDamage()
+        private (float, bool) FinalDamage()
         {
             return Damage.instance.DamageCalculate(damage);
         }

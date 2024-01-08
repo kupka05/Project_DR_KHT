@@ -174,7 +174,8 @@ public class SkillEvent : MonoBehaviour
         Damageable damage = target.GetComponent<Damageable>();
         if(damage)
         {
-            damage.DealDamage(Damage.instance.DamageCalculate(UserData.GetDrillDamage()));
+            (float, bool) _damage = Damage.instance.DamageCalculate(UserData.GetDrillDamage());
+            damage.DealDamage(damageAmount : _damage.Item1, _critical: _damage.Item2);
         }
     }
     void GetData()

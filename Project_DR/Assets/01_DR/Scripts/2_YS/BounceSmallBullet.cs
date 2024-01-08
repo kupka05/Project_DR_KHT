@@ -34,7 +34,7 @@ public class BounceSmallBullet : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         //rigid.velocity = transform.forward * 10.0f;
 
-        damageCollider.Damage = damage;
+        damageCollider.SetDamage(damage);
 
         Invoke("ReturnBullet", destroyTime);
     }

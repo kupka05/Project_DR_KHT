@@ -43,7 +43,7 @@ public class BossBullet : MonoBehaviour
         damageCollider = GetComponent<DamageCollider>();
 
         //rigid.velocity = transform.forward * 10.0f;
-        damageCollider.Damage = damage;
+        damageCollider.SetDamage(damage);
 
         Invoke("Return", destoryTime);
     }

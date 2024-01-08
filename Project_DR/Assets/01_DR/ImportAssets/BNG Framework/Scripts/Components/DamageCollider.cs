@@ -15,7 +15,7 @@ namespace BNG
         /// <summary>
         /// 데미지 양
         /// </summary>
-        public float Damage = 25f;
+        public (float, bool) Damage;
 
         /// <summary>
         /// 이 충돌체의 속도를 결정하는 데 사용됩니다.
@@ -112,7 +112,7 @@ namespace BNG
                 DamageablePart damagePart = collision.gameObject.GetComponent<DamageablePart>();
                 if (d)
                 {
-                    d.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+                    d.DealDamage(Damage.Item1, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject, critical: Damage.Item2);
 
                     if (isKnockback)
                     {
@@ -124,7 +124,7 @@ namespace BNG
                 }
                 else if (damagePart)
                 {
-                    damagePart.parent.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+                    damagePart.parent.DealDamage(Damage.Item1, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject, critical: Damage.Item2);
                     if (isKnockback)
                     {
                         damagePart.parent.OnKnockBack(collision.GetContact(0).point);
@@ -140,5 +140,9 @@ namespace BNG
             }
         }
 
+        public void SetDamage(float damage)
+        {
+            Damage.Item1 = damage;
+        }
     }
 }

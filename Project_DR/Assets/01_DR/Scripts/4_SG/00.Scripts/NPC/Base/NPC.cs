@@ -22,7 +22,22 @@ public enum NPCID
     Tregal_Random = 1110301,
     Tutis_Random = 1111701,
     Dent_Random = 1110501,
-    Saektus_Random = 1110401
+    Saektus_Random = 1110401,
+    Timus_Random = 1110201,
+    Quintus_Random = 1111001,
+    Joy_Random = 1111101,
+    Teo_Random = 1111501,
+    Leon_Random = 1111901,
+    Adeptus_Random = 1110901,
+    Astartes_Random = 1110902,
+    Andre_Random = 1112001,
+    Kurstin_Random = 1110801,
+    Pbus_Random = 1111401,
+    Horia_Random = 1110701,
+    Geta_Random = 1111301,
+    Galba_Random = 1110601
+    
+
 
 }
 
@@ -432,10 +447,16 @@ public class NPC : MonoBehaviour
 
         for (int i = 0; i < _conversationIds.Length; i++)
         {
+            GFunc.Log($"참조할 ID들 : {_conversationIds[i]}");
+
+        }
+        for (int i = 0; i < _conversationIds.Length; i++)
+        {
             stringBuilder.Clear();
             stringBuilder.Append(Data.GetString(_conversationIds[i], "AntecedentQuest"));
             stringBuilder.Replace("_", "");
-            if (stringBuilder.ToString() != "0")
+            GFunc.Log($"참조 시도를 위해 입력한 값 : 대사ID -> {_conversationIds[i]}\n 참조해온 값 : {stringBuilder}");
+            if (stringBuilder.ToString() != "0" && stringBuilder.ToString() != "")
             {
                 conversationIdList.Add(_conversationIds[i]);
                 antecedentQuestIdList.Add(int.Parse(stringBuilder.ToString()));

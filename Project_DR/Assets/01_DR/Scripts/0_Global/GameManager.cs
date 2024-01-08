@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         get
         {
             // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
-            if (m_instance == null)
+            if (m_instance == null || m_instance == default)
             {
                 // 생성 후 할당
                 GameObject obj = new GameObject("GameManager");
@@ -404,9 +404,11 @@ public class GameManager : MonoBehaviour
     /// 모든 방이 클리어 됬는지 체크해줄 함수
     /// </summary>
     public bool CheckAllRoomClear()
-    {
+    {        
         foreach(RandomRoom temp in isClearRoomList)
         {
+            GFunc.Log($"{temp.gameObject.name}의 클리어 여부 : {temp.isClearRoom}");
+                
             if(temp.isClearRoom == false)
             {
                 return false;
@@ -455,7 +457,7 @@ public class GameManager : MonoBehaviour
                 int randListIdx = UnityEngine.Random.Range(0, nullRoomList.Count);
 
                 nullRoomList[randListIdx].CreateAnvilObj();
-                GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
+                //GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
                 isAnvilCreate = true;
             }
         }

@@ -1,9 +1,11 @@
+using Oculus.Platform;
 using OVR.OpenVR;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 
 // 스폰될 오브젝트의 포지션이 고정값인지 아닌지 구별할 Enum
 public enum SpawnPlace
@@ -178,6 +180,7 @@ public class RandomRoomObjCreate : MonoBehaviour
             //Debug.Log($"Mat 스폰된 오브젝트 : {spawnObj.name} ID: {pickObjRefId}");
             spawnObj.transform.parent = parentObj.transform;
             spawnObj.transform.localPosition = spawnPos;
+            spawnObj.layer = (int)Layer.MapObject;
         }
         else { /*PASS*/ }
 
@@ -449,6 +452,5 @@ public class RandomRoomObjCreate : MonoBehaviour
             // 추가적인 축 추가를 위해 임시로 비워둠
         }        
     }       // SpawnObjRotationSet()
-
 
 }       // ClassEnd

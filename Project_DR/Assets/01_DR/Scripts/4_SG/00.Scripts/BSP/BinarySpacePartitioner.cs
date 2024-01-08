@@ -59,7 +59,7 @@ public class BinarySpacePartitioner
                 currentNode,
                 currentNode.TreeLayerIndex + 1);
         }
-        else
+        else // (line.Orientation == Orientation.Vertical)
         {
             node1 = new RoomNode(currentNode.BottomLeftAreaCorner,
            new Vector2Int(line.Coordinates.x, currentNode.TopRightAreaCorner.y),

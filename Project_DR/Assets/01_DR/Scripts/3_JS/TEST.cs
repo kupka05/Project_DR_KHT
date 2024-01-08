@@ -13,12 +13,14 @@ public class TEST : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.J))
         {
-            Unit.AddInventoryItem(5401);
+            //Unit.AddFieldItem(Vector3.zero, 5101);
+            //Unit.PrintRewardText(32_1_001, 32_1_002, 32_1_003, 32_1_004);
+            Unit.ClearQuestByID(3133001);
         }
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Unit.AddInventoryItem(5201);
+            //Unit.AddFieldItem(Vector3.zero, 5201);
         }
     }
 

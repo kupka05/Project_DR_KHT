@@ -58,7 +58,7 @@ namespace Js.Quest
                     GetRewardItem();
                     break;
 
-                // "아이템" 일 경우
+                // "MBTI" 일 경우
                 case QuestRewardData.TypeReward.MBTI:
                     // 퀘스트 보상 MBTI 획득
                     GetRewardMBTI();

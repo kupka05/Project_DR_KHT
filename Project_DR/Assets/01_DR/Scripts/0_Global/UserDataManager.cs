@@ -552,4 +552,19 @@ public partial class UserDataManager : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    // 퀘스트 리워드 HUD 텍스트를 가져옴
+    // 없을 경우 찾아서 할당
+    public QuestRewardText GetQuestRewardText()
+    {
+        if (_questRewardText == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            GameObject questNoticeHUD = player.transform.FindChildRecursive("QuestNoticeHUD").gameObject;
+            _questRewardText = questNoticeHUD.transform.FindChildRecursive("Text (TMP)")
+                .gameObject?.GetComponent<QuestRewardText>();
+        }
+
+        return _questRewardText;
+    }
 }

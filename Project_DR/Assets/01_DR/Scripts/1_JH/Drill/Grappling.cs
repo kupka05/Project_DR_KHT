@@ -244,6 +244,8 @@ public class Grappling : GrabbableEvents
         _drill.GetComponent<DrillHead>().targetPos = grapplePoint;                             // 그래플링 포인트 세팅
         _drill.GetComponent<DrillHead>().grappling = this;                                     // 드릴이 만난 오브젝트의 체력이 0이하일 경우를 체크하기 위함
 
+        _drill.GetComponent<DrillHead>().DrillSide(GetComponent<RaycastWeaponDrill>().isLeft);
+
         Destroy(_drill,grappleDelayTime);
     }
     

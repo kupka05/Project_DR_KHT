@@ -23,7 +23,7 @@ public class DrillHead : MonoBehaviour
     }
     private void Start()
     {
-        damageCollider.Damage = FinalDamage();
+        damageCollider.damage = FinalDamage();
         col = damageCollider.GetComponent<CapsuleCollider>();
     }
     // Update is called once per frame
@@ -55,9 +55,14 @@ public class DrillHead : MonoBehaviour
                
         }
     }
-            // 데미지 연산하는 함수
-        private (float, bool) FinalDamage()
-        {
-            return Damage.instance.DamageCalculate(damage);
-        }
+        // 데미지 연산하는 함수
+    private (float, bool) FinalDamage()
+    {
+        return Damage.instance.DamageCalculate(damage);
+    }
+    public void DrillSide(bool isLeft = default)
+    { 
+        damageCollider.isLeft = isLeft;
+    }
+
 }

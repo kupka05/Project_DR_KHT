@@ -67,7 +67,6 @@ public class DamageUI : MonoBehaviour
         Vector3 dir;
         if (left)
         {
-            GFunc.Log("좌측");
             dir = -lookAt.right + direction;
         }
         else

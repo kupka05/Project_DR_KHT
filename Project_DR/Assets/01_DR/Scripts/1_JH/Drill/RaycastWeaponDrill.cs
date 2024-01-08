@@ -232,8 +232,6 @@ namespace BNG
             drillHead.transform.localScale = new Vector3(drillSize, drillSize, drillSize);
 
             grappling.drill = drillHead;
-            damageCollider = GetComponent<DamageCollider>();
-            damageCollider.Damage = SetDamage();
 
             drillCollider = GetComponent<CapsuleCollider>();
             grabbable = GetComponent<Grabbable>();
@@ -457,7 +455,7 @@ namespace BNG
 
             if (isShootPossible)
             {
-                damageCollider.Damage = SetDamage();
+                damageCollider.damage = SetDamage();
 
                 // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
                 bool useProjectile = AlwaysFireProjectile || (FireProjectileInSlowMo && Time.timeScale < 1);
@@ -900,6 +898,9 @@ namespace BNG
             dotDamage = UserData.GetDrillSpinDamage();
             FiringRate = UserData.GetAttackSpeed();
 
+            damageCollider = GetComponent<DamageCollider>();
+            damageCollider.isDrill = true;
+            damageCollider.SetDrillDamage(damage);
             //damage = (float)DataManager.Instance.GetData(1100, "Damage", typeof(float)) ;
             //dotDamage = (float)DataManager.Instance.GetData(1100, "DotDamage", typeof(float)) ;
             //FiringRate = (float)DataManager.Instance.GetData(1100, "AttackSpeed", typeof(float));

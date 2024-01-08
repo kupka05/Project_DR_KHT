@@ -247,7 +247,7 @@ namespace BNG {
         }
 
         // 아이템에 네임택을 넣어주는 메서드
-        public void CreateDamageUI(float _damage, Vector3 _position = default, bool _left = default,  bool _crit = default)
+        public void CreateDamageUI(float _damage, Vector3 _position = default, bool _left = false,  bool _crit = false)
         {
             // 플레이어의 경우 예외
             if(gameObject.CompareTag("Player"))

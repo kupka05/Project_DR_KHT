@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Damage : MonoBehaviour
 {
@@ -52,13 +54,20 @@ public class Damage : MonoBehaviour
         UserData.GetData(GetData);
     }
 
-    // 데미지 계산기
-    public float DamageCalculate(float _damage, bool isLanding = false)
+    /// <summary>
+    /// 데미지 계산기 튜플로 2가지 값 반환.
+    /// </summary>
+    /// <param name="_damage"></param>
+    /// <param name="isLanding"></param>
+    /// <returns>float : 데미지, bool 크리티컬 여부</returns>
+    //
+    public (float, bool) DamageCalculate(float _damage, bool isLanding = false)
     {
         float _teraIncrease = isTeradrill ? teraIncrease : 0;
         float _grinderCritChance = isGrinder ? grinderCritChance : 0;
         float _grinderIncrease = isGrinder ? grinderIncrease : 0;
         float _landingIncrease = isLanding ? landingIncrease : 0;
+        bool isCrit = default;
 
         float val = isLanding ? -1 : Random.Range(0f, 100f);
 
@@ -70,8 +79,13 @@ public class Damage : MonoBehaviour
 
         _damage *= (1 + _teraIncrease + effectDmgIncrease) * (1 + (_critIncrease + _grinderIncrease + _landingIncrease + effectCritIncrease));
 
+        // 크리티컬이면 트루
+        if(_critIncrease != 0)
+        {
+            isCrit = true;
+        }
 
-        return _damage;
+        return (_damage, isCrit);
     }
 
     void GetData()

@@ -192,7 +192,8 @@ public class Monster : MonoBehaviour
 
         foreach (DamageCollider damageCollider in damageCollider)
         {
-            damageCollider.Damage = attack;
+            damageCollider.SetDamage(attack);
+
             //attack = damageCollider.Damage; // 지환 : attack은 시트에서 가져온 데이터 값
         }
 

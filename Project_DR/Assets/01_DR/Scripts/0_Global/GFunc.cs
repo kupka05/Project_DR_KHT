@@ -181,7 +181,6 @@ public static class GFunc
     public static void ChoiceEvent(int targetID)
     {
         string eventID = Data.GetString(targetID, "Choice1Event");
-        Log(eventID + "이벤트 ID");
         int[] ids = SplitIds(eventID);
 
         for (int i = 0; i < ids.Length; i++)
@@ -189,7 +188,6 @@ public static class GFunc
             if (ids[i] == 0)
             { break; }
             Unit.InProgressQuestByID(ids[i]);
-            Log(ids[i] + " 진행중으로 변경");
         }
     }
 

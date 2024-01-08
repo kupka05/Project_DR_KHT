@@ -49,7 +49,7 @@ public class Lazer : MonoBehaviour
         if(other.tag.Equals("Player"))
         {
             other.GetComponent<Damageable>().DealDamage(damage);
-            GFunc.Log("레이저 데미지 들어온다");
+            //GFunc.Log("레이저 데미지 들어온다");
         }
     }
 }

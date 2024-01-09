@@ -16,7 +16,7 @@ public class AudioManager : MonoBehaviour
             {
                 // 씬에서 GameManager 오브젝트를 찾아 할당
                 //m_Instance = FindObjectOfType<AudioManager>();
-                GameObject audioManager = new GameObject("AudioMAnager");
+                GameObject audioManager = new GameObject("AudioManager");
                 m_Instance = audioManager.AddComponent<AudioManager>();
                 m_Instance.musicSource = audioManager.AddComponent<AudioSource>();
                 m_Instance.sfxSource = audioManager.AddComponent<AudioSource>();

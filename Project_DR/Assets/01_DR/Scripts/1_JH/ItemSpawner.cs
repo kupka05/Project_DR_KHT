@@ -13,6 +13,5 @@ namespace Jihwan
         {
             Unit.AddFieldItem(this.transform.position, itemID);
         }
-
     }
 }

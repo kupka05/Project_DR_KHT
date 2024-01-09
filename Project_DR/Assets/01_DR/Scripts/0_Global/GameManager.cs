@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
             if (isClear != value)
             {
                 isClear = value;
-                DoorControll(IsClear);
+                DoorControl(IsClear);
                 if (isClear == true)
                 {
                     allRoomClear = CheckAllRoomClear();          
@@ -198,6 +198,7 @@ public class GameManager : MonoBehaviour
         {
             ClearDungeon();
         }
+
         isTestList = isClearRoomList;
 
     }
@@ -395,7 +396,7 @@ public class GameManager : MonoBehaviour
     /// 문을 열고 닫는 함수를 하나로 묶은것
     /// </summary>
     /// <param name="_isDoorOn">문을 열지 닫을지 bool값</param>
-    private void DoorControll(bool _isDoorOn)
+    private void DoorControl(bool _isDoorOn)
     {
         if (_isDoorOn == true)
         {

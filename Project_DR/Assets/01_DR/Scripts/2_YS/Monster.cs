@@ -152,12 +152,13 @@ public class Monster : MonoBehaviour
     public bool isStun = false;
     public bool isStack = false;
     public bool isAttack = false;
-    public bool isDebug = false;
+    public bool isUpper = false;
 
     public IEnumerator stunRoutine; // 스턴 루틴
 
     [Header("Debug")]
     public float distanceDebug;
+    public bool isDebug = false;
 
     [Header("DistanceFromGround")]
     public float distanceFromGround;            // 지면과의 거리
@@ -675,17 +676,21 @@ public class Monster : MonoBehaviour
             stunRoutine = null;
         }
 
-        stunRoutine = StunDelay();
-        StartCoroutine(stunRoutine);
+        if (isUpper == false)
+        {
+            stunRoutine = StunDelay();
+            StartCoroutine(stunRoutine);
+        }
+        isUpper = false;
     }
 
     public void ApplyStackDamage(float damage)
     {
-        Debug.Log($"countNum = {countNum}");
+        //Debug.Log($"countNum = {countNum}");
 
         if (countNum == 2)
         {
-            GFunc.Log("스택1진입");
+            //GFunc.Log("스택1진입");
             damageable.Health -= SmashDamageCalculate(damage, 1);
             // 갱신된 체력 값을 적용
             SetHealth(damageable.Health);

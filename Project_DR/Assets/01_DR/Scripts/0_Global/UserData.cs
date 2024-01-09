@@ -446,7 +446,6 @@ public static class UserData
             UserDataManager.Instance.drillLandingCount = 0;
         }
     }
-
     #endregion
 
     #region ####################_Quest_#####################

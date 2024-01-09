@@ -196,6 +196,8 @@ public partial class UserDataManager
     public static Dictionary<int, List<Quest>> KeyIDQuestDictionary => _keyIDQuestDictionary;   // Key ID가 키 값인 보유 퀘스트 딕셔너리화
     public string QuestMain => PlayerDataManager.QuestMain;                                     // 메인 퀘스트
     public string DebugQuest;
+    public QuestRewardText QuestRewardText => _questRewardText;                                 // 퀘스트 리워드 텍스트
+    private QuestRewardText _questRewardText; 
 
     [Header("Result Data")]
     public GameResult result = new GameResult();

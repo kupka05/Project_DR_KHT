@@ -1,9 +1,11 @@
+using Oculus.Platform;
 using OVR.OpenVR;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 
 // 스폰될 오브젝트의 포지션이 고정값인지 아닌지 구별할 Enum
 public enum SpawnPlace
@@ -37,6 +39,8 @@ public class RandomRoomObjCreate : MonoBehaviour
     public List<Vector3> spawnPosList;  // 아이템 스폰 위치를 담아둘 List
     [SerializeField]
     public FloorMeshPos cornerPos;      // 해당방에 꼭지점을 담아둔 Class
+    [SerializeField]
+    private List<Vector3> exceptionV3List;
     private int reCallCount;            // 재귀 Count
     private bool createPass;            // 이번생성 Pass할지 체크할 bool값
 
@@ -52,12 +56,14 @@ public class RandomRoomObjCreate : MonoBehaviour
     protected virtual void Awake()
     {
         AwakeInIt();
+        ExceptionV3Setting();
     }
 
     private void AwakeInIt()
     {
         stringBuilder = new StringBuilder();
         spawnPosList = new List<Vector3>();
+        exceptionV3List = new List<Vector3>();
         parentObj = new GameObject("SpawnObjs");
         cornerPos = this.GetComponent<FloorMeshPos>();
 
@@ -80,7 +86,33 @@ public class RandomRoomObjCreate : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// 방 중앙기준에서 3 x 3 포지션은 예외의 포지션으로 선택되지않도록 하기위해 넣는 위치
+    /// </summary>
+    private void ExceptionV3Setting()
+    {
+        Vector3 centerPos = new Vector3((cornerPos.bottomLeftCorner.x + cornerPos.bottomRightCorner.x) * 0.5f,
+            cornerPos.bottomLeftCorner.y, (cornerPos.bottomLeftCorner.z + cornerPos.topLeftCorner.z) * 0.5f);
 
+        float radius = 1.5f;
+        Vector3 startExceptionPos = new Vector3(centerPos.x - radius, centerPos.y, centerPos.z + radius);
+
+        float reslutX;        
+        float reslutZ;
+        Vector3 reslutPos = Vector3.zero;
+        for (float depth = 0; depth < radius; depth++)
+        {
+            for (float width = 0; width < radius; width++)
+            {
+                reslutX = startExceptionPos.z - depth;
+                reslutZ = startExceptionPos.x + width;
+                reslutPos.x = reslutX;
+                reslutPos.z = reslutZ;
+                exceptionV3List.Add(reslutPos);
+            }
+        }
+
+    }       // ExceptionV3Setting()
 
 
     /// <summary>
@@ -178,6 +210,7 @@ public class RandomRoomObjCreate : MonoBehaviour
             //Debug.Log($"Mat 스폰된 오브젝트 : {spawnObj.name} ID: {pickObjRefId}");
             spawnObj.transform.parent = parentObj.transform;
             spawnObj.transform.localPosition = spawnPos;
+            spawnObj.layer = (int)Layer.MapObject;
         }
         else { /*PASS*/ }
 
@@ -363,7 +396,18 @@ public class RandomRoomObjCreate : MonoBehaviour
             yPos = 0f;
         }
 
-        return spawnPos = new Vector3(xPos, yPos, zPos);
+        spawnPos = new Vector3(xPos, yPos, zPos);
+
+        foreach (Vector3 exceptionPos in exceptionV3List)
+        {
+            if(exceptionPos == spawnPos)
+            {
+                reCallCount++;
+                PickSpwanPos(_createObjId);
+            }
+        }
+
+        return spawnPos;
     }       // GetFloorSpawnPos()
 
     /// <summary>
@@ -449,6 +493,5 @@ public class RandomRoomObjCreate : MonoBehaviour
             // 추가적인 축 추가를 위해 임시로 비워둠
         }        
     }       // SpawnObjRotationSet()
-
 
 }       // ClassEnd

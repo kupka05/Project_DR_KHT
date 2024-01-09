@@ -1295,6 +1295,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09e761280f68674388b3b511328fb7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  depth: 12
+  speed: 2
 --- !u!65 &2770448366491788964
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1307,7 +1309,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -0.05, z: 0}
 --- !u!1 &7306290743991171906
 GameObject:
   m_ObjectHideFlags: 0

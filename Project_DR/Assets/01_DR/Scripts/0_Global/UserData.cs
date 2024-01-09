@@ -103,7 +103,11 @@ public static class UserData
             questGold += result.quest[i].gold;
         }
 
-        return monsterGold + itemGold + questGold;
+        int totalGold = monsterGold + itemGold + questGold;
+
+        int additionalGold = Mathf.RoundToInt(totalGold * UserDataManager.Instance.GainGold);   // 추가 골드 더하기
+
+        return totalGold + additionalGold;
     }
 
     /// <summary>획득한 모든 골드를 계산해주는 메서드 </summary>
@@ -125,7 +129,11 @@ public static class UserData
             questExp += result.quest[i].exp;
         }
 
-        return monsterExp + itemExp + questExp;
+        int totalExp = monsterExp + itemExp + questExp;
+
+        int additionalExp = Mathf.RoundToInt(totalExp * UserDataManager.Instance.GainExp);   // 추가 경험치 더하기
+
+        return totalExp + additionalExp;
     }
     // 남은 재료 아이템을 계산해주는메서드
     public static void MaterialItemCalculator() 

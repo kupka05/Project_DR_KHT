@@ -125,7 +125,7 @@ public class NPC : MonoBehaviour
     protected float npcConversationScope;   // NPC 대화범위
     protected float npcRecognitionRange;    // NPC 인식범위
 
-    public bool isTryCommunity;       // 대화를 한적 있는지?
+    public bool isTryCommunity;             // 대화를 한적 있는지?
     public bool isComunity;                 // 대화중인지 체크할 변수
     protected bool isCommunityDelray;       // 대화의 딜레이를 줄 함수 대화창 클릭이벤트에 관련있음
     public bool isReadyToAutoComunication;  // 자동으로 다가가서 일정거리 안에 있다면 true가 될것임
@@ -388,7 +388,7 @@ public class NPC : MonoBehaviour
 
         if (isPass == false) { /*PASS*/ }
 
-        //---------------------------- 정해진 대사 이벤트 ------------------------------ }
+        //----------------------------- 정해진 대사 이벤트 ------------------------------ }
 
 
         //{---------------------------- 랜덤한 대사 이벤트 -------------------------------
@@ -463,6 +463,8 @@ public class NPC : MonoBehaviour
                         stringBuilder.Replace("_", "");
                         if (questId == int.Parse(stringBuilder.ToString()))
                         {
+                            QuestCallback.OnDialogueCallback(int.Parse(stringBuilder.ToString()));
+                            GFunc.Log($"NPC 특정대사 출력 조건에서 조건에 맞아 OnDialogueCallBack 호출\n 넘겨준 매개변수 : {stringBuilder}");
                             return int.Parse(stringBuilder.ToString());
                         }
                     }
@@ -491,7 +493,7 @@ public class NPC : MonoBehaviour
         }
         else
         {
-            GFunc.Log("퀘스트 완료후 들어간 대사 0개");
+            //GFunc.Log("퀘스트 완료후 들어간 대사 0개");
         }
     }       // CompleateQuest()
     #endregion Inspection이 실행하는 함수

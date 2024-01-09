@@ -50,7 +50,7 @@ public class NPCUIImage : MonoBehaviour
     {
         if (IsHit == true)
         {
-            GFunc.Log($"IS Hit 이벤트가 돌며 INVOKE했음");
+            //GFunc.Log($"IS Hit 이벤트가 돌며 INVOKE했음");
             onHitEvent?.Invoke(this);
             IsHit = false;
         }

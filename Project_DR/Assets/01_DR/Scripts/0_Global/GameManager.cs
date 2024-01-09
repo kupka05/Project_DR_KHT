@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
     public const int FIRSTTIME = 3;
     public const int FIRSTAFTER = 5;
 
+    [SerializeField]
     public static List<RandomRoom> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
 
     private bool allRoomClear = false;              // 모든 방이 클리어 됬다면 true가 될 변수

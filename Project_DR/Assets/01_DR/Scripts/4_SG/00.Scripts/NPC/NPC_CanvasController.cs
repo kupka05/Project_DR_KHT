@@ -1,3 +1,4 @@
+using Js.Quest;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -175,6 +176,10 @@ public class NPC_CanvasController : MonoBehaviour
     /// <param name="_converationRefID">출력해야하는 선택지가 존재하는 대사의 ID값</param>
     public void OutPutChoices(int _conversationRefID)
     {
+        if(isOutPutChoice == true)
+        { return; }
+        else { /*PASS*/ }
+
         //GFunc.Log($"선택지 출력해주는 함수 진입 : OutPutChoices(NPC_CanvasController_Class)");
         isOutPutChoice = true;
         nowConversationRefID = _conversationRefID;
@@ -237,7 +242,7 @@ public class NPC_CanvasController : MonoBehaviour
     /// </summary>
     private bool CheckChoice3()
     {
-        GFunc.Log($"3번 선택지 조건이 맞는지 확인하는 함수 진입 : CheckChoice3 (NPC_CanvasConroller_Class)");
+        //GFunc.Log($"3번 선택지 조건이 맞는지 확인하는 함수 진입 : CheckChoice3 (NPC_CanvasConroller_Class)");
 
         // TODO : 퀘스트클리어 여부를 확인 가능하다면 그떄에 체크해서 출력시키도록 해야함
         // 아래 받아온 string값을 int[], string [] 2개로 나누어야함                                 
@@ -249,7 +254,7 @@ public class NPC_CanvasController : MonoBehaviour
 
         string[] arrChoice3ConditionMBTI = GFunc.SplitConversation(choice3ConditionMBTIs);
 
-        GFunc.Log($"NPCTutis의 문제의 변수값 : {choice3ConditionValues}\n현재 대화 ID : {npc.nowDialogueId} ");
+        //GFunc.Log($"NPCTutis의 문제의 변수값 : {choice3ConditionValues}\n현재 대화 ID : {npc.nowDialogueId} ");
         float[] arrChoice3ConditionValue = GFunc.SplitFloats(choice3ConditionValues);
 
         //GFunc.Log($"arrLength : {arrChoice3ConditionMBTI.Length}"); // 조건 1개짜리 결과 1
@@ -437,9 +442,11 @@ public class NPC_CanvasController : MonoBehaviour
     {
         // 퀘스트
         // 플레이어에게 퀘스트를 부여하는 기능
-        GFunc.Log($"퀘스트 ID : {_questRefId} 를 퀘스트 리스트에 넣어주어야함");
+        Unit.InProgressQuestByID(_questRefId);
+        GFunc.Log($"Unit.InProgressQuestByID호출 : {_questRefId} 를 진행중에 넣었음");
 
-    }
+
+    }       // ItQuest()
     private void ItConveration(int _conversationRefId)
     {
         // 다음 대사 출력하는 기능        
@@ -488,7 +495,7 @@ public class NPC_CanvasController : MonoBehaviour
     /// </summary>
     public void CheckOnClickChoice(NPCUIImage _choiceImage)
     {
-
+        isOutPutChoice = false;
         string choice = "Choice";
         string choiceNum = _choiceImage.choiceNum.ToString();
         string eventText = "Event";

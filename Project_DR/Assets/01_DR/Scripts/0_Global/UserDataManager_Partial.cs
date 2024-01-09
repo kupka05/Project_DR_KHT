@@ -170,7 +170,6 @@ public partial class UserDataManager
             _clearDatas = value;
             if (value == null)
             {
-                GFunc.Log("클리어 데이터 없음. 신규 데이터 생성");
                 _clearDatas = new ClearDatas();
             }
         }

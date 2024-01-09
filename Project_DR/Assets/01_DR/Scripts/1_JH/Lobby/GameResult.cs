@@ -39,8 +39,8 @@ public class GameResult
     {
         int gold = _quest.QuestData.ClearReward.QuestRewardData.GiveGold;
         int exp = _quest.QuestData.ClearReward.QuestRewardData.GiveEXP;
-        GFunc.Log($"퀘스트 : {quest}");
-        GFunc.Log($"퀘스트 명 : {_quest.QuestData.Desc}");
+        //GFunc.Log($"퀘스트 : {quest}");
+        //GFunc.Log($"퀘스트 명 : {_quest.QuestData.Desc}");
         AddScore(quest, _quest.QuestData.Desc, gold, exp);
     }
     // 아이템 점수 추가

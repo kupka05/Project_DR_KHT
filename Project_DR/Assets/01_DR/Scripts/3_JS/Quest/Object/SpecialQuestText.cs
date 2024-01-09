@@ -5,7 +5,7 @@ using TMPro;
 
 namespace Js.Quest
 {
-    public class SpecialQuestText : MonoBehaviour
+    public class SpecialQuest : MonoBehaviour
     {
         /*************************************************
          *                Private Fields
@@ -36,14 +36,30 @@ namespace Js.Quest
         public void Initialize()
         {
             // Init
-            _text = GetComponent<TMP_Text>();
+            _text = GetTMPText();
             while (GetSpecialQuest()) { }
         }
 
-
+        
         /*************************************************
          *                Private Methods
          *************************************************/
+        // 자식을 순회해서 TMP_Text를 찾아서 반환
+        private TMP_Text GetTMPText()
+        {
+            TMP_Text tmpText = default;
+            foreach (Transform child in transform)
+            {
+                if (child.name.Equals("Text (TMP)"))
+                {
+                    tmpText = child.GetComponent<TMP_Text>();
+                    break;
+                }
+            }
+
+            return tmpText;
+        }    
+
         // 랜덤한 스페셜 퀘스트를 가져옴
         private bool GetSpecialQuest()
         {

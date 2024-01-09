@@ -71,9 +71,20 @@ public class GameManager : MonoBehaviour
     // ----------------------------------------------- SG ------------------------------------------------
 
     public bool IsProtoType;
+    #region 변수들
+    /// <summary>
+    /// // 현재 몇층인지 알려줄 변수
+    /// </summary>
+    public int nowFloor;
+    /// <summary>
+    /// 현재 플레이어의 회차의따라서 아래 const변수값이 대입될것임
+    /// </summary>
+    public int isPlayerMaxFloor;
+    /// <summary>
+    /// 기본 딜레이 5이며 딜레이를 줄때마다 ++이 되면서 천천히 생성이 되도록 하는것을 의도한 변수
+    /// </summary>
+    public int spawnDelayFrame = 5; 
 
-    public int nowFloor;        // 현재 몇층인지 알려줄 변수
-    public int isPlayerMaxFloor;    // 현재 플레이어의 회차의따라서 아래 const변수값이 대입될것임
     // 던전 진행 Max층을 알려줄 const int 변수
     public const int PROTOTYPE = 1;
     public const int FIRSTTIME = 3;
@@ -91,6 +102,12 @@ public class GameManager : MonoBehaviour
     [Header("Boss Fight")]
     public bool isBossFight = false;
 
+    public List<GameObject> ghostObjList;       // 유령을 담아둘 리스트
+    public List<NullRoom> nullRoomList;         // 빈방을 담아두는 리스트 (모루생성에 필요)
+    public bool isInItGhost = false;
+    public bool isAnvilCreate = false;
+
+    #endregion 변수들
 
     public bool IsClear
     {
@@ -131,10 +148,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public List<GameObject> ghostObjList;       // 유령을 담아둘 리스트
-    public List<NullRoom> nullRoomList;         // 빈방을 담아두는 리스트 (모루생성에 필요)
-    public bool isInItGhost = false;
-    public bool isAnvilCreate = false;
+
 
     public event System.Action DoorOnEvent;
     public event System.Action DoorOffEvent;

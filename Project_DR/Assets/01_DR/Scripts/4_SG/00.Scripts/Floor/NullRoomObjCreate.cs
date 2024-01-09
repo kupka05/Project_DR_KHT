@@ -12,9 +12,10 @@ public class NullRoomObjCreate : RandomRoomObjCreate
     protected override void Awake()
     {
         base.Awake();
-        SpawnLightObj(lightCreateTableID);
-        SpawnEnvObj(envCreateTableId);
-        SpawnMatObj(matCreateTableId);
+        //SpawnLightObj(lightCreateTableID);
+        //SpawnEnvObj(envCreateTableId);
+        //SpawnMatObj(matCreateTableId);
+        StartSpawn(lightCreateTableID, envCreateTableId, matCreateTableId);
 
     }
 

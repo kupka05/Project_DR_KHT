@@ -31,18 +31,41 @@ public class RandomRoomObjCreate : MonoBehaviour
         // 2. 이 Class를 상속받는 곳에서 어떤것을 만들지 지정 -> 방마다 제작해야 하는리스트가 다르기때문
 
 
+    #region 변수
+    /// <summary>
+    /// 생성할때에 어떤걸 생성할지 PrefabName을 끌어올 StringBuilder
+    /// </summary>
     [SerializeField]
-    public StringBuilder stringBuilder; // 생성할때에 어떤걸 생성할지 PrefabName을 끌어올 StringBuilder        
+    public StringBuilder stringBuilder;
+    /// <summary>
+    /// 생성한 오브젝트를 담아둘 ParentObj
+    /// </summary>
     [SerializeField]
-    public GameObject parentObj;         // 생성한 오브젝트를 담아둘 ParentObj
+    public GameObject parentObj;
+    /// <summary>
+    /// 아이템 스폰 위치를 담아둘 List
+    /// </summary>
     [SerializeField]
-    public List<Vector3> spawnPosList;  // 아이템 스폰 위치를 담아둘 List
+    public List<Vector3> spawnPosList;
+    /// <summary>
+    /// 해당방에 꼭지점을 담아둔 Class
+    /// </summary>
     [SerializeField]
-    public FloorMeshPos cornerPos;      // 해당방에 꼭지점을 담아둔 Class
+    public FloorMeshPos cornerPos;
+    /// <summary>
+    /// 스폰시 스폰이 안돼야하는 포지션이 담긴 리스트
+    /// </summary>
     [SerializeField]
     private List<Vector3> exceptionV3List;
-    private int reCallCount;            // 재귀 Count
-    private bool createPass;            // 이번생성 Pass할지 체크할 bool값
+    /// <summary>
+    /// 재귀한 횟수
+    /// </summary>
+    private int reCallCount;
+    /// <summary>
+    /// 이번생성 Pass할지 체크할 bool값
+    /// </summary>
+    private bool createPass;
+    #endregion 변수
 
 
     List<Vector3> doorPos;
@@ -97,12 +120,12 @@ public class RandomRoomObjCreate : MonoBehaviour
         float radius = 1.5f;
         Vector3 startExceptionPos = new Vector3(centerPos.x - radius, centerPos.y, centerPos.z + radius);
 
-        float reslutX;        
+        float reslutX;
         float reslutZ;
         Vector3 reslutPos = Vector3.zero;
-        for (float depth = 0; depth < radius; depth++)
+        for (float depth = 0; depth < radius * 2; depth++)
         {
-            for (float width = 0; width < radius; width++)
+            for (float width = 0; width < radius * 2; width++)
             {
                 reslutX = startExceptionPos.z - depth;
                 reslutZ = startExceptionPos.x + width;
@@ -111,6 +134,7 @@ public class RandomRoomObjCreate : MonoBehaviour
                 exceptionV3List.Add(reslutPos);
             }
         }
+
 
     }       // ExceptionV3Setting()
 
@@ -199,14 +223,14 @@ public class RandomRoomObjCreate : MonoBehaviour
     /// <param name="_pickObjId">랜덤으로 선택된 오브젝트의 아이디값</param>
     private void CreateMatObj(int _pickObjId)
     {
-        
+
         Vector3 spawnPos = PickSpwanPos(_pickObjId);
         if (spawnPos != Vector3.zero)
         {
             int pickObjRefId = Data.GetInt(_pickObjId, "ReferenceObjID");
             spawnPosList.Add(spawnPos);
             bool isWallSpawn = ObjRotationSetting(_pickObjId);
-            GameObject spawnObj = Unit.AddFieldItem(spawnPos,pickObjRefId);
+            GameObject spawnObj = Unit.AddFieldItem(spawnPos, pickObjRefId);
             //Debug.Log($"Mat 스폰된 오브젝트 : {spawnObj.name} ID: {pickObjRefId}");
             spawnObj.transform.parent = parentObj.transform;
             spawnObj.transform.localPosition = spawnPos;
@@ -294,7 +318,7 @@ public class RandomRoomObjCreate : MonoBehaviour
                 return PickSpwanPos(_CreateObjId);
 
             }
-        }        
+        }
         return tempPos;
     }       // PickSpwanPos()
 
@@ -387,7 +411,7 @@ public class RandomRoomObjCreate : MonoBehaviour
         float yPos;
         float zPos = UnityEngine.Random.Range(cornerPos.bottomLeftCorner.z + 1f, cornerPos.topLeftCorner.z - 1f);
 
-        if(Data.GetString(_createObjId, "PrefabName").Contains("Flower") == true)
+        if (Data.GetString(_createObjId, "PrefabName").Contains("Flower") == true)
         {
             yPos = 0.2f;
         }
@@ -400,7 +424,7 @@ public class RandomRoomObjCreate : MonoBehaviour
 
         foreach (Vector3 exceptionPos in exceptionV3List)
         {
-            if(exceptionPos == spawnPos)
+            if (exceptionPos == spawnPos)
             {
                 reCallCount++;
                 PickSpwanPos(_createObjId);
@@ -477,7 +501,7 @@ public class RandomRoomObjCreate : MonoBehaviour
             _spawnObjClone.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
         else if (spawnCompass == SpawnCompass.Down)
-        {            
+        {
             _spawnObjClone.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         }
         else if (spawnCompass == SpawnCompass.Left)
@@ -491,7 +515,40 @@ public class RandomRoomObjCreate : MonoBehaviour
         else
         {
             // 추가적인 축 추가를 위해 임시로 비워둠
-        }        
+        }
     }       // SpawnObjRotationSet()
+
+    protected void StartSpawn(int _lightCreateTableID, int _envCreateTableId, int _matCreateTableId)
+    {
+        StartCoroutine(OderSpawn(_lightCreateTableID, _envCreateTableId, _matCreateTableId));
+    }
+
+    IEnumerator OderSpawn(int _lightCreateTableID, int _envCreateTableId, int _matCreateTableId)
+    {
+        GameManager.instance.spawnDelayFrame++;
+        for (int i = 0; i < GameManager.instance.spawnDelayFrame; i++)
+        {
+            yield return null;
+        }
+
+        SpawnLightObj(_lightCreateTableID);
+        GameManager.instance.spawnDelayFrame++;
+        for (int i = 0; i < GameManager.instance.spawnDelayFrame; i++)
+        {
+            yield return null;
+        }
+
+        SpawnEnvObj(_envCreateTableId);
+        GameManager.instance.spawnDelayFrame++;
+        for (int i = 0; i < GameManager.instance.spawnDelayFrame; i++)
+        {
+            yield return null;
+        }
+        GameManager.instance.spawnDelayFrame++;
+        SpawnMatObj(_matCreateTableId);
+    }       //OderSpawn()
+
+
+
 
 }       // ClassEnd

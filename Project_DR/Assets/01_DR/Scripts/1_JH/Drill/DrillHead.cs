@@ -52,7 +52,6 @@ public class DrillHead : MonoBehaviour
         if (other.gameObject.GetComponent<Damageable>())
         {
             grappling.StopGrapple();
-               
         }
     }
         // 데미지 연산하는 함수

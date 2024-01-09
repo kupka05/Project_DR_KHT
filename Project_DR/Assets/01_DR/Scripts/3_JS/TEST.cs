@@ -30,6 +30,7 @@ public class TEST : MonoBehaviour
                 int itemID = itemList[i].Item1;
                 int itemAmount = itemList[i].Item2;
                 GFunc.Log($"ID: {itemID} / Amount: {itemAmount}");
+                UserData.AddItemScore(itemID);
             }
         }
     }

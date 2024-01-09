@@ -101,6 +101,8 @@ namespace Js.Quest
         private string GetRewardText(int id, string category = "Name")
         {
             string rewardName = Data.GetString(id, category);
+            // 리워드 이름이 공백일 경우 예외 처리
+            if (rewardName.Equals("")) { return ""; }
             string text = GFunc.SumString("<", rewardName, ">", " 를(을) 받았습니다.");
 
             return text;

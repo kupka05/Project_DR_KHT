@@ -22,7 +22,7 @@ public class Lazer : MonoBehaviour
     void Start()
     {
         damageCollider = GetComponent<DamageCollider>();
-        damageCollider.Damage = damage;
+        damageCollider.SetDamage(damage);
         Invoke("Return", 1);
     }
 

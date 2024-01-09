@@ -15,7 +15,7 @@ namespace BNG
         /// <summary>
         /// 데미지 양
         /// </summary>
-        public float Damage = 25f;
+        public (float, bool) damage;
 
         /// <summary>
         /// 이 충돌체의 속도를 결정하는 데 사용됩니다.
@@ -53,6 +53,9 @@ namespace BNG
         public bool isBossProjectile;  //보스 예외 처리
         public bool isEliteProjectile; //엘리트몬스터 예외 처리
         public bool isProjectile;
+        public bool isLeft;
+        public bool isDrill;
+        private float drillDamage;  // 드릴을 위한 데미지
 
         Damageable thisDamageable;
         public bool isMonster;
@@ -65,6 +68,7 @@ namespace BNG
             }
 
             thisDamageable = GetComponent<Damageable>();
+           
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -94,6 +98,7 @@ namespace BNG
             if (isEliteProjectile && collision.gameObject.GetComponent<EliteMonster>())
                 return;
 
+            DrillDamage();   // 드릴일 경우 
 
             OnCollisionEvent(collision);
         }
@@ -104,6 +109,7 @@ namespace BNG
             LastRelativeVelocity = collision.relativeVelocity.magnitude;
 
 
+
             if (LastDamageForce >= MinForce)
             {
 
@@ -112,33 +118,47 @@ namespace BNG
                 DamageablePart damagePart = collision.gameObject.GetComponent<DamageablePart>();
                 if (d)
                 {
-                    d.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+                    d.DealDamage(damage.Item1, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject, left : isLeft, critical: damage.Item2);
 
                     if (isKnockback)
                     {
                         d.OnKnockBack(collision.GetContact(0).point);
-                        GFunc.Log(collision.gameObject.name + "에게 " + Damage + " / " + transform.name);
-
                     }
 
                 }
                 else if (damagePart)
                 {
-                    damagePart.parent.DealDamage(Damage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+
+                    damagePart.parent.DealDamage(damage.Item1, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject, left: isLeft, critical: damage.Item2);
                     if (isKnockback)
                     {
                         damagePart.parent.OnKnockBack(collision.GetContact(0).point);
                     }
-                    GFunc.Log(collision.gameObject.name + "파츠에게 " + Damage);
 
                 }
             }
             // Otherwise, can we take damage ourselves from this collision?
             else if (TakeCollisionDamage && thisDamageable != null)
             {
-                thisDamageable.DealDamage(CollisionDamage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject);
+
+                thisDamageable.DealDamage(CollisionDamage, collision.GetContact(0).point, collision.GetContact(0).normal, true, gameObject, collision.gameObject, left : isLeft);
             }
         }
 
+        public void SetDamage(float _damage)
+        {
+            damage.Item1 = _damage;
+        }
+        public void DrillDamage()
+        {
+            if (isDrill)
+            {
+                damage = Damage.instance.DamageCalculate(drillDamage);
+            }
+        }
+        public void SetDrillDamage(float _damage)
+        {
+            drillDamage = _damage;
+        }
     }
 }

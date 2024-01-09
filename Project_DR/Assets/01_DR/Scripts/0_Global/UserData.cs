@@ -127,6 +127,21 @@ public static class UserData
 
         return monsterExp + itemExp + questExp;
     }
+    // 남은 재료 아이템을 계산해주는메서드
+    public static void MaterialItemCalculator() 
+    {
+        List<(int, int)> itemList = Unit.GetInventoryMaterialItems();
+        for (int i = 0; i < itemList.Count; i++)
+        {
+            int itemID = itemList[i].Item1;
+            int itemAmount = itemList[i].Item2;
+            for(int j = 0; j < itemAmount; i++)
+            {
+                AddItemScore(itemID);
+            }
+            GFunc.Log($"ID: {itemID} / Amount: {itemAmount}");
+        }
+    }
 
     public static void ResetResult()
     {
@@ -500,9 +515,10 @@ public static class UserData
     {
         UserDataManager.Instance.isGameOver = true;
     }
-
+    // 클리어 던전
     public static void ClearDungeon()
     {
+        MaterialItemCalculator();                            // 재료 아이템 정산
         Unit.SaveQuestDataToDB();
         UserDataManager.Instance.SaveClearData();
         UserDataManager.Instance.isClear = true;

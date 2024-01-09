@@ -16,7 +16,6 @@ public class DialogDebug : MonoBehaviour
 
     
 
-    // 환경설정 UI 입력
     public virtual void CheckOptionToggleInput()
     {
         // Check for bound controller button

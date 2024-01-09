@@ -18,6 +18,7 @@ public class Boss : MonoBehaviour
     public float radius = 3f;
 
     public UnityEngine.UI.Slider bossHPSlider;
+    private TMP_Text bossHPText;
 
     public GameObject bossState;
 
@@ -150,7 +151,6 @@ public class Boss : MonoBehaviour
     }
     public void InitializeBoss()
     {
-        GFunc.Log($"게임시작");
         bossState = GameObject.FindWithTag("Boss");
 
         rigid = GetComponent<Rigidbody>();
@@ -225,12 +225,16 @@ public class Boss : MonoBehaviour
 
     public void SetMaxHealth(float newHealth)
     {
+        bossHPText = bossHPSlider.transform.GetChild(2).GetComponent<TMP_Text>();
+
         bossHPSlider.maxValue = newHealth;
         bossHPSlider.value = newHealth;
+        bossHPText.text = newHealth.ToString();
     }
     public void SetHealth(float newHealth)
     {
         bossHPSlider.value = newHealth;
+        bossHPText.text = newHealth.ToString();
     }
 
     public virtual IEnumerator ExecutePattern()
@@ -804,7 +808,7 @@ public class Boss : MonoBehaviour
             if (damageable.Health >= 0)
             {
                 SetHealth(damageable.Health);
-                GFunc.Log($"현재 HP: {damageable.Health}");
+                //GFunc.Log($"현재 HP: {damageable.Health}");
             }
 
 
@@ -813,7 +817,7 @@ public class Boss : MonoBehaviour
             if (smashCount >= smashMaxCount)
             {
                 smash.SetActive(true);
-                GFunc.Log("분쇄카운트 충족");
+                //GFunc.Log("분쇄카운트 충족");
 
                 //float smashTakeDamage = damageable.Health * smashOne;
                 //SetHealth(damageable.Health - smashTakeDamage);
@@ -831,14 +835,14 @@ public class Boss : MonoBehaviour
                 {
                     smashCountNum.text = countNum.ToString();
                     countNum++;
-                    Debug.Log($"숫자:{countNum}");
+                    //Debug.Log($"숫자:{countNum}");
                 }
                 else if (countNum == 5)
                 {
 
                 }
 
-                GFunc.Log($"숫자:{countNum}");
+                //GFunc.Log($"숫자:{countNum}");
 
                 ApplyStackDamage(damage);
                 //GFunc.Log("스택 별 데미지 진입");
@@ -862,7 +866,7 @@ public class Boss : MonoBehaviour
             SetHealth(damageable.Health);
 
             // 남은 체력을 로그로 출력
-            Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
+            //Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
 
         }
         else if (countNum == 3)
@@ -870,7 +874,7 @@ public class Boss : MonoBehaviour
             damageable.Health -= SmashDamageCalculate(damage, 2);
             SetHealth(damageable.Health);
 
-            Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
+            //Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
 
         }
         else if (countNum == 4)
@@ -878,9 +882,9 @@ public class Boss : MonoBehaviour
             damageable.Health -= SmashDamageCalculate(damage, 3);
             SetHealth(damageable.Health);
 
-            Debug.Log($"남은체력:{damageable.Health}");
+            //Debug.Log($"남은체력:{damageable.Health}");
 
-            Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
+            //Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
 
         }
 

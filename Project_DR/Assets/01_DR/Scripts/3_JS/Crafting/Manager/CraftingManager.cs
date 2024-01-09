@@ -121,7 +121,7 @@ namespace Js.Crafting
                     int conditionID = conditions[j];
                     if (conditionID.Equals(0)) { continue; }
 
-                    GFunc.Log($"ConditionID {conditionID}");
+                    //GFunc.Log($"ConditionID {conditionID}");
                     // 두 가지 조건의 조합식을 가진 컴포짓 아이템을 생성한다.
                     CompositeItem compositeItem = CreateCompositeItemWithConditions(craftingItem, conditionID);
 
@@ -213,8 +213,8 @@ namespace Js.Crafting
             CompositeItem compositeItem = new CompositeItem(material_1, material_2);
             item.AddMaterialData(material_1_KeyID, material_1_Amount);
             item.AddMaterialData(material_2_KeyID, material_2_Amount);
-            GFunc.Log($"id: {material_1_KeyID} / amount: {material_1_Amount}");
-            GFunc.Log($"id: {material_2_KeyID} / amount: {material_2_Amount}");
+            //GFunc.Log($"id: {material_1_KeyID} / amount: {material_1_Amount}");
+            //GFunc.Log($"id: {material_2_KeyID} / amount: {material_2_Amount}");
 
             return compositeItem;
         }

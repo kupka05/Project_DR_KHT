@@ -46,7 +46,10 @@ namespace Js.Quest
             // 출력 중일 경우 예외 처리
             if (_isPrint) { return; }
 
-            // 큐에 ID 넣기
+            // 출력 중
+            _isPrint = true;
+
+            // 리워드 ID[]를 큐에 넣기
             EnqueueReward(ids);
 
             // 큐에 있는 ID를 모두 출력
@@ -67,9 +70,6 @@ namespace Js.Quest
         // 리워드 ID[]를 큐에 넣기
         private void EnqueueReward(int[] ids)
         {
-            // 출력 중
-            _isPrint = true;
-
             for (int i = 0; i < ids.Length; i++)
             {
                 // ID가 0일 경우 예외 처리

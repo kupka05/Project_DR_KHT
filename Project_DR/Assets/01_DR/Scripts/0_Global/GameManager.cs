@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         get
         {
             // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
-            if (m_instance == null)
+            if (m_instance == null || m_instance == default)
             {
                 // 생성 후 할당
                 GameObject obj = new GameObject("GameManager");
@@ -79,7 +79,9 @@ public class GameManager : MonoBehaviour
     public const int FIRSTTIME = 3;
     public const int FIRSTAFTER = 5;
 
+    [SerializeField]
     public static List<RandomRoom> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
+    public List<RandomRoom> isTestList;
 
     private bool allRoomClear = false;              // 모든 방이 클리어 됬다면 true가 될 변수
 
@@ -182,10 +184,8 @@ public class GameManager : MonoBehaviour
         {
             ClearDungeon();
         }
-        if (Input.GetKeyDown(KeyCode.F10))
-        {
-            UserData.MaterialItemCalculator();
-        }
+
+        isTestList = isClearRoomList;
 
     }
 
@@ -386,10 +386,12 @@ public class GameManager : MonoBehaviour
     {
         if (_isDoorOn == true)
         {
+            GFunc.Log($"문열기 호출");
             DoorOn();
         }
         else if (_isDoorOn == false)
         {
+            GFunc.Log($"문닫기 호출");
             DoorOff();
         }
     }       // DoorControll()
@@ -408,9 +410,11 @@ public class GameManager : MonoBehaviour
     /// 모든 방이 클리어 됬는지 체크해줄 함수
     /// </summary>
     public bool CheckAllRoomClear()
-    {
+    {        
         foreach(RandomRoom temp in isClearRoomList)
         {
+            GFunc.Log($"{temp.gameObject.name}의 클리어 여부 : {temp.isClearRoom}");
+                
             if(temp.isClearRoom == false)
             {
                 return false;
@@ -459,7 +463,7 @@ public class GameManager : MonoBehaviour
                 int randListIdx = UnityEngine.Random.Range(0, nullRoomList.Count);
 
                 nullRoomList[randListIdx].CreateAnvilObj();
-                GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
+                //GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
                 isAnvilCreate = true;
             }
         }

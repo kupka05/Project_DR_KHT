@@ -8,12 +8,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class EliteMonster : Monster
 {
-    private bool isMoving = false;
-    private float moveDuration = 1.0f;
-    private float moveTimer = 0.0f;
-    private Vector3 startPosition;
-    private Vector3 targetPosition;
-
     public MonsterBullet monsterBullet;
 
     [Header("몬스터 원거리 관련")]
@@ -21,37 +15,6 @@ public class EliteMonster : Monster
     public Transform bulletPortRight;
     public Transform bulletPort;
     public GameObject monsterBulletPrefab;
-
-    [Header("넉백 카운터")]
-    public float count = 0;
-    public float maxCount = 3;
-
-    void Update()
-    {
-        if (isMoving)
-        {
-            moveTimer += Time.deltaTime;
-
-            float t = Mathf.Clamp01(moveTimer / moveDuration);
-            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
-
-            if (t >= 1.0f)
-            {
-                isMoving = false;
-                moveTimer = 0.0f;
-            }
-        }
-    }
-
-    public void MoveWithSmoothTransition(Vector3 target)
-    {
-        if (!isMoving)
-        {
-            isMoving = true;
-            startPosition = transform.position;
-            targetPosition = target;
-        }
-    }
 
     public override IEnumerator MonsterAction()
     {
@@ -332,81 +295,6 @@ public class EliteMonster : Monster
         Destroy(this.gameObject);
     }
 
-    public override void OnDeal(float damage)
-    {
-        // 죽지 않은 상태면 HP 바 업데이트
-        if (damageable.Health >= 0)
-        {
-            SetHealth(damageable.Health);
-        }
-        else
-            SetHealth(0);
-        return;
-
-        //Debug.Log($"체력:{damageable.Health}");
-
-        // 스턴 상태 또는 죽음 상태일 경우 리턴
-        if (state == State.STUN || state == State.DIE)
-            return;
-
-        MonsterStun();  // 몬스터 스턴
-
-        smashCount++;   // 분쇄 카운트 추가
-
-        if (smashCount >= smashMaxCount)
-        {
-            smash.SetActive(true);
-            //GFunc.Log("분쇄카운트 충족");
-
-            smashCount = 0;
-            //GFunc.Log($"분쇄 카운트:{smashCount}");
-
-            smashFilled.fillAmount = 1;
-            //GFunc.Log($"분쇄FillAmount:{smashFilled.fillAmount}");
-
-            StartCoroutine(SmashTime());
-
-            if (countNum <= 3)
-            {
-                smashCountNum.text = countNum.ToString();
-                countNum++;
-                //Debug.Log($"숫자:{countNum}");
-            }
-            else if (countNum == 5)
-            {
-
-            }
-
-            //GFunc.Log($"숫자:{countNum}");
-
-            ApplyStackDamage(damage);
-
-            //넉백
-            count++;
-
-            if (count >= maxCount)
-            {
-                count = 0;
-                anim.SetTrigger(hashStun);
-
-                Vector3 targetPosition = transform.position - transform.forward * 4.0f;
-
-                MoveWithSmoothTransition(targetPosition);
-            }
-        }
-    }
-    // 스턴 딜레이
-    public override IEnumerator StunDelay()
-    {
-        isStun = true;
-        anim.SetTrigger(hashHit);
-        damageable.stun = true;
-        yield return new WaitForSeconds(stunDelay);
-        isStun = false;
-        damageable.stun = false;
-        yield break;
-    }
-
     
 
     public void GolemShoot(int index)
@@ -454,14 +342,5 @@ public class EliteMonster : Monster
         }
     }
 
-    public override void Explosion(int index)
-    {
-        switch(index)
-        {
-            case 0:
-                Destroy(this.gameObject);
-                break;
-        }
-        
-    }
+   
 }

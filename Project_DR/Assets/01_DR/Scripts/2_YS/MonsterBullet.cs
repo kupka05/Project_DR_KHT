@@ -63,7 +63,7 @@ public class MonsterBullet : MonoBehaviour
                 {
                     // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
                     collider.GetComponent<Damageable>().DealDamage(damage);
-                    GFunc.Log($"데미지:{damage}");
+                    //GFunc.Log($"데미지:{damage}");
 
                     isDamage = true;
                     Destroy(this.gameObject);
@@ -78,7 +78,7 @@ public class MonsterBullet : MonoBehaviour
             if (collider.CompareTag("Wall"))
             {
                 Destroy(this.gameObject);
-                GFunc.Log("벽이나 바닥 만났을 때 파괴되는가");
+                //GFunc.Log("벽이나 바닥 만났을 때 파괴되는가");
             }
         }
 

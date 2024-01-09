@@ -468,14 +468,16 @@ public class NPC : MonoBehaviour
         }
 
 
-        // 완료가능한 붸스트의 리스트
-        List<Quest> achievableQuestList = Unit.GetCanCompleteSubQuestForList();
+        // 진행중인 서브퀘스트의 리스트
+        List<Quest> ProgressQuestList = Unit.GetInProgressSubQuestForList();
 
-        foreach (Quest quest in achievableQuestList)
+        foreach (Quest quest in ProgressQuestList)
         {
             foreach (int questId in antecedentQuestIdList)
             {
-                if (quest.QuestData.ID == questId)
+                if ((quest.QuestData.ID == questId) && 
+                    quest.QuestData.Condition == QuestData.ConditionType.NPC_TALK ||
+                    quest.QuestData.Condition == QuestData.ConditionType.GIVE_ITEM)
                 {
                     foreach (int outId in conversationIdList)
                     {
@@ -483,17 +485,17 @@ public class NPC : MonoBehaviour
                         stringBuilder.Append(Data.GetString(outId, "AntecedentQuest"));
                         stringBuilder.Replace("_", "");
                         if (questId == int.Parse(stringBuilder.ToString()))
-                        {
-                            QuestCallback.OnDialogueCallback(int.Parse(stringBuilder.ToString()));
+                        {                            
+                            QuestCallback.OnDialogueCallback(questId);
+                            Unit.ClearQuestByID(questId);
                             GFunc.Log($"NPC 특정대사 출력 조건에서 조건에 맞아 OnDialogueCallBack 호출\n 넘겨준 매개변수 : {stringBuilder}");
-                            return int.Parse(stringBuilder.ToString());
+                            return outId;
                         }
                     }
                 }
             }
         }
-
-        // 진행중인 퀘스트에서도 확인해야하나?
+        
 
         return 0;
 

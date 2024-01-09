@@ -27,7 +27,7 @@ public class GuidedBullet : MonoBehaviour
             return;
 
         Vector3 initialDirection = target.position - transform.position;
-        damageCollider.Damage = damage;
+        damageCollider.SetDamage(damage);
     }
 
     private void Update()

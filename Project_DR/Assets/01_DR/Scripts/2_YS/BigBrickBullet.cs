@@ -37,7 +37,7 @@ public class BigBrickBullet : MonoBehaviour
     {
         damageCollider = GetComponent<DamageCollider>();
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
-        damageCollider.Damage = damage;
+        damageCollider.SetDamage(damage);
 
         Invoke("Return", destroyTimeBrick);
     }

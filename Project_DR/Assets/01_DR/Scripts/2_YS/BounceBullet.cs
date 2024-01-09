@@ -42,7 +42,7 @@ public class BounceBullet : MonoBehaviour
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         rigid = GetComponent<Rigidbody>();
 
-        damageCollider.Damage = damage;
+        damageCollider.SetDamage(damage);
 
 
         Invoke("Return", destoryTimeBounce);

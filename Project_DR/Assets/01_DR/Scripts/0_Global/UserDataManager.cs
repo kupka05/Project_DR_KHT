@@ -326,7 +326,8 @@ public partial class UserDataManager : MonoBehaviour
 
         PlayerDataManager.Save("weapon_atk", 0);
         yield return null;
-
+        PlayerDataManager.Save("weapon_exp", 0);
+        yield return null;
         PlayerDataManager.Save("weapon_cri_rate", 0);
         yield return null;
 
@@ -551,5 +552,20 @@ public partial class UserDataManager : MonoBehaviour
     public void DestroyUserDataManager()
     {
         Destroy(gameObject);
+    }
+
+    // 퀘스트 리워드 HUD 텍스트를 가져옴
+    // 없을 경우 찾아서 할당
+    public QuestRewardText GetQuestRewardText()
+    {
+        if (_questRewardText == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            GameObject questNoticeHUD = player.transform.FindChildRecursive("QuestNoticeHUD").gameObject;
+            _questRewardText = questNoticeHUD.transform.FindChildRecursive("Text (TMP)")
+                .gameObject?.GetComponent<QuestRewardText>();
+        }
+
+        return _questRewardText;
     }
 }

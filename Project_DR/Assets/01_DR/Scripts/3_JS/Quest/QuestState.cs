@@ -73,6 +73,11 @@ namespace Js.Quest
         // 현재 상태를 다음 상태로 변경
         public void ChangeToNextState()
         {
+#if UNITY_EDITOR
+            // 디버그
+            _currentState = _states[(int)_state];
+            // 디버그
+#endif
             _currentState.ChangeToNextState(_quest, this);
         }
 

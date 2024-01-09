@@ -17,6 +17,7 @@ namespace BNG
 
         // 근접 공격 무기인지 체크
         public bool isMelee;
+        public bool isLeft;
         public GameObject drillHead;
         private Grappling grappling;        
         // 드릴 작동을 위한 클래스
@@ -231,8 +232,6 @@ namespace BNG
             drillHead.transform.localScale = new Vector3(drillSize, drillSize, drillSize);
 
             grappling.drill = drillHead;
-            damageCollider = GetComponent<DamageCollider>();
-            damageCollider.Damage = SetDamage();
 
             drillCollider = GetComponent<CapsuleCollider>();
             grabbable = GetComponent<Grabbable>();
@@ -456,7 +455,7 @@ namespace BNG
 
             if (isShootPossible)
             {
-                damageCollider.Damage = SetDamage();
+                damageCollider.damage = SetDamage();
 
                 // 사격이 가능할 때 실행. 발사체 또는 레이로 분류
                 bool useProjectile = AlwaysFireProjectile || (FireProjectileInSlowMo && Time.timeScale < 1);
@@ -574,22 +573,24 @@ namespace BNG
             // Damage if possible
             Damageable d = hit.collider.GetComponent<Damageable>();
             DamageablePart damagePart = hit.collider.GetComponent<DamageablePart>();
+            (float, bool) finalDamage = FinalDamage();
+
 
             if (d)
             {
-                d.DealDamage(FinalDamage(), hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
+                d.DealDamage(finalDamage.Item1, hit.point, hit.normal, true, gameObject, hit.collider.gameObject, left : isLeft,critical: finalDamage.Item2);
 
                 if (onDealtDamageEvent != null)
                 {
-                    onDealtDamageEvent.Invoke(FinalDamage());
+                    onDealtDamageEvent.Invoke(finalDamage.Item1);
                 }
             }
             else if (damagePart)
             {
-                damagePart.parent.DealDamage(FinalDamage(), hit.point, hit.normal, true, gameObject, hit.collider.gameObject);
+                damagePart.parent.DealDamage(finalDamage.Item1, hit.point, hit.normal, true, gameObject, hit.collider.gameObject, left: isLeft, critical: finalDamage.Item2);
                 if (onDealtDamageEvent != null)
                 {
-                    onDealtDamageEvent.Invoke(FinalDamage());
+                    onDealtDamageEvent.Invoke(finalDamage.Item1);
                 }
             }
 
@@ -876,12 +877,12 @@ namespace BNG
             }
         }
         // 데미지 연산하는 함수
-        private float FinalDamage()
+        private (float, bool) FinalDamage()
         {
             return Damage.instance.DamageCalculate(dotDamage);
         }
 
-        private float SetDamage()
+        private (float, bool) SetDamage()
         {
            return Damage.instance.DamageCalculate(damage);
         }
@@ -897,6 +898,9 @@ namespace BNG
             dotDamage = UserData.GetDrillSpinDamage();
             FiringRate = UserData.GetAttackSpeed();
 
+            damageCollider = GetComponent<DamageCollider>();
+            damageCollider.isDrill = true;
+            damageCollider.SetDrillDamage(damage);
             //damage = (float)DataManager.Instance.GetData(1100, "Damage", typeof(float)) ;
             //dotDamage = (float)DataManager.Instance.GetData(1100, "DotDamage", typeof(float)) ;
             //FiringRate = (float)DataManager.Instance.GetData(1100, "AttackSpeed", typeof(float));

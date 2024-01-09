@@ -15,6 +15,7 @@ public class Boss : MonoBehaviour
 {
    
     public UnityEngine.UI.Slider bossHPSlider;
+    private TMP_Text bossHPText;
 
     public GameObject bossState;
 
@@ -152,7 +153,6 @@ public class Boss : MonoBehaviour
     }
     public void InitializeBoss()
     {
-        GFunc.Log($"게임시작");
         bossState = GameObject.FindWithTag("Boss");
 
         rigid = GetComponent<Rigidbody>();
@@ -234,12 +234,16 @@ public class Boss : MonoBehaviour
 
     public void SetMaxHealth(float newHealth)
     {
+        bossHPText = bossHPSlider.transform.GetChild(2).GetComponent<TMP_Text>();
+
         bossHPSlider.maxValue = newHealth;
         bossHPSlider.value = newHealth;
+        bossHPText.text = newHealth.ToString();
     }
     public void SetHealth(float newHealth)
     {
         bossHPSlider.value = newHealth;
+        bossHPText.text = newHealth.ToString();
     }
 
     public virtual IEnumerator ExecutePattern()

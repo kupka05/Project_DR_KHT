@@ -18,6 +18,7 @@ namespace Js.Quest
         private QuestRewardData _questRewardData;
         private Quest _quest;
 
+
         /*************************************************
          *                 Public Methods
          *************************************************/

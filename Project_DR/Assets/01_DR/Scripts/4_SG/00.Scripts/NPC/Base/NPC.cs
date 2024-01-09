@@ -598,6 +598,8 @@ public class NPC : MonoBehaviour
             RewardEffect(_rewardId);
         }
 
+        // 보상 텍스트 출력
+        Unit.PrintRewardText(_rewardId);
     }       // RewardTypeCheck()
 
     #region 보상지급 함수

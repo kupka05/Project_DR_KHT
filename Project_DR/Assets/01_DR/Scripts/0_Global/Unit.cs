@@ -9,6 +9,16 @@ using Js.Crafting;
 public static class Unit
 {
     /*************************************************
+     *           Public Player HUD Methods
+     *************************************************/
+    // 플레이어 화면에 리워드 보상 HUD 텍스트 출력
+    public static void PrintRewardText(params int[] ids)
+    {
+        UserDataManager.Instance.GetQuestRewardText().PrintText(ids);
+    }
+
+
+    /*************************************************
      *         Public Inventory & Item Methods
      *************************************************/
     // 인벤토리에 아이템을 추가

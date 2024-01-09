@@ -19,6 +19,7 @@ namespace Js.Quest
         // 다음 상태로 변경 {[시작불가] -> [시작가능] -> [진행중] -> [완료가능] -> [완료]}
         public void ChangeToNextState(Quest quest, QuestState questState)
         {
+            GFunc.Log("ChangeToNextState");
             // [7] 증정 조건의 아이템 차감은
             // QuestHandler.GiveQuestReward()에서 처리한다.
 

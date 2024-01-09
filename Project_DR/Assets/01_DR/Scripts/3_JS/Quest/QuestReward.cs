@@ -58,7 +58,7 @@ namespace Js.Quest
                     GetRewardItem();
                     break;
 
-                // "아이템" 일 경우
+                // "MBTI" 일 경우
                 case QuestRewardData.TypeReward.MBTI:
                     // 퀘스트 보상 MBTI 획득
                     GetRewardMBTI();
@@ -104,7 +104,7 @@ namespace Js.Quest
             MBTI mbti = new MBTI();
             float[] values = _questRewardData.MBTIValues;
             mbti.SetMBTI(values[0], values[1], values[2], values[3]);
-            MBTIManager.Instance.ResultMBTI(mbti);
+            MBTIManager.Instance?.ResultMBTI(mbti);
         }
 
         // 퀘스트 보상 상태 획득

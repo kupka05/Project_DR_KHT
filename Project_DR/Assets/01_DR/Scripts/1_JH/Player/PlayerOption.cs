@@ -178,7 +178,7 @@ public class PlayerOption : MonoBehaviour
     {
         if(!AudioManager.Instance)
         {
-            GFunc.Log("오디오 매니저를 찾을 수 없습니다.");
+            //GFunc.Log("오디오 매니저를 찾을 수 없습니다.");
             return;
         }
         AudioManager.Instance.MusicVolume(value);

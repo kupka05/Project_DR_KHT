@@ -15679,6 +15679,7 @@ MonoBehaviour:
   hp: 100
   attack: 0
   attDelay: 0
+  hitDelay: 0
   exp: 0
   speed: 0
   recRange: 20
@@ -15686,6 +15687,7 @@ MonoBehaviour:
   stunDelay: 1
   stunCount: 0
   stopDistance: 0
+  lastDamageTime: 0
   monsterTr: {fileID: 5781229974145385596}
   playerTr: {fileID: 0}
   anim: {fileID: 5781229974137763666}
@@ -15700,13 +15702,14 @@ MonoBehaviour:
   isStun: 0
   isStack: 0
   isAttack: 0
-  isDelay: 0
+  isUpper: 0
   distanceDebug: 0
+  isDebug: 0
   distanceFromGround: 0
   distanceFromGroundOffset: 0
   GroundedLayers:
     serializedVersion: 2
-    m_Bits: 2097153
+    m_Bits: 3145729
 --- !u!195 &1924480271
 NavMeshAgent:
   m_ObjectHideFlags: 0

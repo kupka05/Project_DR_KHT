@@ -41,6 +41,7 @@ public class DamageChecker : MonoBehaviour
 public class Monster : MonoBehaviour
 {
     public UnityEngine.UI.Slider monsterHpSlider;
+    private TMP_Text hpText;
 
     //스턴 추가 - hit상태
     public enum State
@@ -151,11 +152,13 @@ public class Monster : MonoBehaviour
     public bool isStun = false;
     public bool isStack = false;
     public bool isAttack = false;
+    public bool isUpper = false;
 
     public IEnumerator stunRoutine; // 스턴 루틴
 
     [Header("Debug")]
     public float distanceDebug;
+    public bool isDebug = false;
 
     [Header("DistanceFromGround")]
     public float distanceFromGround;            // 지면과의 거리
@@ -201,7 +204,8 @@ public class Monster : MonoBehaviour
 
         foreach (DamageCollider damageCollider in damageCollider)
         {
-            damageCollider.Damage = attack;
+            damageCollider.SetDamage(attack);
+
             //attack = damageCollider.Damage; // 지환 : attack은 시트에서 가져온 데이터 값
         }
 
@@ -279,23 +283,36 @@ public class Monster : MonoBehaviour
         attack = Data.GetFloat(id, "MonAtt");
         attDelay = Data.GetFloat(id, "MonDel");
         hitDelay = Data.GetFloat(id, "HitDel");
-        speed = Data.GetFloat(id, "MonSpd");
-        attRange = Data.GetFloat(id, "MonAtr");
-        recRange = Data.GetFloat(id, "MonRer");
-        stunDelay = Data.GetFloat(id, "MonSTFDel");
-        stopDistance = Data.GetFloat(id, "MonStd");
+        speed = (float)DataManager.Instance.GetData(id, "MonSpd", typeof(float));
+        attRange = (float)DataManager.Instance.GetData(id, "MonAtr", typeof(float));
+        recRange = (float)DataManager.Instance.GetData(id, "MonRer", typeof(float));
+        stunDelay = (float)DataManager.Instance.GetData(id, "MonSTFDel", typeof(float));
+
+        stopDistance = (float)DataManager.Instance.GetData(id, "MonStd", typeof(float));
+
+        if(isDebug)
+        {
+            hp = 100000;
+            attack = 0;
+            speed = 0;
+        }
+
         maxCount = Data.GetInt(id, "MonKno");
     }
 
     public void SetMaxHealth(float newHealth)
     {
+        hpText = monsterHpSlider.transform.GetChild(2).GetComponent<TMP_Text>();
+
         monsterHpSlider.maxValue = newHealth;
         monsterHpSlider.value = newHealth;
+        hpText.text = newHealth.ToString();
     }
 
     public void SetHealth(float newHealth)
     {
         monsterHpSlider.value = newHealth;
+        hpText.text = newHealth.ToString();
     }
 
 
@@ -639,10 +656,13 @@ public class Monster : MonoBehaviour
             SetHealth(damageable.Health);
         }
         else
+        { 
+            SetHealth(0);
             return;
+        }
 
 
-        Debug.Log($"체력:{damageable.Health}");
+        //Debug.Log($"체력:{damageable.Health}");
 
         // 스턴 상태 또는 죽음 상태일 경우 리턴
         if (state == State.STUN || state == State.DIE)
@@ -707,8 +727,12 @@ public class Monster : MonoBehaviour
             stunRoutine = null;
         }
 
-        stunRoutine = StunDelay();
-        StartCoroutine(stunRoutine);
+        if (isUpper == false)
+        {
+            stunRoutine = StunDelay();
+            StartCoroutine(stunRoutine);
+        }
+        isUpper = false;
     }
 
     public void ApplyStackDamage(float damage)
@@ -753,7 +777,7 @@ public class Monster : MonoBehaviour
     public float SmashDamageCalculate(float damage, int index)
     {
         float _debuff = UserData.GetSmashDamage(index); ;
-        return (damage * (1 + _debuff)) - damage; ;
+        return Mathf.RoundToInt(damage * (1 + _debuff)) - damage; 
     }
 
     public IEnumerator SmashTime()
@@ -782,12 +806,14 @@ public class Monster : MonoBehaviour
     // 스턴 딜레이
     public IEnumerator StunDelay()
     {
-        isStun = true;
+        rigid.Sleep();
+        //isStun = true;
         anim.SetTrigger(hashHit);
-        damageable.stun = true;
+        //damageable.stun = true;
         yield return new WaitForSeconds(stunDelay);
-        isStun = false;
-        damageable.stun = false;
+        //isStun = false;
+        rigid.WakeUp();
+        //damageable.stun = false;
         yield break;
     }
 

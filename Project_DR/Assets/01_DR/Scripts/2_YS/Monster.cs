@@ -41,6 +41,7 @@ public class DamageChecker : MonoBehaviour
 public class Monster : MonoBehaviour
 {
     public UnityEngine.UI.Slider monsterHpSlider;
+    private TMP_Text hpText;
 
     //스턴 추가 - hit상태
     public enum State
@@ -151,11 +152,13 @@ public class Monster : MonoBehaviour
     public bool isStun = false;
     public bool isStack = false;
     public bool isAttack = false;
+    public bool isUpper = false;
 
     public IEnumerator stunRoutine; // 스턴 루틴
 
     [Header("Debug")]
     public float distanceDebug;
+    public bool isDebug = false;
 
     [Header("DistanceFromGround")]
     public float distanceFromGround;            // 지면과의 거리
@@ -192,7 +195,8 @@ public class Monster : MonoBehaviour
 
         foreach (DamageCollider damageCollider in damageCollider)
         {
-            damageCollider.Damage = attack;
+            damageCollider.SetDamage(attack);
+
             //attack = damageCollider.Damage; // 지환 : attack은 시트에서 가져온 데이터 값
         }
 
@@ -251,17 +255,28 @@ public class Monster : MonoBehaviour
         stunDelay = (float)DataManager.Instance.GetData(id, "MonSTFDel", typeof(float));
 
         stopDistance = (float)DataManager.Instance.GetData(id, "MonStd", typeof(float));
+
+        if(isDebug)
+        {
+            hp = 100000;
+            attack = 0;
+            speed = 0;
+        }
     }
 
     public void SetMaxHealth(float newHealth)
     {
+        hpText = monsterHpSlider.transform.GetChild(2).GetComponent<TMP_Text>();
+
         monsterHpSlider.maxValue = newHealth;
         monsterHpSlider.value = newHealth;
+        hpText.text = newHealth.ToString();
     }
 
     public void SetHealth(float newHealth)
     {
         monsterHpSlider.value = newHealth;
+        hpText.text = newHealth.ToString();
     }
 
 
@@ -608,7 +623,7 @@ public class Monster : MonoBehaviour
             return;
 
 
-        Debug.Log($"체력:{damageable.Health}");
+        //Debug.Log($"체력:{damageable.Health}");
 
         // 스턴 상태 또는 죽음 상태일 경우 리턴
         if (state == State.STUN || state == State.DIE)
@@ -621,7 +636,7 @@ public class Monster : MonoBehaviour
         if (smashCount >= smashMaxCount)
         {
             smash.SetActive(true);
-            GFunc.Log("분쇄카운트 충족");
+            //GFunc.Log("분쇄카운트 충족");
 
             smashCount = 0;
             //GFunc.Log($"분쇄 카운트:{smashCount}");
@@ -661,23 +676,27 @@ public class Monster : MonoBehaviour
             stunRoutine = null;
         }
 
-        stunRoutine = StunDelay();
-        StartCoroutine(stunRoutine);
+        if (isUpper == false)
+        {
+            stunRoutine = StunDelay();
+            StartCoroutine(stunRoutine);
+        }
+        isUpper = false;
     }
 
     public void ApplyStackDamage(float damage)
     {
-        Debug.Log($"countNum = {countNum}");
+        //Debug.Log($"countNum = {countNum}");
 
         if (countNum == 2)
         {
-            GFunc.Log("스택1진입");
+            //GFunc.Log("스택1진입");
             damageable.Health -= SmashDamageCalculate(damage, 1);
             // 갱신된 체력 값을 적용
             SetHealth(damageable.Health);
 
             // 남은 체력을 로그로 출력
-            Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
+            //Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
 
         }
         else if (countNum == 3)
@@ -685,7 +704,7 @@ public class Monster : MonoBehaviour
             damageable.Health -= SmashDamageCalculate(damage, 2);
             SetHealth(damageable.Health);
 
-            Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
+            //Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
 
         }
         else if (countNum == 4)
@@ -693,9 +712,9 @@ public class Monster : MonoBehaviour
             damageable.Health -= SmashDamageCalculate(damage, 3);
             SetHealth(damageable.Health);
 
-            Debug.Log($"남은체력:{damageable.Health}");
+            //Debug.Log($"남은체력:{damageable.Health}");
 
-            Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
+            //Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
 
         }
 
@@ -707,7 +726,7 @@ public class Monster : MonoBehaviour
     public float SmashDamageCalculate(float damage, int index)
     {
         float _debuff = UserData.GetSmashDamage(index); ;
-        return (damage * (1 + _debuff)) - damage; ;
+        return Mathf.RoundToInt(damage * (1 + _debuff)) - damage; 
     }
 
     public IEnumerator SmashTime()
@@ -736,12 +755,14 @@ public class Monster : MonoBehaviour
     // 스턴 딜레이
     public virtual IEnumerator StunDelay()
     {
-        isStun = true;
+        rigid.Sleep();
+        //isStun = true;
         anim.SetTrigger(hashHit);
-        damageable.stun = true;
+        //damageable.stun = true;
         yield return new WaitForSeconds(stunDelay);
-        isStun = false;
-        damageable.stun = false;
+        //isStun = false;
+        rigid.WakeUp();
+        //damageable.stun = false;
         yield break;
     }
 

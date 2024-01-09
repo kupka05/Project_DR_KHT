@@ -243,7 +243,6 @@ public class ItemManager : MonoBehaviour
             else if (ItemDataManager.SearchItemDB<QuestItemData>(id))
             {
                 item = CreateQuestItem(pos, id, amount);
-                GFunc.Log("quest 아이템 생성");
             }
 
             // 크래프팅 임시 결과 아이템이 아닐 경우 네임태그 추가

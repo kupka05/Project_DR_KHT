@@ -151,17 +151,17 @@ public class SkillEvent : MonoBehaviour
     // 넉백 범위의 콜라이더 껐다 켜주기
     IEnumerator DrillLanding()
     {
-        GFunc.Log("On");
         sphereCollider.enabled = true;
         yield return WaitForSeconds;
 
-        GFunc.Log("Off");
         sphereCollider.enabled = false;
 
     }
     // 범위에 닿은 몬스터들의 넉백 실행부분
     public void ActiveDrillLanding(GameObject target)
     {
+        target.GetComponent<Monster>().isUpper = true;
+
         Rigidbody targetRB = target.GetComponent<Rigidbody>();
         Vector3 skillPos = transform.localPosition;
         Vector3 targetPos = targetRB.transform.localPosition;
@@ -169,12 +169,13 @@ public class SkillEvent : MonoBehaviour
         //targetPos.y += 0.5f;
 
         Vector3 force = targetPos - skillPos * landingForce;
-        targetRB.AddForce(force, ForceMode.Impulse);
+        targetRB.AddForce(force * 2, ForceMode.Impulse);
 
         Damageable damage = target.GetComponent<Damageable>();
         if(damage)
         {
-            damage.DealDamage(Damage.instance.DamageCalculate(UserData.GetDrillDamage()));
+            (float, bool) _damage = Damage.instance.DamageCalculate(UserData.GetDrillDamage());
+            damage.DealDamage(damageAmount : _damage.Item1, _critical: _damage.Item2);
         }
     }
     void GetData()

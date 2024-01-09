@@ -335,14 +335,15 @@ public class EliteMonster : Monster
     public override void OnDeal(float damage)
     {
         // 죽지 않은 상태면 HP 바 업데이트
-        if (damageable.Health > 0)
+        if (damageable.Health >= 0)
         {
             SetHealth(damageable.Health);
         }
         else
-            return;
+            SetHealth(0);
+        return;
 
-        Debug.Log($"체력:{damageable.Health}");
+        //Debug.Log($"체력:{damageable.Health}");
 
         // 스턴 상태 또는 죽음 상태일 경우 리턴
         if (state == State.STUN || state == State.DIE)
@@ -355,7 +356,7 @@ public class EliteMonster : Monster
         if (smashCount >= smashMaxCount)
         {
             smash.SetActive(true);
-            GFunc.Log("분쇄카운트 충족");
+            //GFunc.Log("분쇄카운트 충족");
 
             smashCount = 0;
             //GFunc.Log($"분쇄 카운트:{smashCount}");
@@ -369,14 +370,14 @@ public class EliteMonster : Monster
             {
                 smashCountNum.text = countNum.ToString();
                 countNum++;
-                Debug.Log($"숫자:{countNum}");
+                //Debug.Log($"숫자:{countNum}");
             }
             else if (countNum == 5)
             {
 
             }
 
-            GFunc.Log($"숫자:{countNum}");
+            //GFunc.Log($"숫자:{countNum}");
 
             ApplyStackDamage(damage);
 

@@ -326,7 +326,8 @@ public partial class UserDataManager : MonoBehaviour
 
         PlayerDataManager.Save("weapon_atk", 0);
         yield return null;
-
+        PlayerDataManager.Save("weapon_exp", 0);
+        yield return null;
         PlayerDataManager.Save("weapon_cri_rate", 0);
         yield return null;
 

@@ -39,7 +39,7 @@ public class MonsterBullet : MonoBehaviour
 
         rigid.velocity = transform.forward * speed;
 
-        damageCollider.Damage = damage;
+        damageCollider.SetDamage(damage);
     }
 
     private void Update()

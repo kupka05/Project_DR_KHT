@@ -125,7 +125,7 @@ public class Shoot : MonoBehaviour
             bullets.Clear();
 
             isShoot = false;
-            GFunc.Log($"isShoot:{isShoot}");
+            //GFunc.Log($"isShoot:{isShoot}");
         }
     }
 

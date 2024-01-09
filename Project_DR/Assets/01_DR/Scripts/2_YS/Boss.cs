@@ -310,6 +310,11 @@ public class Boss : MonoBehaviour
 
                     }
                 }
+                else if(damageable.Health <= 0)
+                {
+                    BossDie();
+                }
+
 
                 yield return new WaitForSeconds(patternInterval);
                 isPatternExecuting = false;

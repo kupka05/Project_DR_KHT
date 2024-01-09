@@ -131,10 +131,10 @@ namespace Js.Quest
 
                 // [완료] 상태 변경 & 클리어 보상 지급
                 QuestState.ChangeToNextState();
-                ClearReward.GetReward();
+                ClearReward.GetReward();      
 
                 // 퀘스트 성공 보상 텍스트 출력
-                Unit.PrintRewardText(QuestData.ClearReward);
+                Unit.PrintRewardText(ClearReward.QuestRewardData.ID);
 
                 return 1;
             }
@@ -149,7 +149,7 @@ namespace Js.Quest
                 FailReward.GetReward();
 
                 // 퀘스트 실패 보상 출력
-                Unit.PrintRewardText(FailReward.QuestRewardData.RewardKeyIDs);
+                Unit.PrintRewardText(FailReward.QuestRewardData.ID);
 
                 return 2;
             }

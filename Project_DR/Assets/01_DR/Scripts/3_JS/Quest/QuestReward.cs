@@ -104,7 +104,7 @@ namespace Js.Quest
             MBTI mbti = new MBTI();
             float[] values = _questRewardData.MBTIValues;
             mbti.SetMBTI(values[0], values[1], values[2], values[3]);
-            MBTIManager.Instance.ResultMBTI(mbti);
+            MBTIManager.Instance?.ResultMBTI(mbti);
         }
 
         // 퀘스트 보상 상태 획득

@@ -27,19 +27,6 @@ namespace Js.Quest
             Initialize();
         }
 
-        //private void Update()
-        //{
-        //    if (Input.GetKeyUp(KeyCode.K))
-        //    {
-        //        PrintText(32_1_001, 32_1_002, 32_1_003, 32_1_004);
-        //    }
-
-        //    if (Input.GetKeyDown(KeyCode.L))
-        //    {
-        //        //DisableText();
-        //    }
-        //}
-
 
         /*************************************************
          *                Public Methods
@@ -85,6 +72,9 @@ namespace Js.Quest
 
             for (int i = 0; i < ids.Length; i++)
             {
+                // ID가 0일 경우 예외 처리
+                if (ids[i].Equals(0)) { continue; }
+
                 // 큐에 요소 추가
                 _rewardQueue.Enqueue(ids[i]);
             }

@@ -227,7 +227,7 @@ public static class UserData
         float attackSpeed = Data.GetFloat(1100, "AttackSpeed");
         if (UserDataManager.Instance.WeaponAtkRateLv != 0)
         {
-            attackSpeed = attackSpeed - UserDataManager.Instance.statData.upgradeAtkSpd[UserDataManager.Instance.WeaponAtkRateLv - 1].sum1;
+            attackSpeed = attackSpeed + UserDataManager.Instance.statData.upgradeAtkSpd[UserDataManager.Instance.WeaponAtkRateLv - 1].sum1;
         }
         return attackSpeed + UserDataManager.Instance.effectAttackRate;
     }
@@ -446,7 +446,6 @@ public static class UserData
             UserDataManager.Instance.drillLandingCount = 0;
         }
     }
-
     #endregion
 
     #region ####################_Quest_#####################

@@ -13,11 +13,9 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
-    [Header("테스트")]
-    public float angleRange = 30f;
-    public float radius = 3f;
-
+   
     public UnityEngine.UI.Slider bossHPSlider;
+    private TMP_Text bossHPText;
 
     public GameObject bossState;
 
@@ -125,7 +123,6 @@ public class Boss : MonoBehaviour
 
     [Header("포물선 안 터지는 오브젝트")]
     public GameObject bigBrick;
-    //new private ParticleSystem particleSystem;
     public float destroyTimeBrick = default;
     public float brickCount = default;
     public float waitBrick = default;
@@ -139,6 +136,12 @@ public class Boss : MonoBehaviour
     //public GameObject testBullet;
     private Vector3 initialTargetImagePosition;
 
+    [Header("IEnumerator")]
+    IEnumerator shootPlay;
+    IEnumerator shootLazer;
+    IEnumerator shootBounce;
+    IEnumerator shootBrick;
+
     public void Awake()
     {
         GetData(bossId, bossProjectileId, bossProjectileID, bossProjectileBounceId, bossProjectileLazerId);
@@ -150,7 +153,6 @@ public class Boss : MonoBehaviour
     }
     public void InitializeBoss()
     {
-        GFunc.Log($"게임시작");
         bossState = GameObject.FindWithTag("Boss");
 
         rigid = GetComponent<Rigidbody>();
@@ -170,6 +172,13 @@ public class Boss : MonoBehaviour
         }
 
         npc = GetComponent<BossNPC>();
+
+        //코루틴 
+        shootPlay = PlayShoot();
+        shootLazer = LazerCoroutine();
+        shootBounce = BounceShoot();
+        shootBrick = BigBrickShoot();
+
     }
 
     public void FixedUpdate()
@@ -225,12 +234,16 @@ public class Boss : MonoBehaviour
 
     public void SetMaxHealth(float newHealth)
     {
+        bossHPText = bossHPSlider.transform.GetChild(2).GetComponent<TMP_Text>();
+
         bossHPSlider.maxValue = newHealth;
         bossHPSlider.value = newHealth;
+        bossHPText.text = newHealth.ToString();
     }
     public void SetHealth(float newHealth)
     {
         bossHPSlider.value = newHealth;
+        bossHPText.text = newHealth.ToString();
     }
 
     public virtual IEnumerator ExecutePattern()
@@ -266,7 +279,7 @@ public class Boss : MonoBehaviour
                     if (bossState && !isKnockBack)
                     {
                         PushPlayerBackward();
-                        GFunc.Log("넉백");
+                        //GFunc.Log("넉백");
 
                         bossState.GetComponent<BossState>().CastSpell();
                         //GFunc.Log("넉백 애니메이션 작동");
@@ -330,19 +343,35 @@ public class Boss : MonoBehaviour
         switch (pattern)
         {
             case 0:
-                StartCoroutine(PlayShoot());
+                if(shootPlay != null)
+                {
+                    StartCoroutine(shootPlay);
+                    shootPlay = null;
+                }
                 //GFunc.Log("패턴 1 선택");
                 break;
             case 1:
-                StartCoroutine(LazerCoroutine());
+                if(shootLazer != null)
+                {
+                    StartCoroutine(shootLazer);
+                    shootLazer = null;
+                }
                 //GFunc.Log("패턴 2 선택");
                 break;
             case 2:
-                StartCoroutine(BounceShoot());
+                if(shootBounce != null)
+                {
+                    StartCoroutine(shootBounce);
+                    shootBounce = null;
+                }
                 //GFunc.Log("패턴 3 선택");
                 break;
             case 3:
-                StartCoroutine(BigBrickShoot());
+                if(shootBrick != null)
+                {
+                    StartCoroutine(shootBrick);
+                    shootBrick = null;
+                }
                 //GFunc.Log("패턴 4 선택");
                 break;
         }
@@ -363,8 +392,8 @@ public class Boss : MonoBehaviour
         int pattern2 = UnityEngine.Random.Range(0, 4);
 
         // 랜덤으로 선택된 두 개의 패턴을 동시에 실행
-        yield return StartCoroutine(ExecutePattern(pattern1, "첫 번째 패턴"));
-        yield return StartCoroutine(ExecutePattern(pattern2, "두 번째 패턴"));
+        yield return StartCoroutine(ExecutePatternSecond(pattern1, "첫 번째 패턴"));
+        yield return StartCoroutine(ExecutePatternSecond(pattern2, "두 번째 패턴"));
 
         if (bossState)
         {
@@ -373,25 +402,25 @@ public class Boss : MonoBehaviour
         }
     }
 
-    public IEnumerator ExecutePattern(int pattern, string logMessage)
+    public IEnumerator ExecutePatternSecond(int pattern, string logMessage)
     {
         switch (pattern)
         {
             case 0:
                 StartCoroutine(PlayShoot());
-                GFunc.Log(logMessage + ": 패턴 1 선택");
+                //GFunc.Log(logMessage + ": 패턴 1 선택");
                 break;
             case 1:
                 StartCoroutine(LazerCoroutine());
-                GFunc.Log(logMessage + ": 패턴 2 선택");
+                //GFunc.Log(logMessage + ": 패턴 2 선택");
                 break;
             case 2:
                 StartCoroutine(BounceShoot());
-                GFunc.Log(logMessage + ": 패턴 3 선택");
+                //GFunc.Log(logMessage + ": 패턴 3 선택");
                 break;
             case 3:
                 StartCoroutine(BigBrickShoot());
-                GFunc.Log(logMessage + ": 패턴 4 선택");
+                //GFunc.Log(logMessage + ": 패턴 4 선택");
                 break;
         }
 
@@ -418,7 +447,7 @@ public class Boss : MonoBehaviour
         if (bossState)
         {
             bossState.GetComponent<BossState>().Attack();
-            GFunc.Log("보스 attack 애니메이션");
+            //GFunc.Log("보스 attack 애니메이션");
         }
     }
 
@@ -469,7 +498,7 @@ public class Boss : MonoBehaviour
         if (bossState)
         {
             bossState.GetComponent<BossState>().Attack();
-            GFunc.Log("보스 attack 애니메이션");
+            //GFunc.Log("보스 attack 애니메이션");
         }
     }
 
@@ -503,30 +532,9 @@ public class Boss : MonoBehaviour
     {
         if (knockBack)
         {
-            GFunc.Log("넉백작동");
-
             knockBack.OnBackDash(20);
         }
     }
-
-    //IEnumerator PushPlayerBackwardCoroutine()
-    //{
-    //    if (knockBack)
-    //    {
-    //        GFunc.Log("넉백작동");
-
-    //        knockBack.OnBackDash(20);
-    //    }
-
-    //    yield return new WaitForSeconds(moveDuration);
-
-    //    isPushPlayer = false;  // 넉백이 끝난 후 초기화
-    //}
-
-    //void PushPlayerBackward()
-    //{
-    //    StartCoroutine(PushPlayerBackwardCoroutine());
-    //}
 
     public IEnumerator PlayShoot()
     {
@@ -758,7 +766,7 @@ public class Boss : MonoBehaviour
             }
 
             yield return new WaitForSeconds(waitBounce);
-            GFunc.Log("대기한다");
+            //GFunc.Log("대기한다");
 
             foreach (GameObject instantBounce in bounceBall)
             {
@@ -804,7 +812,7 @@ public class Boss : MonoBehaviour
             if (damageable.Health >= 0)
             {
                 SetHealth(damageable.Health);
-                GFunc.Log($"현재 HP: {damageable.Health}");
+                //GFunc.Log($"현재 HP: {damageable.Health}");
             }
 
 
@@ -813,7 +821,7 @@ public class Boss : MonoBehaviour
             if (smashCount >= smashMaxCount)
             {
                 smash.SetActive(true);
-                GFunc.Log("분쇄카운트 충족");
+                //GFunc.Log("분쇄카운트 충족");
 
                 //float smashTakeDamage = damageable.Health * smashOne;
                 //SetHealth(damageable.Health - smashTakeDamage);
@@ -831,14 +839,14 @@ public class Boss : MonoBehaviour
                 {
                     smashCountNum.text = countNum.ToString();
                     countNum++;
-                    Debug.Log($"숫자:{countNum}");
+                    //Debug.Log($"숫자:{countNum}");
                 }
                 else if (countNum == 5)
                 {
 
                 }
 
-                GFunc.Log($"숫자:{countNum}");
+                //GFunc.Log($"숫자:{countNum}");
 
                 ApplyStackDamage(damage);
                 //GFunc.Log("스택 별 데미지 진입");
@@ -862,7 +870,7 @@ public class Boss : MonoBehaviour
             SetHealth(damageable.Health);
 
             // 남은 체력을 로그로 출력
-            Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
+            //Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
 
         }
         else if (countNum == 3)
@@ -870,7 +878,7 @@ public class Boss : MonoBehaviour
             damageable.Health -= SmashDamageCalculate(damage, 2);
             SetHealth(damageable.Health);
 
-            Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
+            //Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
 
         }
         else if (countNum == 4)
@@ -878,9 +886,9 @@ public class Boss : MonoBehaviour
             damageable.Health -= SmashDamageCalculate(damage, 3);
             SetHealth(damageable.Health);
 
-            Debug.Log($"남은체력:{damageable.Health}");
+            //Debug.Log($"남은체력:{damageable.Health}");
 
-            Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
+            //Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
 
         }
 
@@ -894,7 +902,7 @@ public class Boss : MonoBehaviour
     public float SmashDamageCalculate(float damage, int index)
     {
         float _debuff = UserData.GetSmashDamage(index); ;
-        return (damage * (1 + _debuff)) - damage; ;
+        return Mathf.RoundToInt(damage * (1 + _debuff)) - damage;
 
         //return damage * (1 + _debuff);
     }

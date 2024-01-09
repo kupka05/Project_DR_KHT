@@ -113,6 +113,7 @@ namespace Js.Quest
         // 퀘스트 리워드 지급
         private int GiveQuestReward()
         {
+            // 퀘스트 [성공!]
             // 퀘스트가 [완료가능] 상태일 경우
             if (_quest.QuestState.State.Equals(QuestState.StateQuest.CAN_COMPLETE))
             {
@@ -130,10 +131,15 @@ namespace Js.Quest
 
                 // [완료] 상태 변경 & 클리어 보상 지급
                 QuestState.ChangeToNextState();
-                ClearReward.GetReward();
+                ClearReward.GetReward();      
+
+                // 퀘스트 성공 보상 텍스트 출력
+                Unit.PrintRewardText(ClearReward.QuestRewardData.ID);
+
                 return 1;
             }
 
+            // 퀘스트 [실패!]
             // 아닐 경우
             // 퀘스트가 [진행중] 상태일 경우
             else if (_quest.QuestState.State.Equals(QuestState.StateQuest.IN_PROGRESS))
@@ -141,6 +147,10 @@ namespace Js.Quest
                 // [실패] 상태 변경 & 실패 보상 지급
                 QuestState.ChangeState(QuestState.StateQuest.FAILED);
                 FailReward.GetReward();
+
+                // 퀘스트 실패 보상 출력
+                Unit.PrintRewardText(FailReward.QuestRewardData.ID);
+
                 return 2;
             }
 

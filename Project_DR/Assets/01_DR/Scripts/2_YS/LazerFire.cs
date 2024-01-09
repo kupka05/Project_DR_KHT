@@ -20,7 +20,7 @@ public class LazerFire : MonoBehaviour
     void Start()
     {
         damageCollider = GetComponent<DamageCollider>();
-        damageCollider.Damage = damage;
+        damageCollider.SetDamage(damage);
         Invoke("Return", 1);
     }
 
@@ -47,7 +47,7 @@ public class LazerFire : MonoBehaviour
         if (other.tag.Equals("Player"))
         {
             other.GetComponent<Damageable>().DealDamage(damage);
-            GFunc.Log("불 장판 데미지 들어온다");
+            //GFunc.Log("불 장판 데미지 들어온다");
         }
     }
 }

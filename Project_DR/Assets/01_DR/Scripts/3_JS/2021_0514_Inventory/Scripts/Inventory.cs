@@ -102,8 +102,8 @@ namespace Rito.InventorySystem
         {
             { typeof(QuestItemData),   10000 },
             { typeof(MaterialItemData),   20000 },
-            { typeof(BombItemData),  30000 },
-            { typeof(PortionItemData), 40000 },
+            { typeof(PortionItemData), 30000 },
+            { typeof(BombItemData),  40000 },
         };
         private class ItemComparer : IComparer<Item>
         {
@@ -168,16 +168,16 @@ namespace Rito.InventorySystem
                 if (current == null)
                     continue;
 
-                // 아이템 종류 일치, 개수 여유
-                if (current is CountableItem ci2)
-                {
-                    GFunc.Log(target);
-                }
-                if (current.Data == target)
-                {
-                    GFunc.Log("current.Data == target");
-                }
-                if (current.Data == target && current is CountableItem ci)
+                // LEGACY:
+                //if (current.Data == target && current is CountableItem ci)
+                //{
+                //    if (!ci.IsMax)
+                //        return i;
+                //}
+
+                // LEGACY의 데이터 매칭 오류 발생으로
+                // ID매칭으로 변경
+                if (current.Data.ID == target.ID && current is CountableItem ci)
                 {
                     if (!ci.IsMax)
                         return i;

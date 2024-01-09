@@ -493,7 +493,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -506,6 +505,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &611287757877344652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14853,7 +14855,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -14866,6 +14867,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &530031173480939933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15631,7 +15635,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -15644,6 +15647,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &167113907646550020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22070,7 +22076,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -22083,6 +22088,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &93448142521068276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25226,7 +25234,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -25239,6 +25246,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &1341794677219681296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39392,7 +39402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -39405,6 +39414,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &1006185840862004511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53678,7 +53690,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -53691,6 +53702,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &8246583119140640746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67882,7 +67896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -67895,6 +67908,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &7528243053479888042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82466,7 +82482,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -82479,6 +82494,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &1257201234258451659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83964,7 +83982,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -83977,6 +83994,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &1266050355521349310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85405,7 +85425,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -85418,6 +85437,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &5595822707264958905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89230,7 +89252,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -89243,6 +89264,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &7759840879073069010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90770,7 +90794,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -90783,6 +90806,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &2330449186646317003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96973,6 +96999,7 @@ Transform:
   - {fileID: 850939566265417805}
   - {fileID: 3838572316728355488}
   - {fileID: 268678287840945058}
+  - {fileID: 1749828550157449045}
   m_Father: {fileID: 8717664012036202378}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -101126,7 +101153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -101139,6 +101165,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &8760366981206289038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103073,7 +103102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -103086,6 +103114,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &4253340522480176976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103718,6 +103749,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e791fa7be08b7bb4294ad088481d5ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &3426085894763374878
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8717664012036131316}
+    m_Modifications:
+    - target: {fileID: 4018131380216028746, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_Name
+      value: QuestNoticeHUD
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4be2b1d0dd6083c4ab96d834e93f4417, type: 3}
+--- !u!4 &1749828550157449045 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4018131380216028747, guid: 4be2b1d0dd6083c4ab96d834e93f4417,
+    type: 3}
+  m_PrefabInstance: {fileID: 3426085894763374878}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4933208189577221481
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -104162,6 +104268,16 @@ PrefabInstance:
     - target: {fileID: 2427799753264454126, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
         type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480362079549202500, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
+        type: 3}
+      propertyPath: isLeft
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3038501380542659087, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
+        type: 3}
+      propertyPath: isLeft
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4603309848324968499, guid: cedfbf2e120607f4581a6c7ccc6bedbf,

@@ -120,7 +120,7 @@ namespace Js.Crafting
             // 부모 & 트랜스폼 설정 변경
             Transform inventory = _canvasInventory.transform;
             Vector3 scale = inventory.localScale;
-            Vector3 position = new Vector3(0f, 1.4f, 0.1f);
+            Vector3 position = new Vector3(0f, 1.08f, 0.1f);
             Quaternion rotation = Quaternion.Euler(0f, 180f, 0f);
 
             inventory.SetParent(transform);

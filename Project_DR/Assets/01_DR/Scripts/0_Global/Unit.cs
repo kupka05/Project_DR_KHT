@@ -9,6 +9,40 @@ using Js.Crafting;
 public static class Unit
 {
     /*************************************************
+     *           Public Player HUD Methods
+     *************************************************/
+    // 플레이어 화면에 리워드 보상 HUD 텍스트 출력
+    public static void PrintRewardText(params int[] ids)
+    {
+        UserDataManager.Instance.GetQuestRewardText().PrintText(ids);
+    }
+
+
+    /*************************************************
+     *       Public Inventory Items Get Methods
+     *************************************************/
+    public static List<(int, int)> GetInventoryMaterialItems()
+    {
+        List<(int,int)> itemList = new List<(int, int)>();
+        Item[] tempItems = UserDataManager.items;
+
+        for (int i = 0; i < tempItems.Length; i++)
+        {
+            // 재료 아이템일 경우
+            if (tempItems[i] is Rito.InventorySystem.MaterialItem)
+            {
+                int itemID = tempItems[i].Data.ID;
+                int amount = (tempItems[i] as CountableItem).Amount;
+                // 리스트에 추가
+                itemList.Add((itemID, amount));
+            }
+        }
+
+        return itemList;
+    }
+
+
+    /*************************************************
      *         Public Inventory & Item Methods
      *************************************************/
     // 인벤토리에 아이템을 추가

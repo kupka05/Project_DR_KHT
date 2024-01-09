@@ -243,7 +243,6 @@ public class ItemManager : MonoBehaviour
             else if (ItemDataManager.SearchItemDB<QuestItemData>(id))
             {
                 item = CreateQuestItem(pos, id, amount);
-                GFunc.Log("quest 아이템 생성");
             }
 
             // 크래프팅 임시 결과 아이템이 아닐 경우 네임태그 추가
@@ -348,7 +347,9 @@ public class ItemManager : MonoBehaviour
         }
 
         GameObject ItemTag = Resources.Load<GameObject>("Prefabs/Item_NameTag");
-        GameObject itemTag = Instantiate(ItemTag, item.transform.position, item.transform.rotation, item.transform);
+        GameObject itemTag = Instantiate(ItemTag, item.transform.position, item.transform.rotation);
+        itemTag.transform.localScale =  Vector3.one;
+        itemTag.transform.parent = item.transform;
         itemTag.GetComponent<ItemNameTag>().SetName(item.name);
         itemTag.GetComponent<ItemNameTag>().SetPosition(item.transform);
     }

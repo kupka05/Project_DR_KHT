@@ -225,7 +225,6 @@ public class LobbyEvent : MonoBehaviour
         {
             int clearCount = UserDataManager.Instance.ClearCount;
             clearCount = clearCount <= 23 ? clearCount : 22;
-            GFunc.Log(clearCount);
             targetQuestID += clearCount;
             SetNpcDialog(targetQuestID); // NPC 대사 리스트 가져와서 퀘스트 진행 상황에 따라 대사, 이벤트 지정
         }
@@ -909,7 +908,6 @@ public class LobbyEvent : MonoBehaviour
             isResult = false;
             UserDataManager.Instance.isClear = false;
             UserDataManager.Instance.isGameOver = false;
-
         }
 
         // 4. 문 열림

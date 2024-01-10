@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Js.Quest;
 using Js.Crafting;
+using BNG;
 
 public static class UserData
 {
@@ -189,8 +190,13 @@ public static class UserData
     /// <summary> 플레이어의 현재 체력을 증감 </summary>
     public static void SetCurrentHealth(float amount)
     {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if(player != null)
+        player.GetComponent<Damageable>().DealDamage(amount);
+
         // amount는 양수/음수 둘 중 하나의 값을 받는다.
-        UserDataManager.Instance.CurHP += amount;
+        //UserDataManager.Instance.CurHP += amount;
     }
 
     // 해당 ID의 스킬을 호출한다.

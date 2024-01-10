@@ -347,7 +347,9 @@ public class ItemManager : MonoBehaviour
         }
 
         GameObject ItemTag = Resources.Load<GameObject>("Prefabs/Item_NameTag");
-        GameObject itemTag = Instantiate(ItemTag, item.transform.position, item.transform.rotation, item.transform);
+        GameObject itemTag = Instantiate(ItemTag, item.transform.position, item.transform.rotation);
+        itemTag.transform.localScale =  Vector3.one;
+        itemTag.transform.parent = item.transform;
         itemTag.GetComponent<ItemNameTag>().SetName(item.name);
         itemTag.GetComponent<ItemNameTag>().SetPosition(item.transform);
     }

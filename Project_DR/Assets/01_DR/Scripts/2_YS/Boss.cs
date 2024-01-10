@@ -130,6 +130,9 @@ public class Boss : MonoBehaviour
     [Header("Conversation")]
     public BossNPC npc;
     public UnityEvent bossMeet;
+    public GameObject bossStartPosition;
+    private int startDistance;
+    private Vector3 bossStartPos;
 
     //[Header("유도 미사일 테스트")]
     //public Transform testPort;
@@ -179,6 +182,9 @@ public class Boss : MonoBehaviour
         shootBounce = BounceShoot();
         shootBrick = BigBrickShoot();
 
+        bossStartPos = bossStartPosition.transform.localPosition;
+        bossStartPos.z = startDistance - 17;
+        bossStartPosition.transform.localPosition = bossStartPos;
     }
 
     public void FixedUpdate()
@@ -224,7 +230,7 @@ public class Boss : MonoBehaviour
 
         //6915
         waitLazer = (float)DataManager.Instance.GetData(bossProjectileLazerId, "WaitTime", typeof(float));
-
+        startDistance = Data.GetInt(9106, "BossRoomHeight");
     }
 
     public void SetTarget(Transform newTarget)
@@ -902,7 +908,7 @@ public class Boss : MonoBehaviour
     public float SmashDamageCalculate(float damage, int index)
     {
         float _debuff = UserData.GetSmashDamage(index); ;
-        return (damage * (1 + _debuff)) - damage; ;
+        return Mathf.RoundToInt(damage * (1 + _debuff)) - damage;
 
         //return damage * (1 + _debuff);
     }

@@ -1,8 +1,10 @@
 using Rito.InventorySystem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class RandomRoom : MonoBehaviour
 {       // 각 3종류의 방이 존재하는데 각 방Class는 RandomRoom을 상속받을것임
 

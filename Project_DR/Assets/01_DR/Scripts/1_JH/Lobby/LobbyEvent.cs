@@ -20,8 +20,12 @@ public class LobbyEvent : MonoBehaviour
     //private StatData data;
 
     [Header("Main Display")]
+    public GameObject defaultDisplay;
     public GameObject mainDisplay;
     public GameObject mbtiDisplay;
+    private bool onDisplay;
+    public GameObject infoText;
+    public GameObject secretButton;
 
     [Header("Main NPC")]
     public int questID;         // 시트에서 불러올 퀘스트 ID 
@@ -186,14 +190,14 @@ public class LobbyEvent : MonoBehaviour
         UserDataManager.Instance.DBRequst(dbRequest);   // DB 데이터 요청
 
         // 메인 디스플레이 시작 시 세팅
-        ChangeDisplayButton("Main");
+        ChangeDisplayButton("Default");
+        secretButton.SetActive(false);
 
         // PC 상태창 시작 시 세팅
         SetStatusDisplay();
 
         // 상태창 디스플레이 시작 시 세팅
         ChangeStatusDisplayButton("Main");
-
         // 옵저버 등록
         UserDataManager.Instance.OnUserDataUpdate += UpdatePlayerStatusUI;
     }
@@ -718,6 +722,7 @@ public class LobbyEvent : MonoBehaviour
     // 메인 디스플레이 패널 변경 버튼
     public void ChangeDisplayButton(string name)
     {
+        defaultDisplay.SetActive(false);
         mainDisplay.SetActive(false);
         mbtiDisplay.SetActive(false);
         mbtiPannel.SetActive(false);
@@ -725,6 +730,10 @@ public class LobbyEvent : MonoBehaviour
 
         switch (name)
         {
+            case "Default":
+                defaultDisplay.SetActive(true);
+                break;
+
             case "Main":
                 mainDisplay.SetActive(true);
                 break;
@@ -882,8 +891,15 @@ public class LobbyEvent : MonoBehaviour
     // NPC와 대화/보상 수락 등을 하는  디스플레이 버튼
     public void DisplayButton()
     {
+        if(!onDisplay)
+        {
+            infoText.gameObject.SetActive(false);
+            onDisplay = true;
+            ChangeDisplayButton("Main");
+        }
+
         // 1. 대사 디큐
-        if (dialog.log.Count != 0)
+        else if (dialog.log.Count != 0)
         {
             npcDialog.text = dialog.log.Peek().ToString();
             dialog.log.Dequeue();
@@ -913,8 +929,9 @@ public class LobbyEvent : MonoBehaviour
         // 4. 문 열림
         else
         {
+            secretButton.SetActive(true);
             GFunc.ChoiceEvent(targetQuestID);
-            ChangeDisplayButton("Main");
+            ChangeDisplayButton("Default");
             UpdatePlayerStatusUI();
             OpenSpawnRoomDoor();
         }

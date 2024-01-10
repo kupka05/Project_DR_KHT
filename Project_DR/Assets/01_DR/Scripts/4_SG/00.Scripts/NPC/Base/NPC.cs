@@ -1,3 +1,4 @@
+using Js.Quest;
 using Rito.InventorySystem;
 using System;
 using System.Collections;
@@ -121,7 +122,7 @@ public class NPC : MonoBehaviour
     private WaitForSeconds delayTime;       // 딜레이 캐싱
 
     protected int npcID;                // NPC 스프레드시트 ID    -> 파생된 자식 클래스에서 결정
-    protected int nowDialogueId;        // 현재 대화의 Id
+    public int nowDialogueId;        // 현재 대화의 Id
 
     // 자식 클래스가 ParamsInIt()를 호출하면서 결정
     protected NpcType npcType;                    // NPC 타입을 시트값에 따라 지정해줄것임
@@ -139,7 +140,7 @@ public class NPC : MonoBehaviour
     protected float npcConversationScope;   // NPC 대화범위
     protected float npcRecognitionRange;    // NPC 인식범위
 
-    public bool isTryCommunity;       // 대화를 한적 있는지?
+    public bool isTryCommunity;             // 대화를 한적 있는지?
     public bool isComunity;                 // 대화중인지 체크할 변수
     protected bool isCommunityDelray;       // 대화의 딜레이를 줄 함수 대화창 클릭이벤트에 관련있음
     public bool isReadyToAutoComunication;  // 자동으로 다가가서 일정거리 안에 있다면 true가 될것임
@@ -341,12 +342,13 @@ public class NPC : MonoBehaviour
     /// <summary>
     /// 대사들을 EnQueue해주는 함수
     /// </summary>
-    /// <param name="_ComunicationTableId">대사테이블의 ID</param>
+    /// <param name="_comunicationTableId">대사테이블의 ID</param>
     public virtual void EnQueueConversation(int _comunicationTableId)
     {
+        //GFunc.Log($"대사를 EnQueue해주는 함수 진입 : EnQueueConversation(NPC_Class)");
         NpcCanvas.isOutPutChoice = false;
         nowDialogueId = _comunicationTableId;
-        string converationText = (string)DataManager.Instance.GetData(_comunicationTableId, "OutPutText", typeof(string));
+        string converationText = Data.GetString(_comunicationTableId, "OutPutText");
 
         string[] splitTexts = GFunc.SplitConversation(converationText);
 
@@ -366,11 +368,12 @@ public class NPC : MonoBehaviour
     /// <param name="_outputText">출력할 대사</param>
     public virtual void DeQueueConversation()
     {
+        //GFunc.Log($"대사를 DeQueue해주는 함수 진입 : DeQueueConversation(NPC_Class)");
         if (converationText.Count > 0)
         {
             NpcCanvas.OutPutConversation(converationText.Dequeue());
         }
-        else if (NpcCanvas.isOutPutChoice == false)
+        else if (NpcCanvas.isOutPutChoice == false && converationText.Count <= 0)
         {
             // 선택지 출력해야함
             NpcCanvas.OutPutChoices(nowDialogueId);
@@ -389,6 +392,7 @@ public class NPC : MonoBehaviour
         //  위 조건에서 중복으로 나올 가능성이 있기에 재귀 하더라도 Queue나 Array에 넣어서 한정된 값으로 돌도록해야할거같음
         //      GFunc의 활용을 위해 Array로 채택
 
+        //GFunc.Log($"대사 선택하는 함수 진입 : PickConversationEvent(NPC_Class)");
 
         string conversation = Data.GetString(_npcId, "ConversationTableID");
 
@@ -399,7 +403,7 @@ public class NPC : MonoBehaviour
 
         if (isPass == false) { /*PASS*/ }
 
-        //---------------------------- 정해진 대사 이벤트 ------------------------------ }
+        //----------------------------- 정해진 대사 이벤트 ------------------------------ }
 
 
         //{---------------------------- 랜덤한 대사 이벤트 -------------------------------
@@ -464,26 +468,34 @@ public class NPC : MonoBehaviour
         }
 
 
+        // 진행중인 서브퀘스트의 리스트
+        List<Quest> ProgressQuestList = Unit.GetInProgressSubQuestForList();
 
-        //foreach(/*완료가능한 퀘스트 List들*/)
-        //{
-        //    foreach(int questId in choiceQuestIdList)
-        //    {
-        //        if (/*완료 가능한 퀘스트 List의 현재 완료가능한 퀘스트값과 NPC 전조 퀘스트 값이 같다면*/)
-        //        {
-        //            foreach(int outId in conversationIdList)
-        //             {
-        //                  stringBuilder.Clear();
-        //                  stringBuilder.Append(Data.GetString(outId,"AntecedentQuest"))
-        //                  stringBuilder.Replace("_", "");
-        //                 if(questId == int.Parse(stringBuidler.ToString()));
-        //                  {
-        //                      return int.Parse(stringBuidler.ToString())
-        //                  }
-        //             }        
-        //        }
-        //    }
-        //}
+        foreach (Quest quest in ProgressQuestList)
+        {
+            foreach (int questId in antecedentQuestIdList)
+            {
+                if ((quest.QuestData.ID == questId) && 
+                    quest.QuestData.Condition == QuestData.ConditionType.NPC_TALK ||
+                    quest.QuestData.Condition == QuestData.ConditionType.GIVE_ITEM)
+                {
+                    foreach (int outId in conversationIdList)
+                    {
+                        stringBuilder.Clear();
+                        stringBuilder.Append(Data.GetString(outId, "AntecedentQuest"));
+                        stringBuilder.Replace("_", "");
+                        if (questId == int.Parse(stringBuilder.ToString()))
+                        {                            
+                            QuestCallback.OnDialogueCallback(questId);
+                            Unit.ClearQuestByID(questId);
+                            GFunc.Log($"NPC 특정대사 출력 조건에서 조건에 맞아 OnDialogueCallBack 호출\n 넘겨준 매개변수 : {stringBuilder}");
+                            return outId;
+                        }
+                    }
+                }
+            }
+        }
+        
 
         return 0;
 
@@ -497,8 +509,15 @@ public class NPC : MonoBehaviour
     {       // 퀘스트 완료 대사 출력과 보상 지급해줘야함
         EnQueueConversation(_havingToDialogueID);   // 대사 넣기
 
-        // TODO : 보상지급 해줘야함        
-        DeQueueConversation(); // 대사출력
+        // TODO : 보상지급 해줘야함
+        if (converationText.Count > 0)
+        {
+            DeQueueConversation(); // 대사출력
+        }
+        else
+        {
+            //GFunc.Log("퀘스트 완료후 들어간 대사 0개");
+        }
     }       // CompleateQuest()
     #endregion Inspection이 실행하는 함수
 
@@ -507,6 +526,7 @@ public class NPC : MonoBehaviour
     /// </summary>
     private void NpcRandomEventPick(int _npcId)
     {
+        //GFunc.Log($"랜덤한 대사를 출력하도록 하는 함수 진입 : NpcRandomEventPick(NPC_Class)");
         string dialogueRefId = Data.GetString(_npcId, "ConversationTableID");   // NPC의 모든 대사ID 긁어오기
 
         int[] dialogueIds = GFunc.SplitIds(dialogueRefId);      // 긁어온 대사를 int형 배열에 기입
@@ -598,6 +618,8 @@ public class NPC : MonoBehaviour
             RewardEffect(_rewardId);
         }
 
+        // 보상 텍스트 출력
+        Unit.PrintRewardText(_rewardId);
     }       // RewardTypeCheck()
 
     #region 보상지급 함수
@@ -607,14 +629,20 @@ public class NPC : MonoBehaviour
     /// <param name="_rewardId">보상 ID</param>
     private void RewardSilverCoin(int _rewardId)
     {
-        int tableProbability = Data.GetInt(_rewardId, "Reward_1_Probability");  // 시트상의 확률        
-        bool isPass = NPCManager.Instance.GetProbabilityResult(tableProbability);     // 보상을 지급해도 되는지
+        List<int> rewardItemRefIdList = NPCManager.Instance.GetRewardItemRefIdList(_rewardId);      // 보상의 ID
+        List<int> rewardAmountList = NPCManager.Instance.GetRewardAmountList(_rewardId);            // 보상의 갯수
+        List<int> rewardProbabilityList = NPCManager.Instance.GetRewardProbabilityList(_rewardId);  // 보상의 확률        
 
-        if (isPass == true)
+        for (int i = 0; i < rewardItemRefIdList.Count; i++)
         {
-            UserDataManager.Instance.Gold = UserDataManager.Instance.Gold + Data.GetInt(_rewardId, "GiveGold");
+            bool isRewardInIt = NPCManager.Instance.GetProbabilityResult(rewardProbabilityList[i]);
+
+            if (isRewardInIt == true)
+            {
+                Unit.AddInventoryItem(rewardItemRefIdList[i], rewardAmountList[i]);
+            }
+            else { /*PASS*/ }
         }
-        else { /*PASS*/ }
     }       // RewardSilverCoin()
 
     /// <summary>
@@ -647,7 +675,7 @@ public class NPC : MonoBehaviour
 
         for (int i = 0; i < rewardItemRefIdList.Count; i++)
         {
-            bool isRewardInIt = NPCManager.Instance.GetProbabilityResult(rewardProbabilityList[i]);            
+            bool isRewardInIt = NPCManager.Instance.GetProbabilityResult(rewardProbabilityList[i]);
 
             if (isRewardInIt == true)
             {
@@ -683,7 +711,7 @@ public class NPC : MonoBehaviour
         //Debug.Log($"NPC의 애니메이션 변경 함수 진입\n매개변수값 : {_playAnimationName}");
     }       // ChangeAnimationString()
 
-    
+
 
     #endregion 애니메이션 관련
 

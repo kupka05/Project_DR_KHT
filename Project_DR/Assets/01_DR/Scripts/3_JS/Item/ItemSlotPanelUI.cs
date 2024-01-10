@@ -8,32 +8,33 @@ using UnityEngine.UI;
 public class ItemSlotPanelUI : MonoBehaviour
 {
     /*************************************************
+     *                Public Fields
+     *************************************************/
+
+    public ItemData ItemData => _itemData;
+    public int Index => _index;
+    public int ItemIndex => _itemIndex;
+
+
+    /*************************************************
      *                Private Fields
      *************************************************/
-    #region [+]
+
     [SerializeField] private ItemSlotController _itemSlot;
-    private ItemData _itemData;
+    [SerializeField] private ItemData _itemData;
     [SerializeField] private TMP_Text _name;
     [SerializeField] private Image _iconSprite;
     [SerializeField] private TMP_Text _count;
-    [SerializeField] private int _index = -1;
+    [SerializeField] private int _index = -1;       // 패널 슬롯 인덱스
+    [SerializeField] private int _itemIndex = -1;   // 보관중인 아이템 인덱스
+   
 
-    #endregion
-    /*************************************************
-     *                Public Fields
-     *************************************************/
-    #region [+]
-    public ItemData ItemData => _itemData;
-    public int Index => _index;
-
-    #endregion
     /*************************************************
      *                Public Methods
      *************************************************/
-    #region [+]
-    // Initalize
-    public void Initialize(int id, int amount, int maxAmount, int index)
+    public void Initialize(int id, int amount, int maxAmount, int index, int itemIndex)
     {
+        // Init
         // id가 0일 경우 리셋
         if (id == 0)
         {
@@ -53,41 +54,17 @@ public class ItemSlotPanelUI : MonoBehaviour
         UpdateCountText(countText);
         _index = index;
         _itemSlot.SetIndex(_index);
-        //switch (ItemDataManager.GetItemType(id))
-        //{
-        //    // Potion일 경우
-        //    case 0:
-        //        PortionItemData portionItemData = ItemDataManager.SearchItemDB<PortionItemData>(id);
-        //        InitUI(portionItemData);
-        //        break;
-
-        //    // Bomb일 경우
-        //    case 1:
-        //        BombItemData bombItemData = ItemDataManager.SearchItemDB<BombItemData>(id);
-        //        InitUI(bombItemData);
-        //        break;
-
-        //    // Material일 경우
-        //    case 2:
-        //        MaterialItemData materialItemData = ItemDataManager.SearchItemDB<MaterialItemData>(id);
-        //        InitUI(materialItemData);
-        //        break;
-
-        //    // Quest일 경우
-        //    case 3:
-        //        QuestItemData questItemData = ItemDataManager.SearchItemDB<QuestItemData>(id);
-        //        InitUI(questItemData);
-        //        break;
-
-        //    default:
-        //        Debug.Assert(false);
-        //        break;
-        //}
+        _itemSlot.SetItemIndex(itemIndex);
     }
 
     public void SetIndex(int index)
     {
         _index = index;
+    }
+
+    public void SetItemIndex(int index)
+    {
+        _itemIndex = index;
     }
 
     // 카운트 텍스트 갱신
@@ -96,14 +73,9 @@ public class ItemSlotPanelUI : MonoBehaviour
         _count.text = text;
     }
 
-    #endregion
+
     /*************************************************
      *                Private Methods
      *************************************************/
-    //// UI 정보 Initialize
-    //private void InitUI<T>(T data) where T : ItemData
-    //{
-    //    _name.text = data.Name;
-    //    _iconSprite.sprite = data.IconSprite;
-    //}
+
 }

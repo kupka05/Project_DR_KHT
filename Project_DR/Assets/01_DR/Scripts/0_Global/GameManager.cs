@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         get
         {
             // 만약 싱글톤 변수에 아직 오브젝트가 할당되지 않았다면
-            if (m_instance == null)
+            if (m_instance == null || m_instance == default)
             {
                 // 생성 후 할당
                 GameObject obj = new GameObject("GameManager");
@@ -71,24 +71,45 @@ public class GameManager : MonoBehaviour
     // ----------------------------------------------- SG ------------------------------------------------
 
     public bool IsProtoType;
+    #region 변수들
+    /// <summary>
+    /// // 현재 몇층인지 알려줄 변수
+    /// </summary>
+    public int nowFloor;
+    /// <summary>
+    /// 현재 플레이어의 회차의따라서 아래 const변수값이 대입될것임
+    /// </summary>
+    public int isPlayerMaxFloor;
+    /// <summary>
+    /// 기본 딜레이 5이며 딜레이를 줄때마다 ++이 되면서 천천히 생성이 되도록 하는것을 의도한 변수
+    /// </summary>
+    public int spawnDelayFrame = 5; 
 
-    public int nowFloor;        // 현재 몇층인지 알려줄 변수
-    public int isPlayerMaxFloor;    // 현재 플레이어의 회차의따라서 아래 const변수값이 대입될것임
     // 던전 진행 Max층을 알려줄 const int 변수
     public const int PROTOTYPE = 1;
     public const int FIRSTTIME = 3;
     public const int FIRSTAFTER = 5;
 
+    [SerializeField]
     public static List<RandomRoom> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
+    public List<RandomRoom> isTestList;
 
     private bool allRoomClear = false;              // 모든 방이 클리어 됬다면 true가 될 변수
 
     private bool isClear = false;                   // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
     public bool isGameOver;
 
-    [Header("Boss Fight")]
-    public bool isBossFight = false;
+    [Header("Boss Battle")]
+    public bool isBossBattle = false;            // 보스와 싸우는지 여부 (전투중 게임오버 체크 : 보스 전투 퀘스트 실패 조건)
+    private Vector3 cutSceneRoomPosition;
+    private Vector3 playerPos;                  // 컷씬룸 이동 전 플레이어 포지션
 
+    public List<GameObject> ghostObjList;       // 유령을 담아둘 리스트
+    public List<NullRoom> nullRoomList;         // 빈방을 담아두는 리스트 (모루생성에 필요)
+    public bool isInItGhost = false;
+    public bool isAnvilCreate = false;
+
+    #endregion 변수들
 
     public bool IsClear
     {
@@ -98,7 +119,7 @@ public class GameManager : MonoBehaviour
             if (isClear != value)
             {
                 isClear = value;
-                DoorControll(IsClear);
+                DoorControl(IsClear);
                 if (isClear == true)
                 {
                     allRoomClear = CheckAllRoomClear();          
@@ -129,10 +150,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public List<GameObject> ghostObjList;       // 유령을 담아둘 리스트
-    public List<NullRoom> nullRoomList;         // 빈방을 담아두는 리스트 (모루생성에 필요)
-    public bool isInItGhost = false;
-    public bool isAnvilCreate = false;
+
 
     public event System.Action DoorOnEvent;
     public event System.Action DoorOffEvent;
@@ -164,7 +182,7 @@ public class GameManager : MonoBehaviour
         // 데이터 가져오기
         GetData();
         StartInIt();
-        SetPlayer();
+        SetGameSetting();
     }       // Start()    
 
 
@@ -183,6 +201,8 @@ public class GameManager : MonoBehaviour
             ClearDungeon();
         }
 
+        isTestList = isClearRoomList;
+
     }
 
     private void OnLevelWasLoaded()
@@ -190,7 +210,7 @@ public class GameManager : MonoBehaviour
         // GFunc.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
         // 데이터 가져오기
         GetData();
-        SetPlayer();
+        SetGameSetting();
     }
 
 
@@ -224,7 +244,7 @@ public class GameManager : MonoBehaviour
         }
     }       // StartInIt()
 
-    private void SetPlayer()
+    private void SetGameSetting()
     {
 
         // 플레이어 찾아오기
@@ -242,6 +262,10 @@ public class GameManager : MonoBehaviour
         {
             fader = Camera.main.transform.GetComponent<ScreenFader>();
         }
+
+      
+
+
     }
 
 
@@ -253,7 +277,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         // 보스전일 경우 보스 처치 실패
-        if (isBossFight)
+        if (isBossBattle)
         {
             BossKillFail();
         }
@@ -282,6 +306,8 @@ public class GameManager : MonoBehaviour
     /// <summary>  던전 클리어후 로비로 보내줄 함수 </summary>
     public void ClearDungeon()
     {
+        isBossBattle = false;
+
         // 출구 층이면 로비로 보내주기
         if (nowFloor == isPlayerMaxFloor)
         {
@@ -312,7 +338,7 @@ public class GameManager : MonoBehaviour
     // 보스 처치 실패
     public void BossKillFail()
     {
-        isBossFight = false;
+        isBossBattle = false;
 
         Quest curSubQuest = Unit.GetInProgressSubQuest();    // 현재 진행중인 서브 퀘스트 반환 (보스 처치 퀘스트)
         int clearID = curSubQuest.QuestData.ID;              // 진행중 서브 퀘스트 ID
@@ -378,14 +404,16 @@ public class GameManager : MonoBehaviour
     /// 문을 열고 닫는 함수를 하나로 묶은것
     /// </summary>
     /// <param name="_isDoorOn">문을 열지 닫을지 bool값</param>
-    private void DoorControll(bool _isDoorOn)
+    private void DoorControl(bool _isDoorOn)
     {
         if (_isDoorOn == true)
         {
+            GFunc.Log($"문열기 호출");
             DoorOn();
         }
         else if (_isDoorOn == false)
         {
+            GFunc.Log($"문닫기 호출");
             DoorOff();
         }
     }       // DoorControll()
@@ -404,9 +432,11 @@ public class GameManager : MonoBehaviour
     /// 모든 방이 클리어 됬는지 체크해줄 함수
     /// </summary>
     public bool CheckAllRoomClear()
-    {
+    {        
         foreach(RandomRoom temp in isClearRoomList)
         {
+            GFunc.Log($"{temp.gameObject.name}의 클리어 여부 : {temp.isClearRoom}");
+                
             if(temp.isClearRoom == false)
             {
                 return false;
@@ -455,7 +485,7 @@ public class GameManager : MonoBehaviour
                 int randListIdx = UnityEngine.Random.Range(0, nullRoomList.Count);
 
                 nullRoomList[randListIdx].CreateAnvilObj();
-                GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
+                //GFunc.Log($"모루 생성 -> 위치 {nullRoomList[randListIdx].gameObject.name}");
                 isAnvilCreate = true;
             }
         }
@@ -469,6 +499,41 @@ public class GameManager : MonoBehaviour
         StopAllCoroutines();
     }
 
+    public void BossCutScene()
+    {
+        playerPos = player.transform.position;  // 플레이어 기존 위치 캐싱
+
+        player.GetComponent<SmoothLocomotion>().freeze = true;
+
+        // 컷씬룸 구성
+        cutSceneRoomPosition = playerPos;
+        cutSceneRoomPosition.y -= 50;
+        GameObject cutSceneRoomPrefab = Resources.Load<GameObject>("Prefabs/CutSceneRoom");
+
+        GameObject cutSceneRoom = Instantiate(cutSceneRoomPrefab, cutSceneRoomPosition, Quaternion.identity);
+
+        StartCoroutine(FadeRoutine(cutSceneRoom.transform.GetChild(0).transform.position));
+    }
+
+    public void EndBossCutScene()
+    {
+        player.GetComponent<SmoothLocomotion>().freeze = false;
+
+        StartCoroutine(FadeRoutine(playerPos));
+
+       
+
+    }
+
+    IEnumerator FadeRoutine(Vector3 position)
+    {
+        FadeIn();
+        yield return new WaitForSeconds(1);
+        player.transform.position = position;
+        FadeOut();
+        yield return new WaitForSeconds(1);
+        yield break;
+    }
 
     public void FadeIn()
     {

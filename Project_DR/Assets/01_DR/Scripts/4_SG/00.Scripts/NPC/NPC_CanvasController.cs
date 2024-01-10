@@ -1,3 +1,4 @@
+using Js.Quest;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,7 +37,10 @@ public class NPC_CanvasController : MonoBehaviour
 
     private int nowConversationRefID;           // 현재 대화에서 참조 되고 있는 ID    
 
-    public bool isOutPutChoice;                 // 선택지 중복 출력을 방지하기 위한 bool값 -> EnQueue됄때 false 될거임
+    /// <summary>
+    /// 선택지 중복 출력을 방지하기 위한 bool값 -> EnQueue됄때 false 될거임
+    /// </summary>
+    public bool isOutPutChoice;                 
 
     public event System.Action<int> RewardEvent;        // 보상 지급하라고 NPC에게 알려주는 이벤트
 
@@ -68,7 +72,7 @@ public class NPC_CanvasController : MonoBehaviour
 
     }       // AwakeInIt()
 
-    
+
     private void StartInIt()
     {
         npc = this.transform.parent.parent.GetComponent<NPC>();
@@ -172,14 +176,19 @@ public class NPC_CanvasController : MonoBehaviour
     /// <param name="_converationRefID">출력해야하는 선택지가 존재하는 대사의 ID값</param>
     public void OutPutChoices(int _conversationRefID)
     {
+        if(isOutPutChoice == true)
+        { return; }
+        else { /*PASS*/ }
+
+        //GFunc.Log($"선택지 출력해주는 함수 진입 : OutPutChoices(NPC_CanvasController_Class)");
         isOutPutChoice = true;
         nowConversationRefID = _conversationRefID;
         // Choice1Event가 존재한다면 그것의 ID를 풀어내서 참조해야함(플레이어퀘스트 || 이후 영향이 줄것)
-        string choice1Event = (string)DataManager.Instance.GetData(_conversationRefID, "Choice1Event", typeof(string));
+        string choice1Event = Data.GetString(_conversationRefID, "Choice1Event");
 
-        string choice1 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice1", typeof(string));
-        string choice2 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice2", typeof(string));
-        string choice3 = (string)DataManager.Instance.GetData(_conversationRefID, "Choice3", typeof(string));
+        string choice1 = Data.GetString(_conversationRefID, "Choice1");
+        string choice2 = Data.GetString(_conversationRefID, "Choice2");
+        string choice3 = Data.GetString(_conversationRefID, "Choice3");
         //GFunc.Log($"선택지 시트에서 가져오기 시도\nChoice1 : {choice1}\nChoice2 : {choice2}\nChoice3 : {choice3}");
         // 아래 Choice3는 존재하면 띄우는 조건이 만족하는지 한번 체크해야함 (12.13기준 퀘스트가 나와야 클리어여부를 끌어와서 체크할수있음)
 
@@ -202,8 +211,8 @@ public class NPC_CanvasController : MonoBehaviour
         //{
         //    //GFunc.Log($"Choice : {_choice}");
         //}
-        //GFunc.Log($"해당 선택지의 값 : {_choice} 가 들어왔음");
-        //Debug.Log($"여기 들어오나? 들어온다면 어떤 값을 가지고 있지?\n_choice :{_choice}\n_ChoiceNum : {_choiceNum}");
+        //GFunc.Log($"선택지가 비어있는지 확인하는 함수 진입 : CheckChoiceNull(NPC_CanvasController_Class)  \n해당 선택지의 값 : {_choice} 가 들어왔음");
+        //GFunc.Log($"여기 들어오나? 들어온다면 어떤 값을 가지고 있지?\n_choice :{_choice}\n_ChoiceNum : {_choiceNum}");
         if (_choice == isNon || _choice == underBar)
         {
             ChoiceTextAColorOff(_outputText);
@@ -233,6 +242,8 @@ public class NPC_CanvasController : MonoBehaviour
     /// </summary>
     private bool CheckChoice3()
     {
+        //GFunc.Log($"3번 선택지 조건이 맞는지 확인하는 함수 진입 : CheckChoice3 (NPC_CanvasConroller_Class)");
+
         // TODO : 퀘스트클리어 여부를 확인 가능하다면 그떄에 체크해서 출력시키도록 해야함
         // 아래 받아온 string값을 int[], string [] 2개로 나누어야함                                 
         bool isPass = true;
@@ -240,23 +251,24 @@ public class NPC_CanvasController : MonoBehaviour
         string choice3ConditionMBTIs = Data.GetString(nowConversationRefID, "Choice3ConditionMBTI");
 
         string choice3ConditionValues = Data.GetString(nowConversationRefID, "Choice3ConditionValue");
-         
+
         string[] arrChoice3ConditionMBTI = GFunc.SplitConversation(choice3ConditionMBTIs);
 
+        //GFunc.Log($"NPCTutis의 문제의 변수값 : {choice3ConditionValues}\n현재 대화 ID : {npc.nowDialogueId} ");
         float[] arrChoice3ConditionValue = GFunc.SplitFloats(choice3ConditionValues);
-        
+
         //GFunc.Log($"arrLength : {arrChoice3ConditionMBTI.Length}"); // 조건 1개짜리 결과 1
         bool[] checkArray = new bool[arrChoice3ConditionValue.Length];
 
         for (int i = 0; i < arrChoice3ConditionMBTI.Length; i++)
         {
-            string findMBTI = FindConditionMBTI(arrChoice3ConditionMBTI[i]);            
+            string findMBTI = FindConditionMBTI(arrChoice3ConditionMBTI[i]);
             //checkArray[i] = CheckMBTIValue(arrChoice3ConditionMBTI[i], arrChoice3ConditionValue[i]);
             checkArray[i] = CheckMBTIValue(findMBTI, arrChoice3ConditionValue[i]);
         }
-        
+
         for (int i = 0; i < checkArray.Length; i++)
-        {            
+        {
             if (checkArray[i] == false)
             {
                 isPass = false;
@@ -430,9 +442,11 @@ public class NPC_CanvasController : MonoBehaviour
     {
         // 퀘스트
         // 플레이어에게 퀘스트를 부여하는 기능
-        GFunc.Log($"퀘스트 ID : {_questRefId} 를 퀘스트 리스트에 넣어주어야함");
+        Unit.InProgressQuestByID(_questRefId);
+        GFunc.Log($"Unit.InProgressQuestByID호출 : {_questRefId} 를 진행중에 넣었음");
 
-    }
+
+    }       // ItQuest()
     private void ItConveration(int _conversationRefId)
     {
         // 다음 대사 출력하는 기능        
@@ -481,7 +495,7 @@ public class NPC_CanvasController : MonoBehaviour
     /// </summary>
     public void CheckOnClickChoice(NPCUIImage _choiceImage)
     {
-
+        isOutPutChoice = false;
         string choice = "Choice";
         string choiceNum = _choiceImage.choiceNum.ToString();
         string eventText = "Event";
@@ -498,7 +512,7 @@ public class NPC_CanvasController : MonoBehaviour
         }
         else { /*PASS*/ }
 
-        
+
         string eventRefId = (string)DataManager.Instance.GetData(nowConversationRefID, stringBuilder.ToString(), typeof(string));
         //GFunc.Log($"StBuild의 값 : {stringBuilder}\n참조해온 선택지 이벤트 값 : {eventRefId}");
         if (eventRefId == isNon || eventRefId == underBar || eventRefId == endTalk)
@@ -517,6 +531,9 @@ public class NPC_CanvasController : MonoBehaviour
         // -> 그 ID 값이 퀘스트인지 보상인지 구별하기 -> 퀘스트,보상 실행
 
         // GFunc.Log($"에러부분 ->  eventRefId : {eventRefId}\n nowConversationRefID : {nowConversationRefID}");
+
+        if(eventRefId == null)  // 지환 : 예외처리
+        { return; }
 
         int[] eventRefIds = GFunc.SplitIds(eventRefId);
 

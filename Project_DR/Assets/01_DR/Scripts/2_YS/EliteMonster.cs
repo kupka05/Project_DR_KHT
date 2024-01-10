@@ -394,8 +394,6 @@ public class EliteMonster : Monster
 
         }
         MoveWithSmoothTransition(this.transform.position - transform.forward * 3.0f);
-
-
     }
 
 

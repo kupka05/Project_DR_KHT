@@ -796,6 +796,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterHpSlider: {fileID: 2767832186488124884}
+  nameText: {fileID: 1467414971368222873}
   state: 0
   capsuleColliders: []
   monsterId: 7004
@@ -821,6 +822,7 @@ MonoBehaviour:
   stunDelay: 1
   stunCount: 0
   stopDistance: 0
+  monName: 
   lastDamageTime: 0
   monsterTr: {fileID: 2007344343179077279}
   playerTr: {fileID: 0}
@@ -846,6 +848,7 @@ MonoBehaviour:
     m_Bits: 3145729
   count: 0
   maxCount: 0
+  damageRadius: 1
 --- !u!114 &6041716752347440668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2773,7 +2776,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAC70\uBBF8"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6b3abd72e495a94bae7c535165f6b13, type: 2}
   m_sharedMaterial: {fileID: 4872938910897767070, guid: f6b3abd72e495a94bae7c535165f6b13,

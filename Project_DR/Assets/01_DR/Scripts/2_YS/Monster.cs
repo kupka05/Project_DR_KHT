@@ -43,7 +43,7 @@ public class Monster : MonoBehaviour
 {
     public UnityEngine.UI.Slider monsterHpSlider;
     private TMP_Text hpText;
-
+    public TMP_Text nameText;
 
     //스턴 추가 - hit상태
     public enum State
@@ -108,7 +108,7 @@ public class Monster : MonoBehaviour
     public float stunDelay = 1f;
     public float stunCount = default;  //경직 횟수, 일반 몬스터는 필요 없음
     public float stopDistance = default;
-    //몬스터 이름도 추가될 예정
+    public string monName = default;
 
     public float lastDamageTime;
 
@@ -210,6 +210,8 @@ public class Monster : MonoBehaviour
 
             //attack = damageCollider.Damage; // 지환 : attack은 시트에서 가져온 데이터 값
         }
+
+        nameText.text = monName.ToString(); 
 
         nav.speed = speed;
 
@@ -315,7 +317,7 @@ public class Monster : MonoBehaviour
 
         stopDistance = (float)DataManager.Instance.GetData(id, "MonStd", typeof(float));
 
-
+        monName = Data.GetString(id, "MonName");
 
         if (isDebug)
         {

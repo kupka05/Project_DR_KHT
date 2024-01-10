@@ -95,15 +95,25 @@ public class BossNPC : NPC
     protected override void StartConvertion()
     {
         // 플레이어 화면에 UI 캔버스 붙여주기
-        if (Camera.main)
+        //if (Camera.main)
+        //{
+        //    canvasObj.transform.parent = Camera.main.transform;
+        //    canvasObj.transform.localPosition = new Vector3(0,-0.38f,0.8f);
+        //    canvasObj.transform.localRotation = Quaternion.identity;
+        //}
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null) 
         {
-            canvasObj.transform.parent = Camera.main.transform;
-            canvasObj.transform.localPosition = new Vector3(0,-0.38f,0.8f);
+            canvasObj.transform.parent = player.transform.parent.GetChild(3);
+            canvasObj.transform.localPosition = new Vector3(0f, 0.1f, 0.7f);
             canvasObj.transform.localRotation = Quaternion.identity;
+            canvasObj.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         }
-        
-        // 화면 어둡게 페이드인
-        GameManager.instance.FadeIn();
+
+
+        // 보스 컷씬 시작
+        GameManager.instance.BossCutScene();
         
         // 캔버스 켜주기
         OnCanvasObj();
@@ -134,12 +144,12 @@ public class BossNPC : NPC
         base.EndConveration();
 
         OffCanvasObj();                      // 캔버스 끄기
-        GameManager.instance.FadeOut();      // 플레이어 페이드 아웃
+        GameManager.instance.EndBossCutScene();      // 플레이어 페이드 아웃
 
         GFunc.ChoiceEvent(conversationID);   // 대화 종료 후 대사 클리어 이벤트 진행중으로 변경
 
         GetComponent<Boss>().StartAttack();  // 보스 전투 시작
-        GameManager.instance.isBossFight = true;
+        GameManager.instance.isBossBattle = true;
 
         transform.GetChild(0).gameObject.SetActive(false);
     }       // EndConveration()

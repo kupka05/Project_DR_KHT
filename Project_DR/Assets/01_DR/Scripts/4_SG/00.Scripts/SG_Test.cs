@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
+using UnityEngine.Rendering.Universal;
 
 
 
@@ -13,14 +15,24 @@ public enum testEnum
     four = 4,
     five = 5
 }
+
+
 public class SG_Test : MonoBehaviour
 {
     Transform box;
 
-
+    
+    OcclusionArea occlusionArea = new OcclusionArea();
+    XROcclusionMeshPass testClass;
+        
     private void Awake()
     {
         box = this.GetComponent<Transform>();
+        
+        Camera.main.useOcclusionCulling = true;
+
+        occlusionArea.size = new Vector3(100f, 100f, 100f);
+        occlusionArea.transform.position = occlusionArea.size * 0.5f;
     }
 
     private void Start()

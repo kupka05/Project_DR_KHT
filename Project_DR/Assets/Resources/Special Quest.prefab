@@ -9826,7 +9826,7 @@ GameObject:
   - component: {fileID: 2522083768120084011}
   - component: {fileID: 6624798192309345611}
   m_Layer: 0
-  m_Name: GraveType5_2
+  m_Name: QuestStone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10032,12 +10032,6 @@ MonoBehaviour:
   RemoveBulletHolesOnDeath: 1
   onDamaged:
     m_PersistentCalls:
-      m_Calls: []
-  onKnockback:
-    m_PersistentCalls:
-      m_Calls: []
-  onDestroyed:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
@@ -10051,6 +10045,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onKnockback:
+    m_PersistentCalls:
+      m_Calls: []
+  onDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
   onRespawn:
     m_PersistentCalls:
       m_Calls: []

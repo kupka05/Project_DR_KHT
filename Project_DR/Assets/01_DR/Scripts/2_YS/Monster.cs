@@ -675,7 +675,7 @@ public class Monster : MonoBehaviour
 
     }
 
-    public void OnDeal(float damage)
+    public virtual void OnDeal(float damage)
     {
         // 죽지 않은 상태면 HP 바 업데이트
         if (damageable.Health > 0)
@@ -748,9 +748,9 @@ public class Monster : MonoBehaviour
         }
     }
 
-    public void MonsterKnockBack()
+    public virtual void MonsterKnockBack()
     {
-        anim.SetTrigger(hashStun);
+        //anim.SetTrigger(hashHit);
 
         rigid.WakeUp();
 
@@ -778,7 +778,7 @@ public class Monster : MonoBehaviour
 
     }
 
-    void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
         Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
         overlapSphereCenter.z -= 0.5f;

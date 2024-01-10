@@ -25,6 +25,7 @@ public class LobbyEvent : MonoBehaviour
     public GameObject mbtiDisplay;
     private bool onDisplay;
     public GameObject infoText;
+    public GameObject secretButton;
 
     [Header("Main NPC")]
     public int questID;         // 시트에서 불러올 퀘스트 ID 
@@ -190,13 +191,13 @@ public class LobbyEvent : MonoBehaviour
 
         // 메인 디스플레이 시작 시 세팅
         ChangeDisplayButton("Default");
+        secretButton.SetActive(false);
 
         // PC 상태창 시작 시 세팅
         SetStatusDisplay();
 
         // 상태창 디스플레이 시작 시 세팅
         ChangeStatusDisplayButton("Main");
-
         // 옵저버 등록
         UserDataManager.Instance.OnUserDataUpdate += UpdatePlayerStatusUI;
     }
@@ -928,6 +929,7 @@ public class LobbyEvent : MonoBehaviour
         // 4. 문 열림
         else
         {
+            secretButton.SetActive(true);
             GFunc.ChoiceEvent(targetQuestID);
             ChangeDisplayButton("Default");
             UpdatePlayerStatusUI();

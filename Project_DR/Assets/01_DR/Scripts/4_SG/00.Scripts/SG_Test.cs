@@ -4,52 +4,52 @@ using UnityEngine;
 using System;
 using UnityEditor;
 using UnityEngine.Rendering.Universal;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 
-
-public enum testEnum
-{
-    one = 1,
-    two = 2,
-    three = 3,
-    four = 4,
-    five = 5
-}
 
 
 public class SG_Test : MonoBehaviour
 {
-    Transform box;
 
-    
-    OcclusionArea occlusionArea = new OcclusionArea();
-    XROcclusionMeshPass testClass;
-        
+    public Material tempMaterial;
+    public Vector3[] vertices;
+    public int[] triangles;
+    Mesh mesh;
+    MeshFilter filter;
+
+    GameObject tempObj;
+    Mesh tempMesh;
+
     private void Awake()
-    {
-        box = this.GetComponent<Transform>();
-        
-        Camera.main.useOcclusionCulling = true;
+    {    
+        filter = this.GetComponent<MeshFilter>();
+        mesh = filter.mesh;
 
-        occlusionArea.size = new Vector3(100f, 100f, 100f);
-        occlusionArea.transform.position = occlusionArea.size * 0.5f;
-    }
+
+        tempObj = new GameObject("TempObj", typeof(MeshFilter));
+        tempMesh = new Mesh();
+
+    }       // Awake()
 
     private void Start()
     {
-        
+        vertices = new Vector3[] {new Vector3(-1f,1f,0f), new Vector3(1f,1f,0f),
+                                  new Vector3 (1f,-1f,0f), new Vector3(-1f,-1f,0f)};
 
-        box.transform.localEulerAngles = new Vector3 (0, 90, 0);
-        Debug.Log($"LocalEulerAngles 수정후 Rotation : {box.transform.rotation}");
+        triangles = new int[] {0, 1, 2,
+                               0, 2, 3};
+        //vertices = mesh.vertices;
 
-        box.transform.localEulerAngles = new Vector3(0, 0, 0);
+        tempMesh.vertices = vertices;
 
-        box.transform.rotation = Quaternion.Euler(0, 90, 0);
-        Debug.Log($"rotation = Quaternion.Euler 수정후 Rotation : {box.transform.rotation}");
+        tempMesh.triangles = triangles;
+
+        //temp
 
 
 
-    }
+    }       // Start()
 
 
 }       // SG_Test

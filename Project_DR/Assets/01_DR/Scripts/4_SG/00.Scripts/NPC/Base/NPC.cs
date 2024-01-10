@@ -629,14 +629,20 @@ public class NPC : MonoBehaviour
     /// <param name="_rewardId">보상 ID</param>
     private void RewardSilverCoin(int _rewardId)
     {
-        int tableProbability = Data.GetInt(_rewardId, "Reward_1_Probability");  // 시트상의 확률        
-        bool isPass = NPCManager.Instance.GetProbabilityResult(tableProbability);     // 보상을 지급해도 되는지
+        List<int> rewardItemRefIdList = NPCManager.Instance.GetRewardItemRefIdList(_rewardId);      // 보상의 ID
+        List<int> rewardAmountList = NPCManager.Instance.GetRewardAmountList(_rewardId);            // 보상의 갯수
+        List<int> rewardProbabilityList = NPCManager.Instance.GetRewardProbabilityList(_rewardId);  // 보상의 확률        
 
-        if (isPass == true)
+        for (int i = 0; i < rewardItemRefIdList.Count; i++)
         {
-            UserDataManager.Instance.Gold = UserDataManager.Instance.Gold + Data.GetInt(_rewardId, "GiveGold");
+            bool isRewardInIt = NPCManager.Instance.GetProbabilityResult(rewardProbabilityList[i]);
+
+            if (isRewardInIt == true)
+            {
+                Unit.AddInventoryItem(rewardItemRefIdList[i], rewardAmountList[i]);
+            }
+            else { /*PASS*/ }
         }
-        else { /*PASS*/ }
     }       // RewardSilverCoin()
 
     /// <summary>

@@ -157,6 +157,7 @@ public class PlayerEvent : MonoBehaviour
                 // 아이템일 경우
                 if (shopItem.IsItem)
                 {
+                    GFunc.Log(itemID);
                     GameObject item = Unit.AddShopItem(grabber.transform.position, itemID);
                     ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
                     itemColliderHandler.state = ItemColliderHandler.State.STOP;

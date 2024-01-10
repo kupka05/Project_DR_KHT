@@ -96,7 +96,9 @@ public class PlayerEvent : MonoBehaviour
             ///
             // 인벤토리 참조
             Inventory inventory = grabItem.GetComponent<ItemSlotController>().Inventory;
-            int slotIndex = grabItem.GetComponent<ItemSlotController>().Index; // 슬롯 인덱스
+            // LEGACY:
+            //int slotIndex = grabItem.GetComponent<ItemSlotController>().Index; // 슬롯 인덱스
+            int slotIndex = grabItem.GetComponent<ItemSlotController>().ItemIndex; // 슬롯 보유 아이템 인덱스
             // 슬롯이 비어있을 경우
             if (inventory.HasItem(slotIndex) == false)
             {

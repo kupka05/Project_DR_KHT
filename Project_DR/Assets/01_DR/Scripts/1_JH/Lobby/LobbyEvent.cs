@@ -24,6 +24,7 @@ public class LobbyEvent : MonoBehaviour
     public GameObject mainDisplay;
     public GameObject mbtiDisplay;
     private bool onDisplay;
+    public GameObject infoText;
 
     [Header("Main NPC")]
     public int questID;         // 시트에서 불러올 퀘스트 ID 
@@ -891,6 +892,7 @@ public class LobbyEvent : MonoBehaviour
     {
         if(!onDisplay)
         {
+            infoText.gameObject.SetActive(false);
             onDisplay = true;
             ChangeDisplayButton("Main");
         }

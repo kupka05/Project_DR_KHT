@@ -13,6 +13,8 @@ public class ItemSlotController : MonoBehaviour
     [SerializeField] private GameObject itemSlot;
     private BoxCollider boxCollider;
     [SerializeField] private int _index;
+    [SerializeField] private int _itemIndex;
+
     [SerializeField] private bool _isChangeSize = true;
     // 슬롯에 수납 가능 여부
     [SerializeField] private bool _isStorageAvailable = true;
@@ -20,13 +22,15 @@ public class ItemSlotController : MonoBehaviour
 
     #endregion
     /*************************************************
-     *                 Private Fields
+     *                 Public Fields
      *************************************************/
     #region [+]
     public Inventory Inventory => _inventory;
     public bool IsStorageAvailable => _isStorageAvailable;
     public bool IsPlayerStorage => _isPlayerStorage;
     public int Index => _index;
+    public int ItemIndex => _itemIndex;
+
 
     #endregion
     /*************************************************
@@ -61,6 +65,11 @@ public class ItemSlotController : MonoBehaviour
     public void SetIndex(int index)
     {
         _index = index;
+    }
+
+    public void SetItemIndex(int index)
+    {
+        _itemIndex = index;
     }
 
     #endregion

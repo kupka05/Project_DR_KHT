@@ -13,9 +13,9 @@ namespace BNG
     {
 
         /// <summary>
-        /// 데미지 양
+        /// 데미지 양, 크리티컬 여부
         /// </summary>
-        public (float, bool) damage;
+        public (float, bool) damage;    
 
         /// <summary>
         /// 이 충돌체의 속도를 결정하는 데 사용됩니다.

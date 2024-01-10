@@ -38,27 +38,42 @@ namespace Js.Quest
             SetTextForQuest();
         }
 
-        public void isDead()
-        {
 
+        /*************************************************
+         *                 Unity Events
+         *************************************************/
+        private void OnDestroy()
+        {
+            GFunc.Log("OnDestroy()");
+            DestroyQuestStone();
         }
-        
+
 
         /*************************************************
          *                Private Methods
          *************************************************/
+        // 파괴 될 떄 호출
+        private void DestroyQuestStone()
+        {
+            // 파괴 효과 출력
+            ParticleSystem particle = transform.parent.Find("Firefly_Circle_End_3_Orange")
+                .GetComponent<ParticleSystem>();
+            particle.Play();
+            Destroy(_text.gameObject);
+
+            // 할당된 퀘스트 [진행중]으로 변경
+            Unit.InProgressQuestByID(QuestData.ID);
+            GFunc.Log($"id: [{QuestData.ID}] [진행중]으로 변경");
+        }
+
         // 자식을 순회해서 TMP_Text를 찾아서 반환
         private TMP_Text GetTMPText()
         {
             TMP_Text tmpText = default;
-            foreach (Transform child in transform)
-            {
-                if (child.name.Equals("Text (TMP)"))
-                {
-                    tmpText = child.GetComponent<TMP_Text>();
-                    break;
-                }
-            }
+            Transform parent = transform.parent;
+            tmpText = parent?.FindChildRecursive("Text (TMP)").GetComponent<TMP_Text>();
+
+            if (tmpText == null) { return default; }
 
             return tmpText;
         }

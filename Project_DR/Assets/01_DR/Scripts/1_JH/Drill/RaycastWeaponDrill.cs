@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 using Random = UnityEngine.Random;
+using System.Drawing;
 
 namespace BNG
 {
@@ -26,6 +27,9 @@ namespace BNG
         public bool isShootPossible = true;
         public DamageCollider damageCollider;
 
+
+        private float drillSize = 1;
+        private Vector3 curDrillSize;
 
         // 최대 사거리
         public float MaxRange = 0.5f;
@@ -481,7 +485,6 @@ namespace BNG
                     RaycastHit hit;
                     if (Physics.Raycast(MuzzlePointTransform.position, MuzzlePointTransform.forward, out hit, MaxRange, ValidLayers, QueryTriggerInteraction.Ignore))
                     {
-                        Debug.DrawRay(MuzzlePointTransform.position, MuzzlePointTransform.forward * MaxRange, Color.red);
                         OnRaycastHit(hit);
                     }
                 }
@@ -901,6 +904,7 @@ namespace BNG
             damageCollider = GetComponent<DamageCollider>();
             damageCollider.isDrill = true;
             damageCollider.SetDrillDamage(damage);
+            SetDrillSize(drillSize);
             //damage = (float)DataManager.Instance.GetData(1100, "Damage", typeof(float)) ;
             //dotDamage = (float)DataManager.Instance.GetData(1100, "DotDamage", typeof(float)) ;
             //FiringRate = (float)DataManager.Instance.GetData(1100, "AttackSpeed", typeof(float));
@@ -909,6 +913,19 @@ namespace BNG
         {
             FiringRate = value;
         }
+
+        public void SetDrillSize(float newSize)
+        {
+            drillSize = newSize;
+            curDrillSize = new Vector3(drillSize, drillSize, drillSize);
+            drillHead.transform.localScale = curDrillSize;
+            MaxRange = 0.5f * drillSize;
+        }
+        public Vector3 GetDrillSize()
+        {
+            return curDrillSize;
+        }
+
     }
 
     //public enum FiringType

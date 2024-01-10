@@ -8,22 +8,33 @@ public class ExitFloor : MonoBehaviour
 {
     IEnumerator digRoutine;
     Vector3 floorScale;
+    float curHeight;             // 현재 높이
+    float targetDepth;          // 목표 깊이
+    public float depth = 12;    // 깊이
+    public float speed = 2f;
+
+    WaitForFixedUpdate waitForFixedUpdate;
+    Vector3 floorPos;
 
     // Start is called before the first frame update
     void Start()
     {
         Vector3 floor = transform.parent.transform.localScale;
         floorScale = new Vector3(floor.x, floor.y, floor.z);
+        curHeight = transform.position.y;
+        targetDepth = curHeight - depth;
+        floorPos = transform.position;  
     }
 
 
     IEnumerator Digging()
     {
-        while(0 <= floorScale.y)
+        while(targetDepth < curHeight)
         {
-            floorScale.y -= 0.5f*Time.deltaTime ;
-            transform.parent.localScale = floorScale;
-            yield return new FixedUpdate();
+            curHeight -= speed * Time.deltaTime ;
+            floorPos.y = curHeight;
+            transform.position = floorPos;
+            yield return waitForFixedUpdate;
 
         }
         transform.parent.gameObject.SetActive(false);
@@ -67,42 +78,5 @@ public class ExitFloor : MonoBehaviour
 
     }
 
-    //private void OnCollisionStay(Collision other)
-    //{
-
-        //if (other.gameObject.CompareTag("Weapon"))
-        //{
-
-        //    GFunc.Log("드릴 감지");
-        //    if (digRoutine != null)
-        //    {
-        //        return;
-        //    }
-
-        //    if(!other.gameObject.GetComponent<RaycastWeaponDrill>().isSpining)
-        //    {
-        //        return;
-        //    }
-
-
-
-
-        //    digRoutine = Digging();
-        //    StartCoroutine(digRoutine);
-        //}
-    //}
-
-    //private void OnCollisionExit(Collision other)
-    //{
-    //    if(other.gameObject.CompareTag("Weapon"))
-    //    {
-
-    //        if (digRoutine != null)
-    //        {
-    //            StopCoroutine(digRoutine);
-    //            digRoutine = null;
-    //        }
-    //    }
-    //}
 
 }

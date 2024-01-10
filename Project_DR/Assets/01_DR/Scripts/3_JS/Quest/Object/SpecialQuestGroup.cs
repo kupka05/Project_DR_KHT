@@ -1,6 +1,9 @@
+using BNG;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Js.Quest
 {
@@ -78,6 +81,24 @@ namespace Js.Quest
             return specialQuest;
         }
 
+        // 데미지 처리가 가능하도록 Damageable 컴포넌트 수정
+        private void SetDamageableComponent(GameObject questObject)
+        {
+            GameObject child = questObject.transform.GetChild(0).gameObject;
+            Damageable damageable = child.GetComponent<Damageable>();
+            GFunc.Log(damageable);
+            damageable.Health = 100f;
+            damageable.onDestroyed.AddListener(new UnityAction(DestroyStone));
+        }
+
+        // 스페셜 퀘스트 스톤이 부서졌을 경우 처리
+        private void DestroyStone()
+        {
+            GFunc.Log("부서짐여");
+            //Unit.InProgressQuestByID(Q)
+            Destroy(transform.parent);
+        }
+
         // 랜덤한 스페셜 퀘스트를 가져와서 리스트에 할당
         private void SetSpecialQuestList()
         {
@@ -90,7 +111,7 @@ namespace Js.Quest
                 if (questList.Count.Equals(0)) { break; }
 
                 // 랜덤 스페셜 퀘스트 할당 & 예외 처리
-                int randomIndex = Random.Range(0, questList.Count);
+                int randomIndex = UnityEngine.Random.Range(0, questList.Count);
                 Quest randomQuest = questList[randomIndex];
                 if (randomQuest != null)
                 {

@@ -66,9 +66,18 @@ namespace Js.Quest
         // 현재 텍스트를 퀘스트에 맞게 변경
         private void SetTextForQuest()
         {
-            string text = "<size=0.8>포션_(소) 3회\n\n사용하기</size>\n\n\n30 골드\n\n\n파괴 시\n\n퀘스트 수령";
-            string questName = _currentQuest.QuestData.Desc;
+            string[] questNames = SubStringFromEnd(_currentQuest.QuestData.Desc);
+            int rewardID = _currentQuest.QuestData.ClearReward.QuestRewardData.ID;
+            string reward = Data.GetString(rewardID, "Name");
+            string text = "<size=0.8>" + questNames[0] + " " + questNames[1] + "\n\n" + questNames[2] +"</size>\n\n\n" + reward + "\n\n\n파괴 시\n\n퀘스트 수령";
+            _text.text = text;
+        }
 
+        // 공백을 기준으로 문자열을 잘라서 배열로 반환
+        private string[] SubStringFromEnd(string input, char symbol = ' ')
+        {
+            string[] texts = input.Split(symbol);
+            return texts;
         }
     }
 }

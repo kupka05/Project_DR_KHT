@@ -17,8 +17,16 @@ public class TEST : MonoBehaviour
             //Unit.AddFieldItem(Vector3.zero, 5101);
             //Unit.PrintRewardText(32_1_001, 32_1_002, 32_1_003, 32_1_004);
             //Unit.ClearQuestByID(3133001);
+            Unit.AddInventoryItem(5001);
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            //Unit.AddFieldItem(Vector3.zero, 5101);
+            //Unit.PrintRewardText(32_1_001, 32_1_002, 32_1_003, 32_1_004);
+            //Unit.ClearQuestByID(3133001);
             Unit.AddInventoryItem(5201);
-            Unit.AddInventoryItem(5202);
 
         }
 

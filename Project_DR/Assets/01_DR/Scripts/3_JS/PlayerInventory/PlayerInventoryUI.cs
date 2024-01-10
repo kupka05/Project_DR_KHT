@@ -142,19 +142,19 @@ public class PlayerInventoryUI : MonoBehaviour
     }
 
     // 슬롯에 데이터 Init
-    private void InitSlotData(int id, int amount, int maxAmount, int index)
+    private void InitSlotData(int id, int amount, int maxAmount, int index, int itemIndex)
     {
-        _itemSlotPanels[index].Initialize(id, amount, maxAmount, index);
+        _itemSlotPanels[index].Initialize(id, amount, maxAmount, index, itemIndex);
         _itemSlotPanels[index].gameObject.SetActive(true);
     }
 
     // 지정 순번 이후의 모든 슬롯 초기화
     private void ResetSlotDatas(int startIndex, int id = default,
-    int amount = default, int maxAmount = default, int index = default)
+    int amount = default, int maxAmount = default, int index = default, int itemIndex = default)
     { 
         for (int i = startIndex; i < _itemSlotPanels.Count; i++)
         {
-            _itemSlotPanels[i].Initialize(id, amount, maxAmount, index);
+            _itemSlotPanels[i].Initialize(id, amount, maxAmount, index, itemIndex);
             // 기본 표시 슬롯 3개를 제외한 나머지 슬롯 비활성화
             if (i >= 3)
             {
@@ -191,8 +191,11 @@ public class PlayerInventoryUI : MonoBehaviour
                         int id = pi.Data.ID;
                         int amount = pi.Amount;
                         int maxAmount = pi.MaxAmount;
+                        int itemIndex = i;
+                        //GFunc.Log($"보유 아이템 인덱스: {itemIndex}");
                         // i는 실제 인벤토리 아이템 인덱스 저장을 위해 보냄
-                        InitSlotData(id, amount, maxAmount, i);
+                        // itemIndex는 실제 보유 아이템 인덱스
+                        InitSlotData(id, amount, maxAmount, j, itemIndex);
 
                         latestIndex = j;
                         break;
@@ -214,8 +217,10 @@ public class PlayerInventoryUI : MonoBehaviour
                         int id = bi.Data.ID;
                         int amount = bi.Amount;
                         int maxAmount = bi.MaxAmount;
+                        int itemIndex = i;
+                        //GFunc.Log($"보유 아이템 인덱스: {itemIndex}");
                         // i는 실제 인벤토리 아이템 인덱스 저장을 위해 보냄
-                        InitSlotData(id, amount, maxAmount, i);
+                        InitSlotData(id, amount, maxAmount, j, itemIndex);
 
                         latestIndex = j;
                         break;

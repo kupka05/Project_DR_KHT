@@ -10,6 +10,7 @@ using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.UI.GridLayoutGroup;
 using TMPro;
 using BossMonster;
+using Unity.XR.CoreUtils;
 
 // 데미지를 체크하는 클래스
 public class DamageChecker : MonoBehaviour
@@ -42,6 +43,7 @@ public class Monster : MonoBehaviour
 {
     public UnityEngine.UI.Slider monsterHpSlider;
     private TMP_Text hpText;
+    public TMP_Text nameText;
 
     //스턴 추가 - hit상태
     public enum State
@@ -106,7 +108,7 @@ public class Monster : MonoBehaviour
     public float stunDelay = 1f;
     public float stunCount = default;  //경직 횟수, 일반 몬스터는 필요 없음
     public float stopDistance = default;
-    //몬스터 이름도 추가될 예정
+    public string monName = default;
 
     public float lastDamageTime;
 
@@ -180,6 +182,7 @@ public class Monster : MonoBehaviour
     private float moveTimer = 0.0f;
     private Vector3 startPosition;
     private Vector3 targetPosition;
+    public float damageRadius = 1.0f;
 
     void Awake()
     {
@@ -198,7 +201,6 @@ public class Monster : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
 
-
         damageable.Health = hp;
         lastDamageTime = Time.time;
 
@@ -208,6 +210,8 @@ public class Monster : MonoBehaviour
 
             //attack = damageCollider.Damage; // 지환 : attack은 시트에서 가져온 데이터 값
         }
+
+        nameText.text = monName.ToString(); 
 
         nav.speed = speed;
 
@@ -230,6 +234,8 @@ public class Monster : MonoBehaviour
 
         actionRoutine = MonsterAction();
         StartCoroutine(actionRoutine);
+
+
     }
 
     public void Update()
@@ -247,7 +253,28 @@ public class Monster : MonoBehaviour
                 moveTimer = 0.0f;
             }
         }
+
+
+
     }
+
+    //public void WallCheck()
+    //{
+    //    RaycastHit hit;
+    //    bool hasHit  = Physics.Raycast(transform.position, -transform.forward * 0.05f, out hit);
+    //    Debug.DrawRay(transform.position, -transform.forward * 0.05f, Color.magenta);
+
+    //    if (hasHit)
+    //    {
+    //        Collider collider = hit.collider;
+    //        if(collider.CompareTag("Wall"))
+    //        {
+    //            GFunc.Log($"벽에 닿음 {this.gameObject}");
+    //            isMoving = false;
+    //            return;
+    //        }
+    //    }
+    //}
 
     public void MoveWithSmoothTransition(Vector3 target)
     {
@@ -290,7 +317,9 @@ public class Monster : MonoBehaviour
 
         stopDistance = (float)DataManager.Instance.GetData(id, "MonStd", typeof(float));
 
-        if(isDebug)
+        monName = Data.GetString(id, "MonName");
+
+        if (isDebug)
         {
             hp = 100000;
             attack = 0;
@@ -648,7 +677,7 @@ public class Monster : MonoBehaviour
 
     }
 
-    public void OnDeal(float damage)
+    public virtual void OnDeal(float damage)
     {
         // 죽지 않은 상태면 HP 바 업데이트
         if (damageable.Health > 0)
@@ -656,7 +685,7 @@ public class Monster : MonoBehaviour
             SetHealth(damageable.Health);
         }
         else
-        { 
+        {
             SetHealth(0);
             return;
         }
@@ -705,17 +734,61 @@ public class Monster : MonoBehaviour
         }
 
         count++;
+        GFunc.Log($"넉백 카운트:{count}");
 
         if (count >= maxCount)
         {
             count = 0;
-            anim.SetTrigger(hashStun);
 
-            Vector3 targetPosition = transform.position - transform.forward * 4.0f;
 
-            MoveWithSmoothTransition(targetPosition);
+            MonsterKnockBack();
+
+            ////기존
+            //Vector3 targetPosition = transform.position - transform.forward * 4.0f;
+            //MoveWithSmoothTransition(targetPosition);
+
         }
     }
+
+    public virtual void MonsterKnockBack()
+    {
+        //anim.SetTrigger(hashHit);
+
+        rigid.WakeUp();
+
+        if (rigid != null)
+        {
+            rigid.AddForce(this.transform.position - transform.forward * 2.0f, ForceMode.Impulse);
+
+            Vector3 overlapSphereCenter = this.transform.position-transform.forward * 0.5f;
+            overlapSphereCenter.z -= 0.5f;
+
+            Collider[] colliders = Physics.OverlapSphere(overlapSphereCenter, damageRadius);
+            //if (Physics.Raycast(transform.position, -transform.forward, out hit, 4.0f))
+
+            foreach (Collider collider in colliders)
+            {
+                if(collider.CompareTag("Wall"))
+                {
+                    return;
+                }
+            }
+         
+        }
+        MoveWithSmoothTransition(this.transform.position - transform.forward * 2.0f);
+
+
+    }
+
+    public void OnDrawGizmos()
+    {
+        Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
+        overlapSphereCenter.z -= 0.5f;
+
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(overlapSphereCenter, damageRadius);
+    }
+
 
     // 몬스터 스턴
     public void MonsterStun()
@@ -777,7 +850,7 @@ public class Monster : MonoBehaviour
     public float SmashDamageCalculate(float damage, int index)
     {
         float _debuff = UserData.GetSmashDamage(index); ;
-        return Mathf.RoundToInt(damage * (1 + _debuff)) - damage; 
+        return Mathf.RoundToInt(damage * (1 + _debuff)) - damage;
     }
 
     public IEnumerator SmashTime()
@@ -817,21 +890,21 @@ public class Monster : MonoBehaviour
         yield break;
     }
 
-    void OnDrawGizmos()
-    {
-        if (state == State.TRACE)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, recRange);
-        }
+    //void OnDrawGizmos()
+    //{
+    //    if (state == State.TRACE)
+    //    {
+    //        Gizmos.color = Color.yellow;
+    //        Gizmos.DrawWireSphere(transform.position, recRange);
+    //    }
 
-        if (state == State.ATTACK)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, attRange);
-        }
+    //    if (state == State.ATTACK)
+    //    {
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawWireSphere(transform.position, attRange);
+    //    }
 
-    }
+    //}
     public virtual void Explosion()
     {
         Destroy(this.gameObject);
@@ -917,6 +990,8 @@ public class Monster : MonoBehaviour
         }
 
     }
+
+
     // 데미지 콜라이더를 세팅해준다.
     public void SetDamageCollider()
     {

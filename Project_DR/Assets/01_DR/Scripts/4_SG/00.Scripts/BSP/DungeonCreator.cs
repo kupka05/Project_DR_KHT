@@ -237,7 +237,7 @@ public class DungeonCreator : MonoBehaviour
         isReCreate = false;
         DungeonInspectionManager.dungeonManagerInstance.FloorCollision = false;
         DungeonInspectionManager.dungeonManagerInstance.isEndCreateFloor = false;
-
+        GameManager.isClearRoomList.Clear();
         StopAllCoroutines();
         bspMeshList.Clear();
         bspRoom.Clear();

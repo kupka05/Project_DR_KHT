@@ -300,6 +300,14 @@ public partial class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("skill_level_4_3", Skill4Lv_3);
     }
 
+    public void SaveGoldandExp()
+    {
+        PlayerDataManager.Save("gold", Gold);
+        PlayerDataManager.Save("exp", Exp);
+        PlayerDataManager.Update(true);
+
+    }
+
     // ####################### 디버그용 PC 데이터 리셋 ####################### \\
     // TODO 한번에 호출하면 저장 실패할 경우가 있음.
     public void ResetData()
@@ -377,13 +385,7 @@ public partial class UserDataManager : MonoBehaviour
         yield break;
     }
 
-    public void SaveGoldandExp()
-    {
-        PlayerDataManager.Save("gold", Gold);
-        PlayerDataManager.Save("exp", Exp);
-        PlayerDataManager.Update(true);
 
-    }
 
 
     // #######################  MBTI  ####################### \\

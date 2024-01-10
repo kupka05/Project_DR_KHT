@@ -135,13 +135,14 @@ public static class UserData
         {
             int itemID = itemList[i].Item1;
             int itemAmount = itemList[i].Item2;
-            for(int j = 0; j < itemAmount; i++)
+            //GFunc.Log($"ID: {itemID} / Amount: {itemAmount}");
+            for (int j = 0; j < itemAmount; j++)
             {
-                AddItemScore(itemID);
+                UserData.AddItemScore(itemID);
             }
-            GFunc.Log($"ID: {itemID} / Amount: {itemAmount}");
         }
     }
+
 
     public static void ResetResult()
     {

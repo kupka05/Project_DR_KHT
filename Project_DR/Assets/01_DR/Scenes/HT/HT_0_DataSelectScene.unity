@@ -8257,7 +8257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -8270,6 +8269,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!1 &624268137138975896
 GameObject:
   m_ObjectHideFlags: 0
@@ -13704,7 +13706,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -13717,6 +13718,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!4 &847388283857355281
 Transform:
   m_ObjectHideFlags: 0
@@ -15291,7 +15295,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -15304,6 +15307,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!23 &1040113587417731907
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -22241,7 +22247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -22254,6 +22259,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!136 &1802062037129507571
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -26619,7 +26627,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -26632,6 +26639,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!1 &2220389717281967862
 GameObject:
   m_ObjectHideFlags: 0
@@ -29637,8 +29647,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHolder: 0
   resetTime: 0
+  isEnhance: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 0}
+  StartingItems: []
   CanDropItem: 1
   CanSwapItem: 1
   CanRemoveItem: 1
@@ -33220,7 +33232,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -33233,6 +33244,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!4 &2863597733210573257
 Transform:
   m_ObjectHideFlags: 0
@@ -33652,8 +33666,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHolder: 0
   resetTime: 0
+  isEnhance: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 0}
+  StartingItems: []
   CanDropItem: 1
   CanSwapItem: 1
   CanRemoveItem: 1
@@ -41765,7 +41781,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -41778,6 +41793,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!4 &3719865056914463971
 Transform:
   m_ObjectHideFlags: 0
@@ -41933,7 +41951,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -41946,6 +41963,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!4 &3719865058147859305
 Transform:
   m_ObjectHideFlags: 0
@@ -42999,6 +43019,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -43366,6 +43387,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -45310,7 +45332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -45323,6 +45344,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!136 &4047185360849687435
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46006,7 +46030,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -46019,6 +46042,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!4 &4096997679530526907
 Transform:
   m_ObjectHideFlags: 0
@@ -53353,7 +53379,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -53366,6 +53391,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!1 &4803334785710898568
 GameObject:
   m_ObjectHideFlags: 0
@@ -53814,7 +53842,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -53827,6 +53854,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!1 &4853969519600664091
 GameObject:
   m_ObjectHideFlags: 0
@@ -60133,6 +60163,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -62173,8 +62204,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHolder: 0
   resetTime: 0
+  isEnhance: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 0}
+  StartingItems: []
   CanDropItem: 1
   CanSwapItem: 1
   CanRemoveItem: 1
@@ -62272,6 +62305,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -72817,8 +72851,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHolder: 0
   resetTime: 0
+  isEnhance: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 0}
+  StartingItems: []
   CanDropItem: 1
   CanSwapItem: 1
   CanRemoveItem: 1
@@ -75698,7 +75734,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -75711,6 +75746,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!1 &7079520541311170839
 GameObject:
   m_ObjectHideFlags: 0
@@ -76023,7 +76061,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 5
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -76036,6 +76073,9 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!136 &7130124194769379174
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -79066,6 +79106,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -93299,6 +93340,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -93744,8 +93786,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHolder: 0
   resetTime: 0
+  isEnhance: 0
   HeldItem: {fileID: 0}
   StartingItem: {fileID: 0}
+  StartingItems: []
   CanDropItem: 1
   CanSwapItem: 1
   CanRemoveItem: 1

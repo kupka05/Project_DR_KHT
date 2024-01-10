@@ -13,14 +13,5 @@ namespace Jihwan
         {
             Unit.AddFieldItem(this.transform.position, itemID);
         }
-        public void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.L))
-            {
-                Unit.AddFieldItem(this.transform.position, 5401);
-
-            }
-        }
-
     }
 }

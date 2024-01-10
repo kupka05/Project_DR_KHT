@@ -228,8 +228,8 @@ public class BattleRoom : RandomRoom
     /// </summary>    
     IEnumerator StartMethodDelay()
     {
-        int forLength = 5;
-        for (int i = 0; i < forLength; i++)
+        GameManager.instance.spawnDelayFrame++;
+        for (int i = 0; i < GameManager.instance.spawnDelayFrame; i++)
         {
             yield return null;
         }

@@ -75,11 +75,12 @@ public class SkillManager : MonoBehaviour
         playerController = this.transform.GetChild(0).GetChild(0).GetComponent<PlayerController>();
         smoothLocomotion = playerController.GetComponent<SmoothLocomotion>();   
     }
+
     private void SetGrinderSlider()
     {
         grinderSlider.maxValue = GD_maxTime;
         grinderSlider.value = 0;
-        grinderVal.text = string.Format("" + GD_coolDown);
+        grinderVal.text = GD_coolDown.ToString();
 
     }
 
@@ -134,8 +135,7 @@ public class SkillManager : MonoBehaviour
     {
         for (int i = 0; i < 2; i++)
         {
-            drills[i].drillHead.transform.localScale = new Vector3(size, size, size);
-            drills[i].MaxRange = 0.5f * size;
+            drills[i].SetDrillSize(size);
         }
     }
     #endregion
@@ -244,17 +244,20 @@ public class SkillManager : MonoBehaviour
             // 드릴마다 각각 체크하도록 해야함
             for (int i = 0; i < 2; i ++)
             {
-                if (activeDrillDistance > drills[i].distanceFromGround && playerController.DistanceFromGround <2)
+                // 드릴의 거리가 발동 거리 이내이고, 플레이어 또한 발동거리 이내일 경우
+                if (activeDrillDistance > drills[i].distanceFromGround &&
+                    playerController.DistanceFromGround < 2)
                 {
-                    landingSkill.OnCollisionEvent();
-                    UserData.ActiveLandingSkill();
-                    yield break;
+                    // 만약 isKinematic이 켜져있다면, 드릴을 쥐고있는 상태가 아니다.
+                    if (drills[i].GetComponent<Rigidbody>().isKinematic)
+                    {
+                        GFunc.Log("드릴랜딩 발동");
+                        landingSkill.OnCollisionEvent();
+                        UserData.ActiveLandingSkill();
+                        yield break;
+                    }
                 }
-
-                //if (!drills[i].grabbable.enabled)
-                //{                   
-                //    yield break;
-                //}
+         
             }
             yield return waitForEndOfFrame;
         }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Js.Quest;
 using Js.Crafting;
+using BNG;
 
 public static class UserData
 {
@@ -103,7 +104,11 @@ public static class UserData
             questGold += result.quest[i].gold;
         }
 
-        return monsterGold + itemGold + questGold;
+        int totalGold = monsterGold + itemGold + questGold;
+
+        int additionalGold = Mathf.RoundToInt(totalGold * UserDataManager.Instance.GainGold);   // 추가 골드 더하기
+
+        return totalGold + additionalGold;
     }
 
     /// <summary>획득한 모든 골드를 계산해주는 메서드 </summary>
@@ -125,7 +130,11 @@ public static class UserData
             questExp += result.quest[i].exp;
         }
 
-        return monsterExp + itemExp + questExp;
+        int totalExp = monsterExp + itemExp + questExp;
+
+        int additionalExp = Mathf.RoundToInt(totalExp * UserDataManager.Instance.GainExp);   // 추가 경험치 더하기
+
+        return totalExp + additionalExp;
     }
     // 남은 재료 아이템을 계산해주는메서드
     public static void MaterialItemCalculator() 
@@ -181,8 +190,13 @@ public static class UserData
     /// <summary> 플레이어의 현재 체력을 증감 </summary>
     public static void SetCurrentHealth(float amount)
     {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if(player != null)
+        player.GetComponent<Damageable>().DealDamage(amount);
+
         // amount는 양수/음수 둘 중 하나의 값을 받는다.
-        UserDataManager.Instance.CurHP += amount;
+        //UserDataManager.Instance.CurHP += amount;
     }
 
     // 해당 ID의 스킬을 호출한다.

@@ -1,6 +1,9 @@
+using BNG;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Js.Quest
 {
@@ -72,7 +75,8 @@ namespace Js.Quest
             GameObject questStone = Instantiate(prefab, transform);
             questStone.transform.localPosition = pos;
             questStone.transform.name = _prefabName;
-            SpecialQuest specialQuest = questStone.AddComponent<SpecialQuest>();
+            SpecialQuest specialQuest = questStone.transform
+                .GetChild(0).gameObject.AddComponent<SpecialQuest>();
             specialQuest.Initialize();
 
             return specialQuest;
@@ -90,7 +94,7 @@ namespace Js.Quest
                 if (questList.Count.Equals(0)) { break; }
 
                 // 랜덤 스페셜 퀘스트 할당 & 예외 처리
-                int randomIndex = Random.Range(0, questList.Count);
+                int randomIndex = UnityEngine.Random.Range(0, questList.Count);
                 Quest randomQuest = questList[randomIndex];
                 if (randomQuest != null)
                 {

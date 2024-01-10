@@ -504,8 +504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0bc0660f8c3f054c948ba7e5bca38c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angleRange: 30
-  radius: 40
   bossHPSlider: {fileID: 118018865473801991}
   bossState: {fileID: 3770469314472680577, guid: 66055d0e3ac8d0c479422d8d40ff04f2,
     type: 3}
@@ -564,6 +562,7 @@ MonoBehaviour:
   isStart: 0
   isBounce: 0
   isBrick: 0
+  isLazerCoroutineRunning: 0
   patternInterval: 0
   bigBrick: {fileID: 2771416323480820311, guid: d440c508ec26253479dd7347cc62eccb,
     type: 3}
@@ -574,6 +573,7 @@ MonoBehaviour:
   bossMeet:
     m_PersistentCalls:
       m_Calls: []
+  bossStartPosition: {fileID: 6780438471017655951}
 --- !u!114 &4783316878540129904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,6 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4778c52f465bea441acaffe7c31b9755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nowDialogueId: 0
   npcTriggerType: 0
   isTryCommunity: 0
   isComunity: 0
@@ -912,6 +913,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8364801948526322659}
     m_Modifications:
+    - target: {fileID: 1083919250608983426, guid: 047c66b9c0772b84ebaca3f8af8f3672,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -418652649
+      objectReference: {fileID: 0}
     - target: {fileID: 3261263422036526676, guid: 047c66b9c0772b84ebaca3f8af8f3672,
         type: 3}
       propertyPath: m_RootOrder
@@ -971,6 +977,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NPCCanvasPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 7541618779775089935, guid: 047c66b9c0772b84ebaca3f8af8f3672,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 047c66b9c0772b84ebaca3f8af8f3672, type: 3}

@@ -237,7 +237,7 @@ public class DungeonCreator : MonoBehaviour
         isReCreate = false;
         DungeonInspectionManager.dungeonManagerInstance.FloorCollision = false;
         DungeonInspectionManager.dungeonManagerInstance.isEndCreateFloor = false;
-
+        GameManager.isClearRoomList.Clear();
         StopAllCoroutines();
         bspMeshList.Clear();
         bspRoom.Clear();
@@ -1873,17 +1873,17 @@ public class DungeonCreator : MonoBehaviour
     {
 
         // 방의 하단 중앙위치
-        float bspLastRoomBottomCenterPoint = (bossRoomCornerPos.bottomLeftCorner.x + bossRoomCornerPos.bottomRightCorner.x) / 2;
+        float bspLastRoomBottomCenterPoint = (bossRoomCornerPos.bottomLeftCorner.x + bossRoomCornerPos.bottomRightCorner.x) * 0.5f;
         // 방의 상단 중앙위치
-        float bspLastRoomTopCenterPoint = (bossRoomCornerPos.topLeftCorner.x + bossRoomCornerPos.topRightCorner.x) / 2;
+        float bspLastRoomTopCenterPoint = (bossRoomCornerPos.topLeftCorner.x + bossRoomCornerPos.topRightCorner.x) * 0.5f;
 
         //// 바닥 메시 생성을 위한 꼭지점 좌표 설정
         Vector3 bottomLeftV = new Vector3
-            (bspLastRoomTopCenterPoint - (bossRoomWidth / 2), 0f, bossRoomCornerPos.topLeftCorner.z + bossRoomDistance);
+            (bspLastRoomTopCenterPoint - (nextStageRoomWidth * 0.5f), 0f, bossRoomCornerPos.topLeftCorner.z + nextStageRoomDistance);
         Vector3 bottomRightV = new Vector3
-            (bspLastRoomTopCenterPoint + (bossRoomWidth / 2), 0f, bossRoomCornerPos.topRightCorner.z + bossRoomDistance);
-        Vector3 topLeftV = new Vector3(bottomLeftV.x, 0f, bottomLeftV.z + bossRoomHeight);
-        Vector3 topRightV = new Vector3(bottomRightV.x, 0f, bottomRightV.z + bossRoomHeight);
+            (bspLastRoomTopCenterPoint + (nextStageRoomWidth * 0.5f), 0f, bossRoomCornerPos.topRightCorner.z + nextStageRoomDistance);
+        Vector3 topLeftV = new Vector3(bottomLeftV.x, 0f, bottomLeftV.z + nextStageRoomHeight);
+        Vector3 topRightV = new Vector3(bottomRightV.x, 0f, bottomRightV.z + nextStageRoomHeight);
 
         // 바닥 메시를 위한 꼭지점 배열 생성
         Vector3[] vertices = new Vector3[]

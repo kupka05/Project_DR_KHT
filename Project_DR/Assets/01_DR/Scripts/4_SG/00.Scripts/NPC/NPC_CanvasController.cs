@@ -532,6 +532,9 @@ public class NPC_CanvasController : MonoBehaviour
 
         // GFunc.Log($"에러부분 ->  eventRefId : {eventRefId}\n nowConversationRefID : {nowConversationRefID}");
 
+        if(eventRefId == null)  // 지환 : 예외처리
+        { return; }
+
         int[] eventRefIds = GFunc.SplitIds(eventRefId);
 
         int defaultCompensation = 320000;

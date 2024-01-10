@@ -192,7 +192,7 @@ public class PlayerInventoryUI : MonoBehaviour
                         int amount = pi.Amount;
                         int maxAmount = pi.MaxAmount;
                         int itemIndex = i;
-                        GFunc.Log($"보유 아이템 인덱스: {itemIndex}");
+                        //GFunc.Log($"보유 아이템 인덱스: {itemIndex}");
                         // i는 실제 인벤토리 아이템 인덱스 저장을 위해 보냄
                         // itemIndex는 실제 보유 아이템 인덱스
                         InitSlotData(id, amount, maxAmount, j, itemIndex);
@@ -218,7 +218,7 @@ public class PlayerInventoryUI : MonoBehaviour
                         int amount = bi.Amount;
                         int maxAmount = bi.MaxAmount;
                         int itemIndex = i;
-                        GFunc.Log($"보유 아이템 인덱스: {itemIndex}");
+                        //GFunc.Log($"보유 아이템 인덱스: {itemIndex}");
                         // i는 실제 인벤토리 아이템 인덱스 저장을 위해 보냄
                         InitSlotData(id, amount, maxAmount, j, itemIndex);
 

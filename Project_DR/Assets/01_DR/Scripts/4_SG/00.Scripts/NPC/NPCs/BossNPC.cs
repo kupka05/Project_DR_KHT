@@ -116,7 +116,7 @@ public class BossNPC : NPC
         GameManager.instance.BossCutScene();
         
         // 캔버스 켜주기
-        OnCanvasObj();
+        Invoke(nameof(OnCanvasObj), 1f);
 
         int questID = GetCanCompleteMainQuestID();                              // 완료 가능한 퀘스트 불러오기 
         int[] conversationIDs = Unit.ClearQuestByID(questID);                   // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인 후 시작가능으로 업데이트
@@ -145,14 +145,19 @@ public class BossNPC : NPC
 
         OffCanvasObj();                      // 캔버스 끄기
         GameManager.instance.EndBossCutScene();      // 플레이어 페이드 아웃
+        Invoke(nameof(StartBossBattle), 1f);
+        
+    }       // EndConveration()
 
+    private void StartBossBattle()
+    {
         GFunc.ChoiceEvent(conversationID);   // 대화 종료 후 대사 클리어 이벤트 진행중으로 변경
 
         GetComponent<Boss>().StartAttack();  // 보스 전투 시작
         GameManager.instance.isBossBattle = true;
 
         transform.GetChild(0).gameObject.SetActive(false);
-    }       // EndConveration()
+    }
 
     /// <summary> 대사 선정 </summary>
     public void PickConversation(int conversationId)

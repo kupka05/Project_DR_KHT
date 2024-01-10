@@ -99,8 +99,10 @@ public class GameManager : MonoBehaviour
     private bool isClear = false;                   // 방의 클리어 여부에 따라 변수값이 변하고 문을 관리해줄것임
     public bool isGameOver;
 
-    [Header("Boss Fight")]
-    public bool isBossFight = false;
+    [Header("Boss Battle")]
+    public bool isBossBattle = false;            // 보스와 싸우는지 여부 (전투중 게임오버 체크 : 보스 전투 퀘스트 실패 조건)
+    private Vector3 cutSceneRoomPosition;
+    private Vector3 playerPos;                  // 컷씬룸 이동 전 플레이어 포지션
 
     public List<GameObject> ghostObjList;       // 유령을 담아둘 리스트
     public List<NullRoom> nullRoomList;         // 빈방을 담아두는 리스트 (모루생성에 필요)
@@ -180,7 +182,7 @@ public class GameManager : MonoBehaviour
         // 데이터 가져오기
         GetData();
         StartInIt();
-        SetPlayer();
+        SetGameSetting();
     }       // Start()    
 
 
@@ -208,7 +210,7 @@ public class GameManager : MonoBehaviour
         // GFunc.Log("객체의 첫 생성일때에도 이게 호출이 되나?");
         // 데이터 가져오기
         GetData();
-        SetPlayer();
+        SetGameSetting();
     }
 
 
@@ -242,7 +244,7 @@ public class GameManager : MonoBehaviour
         }
     }       // StartInIt()
 
-    private void SetPlayer()
+    private void SetGameSetting()
     {
 
         // 플레이어 찾아오기
@@ -260,6 +262,10 @@ public class GameManager : MonoBehaviour
         {
             fader = Camera.main.transform.GetComponent<ScreenFader>();
         }
+
+      
+
+
     }
 
 
@@ -271,7 +277,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         // 보스전일 경우 보스 처치 실패
-        if (isBossFight)
+        if (isBossBattle)
         {
             BossKillFail();
         }
@@ -300,6 +306,8 @@ public class GameManager : MonoBehaviour
     /// <summary>  던전 클리어후 로비로 보내줄 함수 </summary>
     public void ClearDungeon()
     {
+        isBossBattle = false;
+
         // 출구 층이면 로비로 보내주기
         if (nowFloor == isPlayerMaxFloor)
         {
@@ -330,7 +338,7 @@ public class GameManager : MonoBehaviour
     // 보스 처치 실패
     public void BossKillFail()
     {
-        isBossFight = false;
+        isBossBattle = false;
 
         Quest curSubQuest = Unit.GetInProgressSubQuest();    // 현재 진행중인 서브 퀘스트 반환 (보스 처치 퀘스트)
         int clearID = curSubQuest.QuestData.ID;              // 진행중 서브 퀘스트 ID
@@ -491,6 +499,41 @@ public class GameManager : MonoBehaviour
         StopAllCoroutines();
     }
 
+    public void BossCutScene()
+    {
+        playerPos = player.transform.position;  // 플레이어 기존 위치 캐싱
+
+        player.GetComponent<SmoothLocomotion>().freeze = true;
+
+        // 컷씬룸 구성
+        cutSceneRoomPosition = playerPos;
+        cutSceneRoomPosition.y -= 50;
+        GameObject cutSceneRoomPrefab = Resources.Load<GameObject>("Prefabs/CutSceneRoom");
+
+        GameObject cutSceneRoom = Instantiate(cutSceneRoomPrefab, cutSceneRoomPosition, Quaternion.identity);
+
+        StartCoroutine(FadeRoutine(cutSceneRoom.transform.GetChild(0).transform.position));
+    }
+
+    public void EndBossCutScene()
+    {
+        player.GetComponent<SmoothLocomotion>().freeze = false;
+
+        StartCoroutine(FadeRoutine(playerPos));
+
+       
+
+    }
+
+    IEnumerator FadeRoutine(Vector3 position)
+    {
+        FadeIn();
+        yield return new WaitForSeconds(1);
+        player.transform.position = position;
+        FadeOut();
+        yield return new WaitForSeconds(1);
+        yield break;
+    }
 
     public void FadeIn()
     {

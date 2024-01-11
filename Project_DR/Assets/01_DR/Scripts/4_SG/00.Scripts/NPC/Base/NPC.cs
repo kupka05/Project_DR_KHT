@@ -640,6 +640,7 @@ public class NPC : MonoBehaviour
             if (isRewardInIt == true)
             {
                 Unit.AddInventoryItem(rewardItemRefIdList[i], rewardAmountList[i]);
+                UserData.AddItemScore(rewardItemRefIdList[i]);
             }
             else { /*PASS*/ }
         }

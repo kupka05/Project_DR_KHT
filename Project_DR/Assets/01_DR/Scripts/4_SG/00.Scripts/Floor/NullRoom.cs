@@ -5,8 +5,11 @@ using UnityEngine;
 public class NullRoom : RandomRoom
 {       // NullRoomClass는 빈방에 들어갈 Class입니다.
 
+    private bool isChecking;
+
     void Start()
     {
+        isChecking = false;
         GameManager.isClearRoomList.Add(this);
         GameManager.instance.AddNullRoom(this);
         GetFloorPos();      // 꼭지점 가져와주는 Class
@@ -30,6 +33,18 @@ public class NullRoom : RandomRoom
         }
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (isChecking == false)
+            {
+                StartCoroutine(NullRoomClear());
+            }
+        }
+    }
+
     /// <summary>
     /// 모루를 생성하는 함수
     /// </summary>
@@ -47,7 +62,8 @@ public class NullRoom : RandomRoom
 
     IEnumerator NullRoomClear()
     {
-        yield return new WaitForSeconds(2f);        
+        isChecking = true;
+        yield return new WaitForSeconds(2f);
         ClearRoomBoolSetTrue();
 
     }

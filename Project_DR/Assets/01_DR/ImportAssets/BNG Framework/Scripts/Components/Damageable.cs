@@ -16,7 +16,7 @@ namespace BNG {
 
         // 보스 할당
         private BossMonster.Boss _boss;
-        
+
         public float Health = 100;
         private float _startingHealth;
 

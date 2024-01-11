@@ -5526,6 +5526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterHpSlider: {fileID: 6045224229770938371}
+  nameText: {fileID: 3094179592109066841}
   state: 0
   capsuleColliders: []
   monsterId: 7010
@@ -5551,6 +5552,7 @@ MonoBehaviour:
   stunDelay: 1
   stunCount: 0
   stopDistance: 0
+  monName: 
   lastDamageTime: 0
   monsterTr: {fileID: 459826078574243675}
   playerTr: {fileID: 0}
@@ -5573,6 +5575,7 @@ MonoBehaviour:
     m_Bits: 2105345
   count: 0
   maxCount: 3
+  damageRadius: 1
   monsterBullet: {fileID: 8809067579740100126, guid: 3a21c71d5bf44ec40a4c4752ae400980,
     type: 3}
   bulletPortLeft: {fileID: 865915322}
@@ -15944,7 +15947,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -4.86, y: 2.85}
+  m_AnchoredPosition: {x: -7.22, y: 2.85}
   m_SizeDelta: {x: 32, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5753535264260957443
@@ -15975,7 +15978,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAC15\uD654\uB85C\uBD07"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6b3abd72e495a94bae7c535165f6b13, type: 2}
   m_sharedMaterial: {fileID: 4872938910897767070, guid: f6b3abd72e495a94bae7c535165f6b13,
@@ -16153,6 +16156,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3339147364907188938}
     m_Modifications:
+    - target: {fileID: 2090145120011318054, guid: efa41f7184fdae84f92637f91dfc44dd,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1.15
+      objectReference: {fileID: 0}
     - target: {fileID: 2383465457267887099, guid: efa41f7184fdae84f92637f91dfc44dd,
         type: 3}
       propertyPath: m_AnchorMax.x

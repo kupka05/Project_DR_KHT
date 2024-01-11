@@ -220,7 +220,7 @@ public class Monster : MonoBehaviour
 
         if(monsterHpSlider != null)
         {
-            SetMaxHealth(hp, damageable.Health); //hp
+            SetMaxHealth(hp); //hp
         }
         
    
@@ -314,14 +314,14 @@ public class Monster : MonoBehaviour
     }
 
     
-    public void SetMaxHealth(float newHealth, float curHealth)
+    public void SetMaxHealth(float newHealth)
     {
 
         if(monsterHpSlider != null)
         {
             hpText = monsterHpSlider.transform.GetChild(2).GetComponent<TMP_Text>();
             monsterHpSlider.maxValue = newHealth;
-            monsterHpSlider.value = curHealth;
+            monsterHpSlider.value = newHealth;
             hpText.text = newHealth.ToString();
         }
       

@@ -73,8 +73,22 @@ public class QuestPannel : MonoBehaviour
         
         // 오브젝트에 퀘스트 정보 세팅
         QuestPannelItem item = newQuestObj.GetComponent<QuestPannelItem>();
-        item.SetCategory(quest.QuestData.ID.ToString());
-        item.SetQuestName(quest.QuestData.name);
+        int id = quest.QuestData.ID;
+        int typeNum = Data.GetInt(id, "Type");
+        string type = default;
+        if (typeNum == 2)
+        {
+            type = "서브";
+        }
+        else if (typeNum == 3)
+        {
+            type = "특수";
+        }
+        else
+            type = "ERROR";
+
+        item.SetCategory(type);
+        item.SetQuestName(Data.GetString(id, "Desc"));
         item.SetAchievement(quest.QuestData.CurrentValue.ToString());
 
         // 딕셔너리에 퀘스트 추가
@@ -97,7 +111,6 @@ public class QuestPannel : MonoBehaviour
         {
             transform.parent.localScale = offSize;
         }
-
     }
 
     /// <summary> 진행중인 퀘스트가 있을 경우 업데이트  </summary>

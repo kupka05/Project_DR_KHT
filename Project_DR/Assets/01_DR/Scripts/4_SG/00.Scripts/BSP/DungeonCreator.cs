@@ -172,6 +172,7 @@ public class DungeonCreator : MonoBehaviour
     public GameObject wallVertical;
     public GameObject wallHorizontal;
     public GameObject wallBreakdown;
+    public Material twoFloorWallMat;
     // 이 오브젝트는 프리펩이며 커스텀 방에서 막힌 벽을 뚫어주는데 사용될거임
     // 벽이 한개만 있는게 아닌 3단 으로 쌓여있기에 이렇게 사용
     public GameObject demolisherWall;
@@ -705,6 +706,7 @@ public class DungeonCreator : MonoBehaviour
         wallObjClone.transform.localScale = new Vector3(1f, 22f, 1f);
         wallPos.y = +(tempWallPosY * 1.33f) + (wallObjClone.transform.localScale.y / 2);
         wallObjClone.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1f, 9f);
+        wallObjClone.GetComponent<MeshRenderer>().material = twoFloorWallMat;
         //wallPos.y = +((2.5f * 2f) / 2) + (wallObjClone.transform.localScale.y / 2); 나중에 이 방식으로 식 바꾸기 시도해봐야겠음
         wallObjClone.transform.position = wallPos;
         wallObjClone.tag = "Wall";
@@ -1449,7 +1451,9 @@ public class DungeonCreator : MonoBehaviour
         wallObjClone = Instantiate(wallPrefab, wallPos, Quaternion.identity, wallParent.transform);
         wallObjClone.transform.localScale = new Vector3(1f, 22f, 1f);
         wallObjClone.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1f, 9f);
+        wallObjClone.GetComponent<MeshRenderer>().material = twoFloorWallMat;
         wallPos.y = +(tempWallPosY * 1.33f) + (wallObjClone.transform.localScale.y / 2);
+
         //wallPos.y = +((2.5f * 2f) / 2) + (wallObjClone.transform.localScale.y / 2); 나중에 이 방식으로 식 바꾸기 시도해봐야겠음
         wallObjClone.transform.position = wallPos;
         wallObjClone.tag = "Wall";

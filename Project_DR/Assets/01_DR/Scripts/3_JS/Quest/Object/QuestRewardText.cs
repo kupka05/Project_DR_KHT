@@ -12,7 +12,7 @@ namespace Js.Quest
          *                Private Fields
          *************************************************/
         private TMP_Text _text;
-        private float _delay = 1.5f;
+        private float _delay = 3.0f;
         private bool _isPrint = false;
         private Queue<int> _rewardQueue;
         private WaitForSeconds _waitForSeconds;
@@ -103,7 +103,7 @@ namespace Js.Quest
             string rewardName = Data.GetString(id, category);
             // 리워드 이름이 공백일 경우 예외 처리
             if (rewardName.Equals("")) { return ""; }
-            string text = GFunc.SumString("<", rewardName, ">", " 를(을) 받았습니다.");
+            string text = GFunc.SumString("<", rewardName, ">");
 
             return text;
         }

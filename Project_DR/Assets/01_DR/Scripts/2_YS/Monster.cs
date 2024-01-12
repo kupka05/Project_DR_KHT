@@ -11,6 +11,7 @@ using static UnityEngine.UI.GridLayoutGroup;
 using TMPro;
 using BossMonster;
 using Unity.XR.CoreUtils;
+using Js.Quest;
 
 // 데미지를 체크하는 클래스
 public class DamageChecker : MonoBehaviour
@@ -360,6 +361,9 @@ public class Monster : MonoBehaviour
 
                 actionRoutine = MonsterAction();
                 StartCoroutine(actionRoutine);
+
+                // 몬스터 처치시 콜백 호출
+                QuestCallback.OnMonsterKillCallback(monsterId);
             }
 
 

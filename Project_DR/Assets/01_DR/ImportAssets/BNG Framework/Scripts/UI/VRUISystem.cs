@@ -32,7 +32,7 @@ namespace BNG {
         public InputActionReference UIInputAction;
 
         [Tooltip("If true a PhysicsRaycaster component will be added to the UI camera, allowing physical objects to use IPointer events such as OnPointClick, OnPointEnter, etc.")]
-        public bool AddPhysicsRaycaster = false;
+        public bool AddPhysicsRaycaster = true;
 
         public LayerMask PhysicsRaycasterEventMask;
 
@@ -125,6 +125,7 @@ namespace BNG {
                 // Add PhysicsRaycaster so other objects can subscribe to IPointer events
                 if(AddPhysicsRaycaster) {
                     var pr = go.AddComponent<PhysicsRaycaster>();
+                    PhysicsRaycasterEventMask |= (1 << 16);
                     pr.eventMask = PhysicsRaycasterEventMask;
                 }
             }

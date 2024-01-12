@@ -36,7 +36,8 @@ public enum NPCID
     Pbus_Random = 1111401,
     Horia_Random = 1110701,
     Geta_Random = 1111301,
-    Galba_Random = 1110601
+    Galba_Random = 1110601,
+    Explorer_Random = 1111102
     
 
 

@@ -2695,7 +2695,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.25, y: 2.95}
+  m_AnchoredPosition: {x: -6.91, y: 2.95}
   m_SizeDelta: {x: 32, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &101501251677896153
@@ -2973,6 +2973,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7994751365983690342}
     m_Modifications:
+    - target: {fileID: 2090145120011318054, guid: efa41f7184fdae84f92637f91dfc44dd,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.86
+      objectReference: {fileID: 0}
     - target: {fileID: 2383465457267887099, guid: efa41f7184fdae84f92637f91dfc44dd,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2981,6 +2986,11 @@ PrefabInstance:
     - target: {fileID: 2383465457267887099, guid: efa41f7184fdae84f92637f91dfc44dd,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2386814848775548687, guid: efa41f7184fdae84f92637f91dfc44dd,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6116199091966207024, guid: efa41f7184fdae84f92637f91dfc44dd,
@@ -3092,6 +3102,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BossHP
+      objectReference: {fileID: 0}
+    - target: {fileID: 7702902388475515977, guid: efa41f7184fdae84f92637f91dfc44dd,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efa41f7184fdae84f92637f91dfc44dd, type: 3}

@@ -893,6 +893,21 @@ public class Monster : MonoBehaviour
         yield return new WaitForSeconds(stunDelay);
         //isStun = false;
         rigid.WakeUp();
+        
+        //while (0.1f <= distanceFromGround)
+        //{
+        //    if (distanceFromGround <= 0.1f)
+        //    {
+        //        //isStun = false;
+        //        rigid.WakeUp();
+        //        rigid.drag = monsterDrag;
+        //        //damageable.stun = false;
+        //        break;
+        //    }
+        //    yield return null;
+        //}
+
+        yield break;
         //damageable.stun = false;
         yield break;
     }

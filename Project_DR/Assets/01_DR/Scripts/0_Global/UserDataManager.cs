@@ -86,17 +86,7 @@ public partial class UserDataManager : MonoBehaviour
         GetReferenceData();
         PlayerDataManager.Update(true); // 데이터 요청
     }
-    //public void Update()
-    //{
-    //    if (Input.GetKeyDown("r"))
-    //    {
-    //        StartCoroutine(SetDebugData());
-    //    }
-    //    //else if (Input.GetKeyDown(KeyCode.F1))
-    //    //{
-    //    //    SaveClearData();
-    //    //}
-    //}
+ 
 
     // ####################### 데이터 로드 #######################
 
@@ -261,7 +251,7 @@ public partial class UserDataManager : MonoBehaviour
         // 저장 후 업데이트
         PlayerDataManager.Save("clear_mbti_value", JsonData);
         PlayerDataManager.Save("clear_count", ClearCount);
-        PlayerDataManager.Update(true);
+        PlayerDataManager.Update();
     }
     // 클리어 시간을 가져오는 함수
     private string GetCurrentDate()
@@ -282,7 +272,7 @@ public partial class UserDataManager : MonoBehaviour
     {
         PlayerDataManager.Save("exp", Exp);
         PlayerDataManager.Save("weapon_atk", WeaponAtkLv);
-        PlayerDataManager.Save("exp", WeaponAtkRateLv);
+        PlayerDataManager.Save("weapon_atk_rate", WeaponAtkRateLv);
         PlayerDataManager.Save("weapon_cri_damage", WeaponCriDamageLv);
         PlayerDataManager.Save("weapon_cri_rate", WeaponCriRateLv);
     }
@@ -298,14 +288,6 @@ public partial class UserDataManager : MonoBehaviour
         PlayerDataManager.Save("skill_level_4_1", Skill4Lv_1);
         PlayerDataManager.Save("skill_level_4_2", Skill4Lv_2);
         PlayerDataManager.Save("skill_level_4_3", Skill4Lv_3);
-    }
-
-    public void SaveGoldandExp()
-    {
-        PlayerDataManager.Save("gold", Gold);
-        PlayerDataManager.Save("exp", Exp);
-        PlayerDataManager.Update(true);
-
     }
 
     // ####################### 디버그용 PC 데이터 리셋 ####################### \\
@@ -334,6 +316,7 @@ public partial class UserDataManager : MonoBehaviour
 
         PlayerDataManager.Save("weapon_atk", 0);
         yield return null;
+
         PlayerDataManager.Save("weapon_exp", 0);
         yield return null;
         PlayerDataManager.Save("weapon_cri_rate", 0);
@@ -381,11 +364,16 @@ public partial class UserDataManager : MonoBehaviour
         yield return null;
         PlayerDataManager.Save("clear_mbti_value", "");
 
-        PlayerDataManager.Update(true);
+        PlayerDataManager.Update();
         yield break;
     }
 
-
+    public void SaveGoldandExp()
+    {
+        PlayerDataManager.Save("gold", Gold);
+        PlayerDataManager.Save("exp", Exp);
+        PlayerDataManager.Update();
+    }
 
 
     // #######################  MBTI  ####################### \\

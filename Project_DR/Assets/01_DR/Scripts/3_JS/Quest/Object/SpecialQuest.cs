@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using BNG;
 
 namespace Js.Quest
 {
@@ -36,6 +37,7 @@ namespace Js.Quest
 
             // 퀘스트가 변경 될 때 텍스트도 변경
             SetTextForQuest();
+            GetComponent<Damageable>().onDestroyed.AddListener(DestroyQuestStone);  // 이벤트 리스너 추가
         }
 
 
@@ -44,8 +46,8 @@ namespace Js.Quest
          *************************************************/
         private void OnDestroy()
         {
-            GFunc.Log("OnDestroy()");
-            DestroyQuestStone();
+            //GFunc.Log("OnDestroy()");
+            //DestroyQuestStone();
         }
 
 
@@ -53,7 +55,7 @@ namespace Js.Quest
          *                Private Methods
          *************************************************/
         // 파괴 될 떄 호출
-        private void DestroyQuestStone()
+        public void DestroyQuestStone()
         {
             // 파괴 효과 출력
             ParticleSystem particle = transform.parent.Find("Firefly_Circle_End_3_Orange")

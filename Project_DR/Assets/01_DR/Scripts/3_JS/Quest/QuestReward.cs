@@ -112,6 +112,24 @@ namespace Js.Quest
         private void GetRewardState()
         {
             // TODO: 퀘스트 상태 보상 구현하기
+            // 보상 아이템(1 ~ 4) 지급
+            for (int i = 0; i < _questRewardData.RewardKeyIDs.Length; i++)
+            {
+                int keyID = _questRewardData.RewardKeyIDs[i];
+                int probability = _questRewardData.RewardProbabilitys[i];
+                // 보상 상태(1 ~ 4) 획득
+                GetRewardState(keyID, probability);
+            }
+        }
+
+        // 퀘스트 보상 상태 획득
+        private void GetRewardState(int keyID, int probability)
+        {
+            // 키 ID가 0이 아닐 경우 && 지정 확률 성공시
+            if (!keyID.Equals(0) && GetRandomProbability(probability))
+            {
+                UserData.ActiveSkill(keyID);
+            }
         }
 
         // 랜덤 확률 돌리기

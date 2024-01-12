@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace BossMonster
+namespace Js.Boss
 {
     public class Boss : MonoBehaviour
     {
@@ -16,7 +16,6 @@ namespace BossMonster
         public GameObject BossStone => _bossStone;
         public BossSummoningStone BossSummoningStone => _bossSummoningStone;
         public BossAnimationHandler BossAnimationHandler => _bossAnimationHandler;
-
         public IState CurrentState => _currentState;
         public IState IdleState => _idleState;
         public IState DieState => _dieState;

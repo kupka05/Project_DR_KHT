@@ -2,26 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BossMonster
+namespace Js.Boss
 {
     public class BossMonster : MonoBehaviour
     {
         /*************************************************
          *                 Private Fields
           *************************************************/
-        [SerializeField] private int _id = default;     // 인스펙터에서 ID를 할당해야 합니다.
+        private int _id;
         private Boss _boss;
         private WaitForSeconds _waitForSeconds;
 
 
         /*************************************************
-         *                 Unity Events
+         *               Public Methods
          *************************************************/
-        void Start()
+        public void Initialize(int id)
         {
+            // Init 
+            _id = id;
+
             // _boss 생성 및 초기화
             _boss = gameObject.AddComponent<Boss>();
-            _boss.Initialize(_id);
+            _boss.Initialize(id);
 
             // 패턴 간격으로 WaitForSeconds 캐싱
             _waitForSeconds = new WaitForSeconds(_boss.BossData.PatternInterval);
@@ -34,8 +37,8 @@ namespace BossMonster
         /*************************************************
          *               Private Methods
          *************************************************/
-     ///// TODO: 보스룸에서 Start를 했을 경우 아래의 함수를
-     ///// 호출하도록 설정한다!
+        ///// TODO: 보스룸에서 Start를 했을 경우 아래의 함수를
+        ///// 호출하도록 설정한다!
         // 패턴 간격에 따라 공격 패턴 실행
         private void StartAttack()
         {

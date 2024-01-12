@@ -116,6 +116,15 @@ public static class PlayerDataManager
         _id = id;
     }
 
+    /// <summary>
+    /// Quest Data를 수동으로 변경한다. 로컬 세이브 데이터 호출용
+    /// </summary>
+    /// <param name="input"></param>
+    public static void SetQuestMain(string input)
+    {
+        _quest_main = input;
+    }
+
     #endregion
     /*************************************************
      *                 Private Methods

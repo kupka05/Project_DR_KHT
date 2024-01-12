@@ -2289,7 +2289,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3216023249476686730}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.999998
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6382,7 +6382,6 @@ GameObject:
   - component: {fileID: 3216023250204439108}
   - component: {fileID: 3216023250204439115}
   - component: {fileID: 3216023250204439114}
-  - component: {fileID: 3867229035091391628}
   m_Layer: 5
   m_Name: Canvas_Inventory
   m_TagString: Untagged
@@ -6398,7 +6397,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3216023250204439113}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -6.39}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.0011933333, y: 0.0011933333, z: 2.0564198}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6542,18 +6541,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &3867229035091391628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3216023250204439113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4cba878c1c91e34fa160c53f2ce9069, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3216023250221724614
 GameObject:
   m_ObjectHideFlags: 0
@@ -7755,7 +7742,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.001100108, y: 0.005594705}
+  m_AnchoredPosition: {x: 0.0016451159, y: 0.005594705}
   m_SizeDelta: {x: -539.001, y: 1272}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &3216023250597619012
@@ -7960,6 +7947,7 @@ MonoBehaviour:
   _inventory: {fileID: 3216023249470161758}
   itemSlot: {fileID: 0}
   _index: 0
+  _itemIndex: 0
   _isChangeSize: 1
   _isStorageAvailable: 1
   _isPlayerStorage: 0
@@ -9069,10 +9057,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemSlot: {fileID: 4010713277719347214}
+  _itemData: {fileID: 0}
   _name: {fileID: 4010713277742302240}
   _iconSprite: {fileID: 4010713276901991421}
   _count: {fileID: 4010713276616280950}
   _index: 0
+  _itemIndex: -1
 --- !u!1 &4010713275854436162
 GameObject:
   m_ObjectHideFlags: 0
@@ -12511,6 +12501,7 @@ MonoBehaviour:
   _inventory: {fileID: 3216023249470161758}
   itemSlot: {fileID: 0}
   _index: 0
+  _itemIndex: 0
   _isChangeSize: 1
   _isStorageAvailable: 0
   _isPlayerStorage: 0

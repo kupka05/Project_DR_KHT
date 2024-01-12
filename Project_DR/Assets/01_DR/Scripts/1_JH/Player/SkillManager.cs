@@ -238,7 +238,9 @@ public class SkillManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator CheckingGound()
     {
-        while(smoothLocomotion.state == PlayerState.air)
+        GFunc.Log("드릴랜딩 체크시작");
+
+        while (smoothLocomotion.state == PlayerState.air)
         {
             // if문 조건 필요
             // 드릴마다 각각 체크하도록 해야함

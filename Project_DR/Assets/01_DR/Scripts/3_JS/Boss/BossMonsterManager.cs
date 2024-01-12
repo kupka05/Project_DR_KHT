@@ -50,6 +50,7 @@ namespace Js.Boss
                 BossMonster bossMonster = boss.AddComponent<BossMonster>();
                 bossMonster.Initialize(id);
                 boss.transform.position = pos;
+                boss.name = prefabName;
                 return boss;
             }
 

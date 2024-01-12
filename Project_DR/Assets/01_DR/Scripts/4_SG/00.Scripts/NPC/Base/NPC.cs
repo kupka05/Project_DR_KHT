@@ -277,6 +277,8 @@ public class NPC : MonoBehaviour
     /// </summary>
     public void InvokeStartConverationEvent()
     {
+        GFunc.Log("대화를 한다.");
+
         if (npcTriggerType == NpcTriggerType.Trigger)
         {
             if (isTryCommunity == false)

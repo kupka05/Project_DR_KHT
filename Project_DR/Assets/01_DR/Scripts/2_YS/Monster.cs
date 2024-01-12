@@ -295,12 +295,12 @@ public class Monster : MonoBehaviour
         attack = Data.GetFloat(id, "MonAtt");
         attDelay = Data.GetFloat(id, "MonDel");
         hitDelay = Data.GetFloat(id, "HitDel");
-        speed = (float)DataManager.Instance.GetData(id, "MonSpd", typeof(float));
-        attRange = (float)DataManager.Instance.GetData(id, "MonAtr", typeof(float));
-        recRange = (float)DataManager.Instance.GetData(id, "MonRer", typeof(float));
-        stunDelay = (float)DataManager.Instance.GetData(id, "MonSTFDel", typeof(float));
+        speed = Data.GetFloat(id, "MonSpd");
+        attRange = Data.GetFloat(id, "MonAtr");
+        recRange = Data.GetFloat(id, "MonRer");
+        stunDelay = Data.GetFloat(id, "MonSTFDel");
 
-        stopDistance = (float)DataManager.Instance.GetData(id, "MonStd", typeof(float));
+        stopDistance = Data.GetFloat(id, "MonStd");
         maxCount = Data.GetInt(id, "MonKno");
         monName = Data.GetString(id, "MonName");
 

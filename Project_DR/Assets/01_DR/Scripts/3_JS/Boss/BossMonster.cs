@@ -42,6 +42,7 @@ namespace Js.Boss
         // 패턴 간격에 따라 공격 패턴 실행
         private void StartAttack()
         {
+            // 공격 패턴 실행
             StartCoroutine(StartBossAttackPatternsCoroutine());
         }
         
@@ -61,6 +62,9 @@ namespace Js.Boss
                 // 패턴 간격만큼 대기
                 yield return _waitForSeconds;
 
+                // 공격 애니메이션 실행
+                _boss.BossAnimationHandler.AttackAnimation();
+
                 // 공격 패턴 변경
                 _boss.DOAttackPattern(_boss.BossData.AvailableAttackPatternsList[i]);
                 GFunc.Log($"사용하는 패턴: {_boss.BossData.AvailableAttackPatternsList[i]}");
@@ -69,6 +73,7 @@ namespace Js.Boss
             // 보스가 살아있을 경우 재귀 호출
             if (! _boss.BossData.IsDead)
             {
+                GFunc.Log($"isDead: {_boss.BossData.IsDead}");
                 StartCoroutine(StartBossAttackPatternsCoroutine());
             }
 

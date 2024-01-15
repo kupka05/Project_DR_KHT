@@ -38,8 +38,8 @@ public static class PlayerDataManager
     public static string ClearMBTIValue => _clear_mbti_value;
     public static string ClearTime => _clear_time;
     public static string QuestMain => _quest_main;
-
     public static int Tutorial => _tutorial;
+
 
     #endregion
     /*************************************************
@@ -77,8 +77,8 @@ public static class PlayerDataManager
     private static string _clear_mbti_value;  // 저장된 MBTI 수치
     private static string _clear_time;        // 클리어 한 날짜 및 시간
     private static string _quest_main;        // 메인 퀘스트 진행도(직렬화 데이터)
+    private static int _tutorial;             // 튜토리얼 클리어 여부(0:False / 1:True)
 
-    private static int _tutorial;
 
     #endregion
     /*************************************************
@@ -91,9 +91,16 @@ public static class PlayerDataManager
     /// </summary>
     public static void Update(bool isUserDataManagerUpdate = false)
     {
-        // 게임 매니저에 코루틴을 요청해서 UpdateCoroutine을 실행
+        // 유저 데이터 매니저에 코루틴을 요청해서 UpdateCoroutine을 실행
         UserDataManager.Instance.StartCoroutine(UpdateCoroutine(isUserDataManagerUpdate));
     }
+
+    public static void UpdateTutorial(string column = "tutorial")
+    {
+        // 데이터 매니저에 코루틴을 요청해서 SearchColumnCoroutine을 실행
+        DataManager.Instance.StartCoroutine(SearchTutorialCoroutine(column: column));
+    }
+
     /// <summary>
     /// GameManager를 트리거로 비동기로 코루틴을 실행 후, DB에 데이터를 
     /// 저장한다. <br></br>평균적으로 값이 업데이트 되는데 1~3초가 걸린다.
@@ -188,6 +195,7 @@ public static class PlayerDataManager
         _clear_count = clearCount;                 // 게임 클리어 횟수
         _clear_mbti_value = clearMBTIValue;        // 저장된 MBTI 수치(직렬화 데이터)
         _clear_time = clearTime;                   // 클리어 한 날짜 및 시간(직렬화 데이터)
+        _tutorial = tutorial;                      // 튜토리얼 클리어 여부
 
         _tutorial = tutorial;
 
@@ -238,6 +246,17 @@ public static class PlayerDataManager
         }
     }
 
+    // 파싱된 데이터 중 tutorial만 업데이트 한다.
+    private static void UpdateTutorialData(
+         List<PlayerData> playerDataList)
+    {
+        foreach (var playerData in playerDataList)
+        {
+            _tutorial = playerData.tutorial;
+        }
+    }
+
+
     #endregion
     /*************************************************
      *                  Coroutines
@@ -279,6 +298,46 @@ public static class PlayerDataManager
 
                 // 디버그
                 DebugData();
+
+            }
+
+            // using문을 사용해도 메모리 누수가 발생하여
+            // 추가로 Dipose()함수를 호출해서 할당 해제
+            www.Dispose();
+        }
+    }
+
+    // 단일 칼럼을 가져오기 위한 코루틴
+    private static IEnumerator SearchTutorialCoroutine(string command = "search", string column = "tutorial")
+    {
+        // 폼 생성
+        WWWForm form = MakeForm(command, PlayerID, column);
+
+        string url = SecureURLHandler.GetURL();
+        // using문을 사용하여 메모리 누수를 해결
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+        {
+            yield return www.SendWebRequest();
+
+            // 에러가 발생했을 경우
+            if (www.isNetworkError || www.isHttpError)
+            {
+                GFunc.LogWarning(www.downloadHandler.text);
+            }
+
+            // 정상일 경우
+            else
+            {
+                // 가져온 데이터를 출력
+                GFunc.Log(www.downloadHandler.text);
+                List<PlayerData> playerDataList = 
+                    ConvertDataToPlayerData(www.downloadHandler.text);
+
+                // 파싱된 데이터를 PlayerDataManager에 넣는다.
+                UpdateTutorialData(playerDataList);
+
+                GFunc.Log($"tutorial: {_tutorial}");
+                
 
             }
 
@@ -341,7 +400,8 @@ public static class PlayerDataManager
             $"skill_level_2_1: {PlayerDataManager.SkillLevel2_1}, skill_level_2_2: {PlayerDataManager.SkillLevel2_2},skill_level_2_3: {PlayerDataManager.SkillLevel2_3}," +
             $"skill_level_3: {PlayerDataManager.SkillLevel3}, " +
             $"skill_level_4_1: {PlayerDataManager.SkillLevel4_1}, skill_level_4_2: {PlayerDataManager.SkillLevel4_2}, skill_level_4_3: {PlayerDataManager.SkillLevel4_3}," +
-            $"quest_main: {PlayerDataManager.QuestMain}, " + "clear_count: {PlayerDataManager.ClearCount}, clear_mbti_value: {PlayerDataManager.ClearMBTIValue}, clear_time: {PlayerDataManager.ClearTime}");
+            $"quest_main: {PlayerDataManager.QuestMain}, " + $"clear_count: {PlayerDataManager.ClearCount}, clear_mbti_value: {PlayerDataManager.ClearMBTIValue}, clear_time: {PlayerDataManager.ClearTime}," +
+            $"tutorial: { PlayerDataManager.Tutorial}");
     }
 
     #endregion

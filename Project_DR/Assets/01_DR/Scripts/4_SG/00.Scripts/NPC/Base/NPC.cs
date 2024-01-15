@@ -55,8 +55,7 @@ public enum RewardID
     MBTIEndId = 324013,
     SilverCoinStartId = 321023,
     SilverCoinEndId = 321028,
-    EffectStartId = 323001,
-    EffectEndId = 323025
+    EffectIdDefalut = 720000
 
 }
 
@@ -600,6 +599,28 @@ public class NPC : MonoBehaviour
     /// /// <param name="_rewardId">보상 ID</param>
     private void RewardTypeCheck(int _rewardId)
     {
+        float isHpReward = Data.GetFloat(_rewardId, "GiveHealth");       
+        if (isHpReward != 0)
+        {       // HP관련 예외처리
+            UserData.SetCurrentHealth(isHpReward);
+        }
+        else { /*PASS*/ }
+
+        int isEffectReward = Data.GetInt(_rewardId, "Reward_1_KeyID");
+        if(isEffectReward >= (int)RewardID.EffectIdDefalut)
+        {       // 임펙트관련 예외처리
+            RewardEffect(_rewardId);
+        }
+        else { /*PASS*/ }
+
+        int isGiveGold = Data.GetInt(_rewardId, "GiveGold");
+        if (isGiveGold != 0)
+        {       // 골드관련 예외처리
+            UserData.AddGold(isGiveGold);
+        }
+        else { /*PASS*/ }
+
+
         //GFunc.Log($"TypeCheck : {_rewardId}");
         if ((int)RewardID.ItemStartId <= _rewardId && (int)RewardID.ItemEndId >= _rewardId)
         {
@@ -612,11 +633,7 @@ public class NPC : MonoBehaviour
         else if ((int)RewardID.SilverCoinStartId <= _rewardId && (int)RewardID.SilverCoinEndId >= _rewardId)
         {
             RewardSilverCoin(_rewardId);
-        }
-        else if ((int)RewardID.EffectStartId <= _rewardId && (int)RewardID.EffectEndId >= _rewardId)
-        {
-            RewardEffect(_rewardId);
-        }
+        }        
 
         // 보상 텍스트 출력
         Unit.PrintRewardText(_rewardId);
@@ -692,7 +709,20 @@ public class NPC : MonoBehaviour
 
     private void RewardEffect(int _rewardId)
     {
+        List<int> rewardItemRefIdList = NPCManager.Instance.GetRewardItemRefIdList(_rewardId);      // 보상의 ID        
+        List<int> rewardProbabilityList = NPCManager.Instance.GetRewardProbabilityList(_rewardId);  // 보상의 확률    
 
+        for (int i = 0; i < rewardItemRefIdList.Count; i++)
+        {
+            bool isRewardInIt = NPCManager.Instance.GetProbabilityResult(rewardProbabilityList[i]);
+
+            if (isRewardInIt == true)
+            {
+                UserData.ActiveSkill(rewardItemRefIdList[i]);
+            }
+            else { /*PASS*/ }
+        }
+        
     }
     #endregion 보상지급 함수
 

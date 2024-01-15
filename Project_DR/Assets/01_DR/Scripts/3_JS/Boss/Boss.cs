@@ -41,7 +41,7 @@ namespace Js.Boss
         private IState _currentState;                                               // 현재 상태
         private IState _idleState;                                                  // 대기 상태
         private IState _dieState;                                                   // 죽음 상태
-        private IState[] _attackStates = new IState[10];                            // 공격 상태 패턴(0 ~ 9)[10]
+        private IState[] _attackStates = new IState[5];                            // 공격 상태 패턴(0 ~ 4)[5]
 
 
         /*************************************************
@@ -98,11 +98,17 @@ namespace Js.Boss
         // 보스 오브젝트 삭제
         public void Dead()
         {
+            // 죽음 처리
+            _bossData.SetIsDead(true);
+
+            // 대기 상태로 변경
+            _currentState = _idleState;
+
             // 죽음 애니메이션 재생
             _bossAnimationHandler.DieAnimation();
 
             // 3초 후 오브젝트 삭제
-            Destroy(gameObject, 3.0f);
+            Destroy(gameObject, _bossData.DestroyDelay);
         }
 
 
@@ -154,7 +160,6 @@ namespace Js.Boss
                 stringBuilder.Clear();
                 stringBuilder.Append("Js.Boss.AttackState_");
                 stringBuilder.Append(i);
-                //string type = "BossMonster.AttackState_" + i;     //Legacy:
                 // 타입 검색
                 Type attackStateType = Type.GetType(stringBuilder.ToString());
                 // 타입이 있을 경우

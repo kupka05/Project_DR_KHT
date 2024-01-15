@@ -21,7 +21,7 @@ public class GoogleSheetsReader
     } // 예시 보여주기용 미사용 함수
     #endregion
 
-    public static WaitForSeconds waitForSceonds = new WaitForSeconds(0.1f);
+    public static WaitForSeconds waitForSceonds = new WaitForSeconds(0.5f);
     // 구글 스프레드 시트에 있는 문서를 가져오는 함수
     // 네트워크 요청과 같이 시간이 걸리는 동작을 수행할 때는
     // 코루틴을 사용하는게 좋다.

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 public class DungeonExit : MonoBehaviour
 {
+
     public bool isLobby;        // 로비 여부
     public string sceneName;    // 전환할 씬 이름
     public float sceneDelay;    // 씬 딜레이
@@ -27,27 +28,7 @@ public class DungeonExit : MonoBehaviour
         }
     }
 
-#if UNITY_EDITOR
-    private bool debug= false;
-    public void Update()
-    {
-        if(!isLobby)
-        { return; }
 
-        if(Input.GetKeyDown(KeyCode.F12) && !debug)
-        {
-            debug = true;
-            int targetQuestID = 3010001;
-            int clearCount = UserDataManager.Instance.ClearCount;
-            clearCount = clearCount <= 23 ? clearCount : 22;
-            GFunc.Log(clearCount);
-            targetQuestID += clearCount;
-            GFunc.ChoiceEvent(targetQuestID);
-
-            SceneLoad(sceneName);
-        }
-    }
-#endif
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Player"))
@@ -61,7 +42,6 @@ public class DungeonExit : MonoBehaviour
             if (isLobby)
             {
                 SceneLoad(sceneName);
-                //await LoadSceneAsync(sceneName);
             }
 
             else if(GameManager.instance.nowFloor <= GameManager.instance.isPlayerMaxFloor )

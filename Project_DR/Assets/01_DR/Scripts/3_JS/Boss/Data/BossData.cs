@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BossMonster
+namespace Js.Boss
 {
     [System.Serializable]
     public class BossData
@@ -32,6 +32,7 @@ namespace BossMonster
         public int CurrentPatternCount => _currentPatternCount;                         // 현재 패턴 갯수      
         public List<int> AvailableAttackPatternsList => _availableAttackPatternsList;   // 사용 가능한 공격 패턴들
         public bool IsDead => _isDead;                                                  // 죽음 여부
+        public float DestroyDelay => _destroyDelay;                                     // 오브젝트가 사라지는데 걸리는 시간 
 
 
         /*************************************************
@@ -46,16 +47,17 @@ namespace BossMonster
         [SerializeField] private float _def;
         [SerializeField] private float _giveEXP;
         [SerializeField] private int _giveGold;
-        [SerializeField] private float _patternInterval = 3.0f;                 // 3.0f는 오류 대비 값, 실제 값은 GetData로 가져온다.
+        [SerializeField] private float _patternInterval = 3.0f;                         // 3.0f는 오류 대비 값, 실제 값은 GetData로 가져온다.
         [SerializeField] private int _attackAnimationRange;
         [SerializeField] private Rigidbody _rigidBody;
         [SerializeField] private Damageable _damageable;
         [SerializeField] private Transform _target;
         [SerializeField] private Animator _animator;
-        [SerializeField] private int[] _phaseAttackPatternCounts = new int[4];  // 페이즈는 4개로 고정.
+        [SerializeField] private int[] _phaseAttackPatternCounts = new int[4];          // 페이즈는 4개로 고정.
         [SerializeField] private int _currentPatternCount;
         [SerializeField] private List<int> _availableAttackPatternsList = new List<int>();
         [SerializeField] private bool _isDead;
+        [SerializeField] private float _destroyDelay = 3.0f;
 
 
         /*************************************************
@@ -118,6 +120,12 @@ namespace BossMonster
             {
                 _isDead = true;
             }
+        }
+
+        // 죽음 여부 변경
+        public void SetIsDead(bool isDead)
+        {
+            _isDead = isDead;
         }
 
         // 사용 가능한 공격 패턴 초기화

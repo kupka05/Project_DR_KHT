@@ -1,5 +1,5 @@
 
-namespace BossMonster
+namespace Js.Boss
 {
     public class AttackStateData_5
     {

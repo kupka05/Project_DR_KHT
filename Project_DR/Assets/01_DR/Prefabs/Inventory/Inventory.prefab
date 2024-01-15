@@ -2185,7 +2185,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3216023249193137523
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3536,7 +3536,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5200,7 +5200,7 @@ GameObject:
   - component: {fileID: 3216023250003062604}
   m_Layer: 5
   m_Name: Item Slot Prefab
-  m_TagString: ItemSlot
+  m_TagString: Inventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6120,8 +6120,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3216023249473996144}
   m_HandleRect: {fileID: 3216023249473996151}
   m_Direction: 2
-  m_Value: 0.9999929
-  m_Size: 0.379717
+  m_Value: 0.9999927
+  m_Size: 0.39308175
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6382,10 +6382,9 @@ GameObject:
   - component: {fileID: 3216023250204439108}
   - component: {fileID: 3216023250204439115}
   - component: {fileID: 3216023250204439114}
-  - component: {fileID: 3867229035091391628}
   m_Layer: 5
   m_Name: Canvas_Inventory
-  m_TagString: Untagged
+  m_TagString: Inventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6398,7 +6397,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3216023250204439113}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -6.39}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.0011933333, y: 0.0011933333, z: 2.0564198}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6542,18 +6541,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &3867229035091391628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3216023250204439113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4cba878c1c91e34fa160c53f2ce9069, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3216023250221724614
 GameObject:
   m_ObjectHideFlags: 0
@@ -7730,6 +7717,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3216023250585719580}
+  - component: {fileID: 2687067005544949706}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -7755,9 +7743,21 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.001100108, y: 0.005594705}
+  m_AnchoredPosition: {x: 0.0008576143, y: 0.005594705}
   m_SizeDelta: {x: -539.001, y: 1272}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &2687067005544949706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3216023250585719555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0522295907b06746995767415ccf7dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3216023250597619012
 GameObject:
   m_ObjectHideFlags: 0
@@ -7907,7 +7907,7 @@ GameObject:
   - component: {fileID: 3216023250648087186}
   m_Layer: 5
   m_Name: SlotCollider
-  m_TagString: ItemSlot
+  m_TagString: Inventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7960,6 +7960,7 @@ MonoBehaviour:
   _inventory: {fileID: 3216023249470161758}
   itemSlot: {fileID: 0}
   _index: 0
+  _itemIndex: 0
   _isChangeSize: 1
   _isStorageAvailable: 1
   _isPlayerStorage: 0
@@ -9069,10 +9070,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemSlot: {fileID: 4010713277719347214}
+  _itemData: {fileID: 0}
   _name: {fileID: 4010713277742302240}
   _iconSprite: {fileID: 4010713276901991421}
   _count: {fileID: 4010713276616280950}
   _index: 0
+  _itemIndex: -1
 --- !u!1 &4010713275854436162
 GameObject:
   m_ObjectHideFlags: 0
@@ -9516,7 +9519,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4010713275993210071
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11805,8 +11808,8 @@ RectTransform:
   m_Father: {fileID: 4010713276763661705}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.00000011920929}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12458,7 +12461,7 @@ GameObject:
   - component: {fileID: 4010713277719347212}
   m_Layer: 5
   m_Name: SlotCollider
-  m_TagString: ItemSlot
+  m_TagString: PlayerInventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12511,6 +12514,7 @@ MonoBehaviour:
   _inventory: {fileID: 3216023249470161758}
   itemSlot: {fileID: 0}
   _index: 0
+  _itemIndex: 0
   _isChangeSize: 1
   _isStorageAvailable: 0
   _isPlayerStorage: 0
@@ -12615,7 +12619,7 @@ GameObject:
   - component: {fileID: 4010713277729156711}
   m_Layer: 5
   m_Name: Canvas_PlayerInventory
-  m_TagString: Untagged
+  m_TagString: PlayerInventory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

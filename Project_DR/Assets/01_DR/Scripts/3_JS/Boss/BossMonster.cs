@@ -2,26 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BossMonster
+namespace Js.Boss
 {
     public class BossMonster : MonoBehaviour
     {
         /*************************************************
          *                 Private Fields
           *************************************************/
-        [SerializeField] private int _id = default;     // 인스펙터에서 ID를 할당해야 합니다.
+        private int _id;
         private Boss _boss;
         private WaitForSeconds _waitForSeconds;
 
 
         /*************************************************
-         *                 Unity Events
+         *               Public Methods
          *************************************************/
-        void Start()
+        public void Initialize(int id)
         {
+            // Init 
+            _id = id;
+
             // _boss 생성 및 초기화
             _boss = gameObject.AddComponent<Boss>();
-            _boss.Initialize(_id);
+            _boss.Initialize(id);
 
             // 패턴 간격으로 WaitForSeconds 캐싱
             _waitForSeconds = new WaitForSeconds(_boss.BossData.PatternInterval);
@@ -34,11 +37,12 @@ namespace BossMonster
         /*************************************************
          *               Private Methods
          *************************************************/
-     ///// TODO: 보스룸에서 Start를 했을 경우 아래의 함수를
-     ///// 호출하도록 설정한다!
+        ///// TODO: 보스룸에서 Start를 했을 경우 아래의 함수를
+        ///// 호출하도록 설정한다!
         // 패턴 간격에 따라 공격 패턴 실행
         private void StartAttack()
         {
+            // 공격 패턴 실행
             StartCoroutine(StartBossAttackPatternsCoroutine());
         }
         
@@ -58,6 +62,9 @@ namespace BossMonster
                 // 패턴 간격만큼 대기
                 yield return _waitForSeconds;
 
+                // 공격 애니메이션 실행
+                _boss.BossAnimationHandler.AttackAnimation();
+
                 // 공격 패턴 변경
                 _boss.DOAttackPattern(_boss.BossData.AvailableAttackPatternsList[i]);
                 GFunc.Log($"사용하는 패턴: {_boss.BossData.AvailableAttackPatternsList[i]}");
@@ -66,6 +73,7 @@ namespace BossMonster
             // 보스가 살아있을 경우 재귀 호출
             if (! _boss.BossData.IsDead)
             {
+                GFunc.Log($"isDead: {_boss.BossData.IsDead}");
                 StartCoroutine(StartBossAttackPatternsCoroutine());
             }
 

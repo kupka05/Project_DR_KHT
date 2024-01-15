@@ -452,7 +452,7 @@ public class LobbyEvent : MonoBehaviour
     public void SetWeaponLevelBtn()
     {
         atkUpBtn.level = UserDataManager.Instance.WeaponAtkLv;
-        critRateUpBtn.level = UserDataManager.Instance.WeaponCriDamageLv;
+        critRateUpBtn.level = UserDataManager.Instance.WeaponCriRateLv;
         critDmgBtn.level = UserDataManager.Instance.WeaponCriDamageLv;
         atkRateBtn.level = UserDataManager.Instance.WeaponAtkRateLv;
 

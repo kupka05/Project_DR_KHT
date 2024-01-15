@@ -528,6 +528,8 @@ public static class UserData
     }
     public static void GameOver()
     {
+        MaterialItemCalculator();                            // 재료 아이템 정산
+        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.isGameOver = true;
     }
     // 클리어 던전

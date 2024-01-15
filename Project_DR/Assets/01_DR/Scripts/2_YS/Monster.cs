@@ -123,6 +123,7 @@ public class Monster : MonoBehaviour
 
     IEnumerator actionRoutine;
 
+    Coroutine smashCoroutine;
 
     public DamageCollider[] damageCollider;
 
@@ -211,19 +212,19 @@ public class Monster : MonoBehaviour
             //attack = damageCollider.Damage; // 지환 : attack은 시트에서 가져온 데이터 값
         }
 
-        nameText.text = monName.ToString(); 
+        nameText.text = monName.ToString();
 
         nav.speed = speed;
 
         nav.stoppingDistance = stopDistance;
         //nav.stoppingDistance = attRange - 0.5f;
 
-        if(monsterHpSlider != null)
+        if (monsterHpSlider != null)
         {
             SetMaxHealth(hp); //hp
         }
-        
-   
+
+
         InitMonster();
 
         SetDamageCollider();   // 데미지 콜라이더를 제어하는 클래스를 세팅
@@ -313,28 +314,28 @@ public class Monster : MonoBehaviour
 
     }
 
-    
+
     public void SetMaxHealth(float newHealth)
     {
 
-        if(monsterHpSlider != null)
+        if (monsterHpSlider != null)
         {
             hpText = monsterHpSlider.transform.GetChild(2).GetComponent<TMP_Text>();
             monsterHpSlider.maxValue = newHealth;
             monsterHpSlider.value = newHealth;
             hpText.text = newHealth.ToString();
         }
-      
+
     }
 
     public void SetHealth(float newHealth)
     {
-        if(monsterHpSlider != null)
+        if (monsterHpSlider != null)
         {
             monsterHpSlider.value = newHealth;
             hpText.text = newHealth.ToString();
         }
-       
+
     }
 
     // 스테이트를 관리하는 코루틴
@@ -681,7 +682,7 @@ public class Monster : MonoBehaviour
             SetHealth(damageable.Health);
             GFunc.Log($"OnDeal체력:{damageable.Health}");
         }
-        else if(damageable.Health <= 0)
+        else if (damageable.Health <= 0)
         {
             SetHealth(0);
             GFunc.Log($"리턴 체력:{damageable.Health}");
@@ -699,6 +700,8 @@ public class Monster : MonoBehaviour
 
         smashCount++;   // 분쇄 카운트 추가
 
+     
+
         if (smashCount >= smashMaxCount)
         {
             smash.SetActive(true);
@@ -710,7 +713,11 @@ public class Monster : MonoBehaviour
             smashFilled.fillAmount = 1;
             //GFunc.Log($"분쇄FillAmount:{smashFilled.fillAmount}");
 
-            StartCoroutine(SmashTime());
+            if (smashCoroutine != null)
+            {
+                StopCoroutine(smashCoroutine);
+            }
+            smashCoroutine = StartCoroutine(SmashTime());
 
             if (countNum <= 3)
             {
@@ -729,6 +736,7 @@ public class Monster : MonoBehaviour
             //GFunc.Log("스택 별 데미지 진입");
 
             //GFunc.Log("중첩 숫자 증가");
+
         }
 
         count++;
@@ -738,7 +746,6 @@ public class Monster : MonoBehaviour
         {
             count = 0;
 
-
             MonsterKnockBack();
 
             ////기존
@@ -747,6 +754,32 @@ public class Monster : MonoBehaviour
 
         }
     }
+
+    public IEnumerator SmashTime()
+    {
+
+        while (smashFilled.fillAmount > 0)
+        {
+
+            if (countNum == 2 || countNum == 3 || countNum == 4)
+            {
+                smashFilled.fillAmount -= Time.deltaTime / skillTime;             
+                //Debug.Log($"쿨타임 스택{countNum}:{smashFilled.fillAmount}");
+            }
+           yield return null;
+        }
+
+        if (smashFilled.fillAmount <= 0)
+        {
+            smash.SetActive(false);
+            smashCount = 0;
+            countNum = 1;
+            //GFunc.Log("사라지나");
+        }
+        yield return null;
+
+    }
+
 
     public virtual void MonsterKnockBack()
     {
@@ -758,7 +791,7 @@ public class Monster : MonoBehaviour
         {
             rigid.AddForce(this.transform.position - transform.forward * 2.0f, ForceMode.Impulse);
 
-            Vector3 overlapSphereCenter = this.transform.position-transform.forward * 0.5f;
+            Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
             overlapSphereCenter.z -= 0.5f;
 
             Collider[] colliders = Physics.OverlapSphere(overlapSphereCenter, damageRadius);
@@ -766,12 +799,12 @@ public class Monster : MonoBehaviour
 
             foreach (Collider collider in colliders)
             {
-                if(collider.CompareTag("Wall"))
+                if (collider.CompareTag("Wall"))
                 {
                     return;
                 }
             }
-         
+
         }
         MoveWithSmoothTransition(this.transform.position - transform.forward * 2.0f);
 
@@ -815,11 +848,11 @@ public class Monster : MonoBehaviour
             //GFunc.Log("스택1진입");
             damageable.Health -= SmashDamageCalculate(damage, 1);
             // 갱신된 체력 값을 적용
-            if(monsterHpSlider != null)
+            if (monsterHpSlider != null)
             {
                 SetHealth(damageable.Health);
             }
-          
+
 
             // 남은 체력을 로그로 출력
             //Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
@@ -862,26 +895,6 @@ public class Monster : MonoBehaviour
         return Mathf.RoundToInt(damage * (1 + _debuff)) - damage;
     }
 
-    public IEnumerator SmashTime()
-    {
-        while (smashFilled.fillAmount > 0)
-        {
-            //GFunc.Log($"남은 시간:{smashFilled.fillAmount * skillTime}");
-            //GFunc.Log("분쇄 fill");
-            smashFilled.fillAmount -= 1 * Time.smoothDeltaTime / skillTime;
-
-            if (smashFilled.fillAmount <= 0)
-            {
-                smash.SetActive(false);
-                smashCount = 0;
-                countNum = 1;
-                //GFunc.Log("사라지나");
-            }
-            yield return null;
-        }
-
-    }
-
     // 스턴 딜레이
     public IEnumerator StunDelay()
     {
@@ -892,7 +905,7 @@ public class Monster : MonoBehaviour
         yield return new WaitForSeconds(stunDelay);
         //isStun = false;
         rigid.WakeUp();
-        
+
         //while (0.1f <= distanceFromGround)
         //{
         //    if (distanceFromGround <= 0.1f)
@@ -908,7 +921,6 @@ public class Monster : MonoBehaviour
 
         yield break;
         //damageable.stun = false;
-        yield break;
     }
 
     //void OnDrawGizmos()

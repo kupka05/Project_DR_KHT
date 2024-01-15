@@ -39,6 +39,8 @@ public static class PlayerDataManager
     public static string ClearTime => _clear_time;
     public static string QuestMain => _quest_main;
 
+    public static int Tutorial => _tutorial;
+
     #endregion
     /*************************************************
      *                 Private Fields
@@ -75,6 +77,8 @@ public static class PlayerDataManager
     private static string _clear_mbti_value;  // 저장된 MBTI 수치
     private static string _clear_time;        // 클리어 한 날짜 및 시간
     private static string _quest_main;        // 메인 퀘스트 진행도(직렬화 데이터)
+
+    private static int _tutorial;
 
     #endregion
     /*************************************************
@@ -149,7 +153,7 @@ public static class PlayerDataManager
         int weaponAtk, int weaponCriRate, int weaponCriDamage, int weaponAtkRate,
         int weaponExp, int skillLevel1_1, int skillLevel1_2, int skillLevel2_1, int skillLevel2_2, int skillLevel2_3, 
         int skillLevel3, int skillLevel4_1, int skillLevel4_2, int skillLevel4_3,
-        string questMain, int clearCount, string clearMBTIValue, string clearTime
+        string questMain, int clearCount, string clearMBTIValue, string clearTime, int tutorial
         )
     {
         // [Player]
@@ -184,6 +188,8 @@ public static class PlayerDataManager
         _clear_count = clearCount;                 // 게임 클리어 횟수
         _clear_mbti_value = clearMBTIValue;        // 저장된 MBTI 수치(직렬화 데이터)
         _clear_time = clearTime;                   // 클리어 한 날짜 및 시간(직렬화 데이터)
+
+        _tutorial = tutorial;
 
         // 퀘스트 목록을 생성 & 업데이트
         QuestManager.Instance.CreateQuestFromDataTable();
@@ -228,7 +234,7 @@ public static class PlayerDataManager
                 playerData.weapon_exp, 
                 playerData.skill_level_1_1, playerData.skill_level_1_2, playerData.skill_level_2_1, playerData.skill_level_2_2, playerData.skill_level_2_3, playerData.skill_level_3,
                 playerData.skill_level_4_1, playerData.skill_level_4_2, playerData.skill_level_4_3, playerData.quest_main, playerData.clear_count, playerData.clear_mbti_value,
-                playerData.clear_time);
+                playerData.clear_time, playerData.tutorial);
         }
     }
 

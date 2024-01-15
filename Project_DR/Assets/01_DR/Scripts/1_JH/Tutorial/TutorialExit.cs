@@ -14,7 +14,9 @@ public class TutorialExit : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            switch(level)
+            PlayerDataManager.Save("tutorial", 1);
+
+            switch (level)
             {
                 case Level.Easy:
                     UserDataManager.Instance.Gold = 5000;

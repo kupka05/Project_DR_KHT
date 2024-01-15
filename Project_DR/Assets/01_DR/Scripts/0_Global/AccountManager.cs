@@ -107,6 +107,7 @@ public class AccountManager : MonoBehaviour
     {
         if (TutorialCheck())
         {
+            sceneLoader.SetFaderColor(Color.white);
             sceneLoader.sceneName = tutorialSceneName;
         }
 

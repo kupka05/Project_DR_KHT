@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BossMonster
+namespace Js.Boss
 {
     public class BossSummoningStone : MonoBehaviour
     {

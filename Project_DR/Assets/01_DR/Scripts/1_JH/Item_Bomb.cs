@@ -1,4 +1,5 @@
 using BNG;
+using Js.Quest;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,9 +41,9 @@ public class Item_Bomb : MonoBehaviour
         
 
         itemHandler = gameObject.GetComponent<ItemColliderHandler>();
-        _renderer = gameObject.GetComponent<MeshRenderer>(); 
+        _renderer = gameObject.GetComponent<MeshRenderer>();
 
-        rigid = gameObject.AddComponent<Rigidbody>();
+        rigid = gameObject.GetOrAddRigidbody();
 
         gameObject.tag = "PlayerSkill"; // 플레이어 스킬에 닿은 몬스터들은 넉백 실행
     }
@@ -91,6 +92,10 @@ public class Item_Bomb : MonoBehaviour
         BombExplosion();
         sphereCollider.enabled = true;
         damageCollider.enabled = true;
+
+        // 폭탄 사용 콜백 호출
+        QuestCallback.OnUseItemCallback(itemID);
+
         Destroy(gameObject, 1f);
     }
 

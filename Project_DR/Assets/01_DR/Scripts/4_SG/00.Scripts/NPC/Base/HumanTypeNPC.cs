@@ -28,9 +28,8 @@ public class HumanTypeNPC : NPC, IPointerClickHandler, IPointerEnterHandler, IPo
         this.gameObject.layer = PhysicsPointerLayer;
 
         GameObject npcConversationBox = Resources.Load<GameObject>("Prefabs/NPCConversationBox");
-        Vector3 boxPosition = transform.position;
-        boxPosition.y += 0.8f;
-        boxPosition.x += 0.5f;
+        Vector3 boxPosition = transform.position + transform.forward * 0.45f;
+        boxPosition.y += 1f;
         ConversationBox = Instantiate(npcConversationBox, boxPosition, transform.rotation, transform);
         ConversationBox.SetActive(false);
     }
@@ -40,7 +39,7 @@ public class HumanTypeNPC : NPC, IPointerClickHandler, IPointerEnterHandler, IPo
     {
         int DefaultLayer = 1;
         this.gameObject.layer = DefaultLayer;
-        Destroy(ConversationBox);
+        ConversationBox.transform.localScale = Vector3.zero;
     }
 
 

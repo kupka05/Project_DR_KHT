@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace BossMonster
+namespace Js.Boss
 {
     public class Boss : MonoBehaviour
     {
@@ -16,7 +16,6 @@ namespace BossMonster
         public GameObject BossStone => _bossStone;
         public BossSummoningStone BossSummoningStone => _bossSummoningStone;
         public BossAnimationHandler BossAnimationHandler => _bossAnimationHandler;
-
         public IState CurrentState => _currentState;
         public IState IdleState => _idleState;
         public IState DieState => _dieState;
@@ -85,7 +84,7 @@ namespace BossMonster
         // 보스의 공격 패턴 상태를 실행
         public void DOAttackPattern(int index)
         {
-            // 인덱스로 받은 공격 패턴을 실행
+            // 인덱스로 받은 공격 패턴을
             ChangeState(_attackStates[index]);
         }
 
@@ -123,7 +122,7 @@ namespace BossMonster
          *************************************************/
         // 현재 상태 변경
         public void ChangeState(IState state)
-        { 
+        {
             if (_currentState != null)
             {
                 // 상태 나가기
@@ -153,7 +152,7 @@ namespace BossMonster
                 // 타입을 찾을 때 네임스페이스명 + 찾을 타입명으로 검색해야 함
                 // 연산을 최소화 하기 위해 string 대신 StringBuilder 사용
                 stringBuilder.Clear();
-                stringBuilder.Append("BossMonster.AttackState_");
+                stringBuilder.Append("Js.Boss.AttackState_");
                 stringBuilder.Append(i);
                 //string type = "BossMonster.AttackState_" + i;     //Legacy:
                 // 타입 검색

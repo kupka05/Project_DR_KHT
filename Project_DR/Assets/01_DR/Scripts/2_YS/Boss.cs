@@ -145,6 +145,9 @@ public class Boss : MonoBehaviour
     IEnumerator shootBounce;
     IEnumerator shootBrick;
 
+    public bool IsUseFunctionalityOnly => _isUseFunctionalityOnly;
+    [SerializeField] private bool _isUseFunctionalityOnly = false;      // 해당 스크립트의 기능만 사용하는지 여부
+
     public void Awake()
     {
         GetData(bossId, bossProjectileId, bossProjectileID, bossProjectileBounceId, bossProjectileLazerId);
@@ -165,13 +168,19 @@ public class Boss : MonoBehaviour
 
         //particleSystem = GetComponent<ParticleSystem>();
 
-        damageable.Health = maxHp;
-
-        SetMaxHealth(damageable.Health);  //maxhp
-
-        if (bossState)
+        if (damageable != null)
         {
-            bossState.GetComponent<BossState>().CastSpell();
+            damageable.Health = maxHp;
+
+            SetMaxHealth(damageable.Health);  //maxhp
+        }
+
+        if (bossState.GetComponent<BossState>() != null)
+        {
+            if (bossState)
+            {
+                bossState.GetComponent<BossState>().CastSpell();
+            }
         }
 
         npc = GetComponent<BossNPC>();
@@ -189,19 +198,23 @@ public class Boss : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (target != null)
+        // _isUseFunctionalityOnly가 False일 경우
+        if (! _isUseFunctionalityOnly)
         {
-            if (!isLazerCoroutineRunning)
+            if (target != null)
             {
-                // Look At Y 각도로만 기울어지게 하기
-                Vector3 targetPostition =
-                    new Vector3(target.position.x, this.transform.position.y, target.position.z);
-                this.transform.LookAt(targetPostition);
+                if (!isLazerCoroutineRunning)
+                {
+                    // Look At Y 각도로만 기울어지게 하기
+                    Vector3 targetPostition =
+                        new Vector3(target.position.x, this.transform.position.y, target.position.z);
+                    this.transform.LookAt(targetPostition);
+                }
             }
-        }
-        else
-        {
-            return;
+            else
+            {
+                return;
+            }
         }
     }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using Js.Quest;
 using System.Text;
 using System;
+using Js.Boss;
 
 public class BossNPC : NPC
 {
@@ -143,12 +144,25 @@ public class BossNPC : NPC
     {
         base.EndConveration();
 
-        OffCanvasObj();                      // 캔버스 끄기
+        OffCanvasObj();                              // 캔버스 끄기
         GameManager.instance.EndBossCutScene();      // 플레이어 페이드 아웃
-        Invoke(nameof(StartBossBattle), 1f);
-        
+
+        Boss oldBoss = GetComponent<Boss>();
+        if (oldBoss.IsUseFunctionalityOnly)
+        {
+            // 신 보스일 경우 & 1초 후 공격 시작
+            BossSummoningStone bossStone = GetComponent<BossSummoningStone>();
+            bossStone.Boss.BossMonster.InvokeStartAttack(1f);
+        }
+
+        else
+        {
+            // 아닐 경우(기존 보스일 경우) & 1초 후 공격 시작
+            Invoke(nameof(StartBossBattle), 1f);
+        }          
     }       // EndConveration()
 
+    // 전투 시작
     private void StartBossBattle()
     {
         GFunc.ChoiceEvent(conversationID);   // 대화 종료 후 대사 클리어 이벤트 진행중으로 변경

@@ -61,7 +61,6 @@ public class DungeonExit : MonoBehaviour
             if (isLobby)
             {
                 SceneLoad(sceneName);
-                //await LoadSceneAsync(sceneName);
             }
 
             else if(GameManager.instance.nowFloor <= GameManager.instance.isPlayerMaxFloor )

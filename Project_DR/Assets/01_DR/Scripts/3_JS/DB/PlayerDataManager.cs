@@ -40,6 +40,8 @@ public static class PlayerDataManager
     public static string QuestMain => _quest_main;
     public static int Tutorial => _tutorial;
 
+    public static int Tutorial => _tutorial;
+
     #endregion
     /*************************************************
      *                 Private Fields
@@ -78,6 +80,8 @@ public static class PlayerDataManager
     private static string _quest_main;        // 메인 퀘스트 진행도(직렬화 데이터)
     private static int _tutorial;             // 튜토리얼 클리어 여부(0:False / 1:True)
 
+
+    private static int _tutorial;
 
     #endregion
     /*************************************************
@@ -195,6 +199,8 @@ public static class PlayerDataManager
         _clear_mbti_value = clearMBTIValue;        // 저장된 MBTI 수치(직렬화 데이터)
         _clear_time = clearTime;                   // 클리어 한 날짜 및 시간(직렬화 데이터)
         _tutorial = tutorial;                      // 튜토리얼 클리어 여부
+
+        _tutorial = tutorial;
 
         // 퀘스트 목록을 생성 & 업데이트
         QuestManager.Instance.CreateQuestFromDataTable();

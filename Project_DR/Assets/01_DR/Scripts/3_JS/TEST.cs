@@ -36,7 +36,7 @@ public class TEST : MonoBehaviour
             //Unit.PrintRewardText(32_1_001, 32_1_002, 32_1_003, 32_1_004);
             //Unit.ClearQuestByID(3133001);
             //Unit.CreateBossMonster(100005, Vector3.one);
-            PlayerDataManager.GetTutorial();
+            PlayerDataManager.UpdateTutorial();
             //UserDataManager.Instance.GetLocalSaveData();
         }
 

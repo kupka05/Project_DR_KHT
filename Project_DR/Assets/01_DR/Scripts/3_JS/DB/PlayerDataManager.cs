@@ -40,7 +40,6 @@ public static class PlayerDataManager
     public static string QuestMain => _quest_main;
     public static int Tutorial => _tutorial;
 
-    public static int Tutorial => _tutorial;
 
     #endregion
     /*************************************************
@@ -81,8 +80,6 @@ public static class PlayerDataManager
     private static int _tutorial;             // 튜토리얼 클리어 여부(0:False / 1:True)
 
 
-    private static int _tutorial;
-
     #endregion
     /*************************************************
      *                 Public Methods
@@ -98,7 +95,7 @@ public static class PlayerDataManager
         UserDataManager.Instance.StartCoroutine(UpdateCoroutine(isUserDataManagerUpdate));
     }
 
-    public static void GetTutorial(string column = "tutorial")
+    public static void UpdateTutorial(string column = "tutorial")
     {
         // 데이터 매니저에 코루틴을 요청해서 SearchColumnCoroutine을 실행
         DataManager.Instance.StartCoroutine(SearchTutorialCoroutine(column: column));

@@ -15,8 +15,8 @@ namespace BNG {
     public class Damageable : MonoBehaviour {
 
         // 보스 할당
-        private BossMonster.Boss _boss;
-
+        private Js.Boss.Boss _boss;
+        
         public float Health = 100;
         private float _startingHealth;
 
@@ -99,7 +99,7 @@ namespace BNG {
         }
 
         // Init
-        public void Initialize(BossMonster.Boss boss)
+        public void Initialize(Js.Boss.Boss boss)
         {
             _boss = boss;
             _startingHealth = boss.BossData.MaxHP;

@@ -76,6 +76,7 @@ public class PlayerEvent : MonoBehaviour
     }
 
     // 아이템 슬롯 관련 이벤트
+
     private void ItemSlotEvent(Grabbable grabItem)
     {
         // 아이템 슬롯인지 확인
@@ -96,9 +97,22 @@ public class PlayerEvent : MonoBehaviour
             ///
             // 인벤토리 참조
             Inventory inventory = grabItem.GetComponent<ItemSlotController>().Inventory;
-            // LEGACY:
-            //int slotIndex = grabItem.GetComponent<ItemSlotController>().Index; // 슬롯 인덱스
-            int slotIndex = grabItem.GetComponent<ItemSlotController>().ItemIndex; // 슬롯 보유 아이템 인덱스
+            // 아이템 슬롯이 Inventory일 경우
+            int slotIndex = default;
+            if (grabItem.CompareTag("Inventory"))
+            {
+                slotIndex = grabItem.GetComponent<ItemSlotController>().Index; // 슬롯 인덱스
+                GFunc.Log("Inventory ItemSlot");
+            }
+
+            // 플레이어 인벤토리일 경우
+            else if (grabItem.CompareTag("PlayerInventory"))
+            {
+                slotIndex = grabItem.GetComponent<ItemSlotController>().ItemIndex; // 슬롯 보유 아이템 인덱스
+                GFunc.Log("PlayerInventory ItemSlot");
+
+            }
+
             // 슬롯이 비어있을 경우
             if (inventory.HasItem(slotIndex) == false)
             {

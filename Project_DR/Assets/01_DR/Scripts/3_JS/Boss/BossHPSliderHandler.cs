@@ -1,6 +1,6 @@
 using UnityEngine.UI;
 
-namespace BossMonster
+namespace Js.Boss
 {
     public class BossHPSliderHandler
     {

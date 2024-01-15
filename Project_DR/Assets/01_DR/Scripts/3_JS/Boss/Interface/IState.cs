@@ -1,5 +1,5 @@
 
-namespace BossMonster
+namespace Js.Boss
 {
     public interface IState
     {

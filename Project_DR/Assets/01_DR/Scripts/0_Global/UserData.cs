@@ -186,17 +186,30 @@ public static class UserData
     {
         UserDataManager.Instance.CurHP -= damage;
     }
+    public static void SetCurHealth(float health)
+    {
+        UserDataManager.Instance.CurHP = health;
+    }
 
     /// <summary> 플레이어의 현재 체력을 증감 </summary>
     public static void SetCurrentHealth(float amount)
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if(player == null)
+        {
+            GFunc.Log("플레이어 찾을 수 없음");
+            return; 
+        }
 
-        if(player != null)
-        player.GetComponent<Damageable>().DealDamage(amount);
+        if(0 < amount)
+        {
+            player.GetComponent<PlayerHealth>().RestoreHealth(amount);
+        }
 
-        // amount는 양수/음수 둘 중 하나의 값을 받는다.
-        //UserDataManager.Instance.CurHP += amount;
+        else if(amount < 0)
+        {
+            player.GetComponent<Damageable>().DealDamage(amount);
+        }
     }
 
     // 해당 ID의 스킬을 호출한다.
@@ -528,6 +541,8 @@ public static class UserData
     }
     public static void GameOver()
     {
+        MaterialItemCalculator();                            // 재료 아이템 정산
+        Unit.SaveQuestDataToDB();
         UserDataManager.Instance.isGameOver = true;
     }
     // 클리어 던전

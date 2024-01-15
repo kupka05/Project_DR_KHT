@@ -4,10 +4,20 @@ using UnityEngine;
 using Js.Quest;
 using Rito.InventorySystem;
 using Js.Crafting;
+using Js.Boss;
 
 // 플레이어에게 특정한 명령을 실행하는 클래스
 public static class Unit
 {
+    /*************************************************
+     *          Public Boss Monster Methods
+     *************************************************/
+    public static GameObject CreateBossMonster(int id, Vector3 pos)
+    {
+        return BossMonsterManager.Instance.CreateBossMonster(id, pos);
+    }
+
+
     /*************************************************
      *           Public Player HUD Methods
      *************************************************/

@@ -26,4 +26,5 @@ public class PlayerData
     public int clear_count;
     public string clear_mbti_value;
     public string clear_time;
+    public int tutorial;
 }

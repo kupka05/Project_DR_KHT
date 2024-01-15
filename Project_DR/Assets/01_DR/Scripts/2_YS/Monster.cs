@@ -9,7 +9,8 @@ using Random = UnityEngine.Random;
 using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.UI.GridLayoutGroup;
 using TMPro;
-using BossMonster;
+using Unity.XR.CoreUtils;
+using Js.Quest;
 
 // 데미지를 체크하는 클래스
 public class DamageChecker : MonoBehaviour
@@ -42,6 +43,7 @@ public class Monster : MonoBehaviour
 {
     public UnityEngine.UI.Slider monsterHpSlider;
     private TMP_Text hpText;
+    public TMP_Text nameText;
 
     //스턴 추가 - hit상태
     public enum State
@@ -106,7 +108,7 @@ public class Monster : MonoBehaviour
     public float stunDelay = 1f;
     public float stunCount = default;  //경직 횟수, 일반 몬스터는 필요 없음
     public float stopDistance = default;
-    //몬스터 이름도 추가될 예정
+    public string monName = default;
 
     public float lastDamageTime;
 
@@ -180,6 +182,7 @@ public class Monster : MonoBehaviour
     private float moveTimer = 0.0f;
     private Vector3 startPosition;
     private Vector3 targetPosition;
+    public float damageRadius = 1.0f;
 
     void Awake()
     {
@@ -198,7 +201,6 @@ public class Monster : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
 
-
         damageable.Health = hp;
         lastDamageTime = Time.time;
 
@@ -209,17 +211,22 @@ public class Monster : MonoBehaviour
             //attack = damageCollider.Damage; // 지환 : attack은 시트에서 가져온 데이터 값
         }
 
+        nameText.text = monName.ToString(); 
+
         nav.speed = speed;
 
         nav.stoppingDistance = stopDistance;
         //nav.stoppingDistance = attRange - 0.5f;
 
-        SetMaxHealth(damageable.Health); //hp
-        //GFunc.Log($"초기 hp 설정 값:{damageable.Health}");
-
+        if(monsterHpSlider != null)
+        {
+            SetMaxHealth(hp); //hp
+        }
+        
+   
         InitMonster();
 
-        SetDamageCollider();        // 데미지 콜라이더를 제어하는 클래스를 세팅
+        SetDamageCollider();   // 데미지 콜라이더를 제어하는 클래스를 세팅
     }
 
     public void InitMonster()
@@ -230,6 +237,8 @@ public class Monster : MonoBehaviour
 
         actionRoutine = MonsterAction();
         StartCoroutine(actionRoutine);
+
+
     }
 
     public void Update()
@@ -247,6 +256,9 @@ public class Monster : MonoBehaviour
                 moveTimer = 0.0f;
             }
         }
+
+
+
     }
 
     public void MoveWithSmoothTransition(Vector3 target)
@@ -283,38 +295,47 @@ public class Monster : MonoBehaviour
         attack = Data.GetFloat(id, "MonAtt");
         attDelay = Data.GetFloat(id, "MonDel");
         hitDelay = Data.GetFloat(id, "HitDel");
-        speed = (float)DataManager.Instance.GetData(id, "MonSpd", typeof(float));
-        attRange = (float)DataManager.Instance.GetData(id, "MonAtr", typeof(float));
-        recRange = (float)DataManager.Instance.GetData(id, "MonRer", typeof(float));
-        stunDelay = (float)DataManager.Instance.GetData(id, "MonSTFDel", typeof(float));
+        speed = Data.GetFloat(id, "MonSpd");
+        attRange = Data.GetFloat(id, "MonAtr");
+        recRange = Data.GetFloat(id, "MonRer");
+        stunDelay = Data.GetFloat(id, "MonSTFDel");
 
-        stopDistance = (float)DataManager.Instance.GetData(id, "MonStd", typeof(float));
+        stopDistance = Data.GetFloat(id, "MonStd");
+        maxCount = Data.GetInt(id, "MonKno");
+        monName = Data.GetString(id, "MonName");
 
-        if(isDebug)
+        if (isDebug)
         {
             hp = 100000;
             attack = 0;
             speed = 0;
         }
 
-        maxCount = Data.GetInt(id, "MonKno");
     }
 
+    
     public void SetMaxHealth(float newHealth)
     {
-        hpText = monsterHpSlider.transform.GetChild(2).GetComponent<TMP_Text>();
 
-        monsterHpSlider.maxValue = newHealth;
-        monsterHpSlider.value = newHealth;
-        hpText.text = newHealth.ToString();
+        if(monsterHpSlider != null)
+        {
+            hpText = monsterHpSlider.transform.GetChild(2).GetComponent<TMP_Text>();
+            monsterHpSlider.maxValue = newHealth;
+            monsterHpSlider.value = newHealth;
+            hpText.text = newHealth.ToString();
+        }
+      
     }
 
     public void SetHealth(float newHealth)
     {
-        monsterHpSlider.value = newHealth;
-        hpText.text = newHealth.ToString();
+        if(monsterHpSlider != null)
+        {
+            monsterHpSlider.value = newHealth;
+            hpText.text = newHealth.ToString();
+        }
+       
     }
-
 
     // 스테이트를 관리하는 코루틴
     // 역할 : 스테이트를 변환만 해준다. 다른건 없음.
@@ -328,6 +349,7 @@ public class Monster : MonoBehaviour
             if (damageable.Health <= 0)
             {
                 SetHealth(0);
+                GFunc.Log($"체력0:{damageable.Health}");
                 state = State.DIE;
 
                 if (actionRoutine != null)
@@ -338,6 +360,9 @@ public class Monster : MonoBehaviour
 
                 actionRoutine = MonsterAction();
                 StartCoroutine(actionRoutine);
+
+                // 몬스터 처치시 콜백 호출
+                QuestCallback.OnMonsterKillCallback(monsterId);
             }
 
 
@@ -648,16 +673,18 @@ public class Monster : MonoBehaviour
 
     }
 
-    public void OnDeal(float damage)
+    public virtual void OnDeal(float damage)
     {
         // 죽지 않은 상태면 HP 바 업데이트
-        if (damageable.Health > 0)
+        if (damageable.Health > 0 && damageable.Health <= hp * 1.0f)
         {
             SetHealth(damageable.Health);
+            GFunc.Log($"OnDeal체력:{damageable.Health}");
         }
-        else
-        { 
+        else if(damageable.Health <= 0)
+        {
             SetHealth(0);
+            GFunc.Log($"리턴 체력:{damageable.Health}");
             return;
         }
 
@@ -705,17 +732,61 @@ public class Monster : MonoBehaviour
         }
 
         count++;
+        GFunc.Log($"넉백 카운트:{count}");
 
         if (count >= maxCount)
         {
             count = 0;
-            anim.SetTrigger(hashStun);
 
-            Vector3 targetPosition = transform.position - transform.forward * 4.0f;
 
-            MoveWithSmoothTransition(targetPosition);
+            MonsterKnockBack();
+
+            ////기존
+            //Vector3 targetPosition = transform.position - transform.forward * 4.0f;
+            //MoveWithSmoothTransition(targetPosition);
+
         }
     }
+
+    public virtual void MonsterKnockBack()
+    {
+        //anim.SetTrigger(hashHit);
+
+        rigid.WakeUp();
+
+        if (rigid != null)
+        {
+            rigid.AddForce(this.transform.position - transform.forward * 2.0f, ForceMode.Impulse);
+
+            Vector3 overlapSphereCenter = this.transform.position-transform.forward * 0.5f;
+            overlapSphereCenter.z -= 0.5f;
+
+            Collider[] colliders = Physics.OverlapSphere(overlapSphereCenter, damageRadius);
+            //if (Physics.Raycast(transform.position, -transform.forward, out hit, 4.0f))
+
+            foreach (Collider collider in colliders)
+            {
+                if(collider.CompareTag("Wall"))
+                {
+                    return;
+                }
+            }
+         
+        }
+        MoveWithSmoothTransition(this.transform.position - transform.forward * 2.0f);
+
+
+    }
+
+    public void OnDrawGizmos()
+    {
+        Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
+        overlapSphereCenter.z -= 0.5f;
+
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(overlapSphereCenter, damageRadius);
+    }
+
 
     // 몬스터 스턴
     public void MonsterStun()
@@ -744,7 +815,11 @@ public class Monster : MonoBehaviour
             //GFunc.Log("스택1진입");
             damageable.Health -= SmashDamageCalculate(damage, 1);
             // 갱신된 체력 값을 적용
-            SetHealth(damageable.Health);
+            if(monsterHpSlider != null)
+            {
+                SetHealth(damageable.Health);
+            }
+          
 
             // 남은 체력을 로그로 출력
             //Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
@@ -753,7 +828,11 @@ public class Monster : MonoBehaviour
         else if (countNum == 3)
         {
             damageable.Health -= SmashDamageCalculate(damage, 2);
-            SetHealth(damageable.Health);
+            if (monsterHpSlider != null)
+            {
+                SetHealth(damageable.Health);
+            }
+
 
             //Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
 
@@ -761,7 +840,10 @@ public class Monster : MonoBehaviour
         else if (countNum == 4)
         {
             damageable.Health -= SmashDamageCalculate(damage, 3);
-            SetHealth(damageable.Health);
+            if (monsterHpSlider != null)
+            {
+                SetHealth(damageable.Health);
+            }
 
             //Debug.Log($"남은체력:{damageable.Health}");
 
@@ -777,7 +859,7 @@ public class Monster : MonoBehaviour
     public float SmashDamageCalculate(float damage, int index)
     {
         float _debuff = UserData.GetSmashDamage(index); ;
-        return Mathf.RoundToInt(damage * (1 + _debuff)) - damage; 
+        return Mathf.RoundToInt(damage * (1 + _debuff)) - damage;
     }
 
     public IEnumerator SmashTime()
@@ -798,10 +880,7 @@ public class Monster : MonoBehaviour
             yield return null;
         }
 
-
     }
-
-
 
     // 스턴 딜레이
     public IEnumerator StunDelay()
@@ -813,25 +892,40 @@ public class Monster : MonoBehaviour
         yield return new WaitForSeconds(stunDelay);
         //isStun = false;
         rigid.WakeUp();
+        
+        //while (0.1f <= distanceFromGround)
+        //{
+        //    if (distanceFromGround <= 0.1f)
+        //    {
+        //        //isStun = false;
+        //        rigid.WakeUp();
+        //        rigid.drag = monsterDrag;
+        //        //damageable.stun = false;
+        //        break;
+        //    }
+        //    yield return null;
+        //}
+
+        yield break;
         //damageable.stun = false;
         yield break;
     }
 
-    void OnDrawGizmos()
-    {
-        if (state == State.TRACE)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, recRange);
-        }
+    //void OnDrawGizmos()
+    //{
+    //    if (state == State.TRACE)
+    //    {
+    //        Gizmos.color = Color.yellow;
+    //        Gizmos.DrawWireSphere(transform.position, recRange);
+    //    }
 
-        if (state == State.ATTACK)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, attRange);
-        }
+    //    if (state == State.ATTACK)
+    //    {
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawWireSphere(transform.position, attRange);
+    //    }
 
-    }
+    //}
     public virtual void Explosion()
     {
         Destroy(this.gameObject);
@@ -917,6 +1011,8 @@ public class Monster : MonoBehaviour
         }
 
     }
+
+
     // 데미지 콜라이더를 세팅해준다.
     public void SetDamageCollider()
     {

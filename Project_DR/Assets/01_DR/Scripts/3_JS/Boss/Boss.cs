@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace BossMonster
+namespace Js.Boss
 {
     public class Boss : MonoBehaviour
     {
@@ -16,7 +16,6 @@ namespace BossMonster
         public GameObject BossStone => _bossStone;
         public BossSummoningStone BossSummoningStone => _bossSummoningStone;
         public BossAnimationHandler BossAnimationHandler => _bossAnimationHandler;
-
         public IState CurrentState => _currentState;
         public IState IdleState => _idleState;
         public IState DieState => _dieState;
@@ -42,7 +41,7 @@ namespace BossMonster
         private IState _currentState;                                               // 현재 상태
         private IState _idleState;                                                  // 대기 상태
         private IState _dieState;                                                   // 죽음 상태
-        private IState[] _attackStates = new IState[10];                            // 공격 상태 패턴(0 ~ 9)[10]
+        private IState[] _attackStates = new IState[5];                            // 공격 상태 패턴(0 ~ 4)[5]
 
 
         /*************************************************
@@ -85,7 +84,7 @@ namespace BossMonster
         // 보스의 공격 패턴 상태를 실행
         public void DOAttackPattern(int index)
         {
-            // 인덱스로 받은 공격 패턴을 실행
+            // 인덱스로 받은 공격 패턴을
             ChangeState(_attackStates[index]);
         }
 
@@ -99,11 +98,17 @@ namespace BossMonster
         // 보스 오브젝트 삭제
         public void Dead()
         {
+            // 죽음 처리
+            _bossData.SetIsDead(true);
+
+            // 대기 상태로 변경
+            _currentState = _idleState;
+
             // 죽음 애니메이션 재생
             _bossAnimationHandler.DieAnimation();
 
             // 3초 후 오브젝트 삭제
-            Destroy(gameObject, 3.0f);
+            Destroy(gameObject, _bossData.DestroyDelay);
         }
 
 
@@ -123,7 +128,7 @@ namespace BossMonster
          *************************************************/
         // 현재 상태 변경
         public void ChangeState(IState state)
-        { 
+        {
             if (_currentState != null)
             {
                 // 상태 나가기
@@ -153,9 +158,8 @@ namespace BossMonster
                 // 타입을 찾을 때 네임스페이스명 + 찾을 타입명으로 검색해야 함
                 // 연산을 최소화 하기 위해 string 대신 StringBuilder 사용
                 stringBuilder.Clear();
-                stringBuilder.Append("BossMonster.AttackState_");
+                stringBuilder.Append("Js.Boss.AttackState_");
                 stringBuilder.Append(i);
-                //string type = "BossMonster.AttackState_" + i;     //Legacy:
                 // 타입 검색
                 Type attackStateType = Type.GetType(stringBuilder.ToString());
                 // 타입이 있을 경우

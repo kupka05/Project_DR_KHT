@@ -53,7 +53,8 @@ namespace BNG {
 
                 fadeCanvas = fadeObject.AddComponent<Canvas>();
                 fadeCanvas.renderMode = RenderMode.WorldSpace;
-                fadeCanvas.sortingOrder = 100; // Make sure the canvas renders on top
+                fadeCanvas.sortingOrder = 200; // Make sure the canvas renders on top
+                fadeCanvas.sortingLayerName = "Dialog";
 
                 canvasGroup = fadeObject.AddComponent<CanvasGroup>();
                 canvasGroup.interactable = false;
@@ -189,6 +190,10 @@ namespace BNG {
             if (alphaValue == 0 && canvasGroup.gameObject.activeSelf) {
                 canvasGroup.gameObject.SetActive(false);
             }
+        }
+        public void SetFadeColor(Color color)
+        {
+            fadeImage.color = color;
         }
     }
 }

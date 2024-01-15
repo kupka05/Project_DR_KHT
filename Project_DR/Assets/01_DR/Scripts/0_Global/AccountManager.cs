@@ -16,7 +16,7 @@ public class AccountManager : MonoBehaviour
     [SerializeField] InputField infoInput;
     [SerializeField] TMP_Text description;
 
-    [SerializeField] string sceneName;
+    [SerializeField] string tutorialSceneName;
     public VRSceneLoder sceneLoader;
     public void LoginClick() => StartCoroutine(AccountCo("login"));
 
@@ -73,8 +73,8 @@ public class AccountManager : MonoBehaviour
                 case "Login Complete":
                     description.text = string.Format("로그인 성공");
                     PlayerDataManager.SetID(id);
-                    //SceneManager.LoadScene(sceneName);
-                    sceneLoader.LoadScene();
+                    PlayerDataManager.UpdateTutorial();
+                    Invoke("LoadScene", 1f);
                     break;
                 case "Fail to login":
                     description.text = string.Format("로그인 실패");
@@ -91,6 +91,27 @@ public class AccountManager : MonoBehaviour
             // 추가로 Dipose()함수를 호출해서 할당 해제
             www.Dispose();
         }
+    }
+
+    private bool TutorialCheck()
+    {
+        if(PlayerDataManager.Tutorial == 0)
+        {            
+            return true; 
+        }
+        else
+        return false;
+    }
+
+    private void LoadScene()
+    {
+        if (TutorialCheck())
+        {
+            sceneLoader.SetFaderColor(Color.white);
+            sceneLoader.sceneName = tutorialSceneName;
+        }
+
+        sceneLoader.LoadScene();
     }
 
     //IEnumerator AccountCo(string command)

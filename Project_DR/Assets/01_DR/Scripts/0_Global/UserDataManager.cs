@@ -86,17 +86,7 @@ public partial class UserDataManager : MonoBehaviour
         GetReferenceData();
         PlayerDataManager.Update(true); // 데이터 요청
     }
-    //public void Update()
-    //{
-    //    if (Input.GetKeyDown("r"))
-    //    {
-    //        StartCoroutine(SetDebugData());
-    //    }
-    //    //else if (Input.GetKeyDown(KeyCode.F1))
-    //    //{
-    //    //    SaveClearData();
-    //    //}
-    //}
+ 
 
     // ####################### 데이터 로드 #######################
 
@@ -261,7 +251,7 @@ public partial class UserDataManager : MonoBehaviour
         // 저장 후 업데이트
         PlayerDataManager.Save("clear_mbti_value", JsonData);
         PlayerDataManager.Save("clear_count", ClearCount);
-        PlayerDataManager.Update(true);
+        PlayerDataManager.Update();
     }
     // 클리어 시간을 가져오는 함수
     private string GetCurrentDate()
@@ -282,7 +272,7 @@ public partial class UserDataManager : MonoBehaviour
     {
         PlayerDataManager.Save("exp", Exp);
         PlayerDataManager.Save("weapon_atk", WeaponAtkLv);
-        PlayerDataManager.Save("exp", WeaponAtkRateLv);
+        PlayerDataManager.Save("weapon_atk_rate", WeaponAtkRateLv);
         PlayerDataManager.Save("weapon_cri_damage", WeaponCriDamageLv);
         PlayerDataManager.Save("weapon_cri_rate", WeaponCriRateLv);
     }
@@ -326,6 +316,7 @@ public partial class UserDataManager : MonoBehaviour
 
         PlayerDataManager.Save("weapon_atk", 0);
         yield return null;
+
         PlayerDataManager.Save("weapon_exp", 0);
         yield return null;
         PlayerDataManager.Save("weapon_cri_rate", 0);
@@ -373,7 +364,7 @@ public partial class UserDataManager : MonoBehaviour
         yield return null;
         PlayerDataManager.Save("clear_mbti_value", "");
 
-        PlayerDataManager.Update(true);
+        PlayerDataManager.Update();
         yield break;
     }
 
@@ -381,8 +372,7 @@ public partial class UserDataManager : MonoBehaviour
     {
         PlayerDataManager.Save("gold", Gold);
         PlayerDataManager.Save("exp", Exp);
-        PlayerDataManager.Update(true);
-
+        PlayerDataManager.Update();
     }
 
 
@@ -567,5 +557,59 @@ public partial class UserDataManager : MonoBehaviour
         }
 
         return _questRewardText;
+    }
+
+
+    // ######################### 세이브 데이터 #########################
+    // 로컬에 데이터를 저장
+    public void SaveLocalData()
+    {
+        PlayerPrefs.SetInt("Gold", Gold);
+        PlayerPrefs.SetInt("Exp", Exp);
+        PlayerPrefs.SetInt("HPLV", HPLv);
+        PlayerPrefs.SetInt("GainGoldLV", GainGoldLv);
+        PlayerPrefs.SetInt("GainEXPLV", GainExpLv);
+        PlayerPrefs.SetInt("WeaponAtkLV", WeaponAtkLv);
+        PlayerPrefs.SetInt("WeaponAtkRateLV", WeaponAtkRateLv);
+        PlayerPrefs.SetInt("WeaponCriRateLV", WeaponCriRateLv);
+        PlayerPrefs.SetInt("WeaponCriDamageLV", WeaponCriDamageLv);
+        PlayerPrefs.SetInt("Skill_1_LV_1", Skill1Lv_1);
+        PlayerPrefs.SetInt("Skill_1_LV_2", Skill1Lv_2);
+        PlayerPrefs.SetInt("Skill_2_LV_1", Skill2Lv_1);
+        PlayerPrefs.SetInt("Skill_2_LV_2", Skill2Lv_2);
+        PlayerPrefs.SetInt("Skill_2_LV_3", Skill2Lv_3);
+        PlayerPrefs.SetInt("Skill_3_LV", Skill3Lv);
+        PlayerPrefs.SetInt("Skill_4_LV_1", Skill4Lv_1);
+        PlayerPrefs.SetInt("Skill_4_LV_2", Skill4Lv_2);
+        PlayerPrefs.SetInt("Skill_4_LV_3", Skill4Lv_3);
+        PlayerPrefs.SetInt("ClearCount", ClearCount);
+        PlayerPrefs.SetString("MBTIData", JsonData);
+        PlayerPrefs.SetString("QuestData", QuestMain);
+    }
+
+    // 로컬에 저장된 데이터를 가져옴
+    public void GetLocalSaveData()
+    {
+        Gold = PlayerPrefs.GetInt("Gold");
+        Exp = PlayerPrefs.GetInt("Exp");
+        HPLv = PlayerPrefs.GetInt("HPLV");
+        GainGoldLv = PlayerPrefs.GetInt("GainGoldLV");
+        GainExpLv = PlayerPrefs.GetInt("GainEXPLV");
+        WeaponAtkLv = PlayerPrefs.GetInt("WeaponAtkLV");
+        WeaponAtkRateLv = PlayerPrefs.GetInt("WeaponAtkRateLV");
+        WeaponCriRateLv = PlayerPrefs.GetInt("WeaponCriRateLV");
+        WeaponCriDamageLv = PlayerPrefs.GetInt("WeaponCriDamageLV");
+        Skill1Lv_1 = PlayerPrefs.GetInt("Skill_1_LV_1");
+        Skill1Lv_2 = PlayerPrefs.GetInt("Skill_1_LV_2");
+        Skill2Lv_1 = PlayerPrefs.GetInt("Skill_2_LV_1");
+        Skill2Lv_2 = PlayerPrefs.GetInt("Skill_2_LV_2");
+        Skill2Lv_3 = PlayerPrefs.GetInt("Skill_2_LV_3");
+        Skill3Lv = PlayerPrefs.GetInt("Skill_3_LV");
+        Skill4Lv_1 = PlayerPrefs.GetInt("Skill_4_LV_1");
+        Skill4Lv_2 = PlayerPrefs.GetInt("Skill_4_LV_2");
+        Skill4Lv_3 = PlayerPrefs.GetInt("Skill_4_LV_3");
+        ClearCount = PlayerPrefs.GetInt("ClearCount");
+        JsonData = PlayerPrefs.GetString("MBTIData");
+        PlayerDataManager.SetQuestMain(PlayerPrefs.GetString("QuestData"));
     }
 }

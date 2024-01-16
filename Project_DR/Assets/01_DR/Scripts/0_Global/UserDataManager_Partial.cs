@@ -179,7 +179,7 @@ public partial class UserDataManager
     [Header("Setting Data")]          // 환경 설정
     public float rotationAmount = 45f;
     [Range(0, 100)]
-    public float masterSound = 100, sfx = 100, backgroundSound = 100;
+    public float masterSound = 0, sfx = 0, backgroundSound = 0;
     [Range(-5, 5)]
     public float brightness = 0;
 

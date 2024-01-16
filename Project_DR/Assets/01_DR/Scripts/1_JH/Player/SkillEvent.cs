@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using UnityEngine.Windows;
 
 public class SkillEvent : MonoBehaviour
@@ -44,7 +45,8 @@ public class SkillEvent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UserData.GetData(GetData);        
+        UserData.GetData(GetData);
+        DisableParticle();
     }
 
 
@@ -236,5 +238,16 @@ public class SkillEvent : MonoBehaviour
         }
         AudioManager.Instance.PlaySFX("SFX_Drill_Skill_Landing_Active_01");
 
+    }
+    private void DisableParticle()
+    {
+        if (particles == null)
+        {
+            return;
+        }
+        for (int i = 0; i < particles.Length; i++)
+        {
+            particles[i].gameObject.SetActive(false);
+        }
     }
 }

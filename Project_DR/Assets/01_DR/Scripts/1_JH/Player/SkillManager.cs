@@ -238,7 +238,6 @@ public class SkillManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator CheckingGound()
     {
-        GFunc.Log("드릴랜딩 체크시작");
 
         while (smoothLocomotion.state == PlayerState.air)
         {
@@ -253,7 +252,6 @@ public class SkillManager : MonoBehaviour
                     // 만약 isKinematic이 켜져있다면, 드릴을 쥐고있는 상태가 아니다.
                     if (drills[i].GetComponent<Rigidbody>().isKinematic)
                     {
-                        GFunc.Log("드릴랜딩 발동");
                         landingSkill.OnCollisionEvent();
                         UserData.ActiveLandingSkill();
                         yield break;

@@ -1,17 +1,12 @@
 using BNG;
 using Js.Quest;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
-public class Boss : MonoBehaviour
+public class Old_Boss : MonoBehaviour
 {
    
     public UnityEngine.UI.Slider bossHPSlider;

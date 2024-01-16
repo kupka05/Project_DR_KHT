@@ -18,18 +18,20 @@ namespace Js.Boss
             FOUR = 3        // 4 페이즈
         }
         public Boss Boss => _boss;
+        public Old_Boss OldBoss => _oldBoss;
         public BossData BossData => _bossData;
         public BNG.Damageable Damageable => _damageable;
         public Slider BossHPSlider => _bossHPSlider;
         public Phase CurrentPhase => _currentPhase;
         public BossPhaseHandler BossPhaseHandler => _bossPhaseHandler;
-
+        
 
         /*************************************************
          *                 Private Fields
          *************************************************/
         [Header("BossSummoningStone")]
         [SerializeField] private Boss _boss;                                    // 보스
+        [SerializeField] private Old_Boss _oldBoss;                             // 구버전 보스
         [SerializeField] private BossData _bossData;                            // 보스 데이터
         [SerializeField] private Slider _bossHPSlider;                          // 보스 체력바 슬라이더
         [SerializeField] private BNG.Damageable _damageable;                    // 데미지 관련 처리
@@ -49,6 +51,7 @@ namespace Js.Boss
         {
             // 보스 및 보스 데이터 참조
             _boss = boss;
+            _oldBoss = GetComponent<Old_Boss>();
             _bossData = boss.BossData;
 
             // 데미지 관련 처리 컴포넌트 호출 및 체력 설정

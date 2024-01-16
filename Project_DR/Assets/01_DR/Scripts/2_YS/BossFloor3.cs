@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
-public class BossFloor3 : Boss
+public class BossFloor3 : Old_Boss
 {
     public override IEnumerator ExecutePattern()
     {

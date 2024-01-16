@@ -36,7 +36,6 @@ namespace Js.Boss
         [SerializeField] private BossData _bossData;                                // 보스 데이터
         [SerializeField] private GameObject _bossStone;                             // 보스 소환석 게임 오브젝트
         [SerializeField] private BossSummoningStone _bossSummoningStone;            // 보스 소환석 스크립트
-        [SerializeField] private string _bossStoneName = "Boss_SummoningStone";     // 가져올 소환석 프리팹 이름
         [SerializeField] private BossAnimationHandler _bossAnimationHandler;        // 보스 애니메이션 핸들러
 
         // 패턴에 따라 정의되는 상태
@@ -184,15 +183,16 @@ namespace Js.Boss
         // 보스 소환석 생성
         private void CreateSummoningStone()
         {
+            string stonePrefabName = _bossData.StonePrefabName;
             // 프리팹에 등록된 보스 소환석 생성
-            GameObject bossStonePrefab = Resources.Load<GameObject>(_bossStoneName);
+            GameObject bossStonePrefab = Resources.Load<GameObject>(stonePrefabName);
             GameObject bossStone = Instantiate(bossStonePrefab);
             // 디버그용
                 // 추후 DungeonCreator.BossRoomCreate()함수에 추가 및 수정
                 Vector3 position = new Vector3(0f, 1.013f, -7.8f);
                 bossStone.transform.position = position;
             // 디버그용
-            bossStone.name = _bossStoneName;
+            bossStone.name = stonePrefabName;
             _bossStone = bossStone;
 
             // 보스 소환석 Init

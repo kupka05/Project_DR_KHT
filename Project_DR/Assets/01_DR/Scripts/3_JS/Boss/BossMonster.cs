@@ -33,16 +33,15 @@ namespace Js.Boss
             StartAttack();
         }
 
-
-        /*************************************************
-         *               Private Methods
-         *************************************************/
         ///// TODO: 보스룸에서 Start를 했을 경우 아래의 함수를
         ///// 호출하도록 설정한다!
         // 패턴 간격에 따라 공격 패턴 실행
         // 공격을 시작한다.
         public void StartAttack()
         {
+            // 사운드 재생
+            //PlaySound();
+
             // 공격 패턴 실행
             StartCoroutine(StartBossAttackPatternsCoroutine());
         }
@@ -53,6 +52,18 @@ namespace Js.Boss
             Invoke("StartAttack", delay);
         }
 
+        // 보스 몬스터에게 할당된 사운드(BGM)을 재생한다.
+        public void PlaySound()
+        {
+            string soundName = _boss.BossData.SoundName;
+            AudioManager.Instance.AddBGM(soundName);
+            AudioManager.Instance.PlayMusic(soundName);
+        }
+
+
+        /*************************************************
+         *               Private Methods
+         *************************************************/
         // 공격을 실행한다.
         private void Attack(int attackPattern)
         {

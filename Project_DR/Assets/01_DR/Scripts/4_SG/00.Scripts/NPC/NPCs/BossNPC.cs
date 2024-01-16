@@ -43,7 +43,7 @@ public class BossNPC : NPC
     protected override void Awake()
     {
         base.Awake();
-        npcID = GetComponent<Boss>().bossId;
+        npcID = GetComponent<Old_Boss>().bossId;
         ConvertionEventInIt();
     }       // Awake()
 
@@ -147,7 +147,7 @@ public class BossNPC : NPC
         OffCanvasObj();                              // 캔버스 끄기
         GameManager.instance.EndBossCutScene();      // 플레이어 페이드 아웃
 
-        Boss oldBoss = GetComponent<Boss>();
+        Old_Boss oldBoss = GetComponent<Old_Boss>();
         if (oldBoss.IsUseFunctionalityOnly)
         {
             // 신 보스일 경우 & 1초 후 공격 시작
@@ -167,7 +167,7 @@ public class BossNPC : NPC
     {
         GFunc.ChoiceEvent(conversationID);   // 대화 종료 후 대사 클리어 이벤트 진행중으로 변경
 
-        GetComponent<Boss>().StartAttack();  // 보스 전투 시작
+        GetComponent<Old_Boss>().StartAttack();  // 보스 전투 시작
         GameManager.instance.isBossBattle = true;
 
         transform.GetChild(0).gameObject.SetActive(false);

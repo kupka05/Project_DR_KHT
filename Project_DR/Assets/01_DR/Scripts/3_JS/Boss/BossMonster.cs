@@ -39,11 +39,11 @@ namespace Js.Boss
         // 공격을 시작한다.
         public void StartAttack()
         {
-            // 사운드 재생
-            //PlaySound();
-
             // 공격 패턴 실행
             StartCoroutine(StartBossAttackPatternsCoroutine());
+
+            // 사운드 재생
+            PlaySound();
         }
 
         // n초 후 공격 시작
@@ -57,7 +57,7 @@ namespace Js.Boss
         {
             string soundName = _boss.BossData.SoundName;
             AudioManager.Instance.AddBGM(soundName);
-            AudioManager.Instance.PlayMusic(soundName);
+            AudioManager.Instance.PlayBGM(soundName);
         }
 
 

@@ -12,7 +12,7 @@ public class TEST : MonoBehaviour
 
     private void Start()
     {
-        //Unit.CreateBossMonster(100005, Vector3.one);
+        Unit.CreateBossMonster(100001, Vector3.one);
     }
 
     private void Update()
@@ -35,8 +35,8 @@ public class TEST : MonoBehaviour
             //Unit.AddFieldItem(Vector3.zero, 5101);
             //Unit.PrintRewardText(32_1_001, 32_1_002, 32_1_003, 32_1_004);
             //Unit.ClearQuestByID(3133001);
-            Vector3 pos = GameObject.Find("PlayerController").transform.position;
-            CraftingManager.Instance.CreateAnvil(pos);
+            //Unit.CreateBossMonster(100005, Vector3.one);
+            PlayerDataManager.UpdateTutorial();
             //UserDataManager.Instance.GetLocalSaveData();
         }
 

@@ -68,8 +68,8 @@ namespace Js.Boss
         // 공격 애니메이션
         public void AttackAnimation()
         {
-            int randomNum = UnityEngine.Random.Range(0, AttackAnimationRange);
-            string animationType = randomNum == 0 ? "" : randomNum.ToString();
+            int randomNum = UnityEngine.Random.Range(1, AttackAnimationRange + 1);
+            string animationType = randomNum == 1 ? "" : randomNum.ToString();
             _animator.SetTrigger(GFunc.SumString("isAttack", animationType));
             GFunc.Log($"AttackAnimation() {randomNum}");
         }

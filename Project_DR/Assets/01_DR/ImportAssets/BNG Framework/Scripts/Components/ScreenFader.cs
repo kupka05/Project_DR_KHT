@@ -191,6 +191,10 @@ namespace BNG {
                 canvasGroup.gameObject.SetActive(false);
             }
         }
+        public void SetFadeColor(Color color)
+        {
+            fadeImage.color = color;
+        }
     }
 }
 

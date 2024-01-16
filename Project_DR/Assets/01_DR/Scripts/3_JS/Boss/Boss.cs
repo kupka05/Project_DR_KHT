@@ -13,6 +13,7 @@ namespace Js.Boss
          *                 Public Fields
          *************************************************/
         public BossMonster BossMonster => _bossMonster;
+        public Old_Boss OldBoss => _bossSummoningStone.OldBoss;
         public BossData BossData => _bossData;
         public GameObject BossStone => _bossStone;
         public BossSummoningStone BossSummoningStone => _bossSummoningStone;
@@ -26,7 +27,7 @@ namespace Js.Boss
         public Damageable Damageable => _bossData.Damageable;                                   // 데미지 관련 처리
         public Transform Target => _bossData.Target;                                            // 공격 대상
         public Animator Animator => _bossData.Animator;                                         // 애니메이터
-
+        
 
         /*************************************************
          *                 Private Fields
@@ -42,7 +43,7 @@ namespace Js.Boss
         private IState _currentState;                                               // 현재 상태
         private IState _idleState;                                                  // 대기 상태
         private IState _stopState;                                                  // 정지 상태
-        private IState[] _attackStates = new IState[5];                             // 공격 상태 패턴(0 ~ 4)[5]
+        private IState[] _attackStates = new IState[4];                             // 공격 상태 패턴(0 ~ 3)[4]
 
 
         /*************************************************
@@ -94,7 +95,7 @@ namespace Js.Boss
         public void OnDamage(float damage)
         {
             // 소환석에 데미지 처리
-            _bossSummoningStone.OnDamage(damage);
+            _bossSummoningStone.OnDamage(OldBoss.OtherOnDeal(damage));
         }
 
         // 보스 오브젝트 삭제

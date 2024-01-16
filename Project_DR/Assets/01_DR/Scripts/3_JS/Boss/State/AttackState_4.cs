@@ -48,10 +48,7 @@ namespace Js.Boss
         // 상태 진입시
         public void EnterState()
         {
-            GFunc.Log("공격 상태 패턴 4 빅 브릭샷 재생");
-            // 공격 패턴 4 빅 브릭샷
-            Old_Boss oldBoss = _boss.BossSummoningStone.OldBoss;
-            oldBoss.StartCoroutine(oldBoss.BigBrickShoot());
+            GFunc.Log("공격 상태 패턴 4 진입");
         }
 
         // 상태 업데이트시

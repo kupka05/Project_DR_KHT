@@ -93,6 +93,7 @@ namespace Js.Boss
 
                 // 공격을 실행
                 Attack(_boss.BossData.AvailableAttackPatternsList[i]);
+
             }
 
             // 보스가 정지 상태가 아닐 경우 재귀 호출

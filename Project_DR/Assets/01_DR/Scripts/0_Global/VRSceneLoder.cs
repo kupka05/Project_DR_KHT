@@ -89,5 +89,9 @@ public class VRSceneLoder : MonoBehaviour
         
         SceneManager.LoadScene(_SceneName);             // 지정된 이름의 씬을 로딩
     }
+    public void SetFaderColor(Color color)
+    {
+        fader.SetFadeColor(color);
+    }
 
 }

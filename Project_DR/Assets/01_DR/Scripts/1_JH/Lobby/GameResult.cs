@@ -39,9 +39,8 @@ public class GameResult
     {
         int gold = _quest.QuestData.ClearReward.QuestRewardData.GiveGold;
         int exp = _quest.QuestData.ClearReward.QuestRewardData.GiveEXP;
-        //GFunc.Log($"퀘스트 : {quest}");
-        //GFunc.Log($"퀘스트 명 : {_quest.QuestData.Desc}");
-        AddScore(quest, _quest.QuestData.Desc, gold, exp);
+        string name = GFunc.ReplaceString(_quest.QuestData.Desc);
+        AddScore(quest, name, gold, exp);
     }
     // 아이템 점수 추가
     public void AddItemScore(int _id)
@@ -57,7 +56,8 @@ public class GameResult
                 return;
             };
         }
-        AddScore(item, Data.GetString(_id, "Name"), Data.GetInt(_id, "GiveGold"), Data.GetInt(_id, "GiveEXP"));
+        itemName = GFunc.ReplaceString(itemName);
+        AddScore(item, itemName, Data.GetInt(_id, "GiveGold"), Data.GetInt(_id, "GiveEXP"));
     }
 
     /// <summary>

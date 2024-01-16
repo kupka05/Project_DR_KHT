@@ -66,8 +66,7 @@ public class PlayerHealth : MonoBehaviour
         SetHealthUIUpdate();
         if (health > maxHealth * dyingAmount)
         { fader.OnRestore(); }
-
-        GFunc.Log($"플레이어 현재 체력:{health} / 증가량:{newHealth}");
+        UserData.SetCurHealth(health);
     }
 
     public void OnDamage(float damage)
@@ -82,7 +81,7 @@ public class PlayerHealth : MonoBehaviour
         {
             Die();
         }
-        UserData.OnDamage(damage);
+        UserData.SetCurHealth(health);
     }
 
     public void GetData()

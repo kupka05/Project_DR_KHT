@@ -62,13 +62,6 @@ public class AudioManager : MonoBehaviour
     {
         DontDestroyOnLoad(this.gameObject);
     }
-    private void Start()
-    {
-        if(backGroundMusic != null)
-        {
-            PlayMusic(backGroundMusic.name);
-        }
-    }
 
 
     // 초기화
@@ -79,6 +72,7 @@ public class AudioManager : MonoBehaviour
         sfxSource = this.gameObject.AddComponent<AudioSource>();
         musicSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("BGM")[0];
         sfxSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[0];
+        musicSource.loop = true;
     }
     // 오디오 초기화
     public void AudioInit()
@@ -91,31 +85,35 @@ public class AudioManager : MonoBehaviour
 
     #region ######################_Play Audio_#####################
     /// <summary> BGM을 재생하는 메서드 </summary>
-    public void PlayMusic(string name)
+    public void PlayBGM(string name)
     {
-        Sound sound = musicSounds[name];
-        if (sound == null)
+       musicSource.Stop();
+        try
         {
-            GFunc.Log("Sound Not Found");
-        }
-        else
-        {
+            Sound sound = musicSounds[name];
+                
             musicSource.clip = sound.clip;
             musicSource.Play();
+        }
+        
+        catch (Exception ex)
+        {
+            GFunc.Log($"{name} BGM을 찾을 수 없음");
         }
     }
     /// <summary> 사운드 이펙트를 재생하는 메서드 </summary>
     public void PlaySFX(string name)
     {
-        Sound sound = sfxSounds[name];
-        if (sound == null)
+        try 
         {
-            GFunc.Log("SFX Not Found");
-        }
-        else
-        {
+            Sound sound = sfxSounds[name];
             sfxSource.PlayOneShot(sound.clip);
         }
+        catch (Exception ex)
+        {
+            //GFunc.Log($"{ex.Message}");
+            GFunc.Log($"{name} SFX를 찾을 수 없음");
+        }        
     }
     #endregion
 
@@ -148,7 +146,6 @@ public class AudioManager : MonoBehaviour
         audioPath[1] = name;
         string path = GFunc.SumString(audioPath);
         AudioClip audio = Resources.Load<AudioClip>(path);
-        GFunc.Log(path);
 
         if (audio == null)
         {
@@ -184,10 +181,6 @@ public class AudioManager : MonoBehaviour
 
         sfxSounds.Add(name, newSound);
     }
-    /// <summary>BGM을 지정하는 메서드 </summary>
-    public void SetBGM(Sound bgm)
-    {
-        backGroundMusic = bgm;
-    }
+
     #endregion
 }

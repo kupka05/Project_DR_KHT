@@ -50,7 +50,7 @@ namespace Js.Boss
         {
             GFunc.Log("공격 상태 패턴 1 레이저 재생");
             // 공격 패턴 1 레이저 재생
-            Old_Boss oldBoss = _boss.BossSummoningStone.OldBoss;
+            Old_Boss oldBoss = _boss.OldBoss;
             oldBoss.StartCoroutine(oldBoss.LazerCoroutine());
         }
 

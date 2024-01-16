@@ -1310,6 +1310,10 @@ MonoBehaviour:
   trigger: 0
   landingForce: 0
   knockbackRange: 0
+  particles: []
+  GroundedLayers:
+    serializedVersion: 2
+    m_Bits: 0
   TDcheckerHeight: 0
   TDcheckerTiming: 0
   GDcheckerTiming: 0
@@ -3171,9 +3175,9 @@ MonoBehaviour:
     type: 3}
   HitFXPrefab: {fileID: 3454612190511497970, guid: fa39ce2ce96bec94b82f2c8124ce3930,
     type: 3}
-  GunShotSound: {fileID: 8300000, guid: 70e832c9caa911a4384b1c097e21f35e, type: 3}
+  GunShotSound: {fileID: 0}
   GunShotVolume: 0
-  EmptySound: {fileID: 8300000, guid: 3ceadf14726b0864fb39bb646c0f9ba0, type: 3}
+  EmptySound: {fileID: 0}
   EmptySoundVolume: 0
   SlideDistance: -0.028
   ForceSlideBackOnLastShot: 1
@@ -3405,6 +3409,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1161999479007489398}
         m_TargetAssemblyTypeName: WeaponDrill, Assembly-CSharp
         m_MethodName: ResetDrill
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2480362079549202500}
+        m_TargetAssemblyTypeName: BNG.RaycastWeaponDrill, Assembly-CSharp
+        m_MethodName: GrabDrill
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

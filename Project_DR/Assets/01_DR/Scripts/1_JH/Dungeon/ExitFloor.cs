@@ -23,7 +23,9 @@ public class ExitFloor : MonoBehaviour
         floorScale = new Vector3(floor.x, floor.y, floor.z);
         curHeight = transform.position.y;
         targetDepth = curHeight - depth;
-        floorPos = transform.position;  
+        floorPos = transform.position;
+        AudioManager.Instance.AddSFX("SFX_Drill_Digging_01");
+
     }
 
 
@@ -38,7 +40,7 @@ public class ExitFloor : MonoBehaviour
 
         }
         transform.parent.gameObject.SetActive(false);
-
+        AudioManager.Instance.PlaySFX("SFX_Drill_Digging_01");
         yield break; 
 
     }

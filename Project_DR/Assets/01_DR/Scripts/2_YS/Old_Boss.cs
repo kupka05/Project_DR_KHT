@@ -220,20 +220,20 @@ public class Old_Boss : MonoBehaviour
         patternInterval = (float)DataManager.Instance.GetData(bossId, "PatternChange", typeof(float)); //이건 하나만
 
         //소형 투사체 6910
-        bulletCount = (float)DataManager.Instance.GetData(bossProjectileId, "Duration", typeof(float));
+        bulletCount = (float)DataManager.Instance.GetData(bossProjectileId, "Count", typeof(float));
         delayTime = (float)DataManager.Instance.GetData(bossProjectileId, "Delay", typeof(float));
         waitBullet = (float)DataManager.Instance.GetData(bossProjectileId, "WaitTime", typeof(float));
         speed = (float)DataManager.Instance.GetData(bossProjectileId, "Speed", typeof(float));
 
         //6914 거대벽돌
         destroyTimeBrick = (float)DataManager.Instance.GetData(bossProjectileID, "DesTime", typeof(float));
-        brickCount = (float)DataManager.Instance.GetData(bossProjectileID, "Duration", typeof(float));
+        brickCount = (float)DataManager.Instance.GetData(bossProjectileID, "Count", typeof(float));
         waitBrick = (float)DataManager.Instance.GetData(bossProjectileID, "WaitTime", typeof(float));
 
         //6912 애드벌룬
         //destoryTimeBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "DesTime", typeof(float));
         speedBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "Speed", typeof(float));
-        bounceCount = (float)DataManager.Instance.GetData(bossProjectileBounceId, "Duration", typeof(float));
+        bounceCount = (float)DataManager.Instance.GetData(bossProjectileBounceId, "Count", typeof(float));
         waitBounce = (float)DataManager.Instance.GetData(bossProjectileBounceId, "WaitTime", typeof(float));
 
         //6915
@@ -818,7 +818,7 @@ public class Old_Boss : MonoBehaviour
     {
         if (damageable.Health <= 0)
         {
-            BossDie();               
+            BossDie();
         }
 
         if (!isDie)
@@ -867,47 +867,106 @@ public class Old_Boss : MonoBehaviour
 
                 //GFunc.Log("중첩 숫자 증가");
             }
-
         }
-
     }
 
+    public float OtherOnDeal(float damage)
+    {
+        smashCount++;   // 분쇄 카운트 추가
 
-    public void ApplyStackDamage(float damage)
+        if (smashCount >= smashMaxCount)
+        {
+            smash.SetActive(true);
+            //GFunc.Log("분쇄카운트 충족");
+
+            //float smashTakeDamage = damageable.Health * smashOne;
+            //SetHealth(damageable.Health - smashTakeDamage);
+            //Debug.Log($"받는 데미지:{damageable.Health - smashTakeDamage}");
+
+            smashCount = 0;
+            //GFunc.Log($"분쇄 카운트:{smashCount}");
+
+            smashFilled.fillAmount = 1;
+            //GFunc.Log($"분쇄FillAmount:{smashFilled.fillAmount}");
+
+            StartCoroutine(SmashTime());
+
+            if (countNum <= 3)
+            {
+                smashCountNum.text = countNum.ToString();
+                countNum++;
+                //Debug.Log($"숫자:{countNum}");
+            }
+            else if (countNum == 5)
+            {
+
+            }
+
+            //GFunc.Log($"숫자:{countNum}");
+
+            return ApplyStackDamage(damage);
+            //GFunc.Log("스택 별 데미지 진입");
+
+            //GFunc.Log("중첩 숫자 증가");
+        }
+
+        // 아닐 경우
+        return damage;
+    }
+
+    public float ApplyStackDamage(float damage)
     {
         Debug.Log($"countNum = {countNum}");
 
         if (countNum == 2)
         {
-            damageable.Health -= SmashDamageCalculate(damage, 1);  //1단계
-            // 갱신된 체력 값을 적용
-            SetHealth(damageable.Health);
+            if (damageable != null)
+            {
+                damageable.Health -= SmashDamageCalculate(damage, 1);  //1단계
+                // 갱신된 체력 값을 적용
+                SetHealth(damageable.Health);
 
-            // 남은 체력을 로그로 출력
-            //Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
-
+                // 남은 체력을 로그로 출력
+                //Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
+            }
+            else
+            {
+                return SmashDamageCalculate(damage, 1);
+            }
         }
         else if (countNum == 3)
         {
-            damageable.Health -= SmashDamageCalculate(damage, 2);
-            SetHealth(damageable.Health);
+            if (damageable != null)
+            {
+                damageable.Health -= SmashDamageCalculate(damage, 2);
+                SetHealth(damageable.Health);
 
-            //Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
+                //Debug.Log($"추가 분쇄 데미지 2 : {SmashDamageCalculate(damage, 2)}, 남은체력:{damageable.Health}");
+            }
+            else
+            {
+                return SmashDamageCalculate(damage, 1);
+            }
 
         }
         else if (countNum == 4)
         {
-            damageable.Health -= SmashDamageCalculate(damage, 3);
-            SetHealth(damageable.Health);
+            if (damageable != null)
+            {
+                damageable.Health -= SmashDamageCalculate(damage, 3);
+                SetHealth(damageable.Health);
 
-            //Debug.Log($"남은체력:{damageable.Health}");
+                //Debug.Log($"남은체력:{damageable.Health}");
 
-            //Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
-
+                //Debug.Log($"추가 분쇄 데미지 3 : {SmashDamageCalculate(damage, 3)}, 남은체력:{damageable.Health}");
+            }
+            else
+            {
+                return SmashDamageCalculate(damage, 1);
+            }
         }
 
-
-
+        return default;
     }
     /// <summary> 분쇄 데미지를 계산하는 메서드 </summary>
     /// <param name="damage">플레이어의 최종 데미지</param>
@@ -915,7 +974,7 @@ public class Old_Boss : MonoBehaviour
     /// <returns></returns>
     public float SmashDamageCalculate(float damage, int index)
     {
-        float _debuff = UserData.GetSmashDamage(index); ;
+        float _debuff = UserData.GetSmashDamage(index);
         return Mathf.RoundToInt(damage * (1 + _debuff)) - damage;
 
         //return damage * (1 + _debuff);

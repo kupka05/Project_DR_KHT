@@ -25,6 +25,7 @@ public class BreakableWall : MonoBehaviour
     void Start()
     {
         SetDirection();
+        AudioManager.Instance.AddSFX("SFX_Drill_Digging_01");
     }
 
     // 방향 세팅
@@ -64,6 +65,7 @@ public class BreakableWall : MonoBehaviour
             yield return waitForFixedUpdate;
         }
         transform.gameObject.SetActive(false);
+        AudioManager.Instance.PlaySFX("SFX_Drill_Digging_01");
         yield break;
     }
 
@@ -135,6 +137,5 @@ public class BreakableWall : MonoBehaviour
                 digRoutine = null;
             }
         }
-
     }
 }

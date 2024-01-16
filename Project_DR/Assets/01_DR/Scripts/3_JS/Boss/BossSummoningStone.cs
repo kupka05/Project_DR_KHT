@@ -58,13 +58,17 @@ namespace Js.Boss
             // 원래는 호출이 아니라 Add로 추가하는데 Damageable의 경우
             // OnDamaged 이벤트에 하나라도 추가가 안되있을 경우 오류가 발생 
             _damageable = gameObject.GetComponent<BNG.Damageable>();
-            _damageable.Initialize(boss);
+            _damageable.Initialize();
 
             // 보스 HP 슬라이더 핸들러 생성
             _bossHPSliderHandler = new BossHPSliderHandler(boss);
 
             // 보스 페이즈 핸들러 생성
             _bossPhaseHandler = new BossPhaseHandler(boss);
+
+            // HP바가 항상 플레이어를 바라보도록 컴포넌트 추가
+            LookAtTarget lookAtTarget = _bossHPSlider.transform.parent.parent.
+                gameObject.AddComponent<LookAtTarget>();
         }
 
         // 현재 페이즈 변경

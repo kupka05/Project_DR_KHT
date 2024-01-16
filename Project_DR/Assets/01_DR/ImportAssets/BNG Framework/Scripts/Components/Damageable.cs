@@ -99,10 +99,15 @@ namespace BNG {
         }
 
         // Init
-        public void Initialize(Js.Boss.Boss boss)
+        public void Initialize()
         {
-            _boss = boss;
-            _startingHealth = boss.BossData.MaxHP;
+            //LEGACY:
+            //_boss = boss;
+            //_startingHealth = boss.BossData.MaxHP;
+            // 데미지를 두번 연산해서 Boss와 Damageable간의
+            // 오차가 생겨 _startingHealth를 변경함
+            // 왜냐면 Damageable의 체력이 0이 되면 데미지가 안들어가기 떄문
+            _startingHealth = 99999999f;
             Health = _startingHealth;
         }
 

@@ -12,7 +12,7 @@ public class TEST : MonoBehaviour
 
     private void Start()
     {
-        Unit.CreateBossMonster(100001, Vector3.one);
+        Unit.CreateBossMonster(100003, Vector3.one);
     }
 
     private void Update()

@@ -118,6 +118,7 @@ public class SkillManager : MonoBehaviour
         SetDrillSize(drillSize);
         
         Damage.instance.isTeradrill = true;
+        AudioManager.Instance.PlaySFX("SFX_Drill_Skill_TeraDrill_Active_02");
     }
     // 테라드릴 스킬 해제
     public void DeactiveTeraDrill()
@@ -129,6 +130,7 @@ public class SkillManager : MonoBehaviour
         SetDrillSize(drillSize);
        
         Damage.instance.isTeradrill = false;
+        AudioManager.Instance.PlaySFX("SFX_Drill_Skill_TeraDrill_End_02");
     }
 
     private void SetDrillSize(float size)
@@ -159,6 +161,7 @@ public class SkillManager : MonoBehaviour
 
         grinderDrillRoutine = IActiveGrinderDrill();
         StartCoroutine(grinderDrillRoutine);
+        AudioManager.Instance.PlaySFX("SFX_Drill_Skill_Grinding_Active_01");
     }
     // 드릴연마 실행
     IEnumerator IActiveGrinderDrill()
@@ -238,7 +241,6 @@ public class SkillManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator CheckingGound()
     {
-        GFunc.Log("드릴랜딩 체크시작");
 
         while (smoothLocomotion.state == PlayerState.air)
         {
@@ -253,7 +255,6 @@ public class SkillManager : MonoBehaviour
                     // 만약 isKinematic이 켜져있다면, 드릴을 쥐고있는 상태가 아니다.
                     if (drills[i].GetComponent<Rigidbody>().isKinematic)
                     {
-                        GFunc.Log("드릴랜딩 발동");
                         landingSkill.OnCollisionEvent();
                         UserData.ActiveLandingSkill();
                         yield break;
@@ -372,6 +373,10 @@ public class SkillManager : MonoBehaviour
         SetGrinderSlider();
 
         effectDrillSize = UserData.GetEffectDrillSize();
+
+        AudioManager.Instance.AddSFX("SFX_Drill_Skill_TeraDrill_Active_02");
+        AudioManager.Instance.AddSFX("SFX_Drill_Skill_TeraDrill_End_02");
+        AudioManager.Instance.AddSFX("SFX_Drill_Skill_Grinding_Active_01");
 
         //TD_collDown = Data.GetFloat(721100, "Value2");
         //TD_drillSize = Data.GetFloat(721100, "Value1");

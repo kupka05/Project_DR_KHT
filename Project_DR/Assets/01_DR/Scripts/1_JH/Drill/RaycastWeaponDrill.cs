@@ -229,6 +229,7 @@ namespace BNG
         {
             UserData.GetData(GetData);
 
+            AudioManager.Instance.AddSFX("SFX_Drill_Equip_01");
             weaponRigid = GetComponent<Rigidbody>();
             grappling = GetComponent<Grappling>();
 
@@ -926,6 +927,10 @@ namespace BNG
             return curDrillSize;
         }
 
+        public void GrabDrill()
+        {
+            AudioManager.Instance.PlaySFX("SFX_Drill_Equip_01");
+        }
     }
 
     //public enum FiringType

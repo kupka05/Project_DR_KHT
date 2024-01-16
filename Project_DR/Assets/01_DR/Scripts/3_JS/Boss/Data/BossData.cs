@@ -33,6 +33,8 @@ namespace Js.Boss
         public List<int> AvailableAttackPatternsList => _availableAttackPatternsList;   // 사용 가능한 공격 패턴들
         public bool IsDead => _isDead;                                                  // 죽음 여부
         public float DestroyDelay => _destroyDelay;                                     // 오브젝트가 사라지는데 걸리는 시간 
+        public string StonePrefabName => _stonePrefabName;                              // 가져올 소환석 프리팹 이름
+        public string SoundName => _soundName;                                          // 불러올 사운드 이름
 
 
         /*************************************************
@@ -58,6 +60,8 @@ namespace Js.Boss
         [SerializeField] private List<int> _availableAttackPatternsList = new List<int>();
         [SerializeField] private bool _isDead;
         [SerializeField] private float _destroyDelay = 3.0f;
+        [SerializeField] private string _stonePrefabName;
+        [SerializeField] private string _soundName;
 
 
         /*************************************************
@@ -77,6 +81,8 @@ namespace Js.Boss
             _giveEXP = Data.GetFloat(id, "GiveEXP");
             _attackAnimationRange = Data.GetInt(id, "AttackAnimationRange");
             _patternInterval = Data.GetFloat(id, "AttackPatternInterval");
+            _stonePrefabName = Data.GetString(id, "StonePrefabName");
+            _soundName = Data.GetString(id, "SoundName");
             for (int i = 0; i < _phaseAttackPatternCounts.Length; i++)
             {
                 int index = i + 1;

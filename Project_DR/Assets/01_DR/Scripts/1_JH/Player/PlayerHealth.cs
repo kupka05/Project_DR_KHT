@@ -25,6 +25,7 @@ public class PlayerHealth : MonoBehaviour
 
 
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+    private WaitForSeconds waitForSeconds = new WaitForSeconds(2.5f);
     IEnumerator knockbackRoutine;
 
 
@@ -32,6 +33,8 @@ public class PlayerHealth : MonoBehaviour
     public List<ControllerBinding> healthUpInput = new List<ControllerBinding>() { ControllerBinding.None };
     public PlayerStatusController[] playerHealthUI;
     // Start is called before the first frame update
+
+    IEnumerator dyingRoutine;
 
     private void Awake()
     {
@@ -44,6 +47,7 @@ public class PlayerHealth : MonoBehaviour
     {
         UserData.GetData(GetData);
 
+        AudioManager.Instance.AddSFX("SFX_PC_LowHealth_01");
 
         playerController = GetComponent<PlayerController>();
         playerRigid = gameObject.GetOrAddRigidbody();
@@ -64,10 +68,11 @@ public class PlayerHealth : MonoBehaviour
         }
         playerDamage.Health = health;
         SetHealthUIUpdate();
+
         if (health > maxHealth * dyingAmount)
         { fader.OnRestore(); }
 
-        GFunc.Log($"플레이어 현재 체력:{health} / 증가량:{newHealth}");
+        UserData.SetCurHealth(health);
     }
 
     public void OnDamage(float damage)
@@ -77,12 +82,18 @@ public class PlayerHealth : MonoBehaviour
         if (health <= maxHealth * dyingAmount)
         {
             fader.OnDying();
+            if(dyingRoutine == null)
+            {
+                dyingRoutine = DyingRoutine();
+                StartCoroutine(dyingRoutine);
+            }
+           
         }
         if(health <= 0)
         {
             Die();
         }
-        UserData.OnDamage(damage);
+        UserData.SetCurHealth(health);
     }
 
     public void GetData()
@@ -148,43 +159,17 @@ public class PlayerHealth : MonoBehaviour
         SetHealthUIUpdate();
     }
 
-    // Regacy
-    //public void OnKnockback(Vector3 targetPos)
-    //{
-    //    StopKnockBack();
-
-
-    //    //Vector3 knockbackTarget = transform.localPosition + (-transform.forward * knockbackDistance);
-    //    Vector3 knockbackTarget = transform.localPosition - targetPos*knockbackDistance;
-    //    knockbackRoutine = KnockBackRoutine(knockbackTarget);
-    //    StartCoroutine(knockbackRoutine);
-    //    Invoke("StopKnockBack", 0.5f);
-    //}
-//    IEnumerator KnockBackRoutine(Vector3 target)
-//    {
-//        while (true)
-//        {
-//            transform.localPosition = Vector3.Lerp(transform.localPosition, target, Time.fixedDeltaTime * knockbackSpeed);
-//            float distance = Vector3.Distance(transform.localPosition, target);
-//            if (distance <= 0.05f)
-//            {
-//                break;
-//            }
-//            yield return waitForFixedUpdate;
-////            yield return null;
-//        }
-//    }
-    //public void StopKnockBack()
-    //{
-    //    if (knockbackRoutine != null)
-    //    {
-    //        StopCoroutine(knockbackRoutine);
-    //        knockbackRoutine = null;
-    //    }
-    //}
-
-    private void OnTriggerEnter(Collider other)
+    IEnumerator DyingRoutine()
     {
-        
+        while (true) 
+        {
+            if (health <= maxHealth * dyingAmount)
+            {
+                break;
+            }
+            AudioManager.Instance.PlaySFX("SFX_PC_LowHealth_01");
+            yield return waitForSeconds;
+        }
+        yield break;
     }
 }

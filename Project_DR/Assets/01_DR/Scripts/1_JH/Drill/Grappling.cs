@@ -89,6 +89,9 @@ public class Grappling : GrabbableEvents
         weaponDrill = GetComponent<RaycastWeaponDrill>();
         GetData();
         line = GetComponent<LineRenderer>();
+
+        AudioManager.Instance.AddSFX("SFX_Drill_HookShoot_Stick_01");
+
     }
 
     private void FixedUpdate()
@@ -196,6 +199,8 @@ public class Grappling : GrabbableEvents
                 isDamageCheck = true;
                 target = hit.collider.GetComponent<DamageablePart>().parent;
             }
+            AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Stick_01");
+
         }
 
         else

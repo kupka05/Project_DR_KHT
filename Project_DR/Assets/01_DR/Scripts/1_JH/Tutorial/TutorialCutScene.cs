@@ -46,7 +46,8 @@ public class TutorialCutScene : MonoBehaviour
     }
     IEnumerator Dialog()
     {
-        for(int i = 0; i < dialogs.Length; i++) 
+        yield return new WaitForSeconds(2f);
+        for (int i = 0; i < dialogs.Length; i++) 
         {
             dialogText.DOText(dialogs[i], dialogDelay);
             yield return waitForSeconds;

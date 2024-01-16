@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using UnityEngine.Windows;
 
 public class SkillEvent : MonoBehaviour
@@ -22,6 +23,10 @@ public class SkillEvent : MonoBehaviour
     public float landingForce;              // 넉백 힘
     public float knockbackRange;     // 넉백 사거리
 
+    [Header("Particle")]
+    public ParticleSystem[] particles;
+    public LayerMask GroundedLayers;
+
     [Header("Debug")]
     public float TDcheckerHeight;
     public float TDcheckerTiming;
@@ -35,12 +40,13 @@ public class SkillEvent : MonoBehaviour
 
     WaitForSeconds TDWaitForSeconds;
     WaitForSeconds GDWaitForSeconds;
-    WaitForSeconds WaitForSeconds = new WaitForSeconds(0.1f);
+    WaitForSeconds WaitForSeconds = new WaitForSeconds(0.25f);
 
     // Start is called before the first frame update
     void Start()
     {
-        UserData.GetData(GetData);        
+        UserData.GetData(GetData);
+        DisableParticle();
     }
 
 
@@ -152,6 +158,7 @@ public class SkillEvent : MonoBehaviour
     IEnumerator DrillLanding()
     {
         sphereCollider.enabled = true;
+        ActiveParticle();
         yield return WaitForSeconds;
 
         sphereCollider.enabled = false;
@@ -190,6 +197,8 @@ public class SkillEvent : MonoBehaviour
         landingForce = UserData.GetLandingForce();
         if (skill == Skill.Landing)
         {
+            AudioManager.Instance.AddSFX("SFX_Drill_Skill_Landing_Active_01");
+
             sphereCollider = GetComponent<SphereCollider>();
 
             knockbackRange = Data.GetFloat(720217, "Value1") / 2;
@@ -201,6 +210,44 @@ public class SkillEvent : MonoBehaviour
         {
             boxCollider = GetComponent<BoxCollider>();
             boxCollider.center = new Vector3(0, TDcheckerHeight, 0);
+        }
+    }
+
+    // 파티클을 실행시켜주는 메서드
+    private void ActiveParticle()
+    {
+        if(particles.Length == 0)
+        {
+            return;
+        }
+        RaycastHit hit;
+        Vector3 position = transform.position;
+        if(Physics.Raycast(transform.position, -transform.up, out hit, 5, GroundedLayers))
+        {
+            position = hit.point;
+            position.y += 0.5f;
+        }
+
+        for(int i = 0; i < particles.Length; i++)
+        {
+            GFunc.Log($"{particles[i].name} 실행 + {position}");
+            particles[i].transform.position = position;
+            particles[i].gameObject.SetActive(false);
+            particles[i].gameObject.SetActive(true);
+            particles[i].Play();
+        }
+        AudioManager.Instance.PlaySFX("SFX_Drill_Skill_Landing_Active_01");
+
+    }
+    private void DisableParticle()
+    {
+        if (particles == null)
+        {
+            return;
+        }
+        for (int i = 0; i < particles.Length; i++)
+        {
+            particles[i].gameObject.SetActive(false);
         }
     }
 }

@@ -47,6 +47,14 @@ public static class GFunc
         return input.Replace("_", "");
     }
 
+    // CSV 문제로 인한 string 변환
+    public static string ReplaceString(string str)
+    {
+        str = str.Replace("#", ",");
+        str = str.Replace("_", " ");
+
+        return str;
+    }
     /// <summary>
     /// 늘어져있는 대사의 Replace와 Split이후 반환해주는 함수
     /// </summary>    

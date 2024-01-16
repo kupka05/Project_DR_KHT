@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1372025833996858351}
   - component: {fileID: 1690838894419042012}
   - component: {fileID: 6546329592189385067}
+  - component: {fileID: -7854323029035489604}
   m_Layer: 0
   m_Name: Mat_Gem001
   m_TagString: Untagged
@@ -75,7 +76,19 @@ MonoBehaviour:
   RemoveBulletHolesOnDeath: 1
   onDamaged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -7854323029035489604}
+        m_TargetAssemblyTypeName: SFXPlayer, Assembly-CSharp
+        m_MethodName: PlaySFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onKnockback:
     m_PersistentCalls:
       m_Calls: []
@@ -162,3 +175,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: c7fc3f6f5df199049a63c651ca68095a, type: 3}
+--- !u!114 &-7854323029035489604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6519652495454528230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4afbfac110ec4ef47b5d13cac1c4a006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfxNames:
+  - SFX_Item_Mineral_Collecting_01
+  - SFX_Item_Mineral_Collecting_02
+  - SFX_Item_Mineral_Collecting_03
+  random: 1

@@ -8,6 +8,8 @@ using OVR;
 using System.Text;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class AudioManager : MonoBehaviour
 {
@@ -35,8 +37,10 @@ public class AudioManager : MonoBehaviour
     #endregion
 
     public Sound backGroundMusic;
-    public SerializableDictionary<string, Sound> musicSounds = new SerializableDictionary<string, Sound>();
-    public SerializableDictionary<string, Sound> sfxSounds = new SerializableDictionary<string, Sound>();
+    //public SerializableDictionary<string, Sound> musicSounds = new SerializableDictionary<string, Sound>();
+    //public SerializableDictionary<string, Sound> sfxSounds = new SerializableDictionary<string, Sound>();
+    public Dictionary<string, Sound> musicSounds = new Dictionary<string, Sound>();
+    public Dictionary<string, Sound> sfxSounds = new Dictionary<string, Sound>();
     public AudioMixer audioMixer;
     public AudioSource musicSource, sfxSource;
     
@@ -74,14 +78,15 @@ public class AudioManager : MonoBehaviour
         musicSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("BGM")[0];
         sfxSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[0];
         musicSource.loop = true;
+        sfxSource.loop = true;
     }
     // 오디오 초기화
     public void AudioInit()
     {
         musicSounds.Clear();
         sfxSounds.Clear();
-        musicSounds = new SerializableDictionary<string, Sound>();
-        sfxSounds = new SerializableDictionary<string, Sound>();
+        musicSounds = new Dictionary<string, Sound>();
+        sfxSounds = new Dictionary<string, Sound>();
     }
 
     #region ######################_Play Audio_#####################
@@ -115,6 +120,21 @@ public class AudioManager : MonoBehaviour
             //GFunc.Log($"{ex.Message}");
             GFunc.Log($"{name} SFX를 찾을 수 없음");
         }        
+    }
+    public void PlayLoopSFX(string name, Vector3 position = default)
+    {
+        try
+        {
+            Sound sound = sfxSounds[name];
+            sfxSource.clip = sound.clip;
+            //sfxSource.Play();
+            PlayClipAtPoint(sound.clip, position);
+        }
+        catch (Exception ex)
+        {
+            //GFunc.Log($"{ex.Message}");
+            GFunc.Log($"{name} SFX를 찾을 수 없음");
+        }
     }
     #endregion
 
@@ -153,16 +173,17 @@ public class AudioManager : MonoBehaviour
             GFunc.Log("BGM을 찾을 수 없습니다.");
             return;
         }
-
-        Sound newSound = new Sound();
-        newSound.name = name;
-        newSound.clip = audio;
-
         if (musicSounds.ContainsKey(name))
         {
             GFunc.Log(name + "은 이미 등록된 BGM입니다.");
             return;
         }
+
+        Sound newSound = new Sound();
+        newSound.name = name;
+        newSound.clip = audio;
+
+
 
         musicSounds.Add(name, newSound);
         
@@ -182,20 +203,35 @@ public class AudioManager : MonoBehaviour
             GFunc.Log("SFX을 찾을 수 없습니다.");
             return;
         }
-
-        Sound newSound = new Sound();
-        newSound.name = name;
-        newSound.clip = audio;
-
         if (sfxSounds.ContainsKey(name))
         {
             GFunc.Log(name + "은 이미 등록된 SFX입니다.");
             return;
         }
+
+        Sound newSound = new Sound();
+        newSound.name = name;
+        newSound.clip = audio;
+
+       
         GFunc.Log(name + "추가");
         sfxSounds.Add(name, newSound);
         
     }
 
     #endregion
+
+    // 특정 위치에 사운드를 플레이
+    private void PlayClipAtPoint(AudioClip clip, Vector3 position)
+    {
+        GameObject gameObject = new GameObject("One shot audio");
+        gameObject.transform.position = position;
+        AudioSource audioSource = (AudioSource)gameObject.AddComponent(typeof(AudioSource));
+        audioSource.clip = clip;
+        audioSource.spatialBlend = 1f;
+        audioSource.volume = 1f;
+        audioSource.Play();
+        audioSource.loop = true;
+        UnityEngine.Object.Destroy(gameObject, clip.length * ((Time.timeScale < 0.01f) ? 0.01f : Time.timeScale));
+    }
 }

@@ -27,6 +27,7 @@ public static class UserData
     public static void AddGold(int value)
     {
         UserDataManager.Instance.Gold += value;
+        AudioManager.Instance.PlaySFX("SFX_Item_Gold_Gain_01");
     }
     /// <summary>골드를 소모하는 메서드 </summary>
     public static void SpendGold(int value)

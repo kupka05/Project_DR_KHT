@@ -109,6 +109,7 @@ public class SkillEvent : MonoBehaviour
         }
         if (skill == Skill.Grinding)
         {
+            particles[0].gameObject.SetActive(false);
             if (!other.gameObject.CompareTag("Weapon"))
             { return; }
             InitRoutine(skillRoutine);
@@ -135,6 +136,8 @@ public class SkillEvent : MonoBehaviour
     {
         trigger = true;
         shootDisableEvent.Invoke();
+        particles[0].gameObject.SetActive(false);
+        particles[0].gameObject.SetActive(true);
         while (true)
         {
             yield return GDWaitForSeconds;

@@ -8,6 +8,10 @@ using UnityEngine;
 public class PlayerEvent : MonoBehaviour
 {
 
+    private void Start()
+    {
+        AudioManager.Instance.AddSFX("SFX_Shop_Purchase_01");
+    }
     // 그랩한 아이템을 체크하는 이벤트
     public void GrabCheck(Grabbable grabItem)
     {
@@ -167,6 +171,8 @@ public class PlayerEvent : MonoBehaviour
             // 아이템 구매 처리(골드 차감)
             if (shopItemPurchaseHandler.CheckAndDeductGoldForItemPurchase(shopItemID))
             {
+                AudioManager.Instance.PlaySFX("SFX_Shop_Purchase_01");
+
                 GFunc.Log("구매했슴당");
                 // 아이템일 경우
                 if (shopItem.IsItem)

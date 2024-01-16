@@ -97,6 +97,7 @@ public partial class UserDataManager : MonoBehaviour
 
         result.Initialize(); // 결과 점수 초기화
         InitMBTI();         // MBTI 초기화
+        AudioManager.Instance.AddSFX("SFX_Item_Gold_Gain_01");
     }
 
     // 로그인 후, DB에서 데이터 받아오기

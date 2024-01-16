@@ -48,10 +48,10 @@ namespace Js.Boss
         // 상태 진입시
         public void EnterState()
         {
-            GFunc.Log("공격 상태 패턴 3 바운스 샷 재생");
-            // 공격 패턴 2 바운스 샷
-            Old_Boss oldBoss = _boss.BossSummoningStone.OldBoss;
-            oldBoss.StartCoroutine(oldBoss.BounceShoot());
+            GFunc.Log("공격 상태 패턴 3 빅 브릭샷 재생");
+            // 공격 패턴 3 빅 브릭샷
+            Old_Boss oldBoss = _boss.OldBoss;
+            oldBoss.StartCoroutine(oldBoss.BigBrickShoot());
         }
 
         // 상태 업데이트시

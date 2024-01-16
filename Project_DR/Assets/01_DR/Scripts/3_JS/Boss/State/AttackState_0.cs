@@ -48,7 +48,10 @@ namespace Js.Boss
         // 상태 진입시
         public void EnterState()
         {
-            GFunc.Log("공격 상태 패턴 0 진입");
+            GFunc.Log("공격 상태 패턴 0 플레이 샷 재생");
+            // 공격 패턴 0 플레이 샷 재생
+            Old_Boss oldBoss = _boss.BossSummoningStone.OldBoss;
+            oldBoss.StartCoroutine(oldBoss.PlayShoot());
         }
 
         // 상태 업데이트시

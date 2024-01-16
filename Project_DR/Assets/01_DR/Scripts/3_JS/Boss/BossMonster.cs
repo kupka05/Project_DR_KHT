@@ -24,7 +24,7 @@ namespace Js.Boss
 
             // _boss 생성 및 초기화
             _boss = gameObject.AddComponent<Boss>();
-            _boss.Initialize(id);
+            _boss.Initialize(this, id);
 
             // 패턴 간격으로 WaitForSeconds 캐싱
             _waitForSeconds = new WaitForSeconds(_boss.BossData.PatternInterval);
@@ -33,19 +33,51 @@ namespace Js.Boss
             StartAttack();
         }
 
+        ///// TODO: 보스룸에서 Start를 했을 경우 아래의 함수를
+        ///// 호출하도록 설정한다!
+        // 패턴 간격에 따라 공격 패턴 실행
+        // 공격을 시작한다.
+        public void StartAttack()
+        {
+            // 공격 패턴 실행
+            StartCoroutine(StartBossAttackPatternsCoroutine());
+
+            // 사운드 재생
+            PlaySound();
+        }
+
+        // n초 후 공격 시작
+        public void InvokeStartAttack(float delay)
+        {
+            Invoke("StartAttack", delay);
+        }
+
+        // 보스 몬스터에게 할당된 사운드(BGM)을 재생한다.
+        public void PlaySound()
+        {
+            string soundName = _boss.BossData.SoundName;
+            AudioManager.Instance.AddBGM(soundName);
+            AudioManager.Instance.PlayBGM(soundName);
+        }
+
 
         /*************************************************
          *               Private Methods
          *************************************************/
-        ///// TODO: 보스룸에서 Start를 했을 경우 아래의 함수를
-        ///// 호출하도록 설정한다!
-        // 패턴 간격에 따라 공격 패턴 실행
-        private void StartAttack()
+        // 공격을 실행한다.
+        private void Attack(int attackPattern)
         {
-            // 공격 패턴 실행
-            StartCoroutine(StartBossAttackPatternsCoroutine());
+            // 현재 상태가 정지 상태일 경우 예외 처리
+            if (_boss.CurrentState.Equals(_boss.StopState)) { return; }
+
+            // 공격 애니메이션 실행
+            _boss.BossAnimationHandler.AttackAnimation();
+
+            // 공격 패턴 변경
+            _boss.DOAttackPattern(attackPattern);
+            GFunc.Log($"사용하는 패턴: {attackPattern}");
         }
-        
+
 
         /*************************************************
          *                 Coroutines
@@ -56,24 +88,17 @@ namespace Js.Boss
             int patternCount = _boss.BossData.AvailableAttackPatternsList.Count;
             for (int i = 0; i < patternCount; i++)
             {
-                // 보스가 죽었을 경우
-                if (_boss.BossData.IsDead) { break; }
-
                 // 패턴 간격만큼 대기
                 yield return _waitForSeconds;
 
-                // 공격 애니메이션 실행
-                _boss.BossAnimationHandler.AttackAnimation();
-
-                // 공격 패턴 변경
-                _boss.DOAttackPattern(_boss.BossData.AvailableAttackPatternsList[i]);
-                GFunc.Log($"사용하는 패턴: {_boss.BossData.AvailableAttackPatternsList[i]}");
+                // 공격을 실행
+                Attack(_boss.BossData.AvailableAttackPatternsList[i]);
             }
 
-            // 보스가 살아있을 경우 재귀 호출
-            if (! _boss.BossData.IsDead)
+            // 보스가 정지 상태가 아닐 경우 재귀 호출
+            if (_boss.CurrentState != _boss.StopState)
             {
-                GFunc.Log($"isDead: {_boss.BossData.IsDead}");
+                GFunc.Log($"CurrentState: {_boss.CurrentState}");
                 StartCoroutine(StartBossAttackPatternsCoroutine());
             }
 

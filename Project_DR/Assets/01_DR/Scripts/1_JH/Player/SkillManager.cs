@@ -118,6 +118,7 @@ public class SkillManager : MonoBehaviour
         SetDrillSize(drillSize);
         
         Damage.instance.isTeradrill = true;
+        AudioManager.Instance.PlaySFX("SFX_Drill_Skill_TeraDrill_Active_02");
     }
     // 테라드릴 스킬 해제
     public void DeactiveTeraDrill()
@@ -129,6 +130,7 @@ public class SkillManager : MonoBehaviour
         SetDrillSize(drillSize);
        
         Damage.instance.isTeradrill = false;
+        AudioManager.Instance.PlaySFX("SFX_Drill_Skill_TeraDrill_End_02");
     }
 
     private void SetDrillSize(float size)
@@ -159,6 +161,7 @@ public class SkillManager : MonoBehaviour
 
         grinderDrillRoutine = IActiveGrinderDrill();
         StartCoroutine(grinderDrillRoutine);
+        AudioManager.Instance.PlaySFX("SFX_Drill_Skill_Grinding_Active_01");
     }
     // 드릴연마 실행
     IEnumerator IActiveGrinderDrill()
@@ -370,6 +373,10 @@ public class SkillManager : MonoBehaviour
         SetGrinderSlider();
 
         effectDrillSize = UserData.GetEffectDrillSize();
+
+        AudioManager.Instance.AddSFX("SFX_Drill_Skill_TeraDrill_Active_02");
+        AudioManager.Instance.AddSFX("SFX_Drill_Skill_TeraDrill_End_02");
+        AudioManager.Instance.AddSFX("SFX_Drill_Skill_Grinding_Active_01");
 
         //TD_collDown = Data.GetFloat(721100, "Value2");
         //TD_drillSize = Data.GetFloat(721100, "Value1");

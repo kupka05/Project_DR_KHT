@@ -57,15 +57,12 @@ public class AudioManager : MonoBehaviour
     {
         // 씬이 로드될 때 마다 오디오 초기화
         AudioInit();
+
     }
 
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
-    }
-    private void Start()
-    {
-        AudioInit();
     }
 
     // 초기화
@@ -163,7 +160,7 @@ public class AudioManager : MonoBehaviour
 
         if (musicSounds.ContainsKey(name))
         {
-            GFunc.Log("이미 등록된 BGM입니다.");
+            GFunc.Log(name + "은 이미 등록된 BGM입니다.");
             return;
         }
 
@@ -192,10 +189,10 @@ public class AudioManager : MonoBehaviour
 
         if (sfxSounds.ContainsKey(name))
         {
-            GFunc.Log("이미 등록된 SFX입니다.");
+            GFunc.Log(name + "은 이미 등록된 SFX입니다.");
             return;
         }
-
+        GFunc.Log(name + "추가");
         sfxSounds.Add(name, newSound);
         
     }

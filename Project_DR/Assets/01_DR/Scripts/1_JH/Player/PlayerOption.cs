@@ -150,14 +150,14 @@ public class PlayerOption : MonoBehaviour
     {
         float newValue = ValueCheck(backgroundSlider.value, value);
         backgroundSlider.value = newValue;
-        SetBackGroundSlider(newValue);
+        SetBGMSlider(newValue);
     }
     // 사운드 이펙트 조절 버튼
     public void SetSoundEffectButton(float value)
     {
         float newValue = ValueCheck(soundEffectSlider.value, value);
         soundEffectSlider.value = newValue;
-        SetSoundEffectSlider(newValue);
+        SetSFXSlider(newValue);
 
     }
 
@@ -169,12 +169,12 @@ public class PlayerOption : MonoBehaviour
             GFunc.Log("오디오 매니저를 찾을 수 없습니다.");
             return;
         }
-        //ToDo: 마스터 사운드 연동 필요
+        AudioManager.Instance.MasterVolume(value);
         masterSlider.value = value;
         UserDataManager.Instance.masterSound = value; // 유저 데이터에 저장
     }
     // 배경음 조정
-    public void SetBackGroundSlider(float value)
+    public void SetBGMSlider(float value)
     {
         if(!AudioManager.Instance)
         {
@@ -187,7 +187,7 @@ public class PlayerOption : MonoBehaviour
     }
 
     // 효과음 조정 
-    public void SetSoundEffectSlider(float value)
+    public void SetSFXSlider(float value)
     {
         if (!AudioManager.Instance)
         {
@@ -209,8 +209,8 @@ public class PlayerOption : MonoBehaviour
 
         SetRotation(UserDataManager.Instance.rotationAmount);
         SetMasterSlider(UserDataManager.Instance.masterSound);
-        SetBackGroundSlider(UserDataManager.Instance.backgroundSound);
-        SetSoundEffectSlider(UserDataManager.Instance.sfx);
+        SetBGMSlider(UserDataManager.Instance.backgroundSound);
+        SetSFXSlider(UserDataManager.Instance.sfx);
         BrightnessSlider(UserDataManager.Instance.brightness);
     }
 

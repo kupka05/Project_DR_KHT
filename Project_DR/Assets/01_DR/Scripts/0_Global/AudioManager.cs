@@ -7,6 +7,7 @@ using UnityEngine.Audio;
 using OVR;
 using System.Text;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class AudioManager : MonoBehaviour
 {
@@ -56,13 +57,13 @@ public class AudioManager : MonoBehaviour
     {
         // 씬이 로드될 때 마다 오디오 초기화
         AudioInit();
+
     }
 
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
     }
-
 
     // 초기화
     private void Initialized()
@@ -157,7 +158,14 @@ public class AudioManager : MonoBehaviour
         newSound.name = name;
         newSound.clip = audio;
 
+        if (musicSounds.ContainsKey(name))
+        {
+            GFunc.Log(name + "은 이미 등록된 BGM입니다.");
+            return;
+        }
+
         musicSounds.Add(name, newSound);
+        
     }
     /// <summary>
     /// 사운드 이펙트를 추가하는 메서드
@@ -179,7 +187,14 @@ public class AudioManager : MonoBehaviour
         newSound.name = name;
         newSound.clip = audio;
 
+        if (sfxSounds.ContainsKey(name))
+        {
+            GFunc.Log(name + "은 이미 등록된 SFX입니다.");
+            return;
+        }
+        GFunc.Log(name + "추가");
         sfxSounds.Add(name, newSound);
+        
     }
 
     #endregion

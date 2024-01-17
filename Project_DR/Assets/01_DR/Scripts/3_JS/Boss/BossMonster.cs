@@ -29,8 +29,8 @@ namespace Js.Boss
             // 패턴 간격으로 WaitForSeconds 캐싱
             _waitForSeconds = new WaitForSeconds(_boss.BossData.PatternInterval);
 
-            // 공격 실행
-            StartAttack();
+            // 디버그: 공격 실행
+            //StartAttack();
         }
 
         ///// TODO: 보스룸에서 Start를 했을 경우 아래의 함수를

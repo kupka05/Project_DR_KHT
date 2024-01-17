@@ -48,7 +48,9 @@ public class LODCreator : MonoBehaviour
         Debug.Log("CreateLOD는 들어오나?");
 
         // 폴더가 존재할 경우에만 폴더를 생성해주는 함수
+#if UNITY_EDITOR
         LODFileGenerator.LODForderCreate();
+#endif
         // 클론을 제작할 매쉬 오리지날과 동일하도록 제작
         meshClone = MeshCloneSetting(originalMesh);
 

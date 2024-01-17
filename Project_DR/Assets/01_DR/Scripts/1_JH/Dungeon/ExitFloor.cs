@@ -39,7 +39,7 @@ public class ExitFloor : MonoBehaviour
             yield return waitForFixedUpdate;
 
         }
-        transform.parent.gameObject.SetActive(false);
+        transform.gameObject.SetActive(false);
         AudioManager.Instance.PlaySFX("SFX_Drill_Digging_01");
         yield break; 
 

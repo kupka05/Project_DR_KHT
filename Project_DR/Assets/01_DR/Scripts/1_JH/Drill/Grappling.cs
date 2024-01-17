@@ -90,10 +90,9 @@ public class Grappling : GrabbableEvents
         GetData();
         line = GetComponent<LineRenderer>();
 
+        AudioManager.Instance.AddSFX("SFX_Drill_HookShoot_Fire");
         AudioManager.Instance.AddSFX("SFX_Drill_HookShoot_Stick_01");
         AudioManager.Instance.AddSFX("SFX_Drill_HookShoot_Stick_02");
-
-
     }
 
     private void FixedUpdate()
@@ -195,17 +194,13 @@ public class Grappling : GrabbableEvents
             {
                 isDamageCheck = true;                             // 데미지 체크 켜고
                 target = hit.collider.GetComponent<Damageable>(); // 타겟 세팅
-                AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Stick_02");
             }
             else if (hit.collider.GetComponent<DamageablePart>())
             {
                 isDamageCheck = true;
                 target = hit.collider.GetComponent<DamageablePart>().parent;
-                AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Stick_02");
             }
-            else
-            AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Stick_01");
-
+            
         }
 
         else
@@ -232,6 +227,8 @@ public class Grappling : GrabbableEvents
     // 드릴 발사
     private void ShootDrill()
     {
+        AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Fire");
+
         _drill = Instantiate(drillPrefab, drill.transform.position, drill.transform.rotation); // 드릴 인스턴스
         //_drill.transform.localScale = drill.transform.localScale;
         _drill.transform.localScale = weaponDrill.GetDrillSize();                              // 현재 드릴 크기로 맞추기

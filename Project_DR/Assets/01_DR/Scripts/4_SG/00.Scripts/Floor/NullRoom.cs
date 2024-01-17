@@ -1,14 +1,22 @@
+using Oculus.Interaction.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.XR.Interaction;
 
 public class NullRoom : RandomRoom
 {       // NullRoomClass는 빈방에 들어갈 Class입니다.
 
     private bool isChecking;
 
+    public bool TestBool;
+    private void Update()
+    {
+        TestBool = isClearRoom;
+    }
     void Start()
     {
+
         isChecking = false;
         GameManager.isClearRoomList.Add(this);
         GameManager.instance.AddNullRoom(this);

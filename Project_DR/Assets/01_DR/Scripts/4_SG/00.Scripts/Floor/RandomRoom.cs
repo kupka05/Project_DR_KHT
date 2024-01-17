@@ -7,16 +7,19 @@ using UnityEngine;
 [Serializable]
 public class RandomRoom : MonoBehaviour
 {       // 각 3종류의 방이 존재하는데 각 방Class는 RandomRoom을 상속받을것임
+    
+    public bool isClearRoom = default;    // 해당방 클리어했는지 여부
 
-    [SerializeField]
-    public bool isClearRoom;    // 해당방 클리어했는지 여부
-
-    public FloorMeshPos meshPos;        // 각방의 꼭지점Pos이 들어있는 Class
-
-
+    public FloorMeshPos meshPos = default;        // 각방의 꼭지점Pos이 들어있는 Class
+        
     private void Awake()
     {
         isClearRoom = false;
+    }
+
+    public bool BoolTest()
+    {
+        return isClearRoom;
     }
 
     /// <summary>
@@ -52,6 +55,7 @@ public class RandomRoom : MonoBehaviour
     {
         isClearRoom = false;
     }       // ClearRoomBoolSetFalse()
+
 
     protected virtual void OnCollisionEnter(Collision collision)
     {

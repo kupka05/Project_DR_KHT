@@ -94,6 +94,7 @@ public class DataManager : MonoBehaviour
         "BattleRoomObjectCreate_Table","EventRoomObjectCreate_Table","NullRoomObjectCreate_Table",
         "LightObject_Table","EnvObject_Table","MatObject_Table",
         "NPC_Table", "BossRoomObjectCreate_Table","NPC_Comunication_Table",
+        "NPC_Sound_Table"
     };
 
     // dataTable에 ID로 접근하기 위해

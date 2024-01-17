@@ -88,12 +88,16 @@ namespace Js.Boss
             if (_currentPhase != phase)
             {
                 GFunc.Log($"페이즈를 {phase}로 변경");
+
                 // 페이즈 변경
                 _currentPhase = phase;
                 // 보스 데이터의 현재 패턴 갯수 변경
                 _boss.BossData.SetCurrentPatternCount((int)phase);
                 // 공격 패턴 변경
                 _bossData.ChooseRandomPattern();
+
+                // 플레이어를 보스룸 입구로 텔레포트
+                GameManager.instance.EndBossCutScene();
             }
         }
 

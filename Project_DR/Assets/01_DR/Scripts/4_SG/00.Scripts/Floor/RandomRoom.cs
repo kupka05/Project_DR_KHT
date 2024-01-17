@@ -9,11 +9,15 @@ public class RandomRoom : MonoBehaviour
 {       // 각 3종류의 방이 존재하는데 각 방Class는 RandomRoom을 상속받을것임
 
     [SerializeField]
-    public bool isClearRoom = false;    // 해당방 클리어했는지 여부
+    public bool isClearRoom;    // 해당방 클리어했는지 여부
 
     public FloorMeshPos meshPos;        // 각방의 꼭지점Pos이 들어있는 Class
-        
 
+
+    private void Awake()
+    {
+        isClearRoom = false;
+    }
 
     /// <summary>
     /// FloorMeshPos 컴포넌트를 가져오는 함수 : 각 방의 꼭지점 V3 값이 들어있는 컴포넌트

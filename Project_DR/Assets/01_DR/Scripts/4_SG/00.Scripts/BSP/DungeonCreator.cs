@@ -136,6 +136,7 @@ public class DungeonCreator : MonoBehaviour
 
     // 그래픽 설정
     public Material material;  // 던전 바닥의 재질
+    public Material roopMaterial;   // 지붕의 마테리얼
 
     // 방 모양 수정자 설정
     //[Range(0.0f, 0.3f)]
@@ -634,7 +635,7 @@ public class DungeonCreator : MonoBehaviour
         dungeonFloor.transform.position = Vector3.zero;
         dungeonFloor.transform.localScale = Vector3.one;
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
-        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        dungeonFloor.GetComponent<MeshRenderer>().material = roopMaterial;
 
         dungeonFloor.transform.parent = roopParent.transform;
         dungeonFloor.transform.position = roopYpos;
@@ -1558,7 +1559,7 @@ public class DungeonCreator : MonoBehaviour
         dungeonFloor.transform.position = Vector3.zero;
         dungeonFloor.transform.localScale = Vector3.one;
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
-        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        dungeonFloor.GetComponent<MeshRenderer>().material = roopMaterial;
 
         dungeonFloor.transform.parent = roopParent.transform;
         dungeonFloor.transform.position = roopYpos;
@@ -1644,7 +1645,7 @@ public class DungeonCreator : MonoBehaviour
         dungeonFloor.transform.position = Vector3.zero;
         dungeonFloor.transform.localScale = Vector3.one;
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
-        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        dungeonFloor.GetComponent<MeshRenderer>().material = roopMaterial;
 
         dungeonFloor.transform.parent = roopParent.transform;
         dungeonFloor.transform.position = roopYpos;

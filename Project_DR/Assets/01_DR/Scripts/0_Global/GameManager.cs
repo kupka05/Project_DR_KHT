@@ -91,8 +91,7 @@ public class GameManager : MonoBehaviour
     public const int FIRSTAFTER = 5;
 
     [SerializeField]
-    public static List<RandomRoom> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List
-    public List<RandomRoom> isTestList;
+    public static List<RandomRoom> isClearRoomList;       // 모든 방의 클리어 여부를 관리해줄 List    
 
     private bool allRoomClear = false;              // 모든 방이 클리어 됬다면 true가 될 변수
 
@@ -200,8 +199,7 @@ public class GameManager : MonoBehaviour
         {
             ClearDungeon();
         }
-
-        isTestList = isClearRoomList;
+        
 
     }
 
@@ -408,12 +406,12 @@ public class GameManager : MonoBehaviour
     {
         if (_isDoorOn == true)
         {
-            GFunc.Log($"문열기 호출");
+            //GFunc.Log($"문열기 호출");
             DoorOn();
         }
         else if (_isDoorOn == false)
         {
-            GFunc.Log($"문닫기 호출");
+            //GFunc.Log($"문닫기 호출");
             DoorOff();
         }
     }       // DoorControll()
@@ -435,7 +433,7 @@ public class GameManager : MonoBehaviour
     {        
         foreach(RandomRoom temp in isClearRoomList)
         {
-            GFunc.Log($"{temp.gameObject.name}의 클리어 여부 : {temp.isClearRoom}");
+            //GFunc.Log($"{temp.gameObject.name}의 클리어 여부 : {temp.isClearRoom}");
                 
             if(temp.isClearRoom == false)
             {

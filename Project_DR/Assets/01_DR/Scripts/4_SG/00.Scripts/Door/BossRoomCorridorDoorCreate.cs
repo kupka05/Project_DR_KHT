@@ -8,7 +8,7 @@ public GameObject doorPrefab;
 
     private void Awake()
     {
-        doorPrefab = Resources.Load<GameObject>("TempDoor");
+        doorPrefab = Resources.Load<GameObject>("BossRoomDoor");
     }
     void Start()
     {

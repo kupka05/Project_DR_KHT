@@ -17,17 +17,10 @@ public class TEST : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyUp(KeyCode.J))
         {
-            //Unit.AddFieldItem(Vector3.zero, 5101);
-            //Unit.PrintRewardText(32_1_001, 32_1_002, 32_1_003, 32_1_004);
-            //Unit.ClearQuestByID(3133001);
-            Unit.AddInventoryItem(5201);
-            Unit.AddInventoryItem(5202);
-            Unit.AddInventoryItem(5203);
-
-            //UserDataManager.Instance.SaveLocalData();
-            //Unit.CreateBossMonster(100005, Vector3.one);
+            Vector3 pos = GameObject.Find("PlayerController").transform.position;
+            CraftingManager.Instance.CreateEnhance(pos);
         }
 
         if (Input.GetKeyDown(KeyCode.K))

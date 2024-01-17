@@ -141,6 +141,7 @@ public class Old_Boss : MonoBehaviour
     IEnumerator shootBrick;
 
     public bool IsUseFunctionalityOnly => _isUseFunctionalityOnly;
+    [SerializeField] private Transform _attackTransform;
     [SerializeField] private bool _isUseFunctionalityOnly = false;      // 해당 스크립트의 기능만 사용하는지 여부
 
     public void Awake()
@@ -150,10 +151,16 @@ public class Old_Boss : MonoBehaviour
 
     public void Start()
     {
-        InitializeBoss();
+        // 기존 Old 보스일 경우
+        if (! _isUseFunctionalityOnly)
+        {
+            InitializeBoss();
+        }
     }
     public void InitializeBoss()
     {
+        _attackTransform = transform;
+
         bossState = GameObject.FindWithTag("Boss");
 
         rigid = GetComponent<Rigidbody>();
@@ -191,6 +198,13 @@ public class Old_Boss : MonoBehaviour
         bossStartPosition.transform.localPosition = bossStartPos;
     }
 
+    // 공격의 주체를 Init
+    public void InitializeTransform(Transform transform)
+    {
+        _attackTransform = transform;
+        GFunc.Log(_attackTransform);
+    }
+
     public void FixedUpdate()
     {
         // _isUseFunctionalityOnly가 False일 경우
@@ -202,8 +216,8 @@ public class Old_Boss : MonoBehaviour
                 {
                     // Look At Y 각도로만 기울어지게 하기
                     Vector3 targetPostition =
-                        new Vector3(target.position.x, this.transform.position.y, target.position.z);
-                    this.transform.LookAt(targetPostition);
+                        new Vector3(target.position.x, _attackTransform.position.y, target.position.z);
+                    _attackTransform.LookAt(targetPostition);
                 }
             }
             else
@@ -567,7 +581,7 @@ public class Old_Boss : MonoBehaviour
                 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 2.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 2.0f);
 
                 //기존 로직
-                GameObject instantBullet = Instantiate(smallBulletPrefab, transform.position + offset, Quaternion.identity);
+                GameObject instantBullet = Instantiate(smallBulletPrefab, _attackTransform.position + offset, Quaternion.identity);
                 //bullets.Add(instantBullet);
                 //instantBullet.transform.LookAt(target.position);
 
@@ -694,7 +708,7 @@ public class Old_Boss : MonoBehaviour
             {
                 Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 4.0f, 2.0f, UnityEngine.Random.insideUnitCircle.y * 3.0f);
 
-                GameObject instantBrick = Instantiate(bigBrick, transform.position + offset, Quaternion.identity);
+                GameObject instantBrick = Instantiate(bigBrick, _attackTransform.position + offset, Quaternion.identity);
                 //GameObject instantBrick = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BIGBRICK);
                 //instantBrick.transform.position = transform.position + offset;
                 //instantBrick.transform.rotation = Quaternion.identity;
@@ -745,7 +759,7 @@ public class Old_Boss : MonoBehaviour
     {
         int randomPower = UnityEngine.Random.Range(3, 8);
 
-        Vector3 pos = transform.forward;
+        Vector3 pos = _attackTransform.forward;
         pos.y += 3.0f;
 
         return pos * randomPower;
@@ -764,7 +778,7 @@ public class Old_Boss : MonoBehaviour
                 Vector3 offset = new Vector3(UnityEngine.Random.insideUnitCircle.x * 6.0f, 3.0f, UnityEngine.Random.insideUnitCircle.y * 5.0f);
 
                 //기존 로직
-                GameObject instantBounce = Instantiate(bounce, transform.position + offset, Quaternion.identity);
+                GameObject instantBounce = Instantiate(bounce, _attackTransform.position + offset, Quaternion.identity);
                 //GameObject instantBounce = ObjectPoolManager.GetObject(ObjectPoolManager.ProjectileType.BOUNCEBALL);
                 //GFunc.Log("오브젝트 풀 생성");
                 //instantBounce.transform.position = transform.position + offset;
@@ -1001,21 +1015,25 @@ public class Old_Boss : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !isStart)
+        // 기본 보스일 경우
+        if (! _isUseFunctionalityOnly)
         {
-            isStart = true;
+            if (other.CompareTag("Player") && !isStart)
+            {
+                GFunc.Log("Old_Boss.Trigger");
+                isStart = true;
 
-            //// 보스 조우 퀘스트 콜백
-            //QuestCallback.OnBossMeetCallback(bossId);   // 상태값 갱신 및 자동 완료
-            //Unit.ClearQuestByID(3111001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
-            //Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
+                //// 보스 조우 퀘스트 콜백
+                //QuestCallback.OnBossMeetCallback(bossId);   // 상태값 갱신 및 자동 완료
+                //Unit.ClearQuestByID(3111001);               // 완료 상태로 변경 & 보상 지급 & 선행퀘스트 조건이 있는 퀘스트들 조건 확인후 시작가능으로 업데이트
+                //Unit.InProgressQuestByID(3122001);          // 다음 퀘스트 진행중 으로 변경
 
-            npc.BossMeet();
+                npc.BossMeet();
 
-            //isStart = true;
-            //GFunc.Log("인식되냐");
-            //StartCoroutine(ExecutePattern());
-
+                //isStart = true;
+                //GFunc.Log("인식되냐");
+                //StartCoroutine(ExecutePattern());
+            }
         }
     }
 

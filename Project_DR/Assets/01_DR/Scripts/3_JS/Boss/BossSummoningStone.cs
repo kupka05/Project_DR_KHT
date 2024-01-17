@@ -19,6 +19,7 @@ namespace Js.Boss
         }
         public Boss Boss => _boss;
         public Old_Boss OldBoss => _oldBoss;
+        public BossNPC BossNPC => _bossNPC;
         public BossData BossData => _bossData;
         public BNG.Damageable Damageable => _damageable;
         public Slider BossHPSlider => _bossHPSlider;
@@ -32,6 +33,7 @@ namespace Js.Boss
         [Header("BossSummoningStone")]
         [SerializeField] private Boss _boss;                                    // 보스
         [SerializeField] private Old_Boss _oldBoss;                             // 구버전 보스
+        [SerializeField] private BossNPC _bossNPC;                              // 보스 NPC
         [SerializeField] private BossData _bossData;                            // 보스 데이터
         [SerializeField] private Slider _bossHPSlider;                          // 보스 체력바 슬라이더
         [SerializeField] private BNG.Damageable _damageable;                    // 데미지 관련 처리
@@ -69,6 +71,16 @@ namespace Js.Boss
             // HP바가 항상 플레이어를 바라보도록 컴포넌트 추가
             LookAtTarget lookAtTarget = _bossHPSlider.transform.parent.parent.
                 gameObject.AddComponent<LookAtTarget>();
+
+            // Old_Boss의 기본 설정과 공격 주체를 Init
+            _oldBoss.InitializeBoss();
+            _oldBoss.InitializeTransform(_boss.BossMonster.transform);
+
+            // NPC 대화 트리거를 찾아서 컴포넌트 추가 & Init
+            _bossNPC = GetComponent<BossNPC>();
+            Transform npcTrigger = transform.FindChildRecursive("GameStart");
+            npcTrigger?.gameObject?.AddComponent<BossNPCMeet>()
+                ?.Initialize(_bossNPC);
         }
 
         // 현재 페이즈 변경
@@ -105,6 +117,13 @@ namespace Js.Boss
             IsInPhase();
         }
 
+        // 부모와 포지션을 변경
+        public void SetParentAndPosition(Transform parent)
+        {
+            transform.SetParent(parent);
+            transform.position = Vector3.zero;
+        }
+        
 
         /*************************************************
          *               Private Methods
@@ -136,8 +155,11 @@ namespace Js.Boss
                 // 죽음 관련 처리
                 _boss.Dead();
 
-                // 0.1초 후 오브젝트 삭제
-                Destroy(gameObject, 0.1f);
+                // LEGACY:
+                // 0.1초 후 소환석 오브젝트 삭제
+                //Destroy(gameObject, 0.1f);
+                // 소환석 숨기기
+                gameObject.transform.localScale = Vector3.zero;
             }
         }
 

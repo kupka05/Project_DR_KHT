@@ -517,6 +517,7 @@ public class GameManager : MonoBehaviour
 
     public void EndBossCutScene()
     {
+        GFunc.Log("EndBossCutScene()");
         player.GetComponent<SmoothLocomotion>().freeze = false;
 
         StartCoroutine(FadeRoutine(playerPos));

@@ -27,6 +27,7 @@ public static class UserData
     public static void AddGold(int value)
     {
         UserDataManager.Instance.Gold += value;
+        AudioManager.Instance.PlaySFX("SFX_Item_Gold_Gain_01");
     }
     /// <summary>골드를 소모하는 메서드 </summary>
     public static void SpendGold(int value)
@@ -213,9 +214,9 @@ public static class UserData
     }
 
     // 해당 ID의 스킬을 호출한다.
-    public static void ActiveSkill(int id)
+    public static void ActiveSkill(int id, float _value = 0)
     {
-        SkillManager.instance.ActiveSkill(id);
+        SkillManager.instance.ActiveSkill(id, value : _value);
     }
 
     #endregion

@@ -24,7 +24,7 @@ public class DrillHead : MonoBehaviour
     private void Start()
     {
         damageCollider.damage = FinalDamage();
-        col = damageCollider.GetComponent<CapsuleCollider>();
+        col = damageCollider.GetComponent<CapsuleCollider>();      
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -49,12 +49,17 @@ public class DrillHead : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Damageable>())
-        {
-            grappling.StopGrapple();
-        }
+        //GFunc.Log("닿았나?" + other.gameObject.name);
+        //if (other.gameObject.GetComponent<Damageable>())
+        //{
+        //    grappling.StopGrapple();
+        //}
+        //else if (other.gameObject.GetComponent<DamageablePart>())
+        //{
+        //    grappling.StopGrapple();
+        //}
     }
-        // 데미지 연산하는 함수
+    // 데미지 연산하는 함수
     private (float, bool) FinalDamage()
     {
         return Damage.instance.DamageCalculate(damage);

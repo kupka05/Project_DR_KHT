@@ -189,6 +189,8 @@ public class LobbyEvent : MonoBehaviour
         dbRequest += GetDataFromDB;                     // DB 데이터 요청 성공 시 액션 추가
         UserDataManager.Instance.DBRequst(dbRequest);   // DB 데이터 요청
 
+        SetAudio();
+
         // 메인 디스플레이 시작 시 세팅
         ChangeDisplayButton("Default");
         secretButton.SetActive(false);
@@ -200,6 +202,7 @@ public class LobbyEvent : MonoBehaviour
         ChangeStatusDisplayButton("Main");
         // 옵저버 등록
         UserDataManager.Instance.OnUserDataUpdate += UpdatePlayerStatusUI;
+
     }
 
     // ############################### 데이터 불러오기 ###############################
@@ -359,6 +362,7 @@ public class LobbyEvent : MonoBehaviour
         if (playerSpend <= UserDataManager.Instance.Exp)
         {
             GFunc.Log("구매 완료");
+            AudioManager.Instance.PlaySFX("SFX_Stat_Upgrade_Confirm_01");
 
             //GFunc.Log($"새 레벨 : {hpUpBtn.newLevel}, 기존 레벨 : {hpUpBtn.level}");
             // 업그레이드 레벨을 새 레벨로 적용
@@ -488,6 +492,7 @@ public class LobbyEvent : MonoBehaviour
         if (weaponSpend <= UserDataManager.Instance.Exp)
         {
             GFunc.Log("구매 완료");
+            AudioManager.Instance.PlaySFX("SFX_Stat_Upgrade_Confirm_01");
 
             // 업그레이드 레벨을 새 레벨로 적용
             atkUpBtn.level = atkUpBtn.newLevel;
@@ -602,6 +607,7 @@ public class LobbyEvent : MonoBehaviour
         if (spend <= UserData.GetExp())
         {
             GFunc.Log("구매 완료");
+            AudioManager.Instance.PlaySFX("SFX_Stat_Upgrade_Confirm_01");
 
             // 업그레이드 레벨을 새 레벨로 적용
             skill1Btn1.level = skill1Btn1.newLevel;
@@ -777,6 +783,8 @@ public class LobbyEvent : MonoBehaviour
     // 상태창 패널 변경 버튼
     public void ChangeStatusDisplayButton(string name)
     {
+        AudioManager.Instance.PlaySFX("SFX_Stat_UI_SlideMenu_01");
+
         selectStatusDis.SetActive(false);
         playerStatusDis.SetActive(false);
         playerAcceptPannel.SetActive(false);
@@ -827,6 +835,8 @@ public class LobbyEvent : MonoBehaviour
         {
             statusDisplay.GetComponent<Animation>().Play("Status_On");
             ChangeStatusDisplayButton("Main");
+            AudioManager.Instance.PlaySFX("SFX_Stat_DisplayOpen_01");
+
         }
     }
     public void OnTriggerExit(Collider other)
@@ -834,6 +844,7 @@ public class LobbyEvent : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             statusDisplay.GetComponent<Animation>().Play("Status_Off");
+            AudioManager.Instance.PlaySFX("SFX_Stat_DisplayClose_01");
         }
     }
     #endregion
@@ -903,6 +914,7 @@ public class LobbyEvent : MonoBehaviour
         {
             npcDialog.text = dialog.log.Peek().ToString();
             dialog.log.Dequeue();
+            AudioManager.Instance.PlaySFX("SFX_NPC_Main_DisplayText_01");
         }
 
         // 2. 클리어 MBTI 결과 표시
@@ -934,6 +946,8 @@ public class LobbyEvent : MonoBehaviour
             ChangeDisplayButton("Default");
             UpdatePlayerStatusUI();
             OpenSpawnRoomDoor();
+            AudioManager.Instance.PlaySFX("SFX_Lobby_MainShip_OpenDoor_01");
+
         }
     }
 
@@ -1056,5 +1070,19 @@ public class LobbyEvent : MonoBehaviour
         questResult.SetActive(true);
     }
 
+    private void SetAudio()
+    {
+        AudioManager.Instance.AddSFX("SFX_NPC_Main_DisplayText_01");    // 메인NPC 대화
+        AudioManager.Instance.AddSFX("SFX_Lobby_MainShip_OpenDoor_01"); // 문열림
+        AudioManager.Instance.AddSFX("SFX_Stat_DisplayOpen_01");        // 디스플레이 켜짐
+        AudioManager.Instance.AddSFX("SFX_Stat_DisplayClose_01");       // 디스플레이 꺼짐
 
+        AudioManager.Instance.AddSFX("SFX_Stat_UI_SlideMenu_01");       // 상태창 바꾸기
+        AudioManager.Instance.AddSFX("SFX_Stat_Upgrade_Confirm_01");    // 업그레이드 완료
+        AudioManager.Instance.AddSFX("SFX_Stat_Upgrade_Cancle_01");     // 업그레이드 취소
+    }
+    public void CancleUpgrade()
+    {
+        AudioManager.Instance.PlaySFX("SFX_Stat_Upgrade_Cancle_01");
+    }
 }

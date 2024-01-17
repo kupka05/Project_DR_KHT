@@ -183,8 +183,6 @@ public class AudioManager : MonoBehaviour
         newSound.name = name;
         newSound.clip = audio;
 
-
-
         musicSounds.Add(name, newSound);
         
     }
@@ -214,7 +212,6 @@ public class AudioManager : MonoBehaviour
         newSound.clip = audio;
 
        
-        GFunc.Log(name + "추가");
         sfxSounds.Add(name, newSound);
         
     }
@@ -232,6 +229,7 @@ public class AudioManager : MonoBehaviour
         audioSource.volume = 1f;
         audioSource.Play();
         audioSource.loop = loopEnable;
+        audioSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[0];
         UnityEngine.Object.Destroy(gameObject, clip.length * ((Time.timeScale < 0.01f) ? 0.01f : Time.timeScale));
     }
 }

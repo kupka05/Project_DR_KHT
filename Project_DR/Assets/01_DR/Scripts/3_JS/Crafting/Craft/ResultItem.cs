@@ -55,6 +55,10 @@ namespace Js.Crafting
 
             // 디버그
             GFunc.Log($"[{_itemID}]아이템 [{_itemName}]이 [{_giveAmount}] 갯수만큼 제작되었습니다.");
+
+            //TODO: 성공 효과음 출력
+            //AudioManager.Instance.AddSFX("");
+            //AudioManager.Instance.PlaySFX("");
         }
 
         public void Enhance(int type) { }

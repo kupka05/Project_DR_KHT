@@ -227,6 +227,7 @@ namespace BNG
 
         IEnumerator spinSoundRoutine;
         WaitForSeconds waitForSeconds;
+        float lastSfxTime;
 
         void Start()
         {
@@ -254,6 +255,7 @@ namespace BNG
             spinDrill = GetComponentInChildren<WeaponDrill>();
 
             updateChamberedBullet();
+            lastSfxTime = Time.time;
         }
 
         public void FixedUpdate()
@@ -829,9 +831,17 @@ namespace BNG
         // 드릴 효과음 재생
         public void PlaySFX()
         {
+            float sfxDelay = 0.5f - (UserDataManager.Instance.WeaponAtkRateLv * 0.025f);
+            if(Time.time - lastSfxTime < sfxDelay)
+            {
+                return;
+            }
+
             if(spinSoundRoutine == null)
             {
                 GFunc.Log("플레이");
+                lastSfxTime = Time.time;
+
                 spinSoundRoutine = SpinSoundRoutine();
                 StartCoroutine(spinSoundRoutine);
             }
@@ -849,6 +859,7 @@ namespace BNG
         {
             while (true)
             {
+
                 AudioManager.Instance.PlaySFX("SFX_DriilSpin");
                 yield return waitForSeconds;
             }

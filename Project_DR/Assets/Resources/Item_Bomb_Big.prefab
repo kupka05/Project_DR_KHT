@@ -5045,10 +5045,10 @@ GameObject:
   - component: {fileID: 7220416822920735943}
   - component: {fileID: 1169231775107440145}
   - component: {fileID: 7339686973818956167}
-  - component: {fileID: 3923007426008319873}
   - component: {fileID: -3719879486247123414}
   - component: {fileID: 6990171317169601371}
   - component: {fileID: 105370534297795952}
+  - component: {fileID: 5234564182838345825}
   m_Layer: 9
   m_Name: Item_Bomb_Big
   m_TagString: ItemBomb
@@ -5092,7 +5092,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &3278406120060304704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5296,20 +5296,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3923007426008319873
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3278406120060304705}
-  m_Material: {fileID: 13400000, guid: b2a5f738e0b695448bc73333335681d0, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43125994288537158, guid: 389fd75b6f3b3514e9cfa0a1a37ce613, type: 2}
 --- !u!114 &-3719879486247123414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5414,6 +5400,20 @@ MonoBehaviour:
   onSnapZoneExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!136 &5234564182838345825
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3278406120060304705}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.25
+  m_Height: 0.44811994
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: -0.03}
 --- !u!1 &4450956759164769995
 GameObject:
   m_ObjectHideFlags: 0
@@ -5607,7 +5607,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4552599041358101197}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: 0.7071068, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3.3333335, y: 3.3333333, z: 3.3333337}
   m_ConstrainProportionsScale: 0
@@ -5617,7 +5617,7 @@ Transform:
   - {fileID: 4352785601215221641}
   m_Father: {fileID: 1955799360528699218}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!198 &3974646647979205803
 ParticleSystem:
   m_ObjectHideFlags: 0

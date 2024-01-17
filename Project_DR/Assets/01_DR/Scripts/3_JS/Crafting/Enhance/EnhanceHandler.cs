@@ -85,7 +85,17 @@ namespace Js.Crafting
             {
                 //TODO 강화 능력치 추가
                 GFunc.Log($"[{type}] 강화 성공! 확률[{_successProbabilities[type]}] ");
-                //UserData.ActiveSkill(_statID, _statAmounts[type]);
+                //UserData.ActiveSkill(_statID);
+
+                // 효과음 재생
+                PlaySuccessSFX(type);
+            }
+
+            // 강화 실패시
+            else
+            {
+                // 실패 효과음 재생
+                PlaySuccessSFX(-1);
             }
         }
 
@@ -105,6 +115,35 @@ namespace Js.Crafting
 
             // 실패할 경우
             return false;
+        }
+
+        // 타입에 따른 효과음 재생
+        // [0] = 안전형, [1] = 일반형, [2] = 도박형
+        private void PlaySuccessSFX(int type)
+        {
+            switch (type)
+            {
+                // 실패
+                case -1:
+                    AudioManager.Instance.AddSFX("SFX_Craft_DrillUpgrade_Fail_01");
+                    AudioManager.Instance.PlaySFX("SFX_Craft_DrillUpgrade_Fail_01");
+                    break;
+                // 안전형
+                case 0:
+                    AudioManager.Instance.AddSFX("SFX_Craft_DrillUpgrade_Success_01");
+                    AudioManager.Instance.PlaySFX("SFX_Craft_DrillUpgrade_Success_01");
+                    break;
+                // 일반형
+                case 1:
+                    AudioManager.Instance.AddSFX("SFX_Craft_DrillUpgrade_Success_01");
+                    AudioManager.Instance.PlaySFX("SFX_Craft_DrillUpgrade_Success_01");
+                    break;
+                // 도박형
+                case 2:
+                    AudioManager.Instance.AddSFX("SFX_Craft_DrillUpgrade_GreatSuccess_01");
+                    AudioManager.Instance.PlaySFX("SFX_Craft_DrillUpgrade_GreatSuccess_01");
+                    break;
+            }
         }
     }
 }

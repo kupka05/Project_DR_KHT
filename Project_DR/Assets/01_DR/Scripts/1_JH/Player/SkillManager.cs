@@ -270,14 +270,14 @@ public class SkillManager : MonoBehaviour
 
     //  #######################  스킬 이펙트  #######################
 
-    public void ActiveSkill(int id, float amount = 100)
+    public void ActiveSkill(int id, float amount = 100, float value = 0)
     {
         string effect = Data.GetString(id, "Effect");
 
         switch (effect) 
         {
             case "Attack":
-                ActiveAttack(id, amount);
+                ActiveAttack(id, amount, value);
                 return;                
 
             case "AttackRate":
@@ -289,7 +289,7 @@ public class SkillManager : MonoBehaviour
                 return;
 
             case "CritProbability":
-                ActiveCritProbability(id, amount);
+                ActiveCritProbability(id, amount, value);
                 return;
 
             case "DrillSize":
@@ -305,9 +305,13 @@ public class SkillManager : MonoBehaviour
 
 
     // 공격력 스킬
-    public void ActiveAttack(int id, float amount = 100)
-    {
+    public void ActiveAttack(int id, float amount = 100, float value = 0)
+    {        
         float attackDamage = Data.GetFloat(id, "Value1");
+        if(value != 0)
+        {
+            attackDamage = value;
+        }
         attackDamage *= (amount / 100);
         Damage.instance.AddEffectDamage(attackDamage); 
     }
@@ -333,9 +337,13 @@ public class SkillManager : MonoBehaviour
         Damage.instance.AddEffectCritDamage(critDamage);
     }
     // 치명타 확률 스킬
-    public void ActiveCritProbability(int id, float amount = 100)
+    public void ActiveCritProbability(int id, float amount = 100, float value = 0)
     {
         float critProbability = Data.GetFloat(id, "Value1");
+        if (value != 0)
+        {
+            critProbability = value;
+        }
         critProbability *= (amount / 100);
 
         Damage.instance.AddEffectCritProbability(critProbability);

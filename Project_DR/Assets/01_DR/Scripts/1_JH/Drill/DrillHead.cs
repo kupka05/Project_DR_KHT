@@ -49,21 +49,15 @@ public class DrillHead : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        GFunc.Log("닿았나?" + other.gameObject.name);
-        if (other.gameObject.GetComponent<Damageable>())
-        {
-            AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Stick_02");
-            grappling.StopGrapple();
-        }
-        else if (other.gameObject.GetComponent<DamageablePart>())
-        {
-            AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Stick_02");
-            grappling.StopGrapple();
-        }
-        if (other.gameObject.layer.Equals(LayerMask.NameToLayer("Default")))
-        {
-            AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Stick_01");
-        }
+        //GFunc.Log("닿았나?" + other.gameObject.name);
+        //if (other.gameObject.GetComponent<Damageable>())
+        //{
+        //    grappling.StopGrapple();
+        //}
+        //else if (other.gameObject.GetComponent<DamageablePart>())
+        //{
+        //    grappling.StopGrapple();
+        //}
     }
     // 데미지 연산하는 함수
     private (float, bool) FinalDamage()

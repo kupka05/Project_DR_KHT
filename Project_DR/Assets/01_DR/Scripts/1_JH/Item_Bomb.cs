@@ -46,6 +46,8 @@ public class Item_Bomb : MonoBehaviour
         rigid = gameObject.GetOrAddRigidbody();
 
         gameObject.tag = "PlayerSkill"; // 플레이어 스킬에 닿은 몬스터들은 넉백 실행
+        AudioManager.Instance.AddSFX("SFX_Item_Bomb_Trigger");
+        AudioManager.Instance.AddSFX("SFX_Bomb_Explosion");
     }
 
     public void GetData()
@@ -67,6 +69,7 @@ public class Item_Bomb : MonoBehaviour
             Destroy(GetComponent<ItemColliderHandler>());
             Destroy(GetComponent<ItemDataComponent>());
             _renderer.material.color = Color.red;
+            AudioManager.Instance.PlaySFXPoint("SFX_Item_Bomb_Trigger", this.transform.position);
 
             Invoke(nameof(Bomb), duration);
         }   
@@ -83,6 +86,7 @@ public class Item_Bomb : MonoBehaviour
 
         // 폭탄 사용 콜백 호출
         QuestCallback.OnUseItemCallback(itemID);
+        AudioManager.Instance.PlaySFXPoint("SFX_Bomb_Explosion", this.transform.position);
 
         Destroy(gameObject, 5f);
     }

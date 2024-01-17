@@ -121,7 +121,22 @@ public class AudioManager : MonoBehaviour
             GFunc.Log($"{name} SFX를 찾을 수 없음");
         }        
     }
-    public void PlayLoopSFX(string name, Vector3 position = default)
+    /// <summary> 특정 위치에 사운드 이펙트를 재생하는 메서드 </summary>
+    public void PlaySFXPoint(string name, Vector3 position)
+    {
+        try
+        {
+            Sound sound = sfxSounds[name];
+            PlayClipAtPoint(sound.clip, position);
+        }
+        catch (Exception ex)
+        {
+            //GFunc.Log($"{ex.Message}");
+            GFunc.Log($"{name} SFX를 찾을 수 없음");
+        }
+    }
+    /// <summary> 루핑하는 사운드 이펙트를 재생하는 메서드 </summary>
+    public void PlaySFXLoop(string name, Vector3 position = default)
     {
         try
         {
@@ -212,8 +227,7 @@ public class AudioManager : MonoBehaviour
         newSound.clip = audio;
 
        
-        sfxSounds.Add(name, newSound);
-        
+        sfxSounds.Add(name, newSound);        
     }
 
     #endregion

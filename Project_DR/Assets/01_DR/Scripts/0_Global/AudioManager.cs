@@ -128,7 +128,7 @@ public class AudioManager : MonoBehaviour
             Sound sound = sfxSounds[name];
             sfxSource.clip = sound.clip;
             //sfxSource.Play();
-            PlayClipAtPoint(sound.clip, position);
+            PlayClipAtPoint(sound.clip, position, true);
         }
         catch (Exception ex)
         {
@@ -222,7 +222,7 @@ public class AudioManager : MonoBehaviour
     #endregion
 
     // 특정 위치에 사운드를 플레이
-    private void PlayClipAtPoint(AudioClip clip, Vector3 position)
+    private void PlayClipAtPoint(AudioClip clip, Vector3 position, bool loopEnable = false)
     {
         GameObject gameObject = new GameObject("One shot audio");
         gameObject.transform.position = position;
@@ -231,7 +231,7 @@ public class AudioManager : MonoBehaviour
         audioSource.spatialBlend = 1f;
         audioSource.volume = 1f;
         audioSource.Play();
-        audioSource.loop = true;
+        audioSource.loop = loopEnable;
         UnityEngine.Object.Destroy(gameObject, clip.length * ((Time.timeScale < 0.01f) ? 0.01f : Time.timeScale));
     }
 }

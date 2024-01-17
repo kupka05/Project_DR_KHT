@@ -23,6 +23,9 @@ public class MonsterBullet : MonoBehaviour
     public float speed = default;
     public float damage = default;
 
+    [Header("투사체 폭발 이펙트")]
+    public GameObject explosionEffect;
+
     void Awake()
     {
         GetData(ProjectileID);
@@ -64,6 +67,8 @@ public class MonsterBullet : MonoBehaviour
                     // 데미지를 처리하거나 플레이어 스크립트에 데미지를 전달
                     collider.GetComponent<Damageable>().DealDamage(damage);
                     //GFunc.Log($"데미지:{damage}");
+                    GameObject instantExplosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+                    GFunc.Log($"투사체 플레이어 닿았을 시 이펙트:{instantExplosion}");
 
                     isDamage = true;
                     Destroy(this.gameObject);

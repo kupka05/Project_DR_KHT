@@ -85,7 +85,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 377309540}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.96, y: -0.04, z: -0.121}
+  m_LocalPosition: {x: -1.55, y: 0.18, z: -0.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -774,6 +774,11 @@ MonoBehaviour:
   capsuleColliders: []
   monsterId: 7009
   monsterType: 9
+  AttackEffect: {fileID: 0}
+  takeDamageEffect: {fileID: 2322924476710990547, guid: 2613421fa4e1cfd4187d69577b78a6ce,
+    type: 3}
+  DeathEffect: {fileID: 5162492940645847767, guid: 4aa803b0eaab8434699b7967441ced0f,
+    type: 3}
   smash: {fileID: 6749380709991516414}
   smashFilled: {fileID: 8801810509069011367}
   smashCountNum: {fileID: 527558469021473629}
@@ -826,6 +831,11 @@ MonoBehaviour:
   bulletPort: {fileID: 377309541}
   monsterBulletPrefab: {fileID: 226263161099241651, guid: 1aa65d5aa6692cc4fa018ba03dbee393,
     type: 3}
+  FireEffect: {fileID: 8371428720062128031, guid: 59f254d387bde744f88699395cc94573,
+    type: 3}
+  knockBackHeadEffect: {fileID: 4969520057012217990, guid: e07c43c1478d10f42a9ddb520776acf4,
+    type: 3}
+  headHeight: 2
 --- !u!114 &1815641167
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -79,6 +79,31 @@ public class Monster : MonoBehaviour
 
     public Type monsterType = Type.HUMAN_ROBOT;
 
+    [Header("이펙트")]
+    public GameObject AttackEffect;
+    public GameObject takeDamageEffect;
+    public GameObject DeathEffect;
+
+    //[Header("인간형2 이펙트")]
+    //public GameObject golemDamageEffect;
+    //public GameObject golemDeathEffect;
+
+    //[Header("동물형1 이펙트")]
+    //public GameObject spiderDamageEffect;
+    //public GameObject spiderDeathEffect;
+
+    //[Header("동물형2 이펙트")]
+    //public GameObject stingDamageEffect;
+    //public GameObject stingDeathEffect;
+
+    //[Header("단순형1 이펙트")]
+    //public GameObject fungiDamageEffect;
+    //public GameObject fungiDeathEffect;
+
+    //[Header("단순형2 이펙트")]
+    //public GameObject spookDamageEffect;
+    //public GameObject spookDeathEffect;
+
     [Header("분쇄")]
     public GameObject smash;
     public UnityEngine.UI.Image smashFilled;
@@ -121,9 +146,9 @@ public class Monster : MonoBehaviour
     public Rigidbody rigid;
     public NavMeshAgent nav;
 
-    IEnumerator actionRoutine;
+    public IEnumerator actionRoutine;
 
-    Coroutine smashCoroutine;
+    public Coroutine smashCoroutine;
 
     public DamageCollider[] damageCollider;
 
@@ -201,6 +226,11 @@ public class Monster : MonoBehaviour
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
+
+        AudioManager.Instance.AddSFX("Voice_Monster_Human_Normal_01_StartAttack"); //첫 공격 효과음
+        AudioManager.Instance.AddSFX("SFX_Monster_Human_Normal_01_SpinAttack");    //공격 효과음
+        AudioManager.Instance.AddSFX("Voice_Monster_Human_Normal_01_TakeDamage");  //피격 효과음
+        AudioManager.Instance.AddSFX("Voice_Monster_Human_Normal_01_Die");         //사망 효과음
 
         damageable.Health = hp;
         lastDamageTime = Time.time;
@@ -441,6 +471,11 @@ public class Monster : MonoBehaviour
 
                             anim.SetBool(hashWalkingAttack, true);
                             anim.SetBool(hashAttack, true);
+                            //AudioManager.Instance.PlaySFX("SFX_Monster_Human_Normal_01_SpinAttack");
+                            GameObject instantAttackEffect = Instantiate(AttackEffect, transform.position, Quaternion.identity);
+                            Destroy(instantAttackEffect, 0.5f);
+
+
                             yield return new WaitForSeconds(0.5f);
                             anim.SetBool(hashidle, true);
                             anim.SetBool(hashAttack, false);
@@ -662,7 +697,6 @@ public class Monster : MonoBehaviour
                     }
                     UserData.KillMonster(exp);
 
-
                     Invoke(nameof(Explosion), 3f);
 
                     yield break;
@@ -676,6 +710,9 @@ public class Monster : MonoBehaviour
 
     public virtual void OnDeal(float damage)
     {
+        GameObject instantTakeDamage = Instantiate(takeDamageEffect, transform.position, Quaternion.identity);
+        GFunc.Log($"피격 이펙트:{instantTakeDamage}");
+
         // 죽지 않은 상태면 HP 바 업데이트
         if (damageable.Health > 0 && damageable.Health <= hp * 1.0f)
         {
@@ -700,7 +737,7 @@ public class Monster : MonoBehaviour
 
         smashCount++;   // 분쇄 카운트 추가
 
-     
+
 
         if (smashCount >= smashMaxCount)
         {
@@ -763,10 +800,10 @@ public class Monster : MonoBehaviour
 
             if (countNum == 2 || countNum == 3 || countNum == 4)
             {
-                smashFilled.fillAmount -= Time.deltaTime / skillTime;             
+                smashFilled.fillAmount -= Time.deltaTime / skillTime;
                 //Debug.Log($"쿨타임 스택{countNum}:{smashFilled.fillAmount}");
             }
-           yield return null;
+            yield return null;
         }
 
         if (smashFilled.fillAmount <= 0)
@@ -807,8 +844,6 @@ public class Monster : MonoBehaviour
 
         }
         MoveWithSmoothTransition(this.transform.position - transform.forward * 2.0f);
-
-
     }
 
     public void OnDrawGizmos()
@@ -1057,7 +1092,16 @@ public class Monster : MonoBehaviour
         isAttack = false;
     }
 
-
+    public void DieAnimEvent(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                GameObject instantDie = Instantiate(DeathEffect, transform.position, Quaternion.identity);
+                //GFunc.Log($"사망 애니메이션 이펙트:{instantDie}");
+                break;
+        }
+    }
 
 
 }

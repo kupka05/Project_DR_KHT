@@ -2184,6 +2184,11 @@ MonoBehaviour:
   capsuleColliders: []
   monsterId: 7012
   monsterType: 10
+  AttackEffect: {fileID: 0}
+  takeDamageEffect: {fileID: 8924082548842910981, guid: d0153393c0e15fd48a9374eda058ce17,
+    type: 3}
+  DeathEffect: {fileID: 6669493957346649441, guid: 8a7547f28816d6c4b8b414525569da4c,
+    type: 3}
   smash: {fileID: 5256639342327942970}
   smashFilled: {fileID: 8034307769789845091}
   smashCountNum: {fileID: 1300286843004247193}
@@ -2236,6 +2241,11 @@ MonoBehaviour:
   bulletPort: {fileID: 112073181}
   monsterBulletPrefab: {fileID: 3618340128805133372, guid: 36a1ac8df5474e34585d3298b29ec980,
     type: 3}
+  FireEffect: {fileID: 4845895622762626098, guid: 4c0a8429d6603ef4487e389b08ef17d4,
+    type: 3}
+  knockBackHeadEffect: {fileID: 4100018987108970054, guid: 782ec01a712333e43910a14d7a2ab69f,
+    type: 3}
+  headHeight: 2
 --- !u!54 &1596593167
 Rigidbody:
   m_ObjectHideFlags: 0

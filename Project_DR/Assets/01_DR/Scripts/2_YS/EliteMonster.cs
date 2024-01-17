@@ -16,7 +16,12 @@ public class EliteMonster : Monster
     public Transform bulletPort;
     public GameObject monsterBulletPrefab;
 
-   
+    [Header("정예 이펙트")]
+    public GameObject FireEffect;
+    public GameObject knockBackHeadEffect;
+
+    [Header("이펙트 머리 위치")]
+    public float headHeight = 2.0f;
 
     public override IEnumerator MonsterAction()
     {
@@ -292,117 +297,127 @@ public class EliteMonster : Monster
 
     }
 
+    public override void OnDeal(float damage)
+    {
+        GameObject instantTakeDamage = Instantiate(takeDamageEffect, transform.position, Quaternion.identity);
+        GFunc.Log($"피격 이펙트:{instantTakeDamage}");
+
+        // 죽지 않은 상태면 HP 바 업데이트
+        if (damageable.Health > 0 && damageable.Health <= hp * 1.0f)
+        {
+            SetHealth(damageable.Health);
+            GFunc.Log($"OnDeal체력:{damageable.Health}");
+        }
+        else if (damageable.Health <= 0)
+        {
+            SetHealth(0);
+            GFunc.Log($"리턴 체력:{damageable.Health}");
+            return;
+        }
+
+
+        //Debug.Log($"체력:{damageable.Health}");
+
+        // 스턴 상태 또는 죽음 상태일 경우 리턴
+        if (state == State.STUN || state == State.DIE)
+            return;
+
+        MonsterStun();  // 몬스터 스턴
+
+        smashCount++;   // 분쇄 카운트 추가
+
+
+
+        if (smashCount >= smashMaxCount)
+        {
+            smash.SetActive(true);
+            //GFunc.Log("분쇄카운트 충족");
+
+            smashCount = 0;
+            //GFunc.Log($"분쇄 카운트:{smashCount}");
+
+            smashFilled.fillAmount = 1;
+            //GFunc.Log($"분쇄FillAmount:{smashFilled.fillAmount}");
+
+            if (smashCoroutine != null)
+            {
+                StopCoroutine(smashCoroutine);
+            }
+            smashCoroutine = StartCoroutine(SmashTime());
+
+            if (countNum <= 3)
+            {
+                smashCountNum.text = countNum.ToString();
+                countNum++;
+                //Debug.Log($"숫자:{countNum}");
+            }
+            else if (countNum == 5)
+            {
+
+            }
+
+            //GFunc.Log($"숫자:{countNum}");
+
+            ApplyStackDamage(damage);
+            //GFunc.Log("스택 별 데미지 진입");
+
+            //GFunc.Log("중첩 숫자 증가");
+
+        }
+
+        count++;
+        GFunc.Log($"넉백 카운트:{count}");
+
+        if (count >= maxCount)
+        {
+            count = 0;
+
+            MonsterKnockBack();
+
+            ////기존
+            //Vector3 targetPosition = transform.position - transform.forward * 4.0f;
+            //MoveWithSmoothTransition(targetPosition);
+
+        }
+    }
+
+    public override void MonsterKnockBack()
+    {
+        //anim.SetTrigger(hashHit);
+
+        rigid.WakeUp();
+
+        if (rigid != null)
+        {
+            Vector3 headPositon = transform.position + Vector3.up * headHeight;
+
+            rigid.AddForce(this.transform.position - transform.forward * 2.0f, ForceMode.Impulse);
+
+            GameObject instantKnockbackHead = Instantiate(knockBackHeadEffect, headPositon, Quaternion.Euler(-90, 0, 0));
+            GFunc.Log($"머리 쪽 이펙트:{instantKnockbackHead}");
+
+            Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
+            overlapSphereCenter.z -= 0.5f;
+
+            Collider[] colliders = Physics.OverlapSphere(overlapSphereCenter, damageRadius);
+            //if (Physics.Raycast(transform.position, -transform.forward, out hit, 4.0f))
+
+            foreach (Collider collider in colliders)
+            {
+                if (collider.CompareTag("Wall"))
+                {
+                    return;
+                }
+            }
+
+        }
+        MoveWithSmoothTransition(this.transform.position - transform.forward * 2.0f);
+    }
+
     public void MonsterDestroy()
     {
         Destroy(this.gameObject);
     }
-
-    //public override void OnDeal(float damage)
-    //{
-    //    // 죽지 않은 상태면 HP 바 업데이트
-    //    if (damageable.Health > 0)
-    //    {
-    //        SetHealth(damageable.Health);
-    //    }
-    //    else
-    //    {
-    //        SetHealth(0);
-    //        return;
-    //    }
-
-
-    //    //Debug.Log($"체력:{damageable.Health}");
-
-    //    // 스턴 상태 또는 죽음 상태일 경우 리턴
-    //    if (state == State.STUN || state == State.DIE)
-    //        return;
-
-    //    MonsterStun();  // 몬스터 스턴
-
-    //    smashCount++;   // 분쇄 카운트 추가
-
-    //    if (smashCount >= smashMaxCount)
-    //    {
-    //        smash.SetActive(true);
-    //        //GFunc.Log("분쇄카운트 충족");
-
-    //        smashCount = 0;
-    //        //GFunc.Log($"분쇄 카운트:{smashCount}");
-
-    //        smashFilled.fillAmount = 1;
-    //        //GFunc.Log($"분쇄FillAmount:{smashFilled.fillAmount}");
-
-    //        if(smashCoroutine != null)
-    //        {
-    //            StopCoroutine(smashCoroutine);
-    //        }
-    //        smashCoroutine = StartCoroutine(SmashTime());
-
-    //        if (countNum <= 3)
-    //        {
-    //            smashCountNum.text = countNum.ToString();
-    //            countNum++;
-    //            //Debug.Log($"숫자:{countNum}");
-    //        }
-    //        else if (countNum == 5)
-    //        {
-
-    //        }
-
-    //        //GFunc.Log($"숫자:{countNum}");
-
-    //        ApplyStackDamage(damage);
-    //        //GFunc.Log("스택 별 데미지 진입");
-
-    //        //GFunc.Log("중첩 숫자 증가");
-    //    }
-
-    //    count++;
-    //    GFunc.Log($"넉백 카운트:{count}");
-
-    //    if (count >= maxCount)
-    //    {
-    //        count = 0;
-
-
-    //        MonsterKnockBack();
-
-    //        ////기존
-    //        //Vector3 targetPosition = transform.position - transform.forward * 4.0f;
-    //        //MoveWithSmoothTransition(targetPosition);
-
-    //    }
-    //}
-
-    //public override void MonsterKnockBack()
-    //{
-    //    anim.SetTrigger(hashStun);
-
-    //    rigid.WakeUp();
-
-    //    if (rigid != null)
-    //    {
-    //        rigid.AddForce(this.transform.position - transform.forward * 3.0f, ForceMode.Impulse);
-
-    //        Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
-    //        overlapSphereCenter.z -= 0.5f;
-
-    //        Collider[] colliders = Physics.OverlapSphere(overlapSphereCenter, damageRadius);
-    //        //if (Physics.Raycast(transform.position, -transform.forward, out hit, 4.0f))
-
-    //        foreach (Collider collider in colliders)
-    //        {
-    //            if (collider.CompareTag("Wall"))
-    //            {
-    //                return;
-    //            }
-    //        }
-
-    //    }
-    //    MoveWithSmoothTransition(this.transform.position - transform.forward * 3.0f);
-    //}
-
-
 
 
     public void GolemShoot(int index)
@@ -415,10 +430,17 @@ public class EliteMonster : Monster
                 bulletPortRight.transform.LookAt(playerTr.position);
                 //instantBulletLeft.transform.LookAt(playerTr);
 
-                GameObject instantBulletRight = Instantiate(monsterBulletPrefab, bulletPortRight.position, bulletPortLeft.rotation);
+                GameObject instantLeft = Instantiate(FireEffect, bulletPortLeft.position, bulletPortLeft.rotation);
+                GFunc.Log($"이펙트 발생:{instantLeft}");
+
+                GameObject instantBulletRight = Instantiate(monsterBulletPrefab, bulletPortRight.position, bulletPortRight.rotation);
                 //MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
                 bulletPortRight.transform.LookAt(playerTr.position);
                 //instantBulletRight.transform.LookAt(playerTr);
+                
+                GameObject instantRight = Instantiate(FireEffect, bulletPortRight.position, bulletPortRight.rotation);
+                GFunc.Log($"이펙트 발생:{instantRight}");
+
                 break;
         }
     }
@@ -432,6 +454,9 @@ public class EliteMonster : Monster
                 MonsterBullet bullet = instantBullet.GetComponent<MonsterBullet>();
                 bulletPort.transform.LookAt(playerTr.position);
                 //instantBullet.transform.LookAt(playerTr);
+
+                GameObject instantFire = Instantiate(FireEffect, bulletPort.position, bulletPort.rotation);
+                GFunc.Log($"이펙트 발생:{instantFire}");
                 break;
 
                 case 1:
@@ -439,6 +464,9 @@ public class EliteMonster : Monster
                 MonsterBullet bulletRight = instantBulletRight.GetComponent<MonsterBullet>();
                 bulletPortRight.transform.LookAt(playerTr.position);
                 //instantBulletRight.transform.LookAt(playerTr);
+
+                GameObject instantFireRight = Instantiate(FireEffect, bulletPortRight.position, bulletPortRight.rotation);
+                GFunc.Log($"이펙트 발생:{instantFireRight}");
                 break;
 
                 case 2:
@@ -446,6 +474,9 @@ public class EliteMonster : Monster
                 MonsterBullet bulletLeft = instantBulletLeft.GetComponent<MonsterBullet>();
                 bulletPortRight.transform.LookAt(playerTr.position);
                 //instantBulletLeft.transform.LookAt(playerTr);
+
+                GameObject instantFireLeft = Instantiate(FireEffect, bulletPortLeft.position, bulletPortLeft.rotation);
+                GFunc.Log($"이펙트 발생:{instantFireLeft}");
                 break;
         }
     }

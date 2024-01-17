@@ -367,9 +367,9 @@ public class Old_Boss : MonoBehaviour
             case 1:
                 if(shootLazer != null)
                 {
-                    StartCoroutine(shootLazer);
-                    shootLazer = null;
+                   StopCoroutine(shootLazer);
                 }
+                StartCoroutine(shootLazer);
                 //GFunc.Log("패턴 2 선택");
                 break;
             case 2:
@@ -630,8 +630,11 @@ public class Old_Boss : MonoBehaviour
             initialTargetImagePosition = target.position;
 
             // 처음 위치로 설정
-            targetImage.transform.position = initialTargetImagePosition;
-            targetImage.gameObject.SetActive(true);
+            if (targetImage != null)
+            {
+                targetImage.gameObject.SetActive(true);
+                targetImage.transform.position = initialTargetImagePosition; // Set position after activation
+            }
 
             // 기다리고
             yield return new WaitForSeconds(waitLazer);

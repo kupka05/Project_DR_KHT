@@ -16,12 +16,15 @@ public class LobbyTeleport : MonoBehaviour
         fader = Camera.main.GetComponentInChildren<ScreenFader>();
         position = spawnPosition.position;
         position.y += 1f;
+        AudioManager.Instance.AddSFX("SFX_Lobby_PlayGrond_Floor_01");
     }
 
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            AudioManager.Instance.PlaySFX("SFX_Lobby_PlayGrond_Floor_01");
+
             player = other.gameObject;
             fader.DoFadeIn();
             Invoke(nameof(FadeOut), 1f);

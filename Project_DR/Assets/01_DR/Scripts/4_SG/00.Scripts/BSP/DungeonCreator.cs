@@ -189,7 +189,14 @@ public class DungeonCreator : MonoBehaviour
     public GameObject exitObjPrefab;        // !현재 위치값은 매직넘버로 이루어져있음
     public GameObject[] bossMonsterSkin;      // 보스몬스터 인형
     public GameObject[] bossMonsterCapsule;   // 보스몬스터 본체
-
+    [SerializeField] private int[] _bossMonsterIDs =
+    {
+        100001,     // [1층]보스 "눈"
+        100002,     // [2층]보스 "드라"
+        100003,     // [3층]보스 "보헌 블레허"
+        100004,     // [4층]보스 "리퍼"
+        100005      // [5층]보스 "드뷔시"
+    };
 
 
     // 부숴지는벽이 나올 확률 
@@ -1807,8 +1814,11 @@ public class DungeonCreator : MonoBehaviour
         //bossClone = Instantiate(bossMonsterCapsule, bossPos, Quaternion.identity, monsterParent.transform);
         #endregion LEGACY
 
-        _dungeonFloor.AddComponent<BossRoom>().VariablesInIt(_floorMeshPos, bossMonsterSkin[GameManager.instance.nowFloor - 1], bossMonsterCapsule[GameManager.instance.nowFloor - 1], _dungeonFloor.transform, _centerPos);
+        // LEGACY:
+        //_dungeonFloor.AddComponent<BossRoom>().VariablesInIt(_floorMeshPos, bossMonsterSkin[GameManager.instance.nowFloor - 1], bossMonsterCapsule[GameManager.instance.nowFloor - 1], _dungeonFloor.transform, _centerPos);
 
+        int bossID = _bossMonsterIDs[GameManager.instance.nowFloor - 1];
+        _dungeonFloor.AddComponent<BossRoom>().NewVariablesInIt(_floorMeshPos, bossID, _dungeonFloor.transform, _centerPos);
     }       // CreateBossMonster()
 
     /// <summary>

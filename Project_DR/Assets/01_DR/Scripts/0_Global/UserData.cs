@@ -214,9 +214,9 @@ public static class UserData
     }
 
     // 해당 ID의 스킬을 호출한다.
-    public static void ActiveSkill(int id)
+    public static void ActiveSkill(int id, float _value = 0)
     {
-        SkillManager.instance.ActiveSkill(id);
+        SkillManager.instance.ActiveSkill(id, value : _value);
     }
 
     #endregion

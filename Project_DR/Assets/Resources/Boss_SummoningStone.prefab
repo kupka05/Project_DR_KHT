@@ -247,7 +247,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!1 &6780438471017655951
+--- !u!1 &2706106365901264408
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -255,8 +255,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4121607586531956351}
-  - component: {fileID: 581350270918758876}
+  - component: {fileID: 3581849634438336388}
+  - component: {fileID: 1044769859162965095}
   m_Layer: 0
   m_Name: GameStart
   m_TagString: Finish
@@ -264,28 +264,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4121607586531956351
+--- !u!4 &3581849634438336388
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6780438471017655951}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-  m_LocalPosition: {x: 0.3, y: 0.29, z: 55}
+  m_GameObject: {fileID: 2706106365901264408}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
+  m_LocalPosition: {x: 0.3, y: 0.29, z: -76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8364801948526322659}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &581350270918758876
+--- !u!65 &1044769859162965095
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6780438471017655951}
+  m_GameObject: {fileID: 2706106365901264408}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
@@ -408,7 +408,7 @@ Transform:
   - {fileID: 7934396489761765115}
   - {fileID: 5328627882301916150}
   - {fileID: 5010941756266521488}
-  - {fileID: 4121607586531956351}
+  - {fileID: 3581849634438336388}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -504,7 +504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6de38f13d6b1443b2c5a5a20ac08d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 555555
+  Health: 5555555
   SpawnOnDeath: {fileID: 0}
   ActivateGameObjectsOnDeath: []
   DeactivateGameObjectsOnDeath: []
@@ -572,6 +572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boss: {fileID: 0}
   _oldBoss: {fileID: 0}
+  _bossNPC: {fileID: 0}
   _bossData:
     _boss: {fileID: 0}
     _id: 0
@@ -681,7 +682,8 @@ MonoBehaviour:
   bossMeet:
     m_PersistentCalls:
       m_Calls: []
-  bossStartPosition: {fileID: 6780438471017655951}
+  bossStartPosition: {fileID: 2706106365901264408}
+  _attackTransform: {fileID: 0}
   _isUseFunctionalityOnly: 1
 --- !u!1 &9214153932938119771
 GameObject:
@@ -885,7 +887,7 @@ PrefabInstance:
     - target: {fileID: 4084670480824764562, guid: 9a15104235e74c44ebb3c27099a3334d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1.612
+      value: -0.38
       objectReference: {fileID: 0}
     - target: {fileID: 4084670480824764562, guid: 9a15104235e74c44ebb3c27099a3334d,
         type: 3}

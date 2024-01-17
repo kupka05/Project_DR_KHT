@@ -31,6 +31,10 @@ namespace Js.Quest
                 {
                     QuestCallback.OnSubspecialQuestProgressCallback(quest);
                 }
+
+                // 효과음 재생
+                AudioManager.Instance.AddSFX("SFX_Quest_UI_message_01");
+                AudioManager.Instance.PlaySFX("SFX_Quest_UI_message_01");
             }
         }
     }

@@ -148,6 +148,11 @@ public class UseItem : MonoBehaviour
         float maxDuration = potionData.MaxDuration;         // 최대 지속 누적시간
         float effectDuration = potionData.EffectDuration;   // 주기당 회복량
 
+        string sfx = Data.GetString(id, "SFX");
+
+        AudioManager.Instance.AddSFX(sfx);
+        AudioManager.Instance.PlaySFX(sfx);
+
         // StateOnTick에 회복 상태 추가
         PlayerHealth playerHealth = StateOnTick.Instance.Player.GetComponent<PlayerHealth>();
         Action healthFunc = () => playerHealth.RestoreHealth(effectDuration);

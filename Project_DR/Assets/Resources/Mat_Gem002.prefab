@@ -9,11 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3999235972739892889}
+  - component: {fileID: 3982381735608602305}
   - component: {fileID: 8226534991270473709}
   - component: {fileID: 4095666056233383897}
   - component: {fileID: 3947718727398362231}
-  - component: {fileID: 3982381735608602305}
   - component: {fileID: 9179443469726865847}
+  - component: {fileID: -6768477979264480413}
   m_Layer: 0
   m_Name: Mat_Gem002
   m_TagString: Untagged
@@ -36,6 +37,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3982381735608602305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8495467468431924616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7621ec65345ebe4d9a98f6e85aa9ecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropItem: 591400005a1400005b140000
+  maxDrop: 3
 --- !u!33 &8226534991270473709
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -100,20 +115,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: dc0618886163dc940b6a84f5e2b29dd5, type: 3}
---- !u!114 &3982381735608602305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8495467468431924616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7621ec65345ebe4d9a98f6e85aa9ecb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropItem: 591400005a1400005b140000
-  maxDrop: 3
 --- !u!114 &9179443469726865847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,7 +140,19 @@ MonoBehaviour:
   RemoveBulletHolesOnDeath: 1
   onDamaged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -6768477979264480413}
+        m_TargetAssemblyTypeName: SFXPlayer, Assembly-CSharp
+        m_MethodName: PlaySFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onKnockback:
     m_PersistentCalls:
       m_Calls: []
@@ -162,3 +175,20 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   stun: 0
+--- !u!114 &-6768477979264480413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8495467468431924616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4afbfac110ec4ef47b5d13cac1c4a006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfxNames:
+  - SFX_Item_Mineral_Collecting_01
+  - SFX_Item_Mineral_Collecting_02
+  - SFX_Item_Mineral_Collecting_03
+  random: 1

@@ -91,6 +91,8 @@ public class Grappling : GrabbableEvents
         line = GetComponent<LineRenderer>();
 
         AudioManager.Instance.AddSFX("SFX_Drill_HookShoot_Stick_01");
+        AudioManager.Instance.AddSFX("SFX_Drill_HookShoot_Stick_02");
+
 
     }
 
@@ -193,12 +195,15 @@ public class Grappling : GrabbableEvents
             {
                 isDamageCheck = true;                             // 데미지 체크 켜고
                 target = hit.collider.GetComponent<Damageable>(); // 타겟 세팅
+                AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Stick_02");
             }
             else if (hit.collider.GetComponent<DamageablePart>())
             {
                 isDamageCheck = true;
                 target = hit.collider.GetComponent<DamageablePart>().parent;
+                AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Stick_02");
             }
+            else
             AudioManager.Instance.PlaySFX("SFX_Drill_HookShoot_Stick_01");
 
         }

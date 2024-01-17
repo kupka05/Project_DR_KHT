@@ -39,6 +39,9 @@ public class LobbyDisplayButton : MonoBehaviour
     public void Start()
     {
         lobbyEvent = transform.root.GetComponent<LobbyEvent>();
+        AudioManager.Instance.AddSFX("SFX_Stat_Upgrade_LevelUP_01");
+        AudioManager.Instance.AddSFX("SFX_Stat_Upgrade_LevelDown_01");
+        AudioManager.Instance.AddSFX("SFX_Stat_Upgrade_Choose_01");
     }
 
     public void OnEnable()
@@ -117,6 +120,8 @@ public class LobbyDisplayButton : MonoBehaviour
         if (afterValue)
         afterValue.SetActive(true);
         SetLevelItem(index, level);
+
+        AudioManager.Instance.PlaySFX("SFX_Stat_Upgrade_Choose_01");
     }
 
     // 레벨 생성
@@ -152,7 +157,14 @@ public class LobbyDisplayButton : MonoBehaviour
             return;
         }
 
-
+        if (0 < value)
+        {
+            AudioManager.Instance.PlaySFX("SFX_Stat_Upgrade_LevelUP_01");
+        }
+        else
+        {
+            AudioManager.Instance.PlaySFX("SFX_Stat_Upgrade_LevelDown_01");
+        }
         SetLevel();
     }
     public void SetLevel()

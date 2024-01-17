@@ -76,11 +76,9 @@ namespace Js.Boss
             _oldBoss.InitializeBoss();
             _oldBoss.InitializeTransform(_boss.BossMonster.transform);
 
-            // NPC 대화 트리거를 찾아서 컴포넌트 추가 & Init
+            // 보스NPC Init & NPC 트리거 설정
             _bossNPC = GetComponent<BossNPC>();
-            Transform npcTrigger = transform.FindChildRecursive("GameStart");
-            npcTrigger?.gameObject?.AddComponent<BossNPCMeet>()
-                ?.Initialize(_bossNPC);
+            _boss.SetNPCTrigger();
         }
 
         // 현재 페이즈 변경
@@ -120,8 +118,11 @@ namespace Js.Boss
         // 부모와 포지션을 변경
         public void SetParentAndPosition(Transform parent)
         {
-            transform.SetParent(parent);
-            transform.position = Vector3.zero;
+            transform.SetParent(parent.parent);
+            Vector3 position = parent.transform.position;
+            position.z -= 3.0f;
+            position.y -= 2.0f;
+            transform.position = position;
         }
         
 

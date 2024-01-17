@@ -83,7 +83,7 @@ public class BossRoom : MonoBehaviour
         this.gameObject.AddComponent<BossRoomObjSpawn>().InItBossSpawnPos(bossPos);
         int stage = GameManager.instance.nowFloor - 1;
         bossClone.GetComponent<Boss>().BossSummoningStone.BossNPC.ChangeBossLevel(stage);
-        //bossClone.GetComponent<Boss>().BossSummoningStone.SetParentAndPosition(bossClone.transform);
+        bossClone.GetComponent<Boss>().BossSummoningStone.SetParentAndPosition(bossClone.transform);
     }
 
     public void CheckClearBoss()

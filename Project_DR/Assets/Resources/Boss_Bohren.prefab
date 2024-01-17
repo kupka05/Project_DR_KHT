@@ -1342,7 +1342,6 @@ GameObject:
   m_Component:
   - component: {fileID: 406873507178150516}
   - component: {fileID: 406873507168261524}
-  - component: {fileID: 7152822249510341986}
   m_Layer: 0
   m_Name: Boss_Bohren
   m_TagString: Boss
@@ -1404,21 +1403,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7152822249510341986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406873507177784916}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2bc7220e23c86b4a893a671521e864d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bossType: 2
-  anim: {fileID: 406873507168261524}
-  target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0, type: 3}
 --- !u!1 &406873507177784918
 GameObject:
   m_ObjectHideFlags: 0

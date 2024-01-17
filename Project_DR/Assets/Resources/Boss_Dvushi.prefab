@@ -106,7 +106,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1325287064174265013}
   - component: {fileID: 4937195631211632847}
-  - component: {fileID: 6968258513887108649}
   m_Layer: 0
   m_Name: Boss_Dvushi
   m_TagString: Boss
@@ -154,21 +153,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6968258513887108649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1814824466765010959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2bc7220e23c86b4a893a671521e864d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bossType: 4
-  anim: {fileID: 4937195631211632847}
-  target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0, type: 3}
 --- !u!1 &1945773717787372663
 GameObject:
   m_ObjectHideFlags: 0

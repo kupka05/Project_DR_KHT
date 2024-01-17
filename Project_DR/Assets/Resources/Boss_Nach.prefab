@@ -201,7 +201,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1304773463915692366}
   - component: {fileID: 4970654960815495988}
-  - component: {fileID: 5786424491752570215}
   m_Layer: 0
   m_Name: Boss_Nach
   m_TagString: Boss
@@ -249,21 +248,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5786424491752570215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1824147110975331316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2bc7220e23c86b4a893a671521e864d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bossType: 3
-  anim: {fileID: 4970654960815495988}
-  target: {fileID: 6757648434215542745, guid: 9af8996cf7742564d86ec55ab5e912c0, type: 3}
 --- !u!1 &1981557440760246156
 GameObject:
   m_ObjectHideFlags: 0

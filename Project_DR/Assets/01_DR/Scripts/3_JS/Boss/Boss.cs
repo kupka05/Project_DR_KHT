@@ -27,7 +27,7 @@ namespace Js.Boss
         public Damageable Damageable => _bossData.Damageable;                                   // 데미지 관련 처리
         public Transform Target => _bossData.Target;                                            // 공격 대상
         public Animator Animator => _bossData.Animator;                                         // 애니메이터
-        
+
 
         /*************************************************
          *                 Private Fields
@@ -110,10 +110,19 @@ namespace Js.Boss
             // 죽음 애니메이션 재생
             _bossAnimationHandler.DieAnimation();
 
+            // 3초 후 오브젝트 숨기기
+            //Invoke("HideObject", _bossData.DestroyDelay);
             // 3초 후 오브젝트 삭제
             Destroy(gameObject, _bossData.DestroyDelay);
         }
 
+        // NPC 트리거 설정
+        public void SetNPCTrigger()
+        {
+            Transform npcTrigger = transform.FindChildRecursive("GameStart");
+            npcTrigger?.gameObject?.AddComponent<BossNPCMeet>()
+                ?.Initialize(_bossSummoningStone.BossNPC);
+        }
 
         /*************************************************
          *                 Unity Methods
@@ -238,6 +247,12 @@ namespace Js.Boss
                     new Vector3(target.position.x, transform.position.y, target.position.z);
                 transform.LookAt(targetPosition);
             }
+        }
+
+        // 오브젝트 숨기기
+        public void HideObject()
+        {
+            gameObject.transform.localScale = Vector3.zero;
         }
     }
 }

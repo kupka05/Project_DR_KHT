@@ -100,6 +100,10 @@ namespace Js.Crafting
 
             // 크래프팅 인벤토리 표시
             _canvasInventory.gameObject.SetActive(true);
+
+            // 효과음 재생
+            AudioManager.Instance.AddSFX("SFX_Craft_BoxOpen_01");
+            AudioManager.Instance.PlaySFX("SFX_Craft_BoxOpen_01");
         }
 
         // 상자를 닫는다
@@ -110,7 +114,11 @@ namespace Js.Crafting
             _currentState = State.CLOSE;
 
             // 크래프팅 인벤토리 숨김
-            _canvasInventory.gameObject.SetActive(false) ;
+            _canvasInventory.gameObject.SetActive(false);
+
+            // 효과음 재생
+            AudioManager.Instance.AddSFX("SFX_Craft_BoxClose_01");
+            AudioManager.Instance.PlaySFX("SFX_Craft_BoxClose_01");
         }
 
         // 인벤토리를 크래프팅 하위의 자식으로 변경하고

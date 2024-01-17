@@ -7,7 +7,7 @@ using UnityEngine;
 public class Item_Bomb : MonoBehaviour
 {
     public int itemID;
-    public bool bombTrigger;
+    public ParticleSystem particle;
 
     private float damage;
     private float radius;
@@ -15,8 +15,6 @@ public class Item_Bomb : MonoBehaviour
     private SphereCollider sphereCollider;
     private DamageCollider damageCollider;
     private Rigidbody rigid;
-    private ItemColliderHandler itemHandler;
-    private MeshRenderer _renderer;
     private IEnumerator checkRoutine;
 
     // Start is called before the first frame update
@@ -40,12 +38,10 @@ public class Item_Bomb : MonoBehaviour
         skillEvent.knockbackRange = radius;
         
 
-        itemHandler = gameObject.GetComponent<ItemColliderHandler>();
-        _renderer = gameObject.GetComponent<MeshRenderer>();
-
         rigid = gameObject.GetOrAddRigidbody();
 
-        gameObject.tag = "PlayerSkill"; // 플레이어 스킬에 닿은 몬스터들은 넉백 실행
+
+        Invoke(nameof(Bomb), duration);
     }
 
     public void GetData()
@@ -54,41 +50,11 @@ public class Item_Bomb : MonoBehaviour
         radius = Data.GetFloat(itemID, "Radius");
         duration = Data.GetFloat(itemID, "Duration");
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        BombTriggerCheck();
-    }
 
-    public void BombTriggerCheck()
-    {
-        if(itemHandler.state == ItemColliderHandler.State.GRABBED)
-        {
-            if(checkRoutine == null)
-            {
-                checkRoutine = CheckBombTriggerRoutine();
-                StartCoroutine(checkRoutine);
-            }
-        }
-
-    }
-
-    IEnumerator CheckBombTriggerRoutine()
-    {
-        yield return new WaitForSeconds(duration);
-        Bomb();
-    }
 
     // 폭발
     public void Bomb()
-    {
-        GFunc.Log("폭탄터지나?");
-        Destroy(GetComponent<Grabbable>());
-        Destroy(GetComponent<UseItem>());
-        Destroy(GetComponent<ItemBombHandler>());
-        Destroy(GetComponent<ItemColliderHandler>());
-        Destroy(GetComponent<ItemDataComponent>());
-
-        _renderer.enabled = false;
+    {  
         BombExplosion();
         sphereCollider.enabled = true;
         damageCollider.enabled = true;
@@ -96,14 +62,12 @@ public class Item_Bomb : MonoBehaviour
         // 폭탄 사용 콜백 호출
         QuestCallback.OnUseItemCallback(itemID);
 
-        Destroy(gameObject, 1f);
+        Destroy(gameObject, 5f);
     }
 
     public void BombExplosion()
     {
         // 파괴 효과 출력
-        ParticleSystem particle = transform.Find("Firefly_Circle_End_3_Orange")
-            .GetComponent<ParticleSystem>();
         particle.Play();
     }
 

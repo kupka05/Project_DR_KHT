@@ -519,10 +519,7 @@ public class GameManager : MonoBehaviour
     {
         player.GetComponent<SmoothLocomotion>().freeze = false;
 
-        StartCoroutine(FadeRoutine(playerPos));
-
-       
-
+        StartCoroutine(FadeRoutine(playerPos));    
     }
 
     IEnumerator FadeRoutine(Vector3 position)

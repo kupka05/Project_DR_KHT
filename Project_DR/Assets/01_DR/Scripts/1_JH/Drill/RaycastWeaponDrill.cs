@@ -225,11 +225,15 @@ namespace BNG
 
         protected bool readyToShoot = true;
 
+        IEnumerator spinSoundRoutine;
+        WaitForSeconds waitForSeconds;
+
         void Start()
         {
             UserData.GetData(GetData);
 
             AudioManager.Instance.AddSFX("SFX_Drill_Equip_01");
+            AudioManager.Instance.AddSFX("SFX_DriilSpin");
             weaponRigid = GetComponent<Rigidbody>();
             grappling = GetComponent<Grappling>();
 
@@ -316,8 +320,10 @@ namespace BNG
                 readyToShoot = FiringMethod == FiringType.Automatic;
             }
             else
+            {
                 isSpining = false;
-
+                StopSFX();
+            }
 
 
             // These are here for convenience. Could be called through GrabbableUnityEvents instead
@@ -532,18 +538,7 @@ namespace BNG
             {
                 MuzzleFlashObject.SetActive(false);
                 StopCoroutine(shotRoutine);
-            }
-
-            if (AutoChamberRounds)
-            {
-                shotRoutine = animateSlideAndEject();
-                StartCoroutine(shotRoutine);
-            }
-            else
-            {
-                shotRoutine = doMuzzleFlash();
-                StartCoroutine(shotRoutine);
-            }
+            }          
         }
 
 
@@ -777,109 +772,6 @@ namespace BNG
             GameObject.Destroy(shell, 5);
         }
 
-        protected virtual IEnumerator doMuzzleFlash()
-        {
-            MuzzleFlashObject.SetActive(true);
-            yield return new WaitForSeconds(0.05f);
-
-            randomizeMuzzleFlashScaleRotation();
-            yield return new WaitForSeconds(0.05f);
-
-            MuzzleFlashObject.SetActive(false);
-        }
-
-        // Animate the slide back, eject casing, pull slide back
-        protected virtual IEnumerator animateSlideAndEject()
-        {
-
-            // Start Muzzle Flash
-            MuzzleFlashObject.SetActive(true);
-
-            int frames = 0;
-            bool slideEndReached = false;
-            Vector3 slideDestination = new Vector3(0, 0, SlideDistance);
-
-            if (SlideTransform)
-            {
-                while (!slideEndReached)
-                {
-
-
-                    SlideTransform.localPosition = Vector3.MoveTowards(SlideTransform.localPosition, slideDestination, Time.deltaTime * slideSpeed);
-                    float distance = Vector3.Distance(SlideTransform.localPosition, slideDestination);
-
-                    if (distance <= minSlideDistance)
-                    {
-                        slideEndReached = true;
-                    }
-
-                    frames++;
-
-                    // Go ahead and update muzzleflash in sync with slide
-                    if (frames < 2)
-                    {
-                        randomizeMuzzleFlashScaleRotation();
-                    }
-                    else
-                    {
-                        slideEndReached = true;
-                        MuzzleFlashObject.SetActive(false);
-                    }
-
-                    yield return new WaitForEndOfFrame();
-                }
-            }
-            else
-            {
-                yield return new WaitForEndOfFrame();
-                randomizeMuzzleFlashScaleRotation();
-                yield return new WaitForEndOfFrame();
-
-                MuzzleFlashObject.SetActive(false);
-                slideEndReached = true;
-            }
-
-            // Set Slide Position
-            if (SlideTransform)
-            {
-                SlideTransform.localPosition = slideDestination;
-            }
-
-            yield return new WaitForEndOfFrame();
-            MuzzleFlashObject.SetActive(false);
-
-            // Eject Shell
-            ejectCasing();
-
-            // Pause for shell to eject before returning slide
-            yield return new WaitForEndOfFrame();
-
-
-            if (!slideForcedBack && SlideTransform != null)
-            {
-                // Slide back to original position
-                frames = 0;
-                bool slideBeginningReached = false;
-                while (!slideBeginningReached)
-                {
-
-                    SlideTransform.localPosition = Vector3.MoveTowards(SlideTransform.localPosition, Vector3.zero, Time.deltaTime * slideSpeed);
-                    float distance = Vector3.Distance(SlideTransform.localPosition, Vector3.zero);
-
-                    if (distance <= minSlideDistance)
-                    {
-                        slideBeginningReached = true;
-                    }
-
-                    if (frames > 2)
-                    {
-                        slideBeginningReached = true;
-                    }
-
-                    yield return new WaitForEndOfFrame();
-                }
-            }
-        }
         // 데미지 연산하는 함수
         private (float, bool) FinalDamage()
         {
@@ -906,15 +798,16 @@ namespace BNG
             damageCollider.isDrill = true;
             damageCollider.SetDrillDamage(damage);
             SetDrillSize(drillSize);
-            //damage = (float)DataManager.Instance.GetData(1100, "Damage", typeof(float)) ;
-            //dotDamage = (float)DataManager.Instance.GetData(1100, "DotDamage", typeof(float)) ;
-            //FiringRate = (float)DataManager.Instance.GetData(1100, "AttackSpeed", typeof(float));
+
+            float sfxDelay = 0.5f - (UserDataManager.Instance.WeaponAtkRateLv * 0.025f);
+            waitForSeconds = new WaitForSeconds(sfxDelay);
         }
+        // 공격 속도를 세팅해주는 메서드
         public void SetEffectFireRate(float value)
         {
             FiringRate = value;
         }
-
+        // 드릴사이즈를 세팅해주는 메서드
         public void SetDrillSize(float newSize)
         {
             drillSize = newSize;
@@ -922,6 +815,7 @@ namespace BNG
             drillHead.transform.localScale = curDrillSize;
             MaxRange = 0.5f * drillSize;
         }
+        // 드릴사이즈를 가져오는 메서드
         public Vector3 GetDrillSize()
         {
             return curDrillSize;
@@ -930,6 +824,34 @@ namespace BNG
         public void GrabDrill()
         {
             AudioManager.Instance.PlaySFX("SFX_Drill_Equip_01");
+        }
+        
+        // 드릴 효과음 재생
+        public void PlaySFX()
+        {
+            if(spinSoundRoutine == null)
+            {
+                GFunc.Log("플레이");
+                spinSoundRoutine = SpinSoundRoutine();
+                StartCoroutine(spinSoundRoutine);
+            }
+        }
+        public void StopSFX()
+        {
+            if (spinSoundRoutine != null)
+            {
+                GFunc.Log("스탑");
+                StopCoroutine(spinSoundRoutine);
+                spinSoundRoutine = null;
+            }
+        }
+        IEnumerator SpinSoundRoutine()
+        {
+            while (true)
+            {
+                AudioManager.Instance.PlaySFX("SFX_DriilSpin");
+                yield return waitForSeconds;
+            }
         }
     }
 

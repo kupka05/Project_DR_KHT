@@ -45,6 +45,10 @@ public class QuestPannel : MonoBehaviour
 
     private void Start()
     {
+        QuestCallback.SubspecialQuestProgressCallback += AddQuest;
+        QuestCallback.SubspecialQuestValueChangedCallback += AddQuest;
+        QuestCallback.SubspecialQuestCompletedCallback += RemoveQuest;
+
         transform.parent.localScale = offSize;
         // 퀘스트 아이템 및 부모 지정
         questItem = transform.GetChild(1).GetChild(0).GetChild(0).GetChild(2).gameObject;

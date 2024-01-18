@@ -135,6 +135,8 @@ namespace Js.Crafting
             inventory.localPosition = position;
             inventory.localScale = scale;
             inventory.localRotation = rotation;
+
+            inventory.GetComponentInChildren<ResetScroll>().ResetScrollPos();
         }
 
         // 인벤토리의 모든 슬롯을 정렬

@@ -160,6 +160,11 @@ public class GameManager : MonoBehaviour
 
     // ----------------------------------------------- SG ------------------------------------------------
 
+
+    [Header("BossRoom")]
+    public List<GameObject> bossRoomPillars = new List<GameObject>();
+
+
     private void Awake()
     {
         // 싱글톤 인스턴스 초기화

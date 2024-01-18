@@ -31,18 +31,20 @@ namespace Js.Boss
          *                 Private Fields
          *************************************************/
         [Header("BossSummoningStone")]
-        [SerializeField] private Boss _boss;                                    // 보스
-        [SerializeField] private Old_Boss _oldBoss;                             // 구버전 보스
-        [SerializeField] private BossNPC _bossNPC;                              // 보스 NPC
-        [SerializeField] private BossData _bossData;                            // 보스 데이터
-        [SerializeField] private Slider _bossHPSlider;                          // 보스 체력바 슬라이더
-        [SerializeField] private BNG.Damageable _damageable;                    // 데미지 관련 처리
-        [SerializeField] private BossHPSliderHandler _bossHPSliderHandler;      // 보스 체력바 핸들러
-        [SerializeField] private Image _imgIcon_1;                              // 아이콘 (1)
-        [SerializeField] private Image _imgIcon_2;                              // 아이콘 (2)
-        [SerializeField] private GameObject _gameStartObject;                   // 게임 시작 오브젝트
-        private BossPhaseHandler _bossPhaseHandler;                             // 보스 페이즈 핸들러
-        private Phase _currentPhase;                                            // 현재 페이즈
+        [SerializeField] private Boss _boss;                                            // 보스
+        [SerializeField] private Old_Boss _oldBoss;                                     // 구버전 보스
+        [SerializeField] private BossNPC _bossNPC;                                      // 보스 NPC
+        [SerializeField] private BossData _bossData;                                    // 보스 데이터
+        [SerializeField] private Slider _bossHPSlider;                                  // 보스 체력바 슬라이더
+        [SerializeField] private BNG.Damageable _damageable;                            // 데미지 관련 처리
+        [SerializeField] private BossHPSliderHandler _bossHPSliderHandler;              // 보스 체력바 핸들러
+        [SerializeField] private Image _imgIcon_1;                                      // 아이콘 (1)
+        [SerializeField] private Image _imgIcon_2;                                      // 아이콘 (2)
+        [SerializeField] private GameObject _gameStartObject;                           // 게임 시작 오브젝트
+        [SerializeField] private BossPhaseHandler _bossPhaseHandler;                    // 보스 페이즈 핸들러
+        [SerializeField] private Phase _currentPhase;                                   // 현재 페이즈
+        [SerializeField] private string _clonePrefabName = "Boss_CloneSummoningStone";  // 클론 소환석 프리팹 이름
+        [SerializeField] private List<GameObject> _pillars;                             // 보스룸 기둥 리스트
 
 
         /*************************************************
@@ -79,6 +81,9 @@ namespace Js.Boss
             // 보스NPC Init & NPC 트리거 설정
             _bossNPC = GetComponent<BossNPC>();
             _boss.SetNPCTrigger();
+
+            // 보스룸 기둥 리스트 초기화
+            _pillars = new List<GameObject>();
         }
 
         // 현재 페이즈 변경
@@ -135,25 +140,6 @@ namespace Js.Boss
         /*************************************************
          *               Private Methods
          *************************************************/
-        //LEGACY:
-        //// Boss HP 캔버스 생성
-        //private void CreateBossHPCanvas()
-        //{
-        //    // BossHP_Canvas 생성 및 _bossHPSlider 할당
-        //    string prefabName = "BossHP_Canvas";
-        //    GameObject canvasPrefab = Resources.Load<GameObject>(prefabName);
-        //    GameObject canvas = Instantiate(canvasPrefab, transform);
-        //    canvas.name = prefabName;
-
-        //    // HP바 위치/각도 조정
-        //    _bossHPSlider = canvas.GetComponentInChildren<Slider>();
-        //    Vector3 position = _bossHPSlider.transform.position;
-        //    Quaternion rotation = Quaternion.Euler(0f, 0f, 0f);
-        //    position.x = 0f;
-        //    _bossHPSlider.transform.position = position;
-        //    _bossHPSlider.transform.rotation = rotation;
-        //}
-
         // 죽음 체크
         private void IsDie()
         {
@@ -174,6 +160,84 @@ namespace Js.Boss
         private void IsInPhase()
         {
             _bossPhaseHandler.IsInPhase();
+        }
+
+
+        /*************************************************
+         *         Clone Summoning Stone Methods
+         *************************************************/
+        // 지정된 갯수만큼 소환석 클론 스폰
+        public void SpawnCloneSummoningStones(int count)
+        {
+            int i = default;
+            while (true)
+            {
+                // 소환석 클론 스폰
+                if (Spawn(i)) { i++; };
+
+                // count 만큼 스폰시 종료
+                if (i >= count) { break; }
+            }
+        }
+
+        // 소환석 스폰
+        private bool Spawn(int index)
+        {
+            // 소환 전에 기둥들을 할당
+            if (_pillars.Count.Equals(0)) { GetBossRoomPillars(); }
+
+            // 소환할 랜덤 포지션 계산
+            Vector3 position = GetRandomSpawnPosition(_pillars[index]);
+
+            // 소환이 불가능할 경우 예외 처리
+            if (! IsCanSpawn(position)) { return false; }
+
+            Transform parent = transform.parent;
+            GameObject prefab = Resources.Load<GameObject>(_clonePrefabName);
+            GameObject cloneStone = Instantiate(prefab, parent);
+            cloneStone.transform.position = position;
+            CloneBossSummoningStone cloneStoneComponent = 
+                cloneStone.AddComponent<CloneBossSummoningStone>();
+            cloneStoneComponent.Initialize(_boss);
+
+            return true;
+        }
+
+        // 보스룸에 있는 기둥들을 할당
+        private void GetBossRoomPillars()
+        {
+            _pillars = GameManager.instance?.bossRoomPillars;
+        }
+
+        // 소환 전에 소환이 가능한지 체크
+        private bool IsCanSpawn(Vector3 position)
+        {
+            // 오버랩을 생성해서 중복되는 오브젝트가 있는지 체크
+            // 바닥은 예외 (태그:Floor)
+            Vector3 scale = transform.localScale / 2;
+            bool isDuplicate = false;
+            Collider[] coliiders = Physics.OverlapBox(position, scale, Quaternion.identity);
+            for (int i = 0; i < coliiders.Length; i++)
+            {
+                // 검출된 오브젝트의 "Floor" 태그가 아닐 경우
+                if (! coliiders[i].CompareTag("Floor"))
+                {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+
+            return !isDuplicate;
+        }
+
+        // 소환될 랜덤한 포지션 계산
+        private Vector3 GetRandomSpawnPosition(GameObject pillar)
+        {
+            Vector3 position = pillar.transform.position;
+            // TODO: 포지션 랜덤 계산
+            position.z += 2.0f;
+            position.y = 0f;
+            return position;
         }
     }
 }

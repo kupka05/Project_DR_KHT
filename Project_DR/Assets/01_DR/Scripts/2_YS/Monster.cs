@@ -459,21 +459,12 @@ public class Monster : MonoBehaviour
                 // ATTACK 상태 =======================================================
                 case State.ATTACK:
 
-                    GFunc.Log("공격상태 진입");
-                    
-                    //GFunc.Log("ATTACK state");
-
                     switch (monsterType)
                     {
                         case Type.HUMAN_ROBOT:
-                            //AudioManager.Instance.PlaySFX(attackSound);
 
                             anim.SetBool(hashWalkingAttack, true);
                             anim.SetBool(hashAttack, true);
-                            GFunc.Log("애니메이션 진입");
-
-                            AudioManager.Instance.PlaySFX(attackSound);
-                            GFunc.Log("공격 사운드 진입");
                             
                             GameObject instantAttackEffect = Instantiate(AttackEffect, transform.position, Quaternion.identity);
                             Destroy(instantAttackEffect, 0.5f);
@@ -496,7 +487,7 @@ public class Monster : MonoBehaviour
                                 case 0:
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                    
                                     yield return new WaitForSeconds(1.3f);
                                     
                                     anim.SetBool(hashidle, true);
@@ -507,10 +498,8 @@ public class Monster : MonoBehaviour
                                     break;
 
                                 case 1:
-                                    //anim.SetBool(hashWalkingAttack, true);
-                                  
                                     anim.SetBool(hashAttack2, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                   
                                     yield return new WaitForSeconds(1.3f);
                                    
                                     anim.SetBool(hashidle, true);
@@ -521,10 +510,9 @@ public class Monster : MonoBehaviour
                                     break;
 
                                 case 2:
-                                    //anim.SetBool(hashWalkingAttack, true);
-                                    
+
                                     anim.SetBool(hashAttack3, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                   
                                     yield return new WaitForSeconds(1.2f);
                                     
                                     anim.SetBool(hashidle, true);
@@ -547,7 +535,7 @@ public class Monster : MonoBehaviour
                                    
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                    
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
@@ -559,7 +547,7 @@ public class Monster : MonoBehaviour
                                 case 1:
                                    
                                     anim.SetBool(hashAttack2, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                    
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
@@ -571,7 +559,7 @@ public class Monster : MonoBehaviour
                                 case 2:
                                     
                                     anim.SetBool(hashAttack3, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                  
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack3, false);
@@ -593,7 +581,7 @@ public class Monster : MonoBehaviour
                                  
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                   
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
@@ -605,7 +593,7 @@ public class Monster : MonoBehaviour
                                 case 1:
                                    
                                     anim.SetBool(hashAttack2, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                   
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
@@ -617,7 +605,7 @@ public class Monster : MonoBehaviour
                                 case 2:
                                 
                                     anim.SetBool(hashAttack3, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                    
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack3, false);
@@ -644,12 +632,8 @@ public class Monster : MonoBehaviour
                             switch (fungi)
                             {
                                 case 0:
-                                    //AudioManager.Instance.PlaySFX(attackSound);
-
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
-                                    //Invoke(nameof(AttackSoundPlay), 1.0f);
 
                                     yield return new WaitForSeconds(0.2f);
 
@@ -662,11 +646,8 @@ public class Monster : MonoBehaviour
                                     break;
 
                                 case 1:
-                                    //AudioManager.Instance.PlaySFX(attackSound);
-
                                     anim.SetBool(hashAttack2, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
-                                    //Invoke(nameof(AttackSoundPlay), 1.0f);
+                                    
 
                                     yield return new WaitForSeconds(0.2f);
 
@@ -690,7 +671,7 @@ public class Monster : MonoBehaviour
                                    
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                    
                                     yield return new WaitForSeconds(0.7f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
@@ -702,7 +683,7 @@ public class Monster : MonoBehaviour
                                 case 1:
                                     
                                     anim.SetBool(hashAttack2, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                    
                                     yield return new WaitForSeconds(0.7f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
@@ -714,7 +695,7 @@ public class Monster : MonoBehaviour
                                 case 2:
                                     
                                     anim.SetBool(hashAttack3, true);
-                                    AudioManager.Instance.PlaySFX(attackSound);
+                                    
                                     yield return new WaitForSeconds(0.7f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack3, false);
@@ -871,7 +852,7 @@ public class Monster : MonoBehaviour
 
         if (rigid != null)
         {
-            rigid.AddForce(this.transform.position - transform.forward * 1.0f, ForceMode.Impulse);
+            rigid.AddForce(this.transform.position - transform.forward * 5.0f, ForceMode.Impulse);
 
             Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
             overlapSphereCenter.z -= 0.5f;

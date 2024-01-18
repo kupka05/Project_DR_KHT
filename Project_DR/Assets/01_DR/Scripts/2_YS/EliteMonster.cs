@@ -395,7 +395,7 @@ public class EliteMonster : Monster
             Vector3 headPositon = transform.position + Vector3.up * headHeight;
 
             // 넉백 힘이 적용되는 동안에도 이동하도록 Coroutine 사용
-            StartCoroutine(MoveWithKnockBack(transform.position - transform.forward * 1.0f));
+            StartCoroutine(MoveWithKnockBack(transform.position - transform.forward * 5.0f));
            
 
             AudioManager.Instance.PlaySFX(knockbackSound);

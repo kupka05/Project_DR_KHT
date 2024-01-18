@@ -76,6 +76,19 @@ public static class GFunc
         return replaceStrings;
     }       // SplitConveration()
 
+    public static string CSVConversation(string _placeString)
+    {
+        _placeString = _placeString.Replace("\\n", "\n");
+        _placeString = _placeString.Replace("#", ",");
+        _placeString = _placeString.Replace("\\", "");
+        _placeString = _placeString.Replace("_", "");
+
+        //tableIDs = tableIDs.Replace("\\n", "\n");
+        //tableIDs = tableIDs.Replace("\\", "");        
+
+
+        return _placeString;
+    }       // SplitConveration()
     /// <summary>
     /// GetData해온 string값을 Replace와 Split한후 int[]로 변환시켜줘서 반환해주는 함수
     /// </summary>

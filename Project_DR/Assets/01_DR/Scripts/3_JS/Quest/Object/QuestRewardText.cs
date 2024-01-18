@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
+using static UnityEditor.PlayerSettings;
 
 namespace Js.Quest
 {
@@ -27,6 +28,15 @@ namespace Js.Quest
             Initialize();
         }
 
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.U)) 
+            {
+                PrintText(32_3_024);
+
+                // 큐에 있는 ID를 모두 출력
+            }
+        }
 
         /*************************************************
          *                Public Methods
@@ -101,6 +111,8 @@ namespace Js.Quest
         private string GetRewardText(int id, string category = "Name")
         {
             string rewardName = Data.GetString(id, category);
+            rewardName = GFunc.CSVConversation(rewardName);
+
             // 리워드 이름이 공백일 경우 예외 처리
             if (rewardName.Equals("")) { return ""; }
             string text = GFunc.SumString("<", rewardName, ">");

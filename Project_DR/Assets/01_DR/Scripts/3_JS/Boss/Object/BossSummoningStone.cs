@@ -235,7 +235,15 @@ namespace Js.Boss
         {
             Vector3 position = pillar.transform.position;
             // TODO: 포지션 랜덤 계산
-            position.z += 2.0f;
+            float[] randomPosition =
+            {
+                2.0f, -2.0f
+            };
+            int randomIndex = Random.Range(0, 2);
+            int randomIndex2 = Random.Range(0, 2);
+
+            position.z += randomPosition[randomIndex];
+            position.x += randomPosition[randomIndex2];
             position.y = 0f;
             return position;
         }

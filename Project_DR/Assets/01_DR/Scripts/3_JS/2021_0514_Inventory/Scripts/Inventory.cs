@@ -443,11 +443,19 @@ namespace Rito.InventorySystem
         /// <summary> ID로 인벤토리에 있는 아이템을 제거 </summary>
         public bool RemoveInventoryItemForID(int id, int amount)
         {
+            GFunc.Log($"삭제할 ID: {id}");
+            // ID가 0일 경우 예외처리
+            if (id.Equals(0))
+            { 
+                GFunc.Log("Inventory.RemoveInventoryItemForID():" +
+                "삭제할 ID가 0이라서 삭제할 수 없습니다.");
+                return false;
+            }
             List<int> itemIndexList = new List<int>();
             List<int> itemAmountList = new List<int>();
             int removeAmount = amount;
             int itemTotalAmount = default;
-            for (int i = 0; i < Items.Length; i++)
+            for (int i = (_items.Length - 1); i > -1; i--)
             {
                 // 아이템 보유량 체크 및 인덱스 보관
                 // 인벤토리에 있는 아이템 ID와 받아온 ID가 일치할 경우
@@ -473,6 +481,7 @@ namespace Rito.InventorySystem
                     // 인덱스 & 카운트 보관
                     itemIndexList.Add(i);
                     itemAmountList.Add(itemCount);
+                    GFunc.Log($"아이템 Amount: {itemCount}");
                 }
             }
 
@@ -480,15 +489,18 @@ namespace Rito.InventorySystem
             if (itemTotalAmount >= amount)
             {
                 // 삭제할 아이템 갯수
-                for (int i = (itemIndexList.Count - 1); i > -1; i--)
+                for (int i = 0; i < itemIndexList.Count; i++)
                 {
                     GFunc.Log(i);
                     // 해당 슬롯의 아이템 보유량 만큼 차감 & 아이템 삭제
+                    GFunc.Log($"ItemIndexList[{i}]: {itemIndexList[i]}");
                     int itemAmount = itemAmountList[i];
                     if ((removeAmount - itemAmount) > 0)
                     {
                         // 해당 슬롯 아이템 삭제
                         removeAmount -= itemAmount;
+                        GFunc.Log($"보유갯수: {itemAmount}");
+                        GFunc.Log($"아이디:{id} 삭제 갯수[{itemAmount} - {removeAmount}]");
                         Remove(itemIndexList[i]);
                     }
 
@@ -497,7 +509,9 @@ namespace Rito.InventorySystem
                     {
                         // 해당 슬롯 아이템 보유량 차감
                         itemAmount -= removeAmount;
-                        CountableItem ci = Items[i] as CountableItem;
+                        CountableItem ci = Items[itemIndexList[i]] as CountableItem;
+                        GFunc.Log($"아이디[{itemIndexList[i]}]:{id} 삭제 갯수[{itemAmount - removeAmount}]");
+
                         ci.SetAmount(itemAmount);
 
                         // 처리 종료

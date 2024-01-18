@@ -110,8 +110,6 @@ namespace Js.Boss
             // 죽음 애니메이션 재생
             _bossAnimationHandler.DieAnimation();
 
-            // 3초 후 오브젝트 숨기기
-            //Invoke("HideObject", _bossData.DestroyDelay);
             // 3초 후 오브젝트 삭제
             Destroy(gameObject, _bossData.DestroyDelay);
         }

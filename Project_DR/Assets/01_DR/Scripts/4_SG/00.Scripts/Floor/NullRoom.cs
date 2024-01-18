@@ -79,7 +79,7 @@ public class NullRoom : RandomRoom
         GameObject enhanceClone = Unit.CreateEnhance(Vector3.zero);
         Vector3 enhancePos = _anvilPos;
         enhancePos.x = enhancePos.x + 2f;
-        enhancePos.y = 2f;          // 연구된 값
+        enhancePos.y = 1.3f;          // 연구된 값
         enhanceClone.transform.position = enhancePos;
         enhanceClone.transform.parent = this.transform;
 

@@ -395,7 +395,8 @@ public class EliteMonster : Monster
             Vector3 headPositon = transform.position + Vector3.up * headHeight;
 
             // 넉백 힘이 적용되는 동안에도 이동하도록 Coroutine 사용
-            StartCoroutine(MoveWithKnockBack(transform.position - transform.forward * 2.0f));
+            StartCoroutine(MoveWithKnockBack(transform.position - transform.forward * 1.0f));
+           
 
             AudioManager.Instance.PlaySFX(knockbackSound);
 
@@ -438,6 +439,39 @@ public class EliteMonster : Monster
         // 넉백 이동이 끝나면 최종 목적지로 위치 설정
         transform.position = targetPosition;
     }
+
+    //public override void MonsterKnockBack()
+    //{
+    //    //anim.SetTrigger(hashHit);
+
+    //    rigid.WakeUp();
+
+    //    if (rigid != null)
+    //    {
+    //        rigid.AddForce(this.transform.position - transform.forward * 1.0f, ForceMode.Impulse);
+
+    //        GameObject instantKnockbackHead = Instantiate(knockBackHeadEffect, transform.position, Quaternion.Euler(-90, 0, 0));
+    //        Destroy(instantKnockbackHead, 0.7f);
+
+    //        AudioManager.Instance.PlaySFX(knockbackSound);
+
+    //        Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
+    //        overlapSphereCenter.z -= 0.5f;
+
+    //        Collider[] colliders = Physics.OverlapSphere(overlapSphereCenter, damageRadius);
+    //        //if (Physics.Raycast(transform.position, -transform.forward, out hit, 4.0f))
+
+    //        foreach (Collider collider in colliders)
+    //        {
+    //            if (collider.CompareTag("Wall"))
+    //            {
+    //                return;
+    //            }
+    //        }
+
+    //    }
+    //    MoveWithSmoothTransition(this.transform.position - transform.forward * 2.0f);
+    //}
 
     public void MonsterDestroy()
     {

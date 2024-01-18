@@ -50,6 +50,11 @@ public class SFXPlayer : MonoBehaviour
             int rand = Random.Range(0, sfxNames.Length);
             AudioManager.Instance.PlaySFX(sfxNames[rand]);
         }
+
     }
-   
+    public void PlaySFX(string name)
+    {
+        AudioManager.Instance.PlaySFX(name);
+    }
+
 }

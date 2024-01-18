@@ -149,6 +149,7 @@ public class BossNPC : NPC
     protected override void EndConveration()
     {
         if (GameManager.instance.isBossBattle) { return; }
+        GFunc.Log("BossNPC.EndConveration()");
         base.EndConveration();
 
         OffCanvasObj();                              // 캔버스 끄기

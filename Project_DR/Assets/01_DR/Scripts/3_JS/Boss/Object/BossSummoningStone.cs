@@ -98,6 +98,8 @@ namespace Js.Boss
 
                 // 플레이어를 보스룸 입구로 텔레포트
                 GameManager.instance.EndBossCutScene();
+
+                GFunc.Log("ChangeCurrentPhase()");
             }
         }
 

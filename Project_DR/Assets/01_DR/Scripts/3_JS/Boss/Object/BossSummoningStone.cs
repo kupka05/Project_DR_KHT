@@ -71,8 +71,8 @@ namespace Js.Boss
             _bossPhaseHandler = new BossPhaseHandler(boss);
 
             // HP바가 항상 플레이어를 바라보도록 컴포넌트 추가
-            LookAtTarget lookAtTarget = _bossHPSlider.transform.parent.parent.
-                gameObject.AddComponent<LookAtTarget>();
+            //LookAtTarget lookAtTarget = _bossHPSlider.transform.parent.parent.
+            //    gameObject.AddComponent<LookAtTarget>();
 
             // Old_Boss의 기본 설정과 공격 주체를 Init
             _oldBoss.InitializeBoss();

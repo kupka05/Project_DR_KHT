@@ -19,7 +19,8 @@ namespace Js.Quest
          *************************************************/
         [SerializeField] private Quest _currentQuest;
         [SerializeField] private TMP_Text _text;
-
+        [SerializeField] private float _health = 30.0f;
+        
 
         /*************************************************
          *                Public Methods
@@ -28,6 +29,7 @@ namespace Js.Quest
         {
             // Init
             _text = GetTMPText();
+            GetComponent<Damageable>().Health = _health;
         }
 
         // 현재 퀘스트 변경
@@ -38,16 +40,6 @@ namespace Js.Quest
             // 퀘스트가 변경 될 때 텍스트도 변경
             SetTextForQuest();
             GetComponent<Damageable>().onDestroyed.AddListener(DestroyQuestStone);  // 이벤트 리스너 추가
-        }
-
-
-        /*************************************************
-         *                 Unity Events
-         *************************************************/
-        private void OnDestroy()
-        {
-            //GFunc.Log("OnDestroy()");
-            //DestroyQuestStone();
         }
 
 

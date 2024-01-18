@@ -682,6 +682,12 @@ MonoBehaviour:
   capsuleColliders: []
   monsterId: 7007
   monsterType: 7
+  AttackEffect: {fileID: 0}
+  takeDamageEffect: {fileID: 3416630777954379032, guid: e8bf44b71ae3706499dbda9e1f765a66,
+    type: 3}
+  DeathEffect: {fileID: 7942883009145532105, guid: aadab50aed2cc5d4b92a3b42b591d818,
+    type: 3}
+  lastDamageTime: 0
   smash: {fileID: 2761799004774032850}
   smashFilled: {fileID: 134875404281685131}
   smashCountNum: {fileID: 8983344048537892465}
@@ -704,7 +710,11 @@ MonoBehaviour:
   stunCount: 0
   stopDistance: 0
   monName: 
-  lastDamageTime: 0
+  takeDamageSound: 
+  dieSound: 
+  firstAttackSound: 
+  attackSound: 
+  knockbackSound: 
   monsterTr: {fileID: 1805054989723933451}
   playerTr: {fileID: 0}
   anim: {fileID: 5759254170904772977}
@@ -734,6 +744,11 @@ MonoBehaviour:
   bulletPort: {fileID: 489694403}
   monsterBulletPrefab: {fileID: 7071328520476795973, guid: 70fa73216d483c147b70cfa14352b737,
     type: 3}
+  FireEffect: {fileID: 1274850694701072087, guid: 3967986466c18f443a555ca10de80e54,
+    type: 3}
+  knockBackHeadEffect: {fileID: 8353283252641946414, guid: a78e984cd2132da479d1c8408e8ffd74,
+    type: 3}
+  headHeight: 2.3
 --- !u!1 &1544141444937577124
 GameObject:
   m_ObjectHideFlags: 0

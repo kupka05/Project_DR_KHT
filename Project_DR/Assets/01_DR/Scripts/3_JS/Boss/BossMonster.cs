@@ -49,9 +49,9 @@ namespace Js.Boss
         // n초 후 공격 시작
         public void InvokeStartAttack(float delay)
         {
+            // 디버그(테스트)
             // 클론 소환석 스폰
-            int count = 5;
-            _boss.BossSummoningStone.SpawnCloneSummoningStones(count);
+            //_boss.BossSummoningStone.SpawnCloneSummoningStones(5);
 
             // 공격 시작
             Invoke("StartAttack", delay);

@@ -59,7 +59,7 @@ public class NullRoom : RandomRoom
     public void CreateAnvilObj()
     {
         Vector3 spawnPos = new Vector3((meshPos.bottomLeftCorner.x + meshPos.bottomRightCorner.x) * 0.5f,
-            0.5f,
+            (0.5f - 0.328272f),
             (meshPos.bottomLeftCorner.z + meshPos.topLeftCorner.z) * 0.5f);
         GameObject anvilclone = Unit.CreateAnvil(spawnPos);
 

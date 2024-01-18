@@ -63,6 +63,9 @@ namespace Js.Crafting
 
         public void Enhance(int type)
         {
+            // ID 혹은 필요 갯수가 0일 경우 예외 처리
+            if (_itemID.Equals(0) || NeedAmount.Equals(0)) { return; }
+
             // 재료 삭제
             ItemManager.instance.Inventory.RemoveInventoryItemForID(_itemID, NeedAmount);
         }

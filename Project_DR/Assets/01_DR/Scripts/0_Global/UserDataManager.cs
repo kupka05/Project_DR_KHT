@@ -482,6 +482,9 @@ public partial class UserDataManager : MonoBehaviour
         {
             items[i] = null;
         }
+
+        // 플레이어 인벤토리 업데이트
+        ItemManager.instance.Inventory.SortAndUpdatePlayerInventoryUI();
     }
 
     // ######################### 퀘스트 #########################

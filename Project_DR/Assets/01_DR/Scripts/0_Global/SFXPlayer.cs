@@ -36,7 +36,7 @@ public class SFXPlayer : MonoBehaviour
 
         if (loop)
         {
-            AudioManager.Instance.PlayLoopSFX(sfxNames[0], this.transform.position);
+            AudioManager.Instance.PlaySFXLoop(sfxNames[0], this.transform.position);
         }
         else
             AudioManager.Instance.PlaySFX(sfxNames[0]);
@@ -50,6 +50,11 @@ public class SFXPlayer : MonoBehaviour
             int rand = Random.Range(0, sfxNames.Length);
             AudioManager.Instance.PlaySFX(sfxNames[rand]);
         }
+
     }
-   
+    public void PlaySFX(string name)
+    {
+        AudioManager.Instance.PlaySFX(name);
+    }
+
 }

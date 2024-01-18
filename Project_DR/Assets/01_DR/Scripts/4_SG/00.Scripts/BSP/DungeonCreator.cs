@@ -136,6 +136,7 @@ public class DungeonCreator : MonoBehaviour
 
     // 그래픽 설정
     public Material material;  // 던전 바닥의 재질
+    public Material roopMaterial;   // 지붕의 마테리얼
 
     // 방 모양 수정자 설정
     //[Range(0.0f, 0.3f)]
@@ -188,7 +189,14 @@ public class DungeonCreator : MonoBehaviour
     public GameObject exitObjPrefab;        // !현재 위치값은 매직넘버로 이루어져있음
     public GameObject[] bossMonsterSkin;      // 보스몬스터 인형
     public GameObject[] bossMonsterCapsule;   // 보스몬스터 본체
-
+    [SerializeField] private int[] _bossMonsterIDs =
+    {
+        100001,     // [1층]보스 "눈"
+        100002,     // [2층]보스 "드라"
+        100003,     // [3층]보스 "보헌 블레허"
+        100004,     // [4층]보스 "리퍼"
+        100005      // [5층]보스 "드뷔시"
+    };
 
 
     // 부숴지는벽이 나올 확률 
@@ -594,6 +602,8 @@ public class DungeonCreator : MonoBehaviour
         mesh.uv = uvs;
         mesh.triangles = triangles;
         mesh.triangles = mesh.triangles.Reverse().ToArray();
+        mesh.RecalculateNormals(); // JH : 쉐이더 빛 생성을 위한 노멀 생성
+        mesh.RecalculateTangents();
 
 
         GameObject dungeonFloor = new GameObject("Mesh" + InItNum + bottomLeftCorner,
@@ -627,7 +637,9 @@ public class DungeonCreator : MonoBehaviour
         dungeonFloor.transform.position = Vector3.zero;
         dungeonFloor.transform.localScale = Vector3.one;
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
-        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        dungeonFloor.GetComponent<MeshRenderer>().material = roopMaterial;
+        dungeonFloor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;  // JH : 그림자 꺼주기
+
 
         dungeonFloor.transform.parent = roopParent.transform;
         dungeonFloor.transform.position = roopYpos;
@@ -707,6 +719,8 @@ public class DungeonCreator : MonoBehaviour
         wallPos.y = +(tempWallPosY * 1.33f) + (wallObjClone.transform.localScale.y / 2);
         wallObjClone.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1f, 9f);
         wallObjClone.GetComponent<MeshRenderer>().material = twoFloorWallMat;
+        wallObjClone.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;  // JH : 그림자 꺼주기
+
         //wallPos.y = +((2.5f * 2f) / 2) + (wallObjClone.transform.localScale.y / 2); 나중에 이 방식으로 식 바꾸기 시도해봐야겠음
         wallObjClone.transform.position = wallPos;
         wallObjClone.tag = "Wall";
@@ -768,7 +782,8 @@ public class DungeonCreator : MonoBehaviour
         mesh.vertices = vertices;
         mesh.uv = uvs;
         mesh.triangles = triangles;
-
+        mesh.RecalculateNormals(); // JH : 쉐이더 빛 생성을 위한 노멀 생성
+        mesh.RecalculateTangents();
 
         GameObject dungeonFloor = new GameObject("Mesh" + InItNum + bottomLeftCorner,
             typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
@@ -810,6 +825,7 @@ public class DungeonCreator : MonoBehaviour
 
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
         dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        dungeonFloor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;  // JH : 그림자 꺼주기
 
         // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
@@ -1119,6 +1135,8 @@ public class DungeonCreator : MonoBehaviour
         mesh.vertices = vertices;
         mesh.uv = uvs;
         mesh.triangles = triangles;
+        mesh.RecalculateNormals();
+        mesh.RecalculateTangents();
 
         //GFunc.Log($"PCMeshPos!\n TopLeft : {topLeftV}\n TopRight : {topRightV}\n BottomLeft :{bottomLeftV}\n BottomRight : {bottomRightV}");
 
@@ -1165,6 +1183,7 @@ public class DungeonCreator : MonoBehaviour
 
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
         dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        dungeonFloor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;  // JH : 그림자 꺼주기
 
         // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
@@ -1360,6 +1379,8 @@ public class DungeonCreator : MonoBehaviour
         mesh.vertices = vertices;
         mesh.uv = uvs;
         mesh.triangles = triangles;
+        mesh.RecalculateNormals(); // JH : 쉐이더 빛 생성을 위한 노멀 생성
+        mesh.RecalculateTangents();
 
         GameObject dungeonFloor;
         if (isPositive_ == false)
@@ -1405,6 +1426,7 @@ public class DungeonCreator : MonoBehaviour
 
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
         dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        dungeonFloor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;  // JH : 그림자 꺼주기
 
         // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
@@ -1452,6 +1474,8 @@ public class DungeonCreator : MonoBehaviour
         wallObjClone.transform.localScale = new Vector3(1f, 22f, 1f);
         wallObjClone.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(1f, 9f);
         wallObjClone.GetComponent<MeshRenderer>().material = twoFloorWallMat;
+        wallObjClone.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;  // JH : 그림자 꺼주기
+
         wallPos.y = +(tempWallPosY * 1.33f) + (wallObjClone.transform.localScale.y / 2);
 
         //wallPos.y = +((2.5f * 2f) / 2) + (wallObjClone.transform.localScale.y / 2); 나중에 이 방식으로 식 바꾸기 시도해봐야겠음
@@ -1519,6 +1543,8 @@ public class DungeonCreator : MonoBehaviour
         mesh.uv = uvs;
         mesh.triangles = triangles;
         mesh.triangles = mesh.triangles.Reverse().ToArray();
+        mesh.RecalculateNormals(); // JH : 쉐이더 빛 생성을 위한 노멀 생성
+        mesh.RecalculateTangents();
 
         GameObject dungeonFloor = new GameObject("Mesh" + InItNum + bottomLeftV_,
             typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
@@ -1551,7 +1577,8 @@ public class DungeonCreator : MonoBehaviour
         dungeonFloor.transform.position = Vector3.zero;
         dungeonFloor.transform.localScale = Vector3.one;
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
-        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        dungeonFloor.GetComponent<MeshRenderer>().material = roopMaterial;
+        dungeonFloor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;  // JH : 그림자 꺼주기
 
         dungeonFloor.transform.parent = roopParent.transform;
         dungeonFloor.transform.position = roopYpos;
@@ -1602,6 +1629,8 @@ public class DungeonCreator : MonoBehaviour
         mesh.uv = uvs;
         mesh.triangles = triangles;
         mesh.triangles = mesh.triangles.Reverse().ToArray();
+        mesh.RecalculateNormals(); // JH : 쉐이더 빛 생성을 위한 노멀 생성
+        mesh.RecalculateTangents();
 
         GameObject dungeonFloor = new GameObject("Mesh" + InItNum + bottomLeftV_,
             typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
@@ -1637,7 +1666,8 @@ public class DungeonCreator : MonoBehaviour
         dungeonFloor.transform.position = Vector3.zero;
         dungeonFloor.transform.localScale = Vector3.one;
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
-        dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        dungeonFloor.GetComponent<MeshRenderer>().material = roopMaterial;
+        dungeonFloor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;  // JH : 그림자 꺼주기
 
         dungeonFloor.transform.parent = roopParent.transform;
         dungeonFloor.transform.position = roopYpos;
@@ -1696,7 +1726,8 @@ public class DungeonCreator : MonoBehaviour
         mesh.vertices = vertices;
         mesh.uv = uvs;
         mesh.triangles = triangles;
-
+        mesh.RecalculateNormals(); // JH : 쉐이더 빛 생성을 위한 노멀 생성
+        mesh.RecalculateTangents();
 
         GameObject dungeonFloor = new GameObject("BossRoomMesh" + InItNum + bottomLeftV,
             typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
@@ -1738,6 +1769,7 @@ public class DungeonCreator : MonoBehaviour
 
         dungeonFloor.GetComponent<MeshFilter>().mesh = mesh;
         dungeonFloor.GetComponent<MeshRenderer>().material = material;
+        dungeonFloor.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;  // JH : 그림자 꺼주기
 
         // Obj에게 자신 꼭지점 좌표를 담을수 있는 컴포넌트 추가
         dungeonFloor.AddComponent<FloorMeshPos>().InItPos(bottomLeftV, bottomRightV, topLeftV, topRightV);
@@ -1806,8 +1838,11 @@ public class DungeonCreator : MonoBehaviour
         //bossClone = Instantiate(bossMonsterCapsule, bossPos, Quaternion.identity, monsterParent.transform);
         #endregion LEGACY
 
-        _dungeonFloor.AddComponent<BossRoom>().VariablesInIt(_floorMeshPos, bossMonsterSkin[GameManager.instance.nowFloor - 1], bossMonsterCapsule[GameManager.instance.nowFloor - 1], _dungeonFloor.transform, _centerPos);
+        // LEGACY:
+        //_dungeonFloor.AddComponent<BossRoom>().VariablesInIt(_floorMeshPos, bossMonsterSkin[GameManager.instance.nowFloor - 1], bossMonsterCapsule[GameManager.instance.nowFloor - 1], _dungeonFloor.transform, _centerPos);
 
+        int bossID = _bossMonsterIDs[GameManager.instance.nowFloor - 1];
+        _dungeonFloor.AddComponent<BossRoom>().NewVariablesInIt(_floorMeshPos, bossID, _dungeonFloor.transform, _centerPos);
     }       // CreateBossMonster()
 
     /// <summary>

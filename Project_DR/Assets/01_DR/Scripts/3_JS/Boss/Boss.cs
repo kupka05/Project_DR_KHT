@@ -27,7 +27,7 @@ namespace Js.Boss
         public Damageable Damageable => _bossData.Damageable;                                   // 데미지 관련 처리
         public Transform Target => _bossData.Target;                                            // 공격 대상
         public Animator Animator => _bossData.Animator;                                         // 애니메이터
-        
+
 
         /*************************************************
          *                 Private Fields
@@ -114,6 +114,13 @@ namespace Js.Boss
             Destroy(gameObject, _bossData.DestroyDelay);
         }
 
+        // NPC 트리거 설정
+        public void SetNPCTrigger()
+        {
+            Transform npcTrigger = transform.FindChildRecursive("GameStart");
+            npcTrigger?.gameObject?.AddComponent<BossNPCMeet>()
+                ?.Initialize(_bossSummoningStone.BossNPC);
+        }
 
         /*************************************************
          *                 Unity Methods
@@ -187,20 +194,24 @@ namespace Js.Boss
             string stonePrefabName = _bossData.StonePrefabName;
             // 프리팹에 등록된 보스 소환석 생성
             GameObject bossStonePrefab = Resources.Load<GameObject>(stonePrefabName);
-            GameObject bossStone = Instantiate(bossStonePrefab);
-            // 디버그용
-                // 추후 DungeonCreator.BossRoomCreate()함수에 추가 및 수정
-                Vector3 position = new Vector3(0f, 1.013f, -7.8f);
-                bossStone.transform.position = position;
-            // 디버그용
-            bossStone.name = stonePrefabName;
-            _bossStone = bossStone;
+            if (bossStonePrefab != null)
+            {
+                GameObject bossStone = Instantiate(bossStonePrefab);
+                bossStone.name = stonePrefabName;
+                _bossStone = bossStone;
+                // 보스 소환석 Init
+                // 기존 AddComponent에서 GetComponent로 변경함
+                // 사유: 단시간 내에 기존 boss와 결합하기 위함
+                _bossSummoningStone = bossStone.GetComponent<BossSummoningStone>();
+                _bossSummoningStone.Initialize(this);
+                _bossSummoningStone.SetParentAndPosition(transform);
+            }
 
-            // 보스 소환석 Init
-            // 기존 AddComponent에서 GetComponent로 변경함
-            // 사유: 단시간 내에 기존 boss와 결합하기 위함
-            _bossSummoningStone = bossStone.GetComponent<BossSummoningStone>();
-            _bossSummoningStone.Initialize(this);
+            // 프리팹이 없을 경우
+            else
+            {
+                GFunc.Log($"Boss.CreateSummoningStone(): Prefab[{stonePrefabName}]을 가져올 수 없습니다.");
+            }
         }
 
         // 공격 대상 검색
@@ -234,6 +245,12 @@ namespace Js.Boss
                     new Vector3(target.position.x, transform.position.y, target.position.z);
                 transform.LookAt(targetPosition);
             }
+        }
+
+        // 오브젝트 숨기기
+        public void HideObject()
+        {
+            gameObject.transform.localScale = Vector3.zero;
         }
     }
 }

@@ -1,14 +1,22 @@
+using Oculus.Interaction.Input;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.XR.Interaction;
 
 public class NullRoom : RandomRoom
 {       // NullRoomClass는 빈방에 들어갈 Class입니다.
 
     private bool isChecking;
 
+    public bool TestBool;
+    private void Update()
+    {
+        TestBool = isClearRoom;
+    }
     void Start()
     {
+
         isChecking = false;
         GameManager.isClearRoomList.Add(this);
         GameManager.instance.AddNullRoom(this);
@@ -57,8 +65,25 @@ public class NullRoom : RandomRoom
 
         anvilclone.transform.parent = this.transform;
 
+        CreateEnhanceObj(anvilclone.transform.position);
+
         GFunc.Log($"모루 소환\n{this.gameObject.name}\nPos : {anvilclone.transform.position}\n SpawnObjName : {anvilclone.gameObject.name}");
     }       // CreateAnvilObj()
+
+    /// <summary>
+    /// 무기 강화소 생성
+    /// </summary>
+    /// <param name="_anvilPos">포지션의 기준이될 모루의 포지션</param>
+    private void CreateEnhanceObj(Vector3 _anvilPos)
+    {
+        GameObject enhanceClone = Unit.CreateEnhance(Vector3.zero);
+        Vector3 enhancePos = _anvilPos;
+        enhancePos.x = enhancePos.x + 2f;
+        enhancePos.y = 2f;          // 연구된 값
+        enhanceClone.transform.position = enhancePos;
+        enhanceClone.transform.parent = this.transform;
+
+    }       // CreateEnhanceObj()
 
     IEnumerator NullRoomClear()
     {

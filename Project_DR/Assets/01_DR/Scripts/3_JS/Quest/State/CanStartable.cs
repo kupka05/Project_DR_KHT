@@ -31,6 +31,22 @@ namespace Js.Quest
                 {
                     QuestCallback.OnSubspecialQuestProgressCallback(quest);
                 }
+
+                // 현재 퀘스트가 특수 퀘스트일 경우
+                if (quest.QuestData.Type.Equals(QuestData.QuestType.SPECIAL))
+                {
+                    // 효과음 재생
+                    AudioManager.Instance.AddSFX("msfx_explosion_3_explode");
+                    AudioManager.Instance.PlaySFX("msfx_explosion_3_explode");
+                }
+
+                // 그 외의 경우
+                else
+                {
+                    // 효과음 재생
+                    AudioManager.Instance.AddSFX("SFX_Quest_UI_message_01");
+                    AudioManager.Instance.PlaySFX("SFX_Quest_UI_message_01");
+                }
             }
         }
     }

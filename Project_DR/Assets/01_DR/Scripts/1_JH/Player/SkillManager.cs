@@ -48,6 +48,7 @@ public class SkillManager : MonoBehaviour
 
     [Header("DrillLanding")]
     public SkillEvent landingSkill;
+    public TMP_Text[] landingCountText;
 
     public int LDskillCount;            // 남은 스킬 횟수
     public bool isHookShot;             // 훅샷 사용여부
@@ -257,6 +258,8 @@ public class SkillManager : MonoBehaviour
                     {
                         landingSkill.OnCollisionEvent();
                         UserData.ActiveLandingSkill();
+                        landingCountText[0].text = UserData.GetDrillLandingCount().ToString();
+                        landingCountText[1].text = UserData.GetDrillLandingCount().ToString();
                         yield break;
                     }
                 }
@@ -270,14 +273,14 @@ public class SkillManager : MonoBehaviour
 
     //  #######################  스킬 이펙트  #######################
 
-    public void ActiveSkill(int id, float amount = 100)
+    public void ActiveSkill(int id, float amount = 100, float value = 0)
     {
         string effect = Data.GetString(id, "Effect");
 
         switch (effect) 
         {
             case "Attack":
-                ActiveAttack(id, amount);
+                ActiveAttack(id, amount, value);
                 return;                
 
             case "AttackRate":
@@ -289,7 +292,7 @@ public class SkillManager : MonoBehaviour
                 return;
 
             case "CritProbability":
-                ActiveCritProbability(id, amount);
+                ActiveCritProbability(id, amount, value);
                 return;
 
             case "DrillSize":
@@ -305,11 +308,17 @@ public class SkillManager : MonoBehaviour
 
 
     // 공격력 스킬
-    public void ActiveAttack(int id, float amount = 100)
-    {
+    public void ActiveAttack(int id, float amount = 100, float value = 0)
+    {        
         float attackDamage = Data.GetFloat(id, "Value1");
+        if(value != 0)
+        {
+            attackDamage = value;
+        }
         attackDamage *= (amount / 100);
-        Damage.instance.AddEffectDamage(attackDamage); 
+        Damage.instance.AddEffectDamage(attackDamage);
+
+        GFunc.Log($"드릴강화: 공격력 수치:[{attackDamage}]");
     }
     // 공격 속도 스킬
     public void ActiveAttackRate(int id, float amount = 100)
@@ -333,12 +342,18 @@ public class SkillManager : MonoBehaviour
         Damage.instance.AddEffectCritDamage(critDamage);
     }
     // 치명타 확률 스킬
-    public void ActiveCritProbability(int id, float amount = 100)
+    public void ActiveCritProbability(int id, float amount = 100, float value = 0)
     {
         float critProbability = Data.GetFloat(id, "Value1");
+        if (value != 0)
+        {
+            critProbability = value;
+        }
         critProbability *= (amount / 100);
 
         Damage.instance.AddEffectCritProbability(critProbability);
+
+        GFunc.Log($"드릴강화: 크리티컬 확률 수치:[{critProbability}]");
     }
     // 드릴 사이즈 스킬
     public void ActiveDrillSize(int id)
@@ -377,6 +392,9 @@ public class SkillManager : MonoBehaviour
         AudioManager.Instance.AddSFX("SFX_Drill_Skill_TeraDrill_Active_02");
         AudioManager.Instance.AddSFX("SFX_Drill_Skill_TeraDrill_End_02");
         AudioManager.Instance.AddSFX("SFX_Drill_Skill_Grinding_Active_01");
+
+        landingCountText[0].text = LDskillCount.ToString();
+        landingCountText[1].text = LDskillCount.ToString();
 
         //TD_collDown = Data.GetFloat(721100, "Value2");
         //TD_drillSize = Data.GetFloat(721100, "Value1");

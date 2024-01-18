@@ -40,6 +40,12 @@ public class BossNPC : NPC
 
     }       // AwakeInIt()
 
+    public void ChangeBossLevel(int level)
+    {
+        boss = (BossLevel)level;
+        AwakeInIt();
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -148,16 +154,21 @@ public class BossNPC : NPC
         GameManager.instance.EndBossCutScene();      // 플레이어 페이드 아웃
 
         Old_Boss oldBoss = GetComponent<Old_Boss>();
+        // 신 보스일 경우
         if (oldBoss.IsUseFunctionalityOnly)
         {
-            // 신 보스일 경우 & 1초 후 공격 시작
+            GameManager.instance.isBossBattle = true;
+
+            // 1초 후 공격 시작
             BossSummoningStone bossStone = GetComponent<BossSummoningStone>();
             bossStone.Boss.BossMonster.InvokeStartAttack(1f);
+            transform.GetComponentInChildren<DialogDebug>().enabled = false;
         }
 
+        // 아닐 경우(기존 보스일 경우) 
         else
         {
-            // 아닐 경우(기존 보스일 경우) & 1초 후 공격 시작
+            // 1초 후 공격 시작
             Invoke(nameof(StartBossBattle), 1f);
         }          
     }       // EndConveration()

@@ -85,7 +85,8 @@ namespace Js.Crafting
             {
                 //TODO 강화 능력치 추가
                 GFunc.Log($"[{type}] 강화 성공! 확률[{_successProbabilities[type]}] ");
-                //UserData.ActiveSkill(_statID);
+                GFunc.Log($"StatID:{_statID} / StatAmounts[{type}]:{_statAmounts[type]}");
+                UserData.ActiveSkill(_statID, _statAmounts[type]);
 
                 // 효과음 재생
                 PlaySuccessSFX(type);

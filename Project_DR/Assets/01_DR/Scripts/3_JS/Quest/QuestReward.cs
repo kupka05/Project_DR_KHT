@@ -41,6 +41,10 @@ namespace Js.Quest
 
             // 퀘스트 타입에 따른 보상 획득
             GetQuestRewardByType();
+
+            // 효과음 재생
+            AudioManager.Instance.AddSFX("SFX_Quest_UI_Reward_01");
+            AudioManager.Instance.PlaySFX("SFX_Quest_UI_Reward_01");
         }
 
 

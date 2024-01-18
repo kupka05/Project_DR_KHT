@@ -48,6 +48,7 @@ public class SkillManager : MonoBehaviour
 
     [Header("DrillLanding")]
     public SkillEvent landingSkill;
+    public TMP_Text[] landingCountText;
 
     public int LDskillCount;            // 남은 스킬 횟수
     public bool isHookShot;             // 훅샷 사용여부
@@ -257,6 +258,8 @@ public class SkillManager : MonoBehaviour
                     {
                         landingSkill.OnCollisionEvent();
                         UserData.ActiveLandingSkill();
+                        landingCountText[0].text = UserData.GetDrillLandingCount().ToString();
+                        landingCountText[1].text = UserData.GetDrillLandingCount().ToString();
                         yield break;
                     }
                 }
@@ -389,6 +392,9 @@ public class SkillManager : MonoBehaviour
         AudioManager.Instance.AddSFX("SFX_Drill_Skill_TeraDrill_Active_02");
         AudioManager.Instance.AddSFX("SFX_Drill_Skill_TeraDrill_End_02");
         AudioManager.Instance.AddSFX("SFX_Drill_Skill_Grinding_Active_01");
+
+        landingCountText[0].text = LDskillCount.ToString();
+        landingCountText[1].text = LDskillCount.ToString();
 
         //TD_collDown = Data.GetFloat(721100, "Value2");
         //TD_drillSize = Data.GetFloat(721100, "Value1");

@@ -79,6 +79,13 @@ public class Monster : MonoBehaviour
 
     public Type monsterType = Type.HUMAN_ROBOT;
 
+    [Header("이펙트")]
+    public GameObject AttackEffect;
+    public GameObject takeDamageEffect;
+    public GameObject DeathEffect;
+
+    public float lastDamageTime;
+
     [Header("분쇄")]
     public GameObject smash;
     public UnityEngine.UI.Image smashFilled;
@@ -110,7 +117,12 @@ public class Monster : MonoBehaviour
     public float stopDistance = default;
     public string monName = default;
 
-    public float lastDamageTime;
+    [Header("사운드")]
+    public string takeDamageSound = default;
+    public string dieSound = default;
+    public string firstAttackSound = default;
+    public string attackSound = default;
+    public string knockbackSound = default;
 
     [Header("트랜스폼")]
     public Transform monsterTr;
@@ -121,8 +133,9 @@ public class Monster : MonoBehaviour
     public Rigidbody rigid;
     public NavMeshAgent nav;
 
-    IEnumerator actionRoutine;
+    public IEnumerator actionRoutine;
 
+    public Coroutine smashCoroutine;
 
     public DamageCollider[] damageCollider;
 
@@ -190,7 +203,7 @@ public class Monster : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    public void Start()
+    public virtual void Start()
     {
         capsuleColliders = GetComponentsInChildren<CapsuleCollider>();
         monsterTr = GetComponent<Transform>();
@@ -200,6 +213,12 @@ public class Monster : MonoBehaviour
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
+
+        AudioManager.Instance.AddSFX(takeDamageSound);
+        AudioManager.Instance.AddSFX(dieSound);
+        AudioManager.Instance.AddSFX(firstAttackSound);
+        AudioManager.Instance.AddSFX(attackSound);
+        AudioManager.Instance.AddSFX(knockbackSound);
 
         damageable.Health = hp;
         lastDamageTime = Time.time;
@@ -211,19 +230,19 @@ public class Monster : MonoBehaviour
             //attack = damageCollider.Damage; // 지환 : attack은 시트에서 가져온 데이터 값
         }
 
-        nameText.text = monName.ToString(); 
+        nameText.text = monName.ToString();
 
         nav.speed = speed;
 
         nav.stoppingDistance = stopDistance;
         //nav.stoppingDistance = attRange - 0.5f;
 
-        if(monsterHpSlider != null)
+        if (monsterHpSlider != null)
         {
             SetMaxHealth(hp); //hp
         }
-        
-   
+
+
         InitMonster();
 
         SetDamageCollider();   // 데미지 콜라이더를 제어하는 클래스를 세팅
@@ -288,7 +307,7 @@ public class Monster : MonoBehaviour
         GroundCheck();  // 바닥과의 거리 체크
     }
 
-    public void GetData(int id)
+    public virtual void GetData(int id)
     {
         hp = Data.GetFloat(id, "MonHP");
         exp = Data.GetInt(id, "MonExp");
@@ -304,6 +323,13 @@ public class Monster : MonoBehaviour
         maxCount = Data.GetInt(id, "MonKno");
         monName = Data.GetString(id, "MonName");
 
+        takeDamageSound = Data.GetString(id, "TDmgSnd");
+        dieSound = Data.GetString(id, "DieSnd");
+        firstAttackSound = Data.GetString(id, "FAttSnd");
+        attackSound = Data.GetString(id, "AttSnd");
+
+        knockbackSound = Data.GetString(id, "KnoSnd");
+
         if (isDebug)
         {
             hp = 100000;
@@ -313,28 +339,28 @@ public class Monster : MonoBehaviour
 
     }
 
-    
+
     public void SetMaxHealth(float newHealth)
     {
 
-        if(monsterHpSlider != null)
+        if (monsterHpSlider != null)
         {
             hpText = monsterHpSlider.transform.GetChild(2).GetComponent<TMP_Text>();
             monsterHpSlider.maxValue = newHealth;
             monsterHpSlider.value = newHealth;
             hpText.text = newHealth.ToString();
         }
-      
+
     }
 
     public void SetHealth(float newHealth)
     {
-        if(monsterHpSlider != null)
+        if (monsterHpSlider != null)
         {
             monsterHpSlider.value = newHealth;
             hpText.text = newHealth.ToString();
         }
-       
+
     }
 
     // 스테이트를 관리하는 코루틴
@@ -437,13 +463,21 @@ public class Monster : MonoBehaviour
                     switch (monsterType)
                     {
                         case Type.HUMAN_ROBOT:
+                            //AudioManager.Instance.PlaySFX(attackSound);
 
                             anim.SetBool(hashWalkingAttack, true);
                             anim.SetBool(hashAttack, true);
+                            AudioManager.Instance.PlaySFX(attackSound);
+
+                            GameObject instantAttackEffect = Instantiate(AttackEffect, transform.position, Quaternion.identity);
+                            Destroy(instantAttackEffect, 0.5f);
+
                             yield return new WaitForSeconds(0.5f);
+
                             anim.SetBool(hashidle, true);
                             anim.SetBool(hashAttack, false);
                             anim.SetBool(hashRun, false);
+
                             yield return new WaitForSeconds(attDelay);
                             break;
 
@@ -456,7 +490,9 @@ public class Monster : MonoBehaviour
                                 case 0:
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(1.3f);
+                                    
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
                                     anim.SetBool(hashWalkingAttack, false);
@@ -466,9 +502,11 @@ public class Monster : MonoBehaviour
 
                                 case 1:
                                     //anim.SetBool(hashWalkingAttack, true);
+                                  
                                     anim.SetBool(hashAttack2, true);
-
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(1.3f);
+                                   
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
@@ -478,8 +516,11 @@ public class Monster : MonoBehaviour
 
                                 case 2:
                                     //anim.SetBool(hashWalkingAttack, true);
+                                    
                                     anim.SetBool(hashAttack3, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(1.2f);
+                                    
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack3, false);
                                     //anim.SetBool(hashWalkingAttack, false);
@@ -497,8 +538,10 @@ public class Monster : MonoBehaviour
                             switch (spider)
                             {
                                 case 0:
+                                   
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
@@ -508,7 +551,9 @@ public class Monster : MonoBehaviour
                                     break;
 
                                 case 1:
+                                   
                                     anim.SetBool(hashAttack2, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
@@ -518,7 +563,9 @@ public class Monster : MonoBehaviour
                                     break;
 
                                 case 2:
+                                    
                                     anim.SetBool(hashAttack3, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack3, false);
@@ -537,8 +584,10 @@ public class Monster : MonoBehaviour
                             switch (sting)
                             {
                                 case 0:
+                                 
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
@@ -548,7 +597,9 @@ public class Monster : MonoBehaviour
                                     break;
 
                                 case 1:
+                                   
                                     anim.SetBool(hashAttack2, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
@@ -558,7 +609,9 @@ public class Monster : MonoBehaviour
                                     break;
 
                                 case 2:
+                                
                                     anim.SetBool(hashAttack3, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(0.8f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack3, false);
@@ -585,23 +638,37 @@ public class Monster : MonoBehaviour
                             switch (fungi)
                             {
                                 case 0:
+                                    //AudioManager.Instance.PlaySFX(attackSound);
+
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
+                                    //Invoke(nameof(AttackSoundPlay), 1.0f);
+
                                     yield return new WaitForSeconds(0.2f);
+
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
+
                                     yield return new WaitForSeconds(attDelay);
                                     break;
 
                                 case 1:
+                                    //AudioManager.Instance.PlaySFX(attackSound);
+
                                     anim.SetBool(hashAttack2, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
+                                    //Invoke(nameof(AttackSoundPlay), 1.0f);
+
                                     yield return new WaitForSeconds(0.2f);
+
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
                                     //anim.SetBool(hashWalkingAttack, false);
                                     anim.SetBool(hashRun, false);
+
                                     yield return new WaitForSeconds(attDelay);
                                     break;
                             }
@@ -614,8 +681,10 @@ public class Monster : MonoBehaviour
                             switch (spook)
                             {
                                 case 0:
+                                   
                                     anim.SetBool(hashWalkingAttack, true);
                                     anim.SetBool(hashAttack, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(0.7f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack, false);
@@ -625,8 +694,9 @@ public class Monster : MonoBehaviour
                                     break;
 
                                 case 1:
-
+                                    
                                     anim.SetBool(hashAttack2, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(0.7f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack2, false);
@@ -636,7 +706,9 @@ public class Monster : MonoBehaviour
                                     break;
 
                                 case 2:
+                                    
                                     anim.SetBool(hashAttack3, true);
+                                    AudioManager.Instance.PlaySFX(attackSound);
                                     yield return new WaitForSeconds(0.7f);
                                     anim.SetBool(hashidle, true);
                                     anim.SetBool(hashAttack3, false);
@@ -655,12 +727,12 @@ public class Monster : MonoBehaviour
                     nav.isStopped = true;
                     //GFunc.Log("nav.isStopped: " + nav.isStopped);
                     anim.SetTrigger(hashDie);
+                    AudioManager.Instance.PlaySFX(dieSound);
                     foreach (CapsuleCollider capsuleCollider in capsuleColliders)
                     {
                         capsuleCollider.isTrigger = true;
                     }
                     UserData.KillMonster(exp);
-
 
                     Invoke(nameof(Explosion), 3f);
 
@@ -675,13 +747,18 @@ public class Monster : MonoBehaviour
 
     public virtual void OnDeal(float damage)
     {
+        GameObject instantTakeDamage = Instantiate(takeDamageEffect, transform.position, Quaternion.identity);
+        Destroy(instantTakeDamage, 2.0f);
+
+        AudioManager.Instance.PlaySFX(takeDamageSound);
+
         // 죽지 않은 상태면 HP 바 업데이트
         if (damageable.Health > 0 && damageable.Health <= hp * 1.0f)
         {
             SetHealth(damageable.Health);
             GFunc.Log($"OnDeal체력:{damageable.Health}");
         }
-        else if(damageable.Health <= 0)
+        else if (damageable.Health <= 0)
         {
             SetHealth(0);
             GFunc.Log($"리턴 체력:{damageable.Health}");
@@ -699,6 +776,8 @@ public class Monster : MonoBehaviour
 
         smashCount++;   // 분쇄 카운트 추가
 
+
+
         if (smashCount >= smashMaxCount)
         {
             smash.SetActive(true);
@@ -710,7 +789,11 @@ public class Monster : MonoBehaviour
             smashFilled.fillAmount = 1;
             //GFunc.Log($"분쇄FillAmount:{smashFilled.fillAmount}");
 
-            StartCoroutine(SmashTime());
+            if (smashCoroutine != null)
+            {
+                StopCoroutine(smashCoroutine);
+            }
+            smashCoroutine = StartCoroutine(SmashTime());
 
             if (countNum <= 3)
             {
@@ -729,6 +812,7 @@ public class Monster : MonoBehaviour
             //GFunc.Log("스택 별 데미지 진입");
 
             //GFunc.Log("중첩 숫자 증가");
+
         }
 
         count++;
@@ -737,7 +821,6 @@ public class Monster : MonoBehaviour
         if (count >= maxCount)
         {
             count = 0;
-
 
             MonsterKnockBack();
 
@@ -748,6 +831,32 @@ public class Monster : MonoBehaviour
         }
     }
 
+    public IEnumerator SmashTime()
+    {
+
+        while (smashFilled.fillAmount > 0)
+        {
+
+            if (countNum == 2 || countNum == 3 || countNum == 4)
+            {
+                smashFilled.fillAmount -= Time.deltaTime / skillTime;
+                //Debug.Log($"쿨타임 스택{countNum}:{smashFilled.fillAmount}");
+            }
+            yield return null;
+        }
+
+        if (smashFilled.fillAmount <= 0)
+        {
+            smash.SetActive(false);
+            smashCount = 0;
+            countNum = 1;
+            //GFunc.Log("사라지나");
+        }
+        yield return null;
+
+    }
+
+
     public virtual void MonsterKnockBack()
     {
         //anim.SetTrigger(hashHit);
@@ -756,9 +865,9 @@ public class Monster : MonoBehaviour
 
         if (rigid != null)
         {
-            rigid.AddForce(this.transform.position - transform.forward * 2.0f, ForceMode.Impulse);
+            rigid.AddForce(this.transform.position - transform.forward * 1.0f, ForceMode.Impulse);
 
-            Vector3 overlapSphereCenter = this.transform.position-transform.forward * 0.5f;
+            Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
             overlapSphereCenter.z -= 0.5f;
 
             Collider[] colliders = Physics.OverlapSphere(overlapSphereCenter, damageRadius);
@@ -766,16 +875,14 @@ public class Monster : MonoBehaviour
 
             foreach (Collider collider in colliders)
             {
-                if(collider.CompareTag("Wall"))
+                if (collider.CompareTag("Wall"))
                 {
                     return;
                 }
             }
-         
+
         }
-        MoveWithSmoothTransition(this.transform.position - transform.forward * 2.0f);
-
-
+        MoveWithSmoothTransition(this.transform.position - transform.forward * 1.0f);
     }
 
     public void OnDrawGizmos()
@@ -815,11 +922,11 @@ public class Monster : MonoBehaviour
             //GFunc.Log("스택1진입");
             damageable.Health -= SmashDamageCalculate(damage, 1);
             // 갱신된 체력 값을 적용
-            if(monsterHpSlider != null)
+            if (monsterHpSlider != null)
             {
                 SetHealth(damageable.Health);
             }
-          
+
 
             // 남은 체력을 로그로 출력
             //Debug.Log($"추가 분쇄 데미지 1 : {SmashDamageCalculate(damage, 1)}, 남은체력:{damageable.Health}");
@@ -862,26 +969,6 @@ public class Monster : MonoBehaviour
         return Mathf.RoundToInt(damage * (1 + _debuff)) - damage;
     }
 
-    public IEnumerator SmashTime()
-    {
-        while (smashFilled.fillAmount > 0)
-        {
-            //GFunc.Log($"남은 시간:{smashFilled.fillAmount * skillTime}");
-            //GFunc.Log("분쇄 fill");
-            smashFilled.fillAmount -= 1 * Time.smoothDeltaTime / skillTime;
-
-            if (smashFilled.fillAmount <= 0)
-            {
-                smash.SetActive(false);
-                smashCount = 0;
-                countNum = 1;
-                //GFunc.Log("사라지나");
-            }
-            yield return null;
-        }
-
-    }
-
     // 스턴 딜레이
     public IEnumerator StunDelay()
     {
@@ -892,7 +979,7 @@ public class Monster : MonoBehaviour
         yield return new WaitForSeconds(stunDelay);
         //isStun = false;
         rigid.WakeUp();
-        
+
         //while (0.1f <= distanceFromGround)
         //{
         //    if (distanceFromGround <= 0.1f)
@@ -908,7 +995,6 @@ public class Monster : MonoBehaviour
 
         yield break;
         //damageable.stun = false;
-        yield break;
     }
 
     //void OnDrawGizmos()
@@ -926,11 +1012,16 @@ public class Monster : MonoBehaviour
     //    }
 
     //}
-    public virtual void Explosion()
+    public void Explosion()
     {
         Destroy(this.gameObject);
 
     }
+
+    //public void AttackSoundPlay()
+    //{
+    //    AudioManager.Instance.PlaySFX(attackSound);
+    //}
 
 
     // 플레이어에게 드릴 랜딩을 받을 시 몬스터 넉백 
@@ -1045,9 +1136,26 @@ public class Monster : MonoBehaviour
         isAttack = false;
     }
 
+    public void DieAnimEvent(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                GameObject instantDie = Instantiate(DeathEffect, transform.position, Quaternion.identity);
+                //GFunc.Log($"사망 애니메이션 이펙트:{instantDie}");
+                break;
+        }
+    }
 
-
-
+    public void AttackAnimEvent(int index)
+    {
+        switch(index)
+        {
+            case 0:
+                AudioManager.Instance.PlaySFX(attackSound);
+                break;
+        }
+    }
 }
 
 

@@ -691,8 +691,14 @@ MonoBehaviour:
   nameText: {fileID: 3936496649411517326}
   state: 0
   capsuleColliders: []
-  monsterId: 7014
+  monsterId: 7019
   monsterType: 4
+  AttackEffect: {fileID: 0}
+  takeDamageEffect: {fileID: 5303303942638057009, guid: bd4b645a601ba5b41baa15d6b3bfc3d5,
+    type: 3}
+  DeathEffect: {fileID: 5577991931055398839, guid: d547f87078d102f40b51a6882f7b4d0b,
+    type: 3}
+  lastDamageTime: 0
   smash: {fileID: 9194064404344597517}
   smashFilled: {fileID: 6348717740180974932}
   smashCountNum: {fileID: 2697443430416056238}
@@ -715,7 +721,11 @@ MonoBehaviour:
   stunCount: 0
   stopDistance: 0
   monName: "\uC57D\uD574\uC9C4 \uD391\uAC70\uC2A4"
-  lastDamageTime: 0
+  takeDamageSound: 
+  dieSound: 
+  firstAttackSound: 
+  attackSound: 
+  knockbackSound: 
   monsterTr: {fileID: 0}
   playerTr: {fileID: 0}
   anim: {fileID: 0}

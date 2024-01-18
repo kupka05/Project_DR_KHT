@@ -15,6 +15,7 @@ namespace Js.Boss
         // 기본 스탯
         public Boss Boss => _boss;                                                      // 보스
         public int ID => _id;                                                           // 보스 아이디
+        public int BossKeyID => _bossKeyID;                                             // 보스 키 아이디
         public int BossType => _bossType;                                               // 보스 타입
         public float HP => _hp;                                                         // 현재 체력
         public float MaxHP => _maxHP;                                                   // 최대 체력
@@ -35,6 +36,10 @@ namespace Js.Boss
         public float DestroyDelay => _destroyDelay;                                     // 오브젝트가 사라지는데 걸리는 시간 
         public string StonePrefabName => _stonePrefabName;                              // 가져올 소환석 프리팹 이름
         public string SoundName => _soundName;                                          // 불러올 사운드 이름
+        public int Phase1StoneSpawnCountRange => _phase1StoneSpawnCountRange;           // 1페이즈 소환석 스폰 갯수 범위
+        public int Phase2StoneSpawnCountRange => _phase2StoneSpawnCountRange;           // 2페이즈 소환석 스폰 갯수 범위
+        public int Phase3StoneSpawnCountRange => _phase3StoneSpawnCountRange;           // 3페이즈 소환석 스폰 갯수 범위
+        public int Phase4StoneSpawnCountRange => _phase4StoneSpawnCountRange;           // 4페이즈 소환석 스폰 갯수 범위
 
 
         /*************************************************
@@ -42,6 +47,7 @@ namespace Js.Boss
          *************************************************/
         [SerializeField] private Boss _boss;
         [SerializeField] private int _id;
+        [SerializeField] private int _bossKeyID;
         [SerializeField] private int _bossType;
         [SerializeField] private float _hp;
         [SerializeField] private float _maxHP;
@@ -62,6 +68,10 @@ namespace Js.Boss
         [SerializeField] private float _destroyDelay = 3.0f;
         [SerializeField] private string _stonePrefabName;
         [SerializeField] private string _soundName;
+        [SerializeField] private int _phase1StoneSpawnCountRange;
+        [SerializeField] private int _phase2StoneSpawnCountRange;
+        [SerializeField] private int _phase3StoneSpawnCountRange;
+        [SerializeField] private int _phase4StoneSpawnCountRange;
 
 
         /*************************************************
@@ -72,6 +82,7 @@ namespace Js.Boss
         {
             _boss = boss;
             _id = id;
+            _bossKeyID = Data.GetInt(id, "BossKeyID");
             _bossType = Data.GetInt(id, "Stage");
             _hp = Data.GetFloat(id, "HP");
             _maxHP = Data.GetFloat(id, "MaxHP");
@@ -83,6 +94,10 @@ namespace Js.Boss
             _patternInterval = Data.GetFloat(id, "AttackPatternInterval");
             _stonePrefabName = Data.GetString(id, "StonePrefabName");
             _soundName = Data.GetString(id, "SoundName");
+            _phase1StoneSpawnCountRange = Data.GetInt(id, "Phase1StoneSpawnCountRange");
+            _phase2StoneSpawnCountRange = Data.GetInt(id, "Phase2StoneSpawnCountRange");
+            _phase3StoneSpawnCountRange = Data.GetInt(id, "Phase3StoneSpawnCountRange");
+            _phase4StoneSpawnCountRange = Data.GetInt(id, "Phase4StoneSpawnCountRange");
             for (int i = 0; i < _phaseAttackPatternCounts.Length; i++)
             {
                 int index = i + 1;

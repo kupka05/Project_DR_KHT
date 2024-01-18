@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 786c70c55e6c60d46b5bb989909e8df0, type: 2}
+  - {fileID: 2100000, guid: ad59d77b51894da4e9ea245ebb869a69, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -175,7 +175,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a6de00f2c2eaec2458741f9ec51c38bf, type: 2}
+  - {fileID: 2100000, guid: 92b29e1fea358314d9284b86f8083ffe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -662,7 +662,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 786c70c55e6c60d46b5bb989909e8df0, type: 2}
+  - {fileID: 2100000, guid: 92b29e1fea358314d9284b86f8083ffe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -944,6 +944,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9183015632079340973}
+  - component: {fileID: 8419573709696602825}
   m_Layer: 0
   m_Name: HookShotColumn
   m_TagString: Untagged
@@ -967,3 +968,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8419573709696602825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429497850350062768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d1be5c69aa75e446abd81719339cd63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

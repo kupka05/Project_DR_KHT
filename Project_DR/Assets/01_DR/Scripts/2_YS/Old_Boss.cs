@@ -381,9 +381,9 @@ public class Old_Boss : MonoBehaviour
             case 1:
                 if(shootLazer != null)
                 {
-                    StartCoroutine(shootLazer);
-                    shootLazer = null;
+                   StopCoroutine(shootLazer);
                 }
+                StartCoroutine(shootLazer);
                 //GFunc.Log("패턴 2 선택");
                 break;
             case 2:
@@ -644,8 +644,11 @@ public class Old_Boss : MonoBehaviour
             initialTargetImagePosition = target.position;
 
             // 처음 위치로 설정
-            targetImage.transform.position = initialTargetImagePosition;
-            targetImage.gameObject.SetActive(true);
+            if (targetImage != null)
+            {
+                targetImage.gameObject.SetActive(true);
+                targetImage.transform.position = initialTargetImagePosition; // Set position after activation
+            }
 
             // 기다리고
             yield return new WaitForSeconds(waitLazer);
@@ -1058,10 +1061,11 @@ public class Old_Boss : MonoBehaviour
     }
 
     // 보스 처치 후 퀘스트
-    private void ClearBossKillQuest()
+    public void ClearBossKillQuest(int bossID = 0)
     {
+        if (bossID.Equals(0)) { bossID = bossId; }
         // 보스 죽음 퀘스트
-        QuestCallback.OnBossKillCallback(bossId);
+        QuestCallback.OnBossKillCallback(bossID);
 
         Quest curSubQuest = Unit.GetCanCompleteSubQuest();    // 현재 진행중인 서브 퀘스트 반환 (보스 처치 퀘스트)
         int clearID = curSubQuest.QuestData.ID;              // 진행중 서브 퀘스트 ID

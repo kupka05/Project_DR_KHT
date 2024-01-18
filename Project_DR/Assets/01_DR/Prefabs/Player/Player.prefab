@@ -75539,6 +75539,9 @@ MonoBehaviour:
   canAttack: 0
   effectDrillSize: 0
   landingSkill: {fileID: 1523373499}
+  landingCountText:
+  - {fileID: 3132796633792719472}
+  - {fileID: 4930737523004177525}
   LDskillCount: 0
   isHookShot: 0
   activePcDistance: 5
@@ -103743,6 +103746,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb6d283d59577c94a8f810e4fabac4d7, type: 3}
+--- !u!114 &3132796633792719472 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7662570179012892, guid: eb6d283d59577c94a8f810e4fabac4d7,
+    type: 3}
+  m_PrefabInstance: {fileID: 3126295156519011180}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7525058879717221293 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4831436405020729537, guid: eb6d283d59577c94a8f810e4fabac4d7,
@@ -103953,6 +103968,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4933208189577221481}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4930737523004177525 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7662570179012892, guid: eb6d283d59577c94a8f810e4fabac4d7,
+    type: 3}
+  m_PrefabInstance: {fileID: 4933208189577221481}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5839199382898137281
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -104171,7 +104198,7 @@ PrefabInstance:
     - target: {fileID: 3216023250103863860, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.37971684
+      value: 0.379717
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250103863860, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -104216,7 +104243,7 @@ PrefabInstance:
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.001859562
+      value: 0.00085481274
       objectReference: {fileID: 0}
     - target: {fileID: 3216023250585719580, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -104246,12 +104273,12 @@ PrefabInstance:
     - target: {fileID: 4010713275993210068, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.99999934
+      value: 0.9999999
       objectReference: {fileID: 0}
     - target: {fileID: 4010713275993210068, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4010713275993210070, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -104276,7 +104303,7 @@ PrefabInstance:
     - target: {fileID: 4010713276122279518, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0027151874
+      value: -0.00011882895
       objectReference: {fileID: 0}
     - target: {fileID: 4010713276122279518, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -104301,7 +104328,7 @@ PrefabInstance:
     - target: {fileID: 4010713277854409151, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
       propertyPath: m_Size
-      value: 0.99999964
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4010713277854409151, guid: dd2e04b3e4bde3249b11fd18421ad6ae,
         type: 3}
@@ -104465,6 +104492,11 @@ PrefabInstance:
         type: 3}
       propertyPath: debugMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562283376345319334, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
+        type: 3}
+      propertyPath: grappleableLayer.m_Bits
+      value: 1052673
       objectReference: {fileID: 0}
     - target: {fileID: 8768672552246940888, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
         type: 3}
@@ -104716,6 +104748,11 @@ PrefabInstance:
         type: 3}
       propertyPath: debugMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562283376345319334, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
+        type: 3}
+      propertyPath: grappleableLayer.m_Bits
+      value: 1052673
       objectReference: {fileID: 0}
     - target: {fileID: 8768672552246940888, guid: cedfbf2e120607f4581a6c7ccc6bedbf,
         type: 3}

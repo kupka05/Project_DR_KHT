@@ -4894,7 +4894,6 @@ GameObject:
   - component: {fileID: 7076901441743498909}
   - component: {fileID: 6981720189339774125}
   - component: {fileID: 6981665260937009763}
-  - component: {fileID: 7184292830218322425}
   - component: {fileID: 2794685429537608638}
   - component: {fileID: -41904239291356011}
   - component: {fileID: 1751393375884396242}
@@ -9790,23 +9789,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &7184292830218322425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7071328520476795973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa5c1e37409a9344a344c0468db383d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabSound: {fileID: 1297775994297274, guid: d0db2ed5808dafa44a58583c86aa54e8,
-    type: 3}
-  destroyWhenDone: 1
-  soundPrefabIsChild: 0
-  pitchRandomMultiplier: 1.1
 --- !u!54 &2794685429537608638
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9844,6 +9826,8 @@ MonoBehaviour:
   isDamage: 0
   speed: 0
   damage: 0
+  explosionEffect: {fileID: 7399788194015789856, guid: fb6dfda01693c4a4dbcfcbfba6ed0b5d,
+    type: 3}
 --- !u!114 &1751393375884396242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9856,8 +9840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 25
-  ColliderRigidbody: {fileID: 0}
+  ColliderRigidbody: {fileID: 2794685429537608638}
   MinForce: 0.1
   LastRelativeVelocity: 0
   LastDamageForce: 0
@@ -9869,6 +9852,8 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 1
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
   isMonster: 0
 --- !u!1 &7071489091541652799
 GameObject:

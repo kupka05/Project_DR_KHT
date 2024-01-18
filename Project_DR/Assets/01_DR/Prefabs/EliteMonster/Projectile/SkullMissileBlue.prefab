@@ -14708,11 +14708,14 @@ MonoBehaviour:
   damageCollider: {fileID: 4077754250712289386}
   target: {fileID: 0}
   attack: 1
-  ProjectileID: 7013
+  ProjectileID: 7014
   damageRadius: 1
   isDamage: 0
   speed: 0
   damage: 0
+  explosionSound: 
+  explosionEffect: {fileID: 5034511839510392720, guid: be823c73d257f094d88a4e127e7823c3,
+    type: 3}
 --- !u!114 &4077754250712289386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14725,7 +14728,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 25
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -14738,6 +14740,8 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 1
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
   isMonster: 0
 --- !u!54 &1600496005629856420
 Rigidbody:

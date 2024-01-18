@@ -49,6 +49,11 @@ namespace Js.Boss
         // n초 후 공격 시작
         public void InvokeStartAttack(float delay)
         {
+            // 클론 소환석 스폰
+            int count = 5;
+            _boss.BossSummoningStone.SpawnCloneSummoningStones(count);
+
+            // 공격 시작
             Invoke("StartAttack", delay);
         }
 
@@ -88,12 +93,11 @@ namespace Js.Boss
             int patternCount = _boss.BossData.AvailableAttackPatternsList.Count;
             for (int i = 0; i < patternCount; i++)
             {
-                // 패턴 간격만큼 대기
-                yield return _waitForSeconds;
-
                 // 공격을 실행
                 Attack(_boss.BossData.AvailableAttackPatternsList[i]);
 
+                // 패턴 간격만큼 대기
+                yield return _waitForSeconds;
             }
 
             // 보스가 정지 상태가 아닐 경우 재귀 호출

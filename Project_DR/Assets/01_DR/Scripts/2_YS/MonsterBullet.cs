@@ -23,6 +23,9 @@ public class MonsterBullet : MonoBehaviour
     public float speed = default;
     public float damage = default;
 
+    [Header("사운드")]
+    public string explosionSound = default;
+
     [Header("투사체 폭발 이펙트")]
     public GameObject explosionEffect;
 
@@ -37,6 +40,8 @@ public class MonsterBullet : MonoBehaviour
         target = GameObject.FindWithTag("Player").GetComponent<PlayerPosition>().playerPos;
         damageCollider = GetComponent<DamageCollider>();
         rigid = GetComponent<Rigidbody>();
+
+        AudioManager.Instance.AddSFX(explosionSound);
 
         transform.LookAt(target.position);
 
@@ -68,7 +73,9 @@ public class MonsterBullet : MonoBehaviour
                     collider.GetComponent<Damageable>().DealDamage(damage);
                     //GFunc.Log($"데미지:{damage}");
                     GameObject instantExplosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
-                    GFunc.Log($"투사체 플레이어 닿았을 시 이펙트:{instantExplosion}");
+                    Destroy(instantExplosion, 2.0f);
+
+                    AudioManager.Instance.PlaySFX(explosionSound);
 
                     isDamage = true;
                     Destroy(this.gameObject);
@@ -96,6 +103,7 @@ public class MonsterBullet : MonoBehaviour
     {
         speed = (float)DataManager.Instance.GetData(ProjectileID, "MonSpd", typeof(float));
         damage = (float)DataManager.Instance.GetData(ProjectileID, "MonAtt", typeof(float));
+        explosionSound = Data.GetString(ProjectileID, "ExpSnd");
     }
 
 

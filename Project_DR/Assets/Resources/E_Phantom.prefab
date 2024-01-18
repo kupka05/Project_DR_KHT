@@ -983,6 +983,7 @@ MonoBehaviour:
     type: 3}
   DeathEffect: {fileID: 8494042018576327620, guid: 991096b43714e804aa1fa94073a323d2,
     type: 3}
+  lastDamageTime: 0
   smash: {fileID: 8189611694916455127}
   smashFilled: {fileID: 6209220935196707726}
   smashCountNum: {fileID: 3125364194842270068}
@@ -1005,7 +1006,11 @@ MonoBehaviour:
   stunCount: 0
   stopDistance: 0
   monName: 
-  lastDamageTime: 0
+  takeDamageSound: 
+  dieSound: 
+  firstAttackSound: 
+  attackSound: 
+  knockbackSound: 
   monsterTr: {fileID: 7158893497336324002}
   playerTr: {fileID: 0}
   anim: {fileID: 7158893497326710850}
@@ -1039,7 +1044,7 @@ MonoBehaviour:
     type: 3}
   knockBackHeadEffect: {fileID: 360272009604297309, guid: b2c658507f2970d4e8a38c91e239ca42,
     type: 3}
-  headHeight: 2
+  headHeight: 2.1
 --- !u!1 &7158893497336087428
 GameObject:
   m_ObjectHideFlags: 0

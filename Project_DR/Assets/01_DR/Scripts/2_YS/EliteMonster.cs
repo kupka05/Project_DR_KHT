@@ -281,6 +281,7 @@ public class EliteMonster : Monster
                     nav.isStopped = true;
                     //GFunc.Log("nav.isStopped: " + nav.isStopped);
                     anim.SetTrigger(hashDie);
+                    AudioManager.Instance.PlaySFX(dieSound);
                     Invoke(nameof(MonsterDestroy), 3.0f);
                     foreach (CapsuleCollider capsuleCollider in capsuleColliders)
                     {
@@ -300,7 +301,9 @@ public class EliteMonster : Monster
     public override void OnDeal(float damage)
     {
         GameObject instantTakeDamage = Instantiate(takeDamageEffect, transform.position, Quaternion.identity);
-        GFunc.Log($"피격 이펙트:{instantTakeDamage}");
+        Destroy(instantTakeDamage, 2.0f);
+
+        AudioManager.Instance.PlaySFX(takeDamageSound);
 
         // 죽지 않은 상태면 HP 바 업데이트
         if (damageable.Health > 0 && damageable.Health <= hp * 1.0f)
@@ -391,16 +394,15 @@ public class EliteMonster : Monster
         {
             Vector3 headPositon = transform.position + Vector3.up * headHeight;
 
-            rigid.AddForce(this.transform.position - transform.forward * 2.0f, ForceMode.Impulse);
+            // 넉백 힘이 적용되는 동안에도 이동하도록 Coroutine 사용
+            StartCoroutine(MoveWithKnockBack(transform.position - transform.forward * 2.0f));
 
-            GameObject instantKnockbackHead = Instantiate(knockBackHeadEffect, headPositon, Quaternion.Euler(-90, 0, 0));
-            GFunc.Log($"머리 쪽 이펙트:{instantKnockbackHead}");
+            AudioManager.Instance.PlaySFX(knockbackSound);
 
             Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
             overlapSphereCenter.z -= 0.5f;
 
             Collider[] colliders = Physics.OverlapSphere(overlapSphereCenter, damageRadius);
-            //if (Physics.Raycast(transform.position, -transform.forward, out hit, 4.0f))
 
             foreach (Collider collider in colliders)
             {
@@ -410,8 +412,31 @@ public class EliteMonster : Monster
                 }
             }
 
+            // 넉백 힘이 적용된 후에 이펙트를 머리 위치로 생성
+            GameObject instantKnockbackHead = Instantiate(knockBackHeadEffect, headPositon, Quaternion.Euler(-90, 0, 0));
+            GFunc.Log($"머리 쪽 이펙트:{instantKnockbackHead}");
+            Destroy(instantKnockbackHead, 0.7f);
         }
-        MoveWithSmoothTransition(this.transform.position - transform.forward * 2.0f);
+    }
+
+    // Coroutine으로 넉백 중에도 이동하도록 처리
+    private IEnumerator MoveWithKnockBack(Vector3 targetPosition)
+    {
+        float duration = 1.0f; // 넉백 이동 시간 (조절 가능)
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            // 넉백 이동 중에 머리를 따라가도록 이동
+            transform.position = Vector3.Lerp(transform.position, targetPosition, elapsed / duration);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 넉백 이동이 끝나면 최종 목적지로 위치 설정
+        transform.position = targetPosition;
     }
 
     public void MonsterDestroy()
@@ -441,6 +466,8 @@ public class EliteMonster : Monster
                 GameObject instantRight = Instantiate(FireEffect, bulletPortRight.position, bulletPortRight.rotation);
                 GFunc.Log($"이펙트 발생:{instantRight}");
 
+                AudioManager.Instance.PlaySFX(attackSound);
+
                 break;
         }
     }
@@ -457,6 +484,9 @@ public class EliteMonster : Monster
 
                 GameObject instantFire = Instantiate(FireEffect, bulletPort.position, bulletPort.rotation);
                 GFunc.Log($"이펙트 발생:{instantFire}");
+
+                AudioManager.Instance.PlaySFX(attackSound);
+
                 break;
 
                 case 1:
@@ -467,6 +497,9 @@ public class EliteMonster : Monster
 
                 GameObject instantFireRight = Instantiate(FireEffect, bulletPortRight.position, bulletPortRight.rotation);
                 GFunc.Log($"이펙트 발생:{instantFireRight}");
+
+                AudioManager.Instance.PlaySFX(attackSound);
+
                 break;
 
                 case 2:
@@ -477,6 +510,9 @@ public class EliteMonster : Monster
 
                 GameObject instantFireLeft = Instantiate(FireEffect, bulletPortLeft.position, bulletPortLeft.rotation);
                 GFunc.Log($"이펙트 발생:{instantFireLeft}");
+
+                AudioManager.Instance.PlaySFX(attackSound);
+
                 break;
         }
     }

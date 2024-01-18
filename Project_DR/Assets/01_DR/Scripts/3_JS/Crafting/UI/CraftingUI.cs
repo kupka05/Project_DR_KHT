@@ -66,6 +66,7 @@ namespace Js.Crafting
             {
                 GameObject canvas = _craftingCanvases[i].Parent.gameObject;
                 canvas.SetActive(false);
+                GFunc.Log($"{canvas.name} {canvas.activeSelf}");
             }
         }
     }

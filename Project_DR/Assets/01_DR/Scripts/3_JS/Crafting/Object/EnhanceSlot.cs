@@ -25,6 +25,7 @@ namespace Js.Crafting
         // 슬롯에 드릴이 나갈 떄 호출
         public void OutSlot()
         {
+            GFunc.Log("OutSlot()");
             // 캔버스를 전부 끔
             _craftingUI.DisableAllCanvas();
         }

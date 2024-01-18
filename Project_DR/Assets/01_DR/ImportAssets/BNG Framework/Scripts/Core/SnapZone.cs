@@ -148,14 +148,14 @@ namespace BNG {
             ClosestGrabbable = getClosestGrabbable();
 
             // 고정 아이템이고 지금 들고있는 아이템이 없는 경우
-            if(isHolder && HeldItem == null && StartingItem != null)
+            if (isHolder && HeldItem == null && StartingItem != null)
             {
                 // 부모오브젝트가 있을 때
                 if (StartingItem.transform.parent != null)
                 {
                     // 이 스냅존이 없으면 : 아이템이 보관되어있지 않으면
                     if (StartingItem.transform.parent.GetComponent<SnapZone>() == null)
-                    { 
+                    {
                         // 현재 코루틴이 없을때만 실행
                         if (resetCoroutine == null)
                         {
@@ -281,11 +281,11 @@ namespace BNG {
             }
 
             // 고정아이템일 경우
-            if(isHolder)
+            if (isHolder)
             {
                 // 스타트 아이템이 아니면 보관할 수 없도록 하기
                 if (closest != null && closest != StartingItem)
-                return null;
+                    return null;
             }
 
             // 강화슬롯일 경우
@@ -298,7 +298,7 @@ namespace BNG {
                     // 넣을 아이템(closest)가 드릴일 경우
                     if (closest != null && closest.Equals(StartingItems[i]))
                     {
-                        isDrill = true;                     
+                        isDrill = true;
                     }
                 }
 
@@ -354,15 +354,15 @@ namespace BNG {
             // Set scale factor            
             // Use SnapZoneScale if specified
 
-            if (grab.GetComponent<SnapZoneScale>()) 
+            if (grab.GetComponent<SnapZoneScale>())
             {
                 _scaleTo = grab.GetComponent<SnapZoneScale>().Scale;
             }
-            else 
+            else
             {
                 _scaleTo = ScaleItem;
             }
- 
+
 
             // Is there an offset to apply?
             SnapZoneOffset off = grab.GetComponent<SnapZoneOffset>();
@@ -428,10 +428,10 @@ namespace BNG {
         /// This is typically called by the GrabAction on the SnapZone
         /// </summary>
         /// <param name="grabber"></param>
-        public virtual void GrabEquipped(Grabber grabber) 
+        public virtual void GrabEquipped(Grabber grabber)
         {
             if (grabber != null) {
-                if (HeldItem) 
+                if (HeldItem)
                 {
                     //// 강화 슬롯일 경우 grabber 체인지
                     //if (isEnhance)
@@ -514,7 +514,7 @@ namespace BNG {
 
             // 강화 슬롯이 아닐 경우 기존 코드 실행
             // 사유: 사이즈가 커지는 현상 발생
-            if (! isEnhance)
+            if (!isEnhance)
             {
                 HeldItem.ResetScale();
             }
@@ -561,14 +561,22 @@ namespace BNG {
             // 강화 슬롯일 경우
             if (isEnhance)
             {
-                // 1초 후 삭제
-                Destroy(HeldItem.gameObject, 1.0f);
+                // 삭제 && 강화 UI 캔버스 끄기
+                Destroy(HeldItem.gameObject);
+
+                HeldItem = null;
 
                 // 강화 UI 캔버스 끄기
                 gameObject.GetComponent<EnhanceSlot>().OutSlot();
             }
 
             HeldItem = null;
+        }
+
+        // 강화 슬롯 초기화
+        public void ResetEnhanceSlot()
+        {
+            ReleaseAll();
         }
 
         // 지환 : 아이템을 다시 홀스터로 되돌리는 스크립트

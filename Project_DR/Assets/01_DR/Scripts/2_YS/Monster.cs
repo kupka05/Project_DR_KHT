@@ -865,7 +865,7 @@ public class Monster : MonoBehaviour
 
         if (rigid != null)
         {
-            rigid.AddForce(this.transform.position - transform.forward * 2.0f, ForceMode.Impulse);
+            rigid.AddForce(this.transform.position - transform.forward * 1.0f, ForceMode.Impulse);
 
             Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
             overlapSphereCenter.z -= 0.5f;
@@ -882,7 +882,7 @@ public class Monster : MonoBehaviour
             }
 
         }
-        MoveWithSmoothTransition(this.transform.position - transform.forward * 2.0f);
+        MoveWithSmoothTransition(this.transform.position - transform.forward * 1.0f);
     }
 
     public void OnDrawGizmos()

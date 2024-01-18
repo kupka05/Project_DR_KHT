@@ -38,7 +38,7 @@ public enum NPCID
     Geta_Random = 1111301,
     Galba_Random = 1110601,
     Explorer_Random = 1111102
-    
+
 
 
 }
@@ -111,29 +111,31 @@ public class NPC : MonoBehaviour
 
 
 
-    protected Animator animator;        // NPC 애니메이터
+    protected Animator animator;            // NPC 애니메이터
 
-    protected StringBuilder npcStringBuilder;   // NPC 대사 출력해줄 Sb
-    protected GameObject canvasObj;     // NPC가 가지고 있는 Canvas를 키고 끌때 사용될 GameObject
-    protected NPC_CanvasController NpcCanvas;       // NPC의 텍스트들을 관리해주는 스크립트
-    public Queue<string> converationText;  // NPC의 대사를 담아둘 Queue
+    protected StringBuilder npcStringBuilder; // NPC 대사 출력해줄 Sb
+    protected GameObject canvasObj;         // NPC가 가지고 있는 Canvas를 키고 끌때 사용될 GameObject
+    protected NPC_CanvasController NpcCanvas; // NPC의 텍스트들을 관리해주는 스크립트
+    public Queue<string> converationText;   // NPC의 대사를 담아둘 Queue
 
     private Coroutine delayCoroutine;       // 코루틴 캐싱
     private WaitForSeconds delayTime;       // 딜레이 캐싱
 
-    protected int npcID;                // NPC 스프레드시트 ID    -> 파생된 자식 클래스에서 결정
-    public int nowDialogueId;        // 현재 대화의 Id
+    protected int npcID;                    // NPC 스프레드시트 ID    -> 파생된 자식 클래스에서 결정
+    public int nowDialogueId;               // 현재 대화의 Id
 
     // 자식 클래스가 ParamsInIt()를 호출하면서 결정
-    protected NpcType npcType;                    // NPC 타입을 시트값에 따라 지정해줄것임
-    public NpcTriggerType npcTriggerType;      // NPC의 트리거 타입을 지정할 Enum 시트값에 따라서 할당될것임
+    protected NpcType npcType;              // NPC 타입을 시트값에 따라 지정해줄것임
+    public NpcTriggerType npcTriggerType;   // NPC의 트리거 타입을 지정할 Enum 시트값에 따라서 할당될것임
 
     protected string npcName;               // NPC 이름
     protected StringBuilder npcTitle;              // NPC 칭호 (대화에 따라서 변화 할수 있기 떄문에 StringBuidler사용)   
     protected string npcWaitMotion;         // NPC 대기모션 (애니메이션에 사용)
     protected string npcConversationMotion; // NPC 대화모션 (애니메이션에 사용)
-    protected string npcMoveMotion;         // NPC 이동모션 (애니메이션에 사용)     
+    protected string npcMoveMotion;         // NPC 이동모션 (애니메이션에 사용)
     protected int[] conversationRefIDs;     // NPC 대화 참조할 테이블 ID -> inIt할때 초기화(선택지도 있기에 ID 필요)
+
+    protected string npcStartConmunicationSound; // NPC 대화 시작 사운드 이름 (Resource폴더에서 끌어올 에셋 이름)    
 
     protected float npcHP;                  // NPC 체력
     protected float npcMoveSpeed;           // NPC 이동속도
@@ -153,13 +155,13 @@ public class NPC : MonoBehaviour
     protected event StartConversationDelegate StartConverationEvent; // StartConversationDelegate의 이벤트
 
     protected delegate void NextConverationDelegate(int _nextConverationId);
-    protected event NextConverationDelegate NextConverationEvent;       // 다음대화가 존재한다면 NPC의 다음 대사가 나오도록하는 이벤트
+    protected event NextConverationDelegate NextConverationEvent; // 다음대화가 존재한다면 NPC의 다음 대사가 나오도록하는 이벤트
 
     protected delegate void EndConverationDelegate();             // NPC와 대화가 끝나면 호출될 델리게이트
     protected event EndConverationDelegate EndConverationEvent;   // StopConversationDelegate의 이벤트
 
     // EventRoom의 SubscribeToNpcClearEvent함수 호출함
-    public event System.Action isCommunityCompleateAction;     // NPC와의 대화가 끝나면 이 이벤트를 호출해서 문을 열도록 할것임
+    public event System.Action isCommunityCompleateAction;        // NPC와의 대화가 끝나면 이 이벤트를 호출해서 문을 열도록 할것임
 
 
 
@@ -213,12 +215,27 @@ public class NPC : MonoBehaviour
         npcConversationScope = (float)DataManager.Instance.GetData(_npcID, "ConversationScope", typeof(float));
         npcRecognitionRange = (float)DataManager.Instance.GetData(_npcID, "RecognitionRange", typeof(float));
 
-
+        TempSoundNameGet(_npcID);
 
         NPCTriggerTypeInIt(_npcID);
         ConvertionRefIdInIt(_npcID);
 
     }       // ParamsInIt()
+
+    /// <summary>
+    /// 임시 : 사운드 이름 가져오는 함수 (NPC에 모든 사운드가 Fix되면 그때 ParamsInIt함수로 옮길예정)
+    /// </summary>
+    private void TempSoundNameGet(int _npcID)
+    {
+        if (Data.GetInt(_npcID, "StartConversationSoundId") != 0)
+        {
+            npcStartConmunicationSound = Data.GetString(Data.GetInt(_npcID, "StartConversationSoundId"), "SoundName");
+        }
+        else
+        {
+            npcStartConmunicationSound = "0";   // 0으로 초기화해서 임시로 예외처리
+        }
+    }
 
     private void NPCTriggerTypeInIt(int _npcID)
     {
@@ -285,6 +302,8 @@ public class NPC : MonoBehaviour
             {
                 isTryCommunity = true;
                 //delayCoroutine = StartCoroutine(CommunicationDelay());
+                AudioManager.Instance.AddSFX(npcStartConmunicationSound);
+                AudioManager.Instance.PlaySFX(npcStartConmunicationSound);
                 StartConverationEvent?.Invoke();
             }
             else { /*PASS*/ }
@@ -295,6 +314,8 @@ public class NPC : MonoBehaviour
             if (isReadyToAutoComunication == true && isComunity == false)
             {
                 isComunity = true;
+                AudioManager.Instance.AddSFX(npcStartConmunicationSound);
+                AudioManager.Instance.PlaySFX(npcStartConmunicationSound);
                 StartConverationEvent?.Invoke();
             }
         }
@@ -477,7 +498,7 @@ public class NPC : MonoBehaviour
         {
             foreach (int questId in antecedentQuestIdList)
             {
-                if ((quest.QuestData.ID == questId) && 
+                if ((quest.QuestData.ID == questId) &&
                     quest.QuestData.Condition == QuestData.ConditionType.NPC_TALK ||
                     quest.QuestData.Condition == QuestData.ConditionType.GIVE_ITEM)
                 {
@@ -487,7 +508,7 @@ public class NPC : MonoBehaviour
                         stringBuilder.Append(Data.GetString(outId, "AntecedentQuest"));
                         stringBuilder.Replace("_", "");
                         if (questId == int.Parse(stringBuilder.ToString()))
-                        {                            
+                        {
                             QuestCallback.OnDialogueCallback(questId);
                             Unit.ClearQuestByID(questId);
                             GFunc.Log($"NPC 특정대사 출력 조건에서 조건에 맞아 OnDialogueCallBack 호출\n 넘겨준 매개변수 : {stringBuilder}");
@@ -497,7 +518,7 @@ public class NPC : MonoBehaviour
                 }
             }
         }
-        
+
 
         return 0;
 
@@ -602,7 +623,7 @@ public class NPC : MonoBehaviour
     /// /// <param name="_rewardId">보상 ID</param>
     private void RewardTypeCheck(int _rewardId)
     {
-        float isHpReward = Data.GetFloat(_rewardId, "GiveHealth");       
+        float isHpReward = Data.GetFloat(_rewardId, "GiveHealth");
         if (isHpReward != 0)
         {       // HP관련 예외처리
             UserData.SetCurrentHealth(isHpReward);
@@ -610,7 +631,7 @@ public class NPC : MonoBehaviour
         else { /*PASS*/ }
 
         int isEffectReward = Data.GetInt(_rewardId, "Reward_1_KeyID");
-        if(isEffectReward >= (int)RewardID.EffectIdDefalut)
+        if (isEffectReward >= (int)RewardID.EffectIdDefalut)
         {       // 임펙트관련 예외처리
             RewardEffect(_rewardId);
         }
@@ -636,7 +657,7 @@ public class NPC : MonoBehaviour
         else if ((int)RewardID.SilverCoinStartId <= _rewardId && (int)RewardID.SilverCoinEndId >= _rewardId)
         {
             RewardSilverCoin(_rewardId);
-        }        
+        }
 
         // 보상 텍스트 출력
         Unit.PrintRewardText(_rewardId);
@@ -725,7 +746,7 @@ public class NPC : MonoBehaviour
             }
             else { /*PASS*/ }
         }
-        
+
     }
     #endregion 보상지급 함수
 

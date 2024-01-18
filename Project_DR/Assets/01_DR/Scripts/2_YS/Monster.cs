@@ -168,6 +168,7 @@ public class Monster : MonoBehaviour
     public bool isStack = false;
     public bool isAttack = false;
     public bool isUpper = false;
+    public bool isAttackSound = false;
 
     public IEnumerator stunRoutine; // 스턴 루틴
 
@@ -458,6 +459,8 @@ public class Monster : MonoBehaviour
                 // ATTACK 상태 =======================================================
                 case State.ATTACK:
 
+                    GFunc.Log("공격상태 진입");
+                    
                     //GFunc.Log("ATTACK state");
 
                     switch (monsterType)
@@ -467,8 +470,11 @@ public class Monster : MonoBehaviour
 
                             anim.SetBool(hashWalkingAttack, true);
                             anim.SetBool(hashAttack, true);
-                            AudioManager.Instance.PlaySFX(attackSound);
+                            GFunc.Log("애니메이션 진입");
 
+                            AudioManager.Instance.PlaySFX(attackSound);
+                            GFunc.Log("공격 사운드 진입");
+                            
                             GameObject instantAttackEffect = Instantiate(AttackEffect, transform.position, Quaternion.identity);
                             Destroy(instantAttackEffect, 0.5f);
 

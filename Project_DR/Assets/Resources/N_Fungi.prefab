@@ -652,7 +652,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!195 &125497160
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -698,6 +698,7 @@ MonoBehaviour:
     type: 3}
   DeathEffect: {fileID: 5577991931055398839, guid: d547f87078d102f40b51a6882f7b4d0b,
     type: 3}
+  lastDamageTime: 0
   smash: {fileID: 9194064404344597517}
   smashFilled: {fileID: 6348717740180974932}
   smashCountNum: {fileID: 2697443430416056238}
@@ -720,7 +721,11 @@ MonoBehaviour:
   stunCount: 0
   stopDistance: 0
   monName: 
-  lastDamageTime: 0
+  takeDamageSound: 
+  dieSound: 
+  firstAttackSound: 
+  attackSound: 
+  knockbackSound: 
   monsterTr: {fileID: 0}
   playerTr: {fileID: 0}
   anim: {fileID: 0}
@@ -736,6 +741,7 @@ MonoBehaviour:
   isStack: 0
   isAttack: 0
   isUpper: 0
+  isAttackSound: 0
   distanceDebug: 0
   isDebug: 0
   distanceFromGround: 0

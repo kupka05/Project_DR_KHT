@@ -157,12 +157,12 @@ namespace Js.Boss
         {
             if (_bossData.HP <= 0)
             {
+                // 보스 처치 콜백 호출
+                _oldBoss.ClearBossKillQuest(_bossData.BossKeyID);
+
                 // 죽음 관련 처리
                 _boss.Dead();
 
-                // LEGACY:
-                // 0.1초 후 소환석 오브젝트 삭제
-                //Destroy(gameObject, 0.1f);
                 // 소환석 숨기기
                 gameObject.transform.localScale = Vector3.zero;
             }

@@ -1058,10 +1058,11 @@ public class Old_Boss : MonoBehaviour
     }
 
     // 보스 처치 후 퀘스트
-    private void ClearBossKillQuest()
+    public void ClearBossKillQuest(int bossID = 0)
     {
+        if (bossID.Equals(0)) { bossID = bossId; }
         // 보스 죽음 퀘스트
-        QuestCallback.OnBossKillCallback(bossId);
+        QuestCallback.OnBossKillCallback(bossID);
 
         Quest curSubQuest = Unit.GetCanCompleteSubQuest();    // 현재 진행중인 서브 퀘스트 반환 (보스 처치 퀘스트)
         int clearID = curSubQuest.QuestData.ID;              // 진행중 서브 퀘스트 ID

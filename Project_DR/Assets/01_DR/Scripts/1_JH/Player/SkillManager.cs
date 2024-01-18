@@ -313,7 +313,9 @@ public class SkillManager : MonoBehaviour
             attackDamage = value;
         }
         attackDamage *= (amount / 100);
-        Damage.instance.AddEffectDamage(attackDamage); 
+        Damage.instance.AddEffectDamage(attackDamage);
+
+        GFunc.Log($"드릴강화: 공격력 수치:[{attackDamage}]");
     }
     // 공격 속도 스킬
     public void ActiveAttackRate(int id, float amount = 100)
@@ -347,6 +349,8 @@ public class SkillManager : MonoBehaviour
         critProbability *= (amount / 100);
 
         Damage.instance.AddEffectCritProbability(critProbability);
+
+        GFunc.Log($"드릴강화: 크리티컬 확률 수치:[{critProbability}]");
     }
     // 드릴 사이즈 스킬
     public void ActiveDrillSize(int id)

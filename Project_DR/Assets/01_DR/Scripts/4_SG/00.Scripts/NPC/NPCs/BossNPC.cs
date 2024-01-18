@@ -148,8 +148,6 @@ public class BossNPC : NPC
     /// <summary> 대사끝날 때 호출 </summary>
     protected override void EndConveration()
     {
-        if (GameManager.instance.isBossBattle) { return; }
-        GFunc.Log("BossNPC.EndConveration()");
         base.EndConveration();
 
         OffCanvasObj();                              // 캔버스 끄기
@@ -164,6 +162,7 @@ public class BossNPC : NPC
             // 1초 후 공격 시작
             BossSummoningStone bossStone = GetComponent<BossSummoningStone>();
             bossStone.Boss.BossMonster.InvokeStartAttack(1f);
+            transform.GetComponentInChildren<DialogDebug>().enabled = false;
         }
 
         // 아닐 경우(기존 보스일 경우) 

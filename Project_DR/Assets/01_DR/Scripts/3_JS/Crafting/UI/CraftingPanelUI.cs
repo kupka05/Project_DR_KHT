@@ -25,6 +25,7 @@ namespace Js.Crafting
         [SerializeField] private Button _button;
         [SerializeField] private TMP_Text _text;
         [SerializeField] private bool _isEnhance;                  // 강화 패널인지 여부
+        [SerializeField] BNG.SnapZone _enhanceSlot;                // 강화 슬롯
 
 
         /*************************************************
@@ -43,6 +44,8 @@ namespace Js.Crafting
             _text.text = ConvertText(id);
             _button = GetComponent<Button>();
             _button?.onClick.AddListener(OnClick);
+            Transform enhanceSlot = _craftingCanvas.CraftingUI.transform.FindChildRecursive("Enhance_Slot");
+            _enhanceSlot = enhanceSlot?.GetComponent<BNG.SnapZone>();
         }
 
 
@@ -136,6 +139,8 @@ namespace Js.Crafting
                 {
                     // 캔버스 타입이 [Type.ONE]일 경우
                     case CraftingCanvas.Type.ONE:
+                        // 모든 캔버스 토글 & 강화 ID 전송
+                        _craftingCanvas.CraftingUI.ToggleAllCanvas(_id);
                         // EMPTY //
                         break;
 
@@ -151,7 +156,7 @@ namespace Js.Crafting
                 }
 
                 // 모든 캔버스 토글 & 강화 ID 전송
-                _craftingCanvas.CraftingUI.ToggleAllCanvas(_id);
+                //_craftingCanvas.CraftingUI.ToggleAllCanvas(_id);
             }
         }
 
@@ -180,6 +185,9 @@ namespace Js.Crafting
             {
                 GFunc.Log("재료가 부족합니다.");
             }
+
+            // 강화 슬롯 초기화
+            _enhanceSlot.ResetEnhanceSlot();
         }
     }
 }

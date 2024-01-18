@@ -185,12 +185,12 @@ public class AudioManager : MonoBehaviour
 
         if (audio == null)
         {
-            GFunc.Log("BGM을 찾을 수 없습니다.");
+            GFunc.Log("추가하려는 BGM을 찾을 수 없습니다.");
             return;
         }
         if (musicSounds.ContainsKey(name))
         {
-            GFunc.Log(name + "은 이미 등록된 BGM입니다.");
+            //GFunc.Log(name + "은 이미 등록된 BGM입니다.");
             return;
         }
 
@@ -213,12 +213,12 @@ public class AudioManager : MonoBehaviour
 
         if (audio == null)
         {
-            GFunc.Log("SFX을 찾을 수 없습니다.");
+            GFunc.Log("추가하려는 SFX을 찾을 수 없습니다.");
             return;
         }
         if (sfxSounds.ContainsKey(name))
         {
-            GFunc.Log(name + "은 이미 등록된 SFX입니다.");
+            //GFunc.Log(name + "은 이미 등록된 SFX입니다.");
             return;
         }
 

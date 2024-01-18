@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
-using static UnityEditor.PlayerSettings;
 
 namespace Js.Quest
 {

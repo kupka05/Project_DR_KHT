@@ -192,8 +192,10 @@ public class ItemManager : MonoBehaviour
         GameObject item = CreateItem(pos, id, amount, true);
         item.transform.SetParent(parent);
         item.transform.localPosition = pos;
-        item.GetComponent<ItemColliderHandler>().enabled = false;
-        item.GetComponent<Grabbable>().enabled = false;
+        ItemColliderHandler itemColliderHandler = item.GetComponent<ItemColliderHandler>();
+        Grabbable grabbable = item.GetComponent<Grabbable>();
+        if (itemColliderHandler != null) { itemColliderHandler.enabled = false; }
+        if (grabbable != null) { grabbable.enabled = false; }
 
         return item;
     }

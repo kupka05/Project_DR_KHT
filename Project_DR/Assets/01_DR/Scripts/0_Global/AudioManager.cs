@@ -43,7 +43,9 @@ public class AudioManager : MonoBehaviour
     public Dictionary<string, Sound> sfxSounds = new Dictionary<string, Sound>();
     public AudioMixer audioMixer;
     public AudioSource musicSource, sfxSource;
-    
+    public GameObject sourceParent;
+
+
     private string[] audioPath = new string[2];
 
 
@@ -61,7 +63,6 @@ public class AudioManager : MonoBehaviour
     {
         // 씬이 로드될 때 마다 오디오 초기화
         AudioInit();
-
     }
 
     private void Awake()
@@ -79,6 +80,7 @@ public class AudioManager : MonoBehaviour
         sfxSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[0];
         musicSource.loop = true;
         sfxSource.loop = true;
+        AudioInit();
     }
     // 오디오 초기화
     public void AudioInit()
@@ -87,6 +89,8 @@ public class AudioManager : MonoBehaviour
         sfxSounds.Clear();
         musicSounds = new Dictionary<string, Sound>();
         sfxSounds = new Dictionary<string, Sound>();
+        GameObject parent = new GameObject("Audio Sources");
+        sourceParent = parent;
     }
 
     #region ######################_Play Audio_#####################
@@ -156,18 +160,16 @@ public class AudioManager : MonoBehaviour
     #region ##################_Set Audio Volume_#################
     public void MasterVolume(float volume)
     {
-        audioMixer.SetFloat("Master", volume);
+        audioMixer.SetFloat("Master", GFunc.DBToLinear(volume));
     }
     public void MusicVolume(float volume)
     {
-
-        audioMixer.SetFloat("BGM", volume);
+        audioMixer.SetFloat("BGM", GFunc.DBToLinear(volume));
 
     }
     public void SFXVolume(float volume)
     {
-        audioMixer.SetFloat("SFX", volume);
-
+        audioMixer.SetFloat("SFX", GFunc.DBToLinear(volume));
     }
     #endregion
 
@@ -185,12 +187,12 @@ public class AudioManager : MonoBehaviour
 
         if (audio == null)
         {
-            GFunc.Log("BGM을 찾을 수 없습니다.");
+            GFunc.Log("추가하려는 BGM을 찾을 수 없습니다.");
             return;
         }
         if (musicSounds.ContainsKey(name))
         {
-            GFunc.Log(name + "은 이미 등록된 BGM입니다.");
+            //GFunc.Log(name + "은 이미 등록된 BGM입니다.");
             return;
         }
 
@@ -213,12 +215,12 @@ public class AudioManager : MonoBehaviour
 
         if (audio == null)
         {
-            GFunc.Log("SFX을 찾을 수 없습니다.");
+            GFunc.Log("추가하려는 SFX을 찾을 수 없습니다.");
             return;
         }
         if (sfxSounds.ContainsKey(name))
         {
-            GFunc.Log(name + "은 이미 등록된 SFX입니다.");
+            //GFunc.Log(name + "은 이미 등록된 SFX입니다.");
             return;
         }
 
@@ -235,7 +237,9 @@ public class AudioManager : MonoBehaviour
     // 특정 위치에 사운드를 플레이
     private void PlayClipAtPoint(AudioClip clip, Vector3 position, bool loopEnable = false)
     {
-        GameObject gameObject = new GameObject("One shot audio");
+        GameObject gameObject = new GameObject(clip.name + " Audio Source");
+
+        gameObject.transform.parent = sourceParent.transform;
         gameObject.transform.position = position;
         AudioSource audioSource = (AudioSource)gameObject.AddComponent(typeof(AudioSource));
         audioSource.clip = clip;
@@ -244,6 +248,9 @@ public class AudioManager : MonoBehaviour
         audioSource.Play();
         audioSource.loop = loopEnable;
         audioSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[0];
-        UnityEngine.Object.Destroy(gameObject, clip.length * ((Time.timeScale < 0.01f) ? 0.01f : Time.timeScale));
+        if (loopEnable == false)
+        {
+            UnityEngine.Object.Destroy(gameObject, clip.length * ((Time.timeScale < 0.01f) ? 0.01f : Time.timeScale));
+        }
     }
 }

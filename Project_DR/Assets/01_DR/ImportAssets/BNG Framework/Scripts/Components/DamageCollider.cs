@@ -109,7 +109,6 @@ namespace BNG
             LastRelativeVelocity = collision.relativeVelocity.magnitude;
 
 
-
             if (LastDamageForce >= MinForce)
             {
 

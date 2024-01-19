@@ -22,7 +22,9 @@ namespace Jihwan
                     item = Unit.AddFieldItem(this.transform.position, itemID);
                     break;
                 case Spawn.Anvil:
-                    item = Unit.CreateAnvil(this.transform.position);
+                    Vector3 position = this.transform.position;
+                    position.y -= 0.328272f;
+                    item = Unit.CreateAnvil(position);
                     break;
                 case Spawn.Enhance:
                     item = Unit.CreateEnhance(this.transform.position);

@@ -189,6 +189,10 @@ public class NPC_CanvasController : MonoBehaviour
         string choice1 = Data.GetString(_conversationRefID, "Choice1");
         string choice2 = Data.GetString(_conversationRefID, "Choice2");
         string choice3 = Data.GetString(_conversationRefID, "Choice3");
+
+        choice1 = GFunc.ReplaceString(choice1);
+        choice2 = GFunc.ReplaceString(choice2);
+        choice3 = GFunc.ReplaceString(choice3);
         //GFunc.Log($"선택지 시트에서 가져오기 시도\nChoice1 : {choice1}\nChoice2 : {choice2}\nChoice3 : {choice3}");
         // 아래 Choice3는 존재하면 띄우는 조건이 만족하는지 한번 체크해야함 (12.13기준 퀘스트가 나와야 클리어여부를 끌어와서 체크할수있음)
 

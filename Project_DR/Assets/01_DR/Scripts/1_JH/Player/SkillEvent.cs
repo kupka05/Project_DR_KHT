@@ -42,6 +42,10 @@ public class SkillEvent : MonoBehaviour
     WaitForSeconds GDWaitForSeconds;
     WaitForSeconds WaitForSeconds = new WaitForSeconds(0.25f);
 
+    public bool bomb;
+    public float bombForce;
+    public float damageVal;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -179,10 +183,21 @@ public class SkillEvent : MonoBehaviour
         //targetPos.y += 0.5f;
 
         Vector3 force = targetPos - skillPos * landingForce;
+        if(bomb)
+        {
+            GFunc.Log("폭탄 터진다.");
+            force = targetRB.transform.position - transform.position * bombForce;
+            targetRB.AddForce(force, ForceMode.Impulse);
+        }
+        else
         targetRB.AddForce(force * 2, ForceMode.Impulse);
 
         Damageable damage = target.GetComponent<Damageable>();
-        if(damage)
+        if(bomb && damage)
+        {
+            damage.DealDamage(damageAmount: damageVal);
+        }
+        else if(damage)
         {
             (float, bool) _damage = Damage.instance.DamageCalculate(UserData.GetDrillDamage(), true);
             damage.DealDamage(damageAmount : _damage.Item1, _critical: _damage.Item2);

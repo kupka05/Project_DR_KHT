@@ -91,6 +91,7 @@ namespace Js.Quest
         // 서부, 특수 퀘스트의 currentValue가 변경될 때
         public static void OnSubspecialQuestValueChangedCallback(Quest quest)
         {
+            GFunc.Log($"OnSubspecialQuestValueChangedCallback(): {quest.QuestData.name} /  {quest.QuestData.CurrentValue}");
             SubspecialQuestValueChangedCallback?.Invoke(quest);
         }
 

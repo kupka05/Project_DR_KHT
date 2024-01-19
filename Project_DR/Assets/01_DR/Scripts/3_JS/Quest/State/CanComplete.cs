@@ -31,7 +31,7 @@ namespace Js.Quest
 
             // 서브, 특수 퀘스트일 경우 콜백 호출
             if (quest.QuestData.Type.Equals(QuestData.QuestType.SUB)
-                && quest.QuestData.Type.Equals(QuestData.QuestType.SPECIAL))
+                || quest.QuestData.Type.Equals(QuestData.QuestType.SPECIAL))
             {
                 QuestCallback.OnSubspecialQuestCompletedCallback(quest);
             }

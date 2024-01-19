@@ -46,7 +46,7 @@ public class QuestPannel : MonoBehaviour
     private void Start()
     {
         QuestCallback.SubspecialQuestProgressCallback += AddQuest;
-        QuestCallback.SubspecialQuestValueChangedCallback += AddQuest;
+        QuestCallback.SubspecialQuestValueChangedCallback += UpdateQuest;
         QuestCallback.SubspecialQuestCompletedCallback += RemoveQuest;
 
         transform.parent.localScale = offSize;
@@ -101,6 +101,7 @@ public class QuestPannel : MonoBehaviour
     /// <summary> 퀘스트를 업데이트하는 메서드  </summary>
     public void UpdateQuest(Quest quest)
     {
+        GFunc.Log($"UpdateQuest(): {quest.QuestData.CurrentValue}");
         // 딕셔너리의 퀘스트 내용 업데이트
         QuestList[quest].GetComponent<QuestPannelItem>().SetAchievement(quest.QuestData.CurrentValue.ToString());
     }

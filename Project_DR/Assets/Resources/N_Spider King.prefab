@@ -798,6 +798,7 @@ MonoBehaviour:
   monsterHpSlider: {fileID: 2767832186488124884}
   nameText: {fileID: 1467414971368222873}
   state: 0
+  lastDamageTime: 0
   capsuleColliders: []
   monsterId: 7004
   monsterType: 2
@@ -806,7 +807,9 @@ MonoBehaviour:
     type: 3}
   DeathEffect: {fileID: 3012592975942428725, guid: e2e52621e2c03184486a6f555c62a961,
     type: 3}
-  lastDamageTime: 0
+  knockBackHeadEffect: {fileID: 8353283252641946414, guid: a78e984cd2132da479d1c8408e8ffd74,
+    type: 3}
+  headHeight: 1.4
   smash: {fileID: 7171906250592818437}
   smashFilled: {fileID: 4903143754628453468}
   smashCountNum: {fileID: 4143141110946989734}

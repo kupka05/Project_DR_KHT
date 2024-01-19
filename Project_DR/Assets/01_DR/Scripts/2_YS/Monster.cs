@@ -73,6 +73,8 @@ public class Monster : MonoBehaviour
         SIMPLE_TOADSTOOL,
         SIMPLE_PHANTOM
     }
+    public float lastDamageTime;
+
     public CapsuleCollider[] capsuleColliders;
 
     public int monsterId;
@@ -83,8 +85,10 @@ public class Monster : MonoBehaviour
     public GameObject AttackEffect;
     public GameObject takeDamageEffect;
     public GameObject DeathEffect;
+    public GameObject knockBackHeadEffect;
 
-    public float lastDamageTime;
+    [Header("이펙트 머리 위치")]
+    public float headHeight = default;
 
     [Header("분쇄")]
     public GameObject smash;
@@ -465,9 +469,6 @@ public class Monster : MonoBehaviour
 
                             anim.SetBool(hashWalkingAttack, true);
                             anim.SetBool(hashAttack, true);
-                            
-                            GameObject instantAttackEffect = Instantiate(AttackEffect, transform.position, Quaternion.identity);
-                            Destroy(instantAttackEffect, 0.5f);
 
                             yield return new WaitForSeconds(0.5f);
 
@@ -843,22 +844,35 @@ public class Monster : MonoBehaviour
 
     }
 
-
     public virtual void MonsterKnockBack()
     {
-        //anim.SetTrigger(hashHit);
-
         rigid.WakeUp();
 
         if (rigid != null)
-        {
-            rigid.AddForce(this.transform.position - transform.forward * 5.0f, ForceMode.Impulse);
+        {        
+            Vector3 knockbackDirection = -transform.forward * 3.0f;
+            rigid.AddForce(knockbackDirection, ForceMode.Impulse);
 
-            Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
-            overlapSphereCenter.z -= 0.5f;
+            AudioManager.Instance.PlaySFX(knockbackSound);
+
+            // 몬스터와 머리가 함께 뒤로 이동하도록 처리
+            MoveWithSmoothTransition(transform.position + knockbackDirection);
+
+            // 몬스터 머리에 이펙트 생성
+            Vector3 headPosition = transform.position + Vector3.up * headHeight;
+            GameObject instantKnockbackHead = Instantiate(knockBackHeadEffect, headPosition, Quaternion.Euler(-90, 0, 0));
+            Destroy(instantKnockbackHead, 1.2f);
+
+            // 몬스터 머리에 생성된 이펙트를 몬스터 머리와 함께 따라가도록 처리
+            instantKnockbackHead.transform.parent = transform;
+
+            //몬스터 벽 인식
+            Vector3 overlapSphereCenter = this.transform.position - transform.forward * 2f;
+            overlapSphereCenter.z += 1.5f;
+
+
 
             Collider[] colliders = Physics.OverlapSphere(overlapSphereCenter, damageRadius);
-            //if (Physics.Raycast(transform.position, -transform.forward, out hit, 4.0f))
 
             foreach (Collider collider in colliders)
             {
@@ -867,15 +881,13 @@ public class Monster : MonoBehaviour
                     return;
                 }
             }
-
         }
-        MoveWithSmoothTransition(this.transform.position - transform.forward * 1.0f);
     }
 
-    public void OnDrawGizmos()
+    public virtual void OnDrawGizmos()
     {
-        Vector3 overlapSphereCenter = this.transform.position - transform.forward * 0.5f;
-        overlapSphereCenter.z -= 0.5f;
+        Vector3 overlapSphereCenter = this.transform.position - transform.forward * 2f;
+        overlapSphereCenter.z += 1.5f;
 
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(overlapSphereCenter, damageRadius);
@@ -1141,6 +1153,17 @@ public class Monster : MonoBehaviour
             case 0:
                 AudioManager.Instance.PlaySFX(attackSound);
                 break;
+        }
+    }
+
+    public void AttackEffectEvent(int index)
+    {
+        switch(index)
+        {
+            case 0:
+                GameObject instantAttackEffect = Instantiate(AttackEffect, transform.position, Quaternion.identity);
+                Destroy(instantAttackEffect, 0.5f);
+                break;    
         }
     }
 }

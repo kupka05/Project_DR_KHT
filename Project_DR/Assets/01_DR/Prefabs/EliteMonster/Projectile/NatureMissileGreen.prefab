@@ -19724,7 +19724,6 @@ GameObject:
   - component: {fileID: 3613096300958142600}
   - component: {fileID: 3497864507844574582}
   - component: {fileID: 3528102288489327446}
-  - component: {fileID: 3720592830468552766}
   - component: {fileID: 3127734311578486675}
   - component: {fileID: 4824626823948853797}
   - component: {fileID: 4742627412182471613}
@@ -24640,23 +24639,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &3720592830468552766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3618340128805133372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa5c1e37409a9344a344c0468db383d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabSound: {fileID: 1297775994297274, guid: 9150517e6165b0f41a4b19231fc8c2ca,
-    type: 3}
-  destroyWhenDone: 1
-  soundPrefabIsChild: 1
-  pitchRandomMultiplier: 1.1
 --- !u!54 &3127734311578486675
 Rigidbody:
   m_ObjectHideFlags: 0

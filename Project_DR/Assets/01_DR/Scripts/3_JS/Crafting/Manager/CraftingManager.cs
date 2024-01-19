@@ -166,7 +166,7 @@ namespace Js.Crafting
             GameObject anvil = Instantiate(prefab);
             anvil.name = _anvilPrefabName;
             anvil.transform.position = pos;
-            _anvil = anvil.GetComponent<Anvil>();
+            _anvil = anvil.transform.GetChild(0).GetComponent<Anvil>();
 
             return anvil;
         }

@@ -726,8 +726,9 @@ namespace Rito.InventorySystem
             // null인 슬롯은 타입 검사 없이 필터 활성화
             if(itemData != null)
             {
-                // 포션 & 폭탄 아이템만 필터 활성화해서 숨김
-                if ((itemData is PortionItemData) || (itemData is BombItemData))
+                // 포션 & 폭탄 & 퀘스트 아이템만 필터 활성화해서 숨김
+                if ((itemData is PortionItemData) || (itemData is BombItemData)
+                    || (itemData is QuestItemData))
                 {
                     isFiltered = false;
                 }
@@ -742,7 +743,6 @@ namespace Rito.InventorySystem
                 //        isFiltered = (itemData is PortionItemData);
                 //        break;
                 //}
-
             // itemData가 null일 경우 true로 필터 활성화(아이템 표시)
             _slotUIList[index].SetItemAccessibleState(isFiltered);
         }

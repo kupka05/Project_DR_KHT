@@ -4,42 +4,45 @@ using UnityEngine;
 
 public class CheckDuplicateObject : MonoBehaviour
 {
-    /*************************************************
-     *                Private Fields
-     *************************************************/
-    [SerializeField] private bool isRun = false;
-
-
-    /*************************************************
-     *                 Unity Events
-     *************************************************/
     private void Start()
     {
-        // 5초 후 isRun 변경
-        Invoke("SetIsRun", 5f);
+        // 3초 후 검출 및 삭제
+        Invoke("DestroyOverlapObject", 3.0f);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    // 현재 오브젝트 주위로 오버랩 후 검출된 오브젝트 삭제
+    private void DestroyOverlapObject()
     {
-        // 실행이 안된 경우
-        if (! isRun)
+        // 오버랩 상자 생성
+        Collider[] colliders = Physics.OverlapBox(transform.position, transform.localScale / 2, Quaternion.identity);
+
+        // 오버랩된 모든 오브젝트 제거
+        foreach (Collider collider in colliders)
         {
-            Collider collider = collision.collider;
-            // 플레이어와 바닥 태그가 아닐 경우
-            if (!(collider.CompareTag("player") && collider.CompareTag("Floor")))
+            // 태그 검사 후 삭제
+            if (IsObject(collider))
             {
-                GFunc.Log($"삭제될 오브젝트: {collider.name}");
-                // 오브젝트 삭제
+                GFunc.Log($"삭제할 오브젝트: {collider.gameObject}");
                 Destroy(collider.gameObject);
             }
         }
     }
 
-    /*************************************************
-     *               Public Methods
-     *************************************************/
-    public void SetIsRun()
+    private bool IsObject(Collider collider)
     {
-        isRun = true;
+        string[] tags =
+        {
+            "Player", "Boss", "Floor"
+        };
+        for (int i = 0; i < tags.Length; i++)
+        {
+            if (collider.CompareTag(tags[i]))
+            {
+                return false;
+            }
+
+        }
+
+        return true;
     }
 }

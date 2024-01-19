@@ -94,8 +94,13 @@ namespace Js.Boss
         // 데미지 처리
         public void OnDamage(float damage)
         {
+            // 피격 효과음 재생
+            AudioManager.Instance.AddSFX("poly_explosion_ice");
+            AudioManager.Instance.PlaySFX("poly_explosion_ice");
+
             // 소환석에 데미지 처리
             _bossSummoningStone.OnDamage(OldBoss.OtherOnDeal(damage));
+            GFunc.Log(damage + ": 보스 데미지");
         }
 
         // 보스 오브젝트 삭제
@@ -112,6 +117,14 @@ namespace Js.Boss
 
             // 3초 후 오브젝트 삭제
             Destroy(gameObject, _bossData.DestroyDelay);
+
+            // 죽음 효과음 출력
+            AudioManager.Instance.AddSFX(_bossData.DieSFXName);
+            AudioManager.Instance.PlaySFX(_bossData.DieSFXName);
+
+            // 배경음악 변경
+            AudioManager.Instance.AddBGM("BGM_Stage_InStage");
+            AudioManager.Instance.PlayBGM("BGM_Stage_InStage");
         }
 
         // NPC 트리거 설정
@@ -121,6 +134,7 @@ namespace Js.Boss
             npcTrigger?.gameObject?.AddComponent<BossNPCMeet>()
                 ?.Initialize(_bossSummoningStone.BossNPC);
         }
+
 
         /*************************************************
          *                 Unity Methods

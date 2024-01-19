@@ -61,6 +61,14 @@ public class PlayerOption : MonoBehaviour
         GetSettingValue();
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            Unit.AddFieldItem(this.transform.position, 5102);
+        }
+    }
+
     // 환경설정 UI 입력
     public virtual void CheckOptionToggleInput()
     {

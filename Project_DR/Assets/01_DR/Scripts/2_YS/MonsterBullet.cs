@@ -82,6 +82,11 @@ public class MonsterBullet : MonoBehaviour
                     break;
                 }
 
+                if(collider.CompareTag("Wall"))
+                {
+                    Destroy(this.gameObject);
+                }
+
             }
         }
 

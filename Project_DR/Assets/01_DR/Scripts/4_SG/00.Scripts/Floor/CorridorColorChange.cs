@@ -26,6 +26,10 @@ public class CorridorColorChange : MonoBehaviour
         gameObj.transform.parent = this.transform;
         FloorMeshPos floorMeshPos = this.GetComponent<FloorMeshPos>();
 
+        if(!floorMeshPos)
+        {
+            return;
+        }
         Vector3 size = new Vector3(2.5f, 3f, 2.5f);
         Vector3 centerPos = new Vector3((floorMeshPos.topLeftCorner.x + floorMeshPos.topRightCorner.x) * 0.5f,
             size.y * 0.5f,

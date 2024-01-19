@@ -186,11 +186,17 @@ public static class ItemDataManager
     private static T InitData<T>(int id, T data) where T : ItemData
     {
         // itemData가 가지고 있는 기본 프로퍼티
-        data._id = (int)DataManager.Instance.GetData(id, "ID", typeof(int));
-        data._name = (string)DataManager.Instance.GetData(id, "Name", typeof(string));
-        data._desc = (string)DataManager.Instance.GetData(id, "Desc", typeof(string));
-        data._iconSprite = Resources.Load<Sprite>((string)DataManager.Instance.GetData(id, "IconSprite", typeof(string)));
-        data._prefab = Resources.Load<GameObject>((string)DataManager.Instance.GetData(id, "PrefabName", typeof(string)));
+        data._id = Data.GetInt(id, "ID");
+        data._name = Data.GetString(id, "Name");
+        data._desc = Data.GetString(id, "Desc");
+        string iconSpriteName = Data.GetString(id, "IconSprite").Trim();
+        string prefabName = Data.GetString(id, "PrefabName").Trim();
+        data._iconSprite = Resources.Load<Sprite>(iconSpriteName);
+        data._prefab = Resources.Load<GameObject>(prefabName);
+        // 참고
+        // 간헐적으로 데이터매니저 호출 사용시 간혹 가져온 데이터에 공백이 생기는
+        // 현상이 있어 프리팹을 못 불러오는 현상이 있음 / 공백 제거 함수 추가 후
+        // 해당 현상은 해결되었으나 참고바람
 
         // 자식 클래스에 해당 프로퍼티가 있는지 확인 후 데이터 추가
         if (CheckField<T, int>(data, "_maxAmount"))

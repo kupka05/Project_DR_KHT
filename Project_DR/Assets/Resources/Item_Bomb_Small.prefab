@@ -217,7 +217,6 @@ GameObject:
   - component: {fileID: 3278406120060304704}
   - component: {fileID: 3278406120060304716}
   - component: {fileID: 7427661338581765944}
-  - component: {fileID: 3278406120060304717}
   - component: {fileID: 7220416822920735943}
   - component: {fileID: 1169231775107440145}
   - component: {fileID: 7339686973818956167}
@@ -373,33 +372,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Scale: 0.5
---- !u!114 &3278406120060304717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3278406120060304705}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ColliderRigidbody: {fileID: 3278406120060304706}
-  MinForce: 0.1
-  LastRelativeVelocity: 0
-  LastDamageForce: 0
-  TakeCollisionDamage: 0
-  CollisionDamage: 5
-  isPlayer: 0
-  canSelfHarm: 0
-  isKnockback: 1
-  isBossProjectile: 0
-  isEliteProjectile: 0
-  isProjectile: 0
-  isLeft: 0
-  isDrill: 0
-  isMonster: 0
 --- !u!114 &7220416822920735943
 MonoBehaviour:
   m_ObjectHideFlags: 0

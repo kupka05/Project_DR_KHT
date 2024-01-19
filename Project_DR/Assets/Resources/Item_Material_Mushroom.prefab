@@ -428,7 +428,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 2
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -553,6 +553,7 @@ MonoBehaviour:
   CollisionAngularMotionY: 2
   CollisionAngularMotionZ: 2
   ApplyCorrectiveForce: 1
+  sleepRigid: 0
   MoveVelocityForce: 3000
   MoveAngularVelocityForce: 90
   LastGrabTime: 0
@@ -613,7 +614,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 25
   ColliderRigidbody: {fileID: 0}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -625,6 +625,10 @@ MonoBehaviour:
   isKnockback: 1
   isBossProjectile: 0
   isEliteProjectile: 0
+  isProjectile: 0
+  isLeft: 0
+  isDrill: 0
+  isMonster: 0
 --- !u!114 &4321034965387261906
 MonoBehaviour:
   m_ObjectHideFlags: 0

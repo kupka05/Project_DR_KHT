@@ -195,13 +195,15 @@ namespace Rito.InventorySystem
 
             if (value)
             {
-                _iconImage.color = Color.white;
-                _amountText.color = Color.white;
+                // 아이템 투명도 표시
+                _iconImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                _amountText.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             }
             else
             {
-                _iconImage.color  = InaccessibleIconColor;
-                _amountText.color = InaccessibleIconColor;
+                // 아이템 투명도 숨김
+                _iconImage.color = new Color(1.0f, 1.0f, 1.0f, 0f);
+                _amountText.color = new Color(1.0f, 1.0f, 1.0f, 0f);
             }
 
             _isAccessibleItem = value;

@@ -39,6 +39,9 @@ namespace Js.Boss
         // 공격을 시작한다.
         public void StartAttack()
         {
+            // 소환석 주위에 중복되는 오브젝트 삭제
+            _boss.BossSummoningStone.gameObject.AddComponent<CheckDuplicateObject>();
+
             // 공격 패턴 실행
             StartCoroutine(StartBossAttackPatternsCoroutine());
 
@@ -49,9 +52,9 @@ namespace Js.Boss
         // n초 후 공격 시작
         public void InvokeStartAttack(float delay)
         {
+            // 디버그(테스트)
             // 클론 소환석 스폰
-            int count = 5;
-            _boss.BossSummoningStone.SpawnCloneSummoningStones(count);
+            //_boss.BossSummoningStone.SpawnCloneSummoningStones(5);
 
             // 공격 시작
             Invoke("StartAttack", delay);
@@ -65,6 +68,15 @@ namespace Js.Boss
             AudioManager.Instance.PlayBGM(soundName);
         }
 
+        // 랜덤한 공격 효과음 출력
+        public void PlayAttackSFX()
+        {
+            int randomIndex = Random.Range(0, 2);
+            string sfxName = _boss.BossData.AttackSFXNames[randomIndex];
+            AudioManager.Instance.AddSFX(sfxName);
+            AudioManager.Instance.PlaySFX(sfxName);
+        }
+
 
         /*************************************************
          *               Private Methods
@@ -74,6 +86,9 @@ namespace Js.Boss
         {
             // 현재 상태가 정지 상태일 경우 예외 처리
             if (_boss.CurrentState.Equals(_boss.StopState)) { return; }
+
+            // 공격 효과음 출력
+            PlayAttackSFX();
 
             // 공격 애니메이션 실행
             _boss.BossAnimationHandler.AttackAnimation();

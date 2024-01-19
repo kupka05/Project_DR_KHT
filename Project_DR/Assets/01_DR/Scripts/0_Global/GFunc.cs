@@ -61,7 +61,7 @@ public static class GFunc
     /// <param name="_placeString">GetData해온 string값</param>
     /// <returns></returns>
     public static string[] SplitConversation(string _placeString)
-    {
+    {        
         _placeString = _placeString.Replace("\\n", "\n");
         _placeString = _placeString.Replace("#", ",");
         _placeString = _placeString.Replace("\\", "");

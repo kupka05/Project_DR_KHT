@@ -34,12 +34,6 @@ public class LODCreator : MonoBehaviour
     [Range(1, 4)]
     public int overlapVerteicesCount;   // 정점이 몇개랑 연결되어있는것을 추릴지
 
-
-    private void Start()
-    {
-        CreateLOD();
-    }
-
     /// <summary>
     /// LOD제작을 시작하는 함수
     /// </summary>

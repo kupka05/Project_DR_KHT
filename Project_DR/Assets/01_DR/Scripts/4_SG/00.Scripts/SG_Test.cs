@@ -12,14 +12,16 @@ using System.Text;
 
 public class SG_Test : MonoBehaviour
 {
+    string sharp = "이건 샵이다 # 이자식";
     private void Awake()
     {
-        Debug.Log($"Awake 실행");
+        sharp = sharp.Replace("#", ",");
+        Debug.Log($"값 : {sharp}");
     }
 
     private void Start()
     {
-        Debug.Log($"Start 실행");
+        
     }
 
 

@@ -31,6 +31,9 @@ public class BossRoom : MonoBehaviour
         StartCoroutine(NewBossInstanceCoroutine(_floorMeshPos, bossID, _dungeonFloor, _centerPos));
     }
 
+    /// <summary>
+    /// 보스 인스턴스해주는 함수
+    /// </summary>       
     IEnumerator BossInstanceCoroutine(FloorMeshPos _floorMeshPos, GameObject _spawnBossSkin, GameObject spawnBossCapsule,
             Transform _dungeonFloor, Vector3 _centerPos)
     {

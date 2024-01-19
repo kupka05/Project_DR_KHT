@@ -293,5 +293,9 @@ public static class GFunc
 
     }
 
-
+    public static float DBToLinear(float dB)
+    {
+        float linear = Mathf.Log10(dB) * 20;
+        return linear;
+    }
 }   // ClassEnd

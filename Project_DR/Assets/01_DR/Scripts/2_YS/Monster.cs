@@ -747,6 +747,7 @@ public class Monster : MonoBehaviour
 
     public virtual void OnDeal(float damage)
     {
+        GFunc.Log(damage + "맞는다.");
         GameObject instantTakeDamage = Instantiate(takeDamageEffect, transform.position, Quaternion.identity);
         Destroy(instantTakeDamage, 2.0f);
 
@@ -1031,6 +1032,7 @@ public class Monster : MonoBehaviour
         {
             if (knockbackRoutine == null)
             {
+                GFunc.Log("넉백 시작");
                 knockbackRoutine = KnockBackRoutine(other);
                 StartCoroutine(knockbackRoutine);
             }

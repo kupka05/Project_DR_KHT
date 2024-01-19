@@ -2,6 +2,7 @@ using BNG;
 using Js.Quest;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Item_Bomb : MonoBehaviour
@@ -12,6 +13,7 @@ public class Item_Bomb : MonoBehaviour
     private float damage;
     private float radius;
     private float duration;
+    private float force;
     private SphereCollider sphereCollider;
     private DamageCollider damageCollider;
     private Rigidbody rigid;
@@ -36,9 +38,12 @@ public class Item_Bomb : MonoBehaviour
 
         SkillEvent skillEvent = gameObject.AddComponent<SkillEvent>();
         skillEvent.skill = SkillEvent.Skill.Landing;
-        skillEvent.landingForce = 20;
         skillEvent.knockbackRange = radius;
-        
+        skillEvent.bombForce = force;
+        skillEvent.damageVal = damage;
+        skillEvent.bomb = true;
+
+
 
         itemHandler = gameObject.GetComponent<ItemColliderHandler>();
         _renderer = gameObject.GetComponent<MeshRenderer>();
@@ -55,6 +60,7 @@ public class Item_Bomb : MonoBehaviour
         damage = Data.GetFloat(itemID, "EffectAmount");
         radius = Data.GetFloat(itemID, "Radius");
         duration = Data.GetFloat(itemID, "Duration");
+        force = Data.GetFloat(itemID, "Duration");
     }
  
     public void BombTriggerCheck()
@@ -71,8 +77,28 @@ public class Item_Bomb : MonoBehaviour
             _renderer.material.color = Color.red;
             AudioManager.Instance.PlaySFXPoint("SFX_Item_Bomb_Trigger", this.transform.position);
 
-            Invoke(nameof(Bomb), duration);
+            //Invoke(nameof(Bomb), duration);
+            StartCoroutine(BombRoutine());
         }   
+    }
+    IEnumerator BombRoutine()
+    {
+        yield return new WaitForSeconds(duration);
+        BombExplosion();
+        _renderer.enabled = false;
+
+        sphereCollider.enabled = true;
+        damageCollider.enabled = true;
+
+        yield return new WaitForSeconds(0.25f);
+
+        sphereCollider.enabled = false;
+        // 폭탄 사용 콜백 호출
+        QuestCallback.OnUseItemCallback(itemID);
+        AudioManager.Instance.PlaySFXPoint("SFX_Bomb_Explosion", this.transform.position);
+        
+        yield return new WaitForSeconds(5f);
+        Destroy(gameObject, 0);
     }
 
     // 폭발
@@ -99,4 +125,12 @@ public class Item_Bomb : MonoBehaviour
         particle.Play();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        Damageable damageable = other.GetComponent<Damageable>();
+        if (damageable)
+        {
+            damageable.DealDamage(damage);
+        }
+    }
 }

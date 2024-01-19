@@ -100,6 +100,7 @@ namespace Js.Boss
 
             // 소환석에 데미지 처리
             _bossSummoningStone.OnDamage(OldBoss.OtherOnDeal(damage));
+            GFunc.Log(damage + ": 보스 데미지");
         }
 
         // 보스 오브젝트 삭제

@@ -156,18 +156,16 @@ public class AudioManager : MonoBehaviour
     #region ##################_Set Audio Volume_#################
     public void MasterVolume(float volume)
     {
-        audioMixer.SetFloat("Master", volume);
+        audioMixer.SetFloat("Master", GFunc.DBToLinear(volume));
     }
     public void MusicVolume(float volume)
     {
-
-        audioMixer.SetFloat("BGM", volume);
+        audioMixer.SetFloat("BGM", GFunc.DBToLinear(volume));
 
     }
     public void SFXVolume(float volume)
     {
-        audioMixer.SetFloat("SFX", volume);
-
+        audioMixer.SetFloat("SFX", GFunc.DBToLinear(volume));
     }
     #endregion
 
@@ -244,6 +242,9 @@ public class AudioManager : MonoBehaviour
         audioSource.Play();
         audioSource.loop = loopEnable;
         audioSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[0];
-        UnityEngine.Object.Destroy(gameObject, clip.length * ((Time.timeScale < 0.01f) ? 0.01f : Time.timeScale));
+        if (loopEnable == false)
+        {
+            UnityEngine.Object.Destroy(gameObject, clip.length * ((Time.timeScale < 0.01f) ? 0.01f : Time.timeScale));
+        }
     }
 }

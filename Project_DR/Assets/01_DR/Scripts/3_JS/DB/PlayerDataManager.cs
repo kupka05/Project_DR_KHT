@@ -289,7 +289,6 @@ public static class PlayerDataManager
 
                 // 파싱된 데이터를 PlayerDataManager에 넣는다.
                 AssignPlayerDataToManager(playerDataList);
-
                 // isUserDataManagerUpdate == true
                 if (isUserDataManagerUpdate)
                 {

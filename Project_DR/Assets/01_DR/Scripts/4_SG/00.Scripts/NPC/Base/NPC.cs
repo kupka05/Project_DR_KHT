@@ -146,7 +146,7 @@ public class NPC : MonoBehaviour
     public bool isComunity;                 // 대화중인지 체크할 변수
     protected bool isCommunityDelray;       // 대화의 딜레이를 줄 함수 대화창 클릭이벤트에 관련있음
     public bool isReadyToAutoComunication;  // 자동으로 다가가서 일정거리 안에 있다면 true가 될것임
-
+    public bool isChangePos = true;
 
 
 
@@ -172,7 +172,7 @@ public class NPC : MonoBehaviour
     {
         AwakeInIt();
         StartCoroutine(NPCPosYSet());
-
+        
 
     }
     protected virtual void OnDestroy()
@@ -297,12 +297,12 @@ public class NPC : MonoBehaviour
     /// </summary>
     public void InvokeStartConverationEvent()
     {
+        GFunc.Log("대화를 한다.");
 
         if (npcTriggerType == NpcTriggerType.Trigger)
         {
             if (isTryCommunity == false)
             {
-                GFunc.Log("대화를 한다.");
                 isTryCommunity = true;
                 //delayCoroutine = StartCoroutine(CommunicationDelay());
                 AudioManager.Instance.AddSFX(npcStartConmunicationSound);
@@ -477,7 +477,7 @@ public class NPC : MonoBehaviour
 
         for (int i = 0; i < _conversationIds.Length; i++)
         {
-            //GFunc.Log($"참조할 ID들 : {_conversationIds[i]}");
+            GFunc.Log($"참조할 ID들 : {_conversationIds[i]}");
 
         }
         for (int i = 0; i < _conversationIds.Length; i++)
@@ -485,7 +485,7 @@ public class NPC : MonoBehaviour
             stringBuilder.Clear();
             stringBuilder.Append(Data.GetString(_conversationIds[i], "AntecedentQuest"));
             stringBuilder.Replace("_", "");
-            //GFunc.Log($"참조 시도를 위해 입력한 값 : 대사ID -> {_conversationIds[i]}\n 참조해온 값 : {stringBuilder}");
+            GFunc.Log($"참조 시도를 위해 입력한 값 : 대사ID -> {_conversationIds[i]}\n 참조해온 값 : {stringBuilder}");
             if (stringBuilder.ToString() != "0" && stringBuilder.ToString() != "")
             {
                 conversationIdList.Add(_conversationIds[i]);
@@ -759,9 +759,12 @@ public class NPC : MonoBehaviour
 
     IEnumerator NPCPosYSet()
     {
-        yield return new WaitForSeconds(5f);
-        this.transform.position = new Vector3(this.transform.position.x, 0f, this.transform.position.z);
-        this.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        yield return new WaitForSeconds(2f);
+        if (isChangePos)
+        {
+            this.transform.position = new Vector3(this.transform.position.x, 0f, this.transform.position.z);
+            this.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        }
     }
     #endregion 생성 이후 추가 셋팅
 

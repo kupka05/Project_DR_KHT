@@ -94,8 +94,9 @@ namespace Js.Quest
             _currentValue += value;
 
             // 현재 퀘스트가 서브, 특수 퀘스트일 경우 콜백 호출
-            if (Type.Equals(QuestType.SUB) && Type.Equals(QuestType.SPECIAL))
+            if (Type.Equals(QuestType.SUB) || Type.Equals(QuestType.SPECIAL))
             {
+                GFunc.Log("AddCurrentValue");
                 QuestCallback.OnSubspecialQuestValueChangedCallback(_quest);
             }
         }
@@ -106,8 +107,9 @@ namespace Js.Quest
             _currentValue = value;
 
             // 현재 퀘스트가 서브, 특수 퀘스트일 경우 콜백 호출
-            if (Type.Equals(QuestType.SUB) && Type.Equals(QuestType.SPECIAL))
+            if (Type.Equals(QuestType.SUB) || Type.Equals(QuestType.SPECIAL))
             {
+                GFunc.Log("ChangeCurrentValue");
                 QuestCallback.OnSubspecialQuestValueChangedCallback(_quest);
             }
         }

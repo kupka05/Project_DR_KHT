@@ -473,7 +473,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.59
+  m_Radius: 0.36
   m_Height: 1.86
   m_Direction: 1
   m_Center: {x: 0.03, y: 0.89620686, z: 0}
@@ -558,6 +558,7 @@ MonoBehaviour:
   isTryCommunity: 0
   isComunity: 0
   isReadyToAutoComunication: 0
+  isChangePos: 1
   boss: 0
 --- !u!114 &2289606079600487184
 MonoBehaviour:
@@ -602,6 +603,9 @@ MonoBehaviour:
     _phase2StoneSpawnCountRange: 0
     _phase3StoneSpawnCountRange: 0
     _phase4StoneSpawnCountRange: 0
+    _attackSFXNames: []
+    _dieSFXName: 
+    _phaseSFX: 
   _bossHPSlider: {fileID: 118018865473801991}
   _damageable: {fileID: 0}
   _imgIcon_1: {fileID: 0}

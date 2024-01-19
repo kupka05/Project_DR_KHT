@@ -540,6 +540,18 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         yield break;
     }
+    IEnumerator Fade()
+    {
+        FadeIn();
+        yield return new WaitForSeconds(3);
+        FadeOut();
+        yield return new WaitForSeconds(1);
+        yield break;
+    }
+    public void DoFade()
+    {
+        StartCoroutine(Fade());
+    }
 
     public void FadeIn()
     {

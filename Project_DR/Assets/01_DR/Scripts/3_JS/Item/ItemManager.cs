@@ -96,6 +96,11 @@ public class ItemManager : MonoBehaviour
 
             // 인벤토리 정렬 및 PlayerInventoryUI 새로고침
             _inventory.SortAndUpdatePlayerInventoryUI();
+
+            // 인벤토리 추가 효과음 출력
+            AudioManager.Instance.AddSFX("SFX_Inventory_Acquirement");
+            AudioManager.Instance.PlaySFX("SFX_Inventory_Acquirement");
+
         }
         catch (Exception ex)
         {

@@ -5,6 +5,7 @@ using UnityEngine;
 public class ExplorerNPC_Random : HumanTypeNPC
 {       // 탐험자NPC에게 들어갈 컴포넌트
 
+    private Vector3 startPos;
     protected override void OnDestroy()
     {
         base.OnDestroy();
@@ -18,6 +19,7 @@ public class ExplorerNPC_Random : HumanTypeNPC
 
     protected override void Awake()
     {
+        isChangePos = false;
         base.Awake();
         AwakeInIt();
         ConvertionEventInIt();

@@ -7,6 +7,7 @@ public class ShopNpc : AnnouncementNPC
 
     protected override void Awake()
     {
+        isChangePos = false;
         base.Awake();
         AwakeInIt();
         ConvertionEventInIt();

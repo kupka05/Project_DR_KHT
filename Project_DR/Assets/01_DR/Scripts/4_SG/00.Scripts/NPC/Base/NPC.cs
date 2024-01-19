@@ -146,7 +146,7 @@ public class NPC : MonoBehaviour
     public bool isComunity;                 // 대화중인지 체크할 변수
     protected bool isCommunityDelray;       // 대화의 딜레이를 줄 함수 대화창 클릭이벤트에 관련있음
     public bool isReadyToAutoComunication;  // 자동으로 다가가서 일정거리 안에 있다면 true가 될것임
-
+    public bool isChangePos = true;
 
 
 
@@ -759,9 +759,12 @@ public class NPC : MonoBehaviour
 
     IEnumerator NPCPosYSet()
     {
-        yield return new WaitForSeconds(5f);
-        this.transform.position = new Vector3 (this.transform.position.x,0f,this.transform.position.z);
-        this.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        yield return new WaitForSeconds(2f);
+        if (isChangePos)
+        {
+            this.transform.position = new Vector3(this.transform.position.x, 0f, this.transform.position.z);
+            this.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        }
     }
     #endregion 생성 이후 추가 셋팅
 

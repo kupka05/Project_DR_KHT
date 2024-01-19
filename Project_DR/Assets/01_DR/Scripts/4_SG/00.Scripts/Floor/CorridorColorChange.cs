@@ -24,6 +24,7 @@ public class CorridorColorChange : MonoBehaviour
     {
         gameObj = new GameObject("DoorColorController", typeof(BoxCollider),typeof(CorridorPassCheck));
         gameObj.transform.parent = this.transform;
+        gameObj.layer = 2;
         FloorMeshPos floorMeshPos = this.GetComponent<FloorMeshPos>();
 
         if(!floorMeshPos)

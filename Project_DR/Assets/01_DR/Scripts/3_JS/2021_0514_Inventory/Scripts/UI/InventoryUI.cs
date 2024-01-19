@@ -722,7 +722,7 @@ namespace Rito.InventorySystem
         public void UpdateSlotFilterState(int index, ItemData itemData)
         {
             bool isFiltered = true;
-            GFunc.Log("UpdateSlotFilterState()");
+            //GFunc.Log("UpdateSlotFilterState()");
             // null인 슬롯은 타입 검사 없이 필터 활성화
             if(itemData != null)
             {

@@ -308,7 +308,7 @@ public class DungeonCreator : MonoBehaviour
         CheckRecreate();
 
         //GFunc.Log($"바닥생성이후 isReCreate값 :{isReCreate}");
-        if (isReCreate == true)
+        if (isReCreate == true || floorParent.transform.childCount > 6)
         {
             GFunc.Log($"던전 재생성 호출");
             CreateDungeon();
@@ -544,12 +544,8 @@ public class DungeonCreator : MonoBehaviour
 
         if (bspListClone[0] != null)
         {
-            for (int i = 0; i < bspListClone.Count; i++)
-            {
-                bspListClone[i].AddComponent<NullRoom>();
-            }
-            bspListClone.Clear();
-        }       // 만약 3으로 나누었을때 전부 방을 기입하고도 List속에 무언가 있다면 빈방으로 설정
+            CreateDungeon();
+        }       
 
         //GFunc.LogFormat("각방 이벤트 선정 끝");
 

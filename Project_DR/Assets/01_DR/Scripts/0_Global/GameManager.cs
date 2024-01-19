@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 기본 딜레이 5이며 딜레이를 줄때마다 ++이 되면서 천천히 생성이 되도록 하는것을 의도한 변수
     /// </summary>
-    public int spawnDelayFrame = 5; 
+    public int spawnDelayFrame = 5;
 
     // 던전 진행 Max층을 알려줄 const int 변수
     public const int PROTOTYPE = 1;
@@ -121,11 +121,12 @@ public class GameManager : MonoBehaviour
                 DoorControl(IsClear);
                 if (isClear == true)
                 {
-                    allRoomClear = CheckAllRoomClear();          
+                    allRoomClear = CheckAllRoomClear();
                 }
-                if(allRoomClear == true)
+                if (allRoomClear == true)
                 {
                     BossRoomDoorOnEvent?.Invoke();
+                    allRoomClear = false;
                 }
             }
 
@@ -192,7 +193,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.Backspace))
         {
             GameOver();
         }
@@ -204,7 +205,7 @@ public class GameManager : MonoBehaviour
         {
             ClearDungeon();
         }
-        
+
 
     }
 
@@ -266,7 +267,7 @@ public class GameManager : MonoBehaviour
             fader = Camera.main.transform.GetComponent<ScreenFader>();
         }
 
-      
+
 
 
     }
@@ -335,7 +336,7 @@ public class GameManager : MonoBehaviour
         }
         else
             GFunc.Log("클리어 실패, 현재 층 : " + nowFloor);
-     
+
     }       // ClearDungeon()
 
     // 보스 처치 실패
@@ -435,17 +436,22 @@ public class GameManager : MonoBehaviour
     /// 모든 방이 클리어 됬는지 체크해줄 함수
     /// </summary>
     public bool CheckAllRoomClear()
-    {        
-        foreach(RandomRoom temp in isClearRoomList)
+    {
+        if (isClearRoomList.Count != 0)
         {
-            //GFunc.Log($"{temp.gameObject.name}의 클리어 여부 : {temp.isClearRoom}");
-                
-            if(temp.isClearRoom == false)
+            foreach (RandomRoom temp in isClearRoomList)
             {
-                return false;
+                //GFunc.Log($"{temp.gameObject.name}의 클리어 여부 : {temp.isClearRoom}");
+
+                if (temp.isClearRoom == false)
+                {
+                    return false;
+                }
             }
+            return true;
         }
-        return true;
+
+        return false;
     }       // CheckAllRoomClear()
 
     /// <summary>
@@ -474,14 +480,14 @@ public class GameManager : MonoBehaviour
 
         //GFunc.Log($"NullRomListCount : {nullRoomList.Count}\nNowFloor : {nowFloor}");
 
-        
+
     }       // AddNullRoom()
 
     IEnumerator CreateAnvil()
     {
         yield return new WaitForSeconds(nullRoomList.Count);
 
-        if(isAnvilCreate == false)
+        if (isAnvilCreate == false)
         {
             if (nullRoomList.Count >= 2 && nowFloor % 2 == 0)
             {   // 빈방이 2개일때와 현재층이 짝수 일때에 들어오는 조건문
@@ -495,7 +501,7 @@ public class GameManager : MonoBehaviour
         else { /*PASS*/ }
 
     }
-    
+
 
     private void OnDestroy()
     {
@@ -522,7 +528,7 @@ public class GameManager : MonoBehaviour
     {
         player.GetComponent<SmoothLocomotion>().freeze = false;
 
-        StartCoroutine(FadeRoutine(playerPos));    
+        StartCoroutine(FadeRoutine(playerPos));
     }
 
     IEnumerator FadeRoutine(Vector3 position)
@@ -564,13 +570,13 @@ public class GameManager : MonoBehaviour
 
 
 
-  
+
 
     /// <summary>
     /// 유령 오브젝트를 List에 Add해주는 함수
     /// </summary>
     public void AllocatedGhostObj()
-    {        
+    {
         if (UserDataManager.Instance.ClearCount < 100)
         {
             if (isInItGhost == false)
@@ -619,7 +625,7 @@ public class GameManager : MonoBehaviour
     // 플레이 상태 세팅
     private void SetPlayState()
     {
-        if(UserDataManager.Instance.ClearCount == 0)
+        if (UserDataManager.Instance.ClearCount == 0)
         {
             round = GameRound.FirstTime;
         }
@@ -628,10 +634,10 @@ public class GameManager : MonoBehaviour
             round = GameRound.FirstAfter;
         }
 
-        if(IsProtoType)
+        if (IsProtoType)
         {
             round = GameRound.Prototype;
-        }       
+        }
     }
     #endregion
 

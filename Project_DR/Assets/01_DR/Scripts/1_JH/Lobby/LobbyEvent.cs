@@ -257,6 +257,9 @@ public class LobbyEvent : MonoBehaviour
         SetSkillLevelBtn();
 
         UserData.ResetPlayer();
+
+        // 퀘스트 목록 업데이트
+        QuestManager.Instance.UpdateQuestStatesToCanStartable();
     }
 
     // 클리어 데이터 불러오기

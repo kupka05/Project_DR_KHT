@@ -4,20 +4,27 @@ using UnityEngine;
 
 public class CheckDuplicateObject : MonoBehaviour
 {
-    [SerializeField] private bool _isRun = false;
-
     private void Start()
     {
-        //Invoke("SetIsRun", 3.0f);
+        // 3초 후 검출 및 삭제
+        Invoke("DestroyOverlapObject", 3.0f);
     }
 
-    private void OnTriggerStay(Collider other)
+    // 현재 오브젝트 주위로 오버랩 후 검출된 오브젝트 삭제
+    private void DestroyOverlapObject()
     {
-        GFunc.Log($"닿은 오브젝트 {other.name}");
-        if (IsObject(other) && _isRun)
+        // 오버랩 상자 생성
+        Collider[] colliders = Physics.OverlapBox(transform.position, transform.localScale / 2, Quaternion.identity);
+
+        // 오버랩된 모든 오브젝트 제거
+        foreach (Collider collider in colliders)
         {
-            //_isRun = true;
-            Destroy(other);
+            // 태그 검사 후 삭제
+            if (IsObject(collider))
+            {
+                GFunc.Log($"삭제할 오브젝트: {collider.gameObject}");
+                Destroy(collider.gameObject);
+            }
         }
     }
 
@@ -37,10 +44,5 @@ public class CheckDuplicateObject : MonoBehaviour
         }
 
         return true;
-    }
-
-    private void SetIsRun()
-    {
-        _isRun = true;
     }
 }

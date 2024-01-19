@@ -40,6 +40,9 @@ namespace Js.Boss
         public int Phase2StoneSpawnCountRange => _phase2StoneSpawnCountRange;           // 2페이즈 소환석 스폰 갯수 범위
         public int Phase3StoneSpawnCountRange => _phase3StoneSpawnCountRange;           // 3페이즈 소환석 스폰 갯수 범위
         public int Phase4StoneSpawnCountRange => _phase4StoneSpawnCountRange;           // 4페이즈 소환석 스폰 갯수 범위
+        public string[] AttackSFXNames => _attackSFXNames;                              // 공격 효과음[]
+        public string DieSFXName => _dieSFXName;                                        // 사망 효과음
+        public string PhaseSFX => _phaseSFX;                                            // 페이즈 효과음
 
 
         /*************************************************
@@ -72,6 +75,9 @@ namespace Js.Boss
         [SerializeField] private int _phase2StoneSpawnCountRange;
         [SerializeField] private int _phase3StoneSpawnCountRange;
         [SerializeField] private int _phase4StoneSpawnCountRange;
+        [SerializeField] private string[] _attackSFXNames;
+        [SerializeField] private string _dieSFXName;
+        [SerializeField] private string _phaseSFX;
 
 
         /*************************************************
@@ -98,6 +104,9 @@ namespace Js.Boss
             _phase2StoneSpawnCountRange = Data.GetInt(id, "Phase2StoneSpawnCountRange");
             _phase3StoneSpawnCountRange = Data.GetInt(id, "Phase3StoneSpawnCountRange");
             _phase4StoneSpawnCountRange = Data.GetInt(id, "Phase4StoneSpawnCountRange");
+            _attackSFXNames = GFunc.SplitConversation(Data.GetString(id, "AttackSFX"));
+            _dieSFXName = Data.GetString(id, "DieSFX");
+            _phaseSFX = Data.GetString(id, "PhaseSFX");
             for (int i = 0; i < _phaseAttackPatternCounts.Length; i++)
             {
                 int index = i + 1;

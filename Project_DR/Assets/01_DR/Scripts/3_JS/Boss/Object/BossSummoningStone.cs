@@ -101,6 +101,10 @@ namespace Js.Boss
                 // 공격 패턴 변경
                 _bossData.ChooseRandomPattern();
 
+                // 페이즈 효과음 재생
+                AudioManager.Instance.AddSFX(_bossData.PhaseSFX);
+                AudioManager.Instance.PlaySFX(_bossData.PhaseSFX);
+
                 // 플레이어를 보스룸 입구로 텔레포트
                 GameManager.instance.EndBossCutScene();
 

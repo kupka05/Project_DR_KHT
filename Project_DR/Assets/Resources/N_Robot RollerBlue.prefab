@@ -15648,7 +15648,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!114 &1924480270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15664,6 +15664,7 @@ MonoBehaviour:
   monsterHpSlider: {fileID: 2580326510073146759}
   nameText: {fileID: 8426423651426712815}
   state: 0
+  lastDamageTime: 0
   capsuleColliders: []
   monsterId: 7003
   monsterType: 0
@@ -15673,6 +15674,9 @@ MonoBehaviour:
     type: 3}
   DeathEffect: {fileID: 7280660387716396427, guid: ebb3c11ecd5a7d64fb52bebe807a85a4,
     type: 3}
+  knockBackHeadEffect: {fileID: 8353283252641946414, guid: a78e984cd2132da479d1c8408e8ffd74,
+    type: 3}
+  headHeight: 1.7
   smash: {fileID: 5730448431322882074}
   smashFilled: {fileID: 7496920547197002051}
   smashCountNum: {fileID: 1548809615290725305}
@@ -15695,7 +15699,11 @@ MonoBehaviour:
   stunCount: 0
   stopDistance: 0
   monName: 
-  lastDamageTime: 0
+  takeDamageSound: 
+  dieSound: 
+  firstAttackSound: 
+  attackSound: 
+  knockbackSound: 
   monsterTr: {fileID: 5781229974145385596}
   playerTr: {fileID: 0}
   anim: {fileID: 5781229974137763666}
@@ -15711,6 +15719,7 @@ MonoBehaviour:
   isStack: 0
   isAttack: 0
   isUpper: 0
+  isAttackSound: 0
   distanceDebug: 0
   isDebug: 0
   distanceFromGround: 0

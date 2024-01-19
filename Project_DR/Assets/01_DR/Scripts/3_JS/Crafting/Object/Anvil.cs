@@ -396,7 +396,8 @@ namespace Js.Crafting
             string itemName = Data.GetString(id, "Name");
             Vector3 pos = Vector3.zero;
             GameObject tempItem = Unit.AddFieldTempItem(pos, id, parent);
-            tempItem.GetComponent<Rigidbody>().isKinematic = true;
+            Rigidbody tempItemRigidBody = tempItem.GetComponent<Rigidbody>();
+            if (tempItemRigidBody != null) { tempItemRigidBody.isKinematic = true; }
             tempItem.name = GFunc.SumString("[임시] ", itemName);
             tempItem.SetActive(false);
 

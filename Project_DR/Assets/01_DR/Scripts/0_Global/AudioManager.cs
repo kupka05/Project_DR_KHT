@@ -43,7 +43,9 @@ public class AudioManager : MonoBehaviour
     public Dictionary<string, Sound> sfxSounds = new Dictionary<string, Sound>();
     public AudioMixer audioMixer;
     public AudioSource musicSource, sfxSource;
-    
+    public GameObject sourceParent;
+
+
     private string[] audioPath = new string[2];
 
 
@@ -61,7 +63,6 @@ public class AudioManager : MonoBehaviour
     {
         // 씬이 로드될 때 마다 오디오 초기화
         AudioInit();
-
     }
 
     private void Awake()
@@ -79,6 +80,7 @@ public class AudioManager : MonoBehaviour
         sfxSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[0];
         musicSource.loop = true;
         sfxSource.loop = true;
+        AudioInit();
     }
     // 오디오 초기화
     public void AudioInit()
@@ -87,6 +89,8 @@ public class AudioManager : MonoBehaviour
         sfxSounds.Clear();
         musicSounds = new Dictionary<string, Sound>();
         sfxSounds = new Dictionary<string, Sound>();
+        GameObject parent = new GameObject("Audio Sources");
+        sourceParent = parent;
     }
 
     #region ######################_Play Audio_#####################
@@ -233,7 +237,9 @@ public class AudioManager : MonoBehaviour
     // 특정 위치에 사운드를 플레이
     private void PlayClipAtPoint(AudioClip clip, Vector3 position, bool loopEnable = false)
     {
-        GameObject gameObject = new GameObject("One shot audio");
+        GameObject gameObject = new GameObject(clip.name + " Audio Source");
+
+        gameObject.transform.parent = sourceParent.transform;
         gameObject.transform.position = position;
         AudioSource audioSource = (AudioSource)gameObject.AddComponent(typeof(AudioSource));
         audioSource.clip = clip;

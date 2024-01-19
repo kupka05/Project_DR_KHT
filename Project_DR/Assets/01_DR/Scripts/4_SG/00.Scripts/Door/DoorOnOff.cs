@@ -39,6 +39,9 @@ public class DoorOnOff : MonoBehaviour
         doorOffTime = 8f;
 
         boxCollider = this.GetComponent<BoxCollider>();
+        AudioManager.Instance.AddSFX("SFX_Stage_Door_Open_01");
+        AudioManager.Instance.AddSFX("SFX_Stage_Door_Close_01");
+        AudioManager.Instance.AddSFX("SFX_Stage_Door_Close_02");
     }       // AwakeInIt()
 
     private void StartInIt()
@@ -75,6 +78,7 @@ public class DoorOnOff : MonoBehaviour
 
     IEnumerator OnDoorCoroutine()
     {
+        AudioManager.Instance.PlaySFXPoint("SFX_Stage_Door_Open_01", this.transform.position);
         //GFunc.Log($"문 열기 호출\n호출자 : {this.gameObject.name}");
         StopCoroutine(OffDoorCoroutine());
         boxCollider.isTrigger = true;
@@ -99,6 +103,7 @@ public class DoorOnOff : MonoBehaviour
 
     IEnumerator OffDoorCoroutine()
     {
+        AudioManager.Instance.PlaySFXPoint("SFX_Stage_Door_Close_01", this.transform.position);
         //GFunc.Log($"문닫기 호출\n호출자 : {this.gameObject.name}");
         StopCoroutine(OnDoorCoroutine());
         boxCollider.isTrigger = true;
@@ -119,6 +124,8 @@ public class DoorOnOff : MonoBehaviour
         }
         boxCollider.isTrigger = false;
         compleateDoorOff = false;
+        AudioManager.Instance.PlaySFXPoint("SFX_Stage_Door_Close_02", this.transform.position);
+
     }       //  OffDoorCoroutine()
 
 }

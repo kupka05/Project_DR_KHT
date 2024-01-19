@@ -163,7 +163,7 @@ public class EventRoom : RandomRoom
     {
         int[] npcIds = (int[])Enum.GetValues(typeof(NPCID));
 
-        int randIdx = UnityEngine.Random.Range(0, npcIds.Length);
+        int randIdx = UnityEngine.Random.Range(0, npcIds.Length -1);
 
         GFunc.Log($"가져온 Prefab 이름 : {Data.GetString(npcIds[randIdx], "PrefabName")}");
         string prefabName = Data.GetString(npcIds[randIdx], "PrefabName");

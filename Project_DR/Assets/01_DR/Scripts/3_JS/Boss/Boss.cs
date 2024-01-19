@@ -94,9 +94,9 @@ namespace Js.Boss
         // 데미지 처리
         public void OnDamage(float damage)
         {
-            // 효과음 재생
-            AudioManager.Instance.AddSFX("SFX_Monster_Boss_SummonStone_Hit");
-            AudioManager.Instance.PlaySFX("SFX_Monster_Boss_SummonStone_Hit");
+            // 피격 효과음 재생
+            AudioManager.Instance.AddSFX("poly_explosion_ice");
+            AudioManager.Instance.PlaySFX("poly_explosion_ice");
 
             // 소환석에 데미지 처리
             _bossSummoningStone.OnDamage(OldBoss.OtherOnDeal(damage));

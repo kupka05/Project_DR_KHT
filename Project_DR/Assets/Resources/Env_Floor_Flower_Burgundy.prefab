@@ -480,7 +480,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8306835002832180333}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c575c9380b9d239499fadf100ef2800b, type: 3}
   m_Name: 
@@ -502,7 +502,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821cfb7c3eab3764bbb57d764c6e26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 25
   ColliderRigidbody: {fileID: 5750507649153430426}
   MinForce: 0.1
   LastRelativeVelocity: 0
@@ -515,6 +514,8 @@ MonoBehaviour:
   isBossProjectile: 0
   isEliteProjectile: 0
   isProjectile: 0
+  isLeft: 0
+  isDrill: 0
   isMonster: 0
 --- !u!114 &3959612554190781187
 MonoBehaviour:

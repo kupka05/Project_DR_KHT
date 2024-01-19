@@ -286,6 +286,7 @@ public class BattleRoom : RandomRoom
         {
             BattleRoomSoundPlay();
         }
+        else { /*PASS*/ }
 
     }       // OnCollisionEnter()
 

@@ -171,9 +171,8 @@ public class NPC : MonoBehaviour
     protected virtual void Awake()
     {
         AwakeInIt();
-        RigidBodyAdd();
-        BoxColliderTrrigerSet();
-        StartCoroutine(RemoveRigidBody_Collider(this.GetComponent<Rigidbody>(),this.GetComponent<BoxCollider>()));
+        StartCoroutine(NPCPosYSet());
+        
 
     }
     protected virtual void OnDestroy()
@@ -756,27 +755,15 @@ public class NPC : MonoBehaviour
 
     #endregion 보상 관련 함수
 
-    #region RigidBody관련 함수
-    private void RigidBodyAdd()
-    {
-        this.transform.AddComponent<Rigidbody>();
-        Rigidbody rigid = this.GetComponent<Rigidbody>();
+    #region 생성 이후 추가 셋팅
 
-        rigid.freezeRotation = true;
-    }       // RigidBodyAdd()
-    private void BoxColliderTrrigerSet()
+    IEnumerator NPCPosYSet()
     {
-        BoxCollider boxCollider = this.transform.GetComponent<BoxCollider>();
-        boxCollider.isTrigger = false;
+        yield return new WaitForSeconds(5f);
+        this.transform.position = new Vector3 (this.transform.position.x,0f,this.transform.position.z);
+        this.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
     }
-
-    IEnumerator RemoveRigidBody_Collider(Rigidbody _npcRigid,BoxCollider _npcCollider)
-    {
-        yield return new WaitForSeconds(7f);
-        Destroy(_npcRigid);
-        _npcCollider.isTrigger = true;   
-    }
-    #endregion RigidBody관련 함수
+    #endregion 생성 이후 추가 셋팅
 
 
     #region 애니메이션 관련

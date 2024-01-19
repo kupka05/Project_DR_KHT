@@ -16,10 +16,13 @@ public class BattleRoom : RandomRoom
     private int recallCount; // 재귀를 몇번했는지 체크할 함수
     private int maxRecallCount; // 최대재귀횟수
 
+    private bool isSoundPlay = default;   // 전투방 음악 재생을 했는지 체크할 변수
+    private string playSoundName = default;
+    private string inStageSoundName = default;
+
     void Start()
     {
         GameManager.isClearRoomList.Add(this);
-
         StartCoroutine(StartMethodDelay());
 
     }       // Start()
@@ -138,7 +141,7 @@ public class BattleRoom : RandomRoom
 
             // 소환
             SpawnMonster(spawnPoint);
-        }       
+        }
 
     }       // ChoiceSpawnCount()
 
@@ -254,6 +257,9 @@ public class BattleRoom : RandomRoom
         monstersParent.transform.parent = this.transform;
         recallCount = 0;
         maxRecallCount = 5;
+        isSoundPlay = false;
+        playSoundName = "BGM_Stage_Battle";
+        inStageSoundName = "BGM_Stage_InStage";
 
     }       // FirstSetting()
 
@@ -266,13 +272,42 @@ public class BattleRoom : RandomRoom
         if (monsterList.Count == 0)
         {
             ClearRoomBoolSetTrue();
+            InStageSoundPlay();
         }
+        else { /*PASS*/ }
 
     }       // CheckClearRoom()
 
     protected override void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);
+
+        if (collision.transform.CompareTag("Player"))
+        {
+            BattleRoomSoundPlay();
+        }
+        else { /*PASS*/ }
+
+    }       // OnCollisionEnter()
+
+    /// <summary>
+    /// 전투방 입장시 한번만 사운드 플레이해주는 함수
+    /// </summary>
+    private void BattleRoomSoundPlay()
+    {
+        if (isSoundPlay == false)
+        {
+            isSoundPlay = true;
+            AudioManager.Instance.AddBGM(playSoundName);
+            AudioManager.Instance.PlayBGM(playSoundName);
+        }
+
+        else { /*PASS*/ }
+    }       // BattleRoomSoundPlay()
+
+    private void InStageSoundPlay()
+    {
+        AudioManager.Instance.PlayBGM(inStageSoundName);
     }
 
 

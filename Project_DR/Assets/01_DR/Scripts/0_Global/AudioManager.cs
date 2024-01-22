@@ -35,10 +35,7 @@ public class AudioManager : MonoBehaviour
     }
     private static AudioManager m_Instance; // 싱글톤이 할당될 static 변수    
     #endregion
-
-    public Sound backGroundMusic;
-    //public SerializableDictionary<string, Sound> musicSounds = new SerializableDictionary<string, Sound>();
-    //public SerializableDictionary<string, Sound> sfxSounds = new SerializableDictionary<string, Sound>();
+  
     public Dictionary<string, Sound> musicSounds = new Dictionary<string, Sound>();
     public Dictionary<string, Sound> sfxSounds = new Dictionary<string, Sound>();
     public AudioMixer audioMixer;
@@ -126,12 +123,12 @@ public class AudioManager : MonoBehaviour
         }        
     }
     /// <summary> 특정 위치에 사운드 이펙트를 재생하는 메서드 </summary>
-    public void PlaySFXPoint(string name, Vector3 position)
+    public void PlaySFXPoint(string name, Vector3 position = default, bool loop = false)
     {
         try
         {
             Sound sound = sfxSounds[name];
-            PlayClipAtPoint(sound.clip, position);
+            PlayClipAtPoint(sound.clip, position, loop);
         }
         catch (Exception ex)
         {
@@ -139,35 +136,39 @@ public class AudioManager : MonoBehaviour
             GFunc.Log($"{name} SFX를 찾을 수 없음");
         }
     }
-    /// <summary> 루핑하는 사운드 이펙트를 재생하는 메서드 </summary>
-    public void PlaySFXLoop(string name, Vector3 position = default)
+
+    // 특정 위치에 사운드를 플레이
+    private void PlayClipAtPoint(AudioClip clip, Vector3 position, bool loopEnable = false)
     {
-        try
+        GameObject gameObject = new GameObject(clip.name + " Audio Source");
+
+        gameObject.transform.parent = sourceParent.transform;
+        gameObject.transform.position = position;
+        AudioSource audioSource = (AudioSource)gameObject.AddComponent(typeof(AudioSource));
+        audioSource.clip = clip;
+        audioSource.spatialBlend = 1f;
+        audioSource.volume = 1f;
+        audioSource.Play();
+        audioSource.loop = loopEnable;
+        audioSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[0];
+        if (loopEnable == false)
         {
-            Sound sound = sfxSounds[name];
-            sfxSource.clip = sound.clip;
-            //sfxSource.Play();
-            PlayClipAtPoint(sound.clip, position, true);
-        }
-        catch (Exception ex)
-        {
-            //GFunc.Log($"{ex.Message}");
-            GFunc.Log($"{name} SFX를 찾을 수 없음");
+            UnityEngine.Object.Destroy(gameObject, clip.length * ((Time.timeScale < 0.01f) ? 0.01f : Time.timeScale));
         }
     }
     #endregion
 
     #region ##################_Set Audio Volume_#################
-    public void MasterVolume(float volume)
+    public void SetMasterVolume(float volume)
     {
         audioMixer.SetFloat("Master", GFunc.DBToLinear(volume));
     }
-    public void MusicVolume(float volume)
+    public void SetBGMVolume(float volume)
     {
         audioMixer.SetFloat("BGM", GFunc.DBToLinear(volume));
 
     }
-    public void SFXVolume(float volume)
+    public void SetSFXVolume(float volume)
     {
         audioMixer.SetFloat("SFX", GFunc.DBToLinear(volume));
     }
@@ -234,23 +235,5 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
-    // 특정 위치에 사운드를 플레이
-    private void PlayClipAtPoint(AudioClip clip, Vector3 position, bool loopEnable = false)
-    {
-        GameObject gameObject = new GameObject(clip.name + " Audio Source");
-
-        gameObject.transform.parent = sourceParent.transform;
-        gameObject.transform.position = position;
-        AudioSource audioSource = (AudioSource)gameObject.AddComponent(typeof(AudioSource));
-        audioSource.clip = clip;
-        audioSource.spatialBlend = 1f;
-        audioSource.volume = 1f;
-        audioSource.Play();
-        audioSource.loop = loopEnable;
-        audioSource.outputAudioMixerGroup = audioMixer.FindMatchingGroups("SFX")[0];
-        if (loopEnable == false)
-        {
-            UnityEngine.Object.Destroy(gameObject, clip.length * ((Time.timeScale < 0.01f) ? 0.01f : Time.timeScale));
-        }
-    }
+  
 }

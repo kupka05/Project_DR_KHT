@@ -113,9 +113,9 @@ public class BossNPC : NPC
         if (player != null) 
         {
             canvasObj.transform.parent = player.transform.parent.GetChild(3);
-            canvasObj.transform.localPosition = new Vector3(0f, 0.1f, 0.7f);
+            canvasObj.transform.localPosition = new Vector3(0f, 0.1f, 0.9f);
             canvasObj.transform.localRotation = Quaternion.identity;
-            canvasObj.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            canvasObj.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
         }
 
 

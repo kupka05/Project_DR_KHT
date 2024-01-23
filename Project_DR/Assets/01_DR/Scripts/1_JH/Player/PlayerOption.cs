@@ -45,7 +45,7 @@ public class PlayerOption : MonoBehaviour
 
     private void Start()
     {
-// 에디터에서만 vr에뮬레이터 켜기
+        // 에디터에서만 vr에뮬레이터 켜기
 #if UNITY_EDITOR
         vrEmulator.enabled = true;
 #endif

@@ -45,8 +45,8 @@ public class PlayerOption : MonoBehaviour
 
     private void Start()
     {
-// 에디터에서만 vr에뮬레이터 켜기
-#if UNITY_EDITOR
+        // 에디터에서만 vr에뮬레이터 켜기
+#if PC_Build
         vrEmulator.enabled = true;
 #endif
 
@@ -177,7 +177,7 @@ public class PlayerOption : MonoBehaviour
             GFunc.Log("오디오 매니저를 찾을 수 없습니다.");
             return;
         }
-        AudioManager.Instance.MasterVolume(value);
+        AudioManager.Instance.SetMasterVolume(value);
         masterSlider.value = value;
         UserDataManager.Instance.masterSound = value; // 유저 데이터에 저장
     }
@@ -189,7 +189,7 @@ public class PlayerOption : MonoBehaviour
             //GFunc.Log("오디오 매니저를 찾을 수 없습니다.");
             return;
         }
-        AudioManager.Instance.MusicVolume(value);
+        AudioManager.Instance.SetBGMVolume(value);
         backgroundSlider.value = value;
         UserDataManager.Instance.backgroundSound = value; // 유저 데이터에 저장
     }
@@ -202,7 +202,7 @@ public class PlayerOption : MonoBehaviour
             GFunc.Log("오디오 매니저를 찾을 수 없습니다.");
             return;
         }
-        AudioManager.Instance.SFXVolume(value);
+        AudioManager.Instance.SetSFXVolume(value);
         soundEffectSlider.value = value;
         UserDataManager.Instance.sfx = value; // 유저 데이터에 저장
     }

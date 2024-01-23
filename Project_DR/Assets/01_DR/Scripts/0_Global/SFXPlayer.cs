@@ -36,7 +36,7 @@ public class SFXPlayer : MonoBehaviour
 
         if (loop)
         {
-            AudioManager.Instance.PlaySFXLoop(sfxNames[0], this.transform.position);
+            AudioManager.Instance.PlaySFXPoint(sfxNames[0], this.transform.position, true);
         }
         else
             AudioManager.Instance.PlaySFX(sfxNames[0]);

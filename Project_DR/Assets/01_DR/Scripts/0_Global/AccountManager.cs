@@ -95,6 +95,7 @@ public class AccountManager : MonoBehaviour
 
     private bool TutorialCheck()
     {
+        // 0이면 튜토리얼
         if(PlayerDataManager.Tutorial == 0)
         {            
             return true; 
